@@ -121,36 +121,9 @@ class Video extends React.Component {
 
 
 /**
- * Returns and formats all course codes in id.
- * @param {string} id The Node's ID.
- * @returns {string[]} All formatted course codes.
- * TODO: Change function name
+ * Modal containing a map with markers corresponding to the locations of the courses currently on the
+ * time table
  */
-function formatCourseName(id) {
-  var names;
-
-  if (id === 'CSC200') {
-      names = id + 'Y1';
-  } else if (id === 'Calc1') {
-      names = 'MAT135H1' + ' ' + 'MAT136H1' + ' ' + 'MAT137Y1' + ' ' +
-              'MAT157Y1';
-  } else if (id === 'Lin1') {
-      names = 'MAT221H1' + ' ' + 'MAT223H1' + ' ' + 'MAT240H1';
-  } else if (id === 'Sta1') {
-      names = 'STA247H1' + ' ' + 'STA255H1';
-  } else if (id === 'Sta2') {
-      names = 'STA248H1' + ' ' + 'STA261H1';
-  } else if (id.indexOf('H1', id.length - 2) !== -1) {
-      names = id;
-  } else {
-      names = id + 'H1';
-  }
-
-  names = names.split(" ");
-  return names;
-}
-
-
 class MapModal extends React.Component {
   constructor(props) {
     super(props);
@@ -226,7 +199,7 @@ class MapModal extends React.Component {
   selectLecTimeframe(lecture) {
     let updatedLecTimeframes = this.state.selectedLecTimeframes.slice();
 
-    const lecTimeframeInd = this.findSelectedLecTimeframe(lecture);
+    const lecTimeframeInd = this.findSelectedLecTimeframe(lecture, updatedLecTimeframes);
 
     if (lecTimeframeInd == -1) {
       updatedLecTimeframes.push(lecture);
@@ -243,7 +216,7 @@ class MapModal extends React.Component {
     let updatedLecTimeframes = this.state.selectedLecTimeframes.slice();
 
     for (let lec of lectures) {
-      if (this.findSelectedLecTimeframe(lec) == -1) {
+      if (this.findSelectedLecTimeframe(lec, updatedLecTimeframes) == -1) {
         updatedLecTimeframes.push(lec);
       }
     }
@@ -256,11 +229,13 @@ class MapModal extends React.Component {
     let updatedLecTimeframes = this.state.selectedLecTimeframes.slice();
 
     for (let lec of lectures) {
-      const lecTimeframeInd = this.findSelectedLecTimeframe(lec);
+      const lecTimeframeInd = this.findSelectedLecTimeframe(lec, updatedLecTimeframes);
+
       if (lecTimeframeInd != -1) {
-        updatedLecTimeframes.splice(lec);
+        updatedLecTimeframes.splice(lecTimeframeInd, 1);
       }
     }
+
     this.setState({selectedLecTimeframes: updatedLecTimeframes});
   }
 
@@ -277,12 +252,13 @@ class MapModal extends React.Component {
 
   // Returns True if all elements of lectures are in selectedLecTimeframes
   isDaySelected(lectures) {
-    return lectures.every(lec => this.findSelectedLecTimeframe(lec) != -1);
+    const updatedLecTimeframes = this.state.selectedLecTimeframes.slice();
+    return lectures.every(lec => this.findSelectedLecTimeframe(lec, updatedLecTimeframes) != -1);
   }
 
   // Returns the index of lecture in selectedLecTimeframes if it exists. Otherwise, return -1
-  findSelectedLecTimeframe(lecture) {
-    return this.state.selectedLecTimeframes.findIndex(lec =>
+  findSelectedLecTimeframe(lecture, selectedLectures) {
+    return selectedLectures.findIndex(lec =>
       lec.courseCode === lecture.courseCode &&
       lec.session === lecture.session &&
       lec.day == lecture.day &&
@@ -327,8 +303,10 @@ class MapModal extends React.Component {
           <MapSidebar
             lecturesByDay={lecturesByDay}
             selectLecTimeframe={this.selectLecTimeframe}
-            isDaySelected={this.isDaySelected}
             selectDayTimeframes={this.selectDayTimeframes}
+            isDaySelected={this.isDaySelected}
+            findSelectedLecTimeframe={this.findSelectedLecTimeframe}
+            selectedLecTimeframes={this.state.selectedLecTimeframes}
           />
         </div>
       </ReactModal>
@@ -352,24 +330,92 @@ class MapSidebar extends React.Component {
 
     for (let day of days) {
       if (this.props.lecturesByDay[day]) {
-        const daySelected = this.props.isDaySelected(this.props.lecturesByDay[day]);
         dayLectures.push(
-          <div>
-            <p onClick={ () => this.props.selectDayTimeframes(this.props.lecturesByDay[day]) }> {day} </p>
-            {this.props.lecturesByDay[day].map(lec =>
-              <li onClick={ () => this.props.selectLecTimeframe(lec) }>{lec.courseCode}</li>
-              )
-            }
-          </div>
+          <DayBox
+            day={day}
+            dayLectures={this.props.lecturesByDay[day]}
+            selectLecTimeframe={this.props.selectLecTimeframe}
+            selectDayTimeframes={this.props.selectDayTimeframes}
+            isDaySelected={this.props.isDaySelected}
+            findSelectedLecTimeframe={this.props.findSelectedLecTimeframe}
+            selectedLecTimeframes={this.props.selectedLecTimeframes}
+          />
         );
       }
     }
 
     return (
-      <div>
+      <div id="map-sidebar" className="col-md-5 col-xs-3">
         {dayLectures}
       </div>
+    );
+  }
+}
 
+
+/**
+ * An expandable weekday box with its corresponding lectures
+ */
+class DayBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false
+    }
+
+    this.toggleExpand = this.toggleExpand.bind(this);
+  }
+
+  toggleExpand() {
+    this.setState({expanded: !this.state.expanded})
+  }
+
+  render() {
+    const isSelected = this.props.isDaySelected(this.props.dayLectures);
+
+    const arrowColour = isSelected ? "lightpurple" : "darkpurple";
+
+    return (
+      <div>
+        <div className={"sidebar-day " +
+          (this.state.expanded ? "accordian-expanded" : "accordian-collapsed") +
+          (isSelected ? " selected-day" : " unselected-day")}>
+
+          <div id="map-day-title">
+            <h3 onClick={ () => this.props.selectDayTimeframes(this.props.dayLectures) }> {this.props.day} </h3>
+          </div>
+
+          <img src={"static/res/ico/" + (this.state.expanded ? "doubleup-" : "doubledown-") + (isSelected ? "lightpurple" : "darkpurple") + ".png"}
+            id="expand-icon"
+            onClick={this.toggleExpand}/>
+        </div>
+
+        {this.state.expanded &&
+          <ul id="map-day-list">
+            {this.props.dayLectures.map(lec => {
+              let roomStr = "";
+              let roomNum = 0;
+              if (lec.fstRoom) {
+                roomNum += 1;
+                roomStr += "Room " + roomNum + ": " + lec.fstRoom.room + ", " + lec.fstRoom.bName + " (" + lec.fstRoom.bCode + ")";
+              }
+              if (lec.secRoom) {
+                roomNum += 1;
+                roomStr += (lec.fstRoom ? "\n" : "") + "Room " + roomNum + ": " + lec.secRoom.room + ", " + lec.secRoom.bName + " (" + lec.secRoom.bCode + ")";
+              }
+
+              return (
+                <li className={ "map-day-lec " + (this.props.findSelectedLecTimeframe(lec, this.props.selectedLecTimeframes) === -1 ? "unselected-day-lec" : "selected-day-lec") }
+                  onClick={ () => this.props.selectLecTimeframe(lec) }>
+                  <h4> {lec.courseCode} </h4>
+                  <h5> {convertTimeToString(lec.startTime) + "-" + convertTimeToString(lec.endTime)} </h5>
+                  <h5> {roomStr} </h5>
+                </li>
+              )}
+            )}
+          </ul>
+        }
+      </div>
     );
   }
 }
@@ -408,7 +454,7 @@ class CampusMap extends React.Component {
       const description = building.days.map(day => {
         const dayTimes = day.timeframes.map(time =>
           <li key={time.startTime + "-" + time.endTime}>
-            {time.startTime + "-" + time.endTime + ", "+ time.room + ": " + time.courseCode}
+            {convertTimeToString(time.startTime) + "-" + convertTimeToString(time.endTime) + ", "+ time.room + ": " + time.courseCode}
           </li>
         );
 
@@ -428,12 +474,7 @@ class CampusMap extends React.Component {
         (lec.secRoom && lec.secRoom.bCode === building.buildingCode)
       );
 
-      if (buildingInd == -1) {
-        colouredMarker = blueMarker;
-      }
-      else {
-        colouredMarker = redMarker;
-      }
+      colouredMarker = (buildingInd == -1) ? blueMarker : redMarker
 
       return (
         <Marker key={building.buildingName} icon={colouredMarker} position={[building.lat, building.lng]}>
@@ -450,10 +491,16 @@ class CampusMap extends React.Component {
       );
     });
 
-    const center = [43.65977015, -79.3972632658009];
+    // TODO: fit map the bounds so that all markers on the map are in view
+    let mapBounds = L.latLngBounds();
+
+    this.props.lecturesByBuilding.forEach(building =>
+      mapBounds.extend(L.latLng(building.lat, building.lng)));
+
+    const center = mapBounds.getCenter();
 
     return (
-      <div id="campus-map">
+      <div ref="map" id="campus-map" className="col-md-8 col-xs-6">
         <Map
           center={center}
           zoom={16}
@@ -471,6 +518,48 @@ class CampusMap extends React.Component {
       </div>
     );
   }
+}
+
+
+/**
+ * Returns and formats all course codes in id.
+ * @param {string} id The Node's ID.
+ * @returns {string[]} All formatted course codes.
+ * TODO: Change function name
+ */
+function formatCourseName(id) {
+  var names;
+
+  if (id === 'CSC200') {
+      names = id + 'Y1';
+  } else if (id === 'Calc1') {
+      names = 'MAT135H1' + ' ' + 'MAT136H1' + ' ' + 'MAT137Y1' + ' ' +
+              'MAT157Y1';
+  } else if (id === 'Lin1') {
+      names = 'MAT221H1' + ' ' + 'MAT223H1' + ' ' + 'MAT240H1';
+  } else if (id === 'Sta1') {
+      names = 'STA247H1' + ' ' + 'STA255H1';
+  } else if (id === 'Sta2') {
+      names = 'STA248H1' + ' ' + 'STA261H1';
+  } else if (id.indexOf('H1', id.length - 2) !== -1) {
+      names = id;
+  } else {
+      names = id + 'H1';
+  }
+
+  names = names.split(" ");
+  return names;
+}
+
+
+// Helper function to get the string representation of the time
+function convertTimeToString(time) {
+  const meridiem = time < 12 ? "AM" : "PM";
+
+  if (time % 1 === 0) {
+    return (time === 12 ? 12 : time % 12) + ':00' + meridiem;
+  }
+  return (time === 12.5 ? 12 : Math.floor(time)) % 12 + ':30' + meridiem;
 }
 
 export { CourseModal, MapModal };

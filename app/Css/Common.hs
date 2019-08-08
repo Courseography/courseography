@@ -140,12 +140,54 @@ modalCSS = do
             margin (pt 5) 0 (pt 5) 0
             lineHeight (em 1.3)
             textAlign $ alignSide sideLeft
-        "#campus-map" ? do
-            height (px 600)
-            width (px 800)
-        ".leaflet-container" ? do
-            height (px 570)
-            width (px 700)
+    ".leaflet-container" ? do
+        height (px 570)
+        width (px 700)
+    "#map-sidebar" ? do
+        height (px 570)
+        width (px 280)
+        overflowY scroll
+    ".accordian-collapsed" ? do
+        borderRadius (px 7) (px 7) (px 7) (px 7)
+        marginBottom (px 10)
+    ".accordian-expanded" ? do
+        borderRadius (px 7) (px 7) (px 0) (px 0)
+    ".sidebar-day" ? do
+        fontWeight bold
+        padding (px 10) (px 10) (px 10) (px 10)
+        fontFamily ["Work Sans"] [sansSerif]
+        "#map-day-title" ? do
+            width (px 165)
+            height (px 40)
+            position relative
+            verticalAlign middle
+            display inlineBlock
+        "#expand-icon" ? do
+            height (px 30)
+            width (px 30)
+            position relative
+            verticalAlign middle
+            display inlineBlock
+            float floatRight
+    ".selected-day" ? do
+        color "#dedae5"
+        backgroundColor purple8
+    ".unselected-day" ? do
+        color "#7a6a96c7"
+        backgroundColor "#dedae5"
+    "#map-day-list" ? do
+        "list-style" -: "none"
+        paddingLeft (px 0)
+        ".map-day-lec" ? do
+            paddingLeft (px 10)
+            paddingRight (px 10)
+            fontFamily ["Work Sans"] [sansSerif]
+            marginTop (px (-3))
+        ".unselected-day-lec" ? do
+            border solid (px 3) "#dedae5"
+        ".selected-day-lec" ? do
+            border solid (px 3) purple8
+            position relative
     ".modal-class" ? do
         overflowY auto
         position absolute
