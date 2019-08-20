@@ -46,7 +46,7 @@ describe("Hybrid Node", () => {
       inEdges: [],
       logicalType: "AND",
       outEdges: ["p32"],
-      parents: [],
+      parents: ["csc301", "csc318", "csc384", "csc418"],
       svg: {
         onKeyDown: jest.fn()
       }
@@ -57,12 +57,12 @@ describe("Hybrid Node", () => {
 
   it("should have the 'hybrid' CSS class", async () => {
     const graph = await TestGraph.build();
-    const hybrid101 = graph.getByTestId("h101");
+    const hybrid101 = graph.getByTestId("h(aaa101)");
     expect(hybrid101.classList.contains("hybrid")).toBe(true);
   });
   it("shouldn't do anything when you hover or click it", async () => {
     const graph = await TestGraph.build();
-    const hybrid101 = graph.getByTestId("h101");
+    const hybrid101 = graph.getByTestId("h(aaa101)");
 
     // convert DOMTokenList to object so we can deep copy
     const cssClassDeepCopy = JSON.parse(JSON.stringify(hybrid101.classList));
@@ -79,12 +79,12 @@ describe("Hybrid Node", () => {
   });
   it("should be 'inactive' when it's prereq parent is NOT met", async () => {
     const graph = await TestGraph.build();
-    const hybrid101 = graph.getByTestId("h101");
+    const hybrid101 = graph.getByTestId("h(aaa101)");
     expect(hybrid101.classList.contains("inactive")).toBe(true);
   });
   it("should be 'active' when its prereq parent is met", async () => {
     const graph = await TestGraph.build();
-    const hybrid101 = graph.getByTestId("h101");
+    const hybrid101 = graph.getByTestId("h(aaa101)");
     const aaa101 = graph.getByTestId("aaa101");
     fireEvent.click(aaa101);
     expect(hybrid101.classList.contains("active")).toBe(true);
@@ -92,7 +92,7 @@ describe("Hybrid Node", () => {
 
   it("should be 'missing' if not 'active' and it's an unmet prereq of the currently hovered course", async () => {
     const graph = await TestGraph.build();
-    const hybrid101 = graph.getByTestId("h101");
+    const hybrid101 = graph.getByTestId("h(aaa101)");
     const aaa303 = graph.getByTestId("aaa303");
 
     fireEvent.mouseOver(aaa303);
@@ -216,7 +216,7 @@ describe("Course Node", () => {
         const aaa202 = graph.getByTestId("aaa202");
         fireEvent.click(aaa201);
         fireEvent.mouseOver(aaa202);
-        // not missing!
+        // not missing because aaa201 is overridden
         expect(aaa101.classList.contains("takeable")).toBe(true);
       });
 

@@ -38,7 +38,7 @@ export default class TestGraph {
   }
 
   /**
-   * @param {string} testId - value of the "data-testId" attribute
+   * @param {string} testId - value of the "data-testid" attribute
    * @returns {DOM Element}
    */
   getByTestId(testId) {
