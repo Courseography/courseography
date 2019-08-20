@@ -31,7 +31,7 @@ export default class TestGraph {
 
   /**
    * @param {string} text
-   * @returns {DOM Element}
+   * @return {DOM Element} -  for example, SVGElement
    */
   getNodeByText(text) {
     return this.rtlGraph.getByText(text).parentNode;
@@ -43,5 +43,13 @@ export default class TestGraph {
    */
   getByTestId(testId) {
     return this.rtlGraph.getByTestId(testId);
+  }
+
+  /**
+   * @param {regex or string} text
+   * @returns {boolean} - whether the exact text exists on the webpage
+   */
+  textExists(text) {
+    return this.rtlGraph.queryByText(text) !== null;
   }
 }

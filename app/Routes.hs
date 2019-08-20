@@ -7,6 +7,7 @@ import Response
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getGraphJSON)
 import Database.CourseInsertion (saveGraphJSON)
 import Data.Text.Lazy (Text)
+import DynamicGraphs.WriteRunDot (findPrereqsResponse)
 
 routes :: String -> Text -> Text -> [ (String, ServerPart Response)]
 routes staticDir aboutContents privacyContents = [
@@ -29,5 +30,6 @@ routes staticDir aboutContents privacyContents = [
     ("calendar", look "courses" >>= calendarResponse),
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     ("loading", lookText' "size" >>= loadingResponse),
-    ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
+    ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr),
+    ("find-prereqs", findPrereqsResponse)
     ]
