@@ -167,6 +167,13 @@ export default class Node extends React.Component {
     });
   }
 
+  getDataTestId = () => {
+    if (this.props.hybrid) {
+      return `h(${this.props.parents.join(',')})`;
+    }
+    return this.props.JSON.id_;
+  }
+
   render() {
     let ellipse = null;
     var newClassName = this.props.className + " " + this.state.status;
@@ -212,7 +219,7 @@ export default class Node extends React.Component {
 
     // TODO: Look at this.props to see what we need to give the g
     return (
-      <g {...gAttrs} id={this.props.JSON.id_} className={newClassName} data-testid={this.props.JSON.id_}>
+      <g {...gAttrs} id={this.props.JSON.id_} className={newClassName} data-testid={this.getDataTestId()}>
         {ellipse}
         <rect {...rectAttrs} style={rectStyle} />
         {this.props.JSON.text.map(function(textTag, i) {
