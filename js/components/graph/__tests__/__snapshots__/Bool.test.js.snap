@@ -3,6 +3,7 @@
 exports[`AND Bool should match shallow snapshot 1`] = `
 <g
   className="bool inactive"
+  data-testid="and(csc209,csc258)"
   fill=""
   graph={1}
   height={14.7368002}
@@ -51,6 +52,7 @@ exports[`AND Bool should match shallow snapshot 1`] = `
 exports[`OR Bool should match shallow snapshot 1`] = `
 <g
   className="bool inactive"
+  data-testid="and(csc209,csc258)"
   fill=""
   graph={1}
   height={14.7368002}
