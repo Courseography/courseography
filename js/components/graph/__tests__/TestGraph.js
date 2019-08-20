@@ -31,17 +31,25 @@ export default class TestGraph {
 
   /**
    * @param {string} text
-   * @returns {DOM Element}
+   * @return {DOM Element} -  for example, SVGElement
    */
   getNodeByText(text) {
     return this.rtlGraph.getByText(text).parentNode;
   }
 
   /**
-   * @param {string} testId - value of the "data-testId" attribute
+   * @param {string} testId - value of the "data-testid" attribute
    * @returns {DOM Element}
    */
   getByTestId(testId) {
     return this.rtlGraph.getByTestId(testId);
+  }
+
+  /**
+   * @param {regex or string} text
+   * @returns {boolean} - whether the exact text exists on the webpage
+   */
+  textExists(text) {
+    return this.rtlGraph.queryByText(text) !== null;
   }
 }

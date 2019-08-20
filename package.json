@@ -19,6 +19,7 @@
     ],
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
+      "<rootDir>/cypress/",
       "<rootDir>/js/components/graph/__tests__/TestGraph.js",
       "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js"
     ],
