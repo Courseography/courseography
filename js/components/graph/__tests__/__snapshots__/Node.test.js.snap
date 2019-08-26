@@ -35,8 +35,8 @@ exports[`Course Node should match shallow snapshot 1`] = `
 
 exports[`Hybrid Node should match snapshot 1`] = `
 <g
-  className="hybrid takeable"
-  data-testid="h()"
+  className="hybrid inactive"
+  data-testid="h(csc301,csc318,csc384,csc418)"
   id="h46"
   onKeyDown={[MockFunction]}
   shapeRendering="geometricPrecision"

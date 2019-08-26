@@ -11,7 +11,6 @@ describe("Hybrid Node", () => {
   });
   it("shouldn't do anything when you hover or click it", () => {
     cy.get('[data-testid="h(csc324)"]').should("have.class", "inactive");
-    // TODO: click, mouseover, mouseout on h(csc324)
     cy.get('[data-testid="h(csc324)"]')
       .click()
       .should("have.class", "inactive")

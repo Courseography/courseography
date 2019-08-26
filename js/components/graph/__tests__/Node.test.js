@@ -46,7 +46,7 @@ describe("Hybrid Node", () => {
       inEdges: [],
       logicalType: "AND",
       outEdges: ["p32"],
-      parents: [],
+      parents: ["csc301", "csc318", "csc384", "csc418"],
       svg: {
         onKeyDown: jest.fn()
       }
