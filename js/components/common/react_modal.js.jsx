@@ -366,10 +366,15 @@ class DayBox extends React.Component {
     }
 
     this.toggleExpand = this.toggleExpand.bind(this);
+    this.getRoomStr = this.getRoomStr.bind(this);
   }
 
   toggleExpand() {
     this.setState({expanded: !this.state.expanded})
+  }
+
+  getRoomStr(lec, room, roomNum) {
+    return "Room" + (lec.fstRoom && lec.secRoom ? " " + roomNum : "") + ": " + room.room + ", " + room.bName + " (" + room.bCode + ")";
   }
 
   render() {
@@ -399,11 +404,11 @@ class DayBox extends React.Component {
               let roomNum = 0;
               if (lec.fstRoom) {
                 roomNum += 1;
-                roomStr += "Room " + roomNum + ": " + lec.fstRoom.room + ", " + lec.fstRoom.bName + " (" + lec.fstRoom.bCode + ")";
+                roomStr += this.getRoomStr(lec, lec.fstRoom, roomNum);
               }
               if (lec.secRoom) {
                 roomNum += 1;
-                roomStr += (lec.fstRoom ? "\n" : "") + "Room " + roomNum + ": " + lec.secRoom.room + ", " + lec.secRoom.bName + " (" + lec.secRoom.bCode + ")";
+                roomStr += (lec.fstRoom ? "\n" : "") + this.getRoomStr(lec, lec.secRoom, roomNum);
               }
 
               return (
@@ -455,13 +460,15 @@ class CampusMap extends React.Component {
 
     const locationMarkers = this.props.lecturesByBuilding.map(building => {
       const description = building.days
-        .sort((dayA, dayB) => dayA.dayOrder < dayB.dayOrder)
+        .sort((dayA, dayB) => {return dayA.dayOrder - dayB.dayOrder})
         .map(day => {
-          const dayTimes = day.timeframes.map(time =>
-            <li key={time.courseCode + "-" + time.startTime + "-" + time.endTime}>
-              {convertTimeToString(time.startTime) + "-" + convertTimeToString(time.endTime) + ", "+ time.room + ": " + time.courseCode}
-            </li>
-          );
+          const dayTimes = day.timeframes
+            .sort((timeA, timeB) => {return timeA.startTime - timeB.startTime})
+            .map(time =>
+              <li key={time.courseCode + "-" + time.startTime + "-" + time.endTime}>
+                {convertTimeToString(time.startTime) + "-" + convertTimeToString(time.endTime) + ", "+ time.room + ": " + time.courseCode}
+              </li>
+            );
 
           return (
             <div key={day.dayString}>
