@@ -164,7 +164,8 @@ class MapModal extends React.Component {
     }
 
     const dayData = {
-      day: lecture.dayString,
+      dayString: lecture.dayString,
+      dayOrder: lecture.day,
       timeframes: [timeframeData]
     };
 
@@ -183,7 +184,7 @@ class MapModal extends React.Component {
     // the building is already in lecsByBuilding, so add the timeframe to the course if the course already
     // exists. Otherwise, add the course with the timeframe
     else {
-      const foundDay = foundBuilding.days.find(c => c.day === lecture.day);
+      const foundDay = foundBuilding.days.find(c => c.dayOrder === lecture.day);
 
       if (!foundDay) {
         foundBuilding.days.push(dayData);
@@ -332,6 +333,7 @@ class MapSidebar extends React.Component {
       if (this.props.lecturesByDay[day]) {
         dayLectures.push(
           <DayBox
+            key={day}
             day={day}
             dayLectures={this.props.lecturesByDay[day]}
             selectLecTimeframe={this.props.selectLecTimeframe}
@@ -405,7 +407,8 @@ class DayBox extends React.Component {
               }
 
               return (
-                <li className={ "map-day-lec " + (this.props.findSelectedLecTimeframe(lec, this.props.selectedLecTimeframes) === -1 ? "unselected-day-lec" : "selected-day-lec") }
+                <li key={lec.courseCode + "-" + lec.startTime + "-" + lec.endTime}
+                  className={ "map-day-lec " + (this.props.findSelectedLecTimeframe(lec, this.props.selectedLecTimeframes) === -1 ? "unselected-day-lec" : "selected-day-lec") }
                   onClick={ () => this.props.selectLecTimeframe(lec) }>
                   <h4> {lec.courseCode} </h4>
                   <h5> {convertTimeToString(lec.startTime) + "-" + convertTimeToString(lec.endTime)} </h5>
@@ -451,22 +454,24 @@ class CampusMap extends React.Component {
     })
 
     const locationMarkers = this.props.lecturesByBuilding.map(building => {
-      const description = building.days.map(day => {
-        const dayTimes = day.timeframes.map(time =>
-          <li key={time.startTime + "-" + time.endTime}>
-            {convertTimeToString(time.startTime) + "-" + convertTimeToString(time.endTime) + ", "+ time.room + ": " + time.courseCode}
-          </li>
-        );
+      const description = building.days
+        .sort((dayA, dayB) => dayA.dayOrder < dayB.dayOrder)
+        .map(day => {
+          const dayTimes = day.timeframes.map(time =>
+            <li key={time.courseCode + "-" + time.startTime + "-" + time.endTime}>
+              {convertTimeToString(time.startTime) + "-" + convertTimeToString(time.endTime) + ", "+ time.room + ": " + time.courseCode}
+            </li>
+          );
 
-        return (
-          <div key={day.day}>
-            <p>
-              {day.day}
-            </p>
-            {dayTimes}
-          </div>
-        );
-      });
+          return (
+            <div key={day.dayString}>
+              <p>
+                {day.dayString}
+              </p>
+              {dayTimes}
+            </div>
+          );
+        });
 
       let colouredMarker;
       const buildingInd = this.props.selectedLecTimeframes.findIndex(lec =>
@@ -494,10 +499,17 @@ class CampusMap extends React.Component {
     // TODO: fit map the bounds so that all markers on the map are in view
     let mapBounds = L.latLngBounds();
 
-    this.props.lecturesByBuilding.forEach(building =>
-      mapBounds.extend(L.latLng(building.lat, building.lng)));
+    // If there are selected lectures, center the map based on the locations of those lectures, otherwise, center the map
+    // on Bahen
+    let center = [43.6596426,-79.3976676];
 
-    const center = mapBounds.getCenter();
+    if (this.props.lecturesByBuilding.length) {
+
+      this.props.lecturesByBuilding.forEach(building =>
+        mapBounds.extend(L.latLng(building.lat, building.lng)));
+
+      center = mapBounds.getCenter();
+    }
 
     return (
       <div ref="map" id="campus-map" className="col-md-8 col-xs-6">
