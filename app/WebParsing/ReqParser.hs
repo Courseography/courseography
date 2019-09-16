@@ -166,7 +166,7 @@ justParser = do
         grade <- Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
         return grade
 
--- parse for single course with our without cutoff OR a req within parantheses
+-- parse for single course with or without cutoff OR a req within parentheses
 courseParser :: Parser Req
 courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,

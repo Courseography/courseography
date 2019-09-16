@@ -91,6 +91,7 @@ export default class Bool extends React.Component {
       <g
         {...this.props.JSON}
         className={this.props.className + " " + this.state.status}
+        data-testid={`and(${this.props.parents.join()})`}
       >
         <ellipse {...ellipseAttrs} />
         {this.props.JSON.text.map(

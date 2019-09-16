@@ -95,8 +95,8 @@ buildEllipses texts entity elementId =
                 shapeText = ellipseText}
     where
         intersectsEllipse a b (cx, cy) (x, y) =
-            let dx = x - cx - 5  -- some tolerance
-                dy = y - cy - 5
+            let dx = x - cx - 10  -- some tolerance
+                dy = y - cy - 10
             in
                 (dx*dx) / (a*a) + (dy*dy) / (b*b) < 1
 

@@ -11,11 +11,13 @@ module Database.CourseQueries
     (retrieveCourse,
      returnCourse,
      allCourses,
+     prereqsForCourse,
      courseInfo,
      getDeptCourses,
      queryGraphs,
      deptList,
      returnMeeting,
+     getGraph,
      getGraphJSON,
      getMeetingTime,
      buildTime) where
@@ -28,7 +30,7 @@ import Control.Monad.IO.Class (liftIO, MonadIO)
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import Data.List
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, fromMaybe)
 import Config (databasePath)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
@@ -121,13 +123,21 @@ buildMeetTimes meet = do
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements
 -- for rendering graph (returned as JSON).
 getGraphJSON :: T.Text -> IO Response
-getGraphJSON graphName =
+getGraphJSON graphName = getGraph graphName >>= withDefault
+    where
+        withDefault (Just response) = return response
+        withDefault Nothing = return $
+            createJSONResponse $
+            object ["texts" .= ([] :: [Text]),
+                    "shapes" .= ([] :: [Text]),
+                    "paths" .= ([] :: [Text])]
+
+getGraph :: T.Text -> IO (Maybe Response)
+getGraph graphName =
     runSqlite databasePath $ do
         graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
         case graphEnt of
-            Nothing -> return $ createJSONResponse $ object ["texts" .= ([] :: [Text]),
-                                                             "shapes" .= ([] :: [Shape]),
-                                                             "paths" .= ([] :: [Path])]
+            Nothing -> return Nothing
             Just graph -> do
                 let gId = entityKey graph
                 sqlTexts    :: [Entity Text] <- selectList [TextGraph ==. gId] []
@@ -167,7 +177,7 @@ getGraphJSON graphName =
                             ("height", toJSON $ graphHeight $ entityVal graph)
                         ]
 
-                return response :: SqlPersistM Response
+                return (Just response) :: SqlPersistM (Maybe Response)
 
 -- | Builds a list of all course codes in the database.
 allCourses :: IO Response
@@ -177,6 +187,18 @@ allCourses = do
       let codes = map (coursesCode . entityVal) courses
       return $ T.unlines codes :: SqlPersistM T.Text
   return $ toResponse response
+
+-- | Retrieves the prerequisites for a course (code) as a string.
+prereqsForCourse :: T.Text -> IO (Either String T.Text)
+prereqsForCourse courseCode = runSqlite databasePath $ do
+    course <- selectFirst [CoursesCode ==. courseCode] []
+    case course of
+        Nothing -> return (Left "Course not found")
+        Just courseEntity ->
+            return (Right $
+                fromMaybe "" $
+                coursesPrereqString $
+                entityVal courseEntity) :: SqlPersistM (Either String T.Text)
 
 -- | Returns all course info for a given department.
 courseInfo :: T.Text -> ServerPart Response

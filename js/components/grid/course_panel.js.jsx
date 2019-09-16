@@ -1,5 +1,6 @@
 import React from 'react';
 import { CourseModal } from '../common/react_modal.js.jsx';
+import { getCourse } from '../common/utils';
 
 /**
  * Creates a search box and stores the current user input that is in the search box

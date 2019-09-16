@@ -7,6 +7,7 @@ export default class NodeGroup extends React.Component {
     super(props);
     this.reset = this.reset.bind(this);
     this.findRelationship = this.findRelationship.bind(this);
+    this.setRefEntry = this.setRefEntry.bind(this);
   }
 
   reset() {
@@ -34,6 +35,10 @@ export default class NodeGroup extends React.Component {
         n.text.some(textTag => textTag.text.includes(course))
     );
     return node;
+  }
+
+  setRefEntry(entry) {
+    return (elem) => elem && (this[entry.id_] = elem);
   }
 
   render() {
@@ -96,7 +101,7 @@ export default class NodeGroup extends React.Component {
               className={"hybrid"}
               key={entry.id_}
               hybrid={true}
-              ref={elem => elem && (this[entry.id_] = elem)}
+              ref={this.setRefEntry(entry)}
               parents={parents}
               childs={childs}
               inEdges={[]}
@@ -131,7 +136,7 @@ export default class NodeGroup extends React.Component {
               JSON={entry}
               className="node"
               key={entry.id_}
-              ref={elem => elem && (this[entry.id_] = elem)}
+              ref={this.setRefEntry(entry)}
               hybrid={false}
               parents={parents}
               childs={childs}

@@ -25,21 +25,15 @@ jQueryScripts = if enableCdn
 graphScripts :: H.Html
 graphScripts = do
     mapM_ toScript $
-        ["/static/js/common/objects/course.js",
-         "/static/js/common/objects/section.js",
-         "/static/js/common/utilities/util.js",
-         "/static/js/vendor/bootstrap.min.3.1.1.js"]
+        ["/static/js/vendor/bootstrap.min.3.1.1.js"]
     H.script ! A.src "/static/js/graph/app.js" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
     mapM_ toScript $
         [if enableCdn
-         then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-         else "/static/js/vendor/bootstrap.min.3.1.1.js",
-         "/static/js/common/objects/course.js",
-         "/static/js/common/objects/section.js",
-         "/static/js/common/utilities/util.js"
+         then "https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"
+         else "/static/js/vendor/bootstrap.min.3.1.1.js"
          ]
     H.script ! A.src "/static/js/grid/app.js" $ ""
 
@@ -54,10 +48,7 @@ drawScripts = do
 
 postScripts :: H.Html
 postScripts = do
-    mapM_ toScript [
-        "/static/js/common/objects/course.js",
-        "/static/js/common/objects/section.js",
-        "/static/js/common/utilities/util.js"]
+    mapM_ toScript []
     H.script ! A.src "/static/js/post/app.js" $ ""
 
 searchScripts :: H.Html

@@ -7,6 +7,7 @@ export default class BoolGroup extends React.Component {
     super(props);
     this.reset = this.reset.bind(this);
     this.generateBool = this.generateBool.bind(this);
+    this.setRefEntry = this.setRefEntry.bind(this);
   }
 
   componentDidMount() {
@@ -20,6 +21,10 @@ export default class BoolGroup extends React.Component {
       var bool = this[boolJSON.id_];
       bool.setState({ status: "inactive" });
     });
+  }
+
+  setRefEntry(boolJSON) {
+    return (elem) => elem && (this[boolJSON.id_] = elem);
   }
 
   // Generate data for a Bool node
@@ -43,7 +48,7 @@ export default class BoolGroup extends React.Component {
         JSON={boolJSON}
         className="bool"
         key={boolJSON.id_}
-        ref={elem => elem && (this[boolJSON.id_] = elem)}
+        ref={this.setRefEntry(boolJSON)}
         parents={parents}
         childs={childs}
         inEdges={inEdges}

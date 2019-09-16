@@ -22,32 +22,40 @@ import Svg.Parser (parsePrebuiltSvgs)
 import Css.Compiler (compileCSS)
 import Util.Documentation (generateDocs)
 
--- dynamicgraph_test
-import DynamicGraphs.WriteRunDot(doDots)
-import DynamicGraphs.GraphGenerator(sampleGraph)
+-- dynamic graph generation
+import DynamicGraphs.WriteRunDot(generatePrereqsForCourses)
 
 -- | A map of command-line arguments to their corresponding IO actions.
-taskMap :: Map.Map String (IO ())
+taskMap :: Map.Map String ([String] -> IO ())
 taskMap = Map.fromList [
-    ("server", runServer),
-    ("database", setupDatabase),
-    ("graphs", parsePrebuiltSvgs),
-    ("css", compileCSS),
-    ("docs", generateDocs),
-    ("minfangraph", doDots [ ("sample", sampleGraph) ])]
+    ("server", const runServer),
+    ("database", const setupDatabase),
+    ("graphs", const parsePrebuiltSvgs),
+    ("css", const compileCSS),
+    ("docs", const generateDocs),
+    ("generate", generate)]
 
 -- | Courseography entry point.
 main :: IO ()
 main = do
     args <- getArgs
-    let taskName = if null args then "server" else head args
-    fromMaybe putUsage (Map.lookup taskName taskMap)
+    let (taskName, rest) =
+            case args of
+                [] -> ("server", [])
+                (command : remaining) -> (command, remaining)
+    fromMaybe putUsage (Map.lookup taskName taskMap) rest
 
 
 -- | Print usage message to user (when main gets an incorrect argument).
-putUsage :: IO ()
-putUsage = hPutStrLn stderr usageMsg
+putUsage :: [String] -> IO ()
+putUsage _ = hPutStrLn stderr usageMsg
     where
         taskNames = Map.keys taskMap
         usageMsg = "Unrecognized argument. Available arguments:\n" ++
                    intercalate "\n" taskNames
+
+generate :: [String] -> IO ()
+generate (name : courses) = generatePrereqsForCourses (name, courses)
+generate _ = hPutStrLn
+    stderr
+    "Generate Usage: generate <filename> <course1> <course2> ..."

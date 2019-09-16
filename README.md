@@ -1,4 +1,4 @@
-Courseography
+[Courseography](https://courseography.cs.toronto.edu)
 =============
 
 About
@@ -77,7 +77,7 @@ Ryan Fan,
 Ailsa Fang,
 Christian Garcia,
 Ross Gatih,
-Sidharth Gupta
+Sidharth Gupta,
 Parker Hutcheson,
 Philip Kukulak,
 Ryan Lee,

@@ -14,7 +14,7 @@ directly to the client when viewing the @/graph@ page.
 -}
 
 module Svg.Parser
-    (parsePrebuiltSvgs) where
+    (parsePrebuiltSvgs, parseDynamicSvg) where
 
 import Data.Maybe (fromMaybe)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
@@ -59,6 +59,9 @@ parsePrebuiltSvgs = runSqlite databasePath $ do
     performParse "Aboriginal" "abs2015.svg"
     performParse "German" "ger2015.svg"
 
+parseDynamicSvg :: T.Text -> T.Text -> IO ()
+parseDynamicSvg graphName graphContents =
+    runSqlite databasePath $ performParseFromMemory graphName graphContents
 
 -- | The starting point for parsing a graph with a given title and file.
 performParse :: T.Text -- ^ The title of the graph.
@@ -67,7 +70,11 @@ performParse :: T.Text -- ^ The title of the graph.
 performParse graphName inputFilename = do
     liftIO . print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
     graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
-    let tags = TS.parseTags graphFile
+    performParseFromMemory graphName graphFile
+
+performParseFromMemory :: T.Text -> T.Text -> SqlPersistM ()
+performParseFromMemory graphName graphContents = do
+    let tags = TS.parseTags graphContents
         svgRoot = head $ filter (TS.isTagOpenName "svg") tags
         (graphWidth, graphHeight) = parseSize svgRoot
     key <- insertGraph graphName graphWidth graphHeight
@@ -302,7 +309,7 @@ parseValWithState parser initialState input =
 -- | Runs a parser on a text object without internal parser state.
 -- Throws an exception on any parse errors.
 parseVal :: Parser a -> T.Text -> a
-parseVal parser input = parseValWithState parser () input
+parseVal parser = parseValWithState parser ()
 
 -- | Looks up an attribute value using the given parser.
 parseAttr :: Parser a -> T.Text     -- ^ The attribute's name.
@@ -318,17 +325,23 @@ digits = P.many1 P.digit
 double :: P.Parsec String u Double
 double = do
     sign <- P.option ' ' (P.char '-')
-    whole <- digits
-    fractional <- P.option ".0" parseFractional
-    magnitude <- P.option "e0" parseMagnitude
-    return (read $ sign : whole ++ fractional ++ magnitude)
+    number <- wholeAndFractional
+    magnitude <- P.option "" parseMagnitude
+    return (read $ sign : number ++ magnitude)
     where
+        wholeAndFractional = do
+            whole <- digits <|> parseFractional
+            if head whole == '.' then
+                return $ '0' : whole
+            else do
+                fractional <- P.option "" parseFractional
+                return $ whole ++ fractional
         parseFractional = do
             _ <- P.char '.'
             decimals <- digits
             return ("." ++ decimals)
         parseMagnitude = do
-            ch <- P.char 'e'
+            ch <- P.oneOf "eE"
             sign <- P.option "" $ P.string "-"
             power <- digits
             return (ch : sign ++ power)
@@ -370,7 +383,7 @@ parseTransform "" = (0, 0)
 parseTransform transform =
     parseVal parser transform
     where
-        parser = P.sepBy (scale <|> rotate) P.spaces >> translate
+        parser = P.sepEndBy (scale <|> rotate) P.spaces >> translate
         scale = P.string "scale(" >> double >> P.spaces >> P.option 0 double
             >> P.char ')'
         rotate = P.string "rotate(" >> double >> P.char ')'
@@ -403,7 +416,7 @@ data PathDState = PathDState
 -- See <https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d>.
 parsePathD :: T.Text -- ^ The 'd' attribute of an SVG path.
            -> [Point]
-parsePathD d = parseValWithState parser initialState d
+parsePathD = parseValWithState parser initialState
     where
         -- Keep track of the (first point, path mode, most recent point)
         initialState = PathDState { firstPoint = (0, 0)
@@ -414,7 +427,7 @@ parsePathD d = parseValWithState parser initialState d
         parser = do
             p <- parseStep
             -- Record the first point added.
-            _ <- P.modifyState $ \st -> st { firstPoint = p, currentPoint = p }
+            P.modifyState $ \st -> st { firstPoint = p, currentPoint = p }
             rest <- P.many parseStep
             return (p : rest)
 
@@ -434,7 +447,7 @@ parsePathD d = parseValWithState parser initialState d
             state <- P.getState
             let p = nextPoint arg state
             -- Every time a new point is added, update the parser state.
-            _ <- (P.modifyState $ \st -> st { currentPoint = p })
+            P.modifyState $ \st -> st { currentPoint = p }
             return p
 
         -- Compute the next point given the input argument and current state.
@@ -460,7 +473,7 @@ parsePathD d = parseValWithState parser initialState d
 
         closeLoop :: P.Parsec String PathDState Point
         closeLoop = do
-            _ <- (P.char 'Z' <|> P.char 'z')
+            _ <- P.char 'Z' <|> P.char 'z'
             state <- P.getState
             _ <- setMode AbsoluteMove
             return (firstPoint state)
