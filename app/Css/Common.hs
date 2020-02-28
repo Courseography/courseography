@@ -141,10 +141,19 @@ modalCSS = do
             lineHeight (em 1.3)
             textAlign $ alignSide sideLeft
     ".leaflet-container" ? do
-        height (px 570)
-        width (px 700)
+        height (px 650)
+        width (px 840)
+    "#zoom-button" ? do
+        borderRadius (px 7) (px 7) (px 7) (px 7)
+        marginTop (px 10)
+        color "#7a6a96c7"
+        backgroundColor "#dedae5"
+        border solid (px 2) "#7a6a96c7"
+    "#zoom-button:hover" ? do
+        color "#dedae5"
+        backgroundColor "#7a6a96c7"
     "#map-sidebar" ? do
-        height (px 570)
+        height (px 650)
         width (px 280)
         overflowY scroll
     ".accordian-collapsed" ? do

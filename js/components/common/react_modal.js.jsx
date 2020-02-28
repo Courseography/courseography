@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import ReactModal from 'react-modal';
 import Leaflet from 'leaflet';
-import { CircleMarker, Polygon, Polyline, Map, TileLayer, Marker, Popup, Tooltip, Circle } from 'react-leaflet';
+import {  Circle, CircleMarker, FeatureGroup, Map, Marker, Polygon, Polyline, Popup, TileLayer, Tooltip } from 'react-leaflet';
 import L from 'leaflet'
 import { getCourse } from '../common/utils';
 
@@ -436,6 +436,24 @@ class DayBox extends React.Component {
 class CampusMap extends React.Component {
   constructor(props) {
     super(props);
+
+    this.zoomToFit = this.zoomToFit.bind(this);
+    this.mapRef = createRef();
+    this.groupRef = createRef();
+  }
+
+  zoomToFit() {
+    const map = this.mapRef.current.leafletElement;
+    const mapGroup = this.groupRef.current.leafletElement;
+
+    // markerCount is the number of markers on the map.
+    // Only adjust the map bounds if there are multiple markers because the zoom will
+    // be strange for 1 marker. Note that the map will be centered on the single marker
+    const markerCount = mapGroup.getLayers().length
+
+    if (markerCount > 1) {
+      map.fitBounds(mapGroup.getBounds(), {padding: [30, 30]});
+    }
   }
 
   render() {
@@ -504,7 +522,6 @@ class CampusMap extends React.Component {
       );
     });
 
-    // TODO: fit map the bounds so that all markers on the map are in view
     let mapBounds = L.latLngBounds();
 
     // If there are selected lectures, center the map based on the locations of those lectures, otherwise, center the map
@@ -531,10 +548,14 @@ class CampusMap extends React.Component {
           scrollWheelZoom={true}
           dragging={true}
           animate={true}
+          ref={this.mapRef}
         >
-          <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-          {locationMarkers}
+          <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"/>
+          <FeatureGroup ref={this.groupRef}>
+            {locationMarkers}
+          </FeatureGroup>
         </Map>
+        <button id="zoom-button" onClick={this.zoomToFit}>Zoom to Fit</button>
       </div>
     );
   }
