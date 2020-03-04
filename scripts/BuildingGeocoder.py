@@ -26,7 +26,7 @@ with open(os.path.join("db", "building.csv"), 'w') as building_file:
     # Geocoder finds incorrect address for Myhal, manually fix this address for now
     if "MY" == build['code']:
       writer.writerow([build['code'], build['name'], build['address'], build['postal_code'],\
-        43.6606723, -79.3987641])
+        43.6606723,-79.3965754])
 
     else:
       writer.writerow([build['code'], build['name'], build['address'], build['postal_code'],\

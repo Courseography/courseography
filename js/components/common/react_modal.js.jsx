@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import ReactModal from 'react-modal';
 import Leaflet from 'leaflet';
-import {  Circle, CircleMarker, FeatureGroup, Map, Marker, Polygon, Polyline, Popup, TileLayer, Tooltip } from 'react-leaflet';
+import { Circle, CircleMarker, FeatureGroup, Map, Marker, Polygon, Polyline, Popup, TileLayer, Tooltip } from 'react-leaflet';
 import L from 'leaflet'
 import { getCourse } from '../common/utils';
 
