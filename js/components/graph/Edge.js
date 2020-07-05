@@ -12,6 +12,9 @@ export default class Edge extends React.Component {
   updateStatus() {
     var source = refLookUp(this.props.source, this.props.svg);
     var target = refLookUp(this.props.target, this.props.svg);
+    if (source === undefined || target === undefined) {
+      return;
+    }
     if (!source.isSelected() && target.state.status === "missing") {
       this.setState({ status: "missing" });
     } else if (!source.isSelected()) {
