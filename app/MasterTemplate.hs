@@ -45,7 +45,8 @@ header page =
             H.li $ toLink "grid" "Grid"
             H.li $ toLink "timesearch" "Search"
             H.li $ toLink "draw" "Draw"
-            H.li $ toLink "post" "Check My POSt!"
+            -- TODO: re-enable after handling new first-year courses
+            -- H.li $ toLink "post" "Check My POSt!"
             H.li $ toLink "about" "About"
             if page `elem` ["graph", "grid"]
             then H.li $ H.a ! A.id "nav-export" $ "Export"

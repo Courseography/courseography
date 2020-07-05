@@ -38,7 +38,7 @@ import Data.List.Split (splitOn)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
-    performParse "Computer Science" "csc2019.svg"
+    performParse "Computer Science" "csc2020.svg"
     performParse "Statistics" "sta2017.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"

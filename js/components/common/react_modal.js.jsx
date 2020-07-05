@@ -135,12 +135,12 @@ function formatCourseName(id) {
   } else if (id === 'Calc1') {
       names = 'MAT135H1' + ' ' + 'MAT136H1' + ' ' + 'MAT137Y1' + ' ' +
               'MAT157Y1';
-  } else if (id === 'Lin1') {
+  } else if (id === 'Calc2') {
+    names = 'MAT235Y1' + ' ' + 'MAT237Y1' + ' ' + 'MAT257Y1';
+  } else if (id === 'Alg1') {
       names = 'MAT221H1' + ' ' + 'MAT223H1' + ' ' + 'MAT240H1';
   } else if (id === 'Sta1') {
       names = 'STA247H1' + ' ' + 'STA255H1';
-  } else if (id === 'Sta2') {
-      names = 'STA248H1' + ' ' + 'STA261H1';
   } else if (id.indexOf('H1', id.length - 2) !== -1) {
       names = id;
   } else {
