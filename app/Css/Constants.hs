@@ -486,4 +486,4 @@ boolFontSize = 6
 
 -- |Defines region font size, 14 in pixels.
 regionFontSize :: Num a => a
-regionFontSize = 14
+regionFontSize = 13
