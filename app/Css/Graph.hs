@@ -112,7 +112,7 @@ nodeCSS = "g" ? do
         cursor cursorDefault
         "data-active" @= "active" & do
             "ellipse" <? do
-                fill "none"
+                fill "white"
                 stroke "black"
         "data-active" @= "overridden" & do
             "ellipse" <? do
@@ -135,7 +135,7 @@ nodeCSS = "g" ? do
         -- For the React graph
         ".active" & do
             "ellipse" <? do
-                fill "none"
+                fill "white"
                 stroke "black"
         ".overridden" & do
             "ellipse" <? do
