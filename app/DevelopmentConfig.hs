@@ -83,7 +83,7 @@ timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
 
 -- | The Faculty of Arts and Science API for course timetables (by unit).
 timetableApiUrl :: Text
-timetableApiUrl = "https://timetable.iit.artsci.utoronto.ca/api/20199/courses?org="
+timetableApiUrl = "https://timetable.iit.artsci.utoronto.ca/api/20209/courses?org="
 
 -- | The Faculty of Arts and Science API for a list of all units.
 orgApiUrl :: String
@@ -107,30 +107,30 @@ cssStyle = Clay.pretty
 
 -- | First day of classes for the fall term.
 fallStartDate :: Day
-fallStartDate = fromGregorian 2019 09 05
+fallStartDate = fromGregorian 2019 09 10
 
 -- | Last day of classes for the fall term.
 fallEndDate :: Day
-fallEndDate = fromGregorian 2019 12 04
+fallEndDate = fromGregorian 2019 12 09
 
 -- | First day of classes for the winter term.
 winterStartDate :: Day
-winterStartDate = fromGregorian 2020 01 06
+winterStartDate = fromGregorian 2020 01 04
 
 -- | Last day of classes for the winter term.
 winterEndDate :: Day
-winterEndDate = fromGregorian 2020 04 03
+winterEndDate = fromGregorian 2020 04 01
 
 -- | Out of date day. Used to control forbidden inputs for days.
 outDay :: Day
-outDay = fromGregorian 2019 01 01
+outDay = fromGregorian 2020 01 01
 
 -- Holidays for the fall and winter term.
 holidays :: [String]
-holidays = ["20191014T", "20191104T", "20191105T",
-            "20191106T", "20191107T", "20191108T",
-            "20200217T", "20200218T", "20200219T",
-            "20200220T", "20200221T"]
+holidays = ["20191012T", "20191109T", "20191110T",
+            "20191111T", "20191112T", "20191113T",
+            "20200215T", "20200216T", "20200217T",
+            "20200218T", "20200219T"]
 
 -- SCRIPT DEPENDENCIES CONFIGURATION
 
