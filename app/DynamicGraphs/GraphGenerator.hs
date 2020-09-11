@@ -21,16 +21,23 @@ import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
 import Data.Text.Lazy (Text, pack)
+import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
-import Control.Monad (mapM)
+import Control.Monad (mapM, liftM)
 
 
--- Serves as a sort of "interface" for the whole part "dynamic graph"
-coursesToPrereqGraph :: [String] -> IO (DotGraph Text)
+-- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
+coursesToPrereqGraph :: [String] -- ^ courses to generate
+                        -> IO (DotGraph Text)
 coursesToPrereqGraph = coursesToPrereqGraphExcluding []
 
-coursesToPrereqGraphExcluding :: [String] -> [String] -> IO (DotGraph Text)
+-- | Takes a list of taken courses, along with a list of courses we wish to generate
+-- a dependency graph for. The generated graph will neither include any of the taken courses,
+-- nor the dependencies of taken courses (unless they are depended on by other courses)
+coursesToPrereqGraphExcluding :: [String] -- ^ taken courses
+                              -> [String] -- ^ course to generate
+                              -> IO (DotGraph Text)
 coursesToPrereqGraphExcluding taken courses = do
     reqs <- lookupCourses taken $ map pack courses
     let reqs' = Map.toList reqs
@@ -47,20 +54,22 @@ sampleGraph = fst $ State.runState (reqsToGraph [
     ])
     (GeneratorState 0 Map.empty)
 
---
--- ** Main algorithm for converting requirements into a graph
 
--- The reqToStmts are meant to convert a single requirement and reqsToGraph use concatMap to
--- use reqToStmts to converts a list of requirements all at once and concatenate the results into a
--- single list of DotGraph objects.
+-- ** Main algorithm for converting requirements into a DotGraph
+
+-- | Convert a list of coursenames and requirements to a DotGraph object for
+--  drawing using Dot. Also prunes any repeated edges that arise from
+--  multiple Reqs using the same GRADE requirement
 reqsToGraph :: [(Text, Req)] -> State GeneratorState (DotGraph Text)
 reqsToGraph reqs = do
-    allStmts <- mapM reqToStmts reqs
-    return $ buildGraph $ concat allStmts
+    allStmts <- liftM concatUnique $ mapM reqToStmts reqs
+    return $ buildGraph allStmts
+    where
+        concatUnique = nubOrd . concat
 
 data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
--- Convert the original requirement data into dot statements that can be used by buildGraph to create the
+-- | Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects.
 reqToStmts :: (Text, Req) -> State GeneratorState [DotStatement Text]
 reqToStmts (name, req) = do
@@ -133,7 +142,7 @@ mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pa
 
 -- ** Graphviz configuration
 
--- With the dot statements converted from original requirement data as input, create the corresponding DotGraph
+-- | With the dot statements converted from original requirement data as input, create the corresponding DotGraph
 -- object with predefined hyperparameters (here, the hyperparameters defines that 1.graph can have multi-edges
 -- 2.graph edges have directions 3.graphID not defined(not so clear) 4.the graph layout, node shape, edge shape
 -- are defined by the attributes as below)
@@ -149,11 +158,11 @@ buildGraph statements = DotGraph {
         ] ++ statements
     }
 
--- Means the layout of the full graph is from left to right.
+-- | Means the layout of the full graph is from left to right.
 graphAttrs :: GlobalAttributes
 graphAttrs = GraphAttrs [AC.RankDir AC.FromLeft]
 
--- Means the shape of each node in the graph is circle with width 1, and is filled.
+-- | Means the shape of each node in the graph is circle with width 1, and is filled.
 nodeAttrs :: GlobalAttributes
 nodeAttrs = NodeAttrs [A.shape A.BoxShape, AC.Width 2, AC.Height 1, A.style A.filled]
 
@@ -164,6 +173,6 @@ ellipseAttrs = [
     AC.Height 0.5,
     A.fillColor White
     ]
--- Using default setting for the edges connecting the nodes.
+-- | Using default setting for the edges connecting the nodes.
 edgeAttrs :: GlobalAttributes
 edgeAttrs = EdgeAttrs []
