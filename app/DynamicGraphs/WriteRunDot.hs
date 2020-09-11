@@ -4,6 +4,7 @@ import Control.Monad (forM_)
 import Control.Monad.IO.Class (liftIO)
 import Data.GraphViz hiding (Str)
 import System.FilePath (FilePath, combine, normalise)
+import System.Directory (createDirectoryIfMissing)
 import DynamicGraphs.GraphGenerator (coursesToPrereqGraph, coursesToPrereqGraphExcluding)
 import Happstack.Server (ServerPart, lookBS)
 import Happstack.Server.SimpleHTTP (Response)
@@ -59,9 +60,18 @@ graphToByteString :: PrintDotRepr dg n => dg n -> IO B.ByteString
 graphToByteString graph = graphvizWithHandle Dot graph Svg B.hGetContents
 
 createImage :: PrintDotRepr dg n => (FilePath, dg n) -> IO FilePath
-createImage (n, g) = createImageInDir (normalise "graphs/gen") n Svg g
+createImage (n, g) = do
+  _ <- createDirectoryIfMissing False filepath
+  createImageInDir filepath n Svg g
+  where
+    filepath = normalise "graphs/gen"
 
--- Here runGraphvizCommand Dot creates the final graph given the input DotGraph object g and connects it
+-- | Here runGraphvizCommand Dot creates the final graph given the input DotGraph object g and connects it
 -- with the file path(by combining directory d and filename n) to make the final graph in the required directory.
-createImageInDir :: PrintDotRepr dg n => FilePath -> FilePath -> GraphvizOutput -> dg n -> IO FilePath
+createImageInDir :: PrintDotRepr dg n
+  => FilePath -- ^ directory to write in
+  -> FilePath -- ^ filename
+  -> GraphvizOutput -- ^ filetype to write in
+  -> dg n -- ^ graph to draw
+  -> IO FilePath
 createImageInDir d n o g = Data.GraphViz.addExtension (runGraphvizCommand Dot g) o (combine d n)

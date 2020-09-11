@@ -62,12 +62,11 @@ jobs:
           command: |
             yarn run eslint
 
-      # TODO: Figure out why this fails.
-      # - run:
-      #     name: Generate documentation
-      #     command: |
-      #       stack exec courseography docs
+      - run:
+          name: Generate documentation
+          command: |
+            stack exec courseography docs
 
-      # - store_artifacts:
-      #     path: doc
-      #     destination: docs
+      - store_artifacts:
+          path: doc
+          destination: docs
