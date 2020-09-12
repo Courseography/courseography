@@ -128,7 +128,7 @@ timetableCSS = do
                 fontWeight bold
             height (px 35)
             ".map-icon" ? do
-                width (px 15)
+                width (px 24)
                 height (px 24)
                 cursor pointer
                 opacity 0.5
