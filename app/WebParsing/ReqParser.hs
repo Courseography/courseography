@@ -208,8 +208,10 @@ categoryParser :: Parser Req
 categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
 
 parseReqs :: String -> Req
-parseReqs reqString =
-    let req = Parsec.parse categoryParser "" reqString
-    in case req of
-        Right x -> x
-        Left e -> J (show e) ""
+parseReqs reqString
+    | all (== ' ') reqString || reqString == "None" = NONE
+    | otherwise =
+        let req = Parsec.parse categoryParser "" reqString
+             in case req of
+                 Right x -> x
+                 Left e -> J (show e) ""
