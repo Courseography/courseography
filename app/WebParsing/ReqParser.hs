@@ -5,6 +5,7 @@ import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 import Text.Parsec ((<|>))
 import Database.Requirement
+import Data.Char (toLower)
 
 -- define separators
 fromSeparator :: Parser ()
@@ -208,10 +209,12 @@ categoryParser :: Parser Req
 categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
 
 parseReqs :: String -> Req
-parseReqs reqString
-    | all (== ' ') reqString || reqString == "None" = NONE
-    | otherwise =
-        let req = Parsec.parse categoryParser "" reqString
-             in case req of
-                 Right x -> x
-                 Left e -> J (show e) ""
+parseReqs reqString = do
+    let reqStringLower = [toLower c | c <- reqString]
+    if all (== ' ') reqString || reqStringLower == "none" || reqStringLower == "no"
+        then NONE
+        else do
+            let req = Parsec.parse categoryParser "" reqString
+                in case req of
+                    Right x -> x
+                    Left e -> J (show e) ""
