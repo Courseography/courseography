@@ -1,32 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Graph from "./Graph";
-import * as sidebarDivs from "./sidebar/sidebar_divs.js";
+import Container from "./Container";
 import * as focusInfo from "./sidebar/focus_descriptions";
+import * as sidebarDivs from "./sidebar/sidebar_divs.js";
 
 // The "main"
 document.addEventListener("DOMContentLoaded", () => {
-  var graphComponent = renderReactGraph("react-graph");
+  ReactDOM.render(<Container />, document.getElementById("container"));
+  const graphComponent = renderReactGraph("react-graph");
 
-  // Set focus button onclicks
-  $(".focus").click((event) => {
-    var id = $(event.target).attr("id");
-    var focusDetails = $("#" + id + "-details");
-    if (graphComponent.state.highlightedNodes == focusInfo[id + "FocusList"]) {
-      graphComponent.setState({ highlightedNodes: [] });
-      focusDetails.animate({ height: "2px" }, "fast");
-    } else {
-      $(".details").css("height", "2px");
-      focusDetails.animate({ height: "128px" }, "fast");
-      focusDetails.html(focusInfo[id + "Description"]);
-      graphComponent.setState({
-        highlightedNodes: focusInfo[id + "FocusList"]
-      });
-    }
-  });
-
-  // Sidebar initialization.
-  // TODO: move sidebar into its own React component.
   $("#reset").click(function() {
     graphComponent.reset();
   });
@@ -37,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Sends an ajax request to retrieve data for graph information
   $.ajax({
     url: "graphs",
     dataType: "json",
@@ -55,6 +39,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   sidebarDivs.activateSidebar();
+
+  // Set focus button onclicks
+  $(".focus").click((event) => {
+    var id = $(event.target).attr("id");
+    var focusDetails = $("#" + id + "-details");
+    if (graphComponent.state.highlightedNodes == focusInfo[id + "FocusList"]) {
+      graphComponent.setState({ highlightedNodes: [] });
+      focusDetails.animate({ height: "2px" }, "fast");
+    } else {
+      $(".details").css("height", "2px");
+      focusDetails.animate({ height: "128px" }, "fast");
+      focusDetails.html(focusInfo[id + "Description"]);
+      graphComponent.setState({
+        highlightedNodes: focusInfo[id + "FocusList"]
+      });
+    }
+  });
 });
 
 export function renderReactGraph(graph_container_id, start_blank, edit) {

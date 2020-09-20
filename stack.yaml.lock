@@ -5,15 +5,57 @@
 
 packages:
 - completed:
-    hackage: happstack-server-7.6.1@sha256:639af7840c897a3a0273bb183149990cbf18127077a025c3004606e27cbe56a0,6028
+    hackage: binary-0.8.7.0@sha256:ae3e6cca723ac55c54bbb3fa771bcf18142bc727afd57818e66d6ee6c8044f12,7705
     pantry-tree:
-      size: 2978
-      sha256: 9a9d737893f4b48b654ed164d385f4d98da1a01593a0af36ea6837dc31817fcb
+      size: 1976
+      sha256: 35e44b6d3ccf0d56fc5407dc3f0895e74696a66da189afbd65973c95743f5e25
   original:
-    hackage: happstack-server-7.6.1
+    hackage: binary-0.8.7.0
+- completed:
+    hackage: HaTeX-3.20.0.0@sha256:734e4a017c1c18c332a67be7139b1099a805ddbeeaae11fade723076e4077805,5339
+    pantry-tree:
+      size: 6794
+      sha256: 7461275e8a5df42383421674c0781fc9afc6f0ffd177db959afac76cb19065f9
+  original:
+    hackage: HaTeX-3.20.0.0
+- completed:
+    hackage: containers-0.5.11.0@sha256:28ad7337057442f75bc689315ab4ec7bdf5e6b2c39668f306672cecd82c02798,16685
+    pantry-tree:
+      size: 4849
+      sha256: faa4e75922a28f7cfe9920c1d7ab3866b792cefcd29bf79f54cfe3b6b5f57cbf
+  original:
+    hackage: containers-0.5.11.0
+- completed:
+    hackage: graphviz-2999.20.0.3@sha256:cde383c356bc41136ed53cd27e0800f46dbd2185600dd0de18d66d5c49739d94,7677
+    pantry-tree:
+      size: 4322
+      sha256: f7d9f7e161d68a5783d915358c28a95a2b8c94f3e302325fa604b91e8d2295c8
+  original:
+    hackage: graphviz-2999.20.0.3
+- completed:
+    hackage: happstack-server-7.5.1.3@sha256:5cfaffa15fe97262d3856196add3e1f92a236e2c5e0afa5ec21ed36887513996,6449
+    pantry-tree:
+      size: 3201
+      sha256: 819ad7fdcf9e97efd54c4046731b428b2a3154ffad23f221ec9a54c436870218
+  original:
+    hackage: happstack-server-7.5.1.3
+- completed:
+    hackage: sendfile-0.7.9@sha256:534718a7fd1b36878594c1307ef998a683a9f16807a2769a34b905b11a3b289f,2230
+    pantry-tree:
+      size: 926
+      sha256: 5ff40f7118a81ba6f25ec5750f2ab7cea37ab6f3a3e79a814545a058eb44f861
+  original:
+    hackage: sendfile-0.7.9
+- completed:
+    hackage: wl-pprint-extras-3.5.0.5@sha256:fcccabbab059e15ad3816998dc1f1f750afb480164bd116b147cc8a35a5da0b8,1446
+    pantry-tree:
+      size: 423
+      sha256: 4751be77e93e98ca5c6b9c8daa5131ed98fdc866fb3ee77356b1f7711f6cae18
+  original:
+    hackage: wl-pprint-extras-3.5.0.5
 snapshots:
 - completed:
-    size: 524996
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/14/27.yaml
-    sha256: 7ea31a280c56bf36ff591a7397cc384d0dff622e7f9e4225b47d8980f019a0f0
-  original: lts-14.27
+    size: 498155
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/13/19.yaml
+    sha256: b9367a80d4393d02e58a46b8a9fdfbd7bc19f59c0c2bbf90034ba15cf52cf213
+  original: lts-13.19

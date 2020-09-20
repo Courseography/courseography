@@ -3,9 +3,9 @@ var toggled = false;
 export function activateSidebar() {
   "use strict";
 
-  $("#sidebar-button").click(function() {
-    toggleSidebar("button");
-  });
+  // $("#sidebar-button").click(function() {
+  //   toggleSidebar("button");
+  // });
 
   $("#focuses-nav").click(function(e) {
     e.preventDefault();

@@ -271,6 +271,8 @@ graphContainer = do
 
 sidebarCSS :: Css
 sidebarCSS = do
+    ".hidden" ? do
+        display none
     "#fce" ? do
         height (px 40)
         width (pct 100)
@@ -280,7 +282,6 @@ sidebarCSS = do
         height (px 40)
         float floatLeft
         backgroundColor purple7
-        display none
         textAlign $ alignSide sideCenter
         paddingLeft (px 15)
         paddingTop (px 5)
@@ -290,7 +291,6 @@ sidebarCSS = do
         float floatLeft
         width (pct 47)
         height (px 40)
-        display none
         border solid (px 1) black
         cursor pointer
         ":hover" & do
@@ -364,7 +364,6 @@ sidebarCSS = do
         marginTop (px 25)
         marginLeft (px 25)
         height (pct 86)
-        display none
         overflowY scroll
     ".focus" ? do
         display block
