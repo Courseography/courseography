@@ -152,15 +152,30 @@ rawTextParser = do
     text <- Parsec.many $ Parsec.noneOf ";\r\n"
     return $ RAW text
 
--- | Parser for a single course.
--- We expect 3 letters, 3 digits, and a letter and a number.
-courseIDParser :: Parser String
-courseIDParser = do
+-- | Parser for a single UTSG course.
+-- We expect 3 letters, 3 digits
+utsgCourseCodeParser :: Parser String
+utsgCourseCodeParser = do
     code <- Parsec.count 3 Parsec.letter
     num <- Parsec.count 3 Parsec.digit
-    -- TODO: Make the last two letters more restricted.
-    sess <- Parsec.count 2 Parsec.alphaNum
-    return (code ++ num ++ sess)
+    return (code ++ num)
+
+-- | Parser for a single UTSC course.
+-- We expect 4 letters, 2 digits
+utscCourseCodeParser :: Parser String
+utscCourseCodeParser = do
+    code <- Parsec.count 4 Parsec.letter
+    num <- Parsec.count 2 Parsec.digit
+    return (code ++ num)
+
+-- | Parser for a single course.
+-- We expect 3 letters followed by 3 digits or 4 letters followed by 2 digits, and a letter and a number.
+courseIDParser :: Parser String
+courseIDParser = do
+    courseCode <- Parsec.try utsgCourseCodeParser <|> utscCourseCodeParser
+    sess <- Parsec.string "H" <|> Parsec.string "Y"
+    sessNum <- Parsec.digit
+    return (courseCode ++ sess ++ [sessNum])
 
 singleParser :: Parser Req
 singleParser = do
