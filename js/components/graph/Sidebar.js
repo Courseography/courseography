@@ -11,7 +11,6 @@ export default class Sidebar extends React.Component {
       focusActive: false,
       graphHidden: true,
       graphActive: false,
-      sidebarFlipped: false,
     }
     this.toggleSidebar = this.toggleSidebar.bind(this);
     this.showFocuses = this.showFocuses.bind(this);
@@ -50,14 +49,7 @@ export default class Sidebar extends React.Component {
         graphActive: true,
         sidebarFlipped: false,
       })
-      $("#sidebar").animate({ width: "40px" }, "fast", undefined, function() {
-        $("#sidebar-icon").removeClass("flip");
-      });
     } else if (!this.state.toggled && location === "button") {
-      $("#sidebar").animate({ width: "400px" }, "fast", undefined, function() {
-        $("#sidebar-icon").addClass("flip");
-      });
-
       this.setState({
         toggled: true,
         hidden: false,
@@ -82,10 +74,11 @@ export default class Sidebar extends React.Component {
     const focusActiveClass = this.state.focusActive ? "active" : "";
     const graphActiveClass = this.state.graphActive ? "active" : "";
     const focusClass = this.state.focusHidden ? "hidden" : "";
-    const flippedClass = this.state.sidebarFlipped ? "flip" : "";
+    const flippedClass = this.state.toggled ? "flip" : "";
+    const sidebarClass = this.state.toggled ? "opened" : "";
     return (
       <div>
-        <div id="sidebar">
+        <div id="sidebar" className={sidebarClass}>
           <div id="fce" className={hiddenClass}>
             <div id="fcecount" className={hiddenClass}>FCE Count: 0.0</div>
             <button id="reset" className={hiddenClass}>Reset Graph</button>

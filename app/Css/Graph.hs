@@ -271,6 +271,8 @@ graphContainer = do
 
 sidebarCSS :: Css
 sidebarCSS = do
+    ".opened" ? do
+        "width" -: "400px !important"
     ".hidden" ? do
         display none
     "#fce" ? do
