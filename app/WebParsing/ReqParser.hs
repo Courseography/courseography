@@ -3,9 +3,9 @@ module WebParsing.ReqParser where
 
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
-import Text.Parsec ((<|>))
+import Text.Parsec ((<|>), (<?>))
 import Database.Requirement
-import Data.Char (toLower, isSpace)
+import Data.Char (toLower, toUpper, isSpace)
 
 -- define separators
 fromSeparator :: Parser ()
@@ -49,6 +49,13 @@ andSeparator = Parsec.choice $ map Parsec.string [
 semicolon :: Parser Char
 semicolon = Parsec.char ';'
 
+caseInsensitiveChar :: Parsec.Stream s m Char => Char -> Parsec.ParsecT s u m Char
+caseInsensitiveChar c = Parsec.char (toLower c) <|> Parsec.char (toUpper c)
+
+-- Match the string 's' regardless of the case of each character
+caseInsensitiveStr :: Parsec.Stream s m Char => String -> Parsec.ParsecT s u m String
+caseInsensitiveStr s = Parsec.try (mapM caseInsensitiveChar s) <?> "\"" ++ s ++ "\""
+
 creditsParser :: Parser String
 creditsParser = do
     Parsec.spaces
@@ -90,16 +97,25 @@ gradeParser = do
         ]
     return grade
 
+
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["minimum grade of", "minimum mark of", "minimum of", "minimum"]
-    Parsec.spaces
-    grade <- gradeParser
+    _ <- Parsec.optional $ caseInsensitiveStr "an " <|> caseInsensitiveStr "a "
+    grade <- cutoffHelper <|> gradeParser
     Parsec.spaces
     _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
     req <- singleParser
     return $ GRADE grade req
+
+    where
+    cutoffHelper = do
+        _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . caseInsensitiveStr)
+                ["minimum grade", "minimum mark", "minimum", "grade", "final grade", "at least"]
+        Parsec.spaces
+        _ <- Parsec.optional $ caseInsensitiveStr "of"
+        Parsec.spaces
+        gradeParser
 
 -- parse for cutoff percentage after a course
 coAftParser :: Parser Req
