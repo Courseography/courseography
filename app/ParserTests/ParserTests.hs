@@ -20,6 +20,10 @@ createTest parser label input = TestLabel label $ TestList $ map (\(x, y) ->
                                 TestCase $ assertEqual ("for (" ++ x ++ "),")
                                 (Right y) (Parsec.parse parser "" x)) input
 
+createReqParserTest :: String -> [(String, Req)] -> Test
+createReqParserTest label input = TestLabel label $ TestList $ map (\(x, y) ->
+                                  TestCase $ assertEqual ("for (" ++ x ++ "),") y (parseReqs x)) input
+
 orInputs :: [(String, Req)]
 orInputs = [
       ("CSC120H1/CSC148H1", OR [J "CSC120H1" "", J "CSC148H1" ""])
@@ -81,6 +85,14 @@ artSciInputs = [
     , ("EEB223H1 (ecology and evo)/ STA220H1 (B-)/ STA257H1", OR [J "EEB223H1" "ecology and evo", GRADE "B-" $ J "STA220H1" "", J "STA257H1" ""])
     , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", (FCES "0.5" $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""]))]
 
+noPrereqInputs :: [(String, Req)]
+noPrereqInputs = [
+      ("", NONE)
+    , ("None", NONE)
+    , ("none", NONE)
+    , ("No", NONE)
+    , ("no", NONE)
+    ]
 
 orTests :: Test
 orTests = createTest categoryParser "Basic or Requirement" orInputs
@@ -106,6 +118,9 @@ gradeAftTests = createTest categoryParser "Basic grade requirements, where grade
 artSciTests :: Test
 artSciTests = createTest categoryParser "Arts and Science requirements from Christine's output" artSciInputs
 
+noPrereqTests :: Test
+noPrereqTests = createReqParserTest "No prerequisites required" noPrereqInputs
+
 -- functions for running tests in REPL
 reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fromParTests, gradeBefTests, gradeAftTests, artSciTests]
+reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fromParTests, gradeBefTests, gradeAftTests, artSciTests, noPrereqTests]
