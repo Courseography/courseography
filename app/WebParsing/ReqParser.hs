@@ -3,7 +3,7 @@ module WebParsing.ReqParser where
 
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
-import Text.Parsec ((<|>), (<?>))
+import Text.Parsec ((<|>))
 import Database.Requirement
 import Data.Char (toLower, toUpper, isSpace)
 
@@ -54,7 +54,7 @@ caseInsensitiveChar c = Parsec.char (toLower c) <|> Parsec.char (toUpper c)
 
 -- Match the string 's' regardless of the case of each character
 caseInsensitiveStr :: Parsec.Stream s m Char => String -> Parsec.ParsecT s u m String
-caseInsensitiveStr s = Parsec.try (mapM caseInsensitiveChar s) <?> "\"" ++ s ++ "\""
+caseInsensitiveStr s = Parsec.try (mapM caseInsensitiveChar s)
 
 creditsParser :: Parser String
 creditsParser = do
@@ -96,7 +96,6 @@ gradeParser = do
         Parsec.oneOf "(),/;" >> return ""
         ]
     return grade
-
 
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
