@@ -648,10 +648,16 @@ export default class Graph extends React.Component {
 
     var zoomInDisabled = this.state.zoomFactor <= 0.5;
     var zoomOutDisabled = this.state.zoomFactor >= 1.1;
-    var panUpDisabled = !this.graphTopEdgeOffScreen() ? true : false;
-    var panRightDisabled = !this.graphRightEdgeOffScreen() ? true : false;
-    var panDownDisabled = !this.graphBottomEdgeOffScreen() ? true : false;
-    var panLeftDisabled = !this.graphLeftEdgeOffScreen() ? true : false;
+    if (document.getElementById("react-graph") !== null) {
+      var panUpDisabled = !this.graphTopEdgeOffScreen() ? true : false;
+      var panRightDisabled = !this.graphRightEdgeOffScreen() ? true : false;
+      var panDownDisabled = !this.graphBottomEdgeOffScreen() ? true : false;
+      var panLeftDisabled = !this.graphLeftEdgeOffScreen() ? true : false;
+    } else {
+      // Set all pan options to disabled on initial render
+      panUpDisabled = panRightDisabled = panDownDisabled = panLeftDisabled = true;
+    }
+
     var resetDisabled =
       this.state.zoomFactor == 1 &&
       this.state.horizontalPanFactor == 0 &&
@@ -668,7 +674,7 @@ export default class Graph extends React.Component {
     }
 
     return (
-      <div>
+      <div id="react-graph" className="react-graph">
         <CourseModal ref={this.modal} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
