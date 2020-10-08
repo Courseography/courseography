@@ -23,6 +23,25 @@ fromSeparator = Parsec.spaces >> (Parsec.choice $ map (Parsec.try . Parsec.strin
             " at"
     ]) >> Parsec.spaces
 
+completionSeparator :: Parser ()
+completionSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
+    "Completion of",
+    "Completion of at least",
+    "Completion of a minimum"
+    ]) >> Parsec.spaces
+
+fceSeperator :: Parser String
+fceSeperator = Parsec.choice (map (Parsec.try . Parsec.string) [
+            "FCE",
+            "FCEs",
+            "credits",
+            "full-course equivalents."
+            ])
+
+-- TO-DO
+-- includingSeparator :: Parser String
+-- includingSeparator = Parsec.string "including"
+
 lParen :: Parser Char
 lParen = Parsec.char '('
 
@@ -196,13 +215,24 @@ andParser = do
 
 -- | Parser for reqs in "from" format:
 -- 4.0 FCEs from CSC108H1, CSC148H1, ...
-fcesParser :: Parser Req
-fcesParser = do
+fromParser :: Parser Req
+fromParser = do
     fces <- creditsParser
     _ <- fromSeparator
     Parsec.spaces
     req <- andParser
     return $ FCES fces req
+
+completionParser :: Parser Req
+completionParser = do
+    _ <- completionSeparator
+    fces <- creditsParser
+    Parsec.spaces
+    _ <- fceSeperator
+    return $ FCES fces (RAW "")
+
+fcesParser :: Parser Req
+fcesParser = Parsec.try completionParser <|> Parsec.try fromParser
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
