@@ -12,9 +12,9 @@ import DynamicGraphs.WriteRunDot (findAndSavePrereqsResponse)
 routes :: String -> Text -> Text -> [ (String, ServerPart Response)]
 routes staticDir aboutContents privacyContents = [
     ("grid", gridResponse),
-    ("graph/generate", do method PUT
+    ("graph", graphResponse),
+    ("graph-generate", do method PUT
                           findAndSavePrereqsResponse),
-    ("graph", graphResponse), 
     ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
     ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
     ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse courses),
