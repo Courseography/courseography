@@ -81,6 +81,10 @@ gradeAftInputs = [
     , ("CSC263H1 B-", GRADE "B-" $ J "CSC263H1" "") 
     , ("CSC263H1 with a minimum grade of 60%", GRADE "60" $ J "CSC263H1" "") 
     , ("CSC263H1 with a minimum mark of B-", GRADE "B-" $ J "CSC263H1" "")
+    , ("CSC236H1 (at least 75% or more)", GRADE "75" $ J "CSC236H1" "")
+    , ("CSC236H1 ( 75% or higher )", GRADE "75" $ J "CSC236H1" "")
+    , ("CSC263H1 with a minimum grade of 60% or more", GRADE "60" $ J "CSC263H1" "")
+    , ("CSC263H1 with a minimum grade of 60% or higher / CSC236H1 (75%)", OR [GRADE "60" $ J "CSC263H1" "", GRADE "75" $ J "CSC236H1" ""])
     ]
 
 artSciInputs :: [(String, Req)]
