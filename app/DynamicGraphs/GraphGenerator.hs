@@ -4,6 +4,7 @@ module DynamicGraphs.GraphGenerator
   ( sampleGraph
   , coursesToPrereqGraph
   , coursesToPrereqGraphExcluding
+  , emptyGraph
   )
   where
 
@@ -157,6 +158,9 @@ buildGraph statements = DotGraph {
         GA edgeAttrs
         ] ++ statements
     }
+
+emptyGraph :: DotGraph Text
+emptyGraph = buildGraph []
 
 -- | Means the layout of the full graph is from left to right.
 graphAttrs :: GlobalAttributes
