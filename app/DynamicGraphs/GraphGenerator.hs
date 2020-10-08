@@ -111,8 +111,12 @@ reqToStmts' parentID (RAW rawText) = do
     return [DN prereq, DE edge]
 
 -- TODO: Complete this one.
-reqToStmts' _ (FCES _ _) = return []
-
+reqToStmts' parentID (FCES creds req) = do
+    fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs")
+    edge <- makeEdge (nodeID fceNode) parentID
+    -- prereqStmts <- reqToStmts' (nodeID fceNode) req 
+    -- currently prereqStmts will always be RAW ""
+    return $ [DN fceNode, DE edge]
 
 makeNode :: Text -> State GeneratorState (DotNode Text)
 makeNode name = do
