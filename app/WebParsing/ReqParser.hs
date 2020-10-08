@@ -87,8 +87,8 @@ infoParser= do
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
 gradeParser = do
-    grade <- Parsec.try ((Parsec.between lParen rParen percentParser <|> letterParser) <|> (percentParser <|> letterParser))
-    _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
+    grade <- (Parsec.between lParen rParen percentParser <|> letterParser) <|> (percentParser <|> letterParser)
+    _ <- Parsec.try $ Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
         andSeparator,
         orSeparator,
         Parsec.space >> return "",
@@ -121,18 +121,26 @@ coAftParser :: Parser Req
 coAftParser = do
     req <- singleParser
     Parsec.spaces
-    grade <- Parsec.between lParen rParen cutoffHelper <|> cutoffHelper
+    grade <- Parsec.between lParen rParen parenCutoffHelper <|> cutoffHelper
     return $ GRADE grade req
 
     where
-    cutoffHelper = Parsec.between Parsec.spaces Parsec.spaces $ do
+    parenCutoffHelper = do
+        grade <- cutoffHelper
+        _ <- Parsec.optional $ Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead rParen)
+        return grade
+
+    -- Parse for the cutoff percentage, which may be followed by "or higher" or "or more". These "or"s will be skipped.
+    cutoffHelper = do
         _ <- Parsec.manyTill (Parsec.noneOf "()")
-          (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
-            _ <- gradeParser
-            Parsec.spaces
-            Parsec.notFollowedBy $ Parsec.alphaNum
-            return "")))
-        gradeParser
+            (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
+                _ <- gradeParser
+                Parsec.notFollowedBy $ Parsec.alphaNum
+                return "")))
+        grade <- gradeParser
+        Parsec.spaces
+        _ <- Parsec.optional $ caseInsensitiveStr "or higher" <|> caseInsensitiveStr "or more"
+        return grade
 
 -- | Parser for a grade cutoff on a course.
 -- This is tricky because the cutoff can come before or after the course code.
