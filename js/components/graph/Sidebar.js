@@ -86,10 +86,10 @@ export default class Sidebar extends React.Component {
           <nav id="sidebar-nav">
             <ul>
               <li id="graphs-nav" className={graphActiveClass}>
-                <a href="">Graphs</a>
+                <div>Graphs</div>
               </li>
               <li id="focuses-nav" className={focusActiveClass} onClick={this.showFocuses}>
-                <a href="">Focuses</a>
+                <div>Focuses</div>
               </li>
             </ul>
           </nav>
