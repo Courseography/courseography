@@ -87,7 +87,7 @@ infoParser= do
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
 gradeParser = do
-    grade <- (Parsec.between lParen rParen percentParser <|> letterParser) <|> (percentParser <|> letterParser)
+    grade <- (Parsec.between lParen rParen percentParser <|> letterParser) <|> percentParser <|> letterParser
     _ <- Parsec.try $ Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
         andSeparator,
         orSeparator,
@@ -101,6 +101,7 @@ gradeParser = do
 coBefParser :: Parser Req
 coBefParser = do
     _ <- Parsec.optional $ caseInsensitiveStr "an " <|> caseInsensitiveStr "a "
+    Parsec.spaces
     grade <- cutoffHelper <|> gradeParser
     Parsec.spaces
     _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
@@ -109,7 +110,7 @@ coBefParser = do
 
     where
     cutoffHelper = do
-        _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . caseInsensitiveStr)
+        _ <- Parsec.choice $ map (Parsec.try . caseInsensitiveStr)
                 ["minimum grade", "minimum mark", "minimum", "grade", "final grade", "at least"]
         Parsec.spaces
         _ <- Parsec.optional $ caseInsensitiveStr "of"
@@ -248,7 +249,7 @@ categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
 
 parseReqs :: String -> Req
 parseReqs reqString = do
-    let reqStringLower = [toLower c | c <- reqString]
+    let reqStringLower = map toLower reqString
     if all isSpace reqString || reqStringLower == "none" || reqStringLower == "no"
         then NONE
         else do
