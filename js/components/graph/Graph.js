@@ -674,7 +674,7 @@ export default class Graph extends React.Component {
     }
 
     return (
-      <div id="react-graph" className="react-graph">
+      <div id="react-graph" className="react-graph" onClick={() => this.props.closeSidebar()}>
         <CourseModal ref={this.modal} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
@@ -794,5 +794,6 @@ export default class Graph extends React.Component {
 Graph.propTypes = {
   edit: PropTypes.bool,
   initialDrawMode: PropTypes.string,
-  start_blank: PropTypes.bool
+  start_blank: PropTypes.bool,
+  closeSidebar: PropTypes.func
 };

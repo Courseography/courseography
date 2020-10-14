@@ -8,13 +8,41 @@ import PropTypes from "prop-types";
 export default class Container extends React.Component {
   constructor(props) {
     super(props);
-    this.graph = React.createRef();
+    this.state = {
+      graphs: [],
+    }
+    this.graphComponent = React.createRef();
+    this.sidebarComponent = React.createRef();
   }
+
+  componentDidMount() {
+    fetch('graphs').then(res => res.json()).then(
+      (graphsData) => {
+        this.setState({
+          graphs: graphsData
+        })
+      },
+      () => {
+        throw "No graphs in database";
+      }
+    )
+  }
+
   render() {
     return (
       <React.Fragment>
-        <Graph start_blank={this.props.start_blank} edit={this.props.edit} initialDrawMode="draw-node" ref={this.graph}/>
-        <Sidebar reset={() => this.graph.current.reset()} />
+        <Graph
+          ref={this.graphComponent}
+          start_blank={this.props.start_blank}
+          edit={this.props.edit}
+          closeSidebar={() => this.sidebarComponent.current.toggleSidebar("graph")}
+          initialDrawMode="draw-node"
+        />
+        <Sidebar
+          ref={this.sidebarComponent}
+          graphs={this.state.graphs}
+          getGraph={(name) => this.graphComponent.current.getGraph(name)}
+        />
       </React.Fragment>
     )
   }
@@ -24,37 +52,6 @@ Container.propTypes = {
   start_blank: PropTypes.bool,
   edit: PropTypes.bool,
 };
-
-
-// $("#reset").click(function() {
-//   graphComponent.reset();
-// });
-
-// $(document).ready(function() {
-//   $("#nav-export").click(function() {
-//     graphComponent.openExportModal();
-//   });
-// });
-
-// // Sends an ajax request to retrieve data for graph information
-// $.ajax({
-//   url: "graphs",
-//   dataType: "json",
-//   success: function(data) {
-//     sidebarDivs.createGraphButtons(data);
-//     $(".graph-button").click(function() {
-//       var id = $(this).data("id");
-//       var name = $(this).text();
-//       graphComponent.getGraph(name);
-//       sidebarDivs.changeFocusEnable(id);
-//     });
-//   },
-//   error: function() {
-//     throw "No graphs in database";
-//   }
-// });
-
-// sidebarDivs.activateSidebar();
 
 // // Set focus button onclicks
 // $(".focus").click((event) => {

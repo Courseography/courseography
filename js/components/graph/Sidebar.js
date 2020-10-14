@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Focus from "./Focus";
 import PropTypes from "prop-types";
 
@@ -9,15 +10,47 @@ export default class Sidebar extends React.Component {
     this.state = {
       toggled: false,
       hidden: true,
+      focusDisabled: true,
       focusHidden: true,
       focusActive: false,
-      graphHidden: true,
       graphActive: false,
     }
     this.toggleSidebar = this.toggleSidebar.bind(this);
     this.showFocuses = this.showFocuses.bind(this);
+    this.showGraphs = this.showGraphs.bind(this);
   }
 
+  handleGraph(graphName) {
+    this.props.getGraph(graphName)
+    // Enable Focuses nav if CS graph is selected
+    if (graphName === "Computer Science") {
+      this.setState({
+        focusDisabled: false,
+      })
+    } else {
+      this.setState({
+        focusDisabled: true,
+      })
+    }
+  }
+
+  createGraphButtons() {
+    const graphButtons = [];
+    this.props.graphs.forEach((graph, i) => {
+      const graphId = "graph-" + graph.id;
+      const graphName = graph.title;
+      graphButtons.push(
+        <div
+          id={graphId}
+          className="graph-button"
+          key={i}
+          onClick={() => this.handleGraph(graphName)}>
+          {graphName}
+        </div>
+      );
+    });
+    return graphButtons;
+  }
 
   getFocusData() {
     const computerScienceFocusData = [
@@ -47,18 +80,17 @@ export default class Sidebar extends React.Component {
         hidden: true,
         focusHidden: true,
         focusActive: false,
-        graphHidden: true,
         graphActive: true,
         sidebarFlipped: false,
       })
     } else if (!this.state.toggled && location === "button") {
+      // open graph
       this.setState({
         toggled: true,
         hidden: false,
         graphActive: true,
         sidebarFlipped: true,
       })
-      $("#graphs-nav").addClass("active");
     }
   }
 
@@ -66,16 +98,24 @@ export default class Sidebar extends React.Component {
     this.setState({
       focusHidden: false,
       focusActive: true,
-      graphHidden: true,
       graphActive: false,
+    });
+  }
+
+  showGraphs() {
+    this.setState({
+      focusHidden: true,
+      focusActive: false,
+      graphActive: true,
     });
   }
 
   render() {
     const hiddenClass = this.state.hidden ? "hidden" : "";
+    const focusClass = this.state.focusHidden ? "hidden" : "";
+    const focusDisabled = this.state.focusDisabled ? "disabled" : "";
     const focusActiveClass = this.state.focusActive ? "active" : "";
     const graphActiveClass = this.state.graphActive ? "active" : "";
-    const focusClass = this.state.focusHidden ? "hidden" : "";
     const flippedClass = this.state.toggled ? "flip" : "";
     const sidebarClass = this.state.toggled ? "opened" : "";
     return (
@@ -87,10 +127,10 @@ export default class Sidebar extends React.Component {
           </div>
           <nav id="sidebar-nav">
             <ul>
-              <li id="graphs-nav" className={graphActiveClass}>
+              <li id="graphs-nav" className={graphActiveClass} onClick={this.showGraphs}>
                 <div>Graphs</div>
               </li>
-              <li id="focuses-nav" className={focusActiveClass} onClick={this.showFocuses}>
+              <li id="focuses-nav" className={`${focusActiveClass} ${focusDisabled}`} onClick={(event) => this.showFocuses(event)}>
                 <div>Focuses</div>
               </li>
             </ul>
@@ -99,7 +139,9 @@ export default class Sidebar extends React.Component {
           <div id="focuses" className={focusClass}>
             {this.getFocusData()}
           </div>
-          <div id="graphs" className={hiddenClass}></div>
+          <div id="graphs" className={hiddenClass}>
+            {this.createGraphButtons()}
+          </div>
         </div>
         
         <div id="sidebar-button" onClick={() => this.toggleSidebar("button")}>
@@ -114,5 +156,7 @@ export default class Sidebar extends React.Component {
 }
 
 Sidebar.propTypes = {
-  reset: PropTypes.Function,
+  reset: PropTypes.func,
+  graphs: PropTypes.array,
+  getGraph: PropTypes.func
 };
