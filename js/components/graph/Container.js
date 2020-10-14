@@ -9,8 +9,8 @@ export default class Container extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Graph start_blank={this.props.start_blank} edit={this.props.edit} initialDrawMode="draw-node" />
-        <Sidebar />
+        <Graph start_blank={this.props.start_blank} edit={this.props.edit} initialDrawMode="draw-node" ref={instance => {this.graph = instance; }}/>
+        <Sidebar reset={() => this.graph.reset()} />
       </React.Fragment>
     )
   }

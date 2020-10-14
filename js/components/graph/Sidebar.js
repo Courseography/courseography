@@ -1,9 +1,12 @@
 import React from "react";
 import Focus from "./Focus";
+import PropTypes from "prop-types";
+
 
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
+    this.reset;
     this.state = {
       toggled: false,
       hidden: true,
@@ -81,7 +84,7 @@ export default class Sidebar extends React.Component {
         <div id="sidebar" className={sidebarClass}>
           <div id="fce" className={hiddenClass}>
             <div id="fcecount" className={hiddenClass}>FCE Count: 0.0</div>
-            <button id="reset" className={hiddenClass}>Reset Graph</button>
+            <button id="reset" className={hiddenClass} onClick={() => this.props.reset()}>Reset Graph</button>
           </div>
           <nav id="sidebar-nav">
             <ul>
@@ -110,3 +113,7 @@ export default class Sidebar extends React.Component {
     )
   }
 }
+
+Sidebar.propTypes = {
+  reset: PropTypes.Component,
+};
