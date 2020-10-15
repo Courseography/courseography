@@ -30,20 +30,19 @@ rParen :: Parser Char
 rParen = Parsec.char ')'
 
 orSeparator :: Parser String
-orSeparator = Parsec.choice $ map Parsec.string [
+orSeparator = Parsec.choice $ map caseInsensitiveStr [
     "/",
-    "OR",
-    "Or",
     "or"
     ]
 
 andSeparator :: Parser String
-andSeparator = Parsec.choice $ map Parsec.string [
+andSeparator = Parsec.choice $ map caseInsensitiveStr [
     ",",
-    "AND",
-    "And",
     "and",
-    ";"
+    ";",
+    "&",
+    "+",
+    "plus"
     ]
 
 semicolon :: Parser Char
@@ -67,7 +66,8 @@ creditsParser = do
 -- | Helpers for parsing grades
 percentParser :: Parser String
 percentParser = do
-    fces <- Parsec.many1 Parsec.digit
+    Parsec.try $ Parsec.notFollowedBy $ Parsec.digit >> (Parsec.count 2 Parsec.digit)
+    fces <- Parsec.count 2 Parsec.digit
     Parsec.optional (Parsec.char '%')
     return fces
 
@@ -180,6 +180,9 @@ utscCourseCodeParser = do
 -- We expect 3 letters followed by 3 digits or 4 letters followed by 2 digits, and a letter and a number.
 courseIDParser :: Parser String
 courseIDParser = do
+    _ <- Parsec.optional $ (Parsec.choice $ map caseInsensitiveStr ["one of either", "one of the following", "at least one of", "one of", "1 of"])
+    _ <- Parsec.optional $ Parsec.string ":"
+    Parsec.spaces
     courseCode <- Parsec.try utsgCourseCodeParser <|> utscCourseCodeParser
     sess <- Parsec.string "H" <|> Parsec.string "Y"
     sessNum <- Parsec.digit
