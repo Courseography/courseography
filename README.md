@@ -1,4 +1,4 @@
-[Courseography](https://courseography.cs.toronto.edu)
+[Courseography](https://courseography.cdf.toronto.edu)
 =============
 
 About
