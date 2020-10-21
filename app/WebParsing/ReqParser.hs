@@ -23,19 +23,19 @@ fromSeparator = Parsec.spaces >> (Parsec.choice $ map (Parsec.try . Parsec.strin
             " at"
     ]) >> Parsec.spaces
 
-completionSeparator :: Parser ()
-completionSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
-    "Completion of",
+completionPrefix :: Parser String
+completionPrefix = Parsec.choice (map (Parsec.try . Parsec.string) [
     "Completion of at least",
-    "Completion of a minimum"
-    ]) >> Parsec.spaces
+    "Completion of a minimum of",
+    "Completion of"
+    ])
 
-fceSeperator :: Parser String
-fceSeperator = Parsec.choice (map (Parsec.try . Parsec.string) [
+fceSeparator :: Parser String
+fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
             "FCE",
             "FCEs",
             "credits",
-            "full-course equivalents."
+            "full-course equivalents"
             ])
 
 -- TO-DO
@@ -225,10 +225,11 @@ fromParser = do
 
 completionParser :: Parser Req
 completionParser = do
-    _ <- completionSeparator
+    _ <- completionPrefix
+    _ <- Parsec.spaces
     fces <- creditsParser
-    Parsec.spaces
-    _ <- fceSeperator
+    _ <- Parsec.spaces
+    _ <- fceSeparator
     return $ FCES fces (RAW "")
 
 fcesParser :: Parser Req

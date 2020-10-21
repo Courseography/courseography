@@ -50,11 +50,19 @@ parInputs = [
     , ("STA247H1/STA255H1/STA257H1/PSY201H1/ECO227Y1, (MAT135H1, MAT136H1)/MAT137Y1/MAT157Y1", AND [OR [J "STA247H1" "", J "STA255H1" "", J "STA257H1" "", J "PSY201H1" "", J "ECO227Y1" ""], OR [AND [J "MAT135H1" "", J "MAT136H1" ""], J "MAT137Y1" "", J "MAT157Y1" ""]])
     ]
 
-fromParInputs :: [(String, Req)]
-fromParInputs = [
+
+fcesInputs :: [(String, Req)]
+fcesInputs = [
       ("1.0 FCE from the following: (CSC148H1)", FCES "1.0" $ J "CSC148H1" "")
     , ("2.0 FCEs from CSC165H1/CSC148H1", FCES "2.0" $ OR [J "CSC165H1" "", J "CSC148H1" ""])
     , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES "2" $ AND [J "MAT135H1" "",OR [J "MAT136H1" "",J "MAT137Y1" ""]])
+    , ("Completion of 4.0 FCEs", FCES "4.0" $ RAW "")
+    , ("Completion of 4 FCE.", FCES "4" $ RAW "")
+    , ("Completion of 9 FCEs", FCES "9" $ RAW "")
+    , ("Completion of at least 9.0 FCE", FCES "9.0" $ RAW "")
+    , ("Completion of a minimum of 4.0 FCEs", FCES "4.0" $ RAW "")
+    , ("Completion of a minimum of 9 FCEs", FCES "9" $ RAW "")
+    , ("Completion of 4.0 credits", FCES "4.0" $ RAW "")
     ]
 
 gradeBefInputs :: [(String, Req)]
@@ -106,8 +114,12 @@ andorTests = createTest categoryParser "Basic and-or-mixed Requirement" andorInp
 parTests :: Test
 parTests = createTest categoryParser "Basic and-or-parenthesized Requirement" parInputs
 
-fromParTests :: Test
-fromParTests = createTest categoryParser "Paranthesized From Requirements with integer or float fces" fromParInputs
+fcesTests:: Test
+fcesTests = createTest categoryParser "Basic fces Requirement" fcesInputs
+
+-- Outdated
+-- fromParTests :: Test
+-- fromParTests = createTest categoryParser "Paranthesized From Requirements with integer or float fces" fromParInputs
 
 gradeBefTests :: Test
 gradeBefTests = createTest categoryParser "Basic grade requirements which come before." gradeBefInputs
@@ -123,4 +135,4 @@ noPrereqTests = createReqParserTest "No prerequisites required" noPrereqInputs
 
 -- functions for running tests in REPL
 reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fromParTests, gradeBefTests, gradeAftTests, artSciTests, noPrereqTests]
+reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fcesTests, gradeBefTests, gradeAftTests, artSciTests, noPrereqTests]

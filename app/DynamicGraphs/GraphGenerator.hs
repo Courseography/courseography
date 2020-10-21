@@ -111,7 +111,7 @@ reqToStmts' parentID (RAW rawText) = do
     return [DN prereq, DE edge]
 
 -- TODO: Complete this one.
-reqToStmts' parentID (FCES creds req) = do
+reqToStmts' parentID (FCES creds _) = do
     fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs")
     edge <- makeEdge (nodeID fceNode) parentID
     -- prereqStmts <- reqToStmts' (nodeID fceNode) req 
