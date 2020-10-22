@@ -5,7 +5,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.GraphViz hiding (Str)
 import System.FilePath (FilePath, combine, normalise)
 import System.Directory (createDirectoryIfMissing)
-import DynamicGraphs.GraphGenerator (coursesToPrereqGraph, coursesToPrereqGraphExcluding, emptyGraph)
+import DynamicGraphs.GraphGenerator (coursesToPrereqGraph, coursesToPrereqGraphExcluding, graphProfileHash)
 import Happstack.Server (ServerPart, lookBS)
 import Happstack.Server.SimpleHTTP (Response)
 import qualified Data.Text as T
@@ -59,9 +59,9 @@ generateAndSavePrereqResponse taken courses = do
 -- | Hash function to uniquely identify the graph layout.
 hash :: [String] -> [String] -> T.Text
 hash taken courses = hashFunction key
-  where key = (sort taken, sort courses, emptyGraph)
+  where key = (sort taken, sort courses, graphProfileHash)
         hashFunction :: (Show b) => ([String], [String], b) -> T.Text
-        hashFunction = T.pack . ("gen_" ++) . md5s . Str . show  
+        hashFunction = T.pack . ("graph_" ++) . md5s . Str . show  
 
 graphToByteString :: PrintDotRepr dg n => dg n -> IO B.ByteString
 graphToByteString graph = graphvizWithHandle Dot graph Svg B.hGetContents

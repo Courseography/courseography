@@ -4,7 +4,7 @@ module DynamicGraphs.GraphGenerator
   ( sampleGraph
   , coursesToPrereqGraph
   , coursesToPrereqGraphExcluding
-  , emptyGraph
+  , graphProfileHash
   )
   where
 
@@ -21,6 +21,7 @@ import DynamicGraphs.CourseFinder (lookupCourses)
 import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
+import Data.Hash.MD5 (Str(Str), md5s)
 import Data.Text.Lazy (Text, pack)
 import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
@@ -159,24 +160,35 @@ buildGraph statements = DotGraph {
         ] ++ statements
     }
 
-emptyGraph :: DotGraph Text
-emptyGraph = buildGraph []
+graphProfileHash :: String
+graphProfileHash = md5s . Str . show $ (buildGraph [], ellipseAttrs)
 
 -- | Means the layout of the full graph is from left to right.
 graphAttrs :: GlobalAttributes
-graphAttrs = GraphAttrs [AC.RankDir AC.FromLeft]
+graphAttrs = GraphAttrs 
+    [ AC.RankDir AC.FromTop
+    , AC.Splines AC.Ortho
+    , AC.Concentrate False
+    ]
 
--- | Means the shape of each node in the graph is circle with width 1, and is filled.
 nodeAttrs :: GlobalAttributes
-nodeAttrs = NodeAttrs [A.shape A.BoxShape, AC.Width 2, AC.Height 1, A.style A.filled]
+nodeAttrs = NodeAttrs 
+    [ A.shape A.BoxShape
+    , AC.FixedSize GrowAsNeeded
+    , A.style A.filled
+    ]
 
 ellipseAttrs :: A.Attributes
-ellipseAttrs = [
-    A.shape A.Ellipse,
-    AC.Width 1,
-    AC.Height 0.5,
-    A.fillColor White
+ellipseAttrs = 
+    [ A.shape A.Ellipse
+    , AC.Width 0.45     -- min 0.01
+    , AC.Height 0.35    -- min 0.01
+    , AC.FixedSize SetNodeSize
+    , A.fillColor White
+    , AC.FontSize 10.0  -- min 1.0
     ]
--- | Using default setting for the edges connecting the nodes.
+
 edgeAttrs :: GlobalAttributes
-edgeAttrs = EdgeAttrs []
+edgeAttrs = EdgeAttrs [
+    ArrowHead (AType [(ArrMod FilledArrow BothSides, NoArrow)])
+    ]
