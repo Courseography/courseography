@@ -66,14 +66,19 @@ creditsParser = do
 -- | Helpers for parsing grades
 percentParser :: Parser String
 percentParser = do
-    Parsec.try $ Parsec.notFollowedBy $ Parsec.digit >> (Parsec.count 2 Parsec.digit)
-    fces <- Parsec.count 2 Parsec.digit
+    fces <- Parsec.try (do
+        percent <- Parsec.count 2 Parsec.digit
+        Parsec.notFollowedBy Parsec.digit
+        return percent)
     Parsec.optional (Parsec.char '%')
     return fces
 
 letterParser :: Parser String
 letterParser = do
-    letter <- Parsec.oneOf "ABCDEF"
+    letter <- Parsec.try (do
+        letterGrade <- Parsec.oneOf "ABCDEF"
+        Parsec.notFollowedBy $ Parsec.letter
+        return letterGrade)
     plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
     return $ letter : plusminus
 
@@ -100,7 +105,7 @@ gradeParser = do
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    _ <- Parsec.optional $ caseInsensitiveStr "an " <|> caseInsensitiveStr "a "
+    _ <- Parsec.optional (caseInsensitiveStr "an " <|> Parsec.try indefiniteArticleAParser)
     Parsec.spaces
     grade <- cutoffHelper <|> gradeParser
     Parsec.spaces
@@ -116,6 +121,11 @@ coBefParser = do
         _ <- Parsec.optional $ caseInsensitiveStr "of"
         Parsec.spaces
         gradeParser
+
+    indefiniteArticleAParser = do
+        indefiniteArticle <- caseInsensitiveStr "a "
+        Parsec.notFollowedBy $ caseInsensitiveStr "in"
+        return indefiniteArticle
 
 -- parse for cutoff percentage after a course
 coAftParser :: Parser Req
@@ -180,9 +190,6 @@ utscCourseCodeParser = do
 -- We expect 3 letters followed by 3 digits or 4 letters followed by 2 digits, and a letter and a number.
 courseIDParser :: Parser String
 courseIDParser = do
-    _ <- Parsec.optional $ (Parsec.choice $ map caseInsensitiveStr ["one of either", "one of the following", "at least one of", "one of", "1 of"])
-    _ <- Parsec.optional $ Parsec.string ":"
-    Parsec.spaces
     courseCode <- Parsec.try utsgCourseCodeParser <|> utscCourseCodeParser
     sess <- Parsec.string "H" <|> Parsec.string "Y"
     sessNum <- Parsec.digit
