@@ -63,6 +63,13 @@ gradeBefInputs = [
     , ("minimum grade of 75% CSC236H1", GRADE "75" $ J "CSC236H1" "")
     , ("minimum of 75% CSC236H1", GRADE "75" $ J "CSC236H1" "")
     , ("minimum (75%) CSC236H1", GRADE "75" $ J "CSC236H1" "")
+    , ("A grade of 75% in CSC236H1", GRADE "75" $ J "CSC236H1" "")
+    , ("At least C+ in CSC236H1", GRADE "C+" $ J "CSC236H1" "")
+    , ("A C+ in CSC236H1", GRADE "C+" $ J "CSC236H1" "")
+    , ("Minimum of 75% CSC236H1", GRADE "75" $ J "CSC236H1" "")
+    , ("Grade of C+ in CSC236H1", GRADE "C+" $ J "CSC236H1" "")
+    , ("A final grade of C+ in CSC236H1", GRADE "C+" $ J "CSC236H1" "")
+    , ("75% in CSC236H1", GRADE "75" $ J "CSC236H1" "")
     ]
 
 gradeAftInputs :: [(String, Req)]
@@ -74,6 +81,10 @@ gradeAftInputs = [
     , ("CSC263H1 B-", GRADE "B-" $ J "CSC263H1" "") 
     , ("CSC263H1 with a minimum grade of 60%", GRADE "60" $ J "CSC263H1" "") 
     , ("CSC263H1 with a minimum mark of B-", GRADE "B-" $ J "CSC263H1" "")
+    , ("CSC236H1 (at least 75% or more)", GRADE "75" $ J "CSC236H1" "")
+    , ("CSC236H1 ( 75% or higher )", GRADE "75" $ J "CSC236H1" "")
+    , ("CSC263H1 with a minimum grade of 60% or more", GRADE "60" $ J "CSC263H1" "")
+    , ("CSC263H1 with a minimum grade of 60% or higher / CSC236H1 (75%)", OR [GRADE "60" $ J "CSC263H1" "", GRADE "75" $ J "CSC236H1" ""])
     ]
 
 artSciInputs :: [(String, Req)]
@@ -83,7 +94,9 @@ artSciInputs = [
     , ("EEB223H1 (ecology and evo), STA220H1 (recommended)/ STA257H1 (recommended)", (AND [J "EEB223H1" "ecology and evo",OR [J "STA220H1" "recommended",J "STA257H1" "recommended"]]))
     , ("EEB223H1 (ecology and evo)/ STA220H1 (recommended)/ STA257H1", (OR [J "EEB223H1" "ecology and evo",J "STA220H1" "recommended",J "STA257H1" ""]))
     , ("EEB223H1 (ecology and evo)/ STA220H1 (B-)/ STA257H1", OR [J "EEB223H1" "ecology and evo", GRADE "B-" $ J "STA220H1" "", J "STA257H1" ""])
-    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", (FCES "0.5" $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""]))]
+    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", (FCES "0.5" $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""]))
+    , ("MATB23H3/STA220H1 (recommended)/STA257H1 (recommended)", (OR [J "MATB23H3" "",J "STA220H1" "recommended",J "STA257H1" "recommended"]))
+    ]
 
 noPrereqInputs :: [(String, Req)]
 noPrereqInputs = [
