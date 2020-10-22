@@ -106,7 +106,7 @@ reqToStmts' parentID (GRADE description req) = do
 
 -- A raw string description of a prerequisite.
 reqToStmts' parentID (RAW rawText) = 
-    if "High school" `isInfixOf` pack rawText
+    if "High school" `isInfixOf` pack rawText || rawText == ""
         then return []
         else do
     prereq <- makeNode (pack rawText)
@@ -114,12 +114,11 @@ reqToStmts' parentID (RAW rawText) =
     return [DN prereq, DE edge]
 
 -- TODO: Complete this one.
-reqToStmts' parentID (FCES creds _) = do
+reqToStmts' parentID (FCES creds req) = do
     fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs")
     edge <- makeEdge (nodeID fceNode) parentID
-    -- prereqStmts <- reqToStmts' (nodeID fceNode) req 
-    -- currently prereqStmts will always be RAW ""
-    return $ [DN fceNode, DE edge]
+    prereqStmts <- reqToStmts' (nodeID fceNode) req 
+    return $  [DN fceNode, DE edge] ++ prereqStmts
 
 makeNode :: Text -> State GeneratorState (DotNode Text)
 makeNode name = do

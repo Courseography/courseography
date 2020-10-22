@@ -8,39 +8,40 @@ import Database.Requirement
 import Data.Char (toLower, isSpace)
 
 -- define separators
-fromSeparator :: Parser ()
-fromSeparator = Parsec.spaces >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
-            "full course or its equivalent",
-            "FCEs",
-            "FCE",
-            "FCEs:",
-            "FCE:"
-    ]) >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
-            " of any of the following:",
-            " from the following: ",
-            " from:",
-            " from",
-            " at"
-    ]) >> Parsec.spaces
+fromSeparator :: Parser String
+fromSeparator = Parsec.spaces 
+                >> Parsec.choice (map (Parsec.try . Parsec.string) [
+            "of any of the following:",
+            "from the following: ",
+            "from:",
+            "from",
+            "at"
+    ])
 
-completionPrefix :: Parser String
+completionPrefix :: Parser ()
 completionPrefix = Parsec.choice (map (Parsec.try . Parsec.string) [
     "Completion of at least",
     "Completion of a minimum of",
     "Completion of"
-    ])
+    ]) 
+    >> Parsec.spaces
 
-fceSeparator :: Parser String
+fceSeparator :: Parser ()
 fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
-            "FCE",
+            "FCEs.",
             "FCEs",
+            "FCE.",
+            "FCE",
             "credits",
             "full-course equivalents"
             ])
+            >> Parsec.spaces
 
--- TO-DO
--- includingSeparator :: Parser String
--- includingSeparator = Parsec.string "including"
+includingSeparator :: Parser String
+includingSeparator = Parsec.optional (Parsec.string ",") 
+                     >> Parsec.spaces
+                     >> Parsec.string "including"
+                     
 
 lParen :: Parser Char
 lParen = Parsec.char '('
@@ -213,27 +214,17 @@ andParser = do
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
--- | Parser for reqs in "from" format:
--- 4.0 FCEs from CSC108H1, CSC148H1, ...
-fromParser :: Parser Req
-fromParser = do
-    fces <- creditsParser
-    _ <- fromSeparator
-    Parsec.spaces
-    req <- andParser
-    return $ FCES fces req
-
-completionParser :: Parser Req
-completionParser = do
-    _ <- completionPrefix
-    _ <- Parsec.spaces
+-- | Parser for FCE requirements:
+-- "... 9.0 FCEs ..."
+fcesParser :: Parser Req
+fcesParser = do 
+    _ <- Parsec.optional completionPrefix
     fces <- creditsParser
     _ <- Parsec.spaces
     _ <- fceSeparator
-    return $ FCES fces (RAW "")
-
-fcesParser :: Parser Req
-fcesParser = Parsec.try completionParser <|> Parsec.try fromParser
+    _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
+    req <- Parsec.try andParser <|> Parsec.try orParser
+    return $ FCES fces req  
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
