@@ -113,7 +113,7 @@ reqToStmts' parentID (RAW rawText) =
     edge <- makeEdge (nodeID prereq) parentID
     return [DN prereq, DE edge]
 
--- TODO: Complete this one.
+--A prerequisite concerning a given number of earned credits
 reqToStmts' parentID (FCES creds req) = do
     fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs")
     edge <- makeEdge (nodeID fceNode) parentID
