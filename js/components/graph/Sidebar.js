@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Focus from "./Focus";
-import PropTypes from "prop-types";
 
 
 export default class Sidebar extends React.Component {
@@ -10,18 +9,28 @@ export default class Sidebar extends React.Component {
     this.state = {
       toggled: false,
       hidden: true,
-      focusDisabled: true,
+      focusDisabled: false,
       focusHidden: true,
       focusActive: false,
-      graphActive: false,
+      graphActive: false
     }
     this.toggleSidebar = this.toggleSidebar.bind(this);
     this.showFocuses = this.showFocuses.bind(this);
     this.showGraphs = this.showGraphs.bind(this);
   }
 
+  componentDidMount() {
+    this.handleGraph();
+  }
+
   handleGraph(graphName) {
-    this.props.getGraph(graphName)
+    if (graphName != undefined) {
+      this.props.getGraph(graphName);
+    } else {
+      console.log("Sidebar component is getting the local graph name.");
+      graphName = this.props.getLocalGraph();
+      console.log('Sidebar component just got this graphName :>> ', graphName);
+    }
     // Enable Focuses nav if CS graph is selected
     if (graphName === "Computer Science") {
       this.setState({
@@ -67,7 +76,12 @@ export default class Sidebar extends React.Component {
     const focusComponents = [];
     computerScienceFocusData.forEach((focus, i) => {
       focusComponents.push(
-        <Focus key={i} pId={focus[0]} focusName={focus[1]} />
+        <Focus
+          key={i}
+          pId={focus[0]}
+          focusName={focus[1]}
+          highlightFocus={(id) => this.props.highlightFocus(id)}
+        />
       )
     })
     return focusComponents;
@@ -158,5 +172,7 @@ export default class Sidebar extends React.Component {
 Sidebar.propTypes = {
   reset: PropTypes.func,
   graphs: PropTypes.array,
-  getGraph: PropTypes.func
+  getGraph: PropTypes.func,
+  highlightFocus: PropTypes.func,
+  getLocalGraph: PropTypes.func
 };

@@ -93,19 +93,9 @@ export default class Graph extends React.Component {
 
   getGraph = graphName => {
     if (graphName === undefined) {
-      const params = new URL(document.location).searchParams;
-      const urlSpecifiedGraph = params.get("dept");
-
-      // HACK: Temporary workaround for giving the statistics department a
-      // link to our graph.
-      // Should be replaced with a more general solution.
-      if (urlSpecifiedGraph === "sta") {
-        graphName = "Statistics";
-      } else if (urlSpecifiedGraph !== null) {
-        graphName = "Computer Science";
-      } else {
-        graphName = localStorage.getItem("active-graph") || "Computer Science";
-      }
+      console.log("Graph component is getting the local graph name.");
+      graphName = this.props.getLocalGraph();
+      console.log('Graph component just got this graphName :>> ', graphName);
     }
 
     graphName = graphName.replace("-", " ");
@@ -630,6 +620,10 @@ export default class Graph extends React.Component {
     }
   };
 
+  highlightFocuses(focuses) {
+    this.setState({ highlightedNodes: focuses });
+  }
+
   render() {
     // not all of these properties are supported in React
     var svgAttrs = {
@@ -795,5 +789,6 @@ Graph.propTypes = {
   edit: PropTypes.bool,
   initialDrawMode: PropTypes.string,
   start_blank: PropTypes.bool,
-  closeSidebar: PropTypes.func
+  closeSidebar: PropTypes.func,
+  getLocalGraph: PropTypes.func
 };
