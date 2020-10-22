@@ -20,7 +20,7 @@ import DynamicGraphs.CourseFinder (lookupCourses)
 import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
-import Data.Text.Lazy (Text, pack)
+import Data.Text.Lazy (Text, pack, isInfixOf)
 import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
@@ -105,7 +105,10 @@ reqToStmts' parentID (GRADE description req) = do
     return $ [DN gradeNode, DE edge] ++ prereqStmts
 
 -- A raw string description of a prerequisite.
-reqToStmts' parentID (RAW rawText) = do
+reqToStmts' parentID (RAW rawText) = 
+    if "High school" `isInfixOf` pack rawText
+        then return []
+        else do
     prereq <- makeNode (pack rawText)
     edge <- makeEdge (nodeID prereq) parentID
     return [DN prereq, DE edge]
