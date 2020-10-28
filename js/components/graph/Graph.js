@@ -93,9 +93,7 @@ export default class Graph extends React.Component {
 
   getGraph = graphName => {
     if (graphName === undefined) {
-      console.log("Graph component is getting the local graph name.");
       graphName = this.props.getLocalGraph();
-      console.log('Graph component just got this graphName :>> ', graphName);
     }
 
     graphName = graphName.replace("-", " ");
@@ -371,7 +369,7 @@ export default class Graph extends React.Component {
   };
 
   openExportModal = () => {
-    this.exportModal.openModal();
+    this.exportModal.current.openModal();
   };
 
   // Reset graph
@@ -620,7 +618,7 @@ export default class Graph extends React.Component {
     }
   };
 
-  highlightFocuses(focuses) {
+  highlightFocuses = focuses => {
     this.setState({ highlightedNodes: focuses });
   }
 

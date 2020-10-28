@@ -8,6 +8,7 @@ export default class Container extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currFocus: null,
       graphName: null,
       graphs: [],
     }
@@ -26,61 +27,67 @@ export default class Container extends React.Component {
         throw "No graphs in database";
       }
     )
+    
+    let currGraph = this.graph.current;
+    $("#nav-export").click(function() {
+      currGraph.openExportModal();
+    });
   }
 
-  getLocalGraph() {
-    if (this.state.graphName == null) {
-      console.log('Container component does not have a graph name state so I will look it up in local storage.');
-      let graphName;
-      const params = new URL(document.location).searchParams;
-      const urlSpecifiedGraph = params.get("dept");
+  getLocalGraph = () => {
+    // Gets graph from local storage, if it exists
+    let graphName;
+    const params = new URL(document.location).searchParams;
+    const urlSpecifiedGraph = params.get("dept");
 
-      // HACK: Temporary workaround for giving the statistics department a
-      // link to our graph.
-      // Should be replaced with a more general solution.
-      if (urlSpecifiedGraph === "sta") {
-        graphName = "Statistics";
-      } else if (urlSpecifiedGraph !== null) {
-        graphName = "Computer Science";
-      } else {
-        graphName = localStorage.getItem("active-graph") || "Computer Science";
-      }
-      this.setState({ graphName: graphName });
-      return graphName;
+    // HACK: Temporary workaround for giving the statistics department a
+    // link to our graph.
+    // Should be replaced with a more general solution.
+    if (urlSpecifiedGraph === "sta") {
+      graphName = "Statistics";
+    } else if (urlSpecifiedGraph !== null) {
+      graphName = "Computer Science";
+    } else {
+      graphName = localStorage.getItem("active-graph") || "Computer Science";
     }
-    console.log("Container component already has the graph name. Here it is!");
-    return this.state.graphName;
+    this.setState({ graphName: graphName });
+    return graphName;
   }
 
-  highlightFocus(id) {
+  highlightFocus = id => {
     if (this.graph.current.state.highlightedNodes == focusInfo[id + "FocusList"]) {
       this.graph.current.highlightFocuses([]);
+      this.setState({
+        currFocus: null,
+      });
     } else {
-      // TODO SET SOME CSS STUFF LOL
-      // $(".details").css("height", "2px");
       this.graph.current.highlightFocuses(focusInfo[id + "FocusList"]);
+      this.setState({
+        currFocus: id,
+      });
     }
   }
 
   render() {
     return (
-      <React.Fragment>
+      <div>
         <Graph
           ref={this.graph}
-          start_blank={this.props.start_blank}
+          initialDrawMode="draw-node"
           edit={this.props.edit}
+          start_blank={this.props.start_blank}
           getLocalGraph={() => this.getLocalGraph()}
           closeSidebar={() => this.sidebar.current.toggleSidebar("graph")}
-          initialDrawMode="draw-node"
         />
         <Sidebar
           ref={this.sidebar}
+          currFocus={this.state.currFocus}
           graphs={this.state.graphs}
+          graphName={this.state.graphName}
           getGraph={(name) => this.graph.current.getGraph(name)}
-          getLocalGraph={() => this.getLocalGraph()}
           highlightFocus={(id) => this.highlightFocus(id)}
         />
-      </React.Fragment>
+      </div>
     )
   }
 }

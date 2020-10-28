@@ -12,38 +12,38 @@ export default class Sidebar extends React.Component {
       focusDisabled: false,
       focusHidden: true,
       focusActive: false,
-      graphActive: false
+      graphActive: false,
+      graphName: ""
     }
-    this.toggleSidebar = this.toggleSidebar.bind(this);
-    this.showFocuses = this.showFocuses.bind(this);
-    this.showGraphs = this.showGraphs.bind(this);
   }
 
-  componentDidMount() {
-    this.handleGraph();
+  componentWillUpdate(prevProps) {
+    if (this.state.graphName.length == 0 && prevProps.graphName !== this.state.graphName) {
+      this.setState({graphName: prevProps.graphName}, () => {
+        this.handleGraph();
+      });
+    }
   }
 
-  handleGraph(graphName) {
+  handleGraph = graphName => {
     if (graphName != undefined) {
       this.props.getGraph(graphName);
     } else {
-      console.log("Sidebar component is getting the local graph name.");
-      graphName = this.props.getLocalGraph();
-      console.log('Sidebar component just got this graphName :>> ', graphName);
+      graphName = this.state.graphName;
     }
     // Enable Focuses nav if CS graph is selected
     if (graphName === "Computer Science") {
       this.setState({
         focusDisabled: false,
-      })
+      });
     } else {
       this.setState({
         focusDisabled: true,
-      })
+      });
     }
   }
 
-  createGraphButtons() {
+  createGraphButtons = () => {
     const graphButtons = [];
     this.props.graphs.forEach((graph, i) => {
       const graphId = "graph-" + graph.id;
@@ -61,7 +61,7 @@ export default class Sidebar extends React.Component {
     return graphButtons;
   }
 
-  getFocusData() {
+  getFocusData = () => {
     const computerScienceFocusData = [
       ["sci", "Scientific Computing"],
       ["AI", "Artificial Intelligence"],
@@ -75,11 +75,13 @@ export default class Sidebar extends React.Component {
     ];
     const focusComponents = [];
     computerScienceFocusData.forEach((focus, i) => {
+      const openDetails = this.props.currFocus == focus[0];
       focusComponents.push(
         <Focus
           key={i}
           pId={focus[0]}
           focusName={focus[1]}
+          openDetails={openDetails}
           highlightFocus={(id) => this.props.highlightFocus(id)}
         />
       )
@@ -87,7 +89,7 @@ export default class Sidebar extends React.Component {
     return focusComponents;
   }
 
-  toggleSidebar(location) {
+  toggleSidebar = location => {
     if (this.state.toggled) {
       this.setState({
         toggled: false,
@@ -108,7 +110,7 @@ export default class Sidebar extends React.Component {
     }
   }
 
-  showFocuses() {
+  showFocuses = () => {
     this.setState({
       focusHidden: false,
       focusActive: true,
@@ -116,7 +118,7 @@ export default class Sidebar extends React.Component {
     });
   }
 
-  showGraphs() {
+  showGraphs = () => {
     this.setState({
       focusHidden: true,
       focusActive: false,
@@ -171,8 +173,10 @@ export default class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   reset: PropTypes.func,
-  graphs: PropTypes.array,
+  currFocus: PropTypes.string,
   getGraph: PropTypes.func,
+  graphName: PropTypes.string,
+  graphs: PropTypes.array,
   highlightFocus: PropTypes.func,
   getLocalGraph: PropTypes.func
 };
