@@ -2,24 +2,23 @@ import React from "react";
 import PropTypes from "prop-types";
 import Focus from "./Focus";
 
-
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      toggled: false,
-      hidden: true,
+      contentHidden: true,
       focusDisabled: false,
-      focusHidden: true,
       focusActive: false,
       graphActive: false,
-      graphName: ""
+      graphName: "",
+      toggled: false
     }
   }
 
   componentWillUpdate(prevProps) {
+    // Check to see if we have a graph from local storage on load
     if (this.state.graphName.length == 0 && prevProps.graphName !== this.state.graphName) {
-      this.setState({graphName: prevProps.graphName}, () => {
+      this.setState({ graphName: prevProps.graphName }, () => {
         this.handleGraph();
       });
     }
@@ -50,10 +49,11 @@ export default class Sidebar extends React.Component {
       const graphName = graph.title;
       graphButtons.push(
         <div
-          id={graphId}
           className="graph-button"
+          id={graphId}
           key={i}
-          onClick={() => this.handleGraph(graphName)}>
+          onClick={() => this.handleGraph(graphName)}
+        >
           {graphName}
         </div>
       );
@@ -91,78 +91,78 @@ export default class Sidebar extends React.Component {
 
   toggleSidebar = location => {
     if (this.state.toggled) {
+      // close graph
       this.setState({
-        toggled: false,
-        hidden: true,
-        focusHidden: true,
+        contentHidden: true,
         focusActive: false,
         graphActive: true,
-        sidebarFlipped: false,
+        toggled: false,
       })
     } else if (!this.state.toggled && location === "button") {
       // open graph
       this.setState({
         toggled: true,
-        hidden: false,
+        contentHidden: false,
         graphActive: true,
-        sidebarFlipped: true,
-      })
+      });
     }
   }
 
-  showFocuses = () => {
-    this.setState({
-      focusHidden: false,
-      focusActive: true,
-      graphActive: false,
-    });
-  }
-
-  showGraphs = () => {
-    this.setState({
-      focusHidden: true,
-      focusActive: false,
-      graphActive: true,
-    });
+  showFocuses = focus => {
+    if (focus) {
+      // show focuses
+      this.setState({
+        focusActive: true,
+        graphActive: false
+      });
+    } else {
+      // show graphs
+      this.setState({
+        focusActive: false,
+        graphActive: true
+      });
+    }
   }
 
   render() {
-    const hiddenClass = this.state.hidden ? "hidden" : "";
-    const focusClass = this.state.focusHidden ? "hidden" : "";
+    const contentHiddenClass = this.state.contentHidden ? "hidden" : "";
     const focusDisabled = this.state.focusDisabled ? "disabled" : "";
     const focusActiveClass = this.state.focusActive ? "active" : "";
+    const focusHiddenClass = !this.state.focusActive ? "hidden" : "";
     const graphActiveClass = this.state.graphActive ? "active" : "";
+    const graphHiddenClass = !this.state.graphActive ? "hidden" : "";
     const flippedClass = this.state.toggled ? "flip" : "";
     const sidebarClass = this.state.toggled ? "opened" : "";
+
     return (
       <div>
         <div id="sidebar" className={sidebarClass}>
-          <div id="fce" className={hiddenClass}>
-            <div id="fcecount" className={hiddenClass}>FCE Count: 0.0</div>
-            <button id="reset" className={hiddenClass} onClick={() => this.props.reset()}>Reset Graph</button>
+          <div id="fce" className={contentHiddenClass}>
+            <div id="fcecount">FCE Count: 0.0</div>
+            <button id="reset" onClick={() => this.props.reset()}>Reset Graph</button>
           </div>
           <nav id="sidebar-nav">
             <ul>
-              <li id="graphs-nav" className={graphActiveClass} onClick={this.showGraphs}>
+              <li id="graphs-nav" className={graphActiveClass} onClick={() => this.showFocuses(false)}>
                 <div>Graphs</div>
               </li>
-              <li id="focuses-nav" className={`${focusActiveClass} ${focusDisabled}`} onClick={(event) => this.showFocuses(event)}>
+              <li id="focuses-nav" className={`${focusActiveClass} ${focusDisabled}`} onClick={() => this.showFocuses(true)}>
                 <div>Focuses</div>
               </li>
             </ul>
           </nav>
 
-          <div id="focuses" className={focusClass}>
+          <div id="focuses" className={focusHiddenClass}>
             {this.getFocusData()}
           </div>
-          <div id="graphs" className={hiddenClass}>
+          <div id="graphs" className={graphHiddenClass}>
             {this.createGraphButtons()}
           </div>
         </div>
         
         <div id="sidebar-button" onClick={() => this.toggleSidebar("button")}>
           <img id="sidebar-icon"
-           className={flippedClass} 
+           className={flippedClass}
            src="static/res/ico/sidebar.png"
           />
         </div>
@@ -172,11 +172,11 @@ export default class Sidebar extends React.Component {
 }
 
 Sidebar.propTypes = {
-  reset: PropTypes.func,
   currFocus: PropTypes.string,
+  getLocalGraph: PropTypes.func,
   getGraph: PropTypes.func,
-  graphName: PropTypes.string,
   graphs: PropTypes.array,
+  graphName: PropTypes.string,
   highlightFocus: PropTypes.func,
-  getLocalGraph: PropTypes.func
+  reset: PropTypes.func
 };

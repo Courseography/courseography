@@ -1,7 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Graph from "./Graph";
 import Sidebar from "./Sidebar";
-import PropTypes from "prop-types";
 import * as focusInfo from "./sidebar/focus_descriptions";
 
 export default class Container extends React.Component {
@@ -10,7 +10,7 @@ export default class Container extends React.Component {
     this.state = {
       currFocus: null,
       graphName: null,
-      graphs: [],
+      graphs: []
     }
     this.graph = React.createRef();
     this.sidebar = React.createRef();
@@ -28,6 +28,7 @@ export default class Container extends React.Component {
       }
     )
     
+    // Need to use jQuery because nav-export is still a Haskell generated HTML component
     let currGraph = this.graph.current;
     $("#nav-export").click(function() {
       currGraph.openExportModal();
@@ -58,12 +59,12 @@ export default class Container extends React.Component {
     if (this.graph.current.state.highlightedNodes == focusInfo[id + "FocusList"]) {
       this.graph.current.highlightFocuses([]);
       this.setState({
-        currFocus: null,
+        currFocus: null
       });
     } else {
       this.graph.current.highlightFocuses(focusInfo[id + "FocusList"]);
       this.setState({
-        currFocus: id,
+        currFocus: id
       });
     }
   }
@@ -82,10 +83,11 @@ export default class Container extends React.Component {
         <Sidebar
           ref={this.sidebar}
           currFocus={this.state.currFocus}
+          getGraph={(name) => this.graph.current.getGraph(name)}
           graphs={this.state.graphs}
           graphName={this.state.graphName}
-          getGraph={(name) => this.graph.current.getGraph(name)}
           highlightFocus={(id) => this.highlightFocus(id)}
+          reset={() => this.graph.current.reset()}
         />
       </div>
     )

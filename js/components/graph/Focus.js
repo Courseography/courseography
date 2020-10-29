@@ -4,19 +4,15 @@ import * as focusInfo from "./sidebar/focus_descriptions.js";
 
 export default class Focus extends React.Component {
   getDetailsInfo = () => {
-    let detailsInfo;
+    let detailsStyle, detailsText;
     if (this.props.openDetails) {
-      detailsInfo = {
-        "detailsStyle": { height:"128px" },
-        "detailsText": focusInfo[this.props.pId + "Description"]
-      }
+      detailsStyle = { height:"128px" };
+      detailsText = focusInfo[this.props.pId + "Description"]
     } else {
-      detailsInfo = {
-        "detailsStyle": { height:"2px" },
-        "detailsText": ""
-      }
+      detailsStyle = { height:"2px" };
+      detailsText = "";
     }
-    return detailsInfo;
+    return { "detailsStyle": detailsStyle, "detailsText": detailsText };
   }
 
   render() {
