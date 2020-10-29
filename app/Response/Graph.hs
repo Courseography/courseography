@@ -15,9 +15,7 @@ graphResponse =
                 []
                 (do
                     header "graph"
-                    H.div ! A.id "container" $ do
-                        -- TODO: remove this inner div
-                        H.div ! A.id "react-graph" ! A.class_ "react-graph" $ ""
+                    H.div ! A.id "container" $ ""
                     disclaimer
                 )
                 graphScripts
