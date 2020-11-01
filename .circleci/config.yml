@@ -20,7 +20,7 @@ jobs:
           name: Install Package Dependencies
           command: |
             sudo apt-get update
-            sudo apt-get install -y imagemagick texlive-latex-base
+            sudo apt-get install -y imagemagick-6-common texlive-latex-base
             stack update
 
             curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -

@@ -10,7 +10,7 @@ main = defaultMainWithHooks
         -- | Checks existence of Config.hs. If it doesn't exist, copy it from DevelopmentConfig.hs
         -- And check that Imagemagick and LaTeX are available
         preBuildChecks _ _ = do
-            mapM_ checkDependency ["convert", "pdflatex"]
+            mapM_ checkDependency ["magick", "pdflatex"]
             configExistbool <- doesFileExist "app/Config.hs"
             case configExistbool of
                 False -> copyFile "app/DevelopmentConfig.hs" "app/Config.hs" >> return emptyHookedBuildInfo
