@@ -8,8 +8,7 @@ export default class Sidebar extends React.Component {
     this.state = {
       contentHidden: true,
       focusDisabled: false,
-      focusActive: false,
-      graphActive: false,
+      graphActive: 0,
       graphName: "",
       toggled: false
     }
@@ -17,7 +16,7 @@ export default class Sidebar extends React.Component {
 
   componentWillUpdate(prevProps) {
     // Check to see if we have a graph from local storage on load
-    if (this.state.graphName.length == 0 && prevProps.graphName !== this.state.graphName) {
+    if (this.state.graphName.length === 0 && prevProps.graphName !== this.state.graphName) {
       this.setState({ graphName: prevProps.graphName }, () => {
         this.handleGraph();
       });
@@ -94,8 +93,7 @@ export default class Sidebar extends React.Component {
       // close graph
       this.setState({
         contentHidden: true,
-        focusActive: false,
-        graphActive: true,
+        graphActive: 1,
         toggled: false,
       })
     } else if (!this.state.toggled && location === "button") {
@@ -103,7 +101,7 @@ export default class Sidebar extends React.Component {
       this.setState({
         toggled: true,
         contentHidden: false,
-        graphActive: true,
+        graphActive: 1,
       });
     }
   }
@@ -112,14 +110,12 @@ export default class Sidebar extends React.Component {
     if (focus) {
       // show focuses
       this.setState({
-        focusActive: true,
-        graphActive: false
+        graphActive: 0
       });
     } else {
       // show graphs
       this.setState({
-        focusActive: false,
-        graphActive: true
+        graphActive: 1
       });
     }
   }
@@ -127,10 +123,10 @@ export default class Sidebar extends React.Component {
   render() {
     const contentHiddenClass = this.state.contentHidden ? "hidden" : "";
     const focusDisabled = this.state.focusDisabled ? "disabled" : "";
-    const focusActiveClass = this.state.focusActive ? "active" : "";
-    const focusHiddenClass = !this.state.focusActive ? "hidden" : "";
-    const graphActiveClass = this.state.graphActive ? "active" : "";
-    const graphHiddenClass = !this.state.graphActive ? "hidden" : "";
+    const focusActiveClass = this.state.graphActive === 0 ? "active" : "";
+    const focusHiddenClass = this.state.graphActive === 1 ? "hidden" : "";
+    const graphActiveClass = this.state.graphActive === 1? "active" : "";
+    const graphHiddenClass = this.state.graphActive === 0 ? "hidden" : "";
     const flippedClass = this.state.toggled ? "flip" : "";
     const sidebarClass = this.state.toggled ? "opened" : "";
 

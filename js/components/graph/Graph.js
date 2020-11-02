@@ -510,16 +510,16 @@ export default class Graph extends React.Component {
   };
 
   onKeyDown = event => {
-    if (event.keyCode == 39) {
+    if (event.keyCode === 39) {
       this.panDirection("right", 5);
-    } else if (event.keyCode == 40) {
+    } else if (event.keyCode === 40) {
       this.panDirection("down", 5);
-    } else if (event.keyCode == 37) {
+    } else if (event.keyCode === 37) {
       this.panDirection("left", 5);
-    } else if (event.keyCode == 38) {
+    } else if (event.keyCode === 38) {
       this.panDirection("up", 5);
     } else if (this.state.onDraw) {
-      if (event.keyCode == 78) {
+      if (event.keyCode === 78) {
         this.setState({ drawMode: "draw-node" });
       }
     }
@@ -651,9 +651,9 @@ export default class Graph extends React.Component {
     }
 
     var resetDisabled =
-      this.state.zoomFactor == 1 &&
-      this.state.horizontalPanFactor == 0 &&
-      this.state.verticalPanFactor == 0;
+      this.state.zoomFactor === 1 &&
+      this.state.horizontalPanFactor === 0 &&
+      this.state.verticalPanFactor === 0;
 
     // Mouse events for draw tool
     var mouseEvents = {};
@@ -666,7 +666,7 @@ export default class Graph extends React.Component {
     }
 
     return (
-      <div id="react-graph" className="react-graph" onClick={() => this.props.closeSidebar()}>
+      <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
         <CourseModal ref={this.modal} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button

@@ -30,7 +30,7 @@ export default class Container extends React.Component {
     
     // Need to use jQuery because nav-export is still a Haskell generated HTML component
     let currGraph = this.graph.current;
-    $("#nav-export").click(function() {
+    $("#nav-export").click(() => {
       currGraph.openExportModal();
     });
   }
@@ -56,7 +56,7 @@ export default class Container extends React.Component {
   }
 
   highlightFocus = id => {
-    if (this.graph.current.state.highlightedNodes == focusInfo[id + "FocusList"]) {
+    if (this.graph.current.state.highlightedNodes === focusInfo[id + "FocusList"]) {
       this.graph.current.highlightFocuses([]);
       this.setState({
         currFocus: null
@@ -77,7 +77,7 @@ export default class Container extends React.Component {
           initialDrawMode="draw-node"
           edit={this.props.edit}
           start_blank={this.props.start_blank}
-          getLocalGraph={() => this.getLocalGraph()}
+          getLocalGraph={this.getLocalGraph}
           closeSidebar={() => this.sidebar.current.toggleSidebar("graph")}
         />
         <Sidebar
@@ -86,7 +86,7 @@ export default class Container extends React.Component {
           getGraph={(name) => this.graph.current.getGraph(name)}
           graphs={this.state.graphs}
           graphName={this.state.graphName}
-          highlightFocus={(id) => this.highlightFocus(id)}
+          highlightFocus={this.highlightFocus}
           reset={() => this.graph.current.reset()}
         />
       </div>
