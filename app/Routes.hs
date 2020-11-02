@@ -7,12 +7,14 @@ import Response
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getGraphJSON)
 import Database.CourseInsertion (saveGraphJSON)
 import Data.Text.Lazy (Text)
-import DynamicGraphs.WriteRunDot (findPrereqsResponse)
+import DynamicGraphs.WriteRunDot (findAndSavePrereqsResponse)
 
 routes :: String -> Text -> Text -> [ (String, ServerPart Response)]
 routes staticDir aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", graphResponse),
+    ("graph-generate", do method PUT
+                          findAndSavePrereqsResponse),
     ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
     ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
     ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse courses),
@@ -30,6 +32,5 @@ routes staticDir aboutContents privacyContents = [
     ("calendar", look "courses" >>= calendarResponse),
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     ("loading", lookText' "size" >>= loadingResponse),
-    ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr),
-    ("find-prereqs", findPrereqsResponse)
+    ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
     ]
