@@ -8,6 +8,7 @@ import EdgeGroup from "./EdgeGroup";
 import InfoBox from "./InfoBox";
 import NodeGroup from "./NodeGroup";
 import RegionGroup from "./RegionGroup";
+import * as focusInfo from "./sidebar/focus_descriptions";
 
 export default class Graph extends React.Component {
   constructor(props) {
@@ -32,7 +33,9 @@ export default class Graph extends React.Component {
       onDraw: this.props.edit,
       drawMode: this.props.initialDrawMode,
       drawNodeID: 0,
-      draggingNode: null
+      draggingNode: null,
+      currFocus: null,
+      graphName: null
     };
 
     this.svg = React.createRef();
@@ -49,7 +52,7 @@ export default class Graph extends React.Component {
     if (!this.props.start_blank) {
       this.getGraph();
     }
-
+    
     // can't detect keydown event when adding event listener to react-graph
     document.body.addEventListener("keydown", this.onKeyDown);
     document
@@ -84,6 +87,18 @@ export default class Graph extends React.Component {
     markerNode.setAttribute("markerHeight", 7);
   }
 
+  componentWillUpdate(prevProps) {
+    if (this.state.currFocus !== prevProps.currFocus) {
+      this.setState({ currFocus: prevProps.currFocus }, () => {  
+        let focuses = this.state.currFocus === null ? [] : focusInfo[this.state.currFocus + "FocusList"];
+        this.highlightFocuses(focuses);
+      });
+    }
+    if (this.state.graphName !== prevProps.graphName) {
+      this.getGraph();
+    }
+  }
+
   componentWillUnmount() {
     document.body.removeEventListener("keydown", this.onKeyDown);
     document
@@ -91,13 +106,8 @@ export default class Graph extends React.Component {
       .removeEventListener("wheel", this.onWheel);
   }
 
-  getGraph = graphName => {
-    if (graphName === undefined) {
-      graphName = this.props.getLocalGraph();
-    }
-
-    graphName = graphName.replace("-", " ");
-
+  getGraph = () => {
+    let graphName = this.props.graphName.replace("-", " ");
     let url = new URL("/get-json-data", document.location);
     const params = { graphName: graphName };
     Object.keys(params).forEach(key =>
@@ -149,7 +159,6 @@ export default class Graph extends React.Component {
             edgesList.push(entry);
           }
         });
-
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -161,7 +170,8 @@ export default class Graph extends React.Component {
           height: data.height,
           zoomFactor: 1,
           horizontalPanFactor: 0,
-          verticalPanFactor: 0
+          verticalPanFactor: 0,
+          graphName: graphName
         });
       })
       .catch(err => {
@@ -784,9 +794,11 @@ export default class Graph extends React.Component {
 }
 
 Graph.propTypes = {
+  currFocus: PropTypes.string,
   edit: PropTypes.bool,
   initialDrawMode: PropTypes.string,
   start_blank: PropTypes.bool,
   closeSidebar: PropTypes.func,
-  getLocalGraph: PropTypes.func
+  getLocalGraph: PropTypes.func,
+  graphName: PropTypes.string
 };

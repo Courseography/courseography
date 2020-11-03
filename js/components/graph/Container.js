@@ -2,18 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import Graph from "./Graph";
 import Sidebar from "./Sidebar";
-import * as focusInfo from "./sidebar/focus_descriptions";
 
 export default class Container extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       currFocus: null,
-      graphName: null,
+      graphName: "",
       graphs: []
     }
     this.graph = React.createRef();
     this.sidebar = React.createRef();
+  }
+
+  componentWillMount() {
+    this.getLocalGraph();
   }
 
   componentDidMount() {
@@ -29,10 +32,13 @@ export default class Container extends React.Component {
     )
     
     // Need to use jQuery because nav-export is still a Haskell generated HTML component
-    let currGraph = this.graph.current;
     $("#nav-export").click(() => {
-      currGraph.openExportModal();
+      this.graph.current.openExportModal();
     });
+  }
+
+  updateGraph = graphName => {
+    this.setState({ graphName: graphName.replace("-", " ") });
   }
 
   getLocalGraph = () => {
@@ -56,13 +62,11 @@ export default class Container extends React.Component {
   }
 
   highlightFocus = id => {
-    if (this.graph.current.state.highlightedNodes === focusInfo[id + "FocusList"]) {
-      this.graph.current.highlightFocuses([]);
+    if (this.state.currFocus === id) {
       this.setState({
         currFocus: null
       });
     } else {
-      this.graph.current.highlightFocuses(focusInfo[id + "FocusList"]);
       this.setState({
         currFocus: id
       });
@@ -79,15 +83,17 @@ export default class Container extends React.Component {
           start_blank={this.props.start_blank}
           getLocalGraph={this.getLocalGraph}
           closeSidebar={() => this.sidebar.current.toggleSidebar("graph")}
+          currFocus={this.state.currFocus}
+          graphName={this.state.graphName}
         />
         <Sidebar
           ref={this.sidebar}
           currFocus={this.state.currFocus}
-          getGraph={(name) => this.graph.current.getGraph(name)}
           graphs={this.state.graphs}
           graphName={this.state.graphName}
           highlightFocus={this.highlightFocus}
           reset={() => this.graph.current.reset()}
+          updateGraph={this.updateGraph}
         />
       </div>
     )

@@ -11,26 +11,20 @@ export default class Sidebar extends React.Component {
       graphActive: 0,
       graphName: "",
       toggled: false
-    }
+    };
   }
 
-  componentWillUpdate(prevProps) {
-    // Check to see if we have a graph from local storage on load
-    if (this.state.graphName.length === 0 && prevProps.graphName !== this.state.graphName) {
+  componentWillUpdate(prevProps) { 
+    if (prevProps.graphName !== this.state.graphName) {
       this.setState({ graphName: prevProps.graphName }, () => {
-        this.handleGraph();
+        this.handleFocusEnabled(); 
       });
     }
   }
 
-  handleGraph = graphName => {
-    if (graphName != undefined) {
-      this.props.getGraph(graphName);
-    } else {
-      graphName = this.state.graphName;
-    }
+  handleFocusEnabled = () => {
     // Enable Focuses nav if CS graph is selected
-    if (graphName === "Computer Science") {
+    if (this.state.graphName === "Computer Science") {
       this.setState({
         focusDisabled: false,
       });
@@ -42,22 +36,18 @@ export default class Sidebar extends React.Component {
   }
 
   createGraphButtons = () => {
-    const graphButtons = [];
-    this.props.graphs.forEach((graph, i) => {
-      const graphId = "graph-" + graph.id;
-      const graphName = graph.title;
-      graphButtons.push(
+    return this.props.graphs.map((graph, i) => {
+      return (
         <div
           className="graph-button"
-          id={graphId}
+          id={"graph-" + graph.id}
           key={i}
-          onClick={() => this.handleGraph(graphName)}
+          onClick={() => this.props.updateGraph(graph.title)}
         >
-          {graphName}
+          {graph.title}
         </div>
-      );
+      )
     });
-    return graphButtons;
   }
 
   getFocusData = () => {
@@ -72,10 +62,10 @@ export default class Sidebar extends React.Component {
       ["theory", "Theory of Computation"],
       ["web", "Web Technologies"],
     ];
-    const focusComponents = [];
-    computerScienceFocusData.forEach((focus, i) => {
+
+    return computerScienceFocusData.map((focus, i) => {
       const openDetails = this.props.currFocus == focus[0];
-      focusComponents.push(
+      return (
         <Focus
           key={i}
           pId={focus[0]}
@@ -84,8 +74,7 @@ export default class Sidebar extends React.Component {
           highlightFocus={(id) => this.props.highlightFocus(id)}
         />
       )
-    })
-    return focusComponents;
+    });
   }
 
   toggleSidebar = location => {
@@ -125,7 +114,7 @@ export default class Sidebar extends React.Component {
     const focusDisabled = this.state.focusDisabled ? "disabled" : "";
     const focusActiveClass = this.state.graphActive === 0 ? "active" : "";
     const focusHiddenClass = this.state.graphActive === 1 ? "hidden" : "";
-    const graphActiveClass = this.state.graphActive === 1? "active" : "";
+    const graphActiveClass = this.state.graphActive === 1 ? "active" : "";
     const graphHiddenClass = this.state.graphActive === 0 ? "hidden" : "";
     const flippedClass = this.state.toggled ? "flip" : "";
     const sidebarClass = this.state.toggled ? "opened" : "";
@@ -169,8 +158,7 @@ export default class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   currFocus: PropTypes.string,
-  getLocalGraph: PropTypes.func,
-  getGraph: PropTypes.func,
+  updateGraph: PropTypes.func,
   graphs: PropTypes.array,
   graphName: PropTypes.string,
   highlightFocus: PropTypes.func,
