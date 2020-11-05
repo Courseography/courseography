@@ -65,6 +65,19 @@ andSeparator = Parsec.choice $ map caseInsensitiveStr [
     "plus"
     ]
 
+oneOfSeparator :: Parser String
+oneOfSeparator = do
+    separator <- Parsec.choice $ map caseInsensitiveStr [
+        "one of either",
+        "one of the following",
+        "at least one of",
+        "one of", "1 of",
+        "at least 1 of"
+        ]
+    colon <- Parsec.option "" $ Parsec.string ":"
+    return (separator ++ colon)
+
+
 semicolon :: Parser Char
 semicolon = Parsec.char ';'
 
@@ -245,6 +258,22 @@ courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map 
     rawTextParser
     ]
 
+-- | Parser for reqs related through the "one of the following" condition
+-- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
+oneOfParser :: Parser Req
+oneOfParser = do
+    Parsec.spaces
+    _ <- Parsec.try oneOfSeparator
+    Parsec.spaces
+    reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try (do
+                andSep <- andSeparator
+                Parsec.notFollowedBy $ oneOfSeparator
+                return andSep))
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR (x:xs)
+
 -- | Parser for reqs related through an OR.
 orParser :: Parser Req
 orParser = do
@@ -257,7 +286,7 @@ orParser = do
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
 andParser = do
-    reqs <- Parsec.sepBy orParser andSeparator
+    reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
