@@ -127,9 +127,9 @@ makeNode name = do
     GeneratorState i nodesMap <- State.get
     case Map.lookup name nodesMap of
         Nothing -> do
-            let node = DotNode
-                        (mappendTextWithCounter name i)
-                        [AC.Label $ toLabelValue name]
+            let nodeId = mappendTextWithCounter name i
+                node = DotNode nodeId
+                               [AC.Label $ toLabelValue name, ID nodeId]
                 nodesMap' = Map.insert name node nodesMap
             State.put (GeneratorState (i + 1) nodesMap')
             return node
@@ -139,11 +139,13 @@ makeBool :: Text -> State GeneratorState (DotNode Text)
 makeBool text1 = do
     GeneratorState i nodesMap <- State.get
     State.put (GeneratorState (i + 1) nodesMap)
-    return $ DotNode (mappendTextWithCounter text1 i) (AC.Label (toLabelValue text1) : ellipseAttrs)
+    let nodeId = mappendTextWithCounter text1 i
+    return $ DotNode nodeId
+                     ([AC.Label (toLabelValue text1), ID nodeId] ++ ellipseAttrs)
 
 
 makeEdge :: Text -> Text -> State GeneratorState (DotEdge Text)
-makeEdge id1 id2 = return $ DotEdge id1 id2 []
+makeEdge id1 id2 = return $ DotEdge id1 id2 [ID (id1 `mappend` "|" `mappend` id2)]
 
 mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show counter))

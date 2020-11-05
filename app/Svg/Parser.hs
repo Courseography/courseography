@@ -38,49 +38,69 @@ import Data.List.Split (splitOn)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
-    performParse "Computer Science" "csc2020.svg"
-    performParse "(unofficial) Statistics" "sta2017.svg"
-    performParse "(unofficial) Biochemistry" "bch2015.svg"
-    performParse "(unofficial) Cell & Systems Biology" "csb2015.svg"
-    performParse "(unofficial) Estonian" "est2015.svg"
-    performParse "(unofficial) Finnish" "fin2015.svg"
-    performParse "(unofficial) Italian" "ita2015.svg"
-    performParse "(unofficial) Linguistics" "lin2015.svg"
-    performParse "(unofficial) Rotman" "rotman2015.svg"
-    performParse "(unofficial) Economics" "eco2015.svg"
-    performParse "(unofficial) Spanish" "spa2015.svg"
-    performParse "(unofficial) Portuguese" "prt2015.svg"
-    performParse "(unofficial) Slavic" "sla2015.svg"
-    performParse "(unofficial) East Asian Studies" "eas2015.svg"
-    performParse "(unofficial) English" "eng2015.svg"
-    performParse "(unofficial) History and Philosophy of Science" "hps2015.svg"
-    performParse "(unofficial) History" "his2015.svg"
-    performParse "(unofficial) Geography" "ggr2015.svg"
-    performParse "(unofficial) Aboriginal" "abs2015.svg"
-    performParse "(unofficial) German" "ger2015.svg"
+    mapM_ (uncurry performParseFromFile)
+        [ ("Computer Science",                                  "csc2020.svg")
+        , ("(unofficial) Statistics",                           "sta2017.svg")
+        , ("(unofficial) Biochemistry",                         "bch2015.svg")
+        , ("(unofficial) Cell & Systems Biology",               "csb2015.svg")
+        , ("(unofficial) Estonian",                             "est2015.svg")
+        , ("(unofficial) Finnish",                              "fin2015.svg")
+        , ("(unofficial) Italian",                              "ita2015.svg")
+        , ("(unofficial) Linguistics",                          "lin2015.svg")
+        , ("(unofficial) Rotman",                               "rotman2015.svg")
+        , ("(unofficial) Economics",                            "eco2015.svg")
+        , ("(unofficial) Spanish",                              "spa2015.svg")
+        , ("(unofficial) Portuguese",                           "prt2015.svg")
+        , ("(unofficial) Slavic",                               "sla2015.svg")
+        , ("(unofficial) East Asian Studies",                   "eas2015.svg")
+        , ("(unofficial) English",                              "eng2015.svg")
+        , ("(unofficial) History and Philosophy of Science",    "hps2015.svg")
+        , ("(unofficial) History",                              "his2015.svg")
+        , ("(unofficial) Geography",                            "ggr2015.svg")
+        , ("(unofficial) Aboriginal",                           "abs2015.svg")
+        , ("(unofficial) German",                               "ger2015.svg")
+        ]
 
 parseDynamicSvg :: T.Text -> T.Text -> IO ()
 parseDynamicSvg graphName graphContents =
     runSqlite databasePath $ performParseFromMemory graphName graphContents
 
 -- | The starting point for parsing a graph with a given title and file.
-performParse :: T.Text -- ^ The title of the graph.
-             -> String -- ^ The filename of the file that will be parsed.
-             -> SqlPersistM ()
-performParse graphName inputFilename = do
+performParseFromFile :: T.Text -- ^ The title of the graph.
+                     -> String -- ^ The filename of the file that will be parsed.
+                     -> SqlPersistM ()
+performParseFromFile graphName inputFilename = do
     liftIO . print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
     graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
     performParseFromMemory graphName graphFile
 
+-- | Insert the graph components into the database
 performParseFromMemory :: T.Text -> T.Text -> SqlPersistM ()
-performParseFromMemory graphName graphContents = do
-    let tags = TS.parseTags graphContents
-        svgRoot = head $ filter (TS.isTagOpenName "svg") tags
-        (graphWidth, graphHeight) = parseSize svgRoot
+performParseFromMemory graphName graphSvg = do
     key <- insertGraph graphName graphWidth graphHeight
+    let parsedGraph = parseSvg key graphSvg
+    insertElements parsedGraph
+        where (graphWidth, graphHeight) = parseSizeFromSvg graphSvg
 
-    -- Need to remove any "defs" which Inkscape added
-    let defs = TS.partitions (TS.isTagOpenName "defs") tags
+
+-- * Parsing functions
+
+-- | Parse the height and width dimensions from the SVG element, respectively,
+-- and return them as a tuple.
+parseSizeFromSvg :: T.Text -> (Double, Double)
+parseSizeFromSvg graphSvg =
+    let tags = TS.parseTags graphSvg
+        svgRoot = head $ filter (TS.isTagOpenName "svg") tags
+    in (parseDouble "width" svgRoot, parseDouble "height" svgRoot)
+    where parseDouble = parseAttr double
+
+-- | Parse an SVG file (respresented as a Text) and return three
+-- lists corresponding to different graph elements. (edges, nodes, text)
+parseSvg :: GraphId -> T.Text -> ([Path], [Shape], [Text])
+parseSvg key graphSvg =
+    let tags = TS.parseTags graphSvg
+        -- Need to remove any "defs" which Inkscape added
+        defs = TS.partitions (TS.isTagOpenName "defs") tags
         tagsWithoutDefs =
             if null defs
             then
@@ -89,27 +109,9 @@ performParseFromMemory graphName graphContents = do
                 -- TODO: pull this out into a generic helper
                 takeWhile (not . TS.isTagOpenName "defs") tags ++
                 concatMap (dropWhile (not . TS.isTagCloseName "defs")) defs
+    in parseGraph key tagsWithoutDefs
 
-        parsedGraph = parseGraph key tagsWithoutDefs
-
-    -- Insert the graph components into the database
-    insertElements parsedGraph
-
-
--- * Parsing functions
-
--- | Parse the height and width dimensions from the SVG element, respectively,
--- and return them as a tuple.
-parseSize :: Tag T.Text   -- ^ The file contents of the graph that will be parsed.
-          -> (Double, Double)
-parseSize svgRoot =
-    (parseDouble "width" svgRoot, parseDouble "height" svgRoot)
-    where parseDouble = parseAttr double
-
-
--- | Parses an SVG file.
---
--- This and the following functions traverse the raw SVG tags and return
+-- | This and the following functions traverse the raw SVG tags and return
 -- three lists, each containing values corresponding to different graph elements
 -- (edges, nodes, and text).
 parseGraph ::  GraphId                 -- ^ The unique identifier of the graph.
