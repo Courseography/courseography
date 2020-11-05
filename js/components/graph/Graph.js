@@ -391,7 +391,7 @@ export default class Graph extends React.Component {
     if (this.state.currFocus !== null) {
       this.highlightFocuses([]);
     }
-  };
+  }
 
   renderArrowHead = () => {
     var polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" };
