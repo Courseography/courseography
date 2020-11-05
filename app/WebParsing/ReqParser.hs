@@ -265,10 +265,7 @@ oneOfParser = do
     Parsec.spaces
     _ <- Parsec.try oneOfSeparator
     Parsec.spaces
-    reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try (do
-                andSep <- andSeparator
-                Parsec.notFollowedBy $ oneOfSeparator
-                return andSep))
+    reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
