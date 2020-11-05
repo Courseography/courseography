@@ -388,6 +388,9 @@ export default class Graph extends React.Component {
     this.nodes.current.reset();
     this.bools.current.reset();
     this.edges.current.reset();
+    if (this.state.currFocus !== null) {
+      this.highlightFocuses([]);
+    }
   };
 
   renderArrowHead = () => {
