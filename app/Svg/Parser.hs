@@ -162,7 +162,7 @@ parseTextHelper key styles' trans textTags =
     if not $ any (TS.isTagOpenName "tspan") (tail textTags)
     then
         [Text key
-              (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
+              (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id? -- WOW just what I was looking for
               (addTuples newTrans (readAttr "x" $ head textTags,
                                    readAttr "y" $ head textTags))
               (TS.escapeHTML $ trim $ TS.innerText textTags)
@@ -189,7 +189,7 @@ parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
           -> [Tag T.Text]
           -> [Shape]
 parseRect key tags =
-    let
+    let -- get gid, and set to id
         rectOpenTags = filter (\tag -> TS.isTagOpenName "rect" tag || TS.isTagOpenName "polygon" tag) tags
     in
         map (\tag -> if (TS.isTagOpenName "rect" tag) then makeRect tag else makePoly tag) rectOpenTags
@@ -215,7 +215,7 @@ parseRect key tags =
           in
             updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
-                ""
+                (fromAttrib "id" $ head tags) -- TODO: comment this line properly
                 ((fst $ points !! 1) + fst trans, -- get x value
                 (snd $ points !! 1) + snd trans) -- get y value
                 ((fst $ points !! 0) - (fst $ points !! 1)) -- calculate width
@@ -231,16 +231,22 @@ parsePath :: GraphId
           -> [Tag T.Text]
           -> [Path]
 parsePath key tags =
-    concatMap (parsePathHelper key trans) (filter (TS.isTagOpenName "path") tags)
+    concatMap (parsePathHelper key trans edgeInfo) (filter (TS.isTagOpenName "path") tags)
     where
         trans = getTransform $ head tags
+        edgeInfo = 
+            if (length splitArr) == 2
+                then (T.pack (splitArr !! 0), T.pack (splitArr !! 1)) -- not super type-safe
+                else ("", "")
+            where splitArr = splitOn "|" (T.unpack (fromAttrib "id" $ head tags))
 
 
 parsePathHelper :: GraphId -- ^ The Path's corresponding graph identifier.
                 -> Point
+                -> (T.Text, T.Text) -- src, dst
                 -> Tag T.Text
                 -> [Path]
-parsePathHelper key trans pathTag =
+parsePathHelper key trans (src, dst) pathTag =
     let d = fromAttrib "d" pathTag
         styles' = styles pathTag
         currTrans = parseTransform $ fromAttrib "transform" pathTag
@@ -257,8 +263,8 @@ parsePathHelper key trans pathTag =
                 ""
                 ""
                 isRegion
-                ""
-                ""]
+                src
+                dst]
 
 
 -- | Create an ellipse from an open ellipse tag.
@@ -266,18 +272,19 @@ parseEllipse :: GraphId
              -> [Tag T.Text]
              -> [Shape]
 parseEllipse key tags =
-    map (parseEllipseHelper key trans) (filter (TS.isTagOpenName "ellipse") tags)
+    map (parseEllipseHelper key trans gid) (filter (TS.isTagOpenName "ellipse") tags)
     where
         trans = getTransform $ head tags
-
+        gid = (fromAttrib "id" $ head tags)
 
 parseEllipseHelper :: GraphId     -- ^ The related graph id.
                    -> Point       -- ^ The translation to apply.
+                   -> T.Text
                    -> Tag T.Text  -- ^ The open ellipse tag.
                    -> Shape
-parseEllipseHelper key (dx, dy) ellipseTag =
+parseEllipseHelper key (dx, dy) gid ellipseTag =
     Shape key
-          ""
+          gid
           (readAttr "cx" ellipseTag + dx,
            readAttr "cy" ellipseTag + dy)
           (readAttr "rx" ellipseTag * 2)

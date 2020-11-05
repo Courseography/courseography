@@ -189,14 +189,14 @@ nodeAttrs = NodeAttrs
 ellipseAttrs :: A.Attributes
 ellipseAttrs = 
     [ A.shape A.Ellipse
-    , AC.Width 0.45     -- min 0.01
-    , AC.Height 0.35    -- min 0.01
+    , AC.Width 0.20     -- min 0.01
+    , AC.Height 0.15    -- min 0.01
     , AC.FixedSize SetNodeSize
     , A.fillColor White
-    , AC.FontSize 10.0  -- min 1.0
+    , AC.FontSize 6.0  -- min 1.0
     ]
 
 edgeAttrs :: GlobalAttributes
 edgeAttrs = EdgeAttrs [
-    ArrowHead (AType [(ArrMod FilledArrow BothSides, NoArrow)])
+    ArrowHead (AType [(ArrMod FilledArrow BothSides, Normal)])
     ]
