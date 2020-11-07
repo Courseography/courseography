@@ -5,7 +5,7 @@ import * as focusInfo from "./sidebar/focus_descriptions.js";
 export default class Focus extends React.Component {
   getDetailsInfo = () => {
     let detailsStyle, detailsText;
-    if (this.props.open) {
+    if (this.props.openDetails) {
       detailsStyle = { height:"128px" };
       detailsText = focusInfo[this.props.pId + "Description"];
     } else {
@@ -35,6 +35,6 @@ export default class Focus extends React.Component {
 Focus.propTypes = {
   focusName: PropTypes.string,
   highlightFocus: PropTypes.func,
-  open: PropTypes.bool,
+  openDetails: PropTypes.bool,
   pId: PropTypes.string
 };
