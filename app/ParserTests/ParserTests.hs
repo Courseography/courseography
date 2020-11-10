@@ -28,17 +28,25 @@ orInputs :: [(String, Req)]
 orInputs = [
       ("CSC120H1/CSC148H1", OR [J "CSC120H1" "", J "CSC148H1" ""])
     , ("CSC108H1/CSC120H1/CSC148H1", OR [J "CSC108H1" "", J "CSC120H1" "", J "CSC148H1" ""])
+    , ("FOR300H1/FOR301H1/FOR302H1", OR [J "FOR300H1" "", J "FOR301H1" "", J "FOR302H1" ""])
     ]
 
 andInputs :: [(String, Req)]
 andInputs = [
       ("CSC165H1, CSC236H1", AND [J "CSC165H1" "", J "CSC236H1" ""])
     , ("CSC120H1, CSC121H1, CSC148H1", AND [J "CSC120H1" "", J "CSC121H1" "", J "CSC148H1" ""])
+    , ("CSC165H1 & CSC236H1", AND [J "CSC165H1" "", J "CSC236H1" ""])
     ]
 
 andorInputs :: [(String, Req)]
 andorInputs = [
       ("CSC148H1/CSC207H1, CSC165H1/CSC236H1", AND [OR [J "CSC148H1" "", J "CSC207H1" ""], OR [J "CSC165H1" "", J "CSC236H1" ""]])
+    , ("COG250Y1 and one of: LIN232H1/LIN241H1 or JLP315H1/JLP374H1", AND [J "COG250Y1" "", OR [J "LIN232H1" "", J "LIN241H1" "", J "JLP315H1" "", J "JLP374H1" ""]])
+    , ("COG250Y1 and one of either LIN232H1/LIN241H1 or JLP315H1/JLP374H1", AND [J "COG250Y1" "", OR [J "LIN232H1" "", J "LIN241H1" "", J "JLP315H1" "", J "JLP374H1" ""]])
+    , ("COG250Y1 + one of the following: LIN232H1/LIN241H1 or JLP315H1/JLP374H1", AND [J "COG250Y1" "", OR [J "LIN232H1" "", J "LIN241H1" "", J "JLP315H1" "", J "JLP374H1" ""]])
+    , ("CLA204H1 + 1 OF CLA160H1/CLA260H1", AND [J "CLA204H1" "", OR [J "CLA160H1" "", J "CLA260H1" ""]])
+    , ("BIO220H1 and at least one of EEB319H1/EEB321H1", AND [J "BIO220H1" "", OR [J "EEB319H1" "", J "EEB321H1" ""]])
+    , ("CLA204H1 plus one of CLA160H1/CLA260H1", AND [J "CLA204H1" "", OR [J "CLA160H1" "", J "CLA260H1" ""]])
     ]
 
 parInputs :: [(String, Req)]
@@ -93,6 +101,7 @@ gradeAftInputs = [
     , ("CSC236H1 ( 75% or higher )", GRADE "75" $ J "CSC236H1" "")
     , ("CSC263H1 with a minimum grade of 60% or more", GRADE "60" $ J "CSC263H1" "")
     , ("CSC263H1 with a minimum grade of 60% or higher / CSC236H1 (75%)", OR [GRADE "60" $ J "CSC263H1" "", GRADE "75" $ J "CSC236H1" ""])
+    , ("A in CSC236H1", GRADE "A" $ J "CSC236H1" "")
     ]
 
 artSciInputs :: [(String, Req)]

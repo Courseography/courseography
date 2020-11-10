@@ -50,21 +50,33 @@ rParen :: Parser Char
 rParen = Parsec.char ')'
 
 orSeparator :: Parser String
-orSeparator = Parsec.choice $ map Parsec.string [
+orSeparator = Parsec.choice $ map caseInsensitiveStr [
     "/",
-    "OR",
-    "Or",
     "or"
     ]
 
 andSeparator :: Parser String
-andSeparator = Parsec.choice $ map Parsec.string [
+andSeparator = Parsec.choice $ map caseInsensitiveStr [
     ",",
-    "AND",
-    "And",
     "and",
-    ";"
+    ";",
+    "&",
+    "+",
+    "plus"
     ]
+
+oneOfSeparator :: Parser String
+oneOfSeparator = do
+    separator <- Parsec.choice $ map caseInsensitiveStr [
+        "one of either",
+        "one of the following",
+        "at least one of",
+        "one of", "1 of",
+        "at least 1 of"
+        ]
+    colon <- Parsec.option "" $ Parsec.string ":"
+    return (separator ++ colon)
+
 
 semicolon :: Parser Char
 semicolon = Parsec.char ';'
@@ -87,13 +99,19 @@ creditsParser = do
 -- | Helpers for parsing grades
 percentParser :: Parser String
 percentParser = do
-    fces <- Parsec.many1 Parsec.digit
+    fces <- Parsec.try (do
+        percent <- Parsec.count 2 Parsec.digit
+        Parsec.notFollowedBy Parsec.digit
+        return percent)
     Parsec.optional (Parsec.char '%')
     return fces
 
 letterParser :: Parser String
 letterParser = do
-    letter <- Parsec.oneOf "ABCDEF"
+    letter <- Parsec.try (do
+        letterGrade <- Parsec.oneOf "ABCDEF"
+        Parsec.notFollowedBy $ Parsec.letter
+        return letterGrade)
     plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
     return $ letter : plusminus
 
@@ -120,7 +138,7 @@ gradeParser = do
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    _ <- Parsec.optional $ caseInsensitiveStr "an " <|> caseInsensitiveStr "a "
+    _ <- Parsec.optional (caseInsensitiveStr "an " <|> Parsec.try indefiniteArticleAParser)
     Parsec.spaces
     grade <- cutoffHelper <|> gradeParser
     Parsec.spaces
@@ -136,6 +154,11 @@ coBefParser = do
         _ <- Parsec.optional $ caseInsensitiveStr "of"
         Parsec.spaces
         gradeParser
+
+    indefiniteArticleAParser = do
+        indefiniteArticle <- caseInsensitiveStr "a "
+        Parsec.notFollowedBy $ caseInsensitiveStr "in"
+        return indefiniteArticle
 
 -- parse for cutoff percentage after a course
 coAftParser :: Parser Req
@@ -235,6 +258,19 @@ courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map 
     rawTextParser
     ]
 
+-- | Parser for reqs related through the "one of the following" condition
+-- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
+oneOfParser :: Parser Req
+oneOfParser = do
+    Parsec.spaces
+    _ <- Parsec.try oneOfSeparator
+    Parsec.spaces
+    reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR (x:xs)
+
 -- | Parser for reqs related through an OR.
 orParser :: Parser Req
 orParser = do
@@ -247,7 +283,7 @@ orParser = do
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
 andParser = do
-    reqs <- Parsec.sepBy orParser andSeparator
+    reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
