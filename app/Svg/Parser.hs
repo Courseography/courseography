@@ -74,7 +74,6 @@ performParseFromFile graphName inputFilename = do
     graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
     performParseFromMemory graphName graphFile
 
--- | Insert the graph components into the database
 performParseFromMemory :: T.Text -> T.Text -> SqlPersistM ()
 performParseFromMemory graphName graphSvg = do
     key <- insertGraph graphName graphWidth graphHeight
@@ -162,7 +161,7 @@ parseTextHelper key styles' trans textTags =
     if not $ any (TS.isTagOpenName "tspan") (tail textTags)
     then
         [Text key
-              (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id? -- WOW just what I was looking for
+              (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
               (addTuples newTrans (readAttr "x" $ head textTags,
                                    readAttr "y" $ head textTags))
               (TS.escapeHTML $ trim $ TS.innerText textTags)
@@ -189,7 +188,7 @@ parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
           -> [Tag T.Text]
           -> [Shape]
 parseRect key tags =
-    let -- get gid, and set to id
+    let
         rectOpenTags = filter (\tag -> TS.isTagOpenName "rect" tag || TS.isTagOpenName "polygon" tag) tags
     in
         map (\tag -> if (TS.isTagOpenName "rect" tag) then makeRect tag else makePoly tag) rectOpenTags
@@ -215,7 +214,7 @@ parseRect key tags =
           in
             updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
-                (fromAttrib "id" $ head tags) -- TODO: comment this line properly
+                (fromAttrib "id" $ head tags)
                 ((fst $ points !! 1) + fst trans, -- get x value
                 (snd $ points !! 1) + snd trans) -- get y value
                 ((fst $ points !! 0) - (fst $ points !! 1)) -- calculate width

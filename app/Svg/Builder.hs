@@ -74,9 +74,9 @@ buildRect texts entity elementId =
         textString = T.concat $ map textText rectTexts
         id_ = case shapeType_ entity of
               Hybrid -> T.pack $ 'h' : show elementId
-              Node -> if (shapeId_ entity) == ""
+              Node -> if shapeId_ entity == ""
                   then T.map toLower . sanitizeId $ textString 
-                  else (shapeId_ entity)
+                  else shapeId_ entity
               BoolNode -> shapeId_ entity
               Region -> ""
     in
@@ -99,11 +99,13 @@ buildEllipses texts entity elementId =
                               . textPos
                               ) texts
     in
-        entity {shapeId_ = 
-            (if (shapeId_ entity) == "" 
-                then T.pack $ "bool" ++ show elementId
-                else shapeId_ entity),
-                shapeText = ellipseText}
+        entity {
+            shapeId_ = 
+                if shapeId_ entity == "" 
+                    then T.pack $ "bool" ++ show elementId
+                    else shapeId_ entity,
+            shapeText = ellipseText
+            }
     where
         intersectsEllipse a b (cx, cy) (x, y) =
             let dx = x - cx - 10  -- some tolerance
