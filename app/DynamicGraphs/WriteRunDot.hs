@@ -31,10 +31,21 @@ generatePrereqsForCourses (output, courses) = do
     ++ show courses
     ++ " in graphs/gen"
 
+getBody :: ServerPart ByteString
+getBody = do
+    req  <- askRq
+    body <- liftIO $ takeRequestBody req
+    case body of
+        Just rqbody -> return . unBody $ rqbody
+        Nothing     -> return ""
+
 findAndSavePrereqsResponse :: ServerPart Response
 findAndSavePrereqsResponse = do
     takenStr <- lookBS "taken"
     coursesStr <- lookBS "courses"
+    -- look for json
+    jsonBody <- getBody
+
     let taken = fromMaybe [] $ decode takenStr
         courses = fromMaybe [] $ decode coursesStr
     liftIO $ generateAndSavePrereqResponse taken courses
