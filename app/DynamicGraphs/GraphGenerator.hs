@@ -22,26 +22,35 @@ import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
 import Data.Hash.MD5 (Str(Str), md5s)
-import Data.Text.Lazy (Text, pack, isInfixOf)
+import Data.Text.Lazy (Text, pack, unpack, isInfixOf)
 import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
 import Control.Monad (mapM, liftM)
-
+import DynamicGraphs.GraphOptions (GraphOptions(..))
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
                         -> IO (DotGraph Text)
-coursesToPrereqGraph = coursesToPrereqGraphExcluding []
+coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding
+                                        $ GraphOptions (map pack rootCourses)  -- courses
+                                                        []                     -- taken
+                                                        []                     -- departments
+                                                        0                      -- excludedDepth
+                                                        (-1)                   -- maxDepth
+                                                        []                     -- courseNumPrefix
+                                                        []                     -- distribution
+                                                        []                     -- location
+                                                        True                   -- includeRaws
+                                                        True                   -- includeGrades
 
 -- | Takes a list of taken courses, along with a list of courses we wish to generate
 -- a dependency graph for. The generated graph will neither include any of the taken courses,
 -- nor the dependencies of taken courses (unless they are depended on by other courses)
-coursesToPrereqGraphExcluding :: [String] -- ^ taken courses
-                              -> [String] -- ^ course to generate
+coursesToPrereqGraphExcluding :: GraphOptions
                               -> IO (DotGraph Text)
-coursesToPrereqGraphExcluding taken courses = do
-    reqs <- lookupCourses taken $ map pack courses
+coursesToPrereqGraphExcluding options = do
+    reqs <- lookupCourses (map unpack (taken options)) (courses options)
     let reqs' = Map.toList reqs
     return $ fst $ State.runState (reqsToGraph reqs') initialState
     where

@@ -6,17 +6,21 @@ import Data.GraphViz hiding (Str)
 import System.FilePath (FilePath, combine, normalise)
 import System.Directory (createDirectoryIfMissing)
 import DynamicGraphs.GraphGenerator (coursesToPrereqGraph, coursesToPrereqGraphExcluding, graphProfileHash)
-import Happstack.Server (ServerPart, lookBS)
+import Happstack.Server (ServerPart, askRq)
+import Happstack.Server.Types (takeRequestBody, unBody)
 import Happstack.Server.SimpleHTTP (Response)
 import qualified Data.Text as T
+import qualified Data.Text.Lazy as LT
 import qualified Data.ByteString as B
+import qualified Data.ByteString.Lazy as L
 import Svg.Parser (parseDynamicSvg)
 import Data.Text.Encoding (decodeUtf8)
 import Data.Hash.MD5 (Str(Str), md5s)
 import Database.CourseQueries (getGraph)
 import Data.Aeson (decode)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, fromJust)
 import Data.List (sort)
+import DynamicGraphs.GraphOptions (GraphOptions(..))
 
 doDots :: PrintDotRepr dg n => [(FilePath, dg n)] -> IO ()
 doDots cases = do
@@ -24,14 +28,14 @@ doDots cases = do
   putStrLn "Look in graphs/gen to see the created graphs"
 
 generatePrereqsForCourses :: (FilePath, [String]) -> IO ()
-generatePrereqsForCourses (output, courses) = do
-  graph <- coursesToPrereqGraph courses
+generatePrereqsForCourses (output, rootCourses) = do
+  graph <- coursesToPrereqGraph rootCourses
   _ <- createImage (output, graph)
   putStrLn $ "Generated prerequisite graph for "
-    ++ show courses
+    ++ show rootCourses
     ++ " in graphs/gen"
 
-getBody :: ServerPart ByteString
+getBody :: ServerPart L.ByteString
 getBody = do
     req  <- askRq
     body <- liftIO $ takeRequestBody req
@@ -41,22 +45,17 @@ getBody = do
 
 findAndSavePrereqsResponse :: ServerPart Response
 findAndSavePrereqsResponse = do
-    takenStr <- lookBS "taken"
-    coursesStr <- lookBS "courses"
-    -- look for json
-    jsonBody <- getBody
+    body <- getBody
+    let options :: GraphOptions = fromJust $ decode body
+    liftIO $ generateAndSavePrereqResponse options
 
-    let taken = fromMaybe [] $ decode takenStr
-        courses = fromMaybe [] $ decode coursesStr
-    liftIO $ generateAndSavePrereqResponse taken courses
-
-generateAndSavePrereqResponse :: [String] -> [String] -> IO Response
-generateAndSavePrereqResponse taken courses = do 
+generateAndSavePrereqResponse :: GraphOptions -> IO Response
+generateAndSavePrereqResponse options = do
   cached <- getGraph graphHash
   case cached of
     Just cachedGraph -> return cachedGraph
     Nothing -> do
-      graph <- coursesToPrereqGraphExcluding taken courses
+      graph <- coursesToPrereqGraphExcluding options
       bString <- graphToByteString graph
       -- Parse the generated SVG and store it in the database.
       parseDynamicSvg graphHash $ decodeUtf8 bString
@@ -64,14 +63,14 @@ generateAndSavePrereqResponse taken courses = do
       return $ fromMaybe graphNotFound storedGraph
   where    
     graphHash :: T.Text
-    graphHash = hash taken courses
+    graphHash = hash options
     graphNotFound = error "Graph should have been generated but was not found"
 
 -- | Hash function to uniquely identify the graph layout.
-hash :: [String] -> [String] -> T.Text
-hash taken courses = hashFunction key
-  where key = (sort taken, sort courses, graphProfileHash)
-        hashFunction :: (Show b) => ([String], [String], b) -> T.Text
+hash :: GraphOptions -> T.Text
+hash options = hashFunction key
+  where key = (sort (map LT.toStrict (taken options)), sort (map LT.toStrict (courses options)), graphProfileHash)
+        hashFunction :: (Show b) => ([T.Text], [T.Text], b) -> T.Text
         hashFunction = T.pack . ("graph_" ++) . md5s . Str . show  
 
 graphToByteString :: PrintDotRepr dg n => dg n -> IO B.ByteString
