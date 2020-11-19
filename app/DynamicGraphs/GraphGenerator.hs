@@ -32,17 +32,7 @@ import DynamicGraphs.GraphOptions (GraphOptions(..))
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
                         -> IO (DotGraph Text)
-coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding
-                                        $ GraphOptions (map pack rootCourses)  -- courses
-                                                        []                     -- taken
-                                                        []                     -- departments
-                                                        0                      -- excludedDepth
-                                                        (-1)                   -- maxDepth
-                                                        []                     -- courseNumPrefix
-                                                        []                     -- distribution
-                                                        []                     -- location
-                                                        True                   -- includeRaws
-                                                        True                   -- includeGrades
+coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding (getDefaultGraphOptions (map pack rootCourses))
 
 -- | Takes a list of taken courses, along with a list of courses we wish to generate
 -- a dependency graph for. The generated graph will neither include any of the taken courses,
@@ -52,28 +42,41 @@ coursesToPrereqGraphExcluding :: GraphOptions
 coursesToPrereqGraphExcluding options = do
     reqs <- lookupCourses (map unpack (taken options)) (courses options)
     let reqs' = Map.toList reqs
-    return $ fst $ State.runState (reqsToGraph reqs') initialState
+    return $ fst $ State.runState (reqsToGraph options reqs') initialState
     where
         initialState = GeneratorState 0 Map.empty
 
 sampleGraph :: DotGraph Text
-sampleGraph = fst $ State.runState (reqsToGraph [
-    ("MAT237H1", J "MAT137H1" ""),
+sampleGraph = fst $ State.runState (reqsToGraph
+    (getDefaultGraphOptions ["MAT237H1", "MAT133H1", "CSC148H1", "CSC265H1"])
+    [("MAT237H1", J "MAT137H1" ""),
     ("MAT133H1", NONE),
     ("CSC148H1", AND [J "CSC108H1" "", J "CSC104H1" ""]),
     ("CSC265H1", AND [J "CSC148H1" "", J "CSC236H1" ""])
     ])
     (GeneratorState 0 Map.empty)
 
+getDefaultGraphOptions :: [Text] -> GraphOptions
+getDefaultGraphOptions rootCourses =
+    GraphOptions rootCourses           -- courses
+                []                     -- taken
+                []                     -- departments
+                0                      -- excludedDepth
+                (-1)                   -- maxDepth
+                []                     -- courseNumPrefix
+                []                     -- distribution
+                []                     -- location
+                True                   -- includeRaws
+                True                   -- includeGrades
 
 -- ** Main algorithm for converting requirements into a DotGraph
 
 -- | Convert a list of coursenames and requirements to a DotGraph object for
 --  drawing using Dot. Also prunes any repeated edges that arise from
 --  multiple Reqs using the same GRADE requirement
-reqsToGraph :: [(Text, Req)] -> State GeneratorState (DotGraph Text)
-reqsToGraph reqs = do
-    allStmts <- liftM concatUnique $ mapM reqToStmts reqs
+reqsToGraph :: GraphOptions -> [(Text, Req)] -> State GeneratorState (DotGraph Text)
+reqsToGraph options reqs = do
+    allStmts <- liftM concatUnique $ mapM (reqToStmts options) reqs
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . concat
@@ -82,54 +85,69 @@ data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
 -- | Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects.
-reqToStmts :: (Text, Req) -> State GeneratorState [DotStatement Text]
-reqToStmts (name, req) = do
+reqToStmts :: GraphOptions -> (Text, Req) -> State GeneratorState [DotStatement Text]
+reqToStmts options (name, req) = do
     node <- makeNode name
-    stmts <- reqToStmts' (nodeID node) req
+    stmts <- reqToStmts' options (nodeID node) req
     return $ (DN node):stmts
 
-reqToStmts' :: Text -> Req -> State GeneratorState [DotStatement Text]
+reqToStmts' :: GraphOptions -> Text -> Req -> State GeneratorState [DotStatement Text]
 -- No prerequisites.
-reqToStmts' _ NONE = return []
+reqToStmts' _ _ NONE = return []
 -- A single course prerequisite.
-reqToStmts' parentID (J name2 _) = do
+reqToStmts' _ parentID (J name2 _) = do
     prereq <- makeNode (pack name2)
     edge <- makeEdge (nodeID prereq) parentID
     return [DN prereq, DE edge]
 -- Two or more required prerequisites.
-reqToStmts' parentID (AND reqs) = do
-    andNode <- makeBool "and"
-    edge <- makeEdge (nodeID andNode) parentID
-    prereqStmts <- mapM (reqToStmts' (nodeID andNode)) reqs
-    return $ [DN andNode, DE edge] ++ concat prereqStmts
+reqToStmts' options parentID (AND reqs) = do
+    if includeRaws options || atLeastTwoCourseReqs reqs
+        then do
+            andNode <- makeBool "and"
+            edge <- makeEdge (nodeID andNode) parentID
+            prereqStmts <- mapM (reqToStmts' options (nodeID andNode)) reqs
+            return $ [DN andNode, DE edge] ++ concat prereqStmts
+        else do
+            prereqStmts <- mapM (reqToStmts' options parentID) reqs
+            return $ concat prereqStmts
 -- A choice from two or more prerequisites.
-reqToStmts' parentID (OR reqs) = do
-    orNode <- makeBool "or"
-    edge <- makeEdge (nodeID orNode) parentID
-    prereqStmts <- mapM (reqToStmts' (nodeID orNode)) reqs
-    return $ [DN orNode, DE edge] ++ concat prereqStmts
+reqToStmts' options parentID (OR reqs) = do
+    if includeRaws options || atLeastTwoCourseReqs reqs
+        then do
+            orNode <- makeBool "or"
+            edge <- makeEdge (nodeID orNode) parentID
+            prereqStmts <- mapM (reqToStmts' options (nodeID orNode)) reqs
+            return $ [DN orNode, DE edge] ++ concat prereqStmts
+        else do
+            prereqStmts <- mapM (reqToStmts' options parentID) reqs
+            return $ concat prereqStmts
 -- A prerequisite with a grade requirement.
-reqToStmts' parentID (GRADE description req) = do
+reqToStmts' options parentID (GRADE description req) = do
     gradeNode <- makeNode (pack description)
     edge <- makeEdge (nodeID gradeNode) parentID
-    prereqStmts <- reqToStmts' (nodeID gradeNode) req
+    prereqStmts <- reqToStmts' options (nodeID gradeNode) req
     return $ [DN gradeNode, DE edge] ++ prereqStmts
-
 -- A raw string description of a prerequisite.
-reqToStmts' parentID (RAW rawText) = 
-    if "High school" `isInfixOf` pack rawText || rawText == ""
+reqToStmts' options parentID (RAW rawText) =
+    if not (includeRaws options) || "High school" `isInfixOf` pack rawText || rawText == ""
         then return []
         else do
-    prereq <- makeNode (pack rawText)
-    edge <- makeEdge (nodeID prereq) parentID
-    return [DN prereq, DE edge]
-
+            prereq <- makeNode (pack rawText)
+            edge <- makeEdge (nodeID prereq) parentID
+            return [DN prereq, DE edge]
 --A prerequisite concerning a given number of earned credits
-reqToStmts' parentID (FCES creds req) = do
+reqToStmts' options parentID (FCES creds req) = do
     fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs")
     edge <- makeEdge (nodeID fceNode) parentID
-    prereqStmts <- reqToStmts' (nodeID fceNode) req 
+    prereqStmts <- reqToStmts' options (nodeID fceNode) req
     return $  [DN fceNode, DE edge] ++ prereqStmts
+
+atLeastTwoCourseReqs :: [Req] -> Bool
+atLeastTwoCourseReqs reqs = Prelude.length (Prelude.filter isNotRawOrNone reqs) > 1
+    where
+        isNotRawOrNone (RAW _) = False
+        isNotRawOrNone NONE = False
+        isNotRawOrNone _ = True
 
 makeNode :: Text -> State GeneratorState (DotNode Text)
 makeNode name = do

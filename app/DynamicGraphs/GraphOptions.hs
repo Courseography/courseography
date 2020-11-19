@@ -4,7 +4,7 @@ import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), withObject)
 import qualified Data.Text.Lazy as T
 
 data GraphOptions =
-    GraphOptions { courses :: [T.Text],     --courses to create a graph for
+    GraphOptions { courses :: [T.Text],     -- courses to create a graph for
                   taken :: [T.Text],        -- courses to exclude from graph
                   departments :: [T.Text],  -- department prefixes to include
                   excludedDepth :: Int,     -- depth to recurse on courses from excluded departments
@@ -27,7 +27,7 @@ instance FromJSON GraphOptions where
     distrib <- o .:? "distribution" .!= []
     includedLocation <- o .:? "location" .!= []
     incRaws <- o .:? "includeRaws" .!= True
-    incGrades <- o .:? "includeRaws" .!= True
+    incGrades <- o .:? "includeGrades" .!= True
     return $ GraphOptions rootCourses
                           takenCourses
                           dept
