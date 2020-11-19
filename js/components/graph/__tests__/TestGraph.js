@@ -12,6 +12,9 @@ export default class TestGraph {
     this.rtlGraph = graph;
   }
 
+  // look into making this a before each
+  // look into making a container test class
+
   /**
    * For async construction of the TestGraph
    * @return {TestGraph}

@@ -41,6 +41,7 @@ export default class Sidebar extends React.Component {
         <div
           className="graph-button"
           id={"graph-" + graph.id}
+          data-testid={"test-graph-" + i}
           key={i}
           onClick={() => this.props.updateGraph(graph.title)}
         >
@@ -69,6 +70,7 @@ export default class Sidebar extends React.Component {
         <Focus
           key={i}
           pId={focus[0]}
+          data-testid={"test-focus-" + i}
           focusName={focus[1]}
           openDetails={openDetails}
           highlightFocus={(id) => this.props.highlightFocus(id)}
@@ -115,8 +117,8 @@ export default class Sidebar extends React.Component {
 
     return (
       <div id="fce" className={contentHiddenClass}>
-        <div id="fcecount">FCE Count: 0.0</div>
-        <button id="reset" onClick={() => this.props.reset()}>Reset Graph</button>
+        <div id="fcecount" data-testid="test-fcecount">FCE Count: 0.0</div>
+        <button id="reset" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Graph</button>
       </div>
     )
   }
@@ -129,10 +131,21 @@ export default class Sidebar extends React.Component {
     return (
       <nav id="sidebar-nav">
         <ul>
-          <li id="graphs-nav" className={graphActiveClass} onClick={() => this.showFocuses(false)}>
+          <li
+            id="graphs-nav"
+            className={graphActiveClass}
+            onClick={() => this.showFocuses(false)}
+            data-testid="test-graphs-nav"
+          >
             <div>Graphs</div>
           </li>
-          <li id="focuses-nav" className={`${focusActiveClass} ${focusDisabled}`} onClick={() => this.showFocuses(true)}>
+
+          <li
+            id="focuses-nav"
+            className={`${focusActiveClass} ${focusDisabled}`}
+            onClick={() => this.showFocuses(true)}
+            data-testid="test-focuses-nav"
+          >
             <div>Focuses</div>
           </li>
         </ul>
@@ -146,10 +159,10 @@ export default class Sidebar extends React.Component {
 
     return (
       <div>
-        <div id="graphs" className={graphHiddenClass}>
+        <div id="graphs" className={graphHiddenClass} data-testid="test-graph-buttons">
           {this.createGraphButtons()}
         </div>
-        <div id="focuses" className={focusHiddenClass}>
+        <div id="focuses" className={focusHiddenClass} data-testid="test-focus-buttons">
           {this.createFocusButtons()}
         </div>
       </div>
@@ -162,13 +175,13 @@ export default class Sidebar extends React.Component {
 
     return (
       <div>
-        <div id="sidebar" className={sidebarClass}>
+        <div id="sidebar" className={sidebarClass} data-testid="test-sidebar">
           {this.renderSidebarHeader()}
           {this.renderSidebarNav()}
           {this.renderSidebarButtons()}
         </div>
         
-        <div id="sidebar-button" onClick={() => this.toggleSidebar("button")}>
+        <div id="sidebar-button" onClick={() => this.toggleSidebar("button")} data-testid="test-sidebar-button">
           <img id="sidebar-icon"
            className={flippedClass}
            src="static/res/ico/sidebar.png"
