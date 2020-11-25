@@ -52,7 +52,7 @@ export default class Graph extends React.Component {
     if (!this.props.start_blank) {
       this.getGraph();
     }
-    
+
     // can't detect keydown event when adding event listener to react-graph
     document.body.addEventListener("keydown", this.onKeyDown);
     document
