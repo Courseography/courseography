@@ -33,8 +33,8 @@ export default class Sidebar extends React.Component {
         focusDisabled: true,
       });
     }
-  }  
-  
+  }
+
   createGraphButtons = () => {
     return this.props.graphs.map((graph, i) => {
       return (
@@ -78,7 +78,7 @@ export default class Sidebar extends React.Component {
       )
     });
   }
-  
+
   toggleSidebar = location => {
     if (this.state.toggled) {
       // close graph
@@ -117,7 +117,7 @@ export default class Sidebar extends React.Component {
 
     return (
       <div id="fce" className={contentHiddenClass}>
-        <div id="fcecount" data-testid="test-fcecount">FCE Count: 0.0</div>
+        <div id="fcecount" data-testid="test-fcecount">FCE Count: {this.props.fceCount}</div>
         <button id="reset" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Graph</button>
       </div>
     )
@@ -194,9 +194,10 @@ export default class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   currFocus: PropTypes.string,
-  updateGraph: PropTypes.func,
+  fceCount: PropTypes.number,
   graphs: PropTypes.array,
   graphName: PropTypes.string,
   highlightFocus: PropTypes.func,
-  reset: PropTypes.func
+  reset: PropTypes.func,
+  updateGraph: PropTypes.func
 };

@@ -210,7 +210,7 @@ export default class Graph extends React.Component {
           totalFCEs += 0.5;
         }
       });
-      this.setFCECount(totalFCEs);
+      this.props.setFCECount(totalFCEs);
     }
   }
 
@@ -222,24 +222,6 @@ export default class Graph extends React.Component {
     this.setState({ timeouts: [] });
   };
 
-  setFCECount = credits => {
-    this.setState({ fceCount: credits }, function() {
-      if (document.getElementById("fcecount")) {
-        document.getElementById("fcecount").textContent =
-          "FCE Count: " + this.state.fceCount;
-      }
-    });
-  };
-
-  incrementFCECount = credits => {
-    this.setState({ fceCount: this.state.fceCount + credits }, function() {
-      if (document.getElementById("fcecount")) {
-        document.getElementById("fcecount").textContent =
-          "FCE Count: " + this.state.fceCount;
-      }
-    });
-  };
-
   nodeClick = event => {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
@@ -247,9 +229,9 @@ export default class Graph extends React.Component {
     currentNode.toggleSelection(this);
     if (wasSelected) {
       // TODO: Differentiate half- and full-year courses
-      this.incrementFCECount(-0.5);
+      this.props.incrementFCECount(-0.5);
     } else {
-      this.incrementFCECount(0.5);
+      this.props.incrementFCECount(0.5);
     }
   };
 
@@ -384,7 +366,7 @@ export default class Graph extends React.Component {
 
   // Reset graph
   reset = () => {
-    this.setFCECount(0);
+    this.props.setFCECount(0);
     this.nodes.current.reset();
     this.bools.current.reset();
     this.edges.current.reset();
@@ -797,11 +779,13 @@ export default class Graph extends React.Component {
 }
 
 Graph.propTypes = {
+  closeSidebar: PropTypes.func,
   currFocus: PropTypes.string,
   edit: PropTypes.bool,
-  initialDrawMode: PropTypes.string,
-  start_blank: PropTypes.bool,
-  closeSidebar: PropTypes.func,
   getLocalGraph: PropTypes.func,
-  graphName: PropTypes.string
+  graphName: PropTypes.string,
+  incrementFCECount: PropTypes.func,
+  initialDrawMode: PropTypes.string,
+  setFCECount: PropTypes.func,
+  start_blank: PropTypes.bool
 };

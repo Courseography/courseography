@@ -8,6 +8,7 @@ export default class Container extends React.Component {
     super(props);
     this.state = {
       currFocus: null,
+      fceCount: 0,
       graphName: "",
       graphs: []
     }
@@ -61,6 +62,14 @@ export default class Container extends React.Component {
     return graphName;
   }
 
+  setFCECount = credits => {
+    this.setState({ fceCount: credits });
+  };
+
+  incrementFCECount = credits => {
+    this.setState({ fceCount: this.state.fceCount + credits });
+  };
+
   highlightFocus = id => {
     if (this.state.currFocus === id) {
       this.setState({
@@ -78,17 +87,21 @@ export default class Container extends React.Component {
       <div>
         <Graph
           ref={this.graph}
-          initialDrawMode="draw-node"
-          edit={this.props.edit}
-          start_blank={this.props.start_blank}
-          getLocalGraph={this.getLocalGraph}
           closeSidebar={() => this.sidebar.current.toggleSidebar("graph")}
           currFocus={this.state.currFocus}
+          edit={this.props.edit}
+          fceCount = {this.state.fceCount}
+          getLocalGraph={this.getLocalGraph}
           graphName={this.state.graphName}
+          incrementFCECount={this.incrementFCECount}
+          initialDrawMode="draw-node"
+          setFCECount={this.setFCECount}
+          start_blank={this.props.start_blank}
         />
         <Sidebar
           ref={this.sidebar}
           currFocus={this.state.currFocus}
+          fceCount = {this.state.fceCount}
           graphs={this.state.graphs}
           graphName={this.state.graphName}
           highlightFocus={this.highlightFocus}
