@@ -1,5 +1,5 @@
 module Scripts (
-    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts,
+    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, generateScripts,
     globalScripts
     )
     where
@@ -54,3 +54,11 @@ postScripts = do
 searchScripts :: H.Html
 searchScripts = do
     H.script ! A.src "/static/js/search/app.js" $ ""
+
+generateScripts :: H.Html
+generateScripts = do
+    H.ul ! A.id "generate-prerequisites" $ do
+      H.li "CSS"
+      H.li "is not"
+      H.li "applied"
+    -- H.script ! A.src "generate/generate.js" $ ""
