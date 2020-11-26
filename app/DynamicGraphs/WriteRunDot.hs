@@ -10,7 +10,6 @@ import Happstack.Server (ServerPart, askRq)
 import Happstack.Server.Types (takeRequestBody, unBody)
 import Happstack.Server.SimpleHTTP (Response)
 import qualified Data.Text as T
-import qualified Data.Text.Lazy as LT
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
 import Svg.Parser (parseDynamicSvg)
@@ -68,10 +67,17 @@ generateAndSavePrereqResponse options = do
 
 -- | Hash function to uniquely identify the graph layout.
 hash :: GraphOptions -> T.Text
-hash options = hashFunction key
-  where key = (sort (map LT.toStrict (taken options)), sort (map LT.toStrict (courses options)), graphProfileHash)
-        hashFunction :: (Show b) => ([T.Text], [T.Text], b) -> T.Text
-        hashFunction = T.pack . ("graph_" ++) . md5s . Str . show  
+hash options = hashFunction (key, graphProfileHash)
+  where key = options {
+          taken = sort $ taken options, 
+          courses = sort $ courses options,
+          departments = sort $ departments options,
+          distribution = sort $ distribution options,
+          location = sort $ location options,
+          courseNumPrefix = sort $ courseNumPrefix options
+        }
+        hashFunction :: (GraphOptions, String) -> T.Text
+        hashFunction = T.pack . ("graph_" ++) . md5s . Str . show
 
 graphToByteString :: PrintDotRepr dg n => dg n -> IO B.ByteString
 graphToByteString graph = graphvizWithHandle Dot graph Svg B.hGetContents

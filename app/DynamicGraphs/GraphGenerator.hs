@@ -22,7 +22,7 @@ import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
 import Data.Hash.MD5 (Str(Str), md5s)
-import Data.Text.Lazy (Text, pack, unpack, isInfixOf)
+import Data.Text.Lazy (Text, pack, unpack, isInfixOf, isPrefixOf)
 import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
@@ -87,18 +87,24 @@ data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 -- corresponding DotGraph objects.
 reqToStmts :: GraphOptions -> (Text, Req) -> State GeneratorState [DotStatement Text]
 reqToStmts options (name, req) = do
-    node <- makeNode name
-    stmts <- reqToStmts' options (nodeID node) req
-    return $ (DN node):stmts
+    if Prelude.null (departments options)|| prefixedByOneOf name (departments options)
+        then do 
+            node <- makeNode name
+            stmts <- reqToStmts' options (nodeID node) req
+            return $ (DN node):stmts
+        else return []
 
 reqToStmts' :: GraphOptions -> Text -> Req -> State GeneratorState [DotStatement Text]
 -- No prerequisites.
 reqToStmts' _ _ NONE = return []
 -- A single course prerequisite.
-reqToStmts' _ parentID (J name2 _) = do
-    prereq <- makeNode (pack name2)
-    edge <- makeEdge (nodeID prereq) parentID
-    return [DN prereq, DE edge]
+reqToStmts' options parentID (J name2 _) = do
+    if Prelude.null (departments options) || prefixedByOneOf (pack name2) (departments options)
+        then do 
+            prereq <- makeNode (pack name2)
+            edge <- makeEdge (nodeID prereq) parentID
+            return [DN prereq, DE edge]
+        else return []        
 -- Two or more required prerequisites.
 reqToStmts' options parentID (AND reqs) = do
     if includeRaws options || atLeastTwoCourseReqs reqs
@@ -106,7 +112,10 @@ reqToStmts' options parentID (AND reqs) = do
             andNode <- makeBool "and"
             edge <- makeEdge (nodeID andNode) parentID
             prereqStmts <- mapM (reqToStmts' options (nodeID andNode)) reqs
-            return $ [DN andNode, DE edge] ++ concat prereqStmts
+            let mergedStmts = concat prereqStmts
+            if Prelude.length mergedStmts > 1
+                then return $ [DN andNode, DE edge] ++ concat prereqStmts
+                else return []
         else do
             prereqStmts <- mapM (reqToStmts' options parentID) reqs
             return $ concat prereqStmts
@@ -117,7 +126,10 @@ reqToStmts' options parentID (OR reqs) = do
             orNode <- makeBool "or"
             edge <- makeEdge (nodeID orNode) parentID
             prereqStmts <- mapM (reqToStmts' options (nodeID orNode)) reqs
-            return $ [DN orNode, DE edge] ++ concat prereqStmts
+            let mergedStmts = concat prereqStmts
+            if Prelude.length mergedStmts > 1
+                then return $ [DN orNode, DE edge] ++ concat prereqStmts
+                else return []
         else do
             prereqStmts <- mapM (reqToStmts' options parentID) reqs
             return $ concat prereqStmts
@@ -150,6 +162,9 @@ atLeastTwoCourseReqs reqs = Prelude.length (Prelude.filter isNotRawOrNone reqs) 
         isNotRawOrNone (RAW _) = False
         isNotRawOrNone NONE = False
         isNotRawOrNone _ = True
+
+prefixedByOneOf :: Text -> [Text] -> Bool 
+prefixedByOneOf name = any (flip isPrefixOf name)
 
 makeNode :: Text -> State GeneratorState (DotNode Text)
 makeNode name = do
