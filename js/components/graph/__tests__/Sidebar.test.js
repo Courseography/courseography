@@ -47,6 +47,10 @@ describe("Sidebar", () => {
     expect(container.getByText("FCE Count: 0.0")).toBeDefined();
     fireEvent.click(container.getByTestId("aaa100"));
     expect(container.getByText("FCE Count: 0.5")).toBeDefined();
+    fireEvent.click(container.getByTestId("aaa101"));
+    expect(container.getByText("FCE Count: 1.0")).toBeDefined();
+    fireEvent.click(container.getByTestId("aaa101"));
+    expect(container.getByText("FCE Count: 0.5")).toBeDefined();
   });
 
   it("Clicking the reset button should reset the FCE Count to 0.0", async () => {

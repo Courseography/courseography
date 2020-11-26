@@ -114,10 +114,11 @@ export default class Sidebar extends React.Component {
   // Sidebar rendering methods
   renderSidebarHeader= () => {
     const contentHiddenClass = this.state.contentHidden ? "hidden" : "";
+    const fceString = Number.isInteger(this.props.fceCount) ? this.props.fceCount + ".0" : this.props.fceCount
 
     return (
       <div id="fce" className={contentHiddenClass}>
-        <div id="fcecount" data-testid="test-fcecount">FCE Count: {this.props.fceCount}</div>
+        <div id="fcecount" data-testid="test-fcecount">FCE Count: {fceString}</div>
         <button id="reset" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Graph</button>
       </div>
     )

@@ -49,7 +49,7 @@ Object {
               data-testid="test-fcecount"
               id="fcecount"
             >
-              FCE Count: 0.0
+              FCE Count: 
             </div>
             <button
               data-testid="test-reset"
@@ -252,7 +252,7 @@ Object {
             data-testid="test-fcecount"
             id="fcecount"
           >
-            FCE Count: 0.0
+            FCE Count: 
           </div>
           <button
             data-testid="test-reset"
