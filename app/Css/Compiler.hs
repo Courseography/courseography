@@ -13,6 +13,7 @@ import Prelude hiding (writeFile)
 import Clay (renderWith)
 import Data.Text.Lazy.IO (writeFile)
 import Css.Common (common)
+import Css.Generate (generateStyles)
 import Css.Graph (graphStyles)
 import Css.Post (postStyles)
 import Css.Timetable (timetableStyles)
@@ -39,6 +40,7 @@ compileCSS = do
                       privacyStyles,
                       fourOhFourStyles,
                       searchStyles,
+                      generateStyles,
                       loadingStyles
                       ]
     writeFile (genCssPath ++ "app.css") cssText

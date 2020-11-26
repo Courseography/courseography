@@ -44,6 +44,7 @@ header page =
             H.li $ toLink "graph" "Graph"
             H.li $ toLink "grid" "Grid"
             H.li $ toLink "timesearch" "Search"
+            H.li $ toLink "generate" "Generate"
             H.li $ toLink "draw" "Draw"
             -- TODO: re-enable after handling new first-year courses
             -- H.li $ toLink "post" "Check My POSt!"
