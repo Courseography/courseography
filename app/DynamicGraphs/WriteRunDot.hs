@@ -51,7 +51,7 @@ generateAndSavePrereqResponse taken courses = do
       parseDynamicSvg graphHash $ decodeUtf8 bString
       storedGraph <- getGraph graphHash
       return $ fromMaybe graphNotFound storedGraph
-  where
+  where    
     graphHash :: T.Text
     graphHash = hash taken courses
     graphNotFound = error "Graph should have been generated but was not found"
