@@ -123,10 +123,12 @@ reqToStmts' options parentID (OR reqs) = do
             return $ concat prereqStmts
 -- A prerequisite with a grade requirement.
 reqToStmts' options parentID (GRADE description req) = do
-    gradeNode <- makeNode (pack description)
-    edge <- makeEdge (nodeID gradeNode) parentID
-    prereqStmts <- reqToStmts' options (nodeID gradeNode) req
-    return $ [DN gradeNode, DE edge] ++ prereqStmts
+    if includeGrades options then do 
+        gradeNode <- makeNode (pack description)
+        edge <- makeEdge (nodeID gradeNode) parentID
+        prereqStmts <- reqToStmts' options (nodeID gradeNode) req
+        return $ [DN gradeNode, DE edge] ++ prereqStmts
+    else reqToStmts' options parentID req
 -- A raw string description of a prerequisite.
 reqToStmts' options parentID (RAW rawText) =
     if not (includeRaws options) || "High school" `isInfixOf` pack rawText || rawText == ""
