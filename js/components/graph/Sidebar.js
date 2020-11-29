@@ -4,22 +4,32 @@ import Focus from "./Focus";
 
 export default class Sidebar extends React.Component {
   constructor(props) {
+
     super(props);
     this.state = {
       contentHidden: true,
       focusDisabled: false,
       graphActive: 0,
       graphName: "",
-      toggled: false
+      toggled: false,
+      graphSelection: "Computer Science"
     };
+    this.handleGraphSelection = this.handleGraphSelection.bind(this);
+
   }
 
-  componentWillUpdate(prevProps) { 
+
+  componentWillUpdate(prevProps) { console.log(prevProps); console.log(this.state)
     if (prevProps.graphName !== this.state.graphName) {
       this.setState({ graphName: prevProps.graphName }, () => {
         this.handleFocusEnabled(); 
       });
     }
+    // if (prevProps.graphSelection !== this.state.graphSelection) {
+    //   this.setState({ graphSelection: prevProps.graphSelection }, () => {
+    //     this.handleGraphSelection(this.state.graphSelection); 
+    //   });
+    // }
   }
 
   handleFocusEnabled = () => {
@@ -38,6 +48,7 @@ export default class Sidebar extends React.Component {
   createGraphButtons = () => {
     return this.props.graphs.map((graph, i) => {
       return (
+<<<<<<< HEAD
         <div
           className="graph-button"
           id={"graph-" + graph.id}
@@ -47,6 +58,10 @@ export default class Sidebar extends React.Component {
         >
           {graph.title}
         </div>
+=======
+        <option id={"graph-" + graph.id} value={graph.title} className="graph-option" key={i}>
+          {graph.title}</option>
+>>>>>>> cb09a8a6... began implementation of graph buttons conversion to dropdown menu
       )
     });
   }
@@ -154,14 +169,37 @@ export default class Sidebar extends React.Component {
     )
   }
 
+  handleGraphSelection = (selection) => {
+    this.setState({ graphSelection: selection.target.value});
+    alert(selection.target.value);
+  }
+
+  handleSubmit = () => {
+    this.props.updateGraph(this.state.graphSelection)
+  }
+  
+
   renderSidebarButtons = () => {
     const focusHiddenClass = this.state.graphActive === 1 ? "hidden" : "";
     const graphHiddenClass = this.state.graphActive === 0 ? "hidden" : "";
 
-    return (
+    return ( 
       <div>
+<<<<<<< HEAD
         <div id="graphs" className={graphHiddenClass} data-testid="test-graph-buttons">
           {this.createGraphButtons()}
+=======
+        <div id="graphs" className={graphHiddenClass}>
+          <form className="graph-options">
+            <label onSubmit={this.handleSubmit}>
+              CHOOSE A DEPARTMENT:
+              <select value={this.state.graphSelection} onChange={this.handleGraphSelection}>
+              {this.createGraphButtons()}
+              </select>
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
+>>>>>>> cb09a8a6... began implementation of graph buttons conversion to dropdown menu
         </div>
         <div id="focuses" className={focusHiddenClass} data-testid="test-focus-buttons">
           {this.createFocusButtons()}
