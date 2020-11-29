@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import coursesToPrereqGraph from '../app/DynamicGraphs/GraphGenerator.hs';
+
 
   // ========================================
 
@@ -11,70 +13,71 @@ import ReactDOM from 'react-dom';
     }
 
     generate = () => {
-      alert('this should generate a graph');
+      var inputs = document.getElementById("generateForm");
+      // coursesToPrereqGraph([inputs.elements[0].value]);
     }
 
     render() { 
-
       return (
         <div id="generateDiv">
-
-          <div id="header">
-            <div id="header-title"> PREREQUISITE GENERATOR</div>
-            <div id="main-filter">
-              <input  placeholder="Enter Courses"/>
+          <form id="generateForm">
+            <div id="header">
+              <div id="header-title"> PREREQUISITE GENERATOR</div>
+              <div id="main-filter">
+                <input type="text" placeholder="Enter Courses"/>
+              </div>
             </div>
-          </div>
 
-          <p id="filter-title">OPTIONAL FILTERS</p>
+            <p id="filter-title">OPTIONAL FILTERS</p>
 
-          <ul>
-            <li>
-              <p class="filter">Exclude Courses: </p>
-              <input class="filter" placeholder="..."/>
-            </li>
-            
-            <li>
-              <p class="filter">Include Departments: </p>
-              <input class="filter" placeholder="..."/>
-            </li>
+            <ul>
+              <li>
+                <label >Exclude Courses: </label>
+                <input type="text" placeholder="..."/>
+              </li>
+              
+              <li>
+                <label >Include Departments: </label>
+                <input type="text"  placeholder="..."/>
+              </li>
 
-            {/* <li><p class="filter">How many layers of courses from other department(s) do you want to include? </p>
-              <input class="filter" placeholder="..."/>
-            </li> */}
+              {/* <li><label >How many layers of courses from other department(s) do you want to include? </label>
+                <input  placeholder="..."/>
+              </li> */}
 
-            <li>
-              <p class="filter">(?) Number of layers: </p>
-              <input class="filter" placeholder="..."/>
-            </li> 
+              <li>
+                <label >(?) Number of layers: </label>
+                <input type="text"  placeholder="..."/>
+              </li> 
 
-            <li>
-              <p class="filter">Include Faculties: </p>
-              <input class="filter" placeholder="..."/>
-            </li>  
+              <li>
+                <label >Include Faculties: </label>
+                <input type="text"  placeholder="..."/>
+              </li>  
 
-            <li>
-              <p class="filter">Include Campuses: </p>
-              <input class="filter" placeholder="..."/>
-            </li>
+              <li>
+                <label >Include Campuses: </label>
+                <input type="text"  placeholder="..."/>
+              </li>
 
-            <li>
-              <p class="filter">Exclude courses external to campuses: </p>
-              <input type="checkbox" class="filter"/>
-            </li>
+              <li>
+                <label >Exclude courses external to campuses: </label>
+                <input type="checkbox" />
+              </li>
 
-            <li>
-              <p class="filter">Exclude grade requirements: </p>
-              <input type="checkbox" class="filter"/>
-            </li>
+              <li>
+                <label >Exclude grade requirements: </label>
+                <input type="checkbox" />
+              </li>
 
-          </ul>
+            </ul>
 
-          <div id="submit" onClick={() => this.generate()}>
-            <p id="submit-text"> SUBMIT</p>
-          </div>
-
-        </div>
+            <div id="submit" onClick={() => this.generate()}>
+              <input id="submit-text" type="submit" value="SUBMIT"></input>
+            </div>
+        </form>
+      </div>
+      
       )
     }
   }

@@ -42,14 +42,6 @@ Should not take long to convert to Haskell */
     font-weight: bold;
   }
   
-  .filter {
-    font-size: small;
-    color:  #d9e4ee;
-    padding-left: 23px;
-    display: inline-block;
-    padding-right: 10px;
-  }
-  
   ol, ul {
     padding-left: 0px;
     list-style-type: none; 
@@ -57,6 +49,11 @@ Should not take long to convert to Haskell */
   
   li{
     margin: 2px 0;
+    display: inline-block;
+    font-size: small;
+    color:  #d9e4ee;
+    padding-left: 23px;
+    padding-right: 10px;
   }
   
   input {
@@ -71,12 +68,7 @@ Should not take long to convert to Haskell */
   }
   
   #submit {
-    margin: auto;
     text-align: center;
-    background:   #d9e4ee;
-    border: 5px solid#7a6a96;
-    width: 25%;
-    padding-top: 10px;
   }
   
   #submit-text {
