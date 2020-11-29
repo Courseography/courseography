@@ -40,7 +40,7 @@ cabal.sandbox.config
 /public/js/search
 /public/js/grid/app.js
 /public/js/post/app.js
-# /public/js/generate/app.js
+/public/js/generate/app.js
 /public/js/graph/app.js
 /public/js/draw/app.js
 

@@ -24,4 +24,4 @@ generatePrerequisites =
     H.html $ do
         H.head $
             H.title "Generate Prerequisites!"
-        H.div ! A.id "generate-prerequisites" $ ""
+        H.div ! A.id "generateDiv" $ ""

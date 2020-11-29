@@ -57,8 +57,4 @@ searchScripts = do
 
 generateScripts :: H.Html
 generateScripts = do
-    H.ul ! A.id "generate-prerequisites" $ do
-      H.li "CSS"
-      H.li "is not"
-      H.li "applied"
-    -- H.script ! A.src "generate/generate.js" $ ""
+    H.script ! A.src "/static/js/generate/app.js" $ ""
