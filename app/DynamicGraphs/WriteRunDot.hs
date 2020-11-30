@@ -20,7 +20,7 @@ import Database.CourseQueries (getGraph)
 import Data.Aeson (decode)
 import Data.Maybe (fromMaybe, fromJust)
 import Data.List (sort)
-import DynamicGraphs.GraphOptions (GraphOptions(..))
+import DynamicGraphs.GraphOptions (GraphOptions(..), CourseGraphOptions(..))
 
 doDots :: PrintDotRepr dg n => [(FilePath, dg n)] -> IO ()
 doDots cases = do
@@ -46,16 +46,16 @@ getBody = do
 findAndSavePrereqsResponse :: ServerPart Response
 findAndSavePrereqsResponse = do
     body <- getBody
-    let options :: GraphOptions = fromJust $ decode body
-    liftIO $ generateAndSavePrereqResponse options
+    let coursesOptions :: CourseGraphOptions = fromJust $ decode body
+    liftIO $ generateAndSavePrereqResponse (courses coursesOptions) (graphOptions coursesOptions)
 
-generateAndSavePrereqResponse :: GraphOptions -> IO Response
-generateAndSavePrereqResponse options = do
+generateAndSavePrereqResponse :: [LT.Text] -> GraphOptions -> IO Response
+generateAndSavePrereqResponse rootCourses options = do
   cached <- getGraph graphHash
   case cached of
     Just cachedGraph -> return cachedGraph
     Nothing -> do
-      graph <- coursesToPrereqGraphExcluding options
+      graph <- coursesToPrereqGraphExcluding rootCourses options
       bString <- graphToByteString graph
       -- Parse the generated SVG and store it in the database.
       parseDynamicSvg graphHash $ decodeUtf8 bString
@@ -63,13 +63,13 @@ generateAndSavePrereqResponse options = do
       return $ fromMaybe graphNotFound storedGraph
   where    
     graphHash :: T.Text
-    graphHash = hash options
+    graphHash = hash rootCourses options
     graphNotFound = error "Graph should have been generated but was not found"
 
 -- | Hash function to uniquely identify the graph layout.
-hash :: GraphOptions -> T.Text
-hash options = hashFunction key
-  where key = (sort (map LT.toStrict (taken options)), sort (map LT.toStrict (courses options)), graphProfileHash)
+hash :: [LT.Text] -> GraphOptions -> T.Text
+hash rootCourses options = hashFunction key
+  where key = (sort (map LT.toStrict (taken options)), sort (map LT.toStrict rootCourses), graphProfileHash)
         hashFunction :: (Show b) => ([T.Text], [T.Text], b) -> T.Text
         hashFunction = T.pack . ("graph_" ++) . md5s . Str . show  
 

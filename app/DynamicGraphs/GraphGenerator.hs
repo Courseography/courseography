@@ -27,30 +27,19 @@ import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
 import Control.Monad (mapM, liftM)
-import DynamicGraphs.GraphOptions (GraphOptions(..))
+import DynamicGraphs.GraphOptions (GraphOptions(..), getDefaultGraphOptions)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
                         -> IO (DotGraph Text)
-coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding
-                                        $ GraphOptions (map pack rootCourses)  -- courses
-                                                        []                     -- taken
-                                                        []                     -- departments
-                                                        0                      -- excludedDepth
-                                                        (-1)                   -- maxDepth
-                                                        []                     -- courseNumPrefix
-                                                        []                     -- distribution
-                                                        []                     -- location
-                                                        True                   -- includeRaws
-                                                        True                   -- includeGrades
+coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding (map pack rootCourses) getDefaultGraphOptions
 
 -- | Takes a list of taken courses, along with a list of courses we wish to generate
 -- a dependency graph for. The generated graph will neither include any of the taken courses,
 -- nor the dependencies of taken courses (unless they are depended on by other courses)
-coursesToPrereqGraphExcluding :: GraphOptions
-                              -> IO (DotGraph Text)
-coursesToPrereqGraphExcluding options = do
-    reqs <- lookupCourses (map unpack (taken options)) (courses options)
+coursesToPrereqGraphExcluding :: [Text] -> GraphOptions -> IO (DotGraph Text)
+coursesToPrereqGraphExcluding rootCourses options = do
+    reqs <- lookupCourses (map unpack (taken options)) rootCourses
     let reqs' = Map.toList reqs
     return $ fst $ State.runState (reqsToGraph reqs') initialState
     where
