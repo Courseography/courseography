@@ -67,7 +67,9 @@ Object {
                 data-testid="test-graphs-nav"
                 id="graphs-nav"
               >
-                <div>
+                <div
+                  class="nav-section"
+                >
                   Graphs
                 </div>
               </li>
@@ -76,7 +78,9 @@ Object {
                 data-testid="test-focuses-nav"
                 id="focuses-nav"
               >
-                <div>
+                <div
+                  class="nav-section"
+                >
                   Focuses
                 </div>
               </li>
@@ -270,7 +274,9 @@ Object {
               data-testid="test-graphs-nav"
               id="graphs-nav"
             >
-              <div>
+              <div
+                class="nav-section"
+              >
                 Graphs
               </div>
             </li>
@@ -279,7 +285,9 @@ Object {
               data-testid="test-focuses-nav"
               id="focuses-nav"
             >
-              <div>
+              <div
+                class="nav-section"
+              >
                 Focuses
               </div>
             </li>
