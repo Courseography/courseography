@@ -251,28 +251,5 @@ describe("Course Node", () => {
         expect(aaa303.classList.contains("missing")).toBe(true);
       });
     });
-
-    it("Selecting a course node should always increase the FCE count by 0.5, (currently no support for full-year courses)", async () => {
-      const graph = await TestGraph.build();
-      const aaa100 = graph.getByTestId("aaa100");
-      const aaa201 = graph.getByTestId("aaa201");
-
-      fireEvent.click(aaa100);
-      expect(document.getElementById("fcecount").textContent).toBe(
-        "FCE Count: 0.5"
-      );
-      fireEvent.click(aaa201);
-      expect(document.getElementById("fcecount").textContent).toBe(
-        "FCE Count: 1"
-      );
-      fireEvent.click(aaa100);
-      expect(document.getElementById("fcecount").textContent).toBe(
-        "FCE Count: 0.5"
-      );
-      fireEvent.click(aaa201);
-      expect(document.getElementById("fcecount").textContent).toBe(
-        "FCE Count: 0"
-      );
-    });
   });
 });

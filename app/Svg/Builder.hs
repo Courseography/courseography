@@ -42,10 +42,16 @@ buildPath rects ellipses entity elementId
           let coords = pathPoints entity
               start = head coords
               end = last coords
-              sourceNode = getIntersectingShape start (rects ++ ellipses)
-              targetNode = getIntersectingShape end
-                               (filter (\r -> shapeId_ r /= sourceNode) rects ++
-                                ellipses)
+              nodes = rects ++ ellipses
+              sourceNode =
+                  if T.null $ pathSource entity
+                      then getIntersectingShape start nodes
+                      else pathSource entity
+              targetNode =
+                  if T.null $ pathTarget entity
+                      then getIntersectingShape end
+                               (filter (\r -> shapeId_ r /= sourceNode) nodes)
+                      else pathTarget entity
           in
               entity {pathId_ = T.pack $ 'p' : show elementId,
                       pathSource = sourceNode,
@@ -68,8 +74,10 @@ buildRect texts entity elementId =
         textString = T.concat $ map textText rectTexts
         id_ = case shapeType_ entity of
               Hybrid -> T.pack $ 'h' : show elementId
-              Node -> T.map toLower . sanitizeId $ textString
-              BoolNode -> ""
+              Node -> if shapeId_ entity == ""
+                  then T.map toLower . sanitizeId $ textString 
+                  else shapeId_ entity
+              BoolNode -> shapeId_ entity
               Region -> ""
     in
         entity {shapeId_ = id_,
@@ -91,8 +99,13 @@ buildEllipses texts entity elementId =
                               . textPos
                               ) texts
     in
-        entity {shapeId_ = T.pack $ "bool" ++ show elementId,
-                shapeText = ellipseText}
+        entity {
+            shapeId_ = 
+                if shapeId_ entity == "" 
+                    then T.pack $ "bool" ++ show elementId
+                    else shapeId_ entity,
+            shapeText = ellipseText
+            }
     where
         intersectsEllipse a b (cx, cy) (x, y) =
             let dx = x - cx - 10  -- some tolerance

@@ -21,7 +21,11 @@ export default class TestGraph {
       edit: false,
       initialDrawMode: "draw-node",
       initialOnDraw: false,
-      start_blank: false
+      start_blank: false,
+      currFocus: null,
+      graphName: "Computer Science",
+      setFCECount: () => {},
+      incrementFCECount: () => {},
     };
 
     const rtlGraph = render(<Graph {...graphProps} />);
