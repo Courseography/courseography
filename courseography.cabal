@@ -67,6 +67,7 @@ executable courseography
     DynamicGraphs.CourseFinder,
     DynamicGraphs.WriteRunDot,
     DynamicGraphs.GraphGenerator,
+    DynamicGraphs.GraphOptions,
     Export.GetImages,
     Export.ImageConversion,
     Export.LatexGenerator,
