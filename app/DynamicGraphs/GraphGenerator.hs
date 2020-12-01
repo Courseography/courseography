@@ -27,12 +27,12 @@ import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
 import Control.Monad (mapM, liftM)
-import DynamicGraphs.GraphOptions (GraphOptions(..), getDefaultGraphOptions)
+import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
                         -> IO (DotGraph Text)
-coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding (map pack rootCourses) getDefaultGraphOptions
+coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding (map pack rootCourses) defaultGraphOptions
 
 -- | Takes a list of taken courses, along with a list of courses we wish to generate
 -- a dependency graph for. The generated graph will neither include any of the taken courses,
