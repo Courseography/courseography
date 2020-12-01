@@ -71,8 +71,7 @@ oneOfSeparator = do
         "one of either",
         "one of the following",
         "at least one of",
-        "one of",
-        "1 of",
+        "one of", "1 of",
         "at least 1 of"
         ]
     colon <- Parsec.option "" $ Parsec.string ":"
