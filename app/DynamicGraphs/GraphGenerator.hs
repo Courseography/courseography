@@ -84,13 +84,11 @@ reqToStmts' :: GraphOptions -> Text -> Req -> State GeneratorState [DotStatement
 -- No prerequisites.
 reqToStmts' _ _ NONE = return []
 -- A single course prerequisite.
-reqToStmts' options parentID (J name2 _) = do
-    if Prelude.null (departments options) || prefixedByOneOf (pack name2) (departments options)
-        then do 
-            prereq <- makeNode (pack name2)
-            edge <- makeEdge (nodeID prereq) parentID
-            return [DN prereq, DE edge]
-        else return []        
+reqToStmts' _ parentID (J name2 _) = do       
+    prereq <- makeNode (pack name2)
+    edge <- makeEdge (nodeID prereq) parentID
+    return [DN prereq, DE edge]
+        
 -- Two or more required prerequisites.
 reqToStmts' options parentID (AND reqs) = do
     if includeRaws options || atLeastTwoCourseReqs reqs
@@ -148,7 +146,11 @@ atLeastTwoCourseReqs reqs = Prelude.length (Prelude.filter isNotRawOrNone reqs) 
         isNotRawOrNone (RAW _) = False
         isNotRawOrNone NONE = False
         isNotRawOrNone _ = True
-
+{- 
+atLeastTwoCourseReturnsReqs :: [[DotStatement Text]] -> Bool
+atLeastTwoCourseReturnsReqs stmts = 
+    let courseCount = foldr (\sum stmtArr -> if null stmtArr then sum else sum + 1) 0 stmts
+-}
 prefixedByOneOf :: Text -> [Text] -> Bool 
 prefixedByOneOf name = any (flip isPrefixOf name)
 
