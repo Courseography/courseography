@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactModal from 'react-modal';
 
+ReactModal.setAppElement('#nav-export')
 
 export class ExportModal extends React.Component {
     constructor(props) {

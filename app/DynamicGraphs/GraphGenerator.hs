@@ -22,25 +22,24 @@ import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
 import Data.Hash.MD5 (Str(Str), md5s)
-import Data.Text.Lazy (Text, pack, unpack, isInfixOf, isPrefixOf)
+import Data.Text.Lazy (Text, pack, unpack, isPrefixOf, isInfixOf)
 import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
 import Control.Monad (mapM, liftM)
-import DynamicGraphs.GraphOptions (GraphOptions(..))
+import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
                         -> IO (DotGraph Text)
-coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding (getDefaultGraphOptions (map pack rootCourses))
+coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding (map pack rootCourses) defaultGraphOptions
 
 -- | Takes a list of taken courses, along with a list of courses we wish to generate
 -- a dependency graph for. The generated graph will neither include any of the taken courses,
 -- nor the dependencies of taken courses (unless they are depended on by other courses)
-coursesToPrereqGraphExcluding :: GraphOptions
-                              -> IO (DotGraph Text)
-coursesToPrereqGraphExcluding options = do
-    reqs <- lookupCourses (map unpack (taken options)) (courses options)
+coursesToPrereqGraphExcluding :: [Text] -> GraphOptions -> IO (DotGraph Text)
+coursesToPrereqGraphExcluding rootCourses options = do
+    reqs <- lookupCourses (map unpack (taken options)) rootCourses
     let reqs' = Map.toList reqs
     return $ fst $ State.runState (reqsToGraph options reqs') initialState
     where
@@ -48,26 +47,13 @@ coursesToPrereqGraphExcluding options = do
 
 sampleGraph :: DotGraph Text
 sampleGraph = fst $ State.runState (reqsToGraph
-    (getDefaultGraphOptions ["MAT237H1", "MAT133H1", "CSC148H1", "CSC265H1"])
+    defaultGraphOptions
     [("MAT237H1", J "MAT137H1" ""),
     ("MAT133H1", NONE),
     ("CSC148H1", AND [J "CSC108H1" "", J "CSC104H1" ""]),
     ("CSC265H1", AND [J "CSC148H1" "", J "CSC236H1" ""])
     ])
     (GeneratorState 0 Map.empty)
-
-getDefaultGraphOptions :: [Text] -> GraphOptions
-getDefaultGraphOptions rootCourses =
-    GraphOptions rootCourses           -- courses
-                []                     -- taken
-                []                     -- departments
-                0                      -- excludedDepth
-                (-1)                   -- maxDepth
-                []                     -- courseNumPrefix
-                []                     -- distribution
-                []                     -- location
-                True                   -- includeRaws
-                True                   -- includeGrades
 
 -- ** Main algorithm for converting requirements into a DotGraph
 
@@ -171,9 +157,9 @@ makeNode name = do
     GeneratorState i nodesMap <- State.get
     case Map.lookup name nodesMap of
         Nothing -> do
-            let node = DotNode
-                        (mappendTextWithCounter name i)
-                        [AC.Label $ toLabelValue name]
+            let nodeId = mappendTextWithCounter name i
+                node = DotNode nodeId
+                               [AC.Label $ toLabelValue name, ID nodeId]
                 nodesMap' = Map.insert name node nodesMap
             State.put (GeneratorState (i + 1) nodesMap')
             return node
@@ -183,11 +169,13 @@ makeBool :: Text -> State GeneratorState (DotNode Text)
 makeBool text1 = do
     GeneratorState i nodesMap <- State.get
     State.put (GeneratorState (i + 1) nodesMap)
-    return $ DotNode (mappendTextWithCounter text1 i) (AC.Label (toLabelValue text1) : ellipseAttrs)
+    let nodeId = mappendTextWithCounter text1 i
+    return $ DotNode nodeId
+                     ([AC.Label (toLabelValue text1), ID nodeId] ++ ellipseAttrs)
 
 
 makeEdge :: Text -> Text -> State GeneratorState (DotEdge Text)
-makeEdge id1 id2 = return $ DotEdge id1 id2 []
+makeEdge id1 id2 = return $ DotEdge id1 id2 [ID (id1 `mappend` "|" `mappend` id2)]
 
 mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show counter))
@@ -231,14 +219,14 @@ nodeAttrs = NodeAttrs
 ellipseAttrs :: A.Attributes
 ellipseAttrs = 
     [ A.shape A.Ellipse
-    , AC.Width 0.45     -- min 0.01
-    , AC.Height 0.35    -- min 0.01
+    , AC.Width 0.20     -- min 0.01
+    , AC.Height 0.15    -- min 0.01
     , AC.FixedSize SetNodeSize
     , A.fillColor White
-    , AC.FontSize 10.0  -- min 1.0
+    , AC.FontSize 6.0  -- min 1.0
     ]
 
 edgeAttrs :: GlobalAttributes
 edgeAttrs = EdgeAttrs [
-    ArrowHead (AType [(ArrMod FilledArrow BothSides, NoArrow)])
+    ArrowHead (AType [(ArrMod FilledArrow BothSides, Normal)])
     ]

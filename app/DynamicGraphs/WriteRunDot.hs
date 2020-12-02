@@ -19,7 +19,7 @@ import Database.CourseQueries (getGraph)
 import Data.Aeson (decode)
 import Data.Maybe (fromMaybe, fromJust)
 import Data.List (sort)
-import DynamicGraphs.GraphOptions (GraphOptions(..))
+import DynamicGraphs.GraphOptions (GraphOptions(..), CourseGraphOptions(..))
 
 doDots :: PrintDotRepr dg n => [(FilePath, dg n)] -> IO ()
 doDots cases = do
@@ -45,16 +45,16 @@ getBody = do
 findAndSavePrereqsResponse :: ServerPart Response
 findAndSavePrereqsResponse = do
     body <- getBody
-    let options :: GraphOptions = fromJust $ decode body
-    liftIO $ generateAndSavePrereqResponse options
+    let coursesOptions :: CourseGraphOptions = fromJust $ decode body
+    liftIO $ generateAndSavePrereqResponse coursesOptions
 
-generateAndSavePrereqResponse :: GraphOptions -> IO Response
-generateAndSavePrereqResponse options = do
+generateAndSavePrereqResponse :: CourseGraphOptions -> IO Response
+generateAndSavePrereqResponse coursesOptions = do
   cached <- getGraph graphHash
   case cached of
     Just cachedGraph -> return cachedGraph
     Nothing -> do
-      graph <- coursesToPrereqGraphExcluding options
+      graph <- coursesToPrereqGraphExcluding (courses coursesOptions) (graphOptions coursesOptions)
       bString <- graphToByteString graph
       -- Parse the generated SVG and store it in the database.
       parseDynamicSvg graphHash $ decodeUtf8 bString
@@ -62,21 +62,24 @@ generateAndSavePrereqResponse options = do
       return $ fromMaybe graphNotFound storedGraph
   where    
     graphHash :: T.Text
-    graphHash = hash options
+    graphHash = hash coursesOptions
     graphNotFound = error "Graph should have been generated but was not found"
 
 -- | Hash function to uniquely identify the graph layout.
-hash :: GraphOptions -> T.Text
-hash options = hashFunction (key, graphProfileHash)
-  where key = options {
-          taken = sort $ taken options, 
-          courses = sort $ courses options,
-          departments = sort $ departments options,
-          distribution = sort $ distribution options,
-          location = sort $ location options,
-          courseNumPrefix = sort $ courseNumPrefix options
-        }
-        hashFunction :: (GraphOptions, String) -> T.Text
+hash :: CourseGraphOptions -> T.Text
+hash coursesOptions = hashFunction (key, graphProfileHash)
+  where key = coursesOptions {
+          courses = sort $ courses coursesOptions,
+          graphOptions = options {
+            taken = sort $ taken options, 
+            departments = sort $ departments options,
+            distribution = sort $ distribution options,
+            location = sort $ location options,
+            courseNumPrefix = sort $ courseNumPrefix options
+            }
+          }
+          where options = graphOptions coursesOptions
+        hashFunction :: (CourseGraphOptions, String) -> T.Text
         hashFunction = T.pack . ("graph_" ++) . md5s . Str . show
 
 graphToByteString :: PrintDotRepr dg n => dg n -> IO B.ByteString

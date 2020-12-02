@@ -8,6 +8,7 @@ import EdgeGroup from "./EdgeGroup";
 import InfoBox from "./InfoBox";
 import NodeGroup from "./NodeGroup";
 import RegionGroup from "./RegionGroup";
+import * as focusInfo from "./sidebar/focus_descriptions";
 
 export default class Graph extends React.Component {
   constructor(props) {
@@ -32,7 +33,9 @@ export default class Graph extends React.Component {
       onDraw: this.props.edit,
       drawMode: this.props.initialDrawMode,
       drawNodeID: 0,
-      draggingNode: null
+      draggingNode: null,
+      currFocus: null,
+      graphName: null
     };
 
     this.svg = React.createRef();
@@ -84,6 +87,18 @@ export default class Graph extends React.Component {
     markerNode.setAttribute("markerHeight", 7);
   }
 
+  componentWillUpdate(prevProps) {
+    if (this.state.currFocus !== prevProps.currFocus) {
+      this.setState({ currFocus: prevProps.currFocus }, () => {  
+        let focuses = this.state.currFocus === null ? [] : focusInfo[this.state.currFocus + "FocusList"];
+        this.highlightFocuses(focuses);
+      });
+    }
+    if (this.state.graphName !== prevProps.graphName) {
+      this.getGraph();
+    }
+  }
+
   componentWillUnmount() {
     document.body.removeEventListener("keydown", this.onKeyDown);
     document
@@ -91,25 +106,8 @@ export default class Graph extends React.Component {
       .removeEventListener("wheel", this.onWheel);
   }
 
-  getGraph = graphName => {
-    if (graphName === undefined) {
-      const params = new URL(document.location).searchParams;
-      const urlSpecifiedGraph = params.get("dept");
-
-      // HACK: Temporary workaround for giving the statistics department a
-      // link to our graph.
-      // Should be replaced with a more general solution.
-      if (urlSpecifiedGraph === "sta") {
-        graphName = "Statistics";
-      } else if (urlSpecifiedGraph !== null) {
-        graphName = "Computer Science";
-      } else {
-        graphName = localStorage.getItem("active-graph") || "Computer Science";
-      }
-    }
-
-    graphName = graphName.replace("-", " ");
-
+  getGraph = () => {
+    let graphName = this.props.graphName.replace("-", " ");
     let url = new URL("/get-json-data", document.location);
     const params = { graphName: graphName };
     Object.keys(params).forEach(key =>
@@ -161,7 +159,6 @@ export default class Graph extends React.Component {
             edgesList.push(entry);
           }
         });
-
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -173,7 +170,8 @@ export default class Graph extends React.Component {
           height: data.height,
           zoomFactor: 1,
           horizontalPanFactor: 0,
-          verticalPanFactor: 0
+          verticalPanFactor: 0,
+          graphName: graphName
         });
       })
       .catch(err => {
@@ -212,7 +210,7 @@ export default class Graph extends React.Component {
           totalFCEs += 0.5;
         }
       });
-      this.setFCECount(totalFCEs);
+      this.props.setFCECount(totalFCEs);
     }
   }
 
@@ -224,24 +222,6 @@ export default class Graph extends React.Component {
     this.setState({ timeouts: [] });
   };
 
-  setFCECount = credits => {
-    this.setState({ fceCount: credits }, function() {
-      if (document.getElementById("fcecount")) {
-        document.getElementById("fcecount").textContent =
-          "FCE Count: " + this.state.fceCount;
-      }
-    });
-  };
-
-  incrementFCECount = credits => {
-    this.setState({ fceCount: this.state.fceCount + credits }, function() {
-      if (document.getElementById("fcecount")) {
-        document.getElementById("fcecount").textContent =
-          "FCE Count: " + this.state.fceCount;
-      }
-    });
-  };
-
   nodeClick = event => {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
@@ -249,9 +229,9 @@ export default class Graph extends React.Component {
     currentNode.toggleSelection(this);
     if (wasSelected) {
       // TODO: Differentiate half- and full-year courses
-      this.incrementFCECount(-0.5);
+      this.props.incrementFCECount(-0.5);
     } else {
-      this.incrementFCECount(0.5);
+      this.props.incrementFCECount(0.5);
     }
   };
 
@@ -381,16 +361,19 @@ export default class Graph extends React.Component {
   };
 
   openExportModal = () => {
-    this.exportModal.openModal();
+    this.exportModal.current.openModal();
   };
 
   // Reset graph
   reset = () => {
-    this.setFCECount(0);
+    this.props.setFCECount(0);
     this.nodes.current.reset();
     this.bools.current.reset();
     this.edges.current.reset();
-  };
+    if (this.state.currFocus !== null) {
+      this.highlightFocuses([]);
+    }
+  }
 
   renderArrowHead = () => {
     var polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" };
@@ -522,16 +505,16 @@ export default class Graph extends React.Component {
   };
 
   onKeyDown = event => {
-    if (event.keyCode == 39) {
+    if (event.keyCode === 39) {
       this.panDirection("right", 5);
-    } else if (event.keyCode == 40) {
+    } else if (event.keyCode === 40) {
       this.panDirection("down", 5);
-    } else if (event.keyCode == 37) {
+    } else if (event.keyCode === 37) {
       this.panDirection("left", 5);
-    } else if (event.keyCode == 38) {
+    } else if (event.keyCode === 38) {
       this.panDirection("up", 5);
     } else if (this.state.onDraw) {
-      if (event.keyCode == 78) {
+      if (event.keyCode === 78) {
         this.setState({ drawMode: "draw-node" });
       }
     }
@@ -630,6 +613,10 @@ export default class Graph extends React.Component {
     }
   };
 
+  highlightFocuses = focuses => {
+    this.setState({ highlightedNodes: focuses });
+  }
+
   render() {
     // not all of these properties are supported in React
     var svgAttrs = {
@@ -648,14 +635,20 @@ export default class Graph extends React.Component {
 
     var zoomInDisabled = this.state.zoomFactor <= 0.5;
     var zoomOutDisabled = this.state.zoomFactor >= 1.1;
-    var panUpDisabled = !this.graphTopEdgeOffScreen() ? true : false;
-    var panRightDisabled = !this.graphRightEdgeOffScreen() ? true : false;
-    var panDownDisabled = !this.graphBottomEdgeOffScreen() ? true : false;
-    var panLeftDisabled = !this.graphLeftEdgeOffScreen() ? true : false;
+    if (document.getElementById("react-graph") !== null) {
+      var panUpDisabled = !this.graphTopEdgeOffScreen() ? true : false;
+      var panRightDisabled = !this.graphRightEdgeOffScreen() ? true : false;
+      var panDownDisabled = !this.graphBottomEdgeOffScreen() ? true : false;
+      var panLeftDisabled = !this.graphLeftEdgeOffScreen() ? true : false;
+    } else {
+      // Set all pan options to disabled on initial render
+      panUpDisabled = panRightDisabled = panDownDisabled = panLeftDisabled = true;
+    }
+
     var resetDisabled =
-      this.state.zoomFactor == 1 &&
-      this.state.horizontalPanFactor == 0 &&
-      this.state.verticalPanFactor == 0;
+      this.state.zoomFactor === 1 &&
+      this.state.horizontalPanFactor === 0 &&
+      this.state.verticalPanFactor === 0;
 
     // Mouse events for draw tool
     var mouseEvents = {};
@@ -668,7 +661,7 @@ export default class Graph extends React.Component {
     }
 
     return (
-      <div>
+      <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
         <CourseModal ref={this.modal} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
@@ -786,7 +779,13 @@ export default class Graph extends React.Component {
 }
 
 Graph.propTypes = {
+  closeSidebar: PropTypes.func,
+  currFocus: PropTypes.string,
   edit: PropTypes.bool,
+  getLocalGraph: PropTypes.func,
+  graphName: PropTypes.string,
+  incrementFCECount: PropTypes.func,
   initialDrawMode: PropTypes.string,
+  setFCECount: PropTypes.func,
   start_blank: PropTypes.bool
 };
