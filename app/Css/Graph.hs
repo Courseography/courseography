@@ -355,7 +355,7 @@ sidebarCSS = do
                     "background-color" -: "#5C497E !important"
                     a ? do
                         "color" -: "white !important"
-                a ? do
+                ".nav-section" ? do
                     color black
                     display inlineBlock
                     lineHeight (px 30)

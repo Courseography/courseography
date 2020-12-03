@@ -38,7 +38,7 @@ describe("Sidebar", () => {
     const container = await TestContainer.build();
     fireEvent.click(container.getByTestId("test-sidebar-button"));
     expect(container.getByTestId("test-focuses-nav").classList.contains("disabled")).toBe(false);
-    fireEvent.click(container.getByTestId("test-graph-0"));
+    fireEvent.click(container.getByTestId("test-graph-1"));
     expect(container.getByTestId("test-focuses-nav").classList.contains("disabled")).toBe(true);
   });
 
@@ -66,7 +66,7 @@ describe("Sidebar", () => {
     const container = await TestContainer.build();
     fireEvent.click(container.getByTestId("test-sidebar-button"));
     expect(container.getByText("AAA100")).toBeDefined();
-    fireEvent.click(container.getByTestId("test-graph-0"));
+    fireEvent.click(container.getByTestId("test-graph-1"));
     // Need to wait for props update in Graph component
     await waitForDomChange(() => {
       expect(container.getByText("BBB100")).toBeDefined();

@@ -138,7 +138,7 @@ export default class Sidebar extends React.Component {
             onClick={() => this.showFocuses(false)}
             data-testid="test-graphs-nav"
           >
-            <div>Graphs</div>
+            <div className="nav-section">Graphs</div>
           </li>
 
           <li
@@ -147,7 +147,7 @@ export default class Sidebar extends React.Component {
             onClick={() => this.showFocuses(true)}
             data-testid="test-focuses-nav"
           >
-            <div>Focuses</div>
+            <div className="nav-section">Focuses</div>
           </li>
         </ul>
       </nav>
