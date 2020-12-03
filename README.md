@@ -94,7 +94,8 @@ Ian Stewart-Binks,
 Betty Wang,
 Fullchee Zhang,
 Minfan Zhang,
-Alex Shih
+Alex Shih,
+Cassandra Stefura
 
 Privacy Policy and Licensing
 --------------------------------------
