@@ -22,24 +22,26 @@ import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
 import Data.Hash.MD5 (Str(Str), md5s)
-import Data.Text.Lazy (Text, pack, unpack, isPrefixOf, isInfixOf)
+import Data.Text.Lazy (Text, pack, isPrefixOf, isInfixOf)
 import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
 import Control.Monad (mapM, liftM)
 import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
+import Prelude hiding (last)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
                         -> IO (DotGraph Text)
 coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding (map pack rootCourses) defaultGraphOptions
 
--- | Takes a list of taken courses, along with a list of courses we wish to generate
--- a dependency graph for. The generated graph will neither include any of the taken courses,
+-- | Takes a list of courses we wish to generate a dependency graph for, along with graph options
+-- for the courses we want to include. The generated graph will not contain the dependencies of the courses
+-- from excluded departments. In addition, it will neither include any of the taken courses,
 -- nor the dependencies of taken courses (unless they are depended on by other courses)
 coursesToPrereqGraphExcluding :: [Text] -> GraphOptions -> IO (DotGraph Text)
 coursesToPrereqGraphExcluding rootCourses options = do
-    reqs <- lookupCourses (map unpack (taken options)) rootCourses
+    reqs <- lookupCourses options rootCourses
     let reqs' = Map.toList reqs
     return $ fst $ State.runState (reqsToGraph options reqs') initialState
     where
@@ -73,11 +75,11 @@ data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 -- corresponding DotGraph objects.
 reqToStmts :: GraphOptions -> (Text, Req) -> State GeneratorState [DotStatement Text]
 reqToStmts options (name, req) = do
-    if Prelude.null (departments options)|| prefixedByOneOf name (departments options)
+    if Prelude.null (departments options) || prefixedByOneOf name (departments options)
         then do 
             node <- makeNode name
             stmts <- reqToStmts' options (nodeID node) req
-            return $ (DN node):stmts
+            return $ DN node:stmts
         else return []
 
 reqToStmts' :: GraphOptions -> Text -> Req -> State GeneratorState [DotStatement Text]
