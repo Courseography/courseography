@@ -12,24 +12,29 @@ export default class Sidebar extends React.Component {
       graphActive: 0,
       graphName: "",
       toggled: false,
-      graphSelection: ""
+      graphSelection: "Computer Science"
     };
     this.handleGraphSelection = this.handleGraphSelection.bind(this);
-
   }
 
-
-  componentWillUpdate(prevProps, nextProps) { console.log(prevProps); console.log(nextProps)
+  componentWillUpdate(prevProps) { 
     if (prevProps.graphName !== this.state.graphName) {
       this.setState({ graphName: prevProps.graphName }, () => {
         this.handleFocusEnabled(); 
       });
     }
-    // if (prevProps.graphSelection !== this.state.graphSelection) {
-    //   this.setState({ graphSelection: prevProps.graphName}, () => {
-    //     this.handleGraphSelection(this.state.graphSelection); 
-    //   });
-    // }
+  }
+
+  componentDidUpdate(prevProps) { 
+      if (prevProps.graphName !== this.state.graphSelection) { 
+      this.setState({graphName: this.state.graphSelection }, () => {
+        this.props.updateGraph(this.state.graphSelection);
+      });
+    }
+  }
+
+  handleGraphSelection = (selection) => {
+    this.setState({ graphSelection: selection.target.value});
   }
 
   handleFocusEnabled = () => {
@@ -43,11 +48,6 @@ export default class Sidebar extends React.Component {
         focusDisabled: true,
       });
     }
-  }
-
-  handleGraphSelection = (selection) => {
-    this.setState({ graphSelection: selection.target.value});
-    // this.props.updateGraph(this.state.graphSelection);
   }
 
   createGraphButtons = () => {
@@ -169,10 +169,10 @@ export default class Sidebar extends React.Component {
     return ( 
       <div>
         <div id="graphs" className={graphHiddenClass}>
-          <form className="graph-options">
-            <label>
+          <form>
+            <label className="graph-options">
               CHOOSE A DEPARTMENT:
-              <select value={this.state.graphSelection} onChange={this.componentWillUpdate}>
+              <select value="Computer Science" onChange={this.handleGraphSelection}>
               {this.createGraphButtons()}
               </select>
             </label>
