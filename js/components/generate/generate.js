@@ -11,8 +11,32 @@ class Generate extends React.Component {
   }
 
   generate = () => {
-    var inputs = document.getElementById("generateForm");
+    // var inputs = document.getElementById("generateForm");
     // coursesToPrereqGraph([inputs.elements[0].value]);
+
+    // temporary data until we can parse user input
+    const data = {
+      "courses":["CSC324H1"],
+      "includeGrades": false,
+      "includeRaws": false,
+      "departments": ["CSC", "MAT"]
+    }
+    const putData = {
+      method: 'PUT', // Method itself
+      headers: {
+       'Content-Type': 'application/json' // Indicates the content 
+      },
+      body: JSON.stringify(data) // We send data in JSON format
+     }
+    
+    fetch('graph-generate', putData).then(res => res.json()).then(
+      (graph) => {
+        console.log('graph :>> ', graph);
+      },
+      () => {
+        throw "Error. Cannot load graph.";
+      }
+    )
   }
 
   render() { 
@@ -71,7 +95,8 @@ class Generate extends React.Component {
           </ul>
 
           <div id="submit" onClick={() => this.generate()}>
-            <input id="submit-text" type="submit" value="SUBMIT"></input>
+            <div id="submit-text" type="button"> SUBMIT </div>
+            {/* <input id="submit-text" type="submit" value="SUBMIT"></input> */}
           </div>
       </form>
     </div>

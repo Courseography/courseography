@@ -46,6 +46,7 @@ executable courseography
   other-modules:
     Config,
     Css.About,
+    Css.Generate,
     Css.Common,
     Css.Compiler,
     Css.Constants,
