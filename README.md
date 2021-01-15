@@ -93,7 +93,9 @@ Sam Shaftoe,
 Ian Stewart-Binks,
 Betty Wang,
 Fullchee Zhang,
-Minfan Zhang
+Minfan Zhang,
+Alex Shih,
+Cassandra Stefura
 
 Privacy Policy and Licensing
 --------------------------------------
