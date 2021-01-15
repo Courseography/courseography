@@ -10,7 +10,6 @@ import Happstack.Server (ServerPart, askRq)
 import Happstack.Server.Types (takeRequestBody, unBody)
 import Happstack.Server.SimpleHTTP (Response)
 import qualified Data.Text as T
-import qualified Data.Text.Lazy as LT
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
 import Svg.Parser (parseDynamicSvg)
@@ -47,15 +46,15 @@ findAndSavePrereqsResponse :: ServerPart Response
 findAndSavePrereqsResponse = do
     body <- getBody
     let coursesOptions :: CourseGraphOptions = fromJust $ decode body
-    liftIO $ generateAndSavePrereqResponse (courses coursesOptions) (graphOptions coursesOptions)
+    liftIO $ generateAndSavePrereqResponse coursesOptions
 
-generateAndSavePrereqResponse :: [LT.Text] -> GraphOptions -> IO Response
-generateAndSavePrereqResponse rootCourses options = do
+generateAndSavePrereqResponse :: CourseGraphOptions -> IO Response
+generateAndSavePrereqResponse coursesOptions = do
   cached <- getGraph graphHash
   case cached of
     Just cachedGraph -> return cachedGraph
     Nothing -> do
-      graph <- coursesToPrereqGraphExcluding rootCourses options
+      graph <- coursesToPrereqGraphExcluding (courses coursesOptions) (graphOptions coursesOptions)
       bString <- graphToByteString graph
       -- Parse the generated SVG and store it in the database.
       parseDynamicSvg graphHash $ decodeUtf8 bString
@@ -63,15 +62,25 @@ generateAndSavePrereqResponse rootCourses options = do
       return $ fromMaybe graphNotFound storedGraph
   where    
     graphHash :: T.Text
-    graphHash = hash rootCourses options
+    graphHash = hash coursesOptions
     graphNotFound = error "Graph should have been generated but was not found"
 
 -- | Hash function to uniquely identify the graph layout.
-hash :: [LT.Text] -> GraphOptions -> T.Text
-hash rootCourses options = hashFunction key
-  where key = (sort (map LT.toStrict (taken options)), sort (map LT.toStrict rootCourses), graphProfileHash)
-        hashFunction :: (Show b) => ([T.Text], [T.Text], b) -> T.Text
-        hashFunction = T.pack . ("graph_" ++) . md5s . Str . show  
+hash :: CourseGraphOptions -> T.Text
+hash coursesOptions = hashFunction (key, graphProfileHash)
+  where key = coursesOptions {
+          courses = sort $ courses coursesOptions,
+          graphOptions = options {
+            taken = sort $ taken options, 
+            departments = sort $ departments options,
+            distribution = sort $ distribution options,
+            location = sort $ location options,
+            courseNumPrefix = sort $ courseNumPrefix options
+            }
+          }
+          where options = graphOptions coursesOptions
+        hashFunction :: (CourseGraphOptions, String) -> T.Text
+        hashFunction = T.pack . ("graph_" ++) . md5s . Str . show
 
 graphToByteString :: PrintDotRepr dg n => dg n -> IO B.ByteString
 graphToByteString graph = graphvizWithHandle Dot graph Svg B.hGetContents
