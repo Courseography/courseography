@@ -14,10 +14,6 @@ import Css.Constants
 -- |Defines the CSS for the generate page.
 generateStyles :: Css
 generateStyles = do
-    generateFormCSS
-
-generateFormCSS :: Css
-generateFormCSS = do
     "#generateDiv" ? do
         backgroundColor purple10
         width (px 500)
@@ -69,3 +65,9 @@ generateFormCSS = do
     "#submit" ? do
         fontWeight bolder
         color purple10
+        button ? do
+            color "#d9e4ee"
+            paddingTop (px 5)
+            textAlign $ alignSide sideCenter
+            fontSize (px 30)
+            fontWeight bold

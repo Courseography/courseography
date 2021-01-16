@@ -1,42 +1,114 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-// import coursesToPrereqGraph from '../app/DynamicGraphs/GraphGenerator.hs';
-
+import React from "react";
+import ReactDOM from "react-dom";
 
 class Generate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      courseInputs: [],
+      excludedCourses: [],
+      departments: [],
+      layers: 0,
+      faculties: [],
+      campuses: [],
+      includeRaws: false,
+      includeGrades: false
     };
   }
 
-  generate = () => {
-    // var inputs = document.getElementById("generateForm");
-    // coursesToPrereqGraph([inputs.elements[0].value]);
+  generateGraph = () => {
+    // check for invalid input (courses, departments, layers, faculties, campuses)?
+    // remove extra whitespace from input arrays
 
+    const courseInputs =  document.getElementById("generateForm").elements[0].value;    
+    if (courseInputs === "") {
+      alert("Cannot generate graph -- no courses entered!");
+    } 
+    
+    else {      
+      this.state.courseInputs = courseInputs.split(",");
+      
+      const excludedCourses = document.getElementById("generateForm").elements[1].value;
+      if (excludedCourses != "") {
+        this.state.excludedCourses = excludedCourses.split(",");
+      } else {
+        this.state.excludedCourses = [];
+      }
+
+      let departments = document.getElementById("generateForm").elements[2].value;
+      if (departments != "") {
+        this.state.departments = departments.split(",");
+      // when no departments are entered, default is to use the departments associated with course inputs
+      } else {
+        departments = [];
+        for (let i = 0; i < this.state.courseInputs.length; i++) {
+          const newDepartment = this.state.courseInputs[i].trim().slice(0,3);
+          departments.push(newDepartment);
+          }
+        // removes duplicate departments
+        const distinctDepartments = new Set(departments);
+        this.state.departments = [...distinctDepartments];
+      }
+
+      const layers = document.getElementById("generateForm").elements[3].value;
+      if (layers != "") {
+        this.state.layers = parseInt(layers);
+      } else {
+        this.state.layers = 0;
+      }
+
+      const faculties = document.getElementById("generateForm").elements[4].value;
+      if (faculties != "") {
+        this.state.faculties = faculties.split(",");
+      } else {
+        this.state.faculties = [];
+      }
+
+      const campuses = document.getElementById("generateForm").elements[5].value;
+      if (campuses != "") {
+        this.state.campuses = campuses.split(",");
+      } else {
+        this.state.campuses = [];
+      }
+
+      this.state.includeRaws = document.getElementById("generateForm").elements[6].checked;
+      this.state.includeGrades = document.getElementById("generateForm").elements[7].checked;
+      
+      this.getGraph();
+    }
+  }
+
+  getGraph = () => {
     // temporary data until we can parse user input
     const data = {
-      "courses":["CSC324H1"],
-      "includeGrades": false,
-      "includeRaws": false,
-      "departments": ["CSC", "MAT"]
+      "courses": this.state.courseInputs,
+      "excludedCourses": this.state.excludedCourses,
+      "departments": this.state.departments,
+      "layers": this.state.layers,
+      "faculties": this.state.faculties,
+      "campuses": this.state.campuses,
+      "includeRaws": this.state.includeRaws,
+      "includeGrades": this.state.includeGrades
     }
+    console.log('data :>> ', data);
+
     const putData = {
-      method: 'PUT', // Method itself
+      method: "PUT",
       headers: {
-       'Content-Type': 'application/json' // Indicates the content 
+       "Content-Type": "application/json"
       },
       body: JSON.stringify(data) // We send data in JSON format
      }
     
-    fetch('graph-generate', putData).then(res => res.json()).then(
-      (graph) => {
-        console.log('graph :>> ', graph);
-      },
-      () => {
-        throw "Error. Cannot load graph.";
-      }
-    )
+    fetch("graph-generate", putData)
+      .then(res => res.json())
+        .then((graph) => {
+          console.log("graph :>> ", graph);
+        })
+        .catch((err) => {
+          console.log("err :>> ", err);;
+        }
+      )
   }
 
   render() { 
@@ -54,49 +126,49 @@ class Generate extends React.Component {
 
           <ul>
             <li>
-              <label >Exclude Courses: </label>
+              <label> Exclude Courses: </label>
               <input type="text" placeholder="..."/>
             </li>
             
             <li>
-              <label >Include Departments: </label>
-              <input type="text"  placeholder="..."/>
+              <label> Include Departments: </label>
+              <input type="text"  placeholder="CSC, MAT"/>
             </li>
 
-            {/* <li><label >How many layers of courses from other department(s) do you want to include? </label>
+            <li>
+              <label> How many layers of courses from other department(s) do you want to include? </label>
               <input  placeholder="..."/>
-            </li> */}
+            </li>
 
             <li>
-              <label >(?) Number of layers: </label>
-              <input type="text"  placeholder="..."/>
+              <label> Number of layers: </label>
+              <input type="text"  placeholder="0"/>
             </li> 
 
             <li>
-              <label >Include Faculties: </label>
+              <label> Include Faculties: </label>
               <input type="text"  placeholder="..."/>
             </li>  
 
             <li>
-              <label >Include Campuses: </label>
+              <label> Include Campuses: </label>
               <input type="text"  placeholder="..."/>
             </li>
 
             <li>
-              <label >Exclude courses external to campuses: </label>
+              <label> Exclude courses external to campuses: </label>
               <input type="checkbox" />
             </li>
 
             <li>
-              <label >Exclude grade requirements: </label>
+              <label> Exclude grade requirements: </label>
               <input type="checkbox" />
             </li>
 
           </ul>
 
-          <div id="submit" onClick={() => this.generate()}>
+          <div id="submit" onClick={() => this.generateGraph()}>
             <div id="submit-text" type="button"> SUBMIT </div>
-            {/* <input id="submit-text" type="submit" value="SUBMIT"></input> */}
           </div>
       </form>
     </div>
@@ -107,5 +179,5 @@ class Generate extends React.Component {
 
 ReactDOM.render(
   <Generate />,
-  document.getElementById('generateDiv')
+  document.getElementById("generateDiv")
 );

@@ -21,7 +21,7 @@ export default class Container extends React.Component {
   }
 
   componentDidMount() {
-    fetch('graphs').then(res => res.json()).then(
+    fetch("graphs").then(res => res.json()).then(
       (graphsData) => {
         this.setState({
           graphs: graphsData.sort((a, b) => a.id > b.id ? 1 : -1)

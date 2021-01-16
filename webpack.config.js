@@ -7,7 +7,7 @@ module.exports = {
     'js/graph/app': './js/components/graph/main.js',
     'js/post/app': './js/components/post/post.js.jsx',
     'js/draw/app': './js/components/draw/main.js',
-    'js/generate/app': './generate/generate.js',
+    'js/generate/app': './js/components/generate/generate.js',
 
   },
   output: {
