@@ -22,7 +22,7 @@ import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
 import Data.Hash.MD5 (Str(Str), md5s)
-import Data.Text.Lazy (Text, pack, isPrefixOf, isInfixOf)
+import Data.Text.Lazy (Text, pack, isPrefixOf, isInfixOf, last)
 import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
@@ -71,11 +71,33 @@ reqsToGraph options reqs = do
 
 data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
+pickCourse :: GraphOptions -> Text -> Bool
+pickCourse options name =
+    pickCourseByDepartment options name &&
+    pickCourseByLocation options name
+
+pickCourseByDepartment :: GraphOptions -> Text -> Bool
+pickCourseByDepartment options name =
+    Prelude.null (departments options)
+    || prefixedByOneOf name (departments options)
+
+pickCourseByLocation :: GraphOptions -> Text -> Bool
+pickCourseByLocation options name =
+    Prelude.null (location options)
+    || courseLocation `elem` map locationNum (location options)
+    where
+        courseLocation = last name
+        locationNum l= case l of
+            "utsg" -> '1'
+            "utsc" -> '3'
+            "utm"  -> '5'
+            _ -> 'e' -- TODO we need to validate input
+
 -- | Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects.
 reqToStmts :: GraphOptions -> (Text, Req) -> State GeneratorState [DotStatement Text]
 reqToStmts options (name, req) = do
-    if Prelude.null (departments options) || prefixedByOneOf name (departments options)
+    if pickCourse options name
         then do 
             node <- makeNode name
             stmts <- reqToStmts' options (nodeID node) req
@@ -86,10 +108,13 @@ reqToStmts' :: GraphOptions -> Text -> Req -> State GeneratorState [DotStatement
 -- No prerequisites.
 reqToStmts' _ _ NONE = return []
 -- A single course prerequisite.
-reqToStmts' _ parentID (J name2 _) = do       
-    prereq <- makeNode (pack name2)
-    edge <- makeEdge (nodeID prereq) parentID
-    return [DN prereq, DE edge]
+reqToStmts' options parentID (J name2 _) = do
+    if pickCourse options (pack name2) then do
+        prereq <- makeNode (pack name2)
+        edge <- makeEdge (nodeID prereq) parentID
+        return [DN prereq, DE edge]
+    else
+        return []
         
 -- Two or more required prerequisites.
 reqToStmts' options parentID (AND reqs) = do
@@ -140,7 +165,7 @@ reqToStmts' options parentID (FCES creds req) = do
     fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs")
     edge <- makeEdge (nodeID fceNode) parentID
     prereqStmts <- reqToStmts' options (nodeID fceNode) req
-    return $  [DN fceNode, DE edge] ++ prereqStmts
+    return $ [DN fceNode, DE edge] ++ prereqStmts
 
 atLeastTwoCourseReqs :: [Req] -> Bool
 atLeastTwoCourseReqs reqs = Prelude.length (Prelude.filter isNotRawOrNone reqs) > 1
