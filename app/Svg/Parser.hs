@@ -231,7 +231,7 @@ parsePath key tags =
     concatMap (parsePathHelper key trans edgeInfo) (filter (TS.isTagOpenName "path") tags)
     where
         trans = getTransform $ head tags
-        edgeInfo = 
+        edgeInfo =
             if (length splitArr) == 2
                 then (T.pack (splitArr !! 0), T.pack (splitArr !! 1)) -- not super type-safe
                 else ("", "")
@@ -256,12 +256,21 @@ parsePathHelper key trans (src, dst) pathTag =
     else [updatePath fillAttr $
             Path key
                 ""
-                realD
+                (removeDups realD)
                 ""
                 ""
                 isRegion
                 src
                 dst]
+    where
+        -- Remove consecutive duplicated points
+        removeDups :: Eq a => [a] -> [a]
+        removeDups [] = []
+        removeDups [p] = [p]
+        removeDups (x:xs) =
+            if x == head xs
+                then removeDups xs
+                else x : removeDups xs
 
 
 -- | Create an ellipse from an open ellipse tag.
