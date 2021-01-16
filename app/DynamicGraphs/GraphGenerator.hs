@@ -29,6 +29,7 @@ import qualified Control.Monad.State as State
 import Control.Monad (mapM, liftM)
 import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
 import Prelude hiding (last)
+import Data.Maybe (mapMaybe)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
@@ -84,14 +85,14 @@ pickCourseByDepartment options name =
 pickCourseByLocation :: GraphOptions -> Text -> Bool
 pickCourseByLocation options name =
     Prelude.null (location options) ||
-    courseLocation `elem` map locationNum (location options)
+    courseLocation `elem` mapMaybe locationNum (location options)
     where
         courseLocation = last name
-        locationNum l= case l of
-            "utsg" -> '1'
-            "utsc" -> '3'
-            "utm"  -> '5'
-            _ -> 'e' -- TODO we need to validate input
+        locationNum l = case l of
+            "utsg" -> Just '1'
+            "utsc" -> Just '3'
+            "utm" -> Just '5'
+            _ -> Nothing
 
 -- | Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects.
