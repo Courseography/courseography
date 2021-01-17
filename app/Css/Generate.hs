@@ -62,10 +62,9 @@ generateStyles = do
         fontWeight bolder
     "#submit" ? do
         textAlign $ alignSide sideCenter
-    "#submit" ? do
         fontWeight bolder
         color purple10
-        button ? do
+        "#submit-text" ? do
             color "#d9e4ee"
             paddingTop (px 5)
             textAlign $ alignSide sideCenter
