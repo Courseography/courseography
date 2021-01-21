@@ -93,6 +93,7 @@ Graph json
     title T.Text
     width Double
     height Double
+    dynamic Bool
     deriving Show
 
 Text json
