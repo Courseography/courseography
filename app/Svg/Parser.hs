@@ -61,7 +61,7 @@ parsePrebuiltSvgs = runSqlite databasePath $ do
 
 parseDynamicSvg :: T.Text -> T.Text -> IO ()
 parseDynamicSvg graphName graphContents =
-    runSqlite databasePath $ performParseFromMemory graphName graphContents
+    runSqlite databasePath $ performParseFromMemory graphName graphContents True
 
 -- | The starting point for parsing a graph with a given title and file.
 performParse :: T.Text -- ^ The title of the graph.
@@ -70,11 +70,14 @@ performParse :: T.Text -- ^ The title of the graph.
 performParse graphName inputFilename = do
     liftIO . print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
     graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
-    performParseFromMemory graphName graphFile
+    performParseFromMemory graphName graphFile False
 
-performParseFromMemory :: T.Text -> T.Text -> SqlPersistM ()
-performParseFromMemory graphName graphSvg = do
-    key <- insertGraph graphName graphWidth graphHeight
+performParseFromMemory :: T.Text -- ^ The title of the graph
+                       -> T.Text -- ^ Filename of the SVG to parse
+                       -> Bool -- ^ True if SVG is dynamically generated
+                       -> SqlPersistM ()
+performParseFromMemory graphName graphSvg isDynamic = do
+    key <- insertGraph graphName graphWidth graphHeight isDynamic
     let parsedGraph = parseSvg key graphSvg
     insertElements parsedGraph
         where (graphWidth, graphHeight) = parseSizeFromSvg graphSvg
