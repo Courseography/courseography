@@ -30,6 +30,8 @@ import Control.Monad (mapM, liftM)
 import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
 import Prelude hiding (last)
 import Data.Maybe (mapMaybe)
+import Data.Graph (Tree(Node))
+import Data.Tree (flatten)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
@@ -101,84 +103,76 @@ reqToStmts options (name, req) = do
     if pickCourse options name
         then do 
             node <- makeNode name
-            stmts <- reqToStmts' options (nodeID node) req
-            return $ DN node:stmts
+            --stmts <- reqToStmts' options (nodeID node) req
+            stmts <- reqToStmtsTree options (nodeID node) req
+            return $ DN node:(concat (flatten stmts))
         else return []
 
-reqToStmts' :: GraphOptions -> Text -> Req -> State GeneratorState [DotStatement Text]
--- No prerequisites.
-reqToStmts' _ _ NONE = return []
--- A single course prerequisite.
-reqToStmts' options parentID (J name2 _) = do
+filterEmptyNodes :: [Tree [a]] -> [Tree [a]]
+filterEmptyNodes [] = []
+filterEmptyNodes ((Node [] []):xs) = filterEmptyNodes xs
+filterEmptyNodes (x:xs) = x:filterEmptyNodes xs
+
+reqToStmtsTree :: GraphOptions 
+               -> Text 
+               -> Req 
+               -> State GeneratorState (Tree [DotStatement Text])
+reqToStmtsTree _ _ NONE = return (Node [] [])
+reqToStmtsTree options parentID (J name2 _) = do
     if pickCourse options (pack name2) then do
         prereq <- makeNode (pack name2)
         edge <- makeEdge (nodeID prereq) parentID
-        return [DN prereq, DE edge]
+        return (Node [DN prereq, DE edge] [])
     else
-        return []
-        
+        return (Node [] [])
 -- Two or more required prerequisites.
-reqToStmts' options parentID (AND reqs) = do
-    if includeRaws options || atLeastTwoCourseReqs reqs
-        then do
-            andNode <- makeBool "and"
-            edge <- makeEdge (nodeID andNode) parentID
-            prereqStmts <- mapM (reqToStmts' options (nodeID andNode)) reqs
-            let mergedStmts = concat prereqStmts
-            if Prelude.length mergedStmts > 1
-                then return $ [DN andNode, DE edge] ++ concat prereqStmts
-                else return []
-        else do
-            prereqStmts <- mapM (reqToStmts' options parentID) reqs
-            return $ concat prereqStmts
+reqToStmtsTree options parentID (AND reqs) = do
+    andNode <- makeBool "and"
+    edge <- makeEdge (nodeID andNode) parentID
+    prereqStmts <- mapM (reqToStmtsTree options (nodeID andNode)) reqs
+    let filteredStmts = filterEmptyNodes prereqStmts
+    case filteredStmts of
+        [] -> return $ Node [] []        
+        [Node (DN node:_) xs] -> do -- hacky
+            newEdge <- makeEdge (nodeID node) parentID -- make new edge with parent id and single child id
+            return $ Node [DN node, DE newEdge] xs
+        _ -> return $ Node [DN andNode, DE edge] filteredStmts
 -- A choice from two or more prerequisites.
-reqToStmts' options parentID (OR reqs) = do
-    if includeRaws options || atLeastTwoCourseReqs reqs
-        then do
-            orNode <- makeBool "or"
-            edge <- makeEdge (nodeID orNode) parentID
-            prereqStmts <- mapM (reqToStmts' options (nodeID orNode)) reqs
-            let mergedStmts = concat prereqStmts
-            if Prelude.length mergedStmts > 1
-                then return $ [DN orNode, DE edge] ++ concat prereqStmts
-                else return []
-        else do
-            prereqStmts <- mapM (reqToStmts' options parentID) reqs
-            return $ concat prereqStmts
+reqToStmtsTree options parentID (OR reqs) = do
+    orNode <- makeBool "or"
+    edge <- makeEdge (nodeID orNode) parentID
+    prereqStmts <- mapM (reqToStmtsTree options (nodeID orNode)) reqs
+    let filteredStmts = filterEmptyNodes prereqStmts
+    case filteredStmts of
+        [] -> return $ Node [] []
+        [Node (DN node:_) xs] -> do -- hacky
+            newEdge <- makeEdge (nodeID node) parentID -- make new edge with parent id and single child id
+            return $ Node [DN node, DE newEdge] xs
+        _  -> return $ Node [DN orNode, DE edge] filteredStmts
 -- A prerequisite with a grade requirement.
-reqToStmts' options parentID (GRADE description req) = do
+reqToStmtsTree options parentID (GRADE description req) = do
     if includeGrades options then do 
         gradeNode <- makeNode (pack description)
         edge <- makeEdge (nodeID gradeNode) parentID
-        prereqStmts <- reqToStmts' options (nodeID gradeNode) req
-        return $ [DN gradeNode, DE edge] ++ prereqStmts
-    else reqToStmts' options parentID req
+        prereqStmt <- reqToStmtsTree options (nodeID gradeNode) req        
+        return $ Node [DN gradeNode, DE edge] [prereqStmt]
+    else reqToStmtsTree options parentID req
 -- A raw string description of a prerequisite.
-reqToStmts' options parentID (RAW rawText) =
+reqToStmtsTree options parentID (RAW rawText) =
     if not (includeRaws options) || "High school" `isInfixOf` pack rawText || rawText == ""
-        then return []
+        then return $ Node [] []
         else do
             prereq <- makeNode (pack rawText)
             edge <- makeEdge (nodeID prereq) parentID
-            return [DN prereq, DE edge]
+            return $ Node [DN prereq, DE edge] []
 --A prerequisite concerning a given number of earned credits
-reqToStmts' options parentID (FCES creds req) = do
+reqToStmtsTree options parentID (FCES creds req) = do
     fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs")
     edge <- makeEdge (nodeID fceNode) parentID
-    prereqStmts <- reqToStmts' options (nodeID fceNode) req
-    return $ [DN fceNode, DE edge] ++ prereqStmts
+    prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
+    return $ Node [DN fceNode, DE edge] [prereqStmts]
 
-atLeastTwoCourseReqs :: [Req] -> Bool
-atLeastTwoCourseReqs reqs = Prelude.length (Prelude.filter isNotRawOrNone reqs) > 1
-    where
-        isNotRawOrNone (RAW _) = False
-        isNotRawOrNone NONE = False
-        isNotRawOrNone _ = True
-{- 
-atLeastTwoCourseReturnsReqs :: [[DotStatement Text]] -> Bool
-atLeastTwoCourseReturnsReqs stmts = 
-    let courseCount = foldr (\sum stmtArr -> if null stmtArr then sum else sum + 1) 0 stmts
--}
+
 prefixedByOneOf :: Text -> [Text] -> Bool 
 prefixedByOneOf name = any (flip isPrefixOf name)
 
