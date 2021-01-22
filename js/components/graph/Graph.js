@@ -89,7 +89,7 @@ export default class Graph extends React.Component {
 
   componentWillUpdate(prevProps) {
     if (this.state.currFocus !== prevProps.currFocus) {
-      this.setState({ currFocus: prevProps.currFocus }, () => {  
+      this.setState({ currFocus: prevProps.currFocus }, () => {
         let focuses = this.state.currFocus === null ? [] : focusInfo[this.state.currFocus + "FocusList"];
         this.highlightFocuses(focuses);
       });
@@ -210,7 +210,9 @@ export default class Graph extends React.Component {
           totalFCEs += 0.5;
         }
       });
-      this.props.setFCECount(totalFCEs);
+      if (this.props.setFCECount) {
+        this.props.setFCECount(totalFCEs);
+      }
     }
   }
 
@@ -788,4 +790,10 @@ Graph.propTypes = {
   initialDrawMode: PropTypes.string,
   setFCECount: PropTypes.func,
   start_blank: PropTypes.bool
+};
+
+Graph.defaultProps = {
+  currFocus: null,
+  graphName: '',
+  start_blank: false
 };

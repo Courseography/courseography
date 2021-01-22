@@ -31,7 +31,7 @@ export default class Container extends React.Component {
         throw "No graphs in database";
       }
     )
-    
+
     // Need to use jQuery because nav-export is still a Haskell generated HTML component
     $("#nav-export").click(() => {
       this.graph.current.openExportModal();
