@@ -235,6 +235,7 @@ graphContainer = do
         display inlineBlock
         width (px 25)
         height (px 25)
+        position absolute
         ":hover" & do
             backgroundColor purple6
             fontColor white

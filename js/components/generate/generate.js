@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import Graph from "../graph/Graph";
+
 class Generate extends React.Component {
   constructor(props) {
     super(props);
@@ -14,20 +16,21 @@ class Generate extends React.Component {
       includeRaws: false,
       includeGrades: false
     };
+
+    this.graph = React.createRef();
   }
 
-  generateGraph = () => {
+  generateGraph = (event) => {
+    event.preventDefault();
     // check for invalid input (courses, departments, layers, faculties, campuses)?
     // remove extra whitespace from input arrays
 
-    const courseInputs =  document.getElementById("generateForm").elements[0].value;    
+    const courseInputs = document.getElementById("generateForm").elements[0].value;
     if (courseInputs === "") {
       alert("Cannot generate graph -- no courses entered!");
-    } 
-    
-    else {      
+    } else {
       this.state.courseInputs = courseInputs.split(",");
-      
+
       const excludedCourses = document.getElementById("generateForm").elements[1].value;
       if (excludedCourses != "") {
         this.state.excludedCourses = excludedCourses.split(",");
@@ -73,7 +76,7 @@ class Generate extends React.Component {
 
       this.state.includeRaws = document.getElementById("generateForm").elements[6].checked;
       this.state.includeGrades = document.getElementById("generateForm").elements[7].checked;
-      
+
       this.getGraph();
     }
   }
@@ -90,7 +93,6 @@ class Generate extends React.Component {
       "includeRaws": this.state.includeRaws,
       "includeGrades": this.state.includeGrades
     }
-    console.log('data :>> ', data);
 
     const putData = {
       method: "PUT",
@@ -98,22 +100,62 @@ class Generate extends React.Component {
        "Content-Type": "application/json"
       },
       body: JSON.stringify(data) // We send data in JSON format
-     }
-    
+    };
+
     fetch("graph-generate", putData)
       .then(res => res.json())
-        .then((graph) => {
-          console.log("graph :>> ", graph);
-        })
-        .catch((err) => {
-          console.log("err :>> ", err);;
-        }
-      )
+      .then(data => {
+        var regionsList = [];
+        var nodesList = [];
+        var hybridsList = [];
+        var boolsList = [];
+        var edgesList = [];
+
+        var labelsList = data.texts.filter(function(entry) {
+          return entry.rId.startsWith("tspan");
+        });
+
+        data.shapes.forEach(function(entry) {
+          if (entry.type_ === "Node") {
+            nodesList.push(entry);
+          } else if (entry.type_ === "Hybrid") {
+            hybridsList.push(entry);
+          } else if (entry.type_ === "BoolNode") {
+            boolsList.push(entry);
+          }
+        });
+
+        data.paths.forEach(function(entry) {
+          if (entry.isRegion) {
+            regionsList.push(entry);
+          } else {
+            edgesList.push(entry);
+          }
+        });
+        this.graph.current.setState({
+          labelsJSON: labelsList,
+          regionsJSON: regionsList,
+          nodesJSON: nodesList,
+          hybridsJSON: hybridsList,
+          boolsJSON: boolsList,
+          edgesJSON: edgesList,
+          width: data.width,
+          height: data.height,
+          zoomFactor: 1,
+          horizontalPanFactor: 0,
+          verticalPanFactor: 0,
+        });
+      })
+      .catch((err) => {
+        console.log("err :>> ", err);;
+      }
+    )
   }
 
-  render() { 
+  render() {
     return (
-      <div id="generateDiv">
+      <div style={{'display': 'flex', 'flexDirection': 'row'}}>
+      <div id="generateDiv" style={{'position': 'initial'}}>
         <form id="generateForm">
           <div id="header">
             <div id="header-title"> PREREQUISITE GENERATOR</div>
@@ -129,7 +171,7 @@ class Generate extends React.Component {
               <label> Exclude Courses: </label>
               <input type="text" placeholder="..."/>
             </li>
-            
+
             <li>
               <label> Include Departments: </label>
               <input type="text"  placeholder="CSC, MAT"/>
@@ -143,12 +185,12 @@ class Generate extends React.Component {
             <li>
               <label> Number of layers: </label>
               <input type="text"  placeholder="0"/>
-            </li> 
+            </li>
 
             <li>
               <label> Include Faculties: </label>
               <input type="text"  placeholder="..."/>
-            </li>  
+            </li>
 
             <li>
               <label> Include Campuses: </label>
@@ -167,17 +209,22 @@ class Generate extends React.Component {
 
           </ul>
 
-          <div id="submit" onClick={() => this.generateGraph()}>
-            <div id="submit-text" type="button"> SUBMIT </div>
-          </div>
+          <button id="submit" onClick={this.generateGraph}>
+            SUBMIT
+          </button>
       </form>
     </div>
-    
+
+    <Graph
+        ref={this.graph}
+        start_blank={true}
+    />
+    </div>
     )
   }
 }
 
 ReactDOM.render(
   <Generate />,
-  document.getElementById("generateDiv")
+  document.getElementById("generateRoot")
 );

@@ -14,11 +14,12 @@ import Css.Constants
 -- |Defines the CSS for the generate page.
 generateStyles :: Css
 generateStyles = do
+    "#generateRoot #react-graph" ? do
+        position static
     "#generateDiv" ? do
         backgroundColor purple10
         width (px 500)
         height100
-        position absolute
         ul ? do
             paddingLeft (px 5)
             "list-style-type" -: "none"
