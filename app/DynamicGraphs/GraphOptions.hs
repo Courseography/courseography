@@ -10,7 +10,7 @@ data GraphOptions =
                    maxDepth :: Int,          -- total recursive depth to recurse on (depth of the overall graph)
                    courseNumPrefix :: [Int], -- filter based on course number (most useful for filtering based on year)
                    distribution :: [T.Text], -- distribution to include: like "artsci", or "engineering"
-                   location :: [T.Text],     -- location of courses to include: like "st_george", or "scarborough"
+                   location :: [T.Text],     -- location of courses to include: like "utsg", or "utsc"
                    includeRaws :: Bool,      -- True to include nodes which are raw values
                    includeGrades :: Bool     -- True to include grade nodes
                 } deriving (Show)
