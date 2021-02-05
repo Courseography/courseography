@@ -103,19 +103,13 @@ reqToStmts options (name, req) = do
     if pickCourse options name
         then do 
             node <- makeNode name
-            --stmts <- reqToStmts' options (nodeID node) req
             stmts <- reqToStmtsTree options (nodeID node) req
-            return $ DN node:(concat (flatten stmts))
+            return $ DN node:(concat $ flatten stmts)
         else return []
 
-filterEmptyNodes :: [Tree [a]] -> [Tree [a]]
-filterEmptyNodes [] = []
-filterEmptyNodes ((Node [] []):xs) = filterEmptyNodes xs
-filterEmptyNodes (x:xs) = x:filterEmptyNodes xs
-
-reqToStmtsTree :: GraphOptions 
-               -> Text 
-               -> Req 
+reqToStmtsTree :: GraphOptions -- ^ Options to toggle dynamic graph
+               -> Text -- ^ Name of parent course
+               -> Req  -- ^ Requirement to generate dep tree for
                -> State GeneratorState (Tree [DotStatement Text])
 reqToStmtsTree _ _ NONE = return (Node [] [])
 reqToStmtsTree options parentID (J name2 _) = do
@@ -132,9 +126,10 @@ reqToStmtsTree options parentID (AND reqs) = do
     prereqStmts <- mapM (reqToStmtsTree options (nodeID andNode)) reqs
     let filteredStmts = filterEmptyNodes prereqStmts
     case filteredStmts of
-        [] -> return $ Node [] []        
-        [Node (DN node:_) xs] -> do -- hacky
-            newEdge <- makeEdge (nodeID node) parentID -- make new edge with parent id and single child id
+        [] -> return $ Node [] []
+        [Node (DN node:_) xs] -> do
+            -- make new edge with parent id and single child id
+            newEdge <- makeEdge (nodeID node) parentID
             return $ Node [DN node, DE newEdge] xs
         _ -> return $ Node [DN andNode, DE edge] filteredStmts
 -- A choice from two or more prerequisites.
@@ -145,8 +140,9 @@ reqToStmtsTree options parentID (OR reqs) = do
     let filteredStmts = filterEmptyNodes prereqStmts
     case filteredStmts of
         [] -> return $ Node [] []
-        [Node (DN node:_) xs] -> do -- hacky
-            newEdge <- makeEdge (nodeID node) parentID -- make new edge with parent id and single child id
+        [Node (DN node:_) xs] -> do
+            -- make new edge with parent id and single child id
+            newEdge <- makeEdge (nodeID node) parentID
             return $ Node [DN node, DE newEdge] xs
         _  -> return $ Node [DN orNode, DE edge] filteredStmts
 -- A prerequisite with a grade requirement.
@@ -154,7 +150,7 @@ reqToStmtsTree options parentID (GRADE description req) = do
     if includeGrades options then do 
         gradeNode <- makeNode (pack description)
         edge <- makeEdge (nodeID gradeNode) parentID
-        prereqStmt <- reqToStmtsTree options (nodeID gradeNode) req        
+        prereqStmt <- reqToStmtsTree options (nodeID gradeNode) req
         return $ Node [DN gradeNode, DE edge] [prereqStmt]
     else reqToStmtsTree options parentID req
 -- A raw string description of a prerequisite.
@@ -203,6 +199,11 @@ makeEdge id1 id2 = return $ DotEdge id1 id2 [ID (id1 `mappend` "|" `mappend` id2
 
 mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show counter))
+
+filterEmptyNodes :: [Tree [a]] -> [Tree [a]]
+filterEmptyNodes [] = []
+filterEmptyNodes ((Node [] []):xs) = filterEmptyNodes xs
+filterEmptyNodes (x:xs) = x:filterEmptyNodes xs
 
 -- ** Graphviz configuration
 
