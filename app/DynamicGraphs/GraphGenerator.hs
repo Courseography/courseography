@@ -22,16 +22,17 @@ import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
 import Data.Hash.MD5 (Str(Str), md5s)
-import Data.Text.Lazy (Text, pack, isPrefixOf, isInfixOf, last)
+import Data.Text.Lazy (Text, pack, isPrefixOf, isInfixOf, last, take)
 import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
 import Control.Monad (mapM, liftM)
 import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
 import Prelude hiding (last)
-import Data.Maybe (mapMaybe)
 import Data.Graph (Tree(Node))
 import Data.Foldable (toList)
+import Data.Maybe (fromMaybe, mapMaybe)
+import Data.List (elemIndex)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
@@ -96,13 +97,23 @@ pickCourseByLocation options name =
             "utm" -> Just '5'
             _ -> Nothing
 
+nodeColor :: GraphOptions -> Text -> Color
+nodeColor options name = colors !! depIndex
+    where colors :: [Color]
+          colors = cycle $ map toColor
+            [Salmon, CadetBlue, Bisque, Aquamarine, OliveDrab, Violet]
+          depIndex :: Int
+          depIndex = fromMaybe 0 (elemIndex courseDep (departments options))
+          courseDep :: Text
+          courseDep = Data.Text.Lazy.take 3 name
+
 -- | Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects.
 reqToStmts :: GraphOptions -> (Text, Req) -> State GeneratorState [DotStatement Text]
 reqToStmts options (name, req) = do
     if pickCourse options name
         then do 
-            node <- makeNode name
+            node <- makeNode name $ Just (nodeColor options name)
             stmts <- reqToStmtsTree options (nodeID node) req
             return $ DN node:concat (toList stmts)
         else return []
@@ -113,8 +124,9 @@ reqToStmtsTree :: GraphOptions -- ^ Options to toggle dynamic graph
                -> State GeneratorState (Tree [DotStatement Text])
 reqToStmtsTree _ _ NONE = return (Node [] [])
 reqToStmtsTree options parentID (J name2 _) = do
-    if pickCourse options (pack name2) then do
-        prereq <- makeNode (pack name2)
+    let name = pack name2
+    if pickCourse options name then do
+        prereq <- makeNode name $ Just (nodeColor options name)
         edge <- makeEdge (nodeID prereq) parentID
         return (Node [DN prereq, DE edge] [])
     else
@@ -148,7 +160,7 @@ reqToStmtsTree options parentID (OR reqs) = do
 -- A prerequisite with a grade requirement.
 reqToStmtsTree options parentID (GRADE description req) = do
     if includeGrades options then do 
-        gradeNode <- makeNode (pack description)
+        gradeNode <- makeNode (pack description) Nothing
         edge <- makeEdge (nodeID gradeNode) parentID
         prereqStmt <- reqToStmtsTree options (nodeID gradeNode) req
         return $ Node [DN gradeNode, DE edge] [prereqStmt]
@@ -158,12 +170,12 @@ reqToStmtsTree options parentID (RAW rawText) =
     if not (includeRaws options) || "High school" `isInfixOf` pack rawText || rawText == ""
         then return $ Node [] []
         else do
-            prereq <- makeNode (pack rawText)
+            prereq <- makeNode (pack rawText) Nothing
             edge <- makeEdge (nodeID prereq) parentID
             return $ Node [DN prereq, DE edge] []
 --A prerequisite concerning a given number of earned credits
 reqToStmtsTree options parentID (FCES creds req) = do
-    fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs")
+    fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs") Nothing
     edge <- makeEdge (nodeID fceNode) parentID
     prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
     return $ Node [DN fceNode, DE edge] [prereqStmts]
@@ -172,14 +184,19 @@ reqToStmtsTree options parentID (FCES creds req) = do
 prefixedByOneOf :: Text -> [Text] -> Bool 
 prefixedByOneOf name = any (flip isPrefixOf name)
 
-makeNode :: Text -> State GeneratorState (DotNode Text)
-makeNode name = do
+makeNode :: Text -> Maybe Color -> State GeneratorState (DotNode Text)
+makeNode name nodeCol = do
     GeneratorState i nodesMap <- State.get
     case Map.lookup name nodesMap of
         Nothing -> do
             let nodeId = mappendTextWithCounter name i
+                actualColor = case nodeCol of
+                    Nothing -> toColor Gray
+                    Just c -> c
                 node = DotNode nodeId
-                               [AC.Label $ toLabelValue name, ID nodeId]
+                               [AC.Label $ toLabelValue name,
+                                ID nodeId,
+                                FillColor $ toColorList [actualColor]]
                 nodesMap' = Map.insert name node nodesMap
             State.put (GeneratorState (i + 1) nodesMap')
             return node
