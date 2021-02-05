@@ -17,6 +17,7 @@ generateStyles = do
     "#generateRoot #react-graph" ? do
         position static
     "#generateDiv" ? do
+        color "#d9e4ee"
         backgroundColor purple10
         width (px 500)
         height100
@@ -24,7 +25,7 @@ generateStyles = do
             paddingLeft (px 5)
             "list-style-type" -: "none"
             li ? do
-                fontSize (px 10)
+                fontSize (pt 12)
                 color "#d9e4ee"
                 paddingLeft (px 23)
                 paddingRight (px 10)
@@ -32,20 +33,11 @@ generateStyles = do
             color purple10
             backgroundColor "#d9e4ee"
             textAlign $ alignSide sideCenter
-            paddingTop (px 5)
-            paddingBottom (px 5)
-            paddingLeft (px 70)
-            paddingRight (px 70)
             border solid (px 5) purple8
-    "#header" ? do
-        backgroundColor purple10
-        width (px 160)
+            "type=text" & do
+                width (pct 90)
     "#header-title" ? do
-        color "#d9e4ee"
-        paddingTop (px 5)
-        textAlign $ alignSide sideCenter
-        fontSize (px 30)
-        fontWeight bold
+        fontSize (em 1.2)
     "main-filter" ? do
         textAlign $ alignSide sideCenter
         marginTop (px 30)
@@ -53,21 +45,6 @@ generateStyles = do
             border solid (px 5) purple10
     "#filter-title" ? do
         color "#d9e4ee"
-        paddingLeft (px 23)
-        paddingTop (px 10)
-        textAlign $ alignSide sideCenter
         fontSize (px 20)
-        fontWeight bold
-    "#header" ? do
-        color purple10
-        fontWeight bolder
     "#submit" ? do
-        textAlign $ alignSide sideCenter
-        fontWeight bolder
         color purple10
-        "#submit-text" ? do
-            color "#d9e4ee"
-            paddingTop (px 5)
-            textAlign $ alignSide sideCenter
-            fontSize (px 30)
-            fontWeight bold

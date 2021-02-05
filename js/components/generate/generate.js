@@ -7,14 +7,13 @@ class Generate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      courseInputs: [],
-      excludedCourses: [],
-      departments: [],
-      layers: 0,
-      faculties: [],
-      campuses: [],
-      includeRaws: false,
-      includeGrades: false
+      courses: null,
+      taken: null,
+      departments: null,
+      maxDepth: null,
+      location: null,
+      includeRaws: null,
+      includeGrades: null
     };
 
     this.graph = React.createRef();
@@ -22,76 +21,51 @@ class Generate extends React.Component {
 
   generateGraph = (event) => {
     event.preventDefault();
-    // check for invalid input (courses, departments, layers, faculties, campuses)?
-    // remove extra whitespace from input arrays
 
-    const courseInputs = document.getElementById("generateForm").elements[0].value;
-    if (courseInputs === "") {
+    let newState = {};
+
+    const courses = document.getElementById("courses").value;
+    if (courses === "") {
       alert("Cannot generate graph -- no courses entered!");
-    } else {
-      this.state.courseInputs = courseInputs.split(",");
-
-      const excludedCourses = document.getElementById("generateForm").elements[1].value;
-      if (excludedCourses != "") {
-        this.state.excludedCourses = excludedCourses.split(",");
-      } else {
-        this.state.excludedCourses = [];
-      }
-
-      let departments = document.getElementById("generateForm").elements[2].value;
-      if (departments != "") {
-        this.state.departments = departments.split(",");
-      // when no departments are entered, default is to use the departments associated with course inputs
-      } else {
-        departments = [];
-        for (let i = 0; i < this.state.courseInputs.length; i++) {
-          const newDepartment = this.state.courseInputs[i].trim().slice(0,3);
-          departments.push(newDepartment);
-          }
-        // removes duplicate departments
-        const distinctDepartments = new Set(departments);
-        this.state.departments = [...distinctDepartments];
-      }
-
-      const layers = document.getElementById("generateForm").elements[3].value;
-      if (layers != "") {
-        this.state.layers = parseInt(layers);
-      } else {
-        this.state.layers = 0;
-      }
-
-      const faculties = document.getElementById("generateForm").elements[4].value;
-      if (faculties != "") {
-        this.state.faculties = faculties.split(",");
-      } else {
-        this.state.faculties = [];
-      }
-
-      const campuses = document.getElementById("generateForm").elements[5].value;
-      if (campuses != "") {
-        this.state.campuses = campuses.split(",");
-      } else {
-        this.state.campuses = [];
-      }
-
-      this.state.includeRaws = document.getElementById("generateForm").elements[6].checked;
-      this.state.includeGrades = document.getElementById("generateForm").elements[7].checked;
-
-      this.getGraph();
+      return;
     }
+
+    newState["courses"] = courses.split(",");
+
+    const taken = document.getElementById("excluded").value;
+    if (taken !== "") {
+      newState["taken"] = taken.split(",");
+    }
+
+    let departments = document.getElementById("departments").value;
+    if (departments !== "") {
+      newState["departments"] = departments.split(",");
+    }
+
+    const maxDepth = document.getElementById("maxDepth").value;
+    if (maxDepth !== "") {
+      newState["maxDepth"] = maxDepth;
+    }
+
+    const location = Array.from(document.querySelectorAll('#location option:checked')).map(el => el.value);
+    if (location.length !== 0) {
+      newState["location"] = location
+    }
+
+    newState["includeRaws"] = document.getElementById("includeRaws").checked;
+    newState["includeGrades"] = document.getElementById("includeGrades").checked;
+
+    this.setState(newState, this.getGraph);
   }
 
   getGraph = () => {
     // temporary data until we can parse user input
-    const data = {
-      "courses": this.state.courseInputs,
-      "excludedCourses": this.state.excludedCourses,
-      "departments": this.state.departments,
-      "layers": this.state.layers,
-      "faculties": this.state.faculties,
-      "campuses": this.state.campuses,
-      "includeRaws": this.state.includeRaws,
-      "includeGrades": this.state.includeGrades
+    const data = {};
+
+    for (let key in this.state) {
+      if (this.state[key] !== null) {
+        data[key] = this.state[key];
+      }
     }
 
     const putData = {
@@ -156,61 +130,54 @@ class Generate extends React.Component {
     return (
       <div style={{'display': 'flex', 'flexDirection': 'row'}}>
       <div id="generateDiv" style={{'position': 'initial'}}>
+        <h1 id="header-title">Generate Prerequisite Graph</h1>
         <form id="generateForm">
-          <div id="header">
-            <div id="header-title"> PREREQUISITE GENERATOR</div>
             <div id="main-filter">
-              <input type="text" placeholder="Enter Courses"/>
+              <label htmlFor="courses">Courses:</label>
+              <input id="courses" name="courses" type="text"/>
             </div>
-          </div>
 
-          <p id="filter-title">OPTIONAL FILTERS</p>
+          <h2 id="filter-title">Optional filters</h2>
 
           <ul>
             <li>
-              <label> Exclude Courses: </label>
-              <input type="text" placeholder="..."/>
+              <label htmlFor="excluded">Exclude Courses:</label>
+              <input id="excluded" name="excluded" type="text"/>
             </li>
 
             <li>
-              <label> Include Departments: </label>
-              <input type="text"  placeholder="CSC, MAT"/>
+              <label htmlFor="departments">Include Departments:</label>
+              <input id="departments" name="departments" type="text" placeholder="CSC, MAT, STA"/>
             </li>
 
             <li>
-              <label> How many layers of courses from other department(s) do you want to include? </label>
-              <input  placeholder="..."/>
+              <label htmlFor="maxDepth">Depth of prerequisite chain to include:</label>
+              <input id="maxDepth" name="maxDepth" type="number" min="0" step="1"/>
             </li>
 
             <li>
-              <label> Number of layers: </label>
-              <input type="text"  placeholder="0"/>
+              <label htmlFor="location">Campus:</label>
+              <select id="location" name="location" multiple>
+                <option value="utsg" selected>St. George</option>
+                <option value="utm">Mississauga</option>
+                <option value="utsc">Scarborough</option>
+              </select>
             </li>
 
             <li>
-              <label> Include Faculties: </label>
-              <input type="text"  placeholder="..."/>
+              <label htmlFor="includeRaws">Include non-course prerequisites:</label>
+              <input id="includeRaws" name="includeRaws" type="checkbox" />
             </li>
 
             <li>
-              <label> Include Campuses: </label>
-              <input type="text"  placeholder="..."/>
-            </li>
-
-            <li>
-              <label> Exclude courses external to campuses: </label>
-              <input type="checkbox" />
-            </li>
-
-            <li>
-              <label> Exclude grade requirements: </label>
-              <input type="checkbox" />
+              <label htmlFor="includeGrades">Include grade-based prerequisites:</label>
+              <input id="includeGrades" name="includeGrades" type="checkbox" />
             </li>
 
           </ul>
 
           <button id="submit" onClick={this.generateGraph}>
-            SUBMIT
+            Submit
           </button>
       </form>
     </div>

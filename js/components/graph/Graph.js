@@ -94,7 +94,7 @@ export default class Graph extends React.Component {
         this.highlightFocuses(focuses);
       });
     }
-    if (this.state.graphName !== prevProps.graphName) {
+    if (!!this.state.graphName && this.state.graphName !== prevProps.graphName) {
       this.getGraph();
     }
   }
@@ -229,11 +229,13 @@ export default class Graph extends React.Component {
     var currentNode = this.nodes.current[courseId];
     var wasSelected = currentNode.state.selected;
     currentNode.toggleSelection(this);
-    if (wasSelected) {
-      // TODO: Differentiate half- and full-year courses
-      this.props.incrementFCECount(-0.5);
-    } else {
-      this.props.incrementFCECount(0.5);
+    if (typeof this.props.incrementFCECount === 'function') {
+      if (wasSelected) {
+        // TODO: Differentiate half- and full-year courses
+        this.props.incrementFCECount(-0.5);
+      } else {
+        this.props.incrementFCECount(0.5);
+      }
     }
   };
 
