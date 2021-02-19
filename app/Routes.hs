@@ -1,6 +1,7 @@
 module Routes
-    (routes) where
+    (routeResponses) where
 
+import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
 import Happstack.Server hiding (host)
 import Response
@@ -9,8 +10,15 @@ import Database.CourseInsertion (saveGraphJSON)
 import Data.Text.Lazy (Text)
 import DynamicGraphs.WriteRunDot (findAndSavePrereqsResponse)
 
-routes :: String -> Text -> Text -> [ (String, ServerPart Response)]
-routes staticDir aboutContents privacyContents = [
+routeResponses :: String -> Text -> Text -> ServerPartT IO Response
+routeResponses staticDir aboutContents privacyContents =
+    msum (map strictMatchDir (routes aboutContents privacyContents) ++
+         [  dir "static" $ serveDirectory DisableBrowsing [] staticDir,
+            nullDir >> seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
+            notFoundResponse])
+
+routes :: Text -> Text -> [ (String, ServerPart Response)]
+routes aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", graphResponse),
     ("graph-generate", do method PUT
@@ -22,7 +30,6 @@ routes staticDir aboutContents privacyContents = [
     ("draw", drawResponse),
     ("about", aboutResponse aboutContents),
     ("privacy", privacyResponse privacyContents),
-    ("static", serveDirectory DisableBrowsing [] staticDir),
     ("course", lookText' "name" >>= retrieveCourse),
     ("all-courses", liftIO allCourses),
     ("graphs", liftIO queryGraphs),
@@ -35,3 +42,9 @@ routes staticDir aboutContents privacyContents = [
     ("loading", lookText' "size" >>= loadingResponse),
     ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
     ]
+
+strictMatchDir :: (String, ServerPart Response) -> ServerPartT IO Response
+strictMatchDir (pathname, response) = do
+    noTrailingSlash -- enforce no trailing slash in the URI
+    dir pathname nullDir -- enforce that no segments occur after pathname
+    response
