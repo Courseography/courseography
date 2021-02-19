@@ -13,9 +13,9 @@ import DynamicGraphs.WriteRunDot (findAndSavePrereqsResponse)
 routeResponses :: String -> Text -> Text -> ServerPartT IO Response
 routeResponses staticDir aboutContents privacyContents =
     msum (map strictMatchDir (routes aboutContents privacyContents) ++
-         [  dir "static" $ serveDirectory DisableBrowsing [] staticDir,
-            nullDir >> seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
-            notFoundResponse])
+         [dir "static" $ serveDirectory DisableBrowsing [] staticDir,
+          nullDir >> seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
+          notFoundResponse])
 
 routes :: Text -> Text -> [ (String, ServerPart Response)]
 routes aboutContents privacyContents = [
