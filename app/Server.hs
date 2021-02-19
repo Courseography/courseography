@@ -47,7 +47,7 @@ runServer = do
     httpThreadId <- forkIO $ simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
       msum
-           (map (uncurry dir) (routes staticDir aboutContents privacyContents) ++
+           (map matchDir (routes staticDir aboutContents privacyContents) ++
            [ do
               nullDir
               seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
@@ -75,3 +75,8 @@ runServer = do
         --let parentDir = Path.parent $ Path.decodeString cwd
         --return $ Path.encodeString $ Path.append parentDir $ fromString "public/"
         return $ Path.encodeString $ Path.append (Path.decodeString cwd) $ fromString "public/"
+    matchDir :: (String, ServerPart Response) -> ServerPartT IO Response
+    matchDir (pathname, response) = do
+        noTrailingSlash -- enforce no trailing slash in the URI
+        dir pathname nullDir -- enforce no segment after the specified path
+        response -- perform if pathname (the URI) fully matches
