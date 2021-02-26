@@ -101,7 +101,7 @@ nodeColor :: GraphOptions -> Text -> Color
 nodeColor options name = colors !! depIndex
     where colors :: [Color]
           colors = cycle $ map toColor
-            [Salmon, CadetBlue, Bisque, Aquamarine, OliveDrab, Violet]
+            [Orchid, Orange, CornFlowerBlue, Salmon, Aquamarine, Yellow, OliveDrab]
           depIndex :: Int
           depIndex = fromMaybe 0 (elemIndex courseDep (departments options))
           courseDep :: Text
