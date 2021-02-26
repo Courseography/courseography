@@ -31,7 +31,7 @@ import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
 import Prelude hiding (last)
 import Data.Maybe (mapMaybe)
 import Data.Graph (Tree(Node))
-import Data.Tree (flatten)
+import Data.Foldable (toList)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
@@ -104,7 +104,7 @@ reqToStmts options (name, req) = do
         then do 
             node <- makeNode name
             stmts <- reqToStmtsTree options (nodeID node) req
-            return $ DN node:(concat $ flatten stmts)
+            return $ DN node:concat (toList stmts)
         else return []
 
 reqToStmtsTree :: GraphOptions -- ^ Options to toggle dynamic graph
@@ -124,7 +124,7 @@ reqToStmtsTree options parentID (AND reqs) = do
     andNode <- makeBool "and"
     edge <- makeEdge (nodeID andNode) parentID
     prereqStmts <- mapM (reqToStmtsTree options (nodeID andNode)) reqs
-    let filteredStmts = filterEmptyNodes prereqStmts
+    let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
     case filteredStmts of
         [] -> return $ Node [] []
         [Node (DN node:_) xs] -> do
@@ -137,7 +137,7 @@ reqToStmtsTree options parentID (OR reqs) = do
     orNode <- makeBool "or"
     edge <- makeEdge (nodeID orNode) parentID
     prereqStmts <- mapM (reqToStmtsTree options (nodeID orNode)) reqs
-    let filteredStmts = filterEmptyNodes prereqStmts
+    let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
     case filteredStmts of
         [] -> return $ Node [] []
         [Node (DN node:_) xs] -> do
@@ -199,11 +199,6 @@ makeEdge id1 id2 = return $ DotEdge id1 id2 [ID (id1 `mappend` "|" `mappend` id2
 
 mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show counter))
-
-filterEmptyNodes :: [Tree [a]] -> [Tree [a]]
-filterEmptyNodes [] = []
-filterEmptyNodes ((Node [] []):xs) = filterEmptyNodes xs
-filterEmptyNodes (x:xs) = x:filterEmptyNodes xs
 
 -- ** Graphviz configuration
 
