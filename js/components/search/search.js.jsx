@@ -32,7 +32,7 @@ class Search extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: 'depts',
+            url: '/depts',
             dataType: 'json',
             success: (data) => {
                 this.setState({depts: data});
@@ -110,7 +110,7 @@ class Timetable extends React.Component {
 
     populateTable(dept) {
         $.ajax({
-            url: 'course-info',
+            url: '/course-info',
             data: {dept: dept},
             dataType: 'json',
             success: (data) => {
