@@ -29,9 +29,9 @@ import qualified Control.Monad.State as State
 import Control.Monad (mapM, liftM)
 import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
 import Prelude hiding (last)
+import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Graph (Tree(Node))
 import Data.Foldable (toList)
-import Data.Maybe (fromMaybe, mapMaybe)
 import Data.List (elemIndex)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
