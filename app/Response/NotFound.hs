@@ -17,7 +17,7 @@ notFoundResponse =
                    ! A.content "text/html;charset=utf-8"
             mapM_ toStylesheet [
                 "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                "static/style/app.css"]
+                "/static/style/app.css"]
 
         H.body notFoundContent
 

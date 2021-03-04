@@ -235,7 +235,7 @@ Object {
           <img
             class=""
             id="sidebar-icon"
-            src="static/res/ico/sidebar.png"
+            src="/static/res/ico/sidebar.png"
           />
         </div>
       </div>
@@ -442,7 +442,7 @@ Object {
         <img
           class=""
           id="sidebar-icon"
-          src="static/res/ico/sidebar.png"
+          src="/static/res/ico/sidebar.png"
         />
       </div>
     </div>

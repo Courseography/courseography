@@ -45,6 +45,6 @@ routes aboutContents privacyContents = [
 
 strictMatchDir :: (String, ServerPart Response) -> ServerPartT IO Response
 strictMatchDir (pathname, response) = do
-    noTrailingSlash -- enforce no trailing slash in the URI
+    --noTrailingSlash -- enforce no trailing slash in the URI
     dir pathname nullDir -- enforce that no segments occur after pathname
     response
