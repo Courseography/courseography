@@ -1,7 +1,7 @@
 module Routes
     (routeResponses) where
 
-import Control.Monad (msum)
+import Control.Monad (msum, MonadPlus (mplus))
 import Control.Monad.IO.Class (liftIO)
 import Happstack.Server hiding (host)
 import Response
@@ -12,13 +12,13 @@ import DynamicGraphs.WriteRunDot (findAndSavePrereqsResponse)
 
 routeResponses :: String -> Text -> Text -> ServerPartT IO Response
 routeResponses staticDir aboutContents privacyContents =
-    msum (map strictMatchDir (routes aboutContents privacyContents) ++
+    msum (map strictMatchDir (strictRoutes aboutContents privacyContents) ++
          [dir "static" $ serveDirectory DisableBrowsing [] staticDir,
           nullDir >> seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
           notFoundResponse])
 
-routes :: Text -> Text -> [ (String, ServerPart Response)]
-routes aboutContents privacyContents = [
+strictRoutes :: Text -> Text -> [ (String, ServerPart Response)]
+strictRoutes aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", graphResponse),
     ("graph-generate", do method PUT
@@ -44,7 +44,9 @@ routes aboutContents privacyContents = [
     ]
 
 strictMatchDir :: (String, ServerPart Response) -> ServerPartT IO Response
-strictMatchDir (pathname, response) = do
-    --noTrailingSlash -- enforce no trailing slash in the URI
-    dir pathname nullDir -- enforce that no segments occur after pathname
-    response
+strictMatchDir (pathname, response) = 
+    mplus (do noTrailingSlash       -- enforce no trailing slash in the URI
+              dir pathname nullDir  -- enforce that no segments occur after pathname
+              response)
+          (do dir pathname nullDir  -- if a trailing slash exists, redirect
+              seeOther ("/" ++ pathname) (toResponse ("Redirecting to /" ++ pathname)))
