@@ -29,5 +29,5 @@ notFoundContent =
         H.p "The page might have been moved or deleted, or the little dragon running our server might have gone to have smores."
         H.p "You can use the links below to get back on the grid or graph."
         H.ul ! A.id "links" $ do
-            H.li $ toLink "graph" "Graph"
-            H.li $ toLink "grid" "Grid"
+            H.li $ toLink "/graph" "Graph"
+            H.li $ toLink "/grid" "Grid"

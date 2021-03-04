@@ -76,7 +76,7 @@ class Generate extends React.Component {
       body: JSON.stringify(data) // We send data in JSON format
     };
 
-    fetch("graph-generate", putData)
+    fetch("/graph-generate", putData)
       .then(res => res.json())
       .then(data => {
         var regionsList = [];
