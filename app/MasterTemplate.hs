@@ -49,7 +49,7 @@ header page =
             -- TODO: re-enable after handling new first-year courses
             -- H.li $ toLink "post" "Check My POSt!"
             H.li $ toLink "/about" "About"
-            if page `elem` ["graph", "grid", "/graph", "/grid"]
+            if page `elem` ["graph", "grid"]
             then H.li $ H.a ! A.id "nav-export" $ "Export"
             else ""
 
