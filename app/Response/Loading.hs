@@ -25,7 +25,7 @@ loadingResponse size =
 largeLoadingIcon :: H.Html
 largeLoadingIcon = H.div ! A.id "loading-icon" $ do
               H.img ! A.id "c-logo" ! A.src "/static/res/img/C-logo.png"
-              H.img ! A.id "compass" ! A.class_ "spinner" ! A.src "static/res/img/compass.png"
+              H.img ! A.id "compass" ! A.class_ "spinner" ! A.src "/static/res/img/compass.png"
 
 {- Insert a small loading icon into the page -}
 smallLoadingIcon :: H.Html
