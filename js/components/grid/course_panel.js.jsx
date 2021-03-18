@@ -172,8 +172,8 @@ class Course extends React.Component {
               id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}>
           <CourseModal ref={this.modal}/>
           <div className="icon-div">
-            <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
-            <img src="static/res/ico/about.png" className="close-icon" onClick={this.displayInfo}/>
+            <img src="/static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
+            <img src="/static/res/ico/about.png" className="close-icon" onClick={this.displayInfo}/>
           </div>
           <h3 onClick={this.toggleSelect} data-satisfied="true" taken={this.containsSelectedLecture() ? "true" : "false"}>
             {this.props.courseCode}
@@ -261,7 +261,7 @@ class CourseList extends React.Component {
 
     // This makes an AJAX call to retrieve courses from the database
     fetch(
-      'all-courses', // url to which the AJAX request is sent to
+      '/all-courses', // url to which the AJAX request is sent to
     )
       .then(response => response.text())
       .then(data => {

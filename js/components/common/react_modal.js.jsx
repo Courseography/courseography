@@ -396,7 +396,7 @@ class DayBox extends React.Component {
             > {this.props.day} </h3>
           </div>
 
-          <img src={"static/res/ico/" + (this.state.expanded ? "doubleup-" : "doubledown-") + (isSelected ? "lightpurple" : "darkpurple") + ".png"}
+          <img src={"/static/res/ico/" + (this.state.expanded ? "doubleup-" : "doubledown-") + (isSelected ? "lightpurple" : "darkpurple") + ".png"}
             id="expand-icon"
             onClick={this.toggleExpand}/>
         </div>
@@ -461,8 +461,8 @@ class CampusMap extends React.Component {
 
   render() {
     const blueMarker = new L.Icon({
-      iconUrl: 'static/res/ico/blue-marker.png',
-      shadowUrl: 'static/res/ico/shadow.png',
+      iconUrl: '/static/res/ico/blue-marker.png',
+      shadowUrl: '/static/res/ico/shadow.png',
       iconAnchor: [5, 35],
       popupAnchor: [13, -35],
       iconSize: [34, 35],
@@ -471,8 +471,8 @@ class CampusMap extends React.Component {
     })
 
     const redMarker = new L.Icon({
-      iconUrl: 'static/res/ico/red-marker.png',
-      shadowUrl: 'static/res/ico/shadow.png',
+      iconUrl: '/static/res/ico/red-marker.png',
+      shadowUrl: '/static/res/ico/shadow.png',
       iconAnchor: [5, 35],
       popupAnchor: [13, -35],
       iconSize: [34, 35],

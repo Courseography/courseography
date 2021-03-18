@@ -47,7 +47,7 @@ export class ExportModal extends React.Component {
 
         var JsonLocalStorageObj = JSON.stringify(necessaryLS);
         $.ajax({
-            url: 'image',
+            url: '/image',
             data: {JsonLocalStorageObj: JsonLocalStorageObj},
             success: function (data) {
                 this.setState({data: "data:image/png;base64," + data});
@@ -63,7 +63,7 @@ export class ExportModal extends React.Component {
         let allCourses = JSON.parse(localStorage.getItem('selectedLectures'));
         let courseData = allCourses.map((data) => `${data.courseCode.split(' ')[0]}-${data.lectureCode}-${data.session}`);
         $.ajax({
-            url: 'timetable-image',
+            url: '/timetable-image',
             data: {session: formattedSession, courses: courseData.join('_')},
             success: function (data) {
                 this.setState({data: "data:image/png;base64," + data, otherSession: formattedSession === 'Fall' ? 'Spring' : 'Fall'});
@@ -119,7 +119,7 @@ function getCalendar() {
     let courseData = allCourses.map((data) => `${data.courseCode.split(' ')[0]}-${data.lectureCode}-${data.session}`);
     $.ajax({
         type: "post",
-        url: "calendar",
+        url: "/calendar",
         data: {courses: courseData.join('_')},
         success: function (data) {
             var dataURI = "data:text/calendar;charset=utf8," + escape(data)
@@ -158,7 +158,7 @@ function getPDF() {
     let courseData = allCourses.map((data) => `${data.courseCode.split(' ')[0]}-${data.lectureCode}-${data.session}`);
 
     $.ajax({
-        url: "timetable-pdf",
+        url: "/timetable-pdf",
         data: {courses: courseData.join('_'), JsonLocalStorageObj: JSON.stringify(necessaryLS)},
         success: function (data) {
             var dataURI = "data:application/pdf;base64," + data;

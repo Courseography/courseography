@@ -185,7 +185,7 @@ export default class Sidebar extends React.Component {
         <div id="sidebar-button" onClick={() => this.toggleSidebar("button")} data-testid="test-sidebar-button">
           <img id="sidebar-icon"
            className={flippedClass}
-           src="static/res/ico/sidebar.png"
+           src="/static/res/ico/sidebar.png"
           />
         </div>
       </div>

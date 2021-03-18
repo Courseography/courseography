@@ -130,7 +130,7 @@ class TimetableHeader extends React.Component {
           <tr>
             <th className="timetable-dummy-cell"></th>
             <th className="term-name">
-              <img src="static/res/ico/blue-marker.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
+              <img src="/static/res/ico/blue-marker.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
               Fall
             </th>
             {dayCells}
@@ -144,7 +144,7 @@ class TimetableHeader extends React.Component {
             {dayCells}
             <th className="term-name">
               Spring
-              <img src="static/res/ico/blue-marker.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
+              <img src="/static/res/ico/blue-marker.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
             </th>
             <th className="timetable-dummy-cell"></th>
           </tr>

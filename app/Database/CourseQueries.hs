@@ -227,7 +227,7 @@ deptList = do
 -- objects.
 queryGraphs :: IO Response
 queryGraphs = runSqlite databasePath $ do
-    graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
+    graphs :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
     return $ createJSONResponse graphs :: SqlPersistM Response
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
