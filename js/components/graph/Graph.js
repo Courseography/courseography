@@ -418,71 +418,25 @@ export default class Graph extends React.Component {
     return Math.max(heightToContainerRatio, widthToContainerRatio);
   };
 
-  graphRightEdgeOffScreen = () => {
-    // Calculate right edge prior to auto adjusting to fill container.
-    var rightEdge =
-      (this.state.width - this.state.horizontalPanFactor) /
-      this.state.zoomFactor;
-    // Adjust right edge position to account for auto resize.
-    rightEdge /= this.calculateRatioGraphSizeToContainerSize();
-    return rightEdge > document.getElementById("react-graph").clientWidth;
-  };
-
-  graphBottomEdgeOffScreen = () => {
-    // Calculate bottom edge prior to auto adjusting to fill container.
-    var bottomEdge =
-      (this.state.height - this.state.verticalPanFactor) /
-      this.state.zoomFactor;
-    // Adjust bottom edge position to account for auto resize.
-    bottomEdge /= this.calculateRatioGraphSizeToContainerSize();
-    return bottomEdge > document.getElementById("react-graph").clientHeight;
-  };
-
-  graphTopEdgeOffScreen = () => {
-    return this.state.verticalPanFactor > 0;
-  };
-
-  graphLeftEdgeOffScreen = () => {
-    return this.state.horizontalPanFactor > 0;
-  };
-
   panDirection = (direction, panFactorRate) => {
     // onButtonRelease calls are required when a button becomes disabled
     // because it loses its ability to detect mouseUp event
     if (direction === "up") {
-      if (this.graphTopEdgeOffScreen()) {
-        //panning allowed
-        this.setState({
-          verticalPanFactor: this.state.verticalPanFactor - panFactorRate
-        });
-      } else {
-        // button becomes disabled
-        this.onButtonRelease();
-      }
+      this.setState({
+        verticalPanFactor: this.state.verticalPanFactor - panFactorRate
+      });
     } else if (direction === "left") {
-      if (this.graphLeftEdgeOffScreen()) {
-        this.setState({
-          horizontalPanFactor: this.state.horizontalPanFactor - panFactorRate
-        });
-      } else {
-        this.onButtonRelease();
-      }
+      this.setState({
+        horizontalPanFactor: this.state.horizontalPanFactor - panFactorRate
+      });
     } else if (direction === "down") {
-      if (this.graphBottomEdgeOffScreen()) {
-        this.setState({
-          verticalPanFactor: this.state.verticalPanFactor + panFactorRate
-        });
-      } else {
-        this.onButtonRelease();
-      }
+      this.setState({
+        verticalPanFactor: this.state.verticalPanFactor + panFactorRate
+      });
     } else if (direction === "right") {
-      if (this.graphRightEdgeOffScreen()) {
-        this.setState({
-          horizontalPanFactor: this.state.horizontalPanFactor + panFactorRate
-        });
-      } else {
-        this.onButtonRelease();
-      }
+      this.setState({
+        horizontalPanFactor: this.state.horizontalPanFactor + panFactorRate
+      });
     }
   };
 
@@ -622,32 +576,28 @@ export default class Graph extends React.Component {
   }
 
   render() {
+    let containerWidth = 0;
+    let containerHeight = 0;
+    if (document.getElementById("react-graph") !== null && document.getElementById("generateRoot")) {
+      containerWidth = document.getElementById("react-graph").clientWidth;
+      containerHeight = document.getElementById("generateRoot").clientHeight;
+    }
+
+    const viewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
+    const viewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
+    const viewboxX = (this.state.width - viewboxWidth) / 2 + this.state.horizontalPanFactor;
+    const viewboxY = (this.state.height - viewboxHeight) / 2 + this.state.verticalPanFactor;
+
     // not all of these properties are supported in React
     var svgAttrs = {
       width: "100%",
       height: "100%",
-      viewBox:
-        this.state.horizontalPanFactor +
-        " " +
-        this.state.verticalPanFactor +
-        " " +
-        this.state.width * this.state.zoomFactor +
-        " " +
-        this.state.height * this.state.zoomFactor,
+      viewBox: `${viewboxX} ${viewboxY} ${viewboxWidth} ${viewboxHeight}`,
       preserveAspectRatio: "xMinYMin"
     };
 
     var zoomInDisabled = this.state.zoomFactor <= 0.5;
     var zoomOutDisabled = this.state.zoomFactor >= 1.1;
-    if (document.getElementById("react-graph") !== null) {
-      var panUpDisabled = !this.graphTopEdgeOffScreen() ? true : false;
-      var panRightDisabled = !this.graphRightEdgeOffScreen() ? true : false;
-      var panDownDisabled = !this.graphBottomEdgeOffScreen() ? true : false;
-      var panLeftDisabled = !this.graphLeftEdgeOffScreen() ? true : false;
-    } else {
-      // Set all pan options to disabled on initial render
-      panUpDisabled = panRightDisabled = panDownDisabled = panLeftDisabled = true;
-    }
 
     var resetDisabled =
       this.state.zoomFactor === 1 &&
@@ -693,7 +643,6 @@ export default class Graph extends React.Component {
           mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
-          disabled={panUpDisabled}
         />
         <Button
           divId="pan-down-button"
@@ -702,7 +651,6 @@ export default class Graph extends React.Component {
           mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
-          disabled={panDownDisabled}
         />
         <Button
           divId="pan-right-button"
@@ -711,7 +659,6 @@ export default class Graph extends React.Component {
           mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
-          disabled={panRightDisabled}
         />
         <Button
           divId="pan-left-button"
@@ -720,7 +667,6 @@ export default class Graph extends React.Component {
           mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
-          disabled={panLeftDisabled}
         />
         <Button
           divId="reset-button"
