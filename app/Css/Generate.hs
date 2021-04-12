@@ -14,6 +14,8 @@ import Css.Constants
 -- |Defines the CSS for the generate page.
 generateStyles :: Css
 generateStyles = do
+    "#generateRoot" ? do
+        height100
     "#generateRoot #react-graph" ? do
         position static
     "#generateDiv" ? do
@@ -32,10 +34,11 @@ generateStyles = do
         input ? do
             color purple10
             backgroundColor "#d9e4ee"
-            textAlign $ alignSide sideCenter
-            border solid (px 5) purple8
+            margin0
             "type=text" & do
-                width (pct 90)
+                width (pct 100)
+        label ? do
+            fontWeight normal
     "#header-title" ? do
         fontSize (em 1.2)
     "main-filter" ? do

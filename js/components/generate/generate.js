@@ -3,67 +3,54 @@ import ReactDOM from "react-dom";
 
 import Graph from "../graph/Graph";
 
-class Generate extends React.Component {
+class GenerateForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: null,
-      taken: null,
-      departments: null,
-      maxDepth: null,
-      location: null,
-      includeRaws: null,
-      includeGrades: null
+      courses: '',
+      taken: '',
+      departments: 'CSC, MAT, STA',
+      maxDepth: 0,
+      location: ['utsg'],
+      includeRaws: false,
+      includeGrades: false
     };
 
     this.graph = React.createRef();
   }
 
-  generateGraph = (event) => {
+  handleInputChange = (event) => {
+    const target = event.target;
+    let value;
+    if (target.type === 'checkbox') {
+      value = target.checked;
+    } else if (target.type === 'select-multiple') {
+      value = Array.from(target.selectedOptions, option => option.value);
+    } else if (target.type === 'number') {
+      value = parseInt(target.value);
+    } else {
+      value = target.value;
+    }
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
+  handleSubmit = (event) => {
     event.preventDefault();
 
-    let newState = {};
-
-    const courses = document.getElementById("courses").value;
-    if (courses === "") {
+    if (!this.state.courses.length) {
       alert("Cannot generate graph -- no courses entered!");
       return;
     }
-
-    newState["courses"] = courses.split(",");
-
-    const taken = document.getElementById("excluded").value;
-    if (taken !== "") {
-      newState["taken"] = taken.split(",");
-    }
-
-    let departments = document.getElementById("departments").value;
-    if (departments !== "") {
-      newState["departments"] = departments.split(",");
-    }
-
-    const maxDepth = document.getElementById("maxDepth").value;
-    if (maxDepth !== "") {
-      newState["maxDepth"] = maxDepth;
-    }
-
-    const location = Array.from(document.querySelectorAll('#location option:checked')).map(el => el.value);
-    if (location.length !== 0) {
-      newState["location"] = location
-    }
-
-    newState["includeRaws"] = document.getElementById("includeRaws").checked;
-    newState["includeGrades"] = document.getElementById("includeGrades").checked;
-
-    this.setState(newState, this.getGraph);
-  }
-
-  getGraph = () => {
-    // temporary data until we can parse user input
-    const data = {};
+    let data = {};
 
     for (let key in this.state) {
-      if (this.state[key] !== null) {
+      if (['courses', 'taken', 'departments'].includes(key)) {
+        data[key] = this.state[key].split(',').map(s => s.trim());
+      } else {
         data[key] = this.state[key];
       }
     }
@@ -128,63 +115,73 @@ class Generate extends React.Component {
 
   render() {
     return (
-      <div style={{'display': 'flex', 'flexDirection': 'row'}}>
-      <div id="generateDiv" style={{'position': 'initial'}}>
-        <h1 id="header-title">Generate Prerequisite Graph</h1>
+      <div style={{'display': 'flex', 'flexDirection': 'row', 'height': '100%'}}>
+      <div id="generateDiv" style={{'position': 'initial', 'padding': '0 0.5em', 'height': '100%', 'fontSize': '12pt'}}>
+        <h1 id="header-title">Search for courses</h1>
         <form id="generateForm">
-            <div id="main-filter">
-              <label htmlFor="courses">Courses:</label>
-              <input id="courses" name="courses" type="text"/>
-            </div>
+          <input id="courses" name="courses" type="text"
+                 placeholder="e.g., CSC207H1, CSC324H1"
+                 value={this.state.courses}
+                 onChange={this.handleInputChange} />
 
           <h2 id="filter-title">Optional filters</h2>
 
-          <ul>
-            <li>
-              <label htmlFor="excluded">Exclude Courses:</label>
-              <input id="excluded" name="excluded" type="text"/>
-            </li>
+          <label htmlFor="departments">Only include courses these departments</label>
+          <input id="departments" name="departments" type="text"
+                  placeholder="Enter 3-letter department codes separated by commas"
+                  value={this.state.departments}
+                  onChange={this.handleInputChange}
+                  style={{'marginBottom': '1em'}} />
 
-            <li>
-              <label htmlFor="departments">Include Departments:</label>
-              <input id="departments" name="departments" type="text" placeholder="CSC, MAT, STA"/>
-            </li>
+          <label htmlFor="taken">Do not show these courses</label>
+          <input id="taken" name="taken" type="text"
+                  value={this.state.taken}
+                  onChange={this.handleInputChange}
+                  style={{'marginBottom': '1em'}}
+                  placeholder="E.g., CSC207H1, CSC236H1" />
 
-            <li>
-              <label htmlFor="maxDepth">Depth of prerequisite chain to include:</label>
-              <input id="maxDepth" name="maxDepth" type="number" min="0" step="1"/>
-            </li>
+          <label htmlFor="maxDepth">Depth of prerequisite chain (0 shows all prerequisites)</label>
+          <p><input id="maxDepth" name="maxDepth" type="number" min="0" step="1"
+                  value={this.state.maxDepth}
+                  onChange={this.handleInputChange}
+                  style={{'marginBottom': '1em'}} />
+          </p>
 
-            <li>
-              <label htmlFor="location">Campus:</label>
-              <select id="location" name="location" multiple>
-                <option value="utsg" selected>St. George</option>
-                <option value="utm">Mississauga</option>
-                <option value="utsc">Scarborough</option>
-              </select>
-            </li>
+          {/* <label htmlFor="location">Campus</label>
+          <select id="location" name="location" multiple
+            value={this.state.location}
+            onChange={this.handleInputChange}
+            style={{'vertical-align': 'text-top', 'margin-left': '1em', 'margin-bottom': '1em', 'color': 'black'}} >
+            <option value="utsg">St. George</option>
+            <option value="utm">Mississauga</option>
+            <option value="utsc">Scarborough</option>
+          </select>
 
-            <li>
-              <label htmlFor="includeRaws">Include non-course prerequisites:</label>
-              <input id="includeRaws" name="includeRaws" type="checkbox" />
-            </li>
+          <p>
+          <label htmlFor="includeRaws">Include non-course prerequisites</label>
+          <input id="includeRaws" name="includeRaws" type="checkbox"
+                  value={this.state.includeRaws}
+                  onChange={this.handleInputChange}
+                  style={{'margin-left': '1em', 'vertical-align': 'middle'}} />
+          </p>
 
-            <li>
-              <label htmlFor="includeGrades">Include grade-based prerequisites:</label>
-              <input id="includeGrades" name="includeGrades" type="checkbox" />
-            </li>
+          <label htmlFor="includeGrades">Include grade-based prerequisites</label>
+          <input id="includeGrades" name="includeGrades" type="checkbox"
+                  value={this.state.includeGrades}
+                  onChange={this.handleInputChange}
+                  style={{'margin-left': '1em', 'vertical-align': 'middle'}} /> */}
 
-          </ul>
-
-          <button id="submit" onClick={this.generateGraph}>
-            Submit
+          <div style={{'marginTop': '1em', 'width': '100%', 'display': 'flex', 'justifyContent': 'center'}}>
+          <button id="submit" onClick={this.handleSubmit}>
+            Generate Graph
           </button>
+          </div>
       </form>
     </div>
 
     <Graph
-        ref={this.graph}
-        start_blank={true}
+      ref={this.graph}
+      start_blank={true}
     />
     </div>
     )
@@ -192,6 +189,6 @@ class Generate extends React.Component {
 }
 
 ReactDOM.render(
-  <Generate />,
+  <GenerateForm />,
   document.getElementById("generateRoot")
 );
