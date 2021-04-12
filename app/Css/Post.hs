@@ -157,7 +157,9 @@ postCSS = do
         margin0
     "input" ? do
         textAlign $ alignSide sideCenter
-        height $ (px 40)
+        height $ px 40
+        "type=checkbox" & do
+            height $ px 13
     "#notes" ? do
         "clear" -: "left"
         "float" -: "center"
