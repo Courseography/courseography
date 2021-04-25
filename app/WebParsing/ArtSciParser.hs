@@ -1,7 +1,6 @@
 module WebParsing.ArtSciParser
     (parseArtSci, getDeptList, parseBuildings) where
 
-import Data.Either (either)
 import Data.List (elemIndex, nubBy)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T

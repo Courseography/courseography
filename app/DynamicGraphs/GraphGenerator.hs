@@ -26,7 +26,7 @@ import Data.Text.Lazy (Text, pack, isPrefixOf, isInfixOf, last, take)
 import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
-import Control.Monad (mapM, liftM)
+import Control.Monad (liftM)
 import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
 import Prelude hiding (last)
 import Data.Maybe (fromMaybe, mapMaybe)
@@ -112,7 +112,7 @@ nodeColor options name = colors !! depIndex
 reqToStmts :: GraphOptions -> (Text, Req) -> State GeneratorState [DotStatement Text]
 reqToStmts options (name, req) = do
     if pickCourse options name
-        then do 
+        then do
             node <- makeNode name $ Just (nodeColor options name)
             stmts <- reqToStmtsTree options (nodeID node) req
             return $ DN node:concat (toList stmts)
@@ -159,7 +159,7 @@ reqToStmtsTree options parentID (OR reqs) = do
         _  -> return $ Node [DN orNode, DE edge] filteredStmts
 -- A prerequisite with a grade requirement.
 reqToStmtsTree options parentID (GRADE description req) = do
-    if includeGrades options then do 
+    if includeGrades options then do
         gradeNode <- makeNode (pack description) Nothing
         edge <- makeEdge (nodeID gradeNode) parentID
         prereqStmt <- reqToStmtsTree options (nodeID gradeNode) req
@@ -181,7 +181,7 @@ reqToStmtsTree options parentID (FCES creds req) = do
     return $ Node [DN fceNode, DE edge] [prereqStmts]
 
 
-prefixedByOneOf :: Text -> [Text] -> Bool 
+prefixedByOneOf :: Text -> [Text] -> Bool
 prefixedByOneOf name = any (flip isPrefixOf name)
 
 makeNode :: Text -> Maybe Color -> State GeneratorState (DotNode Text)
@@ -240,21 +240,21 @@ graphProfileHash = md5s . Str . show $ (buildGraph [], ellipseAttrs)
 
 -- | Means the layout of the full graph is from left to right.
 graphAttrs :: GlobalAttributes
-graphAttrs = GraphAttrs 
+graphAttrs = GraphAttrs
     [ AC.RankDir AC.FromTop
     , AC.Splines AC.Ortho
     , AC.Concentrate False
     ]
 
 nodeAttrs :: GlobalAttributes
-nodeAttrs = NodeAttrs 
+nodeAttrs = NodeAttrs
     [ A.shape A.BoxShape
     , AC.FixedSize GrowAsNeeded
     , A.style A.filled
     ]
 
 ellipseAttrs :: A.Attributes
-ellipseAttrs = 
+ellipseAttrs =
     [ A.shape A.Ellipse
     , AC.Width 0.20     -- min 0.01
     , AC.Height 0.15    -- min 0.01
