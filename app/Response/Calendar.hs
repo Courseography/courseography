@@ -9,7 +9,7 @@ import Data.Time.Calendar.OrdinalDate (mondayStartWeek, fromMondayStartWeek)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite (runSqlite, (==.), entityVal, selectList, entityKey)
-import Database.CourseQueries (returnMeeting, buildTime)
+import Database.CourseQueries (returnMeeting)
 import qualified Data.Text as T
 import Text.Read (readMaybe)
 import Database.Tables

@@ -3,7 +3,6 @@ module WebParsing.PostParser
 
 import qualified Data.Text as T
 import Data.Either (fromRight)
-import Data.Maybe (maybe)
 import Data.List (find)
 import Data.Text (strip)
 import Control.Monad.Trans (liftIO)

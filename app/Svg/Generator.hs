@@ -38,7 +38,6 @@ import Css.Constants (theoryDark,
                       boolFontSize,
                       regionFontSize)
 import qualified Data.Map.Strict as M
-import Data.Monoid (mempty, mappend, mconcat)
 import Config (databasePath)
 
 

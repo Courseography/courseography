@@ -1,13 +1,22 @@
 flags:
   sendfile:
     portable: true
+  regex-posix:
+    _regex-posix-clib: true
 extra-package-dbs: []
 packages:
 - .
 allow-newer: true
 extra-deps:
-- happstack-server-7.6.1
+  - diagrams-lib-1.4.3
+  - diagrams-svg-1.4.3
+  - active-0.2.0.14
+  - diagrams-core-1.4.2
+  - dual-tree-0.2.2.1
+  - monoid-extras-0.5.1
+  - svg-builder-0.1.1
+  - regex-posix-clib-2.7
 compiler-check: newer-minor
-resolver: lts-14.27
+resolver: lts-17.9
 dump-logs: all
 require-stack-version: ! '>= 1.6'

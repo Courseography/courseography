@@ -1,13 +1,17 @@
-{-# LANGUAGE DeriveGeneric,
+{-# LANGUAGE DataKinds,
+             DeriveGeneric,
+             DerivingStrategies,
              EmptyDataDecls,
              FlexibleContexts,
              FlexibleInstances,
              GADTs,
              GeneralizedNewtypeDeriving,
              MultiParamTypeClasses,
+             StandaloneDeriving,
              QuasiQuotes,
              TemplateHaskell,
-             TypeFamilies #-}
+             TypeFamilies,
+             UndecidableInstances #-}
 
 {-|
     Module      : Database.Tables

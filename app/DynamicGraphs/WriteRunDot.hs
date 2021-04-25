@@ -3,7 +3,7 @@ module DynamicGraphs.WriteRunDot where
 import Control.Monad (forM_)
 import Control.Monad.IO.Class (liftIO)
 import Data.GraphViz hiding (Str)
-import System.FilePath (FilePath, combine, normalise)
+import System.FilePath (combine, normalise)
 import System.Directory (createDirectoryIfMissing)
 import DynamicGraphs.GraphGenerator (coursesToPrereqGraph, coursesToPrereqGraphExcluding, graphProfileHash)
 import Happstack.Server (ServerPart, askRq)
@@ -60,7 +60,7 @@ generateAndSavePrereqResponse coursesOptions = do
       parseDynamicSvg graphHash $ decodeUtf8 bString
       storedGraph <- getGraph graphHash
       return $ fromMaybe graphNotFound storedGraph
-  where    
+  where
     graphHash :: T.Text
     graphHash = hash coursesOptions
     graphNotFound = error "Graph should have been generated but was not found"
@@ -71,7 +71,7 @@ hash coursesOptions = hashFunction (key, graphProfileHash)
   where key = coursesOptions {
           courses = sort $ courses coursesOptions,
           graphOptions = options {
-            taken = sort $ taken options, 
+            taken = sort $ taken options,
             departments = sort $ departments options,
             distribution = sort $ distribution options,
             location = sort $ location options,
