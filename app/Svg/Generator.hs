@@ -38,7 +38,6 @@ import Css.Constants (theoryDark,
                       boolFontSize,
                       regionFontSize)
 import qualified Data.Map.Strict as M
-import Data.Monoid (mempty, mappend, mconcat)
 import Config (databasePath)
 
 
@@ -345,4 +344,4 @@ areaMap =  M.fromList
            (["csc321", "csc384", "csc401", "csc411", "csc412",
              "csc485", "csc486"], (aiDark, "ai")),
            (["csc104", "csc120", "csc108", "csc148"], (introDark, "intro")),
-           (["calc1", "lin1", "sta1", "sta2"], (mathDark, "math"))]
+           (["calc1", "calc2", "alg1", "sta1", "sta2"], (mathDark, "math"))]

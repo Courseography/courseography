@@ -7,7 +7,6 @@ module WebParsing.ParsecCombinators
 import qualified Text.Parsec as P
 import qualified Data.Text as T
 import Text.Parsec.Text (Parser)
-import Control.Monad (mapM)
 
 
 getCourseFromTag :: T.Text -> T.Text

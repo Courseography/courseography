@@ -69,8 +69,10 @@ class CourseCode extends React.Component {
         // (mainly to check if they are active or not through their local storage)
         if (this.props.courseIDs[0] === 'mat135') {
             idName += 'calc1';
+        } else if (this.props.courseIDs[0] === 'mat235') {
+            idName += 'calc2';
         } else if (this.props.courseIDs[0] === 'mat221') {
-            idName += 'lin1';
+            idName += 'alg1';
         } else if (this.props.courseIDs[0] === 'sta247') {
             idName += 'sta1';
         }

@@ -39,9 +39,9 @@ describe("Graph", () => {
     cy.get(`[data-testid='csc209']`).should("have.class", 'missing');
     cy.get(`[data-testid='csc258']`).should("have.class", 'missing');
     cy.get(`[data-testid='csc108']`).should("have.class", 'missing');
-    
+
     // unaffected, despite sharing the same prereqs as CSC458
-    cy.get(`[data-testid='csc358']`).should("have.class", 'inactive');
+    cy.get(`[data-testid='csc385']`).should("have.class", 'inactive');
   });
 
   describe("Info Box", () => {

@@ -6,12 +6,12 @@ describe("Hybrid Node", () => {
     cy.get("body").trigger("mouseout");
   });
   it("should have the 'hybrid' CSS class", () => {
-    cy.get('[data-testid="h(csc324)"]').should("have.class", "hybrid");
-    cy.get('[data-testid="h(csc324)"]').should("have.class", "inactive");
+    cy.get('[data-testid="h(csc209)"]').should("have.class", "hybrid");
+    cy.get('[data-testid="h(csc209)"]').should("have.class", "inactive");
   });
   it("shouldn't do anything when you hover or click it", () => {
-    cy.get('[data-testid="h(csc324)"]').should("have.class", "inactive");
-    cy.get('[data-testid="h(csc324)"]')
+    cy.get('[data-testid="h(csc209)"]').should("have.class", "inactive");
+    cy.get('[data-testid="h(csc209)"]')
       .click()
       .should("have.class", "inactive")
       .trigger("mouseover")
@@ -20,17 +20,17 @@ describe("Hybrid Node", () => {
       .should("have.class", "inactive");
   });
   it("should be 'inactive' when it's prereq parent is NOT met", () => {
-    cy.get('[data-testid="h(csc324)"]').should("have.class", "inactive");
+    cy.get('[data-testid="h(csc209)"]').should("have.class", "inactive");
   });
   it("should be 'active' when its prereq parent is met", () => {
-    cy.get('[data-testid="csc324"]').click();
-    cy.get('[data-testid="h(csc324)"]').should("have.class", "active");
+    cy.get('[data-testid="csc209"]').click();
+    cy.get('[data-testid="h(csc209)"]').should("have.class", "active");
   });
 
   it("should be 'missing' if not 'active' and it's an unmet prereq of the currently hovered course", () => {
-    cy.get('[data-testid="csc488"]').trigger("mouseover");
-    cy.get('[data-testid="h(csc324)"]').should("have.class", "missing");
-    cy.get('[data-testid="csc488"]').trigger("mouseout");
+    cy.get('[data-testid="csc317"]').trigger("mouseover");
+    cy.get('[data-testid="h(csc209)"]').should("have.class", "missing");
+    cy.get('[data-testid="csc317"]').trigger("mouseout");
   });
 });
 
@@ -76,7 +76,7 @@ describe("Course Node", () => {
       it("should be 'overridden' (if you don't hover over it)", () => {
         cy.get('[data-testid="csc148"]').click();
         cy.get('[data-testid="csc148"]').should("have.class", "overridden");
-        
+
         // cleanup
         cy.get('[data-testid="csc148"]').click();
       });
@@ -114,9 +114,9 @@ describe("Course Node", () => {
         cy.get('[data-testid="csc108"]').should("have.class", "missing");
 
         // unaffected, despite sharing the same prereqs as CSC458
-        cy.get('[data-testid="csc358"]').should("have.class", "inactive");
+        cy.get('[data-testid="csc385"]').should("have.class", "inactive");
 
-        // cleanup 
+        // cleanup
         cy.get('[data-testid="csc148"]').click();
       });
       it("selected + hovered over + unmet prereqs: 'missing'", () => {

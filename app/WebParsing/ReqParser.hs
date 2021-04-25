@@ -5,22 +5,43 @@ import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 import Text.Parsec ((<|>))
 import Database.Requirement
+import Data.Char (toLower, toUpper, isSpace)
 
 -- define separators
-fromSeparator :: Parser ()
-fromSeparator = Parsec.spaces >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
-            "full course or its equivalent",
+fromSeparator :: Parser String
+fromSeparator = Parsec.spaces 
+                >> Parsec.choice (map (Parsec.try . Parsec.string) [
+            "of any of the following:",
+            "from the following: ",
+            "from:",
+            "from",
+            "at"
+    ])
+
+completionPrefix :: Parser ()
+completionPrefix = Parsec.choice (map (Parsec.try . Parsec.string) [
+    "Completion of at least",
+    "Completion of a minimum of",
+    "Completion of"
+    ]) 
+    >> Parsec.spaces
+
+fceSeparator :: Parser ()
+fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
+            "FCEs.",
             "FCEs",
+            "FCE.",
             "FCE",
-            "FCEs:",
-            "FCE:"
-    ]) >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
-            " of any of the following:",
-            " from the following: ",
-            " from:",
-            " from",
-            " at"
-    ]) >> Parsec.spaces
+            "credits",
+            "full-course equivalents"
+            ])
+            >> Parsec.spaces
+
+includingSeparator :: Parser String
+includingSeparator = Parsec.optional (Parsec.string ",") 
+                     >> Parsec.spaces
+                     >> Parsec.string "including"
+                     
 
 lParen :: Parser Char
 lParen = Parsec.char '('
@@ -29,24 +50,44 @@ rParen :: Parser Char
 rParen = Parsec.char ')'
 
 orSeparator :: Parser String
-orSeparator = Parsec.choice $ map Parsec.string [
+orSeparator = Parsec.choice $ map caseInsensitiveStr [
     "/",
-    "OR",
-    "Or",
     "or"
     ]
 
 andSeparator :: Parser String
-andSeparator = Parsec.choice $ map Parsec.string [
+andSeparator = Parsec.choice $ map caseInsensitiveStr [
     ",",
-    "AND",
-    "And",
     "and",
-    ";"
+    ";",
+    "&",
+    "+",
+    "plus"
     ]
+
+oneOfSeparator :: Parser String
+oneOfSeparator = do
+    separator <- Parsec.choice $ map caseInsensitiveStr [
+        "one of either",
+        "one of the following",
+        "at least one of",
+        "one of",
+        "1 of",
+        "at least 1 of"
+        ]
+    colon <- Parsec.option "" $ Parsec.string ":"
+    return (separator ++ colon)
+
 
 semicolon :: Parser Char
 semicolon = Parsec.char ';'
+
+caseInsensitiveChar :: Parsec.Stream s m Char => Char -> Parsec.ParsecT s u m Char
+caseInsensitiveChar c = Parsec.char (toLower c) <|> Parsec.char (toUpper c)
+
+-- Match the string 's' regardless of the case of each character
+caseInsensitiveStr :: Parsec.Stream s m Char => String -> Parsec.ParsecT s u m String
+caseInsensitiveStr s = Parsec.try (mapM caseInsensitiveChar s)
 
 creditsParser :: Parser String
 creditsParser = do
@@ -59,13 +100,19 @@ creditsParser = do
 -- | Helpers for parsing grades
 percentParser :: Parser String
 percentParser = do
-    fces <- Parsec.many1 Parsec.digit
+    fces <- Parsec.try (do
+        percent <- Parsec.count 2 Parsec.digit
+        Parsec.notFollowedBy Parsec.digit
+        return percent)
     Parsec.optional (Parsec.char '%')
     return fces
 
 letterParser :: Parser String
 letterParser = do
-    letter <- Parsec.oneOf "ABCDEF"
+    letter <- Parsec.try (do
+        letterGrade <- Parsec.oneOf "ABCDEF"
+        Parsec.notFollowedBy $ Parsec.letter
+        return letterGrade)
     plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
     return $ letter : plusminus
 
@@ -79,8 +126,8 @@ infoParser= do
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
 gradeParser = do
-    grade <- Parsec.try ((Parsec.between lParen rParen percentParser <|> letterParser) <|> (percentParser <|> letterParser))
-    _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
+    grade <- (Parsec.between lParen rParen percentParser <|> letterParser) <|> percentParser <|> letterParser
+    _ <- Parsec.try $ Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
         andSeparator,
         orSeparator,
         Parsec.space >> return "",
@@ -92,31 +139,53 @@ gradeParser = do
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["minimum grade of", "minimum mark of", "minimum of", "minimum"]
+    _ <- Parsec.optional (caseInsensitiveStr "an " <|> Parsec.try indefiniteArticleAParser)
     Parsec.spaces
-    grade <- gradeParser
+    grade <- cutoffHelper <|> gradeParser
     Parsec.spaces
     _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
     req <- singleParser
     return $ GRADE grade req
+
+    where
+    cutoffHelper = do
+        _ <- Parsec.choice $ map (Parsec.try . caseInsensitiveStr)
+                ["minimum grade", "minimum mark", "minimum", "grade", "final grade", "at least"]
+        Parsec.spaces
+        _ <- Parsec.optional $ caseInsensitiveStr "of"
+        Parsec.spaces
+        gradeParser
+
+    indefiniteArticleAParser = do
+        indefiniteArticle <- caseInsensitiveStr "a "
+        Parsec.notFollowedBy $ caseInsensitiveStr "in"
+        return indefiniteArticle
 
 -- parse for cutoff percentage after a course
 coAftParser :: Parser Req
 coAftParser = do
     req <- singleParser
     Parsec.spaces
-    grade <- Parsec.between lParen rParen cutoffHelper <|> cutoffHelper
+    grade <- Parsec.between lParen rParen parenCutoffHelper <|> cutoffHelper
     return $ GRADE grade req
 
     where
-    cutoffHelper = Parsec.between Parsec.spaces Parsec.spaces $ do
+    parenCutoffHelper = do
+        grade <- cutoffHelper
+        _ <- Parsec.optional $ Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead rParen)
+        return grade
+
+    -- Parse for the cutoff percentage, which may be followed by "or higher" or "or more". These "or"s will be skipped.
+    cutoffHelper = do
         _ <- Parsec.manyTill (Parsec.noneOf "()")
-          (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
-            _ <- gradeParser
-            Parsec.spaces
-            Parsec.notFollowedBy $ Parsec.alphaNum
-            return "")))
-        gradeParser
+            (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
+                _ <- gradeParser
+                Parsec.notFollowedBy $ Parsec.alphaNum
+                return "")))
+        grade <- gradeParser
+        Parsec.spaces
+        _ <- Parsec.optional $ caseInsensitiveStr "or higher" <|> caseInsensitiveStr "or more"
+        return grade
 
 -- | Parser for a grade cutoff on a course.
 -- This is tricky because the cutoff can come before or after the course code.
@@ -135,15 +204,30 @@ rawTextParser = do
     text <- Parsec.many $ Parsec.noneOf ";\r\n"
     return $ RAW text
 
--- | Parser for a single course.
--- We expect 3 letters, 3 digits, and a letter and a number.
-courseIDParser :: Parser String
-courseIDParser = do
+-- | Parser for a single UTSG course.
+-- We expect 3 letters, 3 digits
+utsgCourseCodeParser :: Parser String
+utsgCourseCodeParser = do
     code <- Parsec.count 3 Parsec.letter
     num <- Parsec.count 3 Parsec.digit
-    -- TODO: Make the last two letters more restricted.
-    sess <- Parsec.count 2 Parsec.alphaNum
-    return (code ++ num ++ sess)
+    return (code ++ num)
+
+-- | Parser for a single UTSC course.
+-- We expect 4 letters, 2 digits
+utscCourseCodeParser :: Parser String
+utscCourseCodeParser = do
+    code <- Parsec.count 4 Parsec.letter
+    num <- Parsec.count 2 Parsec.digit
+    return (code ++ num)
+
+-- | Parser for a single course.
+-- We expect 3 letters followed by 3 digits or 4 letters followed by 2 digits, and a letter and a number.
+courseIDParser :: Parser String
+courseIDParser = do
+    courseCode <- Parsec.try utsgCourseCodeParser <|> utscCourseCodeParser
+    sess <- Parsec.string "H" <|> Parsec.string "Y"
+    sessNum <- Parsec.digit
+    return (courseCode ++ sess ++ [sessNum])
 
 singleParser :: Parser Req
 singleParser = do
@@ -175,6 +259,19 @@ courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map 
     rawTextParser
     ]
 
+-- | Parser for reqs related through the "one of the following" condition
+-- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
+oneOfParser :: Parser Req
+oneOfParser = do
+    Parsec.spaces
+    _ <- Parsec.try oneOfSeparator
+    Parsec.spaces
+    reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR (x:xs)
+
 -- | Parser for reqs related through an OR.
 orParser :: Parser Req
 orParser = do
@@ -187,29 +284,35 @@ orParser = do
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
 andParser = do
-    reqs <- Parsec.sepBy orParser andSeparator
+    reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
--- | Parser for reqs in "from" format:
--- 4.0 FCEs from CSC108H1, CSC148H1, ...
+-- | Parser for FCE requirements:
+-- "... 9.0 FCEs ..."
 fcesParser :: Parser Req
-fcesParser = do
+fcesParser = do 
+    _ <- Parsec.optional completionPrefix
     fces <- creditsParser
-    _ <- fromSeparator
-    Parsec.spaces
-    req <- andParser
-    return $ FCES fces req
+    _ <- Parsec.spaces
+    _ <- fceSeparator
+    _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
+    req <- Parsec.try andParser <|> Parsec.try orParser
+    return $ FCES fces req  
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
 categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
 
 parseReqs :: String -> Req
-parseReqs reqString =
-    let req = Parsec.parse categoryParser "" reqString
-    in case req of
-        Right x -> x
-        Left e -> J (show e) ""
+parseReqs reqString = do
+    let reqStringLower = map toLower reqString
+    if all isSpace reqString || reqStringLower == "none" || reqStringLower == "no"
+        then NONE
+        else do
+            let req = Parsec.parse categoryParser "" reqString
+                in case req of
+                    Right x -> x
+                    Left e -> J (show e) ""

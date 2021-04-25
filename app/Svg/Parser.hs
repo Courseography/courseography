@@ -38,30 +38,30 @@ import Data.List.Split (splitOn)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
-    performParse "Computer Science" "csc2019.svg"
-    performParse "Statistics" "sta2017.svg"
-    performParse "Biochemistry" "bch2015.svg"
-    performParse "Cell & Systems Biology" "csb2015.svg"
-    performParse "Estonian" "est2015.svg"
-    performParse "Finnish" "fin2015.svg"
-    performParse "Italian" "ita2015.svg"
-    performParse "Linguistics" "lin2015.svg"
-    performParse "Rotman" "rotman2015.svg"
-    performParse "Economics" "eco2015.svg"
-    performParse "Spanish" "spa2015.svg"
-    performParse "Portuguese" "prt2015.svg"
-    performParse "Slavic"  "sla2015.svg"
-    performParse "East Asian Studies" "eas2015.svg"
-    performParse "English" "eng2015.svg"
-    performParse "History and Philosophy of Science" "hps2015.svg"
-    performParse "History" "his2015.svg"
-    performParse "Geography" "ggr2015.svg"
-    performParse "Aboriginal" "abs2015.svg"
-    performParse "German" "ger2015.svg"
+    performParse "Computer Science" "csc2020.svg"
+    performParse "(unofficial) Statistics" "sta2017.svg"
+    performParse "(unofficial) Biochemistry" "bch2015.svg"
+    performParse "(unofficial) Cell & Systems Biology" "csb2015.svg"
+    performParse "(unofficial) Estonian" "est2015.svg"
+    performParse "(unofficial) Finnish" "fin2015.svg"
+    performParse "(unofficial) Italian" "ita2015.svg"
+    performParse "(unofficial) Linguistics" "lin2015.svg"
+    performParse "(unofficial) Rotman" "rotman2015.svg"
+    performParse "(unofficial) Economics" "eco2015.svg"
+    performParse "(unofficial) Spanish" "spa2015.svg"
+    performParse "(unofficial) Portuguese" "prt2015.svg"
+    performParse "(unofficial) Slavic" "sla2015.svg"
+    performParse "(unofficial) East Asian Studies" "eas2015.svg"
+    performParse "(unofficial) English" "eng2015.svg"
+    performParse "(unofficial) History and Philosophy of Science" "hps2015.svg"
+    performParse "(unofficial) History" "his2015.svg"
+    performParse "(unofficial) Geography" "ggr2015.svg"
+    performParse "(unofficial) Aboriginal" "abs2015.svg"
+    performParse "(unofficial) German" "ger2015.svg"
 
 parseDynamicSvg :: T.Text -> T.Text -> IO ()
 parseDynamicSvg graphName graphContents =
-    runSqlite databasePath $ performParseFromMemory graphName graphContents
+    runSqlite databasePath $ performParseFromMemory graphName graphContents True
 
 -- | The starting point for parsing a graph with a given title and file.
 performParse :: T.Text -- ^ The title of the graph.
@@ -70,17 +70,37 @@ performParse :: T.Text -- ^ The title of the graph.
 performParse graphName inputFilename = do
     liftIO . print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
     graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
-    performParseFromMemory graphName graphFile
+    performParseFromMemory graphName graphFile False
 
-performParseFromMemory :: T.Text -> T.Text -> SqlPersistM ()
-performParseFromMemory graphName graphContents = do
-    let tags = TS.parseTags graphContents
+performParseFromMemory :: T.Text -- ^ The title of the graph
+                       -> T.Text -- ^ Filename of the SVG to parse
+                       -> Bool -- ^ True if SVG is dynamically generated
+                       -> SqlPersistM ()
+performParseFromMemory graphName graphSvg isDynamic = do
+    key <- insertGraph graphName graphWidth graphHeight isDynamic
+    let parsedGraph = parseSvg key graphSvg
+    insertElements parsedGraph
+        where (graphWidth, graphHeight) = parseSizeFromSvg graphSvg
+
+
+-- * Parsing functions
+
+-- | Parse the height and width dimensions from the SVG element, respectively,
+-- and return them as a tuple.
+parseSizeFromSvg :: T.Text -> (Double, Double)
+parseSizeFromSvg graphSvg =
+    let tags = TS.parseTags graphSvg
         svgRoot = head $ filter (TS.isTagOpenName "svg") tags
-        (graphWidth, graphHeight) = parseSize svgRoot
-    key <- insertGraph graphName graphWidth graphHeight
+    in (parseDouble "width" svgRoot, parseDouble "height" svgRoot)
+    where parseDouble = parseAttr double
 
-    -- Need to remove any "defs" which Inkscape added
-    let defs = TS.partitions (TS.isTagOpenName "defs") tags
+-- | Parse an SVG file (respresented as a Text) and return three
+-- lists corresponding to different graph elements. (edges, nodes, text)
+parseSvg :: GraphId -> T.Text -> ([Path], [Shape], [Text])
+parseSvg key graphSvg =
+    let tags = TS.parseTags graphSvg
+        -- Need to remove any "defs" which Inkscape added
+        defs = TS.partitions (TS.isTagOpenName "defs") tags
         tagsWithoutDefs =
             if null defs
             then
@@ -89,27 +109,9 @@ performParseFromMemory graphName graphContents = do
                 -- TODO: pull this out into a generic helper
                 takeWhile (not . TS.isTagOpenName "defs") tags ++
                 concatMap (dropWhile (not . TS.isTagCloseName "defs")) defs
+    in parseGraph key tagsWithoutDefs
 
-        parsedGraph = parseGraph key tagsWithoutDefs
-
-    -- Insert the graph components into the database
-    insertElements parsedGraph
-
-
--- * Parsing functions
-
--- | Parse the height and width dimensions from the SVG element, respectively,
--- and return them as a tuple.
-parseSize :: Tag T.Text   -- ^ The file contents of the graph that will be parsed.
-          -> (Double, Double)
-parseSize svgRoot =
-    (parseDouble "width" svgRoot, parseDouble "height" svgRoot)
-    where parseDouble = parseAttr double
-
-
--- | Parses an SVG file.
---
--- This and the following functions traverse the raw SVG tags and return
+-- | This and the following functions traverse the raw SVG tags and return
 -- three lists, each containing values corresponding to different graph elements
 -- (edges, nodes, and text).
 parseGraph ::  GraphId                 -- ^ The unique identifier of the graph.
@@ -213,7 +215,7 @@ parseRect key tags =
           in
             updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
-                ""
+                (fromAttrib "id" $ head tags)
                 ((fst $ points !! 1) + fst trans, -- get x value
                 (snd $ points !! 1) + snd trans) -- get y value
                 ((fst $ points !! 0) - (fst $ points !! 1)) -- calculate width
@@ -229,16 +231,22 @@ parsePath :: GraphId
           -> [Tag T.Text]
           -> [Path]
 parsePath key tags =
-    concatMap (parsePathHelper key trans) (filter (TS.isTagOpenName "path") tags)
+    concatMap (parsePathHelper key trans edgeInfo) (filter (TS.isTagOpenName "path") tags)
     where
         trans = getTransform $ head tags
+        edgeInfo =
+            if (length splitArr) == 2
+                then (T.pack (splitArr !! 0), T.pack (splitArr !! 1)) -- not super type-safe
+                else ("", "")
+            where splitArr = splitOn "|" (T.unpack (fromAttrib "id" $ head tags))
 
 
 parsePathHelper :: GraphId -- ^ The Path's corresponding graph identifier.
                 -> Point
+                -> (T.Text, T.Text) -- src, dst
                 -> Tag T.Text
                 -> [Path]
-parsePathHelper key trans pathTag =
+parsePathHelper key trans (src, dst) pathTag =
     let d = fromAttrib "d" pathTag
         styles' = styles pathTag
         currTrans = parseTransform $ fromAttrib "transform" pathTag
@@ -251,12 +259,21 @@ parsePathHelper key trans pathTag =
     else [updatePath fillAttr $
             Path key
                 ""
-                realD
+                (removeDups realD)
                 ""
                 ""
                 isRegion
-                ""
-                ""]
+                src
+                dst]
+    where
+        -- Remove consecutive duplicated points
+        removeDups :: Eq a => [a] -> [a]
+        removeDups [] = []
+        removeDups [p] = [p]
+        removeDups (x:xs) =
+            if x == head xs
+                then removeDups xs
+                else x : removeDups xs
 
 
 -- | Create an ellipse from an open ellipse tag.
@@ -275,7 +292,7 @@ parseEllipseHelper :: GraphId     -- ^ The related graph id.
                    -> Shape
 parseEllipseHelper key (dx, dy) ellipseTag =
     Shape key
-          ""
+          (fromAttrib "id" ellipseTag)
           (readAttr "cx" ellipseTag + dx,
            readAttr "cy" ellipseTag + dy)
           (readAttr "rx" ellipseTag * 2)

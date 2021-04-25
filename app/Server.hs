@@ -9,10 +9,8 @@ responses.
 module Server
     (runServer) where
 
-import Control.Monad (msum)
 import Control.Concurrent (killThread, forkIO)
 import Happstack.Server hiding (host)
-import Response (notFoundResponse)
 import Filesystem.Path.CurrentOS as Path
 import System.Directory (getCurrentDirectory)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
@@ -21,7 +19,7 @@ import System.Process (CreateProcess(std_in), StdStream(CreatePipe), createProce
 import Data.String (fromString)
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
-import Routes (routes)
+import Routes (routeResponses)
 import GHC.IO.Handle (hClose)
 
 webpackScript :: Path.FilePath
@@ -46,13 +44,7 @@ runServer = do
     -- Start the HTTP server
     httpThreadId <- forkIO $ simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
-      msum
-           (map (uncurry dir) (routes staticDir aboutContents privacyContents) ++
-           [ do
-              nullDir
-              seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
-              notFoundResponse
-        ])
+      routeResponses staticDir aboutContents privacyContents
     waitForTermination
     killThread httpThreadId
     -- Closing the stdin of webpack stops the watch.

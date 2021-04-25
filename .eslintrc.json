@@ -14,7 +14,9 @@
   "overrides": [{
     "files": ["*.js"],
     "env": {
-      "jest": true
+      "jest": true,
+      "node": true,
+      "es6": true
     }
   }],
   "parser": "babel-eslint",

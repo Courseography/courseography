@@ -11,4 +11,5 @@ import Response.NotFound as X
 import Response.Post as X
 import Response.Privacy as X
 import Response.Search as X
+import Response.Generate as X
 import Response.Export as X

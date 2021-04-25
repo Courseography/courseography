@@ -61,6 +61,6 @@ instance FromJSON DB where
       course <- parseJSON (Object o)
       session :: T.Text <- o .:? "section" .!= "F"
       meetingTimesMap :: HM.HashMap T.Text MeetTime <- o .:? "meetings" .!= HM.empty
-      let allMeetingsTimes = map (\m -> m {meetData = (meetData m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
+      let allMeetingsTimes = map (\m -> m {meetInfo = (meetInfo m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
       return $ DB (course, allMeetingsTimes)
     parseJSON _ = fail "Invalid section"

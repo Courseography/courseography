@@ -18,7 +18,7 @@ masterTemplate title headers body scripts =
                    ! A.content "text/html;charset=utf-8"
             H.title (H.toHtml title)
             H.link ! A.rel "icon" ! A.type_ "image/png"
-                   ! A.href "static/res/ico/favicon.png"
+                   ! A.href "/static/res/ico/favicon.png"
             H.link ! A.rel "stylesheet" ! A.href "https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
             H.script ! A.src "https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
                      $ H.toHtml ("" :: String)
@@ -27,7 +27,7 @@ masterTemplate title headers body scripts =
                 if enableCdn
                 then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
                 else "/static/style/bootstrap.min.3.1.1.css",
-                "static/style/app.css"]
+                "/static/style/app.css"]
         H.body $ do
             body
             mapM_ toScript globalScripts
@@ -38,15 +38,17 @@ masterTemplate title headers body scripts =
 header :: T.Text -> H.Html
 header page =
     H.nav ! A.class_ "row header" $ do
-        H.img ! A.id "courseography-header" ! A.src "static/res/img/logo.png"
+        H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
              ! H.customAttribute "context" (textValue page)
         H.ul ! A.id "nav-links" $ do
-            H.li $ toLink "graph" "Graph"
-            H.li $ toLink "grid" "Grid"
-            H.li $ toLink "timesearch" "Search"
-            H.li $ toLink "draw" "Draw"
-            H.li $ toLink "post" "Check My POSt!"
-            H.li $ toLink "about" "About"
+            H.li $ toLink "/graph" "Graph"
+            H.li $ toLink "/grid" "Grid"
+            H.li $ toLink "/timesearch" "Search"
+            H.li $ toLink "/generate" "Generate"
+            H.li $ toLink "/draw" "Draw"
+            -- TODO: re-enable after handling new first-year courses
+            -- H.li $ toLink "post" "Check My POSt!"
+            H.li $ toLink "/about" "About"
             if page `elem` ["graph", "grid"]
             then H.li $ H.a ! A.id "nav-export" $ "Export"
             else ""

@@ -21,7 +21,7 @@ $('#colour-table').on('click', 'td', function() {
 
 $('#save-graph').click(function () {
     $.ajax({
-        url: 'save-json',
+        url: '/save-json',
         data: {'jsonData' : convertSvgToJson(),
                'nameData' : $('#area-of-study').val()},
         method: 'POST',
@@ -36,7 +36,7 @@ $('#save-graph').click(function () {
 
 $('#submit-graph-name').click(function() {
        $.ajax({
-            url: 'get-json-data',
+            url: '/get-json-data',
             data: {graphName : $('#area-of-study').val()},
             dataType: 'json',
             success: function(data) {

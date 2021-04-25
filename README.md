@@ -41,7 +41,7 @@ Then, open a terminal (in Windows, run as Administrator) and run
 *Note*: this is a script intended for beginners; you may wish to read through the script and run modified commands to suit your own needs.
 
 #### Other Files
-*You can also do these two steps manually.*
+*Run these two steps manually.*
 
 1. Copy app/DevelopmentConfig.hs to app/Config.hs with `$ cp app/DevelopmentConfig.hs app/Config.hs`
 2. Create the db folder with `$ mkdir db`
@@ -93,7 +93,9 @@ Sam Shaftoe,
 Ian Stewart-Binks,
 Betty Wang,
 Fullchee Zhang,
-Minfan Zhang
+Minfan Zhang,
+Alex Shih,
+Cassandra Stefura
 
 Privacy Policy and Licensing
 --------------------------------------

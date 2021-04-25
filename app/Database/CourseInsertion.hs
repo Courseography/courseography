@@ -15,7 +15,7 @@ import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
-import Database.Persist.Class (selectKeysList, Key)
+import Database.Persist.Class (selectKeysList)
 import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (==.), runSqlite)
 import Database.Tables hiding (texts, shapes, paths, breadth, distribution)
 import qualified Data.Aeson as Aeson
@@ -32,7 +32,7 @@ saveGraphJSON jsonStr nameStr = do
     where
         insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
         insertGraph nameStr_ texts shapes paths = do
-            gId <- insert $ Graph nameStr_ 256 256
+            gId <- insert $ Graph nameStr_ 256 256 False
             insertMany_ $ map (\text -> text {textGraph = gId}) texts
             insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
             insertMany_ $ map (\path -> path {pathGraph = gId}) paths
