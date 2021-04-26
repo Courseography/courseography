@@ -47,3 +47,8 @@ cabal.sandbox.config
 # coverage directory used by tools like istanbul and jest --coverage
 coverage
 
+# cypress suggested folder structure scaffolding
+/cypress/fixtures
+/cypress/integration/examples
+/cypress/plugins
+/cypress/support

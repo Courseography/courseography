@@ -281,20 +281,18 @@ parseEllipse :: GraphId
              -> [Tag T.Text]
              -> [Shape]
 parseEllipse key tags =
-    map (parseEllipseHelper key trans gid) (filter (TS.isTagOpenName "ellipse") tags)
+    map (parseEllipseHelper key trans) (filter (TS.isTagOpenName "ellipse") tags)
     where
         trans = getTransform $ head tags
-        gid = (fromAttrib "id" $ head tags)
 
 
 parseEllipseHelper :: GraphId     -- ^ The related graph id.
                    -> Point       -- ^ The translation to apply.
-                   -> T.Text      -- ^ An id field for the node in the graph
                    -> Tag T.Text  -- ^ The open ellipse tag.
                    -> Shape
-parseEllipseHelper key (dx, dy) gid ellipseTag =
+parseEllipseHelper key (dx, dy) ellipseTag =
     Shape key
-          gid
+          (fromAttrib "id" ellipseTag)
           (readAttr "cx" ellipseTag + dx,
            readAttr "cy" ellipseTag + dy)
           (readAttr "rx" ellipseTag * 2)
