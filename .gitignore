@@ -17,7 +17,7 @@ cabal.sandbox.config
 .stack-work/
 
 # generated CSS
-/public/style/app.css
+/public/style/
 
 # generated resources
 /graphs/gen/*.svg

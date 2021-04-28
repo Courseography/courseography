@@ -19,7 +19,6 @@ import qualified Data.Map.Strict as Map
 import Server (runServer)
 import Database.Database (setupDatabase)
 import Svg.Parser (parsePrebuiltSvgs)
-import Css.Compiler (compileCSS)
 import Util.Documentation (generateDocs)
 
 -- dynamic graph generation
@@ -31,7 +30,6 @@ taskMap = Map.fromList [
     ("server", const runServer),
     ("database", const setupDatabase),
     ("graphs", const parsePrebuiltSvgs),
-    ("css", const compileCSS),
     ("docs", const generateDocs),
     ("generate", generate)]
 
