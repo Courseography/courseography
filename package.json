@@ -1,6 +1,6 @@
 {
   "name": "courseography",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": "git@github.com:Courseography/courseography.git",
   "author": "David Liu <david@cs.toronto.edu>",
   "license": "GPL-3.0",
@@ -11,6 +11,7 @@
     "eslint": "./node_modules/.bin/eslint --fix-dry-run ./js/components/graph"
   },
   "jest": {
+    "moduleFileExtensions": ["js", "jsx"],
     "setupFiles": [
       "<rootDir>/js/setupTests.js"
     ],
@@ -35,7 +36,7 @@
     }
   },
   "dependencies": {
-    "@babel/polyfill": "^7.2.5",
+    "core-js": "^3.11.0",
     "handlebars": "^4.5.3",
     "leaflet": "^1.5.1",
     "lodash": "^4.17.19",
@@ -43,19 +44,20 @@
     "react-dom": "^16.4.1",
     "react-leaflet": "^2.3.0",
     "react-modal": "^3.5.1",
+    "regenerator-runtime": "^0.13.7",
     "stringstream": "^0.0.6",
-    "webpack": "^2.4.1",
-    "webpack-dev-server": "^3.1.11"
+    "webpack": "^5.36.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/plugin-proposal-class-properties": "^7.5.0",
-    "@babel/preset-env": "^7.4.2",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/core": "^7.13.16",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/preset-env": "^7.13.15",
+    "@babel/preset-react": "^7.13.13",
     "@testing-library/react": "^8.0.5",
     "babel-eslint": "10.0.1",
-    "babel-jest": "24.0.0",
-    "babel-loader": "^8.0.0",
+    "babel-jest": "26.6.3",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.2.4",
     "cypress": "3.4.1",
     "enzyme": "3.8.0",
     "enzyme-adapter-react-16": "1.8.0",
@@ -66,10 +68,16 @@
     "eslint-plugin-react": "7.12.4",
     "fetch-mock": "^7.3.1",
     "husky": "1.3.1",
-    "jest": "24.0.0",
+    "jest": "26.6.3",
+    "mini-css-extract-plugin": "^1.5.1",
     "node-fetch": "^2.6.1",
     "precise-commits": "1.0.2",
     "prettier": "1.16.1",
-    "prop-types": "15.6.2"
+    "prop-types": "15.6.2",
+    "sass": "^1.32.11",
+    "sass-loader": "^11.0.1",
+    "style-loader": "^2.0.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.1.11"
   }
 }

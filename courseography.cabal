@@ -1,9 +1,9 @@
 name:                courseography
-version:             0.2.0.0
+version:             0.3.0.0
 synopsis:            Program and course planning app for the University of Toronto.
 description:         A web application designed to aid students in planning their courses
                      at the University of Toronto.
-homepage:            https://courseography.cdf.toronto.edu
+homepage:            https://courseography.teach.cs.toronto.edu
 license:             GPL
 license-file:        LICENSE
 author:              David Liu
@@ -45,19 +45,7 @@ executable courseography
   main-is:             Main.hs
   other-modules:
     Config,
-    Css.About,
-    Css.Common,
-    Css.Compiler,
     Css.Constants,
-    Css.Draw,
-    Css.FourOhFour,
-    Css.Generate,
-    Css.Graph,
-    Css.Loading,
-    Css.Post,
-    Css.Privacy,
-    Css.Search,
-    Css.Timetable,
     Database.CourseInsertion,
     Database.CourseQueries,
     Database.CourseVideoSeed,
@@ -158,7 +146,6 @@ executable courseography
     mtl,
     persistent-template,
     vector,
-    clay,
     directory,
     markdown,
     system-filepath,

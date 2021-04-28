@@ -1,3 +1,6 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 import {SpecialistPost, MajorPost, MinorPost} from './post_components.js.jsx';
 
 import React from 'react';

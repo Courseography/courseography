@@ -17,7 +17,6 @@ module Config (
     orgApiUrl,
     fasCalendarUrl,
     programsUrl,
-    cssStyle,
     fallStartDate,
     fallEndDate,
     winterStartDate,
@@ -28,7 +27,6 @@ module Config (
     ) where
 
 import Data.Text (Text)
-import qualified Clay.Render as Clay
 import Data.Time (Day, fromGregorian)
 import Happstack.Server (Conf(..), LogAccess, nullConf)
 import System.Log.Logger (logM, Priority(INFO))
@@ -95,13 +93,6 @@ fasCalendarUrl = "https://fas.calendar.utoronto.ca/"
 
 programsUrl :: String
 programsUrl = "https://fas.calendar.utoronto.ca/listing-program-subject-areas"
-
--- ASSET COMPILATION
-
--- | Output css style. Either @Clay.pretty@ for human-readable output or
--- @Clay.compact@ for minified output.
-cssStyle :: Clay.Config
-cssStyle = Clay.pretty
 
 -- CALENDAR RESPONSE DATES
 

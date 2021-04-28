@@ -1,4 +1,10 @@
 const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const presets = [
+  ["@babel/preset-env", { "useBuiltIns": "usage", "corejs": 3 }],
+  ["@babel/preset-react"]
+];
 
 module.exports = {
   entry: {
@@ -8,7 +14,7 @@ module.exports = {
     'js/post/app': './js/components/post/post.js.jsx',
     'js/draw/app': './js/components/draw/main.js',
     'js/generate/app': './js/components/generate/generate.js',
-
+    'style/app': './style/app.js'
   },
   output: {
     path: path.resolve(__dirname, 'public'),
@@ -16,9 +22,47 @@ module.exports = {
     filename: '[name].js'
   },
   module: {
-    loaders: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ }
+    rules: [
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: { presets }
+        },
+        exclude: /node_modules/
+      },
+      {
+        test: /\.jsx$/,
+        use: {
+          loader: 'babel-loader',
+          options: { presets }
+        },
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+        ],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "sass-loader",
+        ],
+      },
     ]
-  }
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "[name].css",
+      chunkFilename: "[id].css",
+    }),
+  ],
+  mode: 'development',
 };

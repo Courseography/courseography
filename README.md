@@ -53,7 +53,6 @@ Then, open a terminal (in Windows, run as Administrator) and run
 #### Parsing and Generation
 1. Create database file for an parse prerequisite graph `$ stack exec courseography graphs`
 2. Parse course information `$ stack exec courseography database`
-3. Generate the CSS `$ stack exec courseography css`
 
 #### Running
 1. Run `$ stack exec courseography` to start the server
