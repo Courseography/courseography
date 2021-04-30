@@ -10,11 +10,11 @@ jobs:
       - restore_cache:
           name: Restore Cached Dependencies (Haskell)
           keys:
-            - v1.2-courseography-haskell-{{ checksum "courseography.cabal" }}
+            - v1.3-courseography-haskell-{{ checksum "courseography.cabal" }}
       - restore_cache:
           name: Restore Cached Dependencies (JavaScript)
           keys:
-            - v1.2-courseography-js-{{ checksum "package.json" }}
+            - v1.3-courseography-js-{{ checksum "package.json" }}
 
       - run:
           name: Install Package Dependencies
@@ -37,14 +37,14 @@ jobs:
 
       - save_cache:
           name: Cache Dependencies (Haskell)
-          key: v1.2-courseography-haskell-{{ checksum "courseography.cabal" }}
+          key: v1.3-courseography-haskell-{{ checksum "courseography.cabal" }}
           paths:
             - "/root/.stack"
             - ".stack-work"
 
       - save_cache:
           name: Cache Dependencies (JavaScript)
-          key: v1.2-courseography-js-{{ checksum "package.json" }}
+          key: v1.3-courseography-js-{{ checksum "package.json" }}
           paths:
             - node_modules
 
