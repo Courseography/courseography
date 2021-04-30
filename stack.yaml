@@ -17,6 +17,6 @@ extra-deps:
   - svg-builder-0.1.1
   - regex-posix-clib-2.7
 compiler-check: newer-minor
-resolver: lts-17.9
+resolver: lts-17.10
 dump-logs: all
 require-stack-version: ! '>= 1.6'

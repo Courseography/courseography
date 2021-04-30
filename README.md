@@ -1,4 +1,4 @@
-[Courseography](https://courseography.cs.toronto.edu)
+[Courseography](https://courseography.teach.cs.toronto.edu/graph)
 =============
 
 About
@@ -14,8 +14,6 @@ Getting Involved
 
 See [CONTRIBUTING.md](https://github.com/Courseography/courseography/blob/master/CONTRIBUTING.md).
 
-Say hello on our [Slack channel][slackin]! ![Slack][slackin-badge]
-
 
 Quickstart and Setup
 --------------------------------------
@@ -25,20 +23,16 @@ Quickstart and Setup
 1. Run `$ git clone https://github.com/Courseography/courseography.git` to create a local copy of the Courseography.
 
 #### Software Dependencies
-First install both of the following.
+First install the following:
 
 1. [Stack](https://docs.haskellstack.org/en/stable/README/)
-2. [ImageMagick](http://www.imagemagick.org/script/download.php)
+2. [Node.js](https://nodejs.org/en/download/)
+3. Yarn, by opening a terminal and running: `npm install -g yarn`
+4. [ImageMagick](http://www.imagemagick.org/script/download.php)
+5. [GraphViz](https://graphviz.org/download/)
 
-On Windows, install Chocolatey.
-
-On Mac, install Homebrew.
-
-Then, open a terminal (in Windows, run as Administrator) and run
-
-```$ scripts/setup_<your os>```
-
-*Note*: this is a script intended for beginners; you may wish to read through the script and run modified commands to suit your own needs.
+Then, open a terminal window and `cd` into your `courseography` repository folder.
+The remaining steps should all be run in this terminal window.
 
 #### Other Files
 *Run these two steps manually.*
@@ -47,15 +41,21 @@ Then, open a terminal (in Windows, run as Administrator) and run
 2. Create the db folder with `$ mkdir db`
 
 #### Installing
-1. Install the latest GHC compiler with `$ stack setup`
-2. Compile Courseography with `$ stack build`
+
+Run the following commands (the parts after `#` are just comments):
+
+```console
+$ yarn install  # Install all Javascript dependencies
+$ stack setup   # Install the required GHC compiler
+$ stack build   # Compile Courseography and all Haskell dependencies (this will take a while)
+```
 
 #### Parsing and Generation
-1. Create database file for an parse prerequisite graph `$ stack exec courseography graphs`
-2. Parse course information `$ stack exec courseography database`
+1. Create database file for an parse prerequisite graph `$ stack run graphs`
+2. Parse course information `$ stack run database`
 
 #### Running
-1. Run `$ stack exec courseography` to start the server
+1. Run `$ stack run` to start the server
 2. Navigate to `http://localhost:8000/graph` in your browser
 
 

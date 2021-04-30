@@ -10,11 +10,11 @@ jobs:
       - restore_cache:
           name: Restore Cached Dependencies (Haskell)
           keys:
-            - v1.1-courseography-haskell-{{ checksum "courseography.cabal" }}
+            - v1.2-courseography-haskell-{{ checksum "courseography.cabal" }}
       - restore_cache:
           name: Restore Cached Dependencies (JavaScript)
           keys:
-            - v1.1-courseography-js-{{ checksum "package.json" }}
+            - v1.2-courseography-js-{{ checksum "package.json" }}
 
       - run:
           name: Install Package Dependencies
@@ -26,35 +26,32 @@ jobs:
             curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
             sudo apt-get install -y nodejs
 
-            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-            sudo apt-get update && sudo apt-get install -y yarn
-
+            npm install yarn
       - run:
           name: Resolve/Update Dependencies
           command: |
-            stack setup
+            stack --no-terminal setup
             rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
             yarn install
 
       - save_cache:
           name: Cache Dependencies (Haskell)
-          key: v1.1-courseography-haskell-{{ checksum "courseography.cabal" }}
+          key: v1.2-courseography-haskell-{{ checksum "courseography.cabal" }}
           paths:
-            - ~/.stack
-            - .stack-work
+            - "/root/.stack"
+            - ".stack-work"
 
       - save_cache:
           name: Cache Dependencies (JavaScript)
-          key: v1.1-courseography-js-{{ checksum "package.json" }}
+          key: v1.2-courseography-js-{{ checksum "package.json" }}
           paths:
             - node_modules
 
       - run:
           name: Run tests
           command: |
-            stack build --fast -j1 --ghc-options -Werror
-            stack test
+            stack --no-terminal build --fast -j1 --ghc-options -Werror
+            stack --no-terminal test
             yarn test
 
       - run:
@@ -65,7 +62,7 @@ jobs:
       - run:
           name: Generate documentation
           command: |
-            stack exec courseography docs
+            stack --no-terminal exec courseography docs
 
       - store_artifacts:
           path: doc

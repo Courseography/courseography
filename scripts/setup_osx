@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-# Install software dependencies from homebrew
-brew install node
-brew install yarn
-
-# Install JavaScript dependencies using yarn
-yarn install
