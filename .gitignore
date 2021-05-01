@@ -36,6 +36,15 @@ cabal.sandbox.config
 # Node (Javascript) modules
 /node_modules
 
+# Yarn files
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # TODO: eventually remove all public/js files from tracking
 /public/js/search
 /public/js/grid/app.js
