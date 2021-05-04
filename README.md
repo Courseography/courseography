@@ -29,6 +29,7 @@ First install the following:
 3. Yarn, by opening a terminal and running: `npm install -g yarn`
 4. [ImageMagick](http://www.imagemagick.org/script/download.php)
 5. [GraphViz](https://graphviz.org/download/)
+6. [LaTeX](https://www.latex-project.org/get/)
 
 Then, open a terminal window and `cd` into your `courseography` repository folder.
 The remaining steps should all be run in this terminal window.
