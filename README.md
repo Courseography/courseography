@@ -15,9 +15,8 @@ Getting Involved
 See [CONTRIBUTING.md](https://github.com/Courseography/courseography/blob/master/CONTRIBUTING.md).
 
 
-Quickstart and Setup
+Installation
 --------------------------------------
-**If this is your first time running Courseography, please click [here](https://github.com/Courseography/courseography/wiki/Installing-Courseography). The following is intended to be a quickstart guide and not a proper tutorial.**
 
 #### Download Courseography
 1. Run `$ git clone https://github.com/Courseography/courseography.git` to create a local copy of the Courseography.
