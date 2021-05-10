@@ -21,13 +21,13 @@ data CourseGraphOptions = CourseGraphOptions { courses :: [T.Text], graphOptions
 defaultGraphOptions :: GraphOptions
 defaultGraphOptions =
     GraphOptions []                    -- taken
-                 ["CSC"]                    -- departments
+                 []                    -- departments
                  0                     -- excludedDepth
                  (-1)                  -- maxDepth
                  []                    -- courseNumPrefix
                  []                    -- distribution
                  []                    -- location
-                 False                  -- includeRaws
+                 True                  -- includeRaws
                  True                  -- includeGrades
 
 instance FromJSON CourseGraphOptions where
