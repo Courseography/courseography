@@ -222,8 +222,9 @@ makeBool text1 = do
 makeEdge :: Text -> Text -> Maybe Text -> State GeneratorState (DotEdge Text)
 makeEdge id1 id2 description =
     return $ DotEdge id1 id2
-                    (ID (id1 `mappend` "|" `mappend` id2) : textLabelList)
-    where textLabelList = case description of
+                     (ID (id1 `mappend` "|" `mappend` id2) : textLabelList)
+    where
+        textLabelList = case description of
             Nothing -> []
             Just a -> [textLabel a]
 
