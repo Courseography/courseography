@@ -76,7 +76,8 @@ class GenerateForm extends React.Component {
         var edgesList = [];
 
         var labelsList = data.texts.filter(function(entry) {
-          return entry.rId.startsWith("tspan");
+            // filter for mark percentages, allow preceding characters for potential geq
+            return entry.text.match(/.*[0-9]*%/g);
         });
 
         data.shapes.forEach(function(entry) {

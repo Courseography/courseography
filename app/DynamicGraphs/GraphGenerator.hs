@@ -127,56 +127,64 @@ reqToStmtsTree options parentID (J name2 _) = do
     let name = pack name2
     if pickCourse options name then do
         prereq <- makeNode name $ Just (nodeColor options name)
-        edge <- makeEdge (nodeID prereq) parentID
+        edge <- makeEdge (nodeID prereq) parentID Nothing
         return (Node [DN prereq, DE edge] [])
     else
         return (Node [] [])
 -- Two or more required prerequisites.
 reqToStmtsTree options parentID (AND reqs) = do
     andNode <- makeBool "and"
-    edge <- makeEdge (nodeID andNode) parentID
+    edge <- makeEdge (nodeID andNode) parentID Nothing
     prereqStmts <- mapM (reqToStmtsTree options (nodeID andNode)) reqs
     let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
     case filteredStmts of
         [] -> return $ Node [] []
         [Node (DN node:_) xs] -> do
             -- make new edge with parent id and single child id
-            newEdge <- makeEdge (nodeID node) parentID
+            newEdge <- makeEdge (nodeID node) parentID Nothing
             return $ Node [DN node, DE newEdge] xs
         _ -> return $ Node [DN andNode, DE edge] filteredStmts
 -- A choice from two or more prerequisites.
 reqToStmtsTree options parentID (OR reqs) = do
     orNode <- makeBool "or"
-    edge <- makeEdge (nodeID orNode) parentID
+    edge <- makeEdge (nodeID orNode) parentID Nothing
     prereqStmts <- mapM (reqToStmtsTree options (nodeID orNode)) reqs
     let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
     case filteredStmts of
         [] -> return $ Node [] []
         [Node (DN node:_) xs] -> do
             -- make new edge with parent id and single child id
-            newEdge <- makeEdge (nodeID node) parentID
+            newEdge <- makeEdge (nodeID node) parentID Nothing
             return $ Node [DN node, DE newEdge] xs
         _  -> return $ Node [DN orNode, DE edge] filteredStmts
+
 -- A prerequisite with a grade requirement.
 reqToStmtsTree options parentID (GRADE description req) = do
     if includeGrades options then do
-        gradeNode <- makeNode (pack description) Nothing
-        edge <- makeEdge (nodeID gradeNode) parentID
-        prereqStmt <- reqToStmtsTree options (nodeID gradeNode) req
-        return $ Node [DN gradeNode, DE edge] [prereqStmt]
+        Node root rest <- reqToStmtsTree options parentID req
+        case root of
+            DN gradeNode:_ -> do
+                -- make an annotated edge
+                gradeEdge <- makeEdge (nodeID gradeNode)
+                                      parentID
+                                      (Just $ pack $ description ++ "%")
+                -- swap out top edge of prereqStmt tree with annotated edge
+                return $ Node [DN gradeNode, DE gradeEdge] rest
+            _ -> return $ Node [] [] -- ERROR
     else reqToStmtsTree options parentID req
+
 -- A raw string description of a prerequisite.
 reqToStmtsTree options parentID (RAW rawText) =
     if not (includeRaws options) || "High school" `isInfixOf` pack rawText || rawText == ""
         then return $ Node [] []
         else do
             prereq <- makeNode (pack rawText) Nothing
-            edge <- makeEdge (nodeID prereq) parentID
+            edge <- makeEdge (nodeID prereq) parentID Nothing
             return $ Node [DN prereq, DE edge] []
 --A prerequisite concerning a given number of earned credits
 reqToStmtsTree options parentID (FCES creds req) = do
     fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs") Nothing
-    edge <- makeEdge (nodeID fceNode) parentID
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
     prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
     return $ Node [DN fceNode, DE edge] [prereqStmts]
 
@@ -210,9 +218,15 @@ makeBool text1 = do
     return $ DotNode nodeId
                      ([AC.Label (toLabelValue text1), ID nodeId] ++ ellipseAttrs)
 
-
-makeEdge :: Text -> Text -> State GeneratorState (DotEdge Text)
-makeEdge id1 id2 = return $ DotEdge id1 id2 [ID (id1 `mappend` "|" `mappend` id2)]
+-- | Create edge from two node ids. Also allow for potential edge label
+makeEdge :: Text -> Text -> Maybe Text -> State GeneratorState (DotEdge Text)
+makeEdge id1 id2 description =
+    return $ DotEdge id1 id2
+                     (ID (id1 `mappend` "|" `mappend` id2) : textLabelList)
+    where
+        textLabelList = case description of
+            Nothing -> []
+            Just a -> [textLabel a]
 
 mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show counter))
