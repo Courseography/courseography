@@ -55,7 +55,7 @@ logMAccessShort host user _ requestLine responseCode _ referer _ =
 
 -- DATABASE CONNECTION STRINGS
 
--- | The path to the database file, relative to @hs/@.
+-- | The path to the database file, relative to the project root.
 databasePath :: Text
 databasePath = "db/database.sqlite3"
 
@@ -77,7 +77,7 @@ genCssPath = "./public/style/"
 
 -- | The URL for U of T's official timetable.
 timetableUrl :: String
-timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
+timetableUrl = "https://timetable.iit.artsci.utoronto.ca/"
 
 -- | The Faculty of Arts and Science API for course timetables (by unit).
 timetableApiUrl :: Text
@@ -89,10 +89,10 @@ orgApiUrl = "https://timetable.iit.artsci.utoronto.ca/api/orgs"
 
 -- | The URLs of the Faculty of Arts & Science calendar.
 fasCalendarUrl :: String
-fasCalendarUrl = "https://fas.calendar.utoronto.ca/"
+fasCalendarUrl = "https://artsci.calendar.utoronto.ca/"
 
 programsUrl :: String
-programsUrl = "https://fas.calendar.utoronto.ca/listing-program-subject-areas"
+programsUrl = "https://artsci.calendar.utoronto.ca/listing-program-subject-areas"
 
 -- CALENDAR RESPONSE DATES
 

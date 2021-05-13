@@ -38,7 +38,7 @@ import Data.List.Split (splitOn)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
-    performParse "Computer Science" "csc2020.svg"
+    performParse "Computer Science" "csc2021.svg"
     performParse "(unofficial) Statistics" "sta2017.svg"
     performParse "(unofficial) Biochemistry" "bch2015.svg"
     performParse "(unofficial) Cell & Systems Biology" "csb2015.svg"
@@ -197,16 +197,17 @@ parseRect key tags =
         gOpen = head tags
         styles' = styles gOpen
         fill = styleVal "fill" styles'
+        fill' = if T.null fill then fromAttrib "fill" gOpen else fill
         trans = getTransform $ head tags
         makeRect rectOpenTag =
-            updateShape fill $
+            updateShape fill' $
                 Shape key
                   ""
                   (readAttr "x" rectOpenTag + fst trans,
                    readAttr "y" rectOpenTag + snd trans)
                   (readAttr "width" rectOpenTag)
                   (readAttr "height" rectOpenTag)
-                  fill
+                  fill'
                   ""
                   []
                   Node

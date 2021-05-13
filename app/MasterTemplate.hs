@@ -43,15 +43,15 @@ header page =
         H.ul ! A.id "nav-links" $ do
             H.li $ toLink "/graph" "Graph"
             H.li $ toLink "/grid" "Grid"
-            H.li $ toLink "/timesearch" "Search"
-            H.li $ toLink "/generate" "Generate"
-            H.li $ toLink "/draw" "Draw"
-            -- TODO: re-enable after handling new first-year courses
-            -- H.li $ toLink "post" "Check My POSt!"
-            H.li $ toLink "/about" "About"
             if page `elem` ["graph", "grid"]
             then H.li $ H.a ! A.id "nav-export" $ "Export"
             else ""
+            H.li $ toLink "/generate" "Generate (beta)"
+            -- H.li $ toLink "/timesearch" "Search"
+            -- H.li $ toLink "/draw" "Draw"
+            -- TODO: re-enable after handling new first-year courses
+            -- H.li $ toLink "post" "Check My POSt!"
+            H.li $ toLink "/about" "About"
 
 disclaimer :: H.Html
 disclaimer =
@@ -60,7 +60,7 @@ disclaimer =
         H.a ! A.href "https://timetable.iit.artsci.utoronto.ca/"
             $ "Official Timetable"
         _ <- " and "
-        H.a ! A.href "http://calendar.artsci.utoronto.ca/"
+        H.a ! A.href "https://artsci.calendar.utoronto.ca/"
             $ "Calendar"
         _ <- " take precedence over the information presented here. "
         _ <- "It's important that you double-check your course selection, "
