@@ -60,7 +60,7 @@ export class ExportModal extends React.Component {
 
     getGridImage(session) {
         var formattedSession = session.charAt(0).toUpperCase() + session.slice(1);
-        let allCourses = JSON.parse(localStorage.getItem('selectedLectures'));
+        let allCourses = JSON.parse(localStorage.getItem('selectedLectures')) || [];
         let courseData = allCourses.map((data) => `${data.courseCode.split(' ')[0]}-${data.lectureCode}-${data.session}`);
         $.ajax({
             url: '/timetable-image',
@@ -115,7 +115,7 @@ export class ExportModal extends React.Component {
 
 
 function getCalendar() {
-    let allCourses = JSON.parse(localStorage.getItem('selectedLectures'));
+    let allCourses = JSON.parse(localStorage.getItem('selectedLectures')) || [];
     let courseData = allCourses.map((data) => `${data.courseCode.split(' ')[0]}-${data.lectureCode}-${data.session}`);
     $.ajax({
         type: "post",
@@ -154,7 +154,7 @@ function getPDF() {
         }
     }
 
-    let allCourses = JSON.parse(localStorage.getItem('selectedLectures'));
+    let allCourses = JSON.parse(localStorage.getItem('selectedLectures')) || [];
     let courseData = allCourses.map((data) => `${data.courseCode.split(' ')[0]}-${data.lectureCode}-${data.session}`);
 
     $.ajax({

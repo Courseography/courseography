@@ -22,7 +22,8 @@ import WebParsing.ParsecCombinators (parseUntil, text)
 addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
 addPostToDatabase programElements = do
     let fullPostName = maybe "" (strip . fromTagText) $ find isTagText programElements
-        requirementLines = reqHtmlToLines $ last $ sections isRequirementSection programElements
+        postHtml = sections isRequirementSection programElements
+        requirementLines = if null postHtml then [] else reqHtmlToLines $ last postHtml
         requirements = concatMap parseRequirement requirementLines
     liftIO $ print fullPostName
 
@@ -35,7 +36,7 @@ addPostToDatabase programElements = do
                     mapM_ (insert_ . PostCategory key) requirements
                 Nothing -> return ()
     where
-        isRequirementSection = tagOpenAttrLit "div" ("class", "field-content")
+        isRequirementSection tag = or [tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag, tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag]
 
 
 -- | Parse a Post value from its title.

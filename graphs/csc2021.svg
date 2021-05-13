@@ -1,0 +1,3785 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1196"
+   height="707.919189453125"
+   viewBox="0 0 1195.999948434501 707.9192123560712"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
+   sodipodi:docname="csc2021.svg">
+  <defs
+     id="defs2">
+    <clipPath
+       id="clipPath1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path4860"
+         d="M 0,0 H 1186 V 660 H 0 Z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath2"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path4863"
+         d="M -17,-317 H 1169 V 343 H -17 Z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.2823701"
+     inkscape:cx="308.24302"
+     inkscape:cy="62.970968"
+     inkscape:document-units="px"
+     inkscape:current-layer="g5351"
+     showgrid="false"
+     fit-margin-top="5"
+     fit-margin-left="5"
+     fit-margin-right="5"
+     fit-margin-bottom="12"
+     inkscape:window-width="1368"
+     inkscape:window-height="890"
+     inkscape:window-x="-6"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     units="px"
+     inkscape:object-nodes="true"
+     inkscape:document-rotation="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Graph"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline"
+     transform="translate(5,5.7142857)">
+    <g
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto"
+       id="g6584">
+      <g
+         id="g5997">
+        <defs
+           id="defs1">
+          <clipPath
+             id="clipPath6011"
+             clipPathUnits="userSpaceOnUse">
+            <path
+               id="path6009"
+               d="M 0,0 H 1186 V 660 H 0 Z"
+               inkscape:connector-curvature="0" />
+          </clipPath>
+          <clipPath
+             id="clipPath6015"
+             clipPathUnits="userSpaceOnUse">
+            <path
+               id="path6013"
+               d="M -17,-317 H 1169 V 343 H -17 Z"
+               inkscape:connector-curvature="0" />
+          </clipPath>
+        </defs>
+        <g
+           id="g4869"
+           transform="translate(17,317)"
+           style="fill:#ffffff;stroke:#ffffff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4867"
+             clip-path="url(#clipPath2)"
+             y="-317"
+             height="660"
+             width="1186"
+             x="-17"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4873"
+           transform="translate(17,317)"
+           style="fill:#b1c8d1;stroke:#b1c8d1;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4871"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="193.47321"
+             x="539.6839"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4879"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4875"
+             clip-path="url(#clipPath2)"
+             y="214.75841"
+             xml:space="preserve"
+             x="541.94562"
+             style="stroke:none">CSC438</text>
+          <rect
+             id="rect4877"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="193.47321"
+             x="539.6839"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4883"
+           transform="translate(17,317)"
+           style="fill:#b1c8d1;stroke:#b1c8d1;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4881"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="149.092"
+             x="539.6839"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4889"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4885"
+             clip-path="url(#clipPath2)"
+             y="170.3772"
+             xml:space="preserve"
+             x="541.94562"
+             style="stroke:none">CSC463</text>
+          <rect
+             id="rect4887"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="149.092"
+             x="539.6839"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4893"
+           transform="translate(17,317)"
+           style="fill:#b1c8d1;stroke:#b1c8d1;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4891"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="24.688101"
+             x="539.6839"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4899"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4895"
+             clip-path="url(#clipPath2)"
+             y="45.973301"
+             xml:space="preserve"
+             x="541.94562"
+             style="stroke:none">CSC448</text>
+          <rect
+             id="rect4897"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="24.688101"
+             x="539.6839"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4903"
+           transform="translate(17,317)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4901"
+             height="32"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-291.03879"
+             x="506.07571"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4909"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4905"
+             clip-path="url(#clipPath2)"
+             y="-268.7536"
+             xml:space="preserve"
+             x="508.3374"
+             style="stroke:none">CSC165</text>
+          <rect
+             id="rect4907"
+             height="32"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-291.03879"
+             x="506.07571"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g4913"
+           transform="translate(17,317)"
+           style="fill:#b1c8d1;stroke:#b1c8d1;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4911"
+             height="32"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-148.4075"
+             x="461.89099"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4919"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4915"
+             clip-path="url(#clipPath2)"
+             y="-126.1224"
+             xml:space="preserve"
+             x="464.15271"
+             style="stroke:none">CSC236</text>
+          <rect
+             id="rect4917"
+             height="32"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-148.4075"
+             x="461.89099"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g4923"
+           transform="translate(17,317)"
+           style="fill:#b1c8d1;stroke:#b1c8d1;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4921"
+             height="32"
+             ry="4"
+             rx="4"
+             width="100.185"
+             clip-path="url(#clipPath2)"
+             y="-59.778"
+             x="444.29849"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4929"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4925"
+             clip-path="url(#clipPath2)"
+             y="-37.492901"
+             xml:space="preserve"
+             x="448.5824"
+             style="stroke:none">CSC263/265</text>
+          <rect
+             id="rect4927"
+             height="32"
+             ry="4"
+             rx="4"
+             width="100.185"
+             clip-path="url(#clipPath2)"
+             y="-59.778"
+             x="444.29849"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g4933"
+           transform="translate(17,317)"
+           style="fill:#b1c8d1;stroke:#b1c8d1;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4931"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="24.688101"
+             x="460.8569"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4939"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4935"
+             clip-path="url(#clipPath2)"
+             y="45.973301"
+             xml:space="preserve"
+             x="463.11859"
+             style="stroke:none">CSC373</text>
+          <rect
+             id="rect4937"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="24.688101"
+             x="460.8569"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g4943"
+           transform="translate(17,317)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4941"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-316.79849"
+             x="734.77838"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4949"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4945"
+             clip-path="url(#clipPath2)"
+             y="-295.5134"
+             xml:space="preserve"
+             x="737.04022"
+             style="stroke:none">CSC108</text>
+          <rect
+             id="rect4947"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-316.79849"
+             x="734.77838"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g4953"
+           transform="translate(17,317)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4951"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-264.65131"
+             x="734.77838"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4959"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4955"
+             clip-path="url(#clipPath2)"
+             y="-243.3661"
+             xml:space="preserve"
+             x="737.04022"
+             style="stroke:none">CSC148</text>
+          <rect
+             id="rect4957"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-264.65131"
+             x="734.77838"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g4963"
+           transform="translate(17,317)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4961"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-147.4075"
+             x="717.0658"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4969"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4965"
+             clip-path="url(#clipPath2)"
+             y="-126.1224"
+             xml:space="preserve"
+             x="719.32751"
+             style="stroke:none">CSC207</text>
+          <rect
+             id="rect4967"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-147.4075"
+             x="717.0658"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g4973"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4971"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-58.778"
+             x="885.68091"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4979"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4975"
+             clip-path="url(#clipPath2)"
+             y="-37.492901"
+             xml:space="preserve"
+             x="887.94263"
+             style="stroke:none">CSC209</text>
+          <rect
+             id="rect4977"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-58.778"
+             x="885.68091"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g4983"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4981"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-147.4075"
+             x="997.80322"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4989"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4985"
+             clip-path="url(#clipPath2)"
+             y="-126.1224"
+             xml:space="preserve"
+             x="1000.0649"
+             style="stroke:none">CSC258</text>
+          <rect
+             id="rect4987"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-147.4075"
+             x="997.80322"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g4993"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4991"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="121.2683"
+             x="945.30322"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4999"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4995"
+             clip-path="url(#clipPath2)"
+             y="142.55341"
+             xml:space="preserve"
+             x="947.56488"
+             style="stroke:none">CSC369</text>
+          <rect
+             id="rect4997"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="121.2683"
+             x="945.30322"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g5003"
+           transform="translate(17,317)"
+           style="fill:#91f27a;stroke:#91f27a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5001"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="81.104897"
+             x="9.7566004"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5009"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5005"
+             clip-path="url(#clipPath2)"
+             y="102.39"
+             xml:space="preserve"
+             x="12.0183"
+             style="stroke:none">CSC318</text>
+          <rect
+             id="rect5007"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="81.104897"
+             x="9.7566004"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5013"
+           transform="translate(17,317)"
+           style="fill:#66a366;stroke:#66a366;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5011"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="238.29559"
+             x="122.4636"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5019"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5015"
+             clip-path="url(#clipPath2)"
+             y="259.58069"
+             xml:space="preserve"
+             x="124.7253"
+             style="stroke:none">CSC320</text>
+          <rect
+             id="rect5017"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="238.29559"
+             x="122.4636"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5023"
+           transform="translate(17,317)"
+           style="fill:#66a366;stroke:#66a366;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5021"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="165.8633"
+             x="235.0668"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5029"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5025"
+             clip-path="url(#clipPath2)"
+             y="187.1485"
+             xml:space="preserve"
+             x="237.32851"
+             style="stroke:none">CSC317</text>
+          <rect
+             id="rect5027"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="165.8633"
+             x="235.0668"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5033"
+           transform="translate(17,317)"
+           style="fill:#91f27a;stroke:#91f27a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5031"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="9.7566004"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5039"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5035"
+             clip-path="url(#clipPath2)"
+             y="312.8916"
+             xml:space="preserve"
+             x="12.0183"
+             style="stroke:none">CSC454</text>
+          <rect
+             id="rect5037"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="9.7566004"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5043"
+           transform="translate(17,317)"
+           style="fill:#91f27a;stroke:#91f27a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5041"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="24.688101"
+             x="9.7566004"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5049"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5045"
+             clip-path="url(#clipPath2)"
+             y="45.973301"
+             xml:space="preserve"
+             x="12.0183"
+             style="stroke:none">CSC300</text>
+          <rect
+             id="rect5047"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="24.688101"
+             x="9.7566004"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5053"
+           transform="translate(17,317)"
+           style="fill:#91f27a;stroke:#91f27a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5051"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="234.951"
+             x="9.7566004"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5059"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5055"
+             clip-path="url(#clipPath2)"
+             y="256.23621"
+             xml:space="preserve"
+             x="12.0183"
+             style="stroke:none">CSC404</text>
+          <rect
+             id="rect5057"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="234.951"
+             x="9.7566004"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5063"
+           transform="translate(17,317)"
+           style="fill:#91f27a;stroke:#91f27a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5061"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="138.3633"
+             x="9.7566004"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5069"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5065"
+             clip-path="url(#clipPath2)"
+             y="159.6485"
+             xml:space="preserve"
+             x="12.0183"
+             style="stroke:none">CSC428</text>
+          <rect
+             id="rect5067"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="138.3633"
+             x="9.7566004"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5073"
+           transform="translate(17,317)"
+           style="fill:#b8ff70;stroke:#b8ff70;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5071"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="128.2932"
+             x="376.85849"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5079"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5075"
+             clip-path="url(#clipPath2)"
+             y="149.57829"
+             xml:space="preserve"
+             x="379.12021"
+             style="stroke:none">CSC336</text>
+          <rect
+             id="rect5077"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="128.2932"
+             x="376.85849"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5083"
+           transform="translate(17,317)"
+           style="fill:#b8ff70;stroke:#b8ff70;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5081"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="234.951"
+             x="332.93991"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5089"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5085"
+             clip-path="url(#clipPath2)"
+             y="256.23621"
+             xml:space="preserve"
+             x="335.2016"
+             style="stroke:none">CSC446</text>
+          <rect
+             id="rect5087"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="234.951"
+             x="332.93991"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5093"
+           transform="translate(17,317)"
+           style="fill:#b8ff70;stroke:#b8ff70;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5091"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="281.43219"
+             x="420.7771"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5099"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5095"
+             clip-path="url(#clipPath2)"
+             y="302.71741"
+             xml:space="preserve"
+             x="423.03879"
+             style="stroke:none">CSC456</text>
+          <rect
+             id="rect5097"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="281.43219"
+             x="420.7771"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5103"
+           transform="translate(17,317)"
+           style="fill:#b8ff70;stroke:#b8ff70;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5101"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="234.951"
+             x="420.7771"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5109"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5105"
+             clip-path="url(#clipPath2)"
+             y="256.23621"
+             xml:space="preserve"
+             x="423.03879"
+             style="stroke:none">CSC436</text>
+          <rect
+             id="rect5107"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="234.951"
+             x="420.7771"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5113"
+           transform="translate(17,317)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5111"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="234.951"
+             x="604.6839"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5119"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5115"
+             clip-path="url(#clipPath2)"
+             y="256.23621"
+             xml:space="preserve"
+             x="606.94562"
+             style="stroke:none">CSC384</text>
+          <rect
+             id="rect5117"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="234.951"
+             x="604.6839"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5123"
+           transform="translate(17,317)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5121"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="551.5274"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5129"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5125"
+             clip-path="url(#clipPath2)"
+             y="312.8916"
+             xml:space="preserve"
+             x="553.78912"
+             style="stroke:none">CSC486</text>
+          <rect
+             id="rect5127"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="551.5274"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5133"
+           transform="translate(17,317)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5131"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="242.53979"
+             x="771.00458"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5139"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5135"
+             clip-path="url(#clipPath2)"
+             y="263.82501"
+             xml:space="preserve"
+             x="773.2663"
+             style="stroke:none">CSC401</text>
+          <rect
+             id="rect5137"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="242.53979"
+             x="771.00458"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5143"
+           transform="translate(17,317)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5141"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="809.00458"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5149"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5145"
+             clip-path="url(#clipPath2)"
+             y="312.8916"
+             xml:space="preserve"
+             x="811.2663"
+             style="stroke:none">CSC485</text>
+          <rect
+             id="rect5147"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="809.00458"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5153"
+           transform="translate(17,317)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5151"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="714.00458"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5159"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5155"
+             clip-path="url(#clipPath2)"
+             y="312.8916"
+             xml:space="preserve"
+             x="716.2663"
+             style="stroke:none">CSC413</text>
+          <rect
+             id="rect5157"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="714.00458"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5163"
+           transform="translate(17,317)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5161"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="193.47321"
+             x="717.0658"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5169"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5165"
+             clip-path="url(#clipPath2)"
+             y="214.75841"
+             xml:space="preserve"
+             x="719.32751"
+             style="stroke:none">CSC311</text>
+          <rect
+             id="rect5167"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="193.47321"
+             x="717.0658"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5173"
+           transform="translate(17,317)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5171"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-22.5002"
+             x="785.11298"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5179"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5175"
+             clip-path="url(#clipPath2)"
+             y="-1.215"
+             xml:space="preserve"
+             x="787.37469"
+             style="stroke:none">CSC301</text>
+          <rect
+             id="rect5177"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-22.5002"
+             x="785.11298"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5183"
+           transform="translate(17,317)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5181"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="23.032801"
+             x="785.11298"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5189"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5185"
+             clip-path="url(#clipPath2)"
+             y="44.318001"
+             xml:space="preserve"
+             x="787.37469"
+             style="stroke:none">CSC302</text>
+          <rect
+             id="rect5187"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="23.032801"
+             x="785.11298"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5193"
+           transform="translate(17,317)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5191"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="81.104897"
+             x="662.39838"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5199"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5195"
+             clip-path="url(#clipPath2)"
+             y="102.39"
+             xml:space="preserve"
+             x="664.66022"
+             style="stroke:none">CSC410</text>
+          <rect
+             id="rect5197"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="81.104897"
+             x="662.39838"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5203"
+           transform="translate(17,317)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5201"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-22.5002"
+             x="662.39838"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5209"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5205"
+             clip-path="url(#clipPath2)"
+             y="-1.215"
+             xml:space="preserve"
+             x="664.66022"
+             style="stroke:none">CSC324</text>
+          <rect
+             id="rect5207"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-22.5002"
+             x="662.39838"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5213"
+           transform="translate(17,317)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5211"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="23.032801"
+             x="662.39838"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5219"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5215"
+             clip-path="url(#clipPath2)"
+             y="44.318001"
+             xml:space="preserve"
+             x="664.66022"
+             style="stroke:none">CSC488</text>
+          <rect
+             id="rect5217"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="23.032801"
+             x="662.39838"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5223"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5221"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="197.52161"
+             x="1052.7181"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5229"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5225"
+             clip-path="url(#clipPath2)"
+             y="218.80679"
+             xml:space="preserve"
+             x="1054.98"
+             style="stroke:none">CSC469</text>
+          <rect
+             id="rect5227"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="197.52161"
+             x="1052.7181"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5233"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5231"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="1052.7181"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5239"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5235"
+             clip-path="url(#clipPath2)"
+             y="312.8916"
+             xml:space="preserve"
+             x="1054.98"
+             style="stroke:none">CSC457</text>
+          <rect
+             id="rect5237"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="1052.7181"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5243"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5241"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="137.52161"
+             x="1052.7181"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5249"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5245"
+             clip-path="url(#clipPath2)"
+             y="158.80679"
+             xml:space="preserve"
+             x="1054.98"
+             style="stroke:none">CSC458</text>
+          <rect
+             id="rect5247"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="137.52161"
+             x="1052.7181"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5253"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5251"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="81.104897"
+             x="890.16492"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5259"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5255"
+             clip-path="url(#clipPath2)"
+             y="102.39"
+             xml:space="preserve"
+             x="892.42657"
+             style="stroke:none">CSC343</text>
+          <rect
+             id="rect5257"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="81.104897"
+             x="890.16492"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5263"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5261"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="890.16492"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5269"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5265"
+             clip-path="url(#clipPath2)"
+             y="312.8916"
+             xml:space="preserve"
+             x="892.42657"
+             style="stroke:none">CSC443</text>
+          <rect
+             id="rect5267"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="890.16492"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5273"
+           transform="translate(17,317)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5271"
+             clip-path="url(#clipPath2)"
+             y="184.29559"
+             height="24"
+             width="80.236099"
+             x="-2.5027001"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5279"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="10px"
+           style="font-size:10px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5275"
+             clip-path="url(#clipPath2)"
+             y="194.0983"
+             xml:space="preserve"
+             x="-0.7464"
+             style="stroke:none">CSC301/317/318/</text>
+          <text
+             id="text5277"
+             clip-path="url(#clipPath2)"
+             y="206.3493"
+             xml:space="preserve"
+             x="9.8101997"
+             style="stroke:none">384/417/419</text>
+        </g>
+        <g
+           id="g5283"
+           transform="translate(17,317)"
+           stroke-miterlimit="1.45"
+           style="stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5281"
+             clip-path="url(#clipPath2)"
+             y="184.29559"
+             height="24"
+             width="80.236099"
+             x="-2.5027001"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5287"
+           transform="translate(17,317)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5285"
+             clip-path="url(#clipPath2)"
+             y="-60.409599"
+             height="24"
+             width="52.768799"
+             x="1109.9255"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5291"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="10px"
+           style="font-size:10px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5289"
+             clip-path="url(#clipPath2)"
+             y="-44.4813"
+             xml:space="preserve"
+             x="1117.411"
+             style="stroke:none">CSC263</text>
+        </g>
+        <g
+           id="g5303"
+           transform="translate(17,317)"
+           stroke-miterlimit="1.45"
+           style="stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5293"
+             clip-path="url(#clipPath2)"
+             y="-60.409599"
+             height="24"
+             width="52.768799"
+             x="1109.9255"
+             style="fill:none" />
+          <text
+             id="text5295"
+             clip-path="url(#clipPath2)"
+             y="-40.635399"
+             font-size="8px"
+             xml:space="preserve"
+             x="1023.6294"
+             style="font-size:8px;stroke:none">and</text>
+          <ellipse
+             id="ellipse5297"
+             cy="-43.778"
+             cx="1030.3032"
+             clip-path="url(#clipPath2)"
+             ry="7.3684001"
+             rx="9.8800001"
+             style="fill:none" />
+          <text
+             id="text5299"
+             clip-path="url(#clipPath2)"
+             y="167.2346"
+             font-size="8px"
+             xml:space="preserve"
+             x="516.03241"
+             style="font-size:8px;stroke:none">or</text>
+          <ellipse
+             id="ellipse5301"
+             cy="164.092"
+             cx="519.58899"
+             clip-path="url(#clipPath2)"
+             ry="7.3684001"
+             rx="9.8800001"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5307"
+           transform="translate(17,317)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5305"
+             clip-path="url(#clipPath2)"
+             y="245.53979"
+             height="24"
+             width="27"
+             x="700.96082"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5311"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="10px"
+           style="font-size:10px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5309"
+             clip-path="url(#clipPath2)"
+             y="261.46799"
+             xml:space="preserve"
+             x="704.45343"
+             style="stroke:none">Alg1</text>
+        </g>
+        <g
+           id="g5315"
+           transform="translate(17,317)"
+           stroke-miterlimit="1.45"
+           style="stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5313"
+             clip-path="url(#clipPath2)"
+             y="245.53979"
+             height="24"
+             width="27"
+             x="700.96082"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5319"
+           transform="translate(17,317)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5317"
+             clip-path="url(#clipPath2)"
+             y="124.2683"
+             height="24"
+             width="27"
+             x="809.00458"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5323"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="10px"
+           style="font-size:10px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5321"
+             clip-path="url(#clipPath2)"
+             y="140.1965"
+             xml:space="preserve"
+             x="812.21887"
+             style="stroke:none">Sta1</text>
+        </g>
+        <g
+           id="g5327"
+           transform="translate(17,317)"
+           stroke-miterlimit="1.45"
+           style="stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5325"
+             clip-path="url(#clipPath2)"
+             y="124.2683"
+             height="24"
+             width="27"
+             x="809.00458"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5331"
+           transform="translate(17,317)"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5329"
+             height="46.165798"
+             ry="4"
+             rx="4"
+             width="173.6458"
+             clip-path="url(#clipPath2)"
+             y="-309.81271"
+             x="1.7825"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5339"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5333"
+             clip-path="url(#clipPath2)"
+             y="-290.24551"
+             xml:space="preserve"
+             x="6.3319998"
+             style="stroke:none">MAT(135,136)/137/157</text>
+          <text
+             id="text5335"
+             clip-path="url(#clipPath2)"
+             y="-270.64389"
+             xml:space="preserve"
+             x="62.8242"
+             style="stroke:none">(Calc1)</text>
+          <rect
+             id="rect5337"
+             height="46.165798"
+             ry="4"
+             rx="4"
+             width="173.6458"
+             clip-path="url(#clipPath2)"
+             y="-309.81271"
+             x="1.7825"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g5343"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5341"
+             height="46.165798"
+             ry="4"
+             rx="4"
+             width="173.646"
+             clip-path="url(#clipPath2)"
+             y="194.0476"
+             x="18.7825"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5351"
+           stroke-miterlimit="1.45"
+           transform="translate(7.455339,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5345"
+             clip-path="url(#clipPath2)"
+             y="-103.3852"
+             xml:space="preserve"
+             x="17.209801"
+             style="stroke:none">STA237/247/255/257</text>
+          <text
+             id="text5347"
+             clip-path="url(#clipPath2)"
+             y="-83.7836"
+             xml:space="preserve"
+             x="55.4715"
+             style="stroke:none">(Sta1)</text>
+          <rect
+             id="rect5349"
+             height="46.165798"
+             ry="4"
+             rx="4"
+             width="173.646"
+             clip-path="url(#clipPath2)"
+             y="-122.9524"
+             x="11.32716"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g5355"
+           transform="translate(17,317)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5353"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="635.96082"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5361"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5357"
+             clip-path="url(#clipPath2)"
+             y="312.8916"
+             xml:space="preserve"
+             x="638.22247"
+             style="stroke:none">CSC412</text>
+          <rect
+             id="rect5359"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="291.60641"
+             x="635.96082"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5365"
+           transform="translate(17,317)"
+           style="fill:#66a366;stroke:#66a366;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5363"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="288.60641"
+             x="122.4636"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5371"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5367"
+             clip-path="url(#clipPath2)"
+             y="309.09079"
+             xml:space="preserve"
+             x="124.7253"
+             style="stroke:none">CSC420</text>
+          <rect
+             id="rect5369"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="288.60641"
+             x="122.4636"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5375"
+           transform="translate(-54.428572,316.28571)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5373"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-316.79849"
+             x="932.73907"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5381"
+           stroke-miterlimit="1.45"
+           transform="translate(-54.428572,316.28571)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5377"
+             clip-path="url(#clipPath2)"
+             y="-295.5134"
+             xml:space="preserve"
+             x="935.00079"
+             style="stroke:none">CSC104</text>
+          <rect
+             id="rect5379"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-316.79849"
+             x="932.73907"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5385"
+           transform="translate(-54.428572,316.28571)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5383"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-316.79849"
+             x="1018.2745"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5391"
+           stroke-miterlimit="1.45"
+           transform="translate(-54.428572,316.28571)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5387"
+             clip-path="url(#clipPath2)"
+             y="-295.5134"
+             xml:space="preserve"
+             x="1020.5362"
+             style="stroke:none">CSC120</text>
+          <rect
+             id="rect5389"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-316.79849"
+             x="1018.2745"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5395"
+           transform="translate(17,317)"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5393"
+             height="46.165798"
+             ry="4"
+             rx="4"
+             width="142.07761"
+             clip-path="url(#clipPath2)"
+             y="-309.81271"
+             x="196.52789"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5403"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5397"
+             clip-path="url(#clipPath2)"
+             y="-290.24551"
+             xml:space="preserve"
+             x="206.1918"
+             style="stroke:none">MAT221/223/240</text>
+          <text
+             id="text5399"
+             clip-path="url(#clipPath2)"
+             y="-270.64389"
+             xml:space="preserve"
+             x="246.2269"
+             style="stroke:none">(Alg1)</text>
+          <rect
+             id="rect5401"
+             height="46.165798"
+             ry="4"
+             rx="4"
+             width="142.07761"
+             clip-path="url(#clipPath2)"
+             y="-309.81271"
+             x="196.52789"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g5407"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5405"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="86.268303"
+             x="1052.7181"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5413"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5409"
+             clip-path="url(#clipPath2)"
+             y="107.5534"
+             xml:space="preserve"
+             x="1054.98"
+             style="stroke:none">CSC385</text>
+          <rect
+             id="rect5411"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="86.268303"
+             x="1052.7181"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5417"
+           transform="translate(17,317)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5415"
+             clip-path="url(#clipPath2)"
+             y="119.716"
+             height="24"
+             width="50"
+             x="210.7774"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5421"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="10px"
+           style="font-size:10px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5419"
+             clip-path="url(#clipPath2)"
+             y="135.6442"
+             xml:space="preserve"
+             x="216.8784"
+             style="stroke:none">CSC209</text>
+        </g>
+        <g
+           id="g5425"
+           transform="translate(17,317)"
+           stroke-miterlimit="1.45"
+           style="stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5423"
+             clip-path="url(#clipPath2)"
+             y="119.716"
+             height="24"
+             width="50"
+             x="210.7774"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5429"
+           transform="translate(17,317)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5427"
+             clip-path="url(#clipPath2)"
+             y="74.957703"
+             height="24"
+             width="50"
+             x="88.750702"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5433"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="10px"
+           style="font-size:10px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5431"
+             clip-path="url(#clipPath2)"
+             y="90.886002"
+             xml:space="preserve"
+             x="94.8517"
+             style="stroke:none">CSC263</text>
+        </g>
+        <g
+           id="g5437"
+           transform="translate(17,317)"
+           stroke-miterlimit="1.45"
+           style="stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5435"
+             clip-path="url(#clipPath2)"
+             y="74.957703"
+             height="24"
+             width="50"
+             x="88.750702"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5441"
+           transform="translate(17,317)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5439"
+             clip-path="url(#clipPath2)"
+             y="38.7318"
+             height="24"
+             width="99.624802"
+             x="898.11432"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5445"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="10px"
+           style="font-size:10px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5443"
+             clip-path="url(#clipPath2)"
+             y="54.66"
+             xml:space="preserve"
+             x="905.12402"
+             style="stroke:none">CSC111/165/Calc1</text>
+        </g>
+        <g
+           id="g5453"
+           transform="translate(17,317)"
+           stroke-miterlimit="1.45"
+           style="stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5447"
+             clip-path="url(#clipPath2)"
+             y="38.7318"
+             height="24"
+             width="99.624802"
+             x="898.11432"
+             style="fill:none" />
+          <text
+             id="text5449"
+             clip-path="url(#clipPath2)"
+             y="-94.155899"
+             font-size="8px"
+             xml:space="preserve"
+             x="197.2263"
+             style="font-size:8px;stroke:none">and</text>
+          <ellipse
+             id="ellipse5451"
+             cy="-97.2985"
+             cx="203.9001"
+             clip-path="url(#clipPath2)"
+             ry="7.3684001"
+             rx="9.8800001"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5457"
+           transform="translate(17,317)"
+           style="fill:#b8ff70;stroke:#b8ff70;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5455"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="281.43219"
+             x="332.93991"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5463"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5459"
+             clip-path="url(#clipPath2)"
+             y="302.71741"
+             xml:space="preserve"
+             x="335.2016"
+             style="stroke:none">CSC466</text>
+          <rect
+             id="rect5461"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="281.43219"
+             x="332.93991"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5467"
+           transform="translate(17,317)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5465"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="128.2932"
+             x="662.39838"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5473"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5469"
+             clip-path="url(#clipPath2)"
+             y="149.57829"
+             xml:space="preserve"
+             x="664.66022"
+             style="stroke:none">CSC465</text>
+          <rect
+             id="rect5471"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="128.2932"
+             x="662.39838"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5477"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5475"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-10.0231"
+             x="918.91559"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5483"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5479"
+             clip-path="url(#clipPath2)"
+             y="11.262"
+             xml:space="preserve"
+             x="921.17731"
+             style="stroke:none">CSC309</text>
+          <rect
+             id="rect5481"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-10.0231"
+             x="918.91559"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5487"
+           transform="translate(17,317)"
+           style="fill:#91f27a;stroke:#91f27a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5485"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="24.688101"
+             x="88.750702"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5493"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5489"
+             clip-path="url(#clipPath2)"
+             y="45.973301"
+             xml:space="preserve"
+             x="91.012398"
+             style="stroke:none">CSC304</text>
+          <rect
+             id="rect5491"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="24.688101"
+             x="88.750702"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5497"
+           transform="translate(17,317)"
+           style="fill:#b1c8d1;stroke:#b1c8d1;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5495"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="106.0376"
+             x="539.6839"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5503"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5499"
+             clip-path="url(#clipPath2)"
+             y="127.3227"
+             xml:space="preserve"
+             x="541.94562"
+             style="stroke:none">CSC473</text>
+          <rect
+             id="rect5501"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="106.0376"
+             x="539.6839"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5507"
+           transform="translate(17,317)"
+           style="fill:#c285ff;stroke:#c285ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5505"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="35.7318"
+             x="1052.7181"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5513"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5509"
+             clip-path="url(#clipPath2)"
+             y="57.016899"
+             xml:space="preserve"
+             x="1054.98"
+             style="stroke:none">CSC367</text>
+          <rect
+             id="rect5511"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="35.7318"
+             x="1052.7181"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5517"
+           transform="translate(17,317)"
+           style="fill:#91f27a;stroke:#91f27a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5515"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="119.3619"
+             x="130.7507"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5523"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5519"
+             clip-path="url(#clipPath2)"
+             y="140.64709"
+             xml:space="preserve"
+             x="133.01241"
+             style="stroke:none">CSC303</text>
+          <rect
+             id="rect5521"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="119.3619"
+             x="130.7507"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5527"
+           transform="translate(17,317)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5525"
+             clip-path="url(#clipPath2)"
+             y="74.957703"
+             height="24"
+             width="27"
+             x="168.7507"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5531"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="10px"
+           style="font-size:10px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5529"
+             clip-path="url(#clipPath2)"
+             y="90.886002"
+             xml:space="preserve"
+             x="172.2433"
+             style="stroke:none">Alg1</text>
+        </g>
+        <g
+           id="g5535"
+           transform="translate(17,317)"
+           stroke-miterlimit="1.45"
+           style="stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5533"
+             clip-path="url(#clipPath2)"
+             y="74.957703"
+             height="24"
+             width="27"
+             x="168.7507"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5539"
+           transform="translate(17,317)"
+           style="fill:#66a366;stroke:#66a366;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5537"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="288.60641"
+             x="235.0668"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5545"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5541"
+             clip-path="url(#clipPath2)"
+             y="309.8916"
+             xml:space="preserve"
+             x="237.32851"
+             style="stroke:none">CSC419</text>
+          <rect
+             id="rect5543"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="288.60641"
+             x="235.0668"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5549"
+           transform="translate(17,317)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5547"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-315.42621"
+             x="607.13098"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5555"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5551"
+             clip-path="url(#clipPath2)"
+             y="-294.14111"
+             xml:space="preserve"
+             x="609.3927"
+             style="stroke:none">CSC110</text>
+          <rect
+             id="rect5553"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-315.42621"
+             x="607.13098"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g5559"
+           transform="translate(17,317)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5557"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-264.65131"
+             x="607.13098"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5573"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5561"
+             clip-path="url(#clipPath2)"
+             y="-243.3661"
+             xml:space="preserve"
+             x="609.3927"
+             style="stroke:none">CSC111</text>
+          <rect
+             id="rect5563"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-264.65131"
+             x="607.13098"
+             style="fill:none;stroke-width:4" />
+          <text
+             id="text5565"
+             xml:space="preserve"
+             clip-path="url(#clipPath2)"
+             y="-188.573"
+             font-size="8px"
+             x="691.3418"
+             style="font-size:8px;font-family:Dialog;stroke:none">or</text>
+          <ellipse
+             id="ellipse5567"
+             cy="-191.71561"
+             cx="694.89838"
+             clip-path="url(#clipPath2)"
+             ry="7.3684001"
+             rx="9.8800001"
+             style="fill:none" />
+          <text
+             id="text5569"
+             xml:space="preserve"
+             clip-path="url(#clipPath2)"
+             y="-209.26289"
+             font-size="8px"
+             x="557.63898"
+             style="font-size:8px;font-family:Dialog;stroke:none">or</text>
+          <ellipse
+             id="ellipse5571"
+             cy="-212.4055"
+             cx="561.19568"
+             clip-path="url(#clipPath2)"
+             ry="7.3684001"
+             rx="9.8800001"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5577"
+           transform="translate(17,317)"
+           style="fill:#b1c8d1;stroke:#b1c8d1;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5575"
+             height="32"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-148.4075"
+             x="556.89099"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5587"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5579"
+             clip-path="url(#clipPath2)"
+             y="-126.1224"
+             xml:space="preserve"
+             x="559.15271"
+             style="stroke:none">CSC240</text>
+          <rect
+             id="rect5581"
+             height="32"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-148.4075"
+             x="556.89099"
+             style="fill:none;stroke-width:4" />
+          <text
+             id="text5583"
+             xml:space="preserve"
+             clip-path="url(#clipPath2)"
+             y="-84.950203"
+             font-size="8px"
+             x="538.33441"
+             style="font-size:8px;font-family:Dialog;stroke:none">or</text>
+          <ellipse
+             id="ellipse5585"
+             cy="-88.092796"
+             cx="541.89099"
+             clip-path="url(#clipPath2)"
+             ry="7.3684001"
+             rx="9.8800001"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5591"
+           transform="translate(-54.428572,316.28571)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5589"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-316.79849"
+             x="1103.8099"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5597"
+           stroke-miterlimit="1.45"
+           transform="translate(-54.428572,316.28571)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5593"
+             clip-path="url(#clipPath2)"
+             y="-295.5134"
+             xml:space="preserve"
+             x="1107.4076"
+             style="stroke:none">JCC250</text>
+          <rect
+             id="rect5595"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-316.79849"
+             x="1103.8099"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5601"
+           transform="translate(17,317)"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5599"
+             height="46.165798"
+             ry="4"
+             rx="4"
+             width="173.6458"
+             clip-path="url(#clipPath2)"
+             y="-230.51289"
+             x="1.7825"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5609"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5603"
+             clip-path="url(#clipPath2)"
+             y="-210.9456"
+             xml:space="preserve"
+             x="27.2304"
+             style="stroke:none">MAT235/237/257</text>
+          <text
+             id="text5605"
+             clip-path="url(#clipPath2)"
+             y="-191.3441"
+             xml:space="preserve"
+             x="62.8242"
+             style="stroke:none">(Calc2)</text>
+          <rect
+             id="rect5607"
+             height="46.165798"
+             ry="4"
+             rx="4"
+             width="173.6458"
+             clip-path="url(#clipPath2)"
+             y="-230.51289"
+             x="1.7825"
+             style="fill:none;stroke-width:4" />
+        </g>
+        <g
+           id="g5613"
+           transform="translate(17,317)"
+           style="fill:#66a366;stroke:#66a366;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5611"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="228.6064"
+             x="232.1936"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5623"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5615"
+             clip-path="url(#clipPath2)"
+             y="249.8916"
+             xml:space="preserve"
+             x="234.4554"
+             style="stroke:none">CSC417</text>
+          <rect
+             id="rect5617"
+             height="30"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="228.6064"
+             x="232.1936"
+             style="fill:none" />
+          <text
+             id="text5619"
+             xml:space="preserve"
+             clip-path="url(#clipPath2)"
+             y="23.4405"
+             font-size="8px"
+             x="310.04639"
+             style="font-size:8px;font-family:Dialog;stroke:none">and</text>
+          <ellipse
+             id="ellipse5621"
+             cy="20.298"
+             cx="316.72031"
+             clip-path="url(#clipPath2)"
+             ry="7.3684001"
+             rx="9.8800001"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5627"
+           transform="translate(17,317)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5625"
+             clip-path="url(#clipPath2)"
+             y="68.3629"
+             height="24"
+             width="27"
+             x="558.6839"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5631"
+           stroke-miterlimit="1.45"
+           transform="translate(17,317)"
+           font-size="10px"
+           style="font-size:10px;font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5629"
+             clip-path="url(#clipPath2)"
+             y="84.2911"
+             xml:space="preserve"
+             x="562.17657"
+             style="stroke:none">Alg1</text>
+        </g>
+        <g
+           id="g5995"
+           transform="translate(17,317)"
+           stroke-miterlimit="1.45"
+           style="stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5633"
+             clip-path="url(#clipPath2)"
+             y="68.3629"
+             height="24"
+             width="27"
+             x="558.6839"
+             style="fill:none" />
+          <path
+             id="path5635"
+             clip-path="url(#clipPath2)"
+             d="M 544.5049,-43.778 H 572.1839 V 16.6496"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5639"
+             clip-path="url(#clipPath2)"
+             d="M 494.1926,-27.7613 493.6417,16.7036"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5643"
+             clip-path="url(#clipPath2)"
+             d="M 767.2784,-286.8011 V -272.6346"
+             inkscape:connector-curvature="0"
+             style="fill:none;stroke-linecap:round;stroke-dasharray:0, 4;stroke-dashoffset:2" />
+          <path
+             id="path5647"
+             clip-path="url(#clipPath2)"
+             d="M 782.0456,-132.4075 H 918.1809 V -66.7948"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5651"
+             clip-path="url(#clipPath2)"
+             d="M 42.2566,111.1184 V 130.3879"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5655"
+             clip-path="url(#clipPath2)"
+             d="M 409.3585,158.318 V 249.951 H 405.9482"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5659"
+             clip-path="url(#clipPath2)"
+             d="M 409.3585,158.2625 V 298.5189 L 412.8189,298.3545"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5663"
+             clip-path="url(#clipPath2)"
+             d="M 409.3585,158.318 V 249.951 H 412.8099"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5667"
+             clip-path="url(#clipPath2)"
+             d="M 544.5165,-43.778 623.5587,-43.702 V 226.9071"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5671"
+             clip-path="url(#clipPath2)"
+             d="M 616.7963,264.9576 599.937,285.4114"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5675"
+             clip-path="url(#clipPath2)"
+             d="M 749.5658,-117.3784 V 164.2635 H 803.5046 V 234.5555"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5679"
+             clip-path="url(#clipPath2)"
+             d="M 885.6857,-43.778 H 870.1649 V 283.582"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5683"
+             clip-path="url(#clipPath2)"
+             d="M 749.5658,-117.3858 V 185.477"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5687"
+             clip-path="url(#clipPath2)"
+             d="M 749.5658,223.4569 V 283.6017"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5691"
+             clip-path="url(#clipPath2)"
+             d="M 885.7066,-43.778 H 829.3862 V -30.5277"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5695"
+             clip-path="url(#clipPath2)"
+             d="M 544.4854,-43.778 H 795.0308 V -30.534"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5699"
+             clip-path="url(#clipPath2)"
+             d="M 817.613,7.4848 V 15.0273"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5703"
+             clip-path="url(#clipPath2)"
+             d="M 749.5658,-117.4281 V 96.1049 H 735.3839"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5707"
+             clip-path="url(#clipPath2)"
+             d="M 544.5146,-43.778 H 694.8984 V -30.486"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5711"
+             clip-path="url(#clipPath2)"
+             d="M 1030.3032,-117.3907 V -88.0928 H 713.0879 V -30.4992"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5715"
+             clip-path="url(#clipPath2)"
+             d="M 694.8984,7.4848 V 15.0273"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5719"
+             clip-path="url(#clipPath2)"
+             d="M 977.8032,151.2732 V 212.5216 H 1044.7262"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5723"
+             clip-path="url(#clipPath2)"
+             d="M 493.3569,54.7223 V 340.813 H 1085.2183 V 329.6052"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5727"
+             clip-path="url(#clipPath2)"
+             d="M 749.5658,-117.4281 V 96.1049 H 882.1666"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5731"
+             clip-path="url(#clipPath2)"
+             d="M 922.6649,112.1264 V 283.6501"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5735"
+             clip-path="url(#clipPath2)"
+             d="M 977.8032,151.2964 V 306.6064 H 963.1609"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5739"
+             clip-path="url(#clipPath2)"
+             d="M 493.3569,54.656 V 340.9576 H 922.6649 V 329.6015"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5743"
+             clip-path="url(#clipPath2)"
+             d="M 38.6534,208.2956 40.2688,226.9702"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5747"
+             clip-path="url(#clipPath2)"
+             d="M 1136.3889,-36.4096 1137.6331,152.5216 H 1125.6959"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5751"
+             clip-path="url(#clipPath2)"
+             d="M 950.6733,-43.778 H 1012.4232"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5755"
+             clip-path="url(#clipPath2)"
+             d="M 1030.3032,-117.3907 V -59.1465"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5759"
+             clip-path="url(#clipPath2)"
+             d="M 1030.3032,-36.4096 V 136.2682 H 1018.2825"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5763"
+             clip-path="url(#clipPath2)"
+             d="M 1030.3032,-36.4096 V 152.5216 H 1044.6929"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5767"
+             clip-path="url(#clipPath2)"
+             d="M 539.6973,164.092 H 537.4691"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5771"
+             clip-path="url(#clipPath2)"
+             d="M 493.3569,54.6615 V 164.092 H 501.709"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5775"
+             clip-path="url(#clipPath2)"
+             d="M 519.5891,171.4605 V 208.4732 H 531.668"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5779"
+             clip-path="url(#clipPath2)"
+             d="M 519.5891,171.4605 V 306.6064 H 543.525"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5783"
+             clip-path="url(#clipPath2)"
+             d="M 722.2976,269.5398 732.3198,284.8862"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5787"
+             clip-path="url(#clipPath2)"
+             d="M 822.5046,148.2682 V 234.5256"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5791"
+             clip-path="url(#clipPath2)"
+             d="M 836.0046,136.2682 H 849.7101 V 283.5997"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5795"
+             clip-path="url(#clipPath2)"
+             d="M 809.0046,136.2682 H 767.2851 V 185.4803"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5799"
+             clip-path="url(#clipPath2)"
+             d="M 1.7593,-288.618 H -16.0821 V -96.6694 L 3.6781,-97.3469"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5803"
+             clip-path="url(#clipPath2)"
+             d="M 121.2503,-76.779 120.9492,-43.778 H 436.2918"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5807"
+             clip-path="url(#clipPath2)"
+             d="M 717.0565,208.4732 H 685.4858 V 283.5735"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5811"
+             clip-path="url(#clipPath2)"
+             d="M 1030.3032,-36.4096 V 101.2683 H 1044.6929"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5815"
+             clip-path="url(#clipPath2)"
+             d="M 220.6013,143.73 V 342.6064 H 453.2771 V 319.4479"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5819"
+             clip-path="url(#clipPath2)"
+             d="M 220.6013,143.7502 V 342.6064 H 94.674 V 153.3633 H 82.736"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5823"
+             clip-path="url(#clipPath2)"
+             d="M 220.6031,143.7337 220.604,180.8633 H 227.0359"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5827"
+             clip-path="url(#clipPath2)"
+             d="M 113.7507,98.9577 V 302.9926 L 114.4851,303.0035"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5831"
+             clip-path="url(#clipPath2)"
+             d="M 941.2456,62.7318 934.9214,74.0908"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5835"
+             clip-path="url(#clipPath2)"
+             d="M 250.1768,-263.6152 208.0521,-112.2205"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5839"
+             clip-path="url(#clipPath2)"
+             d="M 174.0183,-264.5963 201.1889,-112.4778"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5843"
+             clip-path="url(#clipPath2)"
+             d="M 203.9001,-89.9301 V -26.1646 H 392.6891 V 120.2944"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5847"
+             clip-path="url(#clipPath2)"
+             d="M 203.9001,-89.9301 V 253.2956 H 195.5083"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5851"
+             clip-path="url(#clipPath2)"
+             d="M 203.9001,-89.9301 V 303.6064 H 195.4932"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5855"
+             clip-path="url(#clipPath2)"
+             d="M 409.3585,158.2856 V 296.4323 H 405.9482"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5859"
+             clip-path="url(#clipPath2)"
+             d="M 928.4207,-28.7564 936.6921,-16.6223"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5863"
+             clip-path="url(#clipPath2)"
+             d="M 121.2506,-76.8022 V 16.7002"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5867"
+             clip-path="url(#clipPath2)"
+             d="M 493.3569,54.7108 V 121.0376 H 531.6411"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5871"
+             clip-path="url(#clipPath2)"
+             d="M 1030.3032,-36.4096 V 50.7318 H 1044.6929"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5875"
+             clip-path="url(#clipPath2)"
+             d="M 126.2812,98.9577 141.8402,113.858"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5879"
+             clip-path="url(#clipPath2)"
+             d="M 177.4409,98.9577 172.2273,111.9655"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5883"
+             clip-path="url(#clipPath2)"
+             d="M 221.0023,143.7407 V 303.6064 H 227.0663"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5887"
+             clip-path="url(#clipPath2)"
+             d="M 639.631,-285.402 V -272.6289"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5891"
+             clip-path="url(#clipPath2)"
+             d="M 653.9606,-234.6299 683.649,-203.5081"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5895"
+             clip-path="url(#clipPath2)"
+             d="M 748.512,-234.6299 707.8792,-202.1059"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5899"
+             clip-path="url(#clipPath2)"
+             d="M 704.7784,-191.7156 H 749.5658 V -155.3793"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5903"
+             clip-path="url(#clipPath2)"
+             d="M 685.0184,-191.7156 H 409.3585 V 120.2849"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5907"
+             clip-path="url(#clipPath2)"
+             d="M 704.7784,-191.7156 H 1047.2399 V -155.4475"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5911"
+             clip-path="url(#clipPath2)"
+             d="M 685.0184,-191.7156 H 468.6295 V -156.4377"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5915"
+             clip-path="url(#clipPath2)"
+             d="M 544.3522,-259.044 555.9087,-227.0447"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5919"
+             clip-path="url(#clipPath2)"
+             d="M 609.1837,-235.1931 576.7563,-219.7946"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5923"
+             clip-path="url(#clipPath2)"
+             d="M 561.1957,-205.037 V -172.0769 H 513.1216 V -156.4279"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5927"
+             clip-path="url(#clipPath2)"
+             d="M 561.1957,-205.037 V -172.0769 H 1020.1412 V -155.4427"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5931"
+             clip-path="url(#clipPath2)"
+             d="M 494.391,-116.386 527.2979,-96.7851"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5935"
+             clip-path="url(#clipPath2)"
+             d="M 589.391,-116.386 556.4841,-96.7851"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5939"
+             clip-path="url(#clipPath2)"
+             d="M 532.011,-88.0928 H 494.391 V -67.7469"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5943"
+             clip-path="url(#clipPath2)"
+             d="M 551.771,-88.0928 H 639.631 V 143.2932 H 654.3802"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5947"
+             clip-path="url(#clipPath2)"
+             d="M 551.771,-88.0928 H 639.631 V 96.1049 H 654.3802"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5951"
+             clip-path="url(#clipPath2)"
+             d="M 551.771,-88.0928 H 639.631 V 164.092 H 612.6889"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5955"
+             clip-path="url(#clipPath2)"
+             d="M 88.6054,-263.6136 V -238.5015"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5959"
+             clip-path="url(#clipPath2)"
+             d="M 220.6031,143.7546 V 243.6064 H 224.1941"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5963"
+             clip-path="url(#clipPath2)"
+             d="M 316.7203,-263.638 V 4.9295"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5967"
+             clip-path="url(#clipPath2)"
+             d="M 175.4283,-184.34709 186.93,-131.57199 V 20.201714 H 298.8406"
+             inkscape:connector-curvature="0"
+             style="fill:none"
+             sodipodi:nodetypes="cccc" />
+          <path
+             id="path5971"
+             clip-path="url(#clipPath2)"
+             d="M 316.7203,27.6664 V 180.8633 H 308.0638"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5975"
+             clip-path="url(#clipPath2)"
+             d="M 316.7203,27.6664 V 243.6064 H 305.1849"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5979"
+             clip-path="url(#clipPath2)"
+             d="M 316.7203,27.6664 V 306.6064 L 308.0489,306.0772"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5983"
+             clip-path="url(#clipPath2)"
+             d="M 316.7203,27.6664 V 249.951 H 324.9443"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5987"
+             clip-path="url(#clipPath2)"
+             d="M 316.7203,27.6664 V 296.4323 H 324.9443"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5991"
+             clip-path="url(#clipPath2)"
+             d="M 572.1839,92.3629 V 98.0562"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+        </g>
+      </g>
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="regions"
+     sodipodi:insensitive="true"
+     style="display:none">
+    <path
+       transform="translate(-3.9232981,-9.3118992)"
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;display:inline;fill:#6276b9;fill-opacity:0.14902;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M -1.0767019,283.2168 V 3.597573 L 430.2633,3.5976528 430.26348,283.2168 Z"
+       id="path4964"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       transform="translate(-3.9232981,-9.3118992)"
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;display:inline;fill:#0a7442;fill-opacity:0.14902;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 337.1143,711.5168 V 283.2168 H 225.7033 V 483.4768 H 115.3033 V 711.5168 Z"
+       id="path4960"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       transform="translate(-3.9232981,-9.3118992)"
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;display:inline;fill:#5ac0ca;fill-opacity:0.148148;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 430.26295,134.9768 H 660.8233 V 412.99978 L 660.5543,490.4039 644.58952,490.5758 644.482,555.2188 H 514.2633 V 413.32919 L 430.2633,413.52648 C 429.54019,276.88463 430.26295,271.61996 430.26295,134.9768 Z"
+       id="path4966"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccc" />
+    <path
+       transform="translate(-3.9232981,-9.3118992)"
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;display:inline;fill:#71e471;fill-opacity:0.14902;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M -1.0767019,711.5168 V 283.2168 H 225.7033 V 483.4768 H 115.3033 V 711.5168 Z"
+       id="path4190"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       transform="translate(-3.9232981,-9.3118992)"
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;display:inline;fill:#c2f013;fill-opacity:0.148148;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 337.1143,711.5168 H 514.2633 V 413.32919 L 430.2633,413.52648 430.26348,283.2168 H 337.1143 Z"
+       id="path4962"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       transform="translate(-3.9232981,-9.3118992)"
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;display:inline;fill:#5b57cf;fill-opacity:0.14902;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 890.59621,422.4168 V 711.5168 H 514.2633 V 555.2188 H 644.482 L 644.58952,490.5758 H 770.4891 V 422.4168 Z"
+       id="path4974"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccc" />
+    <path
+       transform="translate(-3.9232981,-9.3118992)"
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;display:inline;fill:#dc0c33;fill-opacity:0.148148;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 660.8233,134.9768 V 490.5758 H 770.4891 L 770.67984,422.4168 H 890.59621 V 134.9768 Z"
+       id="path4970"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       transform="translate(-3.9232981,-9.3118992)"
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;display:inline;fill:#d366cb;fill-opacity:0.14902;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 890.59621,134.97698 1194.9233,134.97663 V 711.5168 H 890.59621 Z"
+       id="path4972"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       transform="translate(-3.9232981,-9.3118992)"
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;display:inline;fill:#c2f0b3;fill-opacity:0.148148;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 430.2633,3.5976129 H 1194.9233 V 134.9768 L 430.2633,134.97664 Z"
+       id="path4968"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Labels"
+     transform="translate(5,5.7142857)"
+     sodipodi:insensitive="true">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="1004.0916"
+       y="454.81943"
+       id="text8641"
+       transform="translate(-761.23456,-299.35996)"><tspan
+         sodipodi:role="line"
+         id="tspan8639"
+         x="1004.0916"
+         y="454.81943">Math and</tspan><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="475.98605"
+         id="tspan8643">Statistics</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="1004.0916"
+       y="454.81943"
+       id="text8641-5"
+       transform="translate(-862.10997,229.97895)"><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="454.81943"
+         id="tspan8712">Computer Graphics</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="1004.0916"
+       y="454.81943"
+       id="text8641-5-7"
+       transform="translate(-992.729,-156.65256)"><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="454.81943"
+         id="tspan8712-8">Humans and</tspan><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="475.98605"
+         id="tspan8737">Computing</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="1004.0916"
+       y="454.81943"
+       id="text8641-5-6"
+       transform="translate(-568.04677,-226.02257)"><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="454.81943"
+         id="tspan8712-2">Theory</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="1004.0916"
+       y="454.81943"
+       id="text8641-5-4"
+       transform="translate(-169.00432,-390.52244)"><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="454.81943"
+         id="tspan8712-6">Introductory Courses</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="1004.0916"
+       y="454.81943"
+       id="text8641-5-8"
+       transform="translate(-232.61447,-214.02865)"><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="454.81943"
+         id="tspan8712-26">Software</tspan><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="475.98605"
+         id="tspan8775">Engineering</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="1004.0916"
+       y="454.81943"
+       id="text8641-5-0"
+       transform="translate(-673.19956,229.88802)"><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="454.81943"
+         id="tspan8789">Scientific Computing</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="1004.0916"
+       y="454.81943"
+       id="text8641-5-8-0"
+       transform="translate(57.493751,-235.9797)"><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="454.81943"
+         id="tspan8775-1">Computer</tspan><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="475.98605"
+         id="tspan9477">Systems</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="1004.0916"
+       y="454.81943"
+       id="text8641-5-0-3"
+       transform="translate(-374.34509,229.88802)"><tspan
+         sodipodi:role="line"
+         x="1004.0916"
+         y="454.81943"
+         id="tspan8789-0">Artificial Intelligence</tspan></text>
+  </g>
+</svg>
