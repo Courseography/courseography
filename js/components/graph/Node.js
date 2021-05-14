@@ -15,15 +15,9 @@ export default class Node extends React.Component {
       status: state,
       selected: ["active", "overridden"].indexOf(state) >= 0
     };
-    this.isSelected = this.isSelected.bind(this);
-    this.arePrereqsSatisfied = this.arePrereqsSatisfied.bind(this);
-    this.updateNode = this.updateNode.bind(this);
-    this.toggleSelection = this.toggleSelection.bind(this);
-    this.focusPrereqs = this.focusPrereqs.bind(this);
-    this.unfocusPrereqs = this.unfocusPrereqs.bind(this);
   }
 
-  isSelected() {
+  isSelected = () => {
     if (this.props.hybrid) {
       return this.state.status === "active";
     } else {
@@ -31,7 +25,7 @@ export default class Node extends React.Component {
     }
   }
 
-  arePrereqsSatisfied() {
+  arePrereqsSatisfied = () => {
     var svg = this.props.svg;
     function isAllTrue(element) {
       if (typeof element === "string") {
@@ -50,7 +44,7 @@ export default class Node extends React.Component {
     return this.props.parents.every(isAllTrue);
   }
 
-  updateNode(recursive) {
+  updateNode = recursive => {
     var newState;
     if (this.arePrereqsSatisfied()) {
       if (this.isSelected() || this.props.hybrid) {
@@ -103,13 +97,13 @@ export default class Node extends React.Component {
     }
   }
 
-  toggleSelection() {
+  toggleSelection = () => {
     this.setState({ selected: !this.state.selected }, function() {
       this.updateNode();
     });
   }
 
-  focusPrereqs() {
+  focusPrereqs = () => {
     var svg = this.props.svg;
     // Check if there are any missing prerequisites.
     if (
@@ -145,7 +139,7 @@ export default class Node extends React.Component {
     }
   }
 
-  unfocusPrereqs() {
+  unfocusPrereqs = () => {
     var svg = this.props.svg;
     this.updateNode(false);
     this.props.parents.forEach(function(node) {
