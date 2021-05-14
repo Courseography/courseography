@@ -6,10 +6,9 @@ export default class Edge extends React.Component {
   constructor(props) {
     super(props);
     this.state = { status: "inactive" };
-    this.updateStatus = this.updateStatus.bind(this);
   }
 
-  updateStatus() {
+  updateStatus = () =>{
     var source = refLookUp(this.props.source, this.props.svg);
     var target = refLookUp(this.props.target, this.props.svg);
     if (source === undefined || target === undefined) {
@@ -25,6 +24,7 @@ export default class Edge extends React.Component {
       this.setState({ status: "active" });
     }
   }
+
 
   componentDidUpdate(prevProps, prevState) {
     // After each render, check if the edge's state has changed. If so,
