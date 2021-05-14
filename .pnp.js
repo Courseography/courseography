@@ -56,7 +56,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.0.1"],
             ["eslint-plugin-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:7.12.4"],
             ["fetch-mock", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:7.7.3"],
-            ["handlebars", "npm:4.5.3"],
+            ["handlebars", "npm:4.7.7"],
             ["husky", "npm:6.0.0"],
             ["jest", "npm:26.6.3"],
             ["leaflet", "npm:1.6.0"],
@@ -5469,7 +5469,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.0.1"],
             ["eslint-plugin-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:7.12.4"],
             ["fetch-mock", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:7.7.3"],
-            ["handlebars", "npm:4.5.3"],
+            ["handlebars", "npm:4.7.7"],
             ["husky", "npm:6.0.0"],
             ["jest", "npm:26.6.3"],
             ["leaflet", "npm:1.6.0"],
@@ -7763,14 +7763,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["handlebars", [
-        ["npm:4.5.3", {
-          "packageLocation": "./.yarn/cache/handlebars-npm-4.5.3-69dd796f61-66a20da92f.zip/node_modules/handlebars/",
+        ["npm:4.7.7", {
+          "packageLocation": "./.yarn/cache/handlebars-npm-4.7.7-a9ccfabf80-2df9a6b422.zip/node_modules/handlebars/",
           "packageDependencies": [
-            ["handlebars", "npm:4.5.3"],
+            ["handlebars", "npm:4.7.7"],
+            ["minimist", "npm:1.2.5"],
             ["neo-async", "npm:2.6.1"],
-            ["optimist", "npm:0.6.1"],
             ["source-map", "npm:0.6.1"],
-            ["uglify-js", "npm:3.8.0"]
+            ["uglify-js", "npm:3.8.0"],
+            ["wordwrap", "npm:1.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -10300,13 +10301,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["minimist", [
-        ["npm:0.0.10", {
-          "packageLocation": "./.yarn/cache/minimist-npm-0.0.10-df9c22163e-2e45f01378.zip/node_modules/minimist/",
-          "packageDependencies": [
-            ["minimist", "npm:0.0.10"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:0.0.8", {
           "packageLocation": "./.yarn/cache/minimist-npm-0.0.8-8139f8b2f5-d71c4684bc.zip/node_modules/minimist/",
           "packageDependencies": [
@@ -11006,17 +11000,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["opn", "npm:5.5.0"],
             ["is-wsl", "npm:1.1.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["optimist", [
-        ["npm:0.6.1", {
-          "packageLocation": "./.yarn/cache/optimist-npm-0.6.1-b1b5ef4c06-14cb755f38.zip/node_modules/optimist/",
-          "packageDependencies": [
-            ["optimist", "npm:0.6.1"],
-            ["minimist", "npm:0.0.10"],
-            ["wordwrap", "npm:0.0.3"]
           ],
           "linkType": "HARD",
         }]
@@ -14818,10 +14801,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["wordwrap", [
-        ["npm:0.0.3", {
-          "packageLocation": "./.yarn/cache/wordwrap-npm-0.0.3-ab90803074-e8c84baa72.zip/node_modules/wordwrap/",
+        ["npm:1.0.0", {
+          "packageLocation": "./.yarn/cache/wordwrap-npm-1.0.0-ae57a645e8-b4f3f8104a.zip/node_modules/wordwrap/",
           "packageDependencies": [
-            ["wordwrap", "npm:0.0.3"]
+            ["wordwrap", "npm:1.0.0"]
           ],
           "linkType": "HARD",
         }]
