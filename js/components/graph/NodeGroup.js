@@ -3,14 +3,7 @@ import React from "react";
 import Node from "./Node";
 
 export default class NodeGroup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.reset = this.reset.bind(this);
-    this.findRelationship = this.findRelationship.bind(this);
-    this.setRefEntry = this.setRefEntry.bind(this);
-  }
-
-  reset() {
+  reset = () => {
     this.props.nodesJSON.forEach(nodeJSON => {
       var node = this[nodeJSON.id_];
       var state = node.props.parents.length === 0 ? "takeable" : "inactive";
@@ -27,7 +20,7 @@ export default class NodeGroup extends React.Component {
   }
 
   // Helper for hybrid computation
-  findRelationship(course) {
+  findRelationship = course => {
     var nodes = this.props.nodesJSON;
     var node = nodes.find(
       n =>
@@ -37,7 +30,7 @@ export default class NodeGroup extends React.Component {
     return node;
   }
 
-  setRefEntry(entry) {
+  setRefEntry = entry => {
     return (elem) => elem && (this[entry.id_] = elem);
   }
 
