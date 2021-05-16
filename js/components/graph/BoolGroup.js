@@ -17,12 +17,12 @@ export default class BoolGroup extends React.Component {
     });
   }
 
-  setRefEntry = (boolJSON) => {
+  setRefEntry = boolJSON => {
     return (elem) => elem && (this[boolJSON.id_] = elem);
   }
 
   // Generate data for a Bool node
-  generateBool = (boolJSON) => {
+  generateBool = boolJSON => {
     var parents = [];
     var childs = [];
     var outEdges = [];
