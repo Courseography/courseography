@@ -1,12 +1,13 @@
 module WebParsing.ArtSciParser
     (parseArtSci, getDeptList, parseBuildings) where
 
-import Data.List (elemIndex, nubBy)
+import Data.List (findIndex, nubBy)
+import Data.Maybe (fromMaybe)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
-import Text.Parsec (count, many, parse, (<|>))
+import Text.Parsec (count, many, parse)
 import Text.Parsec.Text (Parser)
 import qualified Text.Parsec.Char as P
 import WebParsing.ParsecCombinators (text)
@@ -22,7 +23,7 @@ import Config (databasePath)
 import WebParsing.PostParser (addPostToDatabase)
 import Data.CSV
 import Text.ParserCombinators.Parsec (parseFromFile)
-import Text.HTML.TagSoup.Match (tagOpenAttrLit, tagOpenAttrNameLit)
+import Text.HTML.TagSoup.Match (tagOpen, tagOpenAttrLit, tagOpenAttrNameLit, anyAttrValue)
 import System.Directory (getCurrentDirectory)
 import Filesystem.Path.CurrentOS as Path
 import Config (fasCalendarUrl, programsUrl)
@@ -89,53 +90,52 @@ insertDepts = mapM_ (print >> (insertUnique . Department))
 -- | Takes the URL and name of a department name for parsing.
 parseDepartment :: (T.Text, T.Text) -> SqlPersistM ()
 parseDepartment (relativeURL, _) = do
+    liftIO $ print relativeURL
     bodyTags <- liftIO $ httpBodyTags $ fasCalendarUrl ++ T.unpack relativeURL
-    let contentTags = dropWhile (not . tagOpenAttrLit "div" ("id", "block-system-main")) bodyTags
-        contentTags' = takeWhile (not . tagOpenAttrLit "p" ("class", "rteright")) contentTags
+    let contentTags = dropWhile (not . tagOpenAttrLit "div" ("class", "content")) bodyTags
+        contentTags' = takeWhile (not . tagOpenAttrLit "footer" ("class", "site-footer")) contentTags
         programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags'
-        programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-course_group_view")) programs
-        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" isCourseSection) contentTags'
+        programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "courses-view")) programs
+        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "courses-view")) programs
+        courseTags' = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-content")) courseTags
     parsePrograms programs'
-    mapM_ insertCourse $ parseCourses courseTags
+    mapM_ insertCourse $ parseCourses courseTags'
     where
-        isProgramHeaderInfix tag = or [(T.isInfixOf "view-id-section") tag, (T.isInfixOf "view-header") tag]
-        isCourseSection tag = or [(T.isInfixOf "view-id-courses") tag,
-            and [(T.isInfixOf "view-") tag, (T.isInfixOf "-courses") tag,
-                  not (T.isInfixOf "programs" tag)]]
+        isProgramHeaderInfix = T.isInfixOf "view-programs-view"
 
 -- | Parse the section of the course calendar listing the programs offered by a department.
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
-parsePrograms programs = do
-    let elems = TS.partitions isPost programs
-    mapM_ addPostToDatabase elems
+parsePrograms programs = mapM_ addPostToDatabase $ TS.partitions isAccordionHeader programs
     where
-         isPost tag = tagOpenAttrNameLit "h3" "class" isProgramsView tag
-         isProgramsView currentTag = or [(T.isInfixOf "programs_view") currentTag, (T.isInfixOf "_programs") currentTag]
+        isAccordionHeader = tagOpenAttrNameLit "p" "class" (T.isInfixOf "js-views-accordion-group-header")
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
 parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]
 parseCourses tags =
-    let elems = TS.partitions (tagOpenAttrNameLit "h3" "class" (T.isInfixOf "views-accordion")) tags
+    let elems = TS.partitions isAccordion tags
         courses = map parseCourse elems
     in
         courses
     where
+        isAccordion = tagOpenAttrNameLit "p" "class" (T.isInfixOf "js-views-accordion-group-header")
+
         parseCourse :: [Tag T.Text] -> (Courses, T.Text, T.Text)
         parseCourse courseTags =
-            let courseHeader = T.strip . TS.innerText $ takeWhile (not . TS.isTagCloseName "h3") courseTags
+            let courseHeader = T.strip . TS.innerText $ takeWhile (not . TS.isTagCloseName "p") courseTags
                 (code, title) = either (error . show) id $ parse parseCourseTitle "course title" courseHeader
-                spans = TS.partitions (TS.isTagOpenName "span") courseTags
+                spans = TS.partitions (tagOpen (const True) (anyAttrValue $ T.isInfixOf "views-field")) courseTags
                 courseContents = map (T.strip . TS.innerText) spans
-                i1 = elemIndex "Hours:" courseContents
+                i1 = findIndex (T.isPrefixOf "Hours:") courseContents
                 -- TODO: add the number of contact hours to the database
-                (_, description) = maybe ("", "") (\i -> either (error . show) id $ parse parseHours "course hours" $ courseContents !! (i+1)) i1
-                prereqString = fmap ((courseContents!!) . (+1)) $ elemIndex "Prerequisite:" courseContents
-                coreq = fmap ((courseContents!!) . (+1)) $ elemIndex "Corequisite:" courseContents
+                -- hours = getValue "Hours:" courseContents
+                description = maybe "" ((courseContents!!) . (+1)) i1
+                prereqString = getValue "Prerequisite:" courseContents
+                coreq = getValue "Corequisite:" courseContents
                 -- TODO: add a "recommended preparation" field to the database
-                -- prep = maybe "" ((courseContents!!) . (+1)) $ elemIndex "Recommended Preparation:" courseContents
-                exclusion = fmap ((courseContents!!) . (+1)) $ elemIndex "Exclusion:" courseContents
-                distribution = maybe "" ((courseContents!!) . (+1)) $ elemIndex "Distribution Requirements:" courseContents
-                breadth = maybe "" ((courseContents!!) . (+1)) $ elemIndex "Breadth Requirements:" courseContents
+                -- prep = getValue "Recommended Preparation:" courseContents
+                exclusion = getValue "Exclusion:" courseContents
+                distribution = fromMaybe "" $ getValue "Distribution Requirements:" courseContents
+                breadth = fromMaybe "" $ getValue "Breadth Requirements:" courseContents
             in
                 (Courses code
                          (Just title)
@@ -149,6 +149,12 @@ parseCourses tags =
                          [],
                  breadth, distribution)
 
+        getValue label texts = do
+            i <- findIndex (T.isPrefixOf label) texts
+            let contents = texts !! i
+            val <- T.stripPrefix label contents
+            return $ T.strip val
+
 -- | Parse a course's code and title.
 parseCourseTitle :: Parser (T.Text, T.Text)
 parseCourseTitle = do
@@ -156,17 +162,11 @@ parseCourseTitle = do
     num <- count 3 P.digit
     session <- P.letter
     campus <- P.digit
-    _ <- text " - "
+    _ <- many P.space
+    _ <- text "-"
+    _ <- many P.space
     title <- many P.anyChar
     return (T.pack $ dept ++ num ++ [session, campus], T.pack title)
-
--- | Parse a course's number of contact hours and description.
-parseHours :: Parser (T.Text, T.Text)
-parseHours = do
-    hours <- many (P.alphaNum <|> P.char '/')
-    _ <- many P.space
-    description <- many P.anyChar
-    return (T.pack hours, T.pack description)
 
 -- | Make an HTTP(S) request and convert the body into a list of Tags.
 httpBodyTags :: String -> IO [Tag T.Text]
