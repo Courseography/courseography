@@ -6,18 +6,13 @@ export default class Bool extends React.Component {
   constructor(props) {
     super(props);
     this.state = { status: "inactive" };
-    this.isSelected = this.isSelected.bind(this);
-    this.arePrereqsSatisfied = this.arePrereqsSatisfied.bind(this);
-    this.updateNode = this.updateNode.bind(this);
-    this.focusPrereqs = this.focusPrereqs.bind(this);
-    this.unfocusPrereqs = this.unfocusPrereqs.bind(this);
   }
 
-  isSelected() {
+  isSelected = () => {
     return this.state.status == "active";
   }
 
-  arePrereqsSatisfied() {
+  arePrereqsSatisfied = () => {
     var svg = this.props.svg;
     function isAllTrue(element) {
       return svg.nodes.current[element]
@@ -32,7 +27,7 @@ export default class Bool extends React.Component {
     }
   }
 
-  updateNode() {
+  updateNode = () => {
     var svg = this.props.svg;
     var newState = this.arePrereqsSatisfied() ? "active" : "inactive";
 
@@ -51,7 +46,7 @@ export default class Bool extends React.Component {
     });
   }
 
-  focusPrereqs() {
+  focusPrereqs = () => {
     var svg = this.props.svg;
     // Check if there are any missing prerequisites.
     if (this.state.status !== "active") {
@@ -71,7 +66,7 @@ export default class Bool extends React.Component {
     }
   }
 
-  unfocusPrereqs() {
+  unfocusPrereqs = () => {
     var svg = this.props.svg;
     this.updateNode(svg);
     this.props.parents.forEach(function(node) {
