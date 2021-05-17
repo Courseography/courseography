@@ -2,8 +2,11 @@ import PropTypes from "prop-types";
 import React from "react";
 import Node from "./Node";
 
+/** A React component class representing a group of Nodes on the graph */
 export default class NodeGroup extends React.Component {
+  /** Returns nodes to their original unselected state, with a status of "takeable" or "inactive" */
   reset = () => {
+    // Resets course nodes
     this.props.nodesJSON.forEach(nodeJSON => {
       var node = this[nodeJSON.id_];
       var state = node.props.parents.length === 0 ? "takeable" : "inactive";
@@ -11,6 +14,7 @@ export default class NodeGroup extends React.Component {
       localStorage.setItem(node.props.JSON.id_, state);
     });
 
+    // Resets hybrid nodes
     this.props.hybridsJSON.forEach(hybridJSON => {
       var hybrid = this[hybridJSON.id_];
       var state = hybrid.props.parents.length === 0 ? "takeable" : "inactive";
@@ -19,7 +23,11 @@ export default class NodeGroup extends React.Component {
     });
   }
 
-  // Helper for hybrid computation
+  /** 
+   * Helper for hybrid computation. Finds the node with the same course label as the hybrid. 
+   * @param  {string} course
+   * @return {*} 
+   */
   findRelationship = course => {
     var nodes = this.props.nodesJSON;
     var node = nodes.find(
@@ -30,6 +38,11 @@ export default class NodeGroup extends React.Component {
     return node;
   }
 
+  /**
+   * 
+   * @param {*} entry 
+   * @return 
+   */
   setRefEntry = entry => {
     return (elem) => elem && (this[entry.id_] = elem);
   }
@@ -43,6 +56,8 @@ export default class NodeGroup extends React.Component {
         {this.props.hybridsJSON.map(entry => {
           var childs = [];
           var outEdges = [];
+
+          // create outEdges (?)
           this.props.edgesJSON.map(element => {
             // Note: hybrids shouldn't have any in edges
             if (entry.id_ === element.source) {
@@ -50,10 +65,12 @@ export default class NodeGroup extends React.Component {
               outEdges.push(element.id_);
             }
           });
+
           // parse prereqs based on text
           var hybridText = "";
           entry.text.forEach(textTag => (hybridText += textTag.text));
           var parents = [];
+          
           // First search for entire string (see Stats graph)
           var prereqNode = this.findRelationship(hybridText);
           if (prereqNode !== undefined) {
