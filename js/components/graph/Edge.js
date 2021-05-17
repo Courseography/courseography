@@ -24,8 +24,7 @@ export default class Edge extends React.Component {
       this.setState({ status: "active" });
     }
   }
-
-
+  
   componentDidUpdate(prevProps, prevState) {
     // After each render, check if the edge's state has changed. If so,
     // notify the state of EdgeGroup with updateEdgeStatus.
