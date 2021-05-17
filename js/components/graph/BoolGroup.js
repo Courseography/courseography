@@ -3,12 +3,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 export default class BoolGroup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.reset = this.reset.bind(this);
-    this.generateBool = this.generateBool.bind(this);
-    this.setRefEntry = this.setRefEntry.bind(this);
-  }
 
   componentDidMount() {
     this.props.boolsJSON.forEach(boolJSON => {
@@ -16,19 +10,19 @@ export default class BoolGroup extends React.Component {
     });
   }
 
-  reset() {
+  reset = () => {
     this.props.boolsJSON.forEach(boolJSON => {
       var bool = this[boolJSON.id_];
       bool.setState({ status: "inactive" });
     });
   }
 
-  setRefEntry(boolJSON) {
+  setRefEntry = boolJSON => {
     return (elem) => elem && (this[boolJSON.id_] = elem);
   }
 
   // Generate data for a Bool node
-  generateBool(boolJSON) {
+  generateBool = boolJSON => {
     var parents = [];
     var childs = [];
     var outEdges = [];
