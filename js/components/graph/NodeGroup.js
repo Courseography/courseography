@@ -26,7 +26,7 @@ export default class NodeGroup extends React.Component {
   /** 
    * Helper for hybrid computation. Finds the node with the same course label as the hybrid. 
    * @param  {string} course
-   * @return {*} 
+   * @return {Node} 
    */
   findRelationship = course => {
     var nodes = this.props.nodesJSON;
@@ -57,7 +57,7 @@ export default class NodeGroup extends React.Component {
           var childs = [];
           var outEdges = [];
 
-          // create outEdges (?)
+          // build childs and outEdges
           this.props.edgesJSON.map(element => {
             // Note: hybrids shouldn't have any in edges
             if (entry.id_ === element.source) {
@@ -70,7 +70,7 @@ export default class NodeGroup extends React.Component {
           var hybridText = "";
           entry.text.forEach(textTag => (hybridText += textTag.text));
           var parents = [];
-          
+
           // First search for entire string (see Stats graph)
           var prereqNode = this.findRelationship(hybridText);
           if (prereqNode !== undefined) {
