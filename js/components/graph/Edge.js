@@ -2,6 +2,9 @@ import PropTypes from "prop-types";
 import React from "react";
 import { refLookUp } from "../common/utils";
 
+/**
+ * Class representing an edge from a Node/Bool to a Node/Bool
+ */
 export default class Edge extends React.Component {
   constructor(props) {
     super(props);
@@ -9,6 +12,7 @@ export default class Edge extends React.Component {
   }
 
   updateStatus = () =>{
+    // source is the "higher" node/bool on graph, target is node/bool this Edge points at
     var source = refLookUp(this.props.source, this.props.svg);
     var target = refLookUp(this.props.target, this.props.svg);
     if (source === undefined || target === undefined) {
@@ -24,10 +28,14 @@ export default class Edge extends React.Component {
       this.setState({ status: "active" });
     }
   }
-
+  /**
+   *
+    After each render beyond the initial, check if the edge's state has changed. If so,
+    notify the state of EdgeGroup with updateEdgeStatus.
+   * @param {*} prevProps
+   * @param {Object} prevState The state of this object from the previous render
+   */
   componentDidUpdate(prevProps, prevState) {
-    // After each render, check if the edge's state has changed. If so,
-    // notify the state of EdgeGroup with updateEdgeStatus.
     if (this.state.status !== prevState.status) {
       this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
     }
@@ -53,9 +61,13 @@ export default class Edge extends React.Component {
 Edge.propTypes = {
   className: PropTypes.string,
   edgeID: PropTypes.string,
+  /** Array of points for the edge. A straight edge will have 2. Each turn in the edge means another point*/
   points: PropTypes.array,
+  /** Node from which the edge is drawn*/
   source: PropTypes.string,
   svg: PropTypes.object,
+  /** Node that the edge is pointing to */
   target: PropTypes.string,
+  /** function called when the edge's state has changed */
   updateEdgeStatus: PropTypes.func
 };
