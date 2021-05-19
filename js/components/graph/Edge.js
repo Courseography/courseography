@@ -6,10 +6,9 @@ export default class Edge extends React.Component {
   constructor(props) {
     super(props);
     this.state = { status: "inactive" };
-    this.updateStatus = this.updateStatus.bind(this);
   }
 
-  updateStatus() {
+  updateStatus = () =>{
     var source = refLookUp(this.props.source, this.props.svg);
     var target = refLookUp(this.props.target, this.props.svg);
     if (source === undefined || target === undefined) {
