@@ -37,9 +37,9 @@ export default class Graph extends React.Component {
       currFocus: null,
       graphName: null,
       showInfoBox: false,
-      infoBoxXPos:0,
-      infoBoxYPos:0,
-      infoBoxNodeId:""
+      infoBoxXPos: 0,
+      infoBoxYPos: 0,
+      infoBoxNodeId: ""
     };
 
     this.svg = React.createRef();
@@ -250,7 +250,6 @@ export default class Graph extends React.Component {
 
     this.clearAllTimeouts();
 
-
     var xPos = currentNode.props.JSON.pos[0];
     var yPos = currentNode.props.JSON.pos[1];
     var rightSide = xPos > 222;
@@ -278,7 +277,6 @@ export default class Graph extends React.Component {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
     currentNode.unfocusPrereqs(this);
-
 
     var timeout = setTimeout(() => {
       this.setState({showInfoBox: false});
@@ -345,15 +343,12 @@ export default class Graph extends React.Component {
   infoBoxMouseEnter = () => {
     this.clearAllTimeouts();
     this.setState({showInfoBox: true});
-
   };
 
   infoBoxMouseLeave = () => {
-
     var timeout = setTimeout(() => {
       this.setState({showInfoBox: false});
     }, 400);
-
     this.setState({ timeouts: this.state.timeouts.concat(timeout) });
   };
 
