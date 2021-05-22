@@ -47,7 +47,6 @@ export default class Graph extends React.Component {
     this.nodes = React.createRef();
     this.bools = React.createRef();
     this.edges = React.createRef();
-    this.infoBox = React.createRef();
     this.modal = React.createRef();
     this.exportModal = React.createRef();
   }
@@ -349,11 +348,12 @@ export default class Graph extends React.Component {
     var timeout = setTimeout(() => {
       this.setState({showInfoBox: false});
     }, 400);
+
     this.setState({ timeouts: this.state.timeouts.concat(timeout) });
   };
 
   infoBoxMouseClick = () => {
-    var newCourse = this.state.infoBoxNodeId.substring(0,6);
+    var newCourse = this.state.infoBoxNodeId.substring(0, 6);
     this.setState({ courseId: newCourse });
     this.modal.current.openModal(newCourse);
   };
@@ -711,7 +711,6 @@ export default class Graph extends React.Component {
             edgesJSON={this.state.edgesJSON}
           />
           <InfoBox
-            ref={this.infoBox}
             onClick={this.infoBoxMouseClick}
             onMouseEnter={this.infoBoxMouseEnter}
             onMouseLeave={this.infoBoxMouseLeave}
