@@ -16,6 +16,9 @@ import { refLookUp } from "../common/utils";
  *    - active: all prerequisities are satisfied
  *    - overridden: missing some prerequisities (will have a red border)
  *
+ *  On Hover status message:
+ *    - missing: means that this node is a prerequisite node that is not satisfied  (red border)
+ *
  * Types of nodes:
  *  - Course nodes are nodes that represent a certain course
  *  - Hybrid nodes are the smaller, grey nodes on the graph that represent another course node
@@ -99,7 +102,8 @@ export default class Node extends React.Component {
 
     var nodeId = this.props.JSON.id_;
 
-    // Check whether need to update children
+    // Updating the children will be unnecessary if the selected state of the current node has not
+    // changed, and the original state was not 'missing'
     if (
       ["active", "overridden"].indexOf(newState) >= 0 ===
         ["active", "overridden"].indexOf(this.state.status) >= 0 &&
@@ -144,6 +148,7 @@ export default class Node extends React.Component {
   /** Sets the status of all missing prerequisites to 'missing' */
   focusPrereqs = () => {
     var svg = this.props.svg;
+    // Missing prerequisites need to have their status updated to 'missing'
     if (
       ["inactive", "overridden", "takeable"].indexOf(this.state.status) >= 0
     ) {
