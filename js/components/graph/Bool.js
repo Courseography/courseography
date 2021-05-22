@@ -2,16 +2,29 @@ import React from "react";
 import { refLookUp } from "../common/utils";
 import PropTypes from "prop-types";
 
+/** Class representing a boolean node (and/or) */
 export default class Bool extends React.Component {
+  /**
+   * Create a boolean node.
+   * @param {string} state - The status of the node which can be active, inactive, or missing
+   */
   constructor(props) {
     super(props);
     this.state = { status: "inactive" };
   }
 
+  /**
+   * Check whether the Bool is selected.
+   * @returns {boolean} Whether status is active or not.
+   */
   isSelected = () => {
     return this.state.status == "active";
   }
 
+  /**
+   * Check if the prerequisite courses have been satisfied based on bool type.
+   * @returns {boolean} Whether any of the prereqs are satisfied.
+   */
   arePrereqsSatisfied = () => {
     var svg = this.props.svg;
     function isAllTrue(element) {
@@ -27,6 +40,9 @@ export default class Bool extends React.Component {
     }
   }
 
+  /**
+   * Update the Bool's state at any moment given the prereqs and current state.
+   */
   updateNode = () => {
     var svg = this.props.svg;
     var newState = this.arePrereqsSatisfied() ? "active" : "inactive";
@@ -46,6 +62,9 @@ export default class Bool extends React.Component {
     });
   }
 
+  /**
+   * Cross check with the selected focus prerequisites.
+   */
   focusPrereqs = () => {
     var svg = this.props.svg;
     // Check if there are any missing prerequisites.
@@ -66,6 +85,9 @@ export default class Bool extends React.Component {
     }
   }
 
+  /**
+   * Remove the focus preqrequisites if the focus is unselected.
+   */
   unfocusPrereqs = () => {
     var svg = this.props.svg;
     this.updateNode(svg);
