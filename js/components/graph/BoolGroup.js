@@ -2,14 +2,21 @@ import Bool from "./Bool";
 import React from "react";
 import PropTypes from "prop-types";
 
+/** Class representing the group of Bools */
 export default class BoolGroup extends React.Component {
 
+  /**
+   * For each entry in boolsJSON update the id with the svg
+   */
   componentDidMount() {
     this.props.boolsJSON.forEach(boolJSON => {
       this[boolJSON.id_].updateNode(this.props.svg);
     });
   }
 
+  /**
+   * Reset the Bool JSON to have all states be inactive
+   */
   reset = () => {
     this.props.boolsJSON.forEach(boolJSON => {
       var bool = this[boolJSON.id_];
@@ -17,6 +24,13 @@ export default class BoolGroup extends React.Component {
     });
   }
 
+  /**
+   * Set the reference entry for a Bool JSON entry
+   * @param {array} boolJSON Bool JSON
+   * @returns {function (elem) {
+     whether elem and the boolJSON id are True
+   }}
+   */
   setRefEntry = boolJSON => {
     return (elem) => elem && (this[boolJSON.id_] = elem);
   }
