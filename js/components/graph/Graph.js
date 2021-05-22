@@ -35,7 +35,8 @@ export default class Graph extends React.Component {
       drawNodeID: 0,
       draggingNode: null,
       currFocus: null,
-      graphName: null
+      graphName: null,
+      children: null
     };
 
     this.svg = React.createRef();
@@ -137,6 +138,7 @@ export default class Graph extends React.Component {
         var hybridsList = [];
         var boolsList = [];
         var edgesList = [];
+        var childs = {};
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -159,6 +161,17 @@ export default class Graph extends React.Component {
             edgesList.push(entry);
           }
         });
+
+        nodesList.forEach(function(node) {
+          let output = [];
+          edgesList.forEach(function(edge) {
+            if (node.id_ === edge.source) {
+              output.push(edge.target);
+            }
+          });
+          childs[node.id_] = output;
+        });
+
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -171,7 +184,8 @@ export default class Graph extends React.Component {
           zoomFactor: 1,
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
-          graphName: graphName
+          graphName: graphName,
+          children: childs
         });
       })
       .catch(err => {
