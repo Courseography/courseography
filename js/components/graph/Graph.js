@@ -132,6 +132,22 @@ export default class Graph extends React.Component {
       })
       .then(data => {
         localStorage.setItem("active-graph", graphName);
+
+        // TODO: Create an object mapping nodeIDS to the IDs of preceeding nodes to replace:
+        /**
+         * this.props.edgesJSON.forEach(element => {
+            if (entry.id_ === element.target) {
+              parents.push(element.source);
+              inEdges.push(element.id_);
+            } else if (entry.id_ === element.source) {
+              childs.push(element.target);
+              outEdges.push(element.id_);
+            }
+          });
+
+          where entry is a Node
+         */
+
         var regionsList = [];
         var nodesList = [];
         var hybridsList = [];
