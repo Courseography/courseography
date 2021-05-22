@@ -9,16 +9,12 @@ export default class EdgeGroup extends React.Component {
     // edges that are missing. Void is just a placeholder state so
     // we can declare an initial state; it does nothing.
     this.state = {};
-    this.updateEdgeStatus = this.updateEdgeStatus.bind(this);
-    this.reset = this.reset.bind(this);
-    this.generateEdge = this.generateEdge.bind(this);
-    this.setRefEntry = this.setRefEntry.bind(this);
   }
 
   // When an edge's state changes and the edge is not undefined,
   // it will call updateEdgeStatus and update EdgeGroup's state with its
   // edgeID and status. This function is passed as a props to Edge.
-  updateEdgeStatus(edgeID, state) {
+  updateEdgeStatus = (edgeID, state) => {
     var isMissing = state === "missing";
     this.setState({ [edgeID]: isMissing });
   }
@@ -29,18 +25,18 @@ export default class EdgeGroup extends React.Component {
     });
   }
 
-  reset() {
+  reset = () => {
     this.props.edgesJSON.forEach(edgeJSON => {
       this[edgeJSON.id_].setState({ status: "inactive" });
     });
   }
 
-  setRefEntry(edgeJSON) {
+  setRefEntry = edgeJSON =>{
     return (elem) => elem && (this[edgeJSON.id_] = elem);
   }
 
   // Generate data for an Edge component
-  generateEdge(edgeJSON) {
+  generateEdge = (edgeJSON) =>{
     return (
       <Edge
         className="path"
