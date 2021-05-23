@@ -162,7 +162,7 @@ export default class Graph extends React.Component {
           }
         });
 
-        // An object connecting a node to its parents/childs improves efficiency in NodeGrp/BoolGrp
+        // An object mapping a node to its parents/childs improves efficiency in NodeGroup/BoolGroup
         nodesList.forEach(node => {
           parentsObj[node.id_] = [];
         });
