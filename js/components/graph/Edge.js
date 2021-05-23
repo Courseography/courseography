@@ -11,8 +11,10 @@ export default class Edge extends React.Component {
     this.state = { status: "inactive" };
   }
 
+  /**
+   * Update the status of the Edge, based on the status of the Node/Bool it points from/to
+   */
   updateStatus = () =>{
-    // source is the "higher" node/bool on graph, target is node/bool this Edge points at
     var source = refLookUp(this.props.source, this.props.svg);
     var target = refLookUp(this.props.target, this.props.svg);
     if (source === undefined || target === undefined) {
@@ -65,6 +67,7 @@ Edge.propTypes = {
   points: PropTypes.array,
   /** Node from which the edge is drawn*/
   source: PropTypes.string,
+  /** The overarching graph object */
   svg: PropTypes.object,
   /** Node that the edge is pointing to */
   target: PropTypes.string,

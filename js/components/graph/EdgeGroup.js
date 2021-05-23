@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import React from "react";
 import Edge from "./Edge";
-
+/**
+ * Class representing a group of all Edges from the graph
+ */
 export default class EdgeGroup extends React.Component {
   constructor(props) {
     super(props);
@@ -11,31 +13,52 @@ export default class EdgeGroup extends React.Component {
     this.state = {};
   }
 
-  // When an edge's state changes and the edge is not undefined,
-  // it will call updateEdgeStatus and update EdgeGroup's state with its
-  // edgeID and status. This function is passed as a props to Edge.
+  /**
+   * Updates EdgeGroup's state with the state of an Edge when the Edge's state changes.
+   * This function is passed as a property to Edge.
+   * @param {string} edgeID
+   * @param {string} state
+   */
   updateEdgeStatus = (edgeID, state) => {
     var isMissing = state === "missing";
     this.setState({ [edgeID]: isMissing });
   }
 
+  /**
+   * After each render after the initial, update the status of each Edge
+   */
   componentDidUpdate() {
     this.props.edgesJSON.forEach(edgeJSON => {
       this[edgeJSON.id_].updateStatus();
     });
   }
 
+  /**
+   * Set all Edges to the inactive status
+   */
   reset = () => {
     this.props.edgesJSON.forEach(edgeJSON => {
       this[edgeJSON.id_].setState({ status: "inactive" });
     });
   }
-
+  /**
+   * This function is used as a callback ref. See {@link:https://reactjs.org/docs/refs-and-the-dom.html#callback-refs}
+   * @param {JSON} edgeJSON Represents a single edge
+   * @returns {function} A function that adds/updates a key value pair to EdgeGroup of an Edge's ID
+   *  and the Edge object
+   */
   setRefEntry = edgeJSON =>{
+    //If the first expression is truthy, then the second expression runs and is returned
+    //If the first expression is falsy (most likely, means the DOM element is unmounted and elem is null),
+    //then the second expression doesn't run so this[edgeJSON.id_] is never null
     return (elem) => elem && (this[edgeJSON.id_] = elem);
   }
 
-  // Generate data for an Edge component
+  /**
+   * Generate React Component representation of edge
+   * @param {JSON} edgeJSON Represents a single edge
+   * @returns {Edge} The React Component representing the edge
+   */
   generateEdge = (edgeJSON) =>{
     return (
       <Edge
@@ -84,6 +107,8 @@ export default class EdgeGroup extends React.Component {
 }
 
 EdgeGroup.propTypes = {
+  /**Array of all edges in the graph */
   edgesJSON: PropTypes.array,
+  /**The overarching graph object */
   svg: PropTypes.object
 };
