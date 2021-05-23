@@ -35,7 +35,8 @@ export default class Graph extends React.Component {
       drawNodeID: 0,
       draggingNode: null,
       currFocus: null,
-      graphName: null
+      graphName: null,
+      parents: null
     };
 
     this.svg = React.createRef();
@@ -132,27 +133,12 @@ export default class Graph extends React.Component {
       })
       .then(data => {
         localStorage.setItem("active-graph", graphName);
-
-        // TODO: Create an object mapping nodeIDS to the IDs of preceeding nodes to replace:
-        /**
-         * this.props.edgesJSON.forEach(element => {
-            if (entry.id_ === element.target) {
-              parents.push(element.source);
-              inEdges.push(element.id_);
-            } else if (entry.id_ === element.source) {
-              childs.push(element.target);
-              outEdges.push(element.id_);
-            }
-          });
-
-          where entry is a Node
-         */
-
         var regionsList = [];
         var nodesList = [];
         var hybridsList = [];
         var boolsList = [];
         var edgesList = [];
+        var parentsObj = {};
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -175,6 +161,18 @@ export default class Graph extends React.Component {
             edgesList.push(entry);
           }
         });
+
+        // An object connecting a node to its parents/childs improves efficiency in NodeGrp/BoolGrp
+        nodesList.forEach(node => {
+          parentsObj[node.id_] = [];
+        });
+
+        edgesList.forEach(edge => {
+          if (edge.target in parentsObj) {
+            parentsObj[edge.target].push(edge.source);
+          }
+        });
+
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -187,7 +185,8 @@ export default class Graph extends React.Component {
           zoomFactor: 1,
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
-          graphName: graphName
+          graphName: graphName,
+          parents: parentsObj
         });
       })
       .catch(err => {
