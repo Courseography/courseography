@@ -138,7 +138,7 @@ export default class Graph extends React.Component {
         var hybridsList = [];
         var boolsList = [];
         var edgesList = [];
-        var childs = {};
+        var children = {};
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -163,13 +163,13 @@ export default class Graph extends React.Component {
         });
 
         nodesList.forEach(function(node) {
-          let output = [];
-          edgesList.forEach(function(edge) {
-            if (node.id_ === edge.source) {
-              output.push(edge.target);
-            }
-          });
-          childs[node.id_] = output;
+          children[node.id_] = [];
+        });
+
+        edgesList.forEach(function(edge) {
+          if (edge.source in children) {
+            children[edge.source].push(edge.target);
+          }
         });
 
         this.setState({
@@ -185,7 +185,7 @@ export default class Graph extends React.Component {
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
           graphName: graphName,
-          children: childs
+          children: children
         });
       })
       .catch(err => {
