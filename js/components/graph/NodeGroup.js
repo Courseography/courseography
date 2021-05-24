@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 import React from "react";
 import Node from "./Node";
 
+/** A React component class representing a group of Nodes on the graph */
 export default class NodeGroup extends React.Component {
+  /** Returns nodes to their original unselected state, with a status of "takeable" or "inactive" */
   reset = () => {
     this.props.nodesJSON.forEach(nodeJSON => {
       var node = this[nodeJSON.id_];
@@ -19,7 +21,11 @@ export default class NodeGroup extends React.Component {
     });
   }
 
-  // Helper for hybrid computation
+  /**
+   * Helper for hybrid computation. Finds the node with the same course label as the hybrid.
+   * @param  {string} course
+   * @return {Node}
+   */
   findRelationship = course => {
     var nodes = this.props.nodesJSON;
     var node = nodes.find(
@@ -30,6 +36,11 @@ export default class NodeGroup extends React.Component {
     return node;
   }
 
+  /**
+   *
+   * @param {*} entry
+   * @return
+   */
   setRefEntry = entry => {
     return (elem) => elem && (this[entry.id_] = elem);
   }
