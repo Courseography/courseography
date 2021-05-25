@@ -45,12 +45,9 @@ export default class EdgeGroup extends React.Component {
    * This function is used as a callback ref. See {@link:https://reactjs.org/docs/refs-and-the-dom.html#callback-refs}
    * @param {JSON} edgeJSON Represents a single edge
    * @returns {function} A function that adds/updates a key value pair to EdgeGroup of an Edge's ID
-   *  and the Edge object
+   *  and the Edge object as long as the Edge exists
    */
   setRefEntry = edgeJSON =>{
-    //If the first expression is truthy, then the second expression runs and is returned
-    //If the first expression is falsy (most likely, means the DOM element is unmounted and elem is null),
-    //then the second expression doesn't run so this[edgeJSON.id_] is never null
     return (elem) => elem && (this[edgeJSON.id_] = elem);
   }
 
