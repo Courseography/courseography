@@ -142,7 +142,7 @@ export default class Graph extends React.Component {
         var boolsList = [];
         var edgesList = [];
         var childrenObj = {};
-        var outEdgesObj= {};
+        var outEdgesObj = {};
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -166,12 +166,12 @@ export default class Graph extends React.Component {
           }
         });
 
-        nodesList.forEach(function(node) {
+        nodesList.forEach(node => {
           childrenObj[node.id_] = [];
           outEdgesObj[node.id_] = [];
         });
 
-        edgesList.forEach(function(edge) {
+        edgesList.forEach(edge => {
           if (edge.source in childrenObj) {
             childrenObj[edge.source].push(edge.target);
             outEdgesObj[edge.source].push(edge.id_);

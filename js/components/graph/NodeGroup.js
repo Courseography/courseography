@@ -125,6 +125,11 @@ export default class NodeGroup extends React.Component {
               inEdges.push(element.id_);
             }
           });
+          hybridRelationships.forEach(element => {
+            if (element[0] === entry.id_) {
+              this.props.connections.children[entry.id_].push(element[1]);
+            }
+          });
           return (
             <Node
               JSON={entry}
