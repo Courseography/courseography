@@ -36,7 +36,6 @@ export default class Graph extends React.Component {
       draggingNode: null,
       currFocus: null,
       graphName: null,
-      parents: null,
       parentTree: null
     };
 
@@ -190,7 +189,6 @@ export default class Graph extends React.Component {
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
           graphName: graphName,
-          parents: parentsObj,
           parentTree: {'parents': parentsObj, 'inEdges': inEdgesObj}
         });
       })

@@ -126,9 +126,9 @@ export default class NodeGroup extends React.Component {
               key={entry.id_}
               ref={this.setRefEntry(entry)}
               hybrid={false}
-              parents={this.props.parentTree['parents']}
+              parents={this.props.parentTree.parents[entry.id_]}
               childs={childs}
-              inEdges={this.props.parentTree['inEdges']}
+              inEdges={this.props.parentTree.inEdges[entry.id_]}
               outEdges={outEdges}
               svg={svg}
               highlighted={highlighted}
