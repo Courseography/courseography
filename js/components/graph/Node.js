@@ -2,7 +2,30 @@ import PropTypes from "prop-types";
 import React from "react";
 import { refLookUp } from "../common/utils";
 
+/** React component class representing a Node on the graph
+ *
+ * States:
+ *  - status: holds the current status message (see below)
+ *  - selected: whether the node is selected, based on the status message
+ *
+ *  Unselected status messages:
+ *    - takeable: all prerequisites are satisfied (or no prereqs/parents)
+ *    - inactive: missing some prerequisites
+ *
+ *  Selected status messages:
+ *    - active: all prerequisities are satisfied
+ *    - overridden: missing some prerequisities (will have a red border)
+ *
+ *  On Hover status message:
+ *    - missing: means that this node is a prerequisite node that is not satisfied  (red border)
+ *
+ * Types of nodes:
+ *  - Course nodes are nodes that represent a certain course
+ *  - Hybrid nodes are the smaller, grey nodes on the graph that represent another course node
+ *    farther away. They can only be either 'active' or 'inactive'
+ */
 export default class Node extends React.Component {
+  /** Create a node */
   constructor(props) {
     super(props);
     var state = localStorage.getItem(this.props.JSON.id_);
@@ -17,6 +40,10 @@ export default class Node extends React.Component {
     };
   }
 
+  /**
+   * Checks whether this Node is selected
+   * @return {boolean}
+   */
   isSelected = () => {
     if (this.props.hybrid) {
       return this.state.status === "active";
@@ -25,8 +52,17 @@ export default class Node extends React.Component {
     }
   }
 
+  /**
+   * Checks whether all prerequisite/preceding nodes for the current one are satisfied
+   * @return {boolean}
+   */
   arePrereqsSatisfied = () => {
     var svg = this.props.svg;
+    /**
+     * Recursively checks that preceding nodes are selected
+     * @param  {string|Array} element Node(s)/other on the graph
+     * @return {boolean}
+     */
     function isAllTrue(element) {
       if (typeof element === "string") {
         if (svg.nodes.current[element] !== undefined) {
@@ -44,6 +80,10 @@ export default class Node extends React.Component {
     return this.props.parents.every(isAllTrue);
   }
 
+  /**
+   * Update the state/status of a node (and its children/edges)
+   * @param  {boolean} recursive whether we should recurse on its children
+   */
   updateNode = recursive => {
     var newState;
     if (this.arePrereqsSatisfied()) {
@@ -62,7 +102,8 @@ export default class Node extends React.Component {
 
     var nodeId = this.props.JSON.id_;
 
-    // Check whether need to update children
+    // Updating the children will be unnecessary if the selected state of the current node has not
+    // changed, and the original state was not 'missing'
     if (
       ["active", "overridden"].indexOf(newState) >= 0 ===
         ["active", "overridden"].indexOf(this.state.status) >= 0 &&
@@ -97,15 +138,17 @@ export default class Node extends React.Component {
     }
   }
 
+  /** Controls the selection and deselection of a node by switching states and updating the graph */
   toggleSelection = () => {
     this.setState({ selected: !this.state.selected }, function() {
       this.updateNode();
     });
   }
 
+  /** Sets the status of all missing prerequisites to 'missing' */
   focusPrereqs = () => {
     var svg = this.props.svg;
-    // Check if there are any missing prerequisites.
+    // Missing prerequisites need to have their status updated to 'missing'
     if (
       ["inactive", "overridden", "takeable"].indexOf(this.state.status) >= 0
     ) {
@@ -139,6 +182,10 @@ export default class Node extends React.Component {
     }
   }
 
+  /**
+   * Resets 'missing' nodes and edges to the previous statuses:
+   *  active, inactive, overridden, takeable
+   */
   unfocusPrereqs = () => {
     var svg = this.props.svg;
     this.updateNode(false);
