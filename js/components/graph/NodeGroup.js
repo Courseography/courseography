@@ -106,15 +106,10 @@ export default class NodeGroup extends React.Component {
         })}
         {this.props.nodesJSON.map(entry => {
           var highlighted = highlightedNodes.indexOf(entry.id_) >= 0;
-          var parents = [];
           var childs = [];
           var outEdges = [];
-          var inEdges = [];
           this.props.edgesJSON.forEach(element => {
-            if (entry.id_ === element.target) {
-              parents.push(element.source);
-              inEdges.push(element.id_);
-            } else if (entry.id_ === element.source) {
+            if (entry.id_ === element.source) {
               childs.push(element.target);
               outEdges.push(element.id_);
             }
@@ -131,9 +126,9 @@ export default class NodeGroup extends React.Component {
               key={entry.id_}
               ref={this.setRefEntry(entry)}
               hybrid={false}
-              parents={parents}
+              parents={this.props.parentTree['parents']}
               childs={childs}
-              inEdges={inEdges}
+              inEdges={this.props.parentTree['inEdges']}
               outEdges={outEdges}
               svg={svg}
               highlighted={highlighted}
@@ -261,5 +256,6 @@ NodeGroup.propTypes = {
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
   nodesJSON: PropTypes.array,
+  parentTree: PropTypes.object,
   svg: PropTypes.object
 };

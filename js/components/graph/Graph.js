@@ -724,6 +724,7 @@ export default class Graph extends React.Component {
             edgesJSON={this.state.edgesJSON}
             highlightedNodes={this.state.highlightedNodes}
             onDraw={this.state.onDraw}
+            parentTree={this.state.parentTree}
           />
           <BoolGroup
             ref={this.bools}
