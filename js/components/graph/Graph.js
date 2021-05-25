@@ -36,7 +36,8 @@ export default class Graph extends React.Component {
       draggingNode: null,
       currFocus: null,
       graphName: null,
-      parents: null
+      parents: null,
+      parentTree: null
     };
 
     this.svg = React.createRef();
@@ -139,6 +140,7 @@ export default class Graph extends React.Component {
         var boolsList = [];
         var edgesList = [];
         var parentsObj = {};
+        var inEdgesObj = {};
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -165,11 +167,13 @@ export default class Graph extends React.Component {
         // An object mapping a node to its parents/childs improves efficiency in NodeGroup/BoolGroup
         nodesList.forEach(node => {
           parentsObj[node.id_] = [];
+          inEdgesObj[node.id_] = [];
         });
 
         edgesList.forEach(edge => {
           if (edge.target in parentsObj) {
             parentsObj[edge.target].push(edge.source);
+            inEdgesObj[edge.target].push(edge.id_);
           }
         });
 
@@ -186,7 +190,8 @@ export default class Graph extends React.Component {
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
           graphName: graphName,
-          parents: parentsObj
+          parents: parentsObj,
+          parentTree: {'parents': parentsObj, 'inEdges': inEdgesObj}
         });
       })
       .catch(err => {
