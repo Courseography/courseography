@@ -163,7 +163,6 @@ export default class Graph extends React.Component {
           }
         });
 
-        // An object mapping a node to its parents/childs improves efficiency in NodeGroup/BoolGroup
         nodesList.forEach(node => {
           parentsObj[node.id_] = [];
           inEdgesObj[node.id_] = [];
