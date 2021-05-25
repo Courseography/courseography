@@ -4,32 +4,32 @@ exports[`Sidebar should match shallow snapshot 1`] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body>
-    
+
 
     <nav>
-      
-    
+
+
       <li>
-        
-        
+
+
         <a
           id="nav-export"
         >
           Export
         </a>
-        
-    
+
+
       </li>
-      
+
 
     </nav>
-    
+
 
     <div
       class="react-graph"
       id="react-graph"
     />
-    
+
 
     <div
       id="fcecount"
@@ -49,13 +49,13 @@ Object {
               data-testid="test-fcecount"
               id="fcecount"
             >
-              FCE Count: 
+              FCE Count:
             </div>
             <button
               data-testid="test-reset"
               id="reset"
             >
-              Reset Graph
+              Reset Selection
             </button>
           </div>
           <nav
@@ -256,13 +256,13 @@ Object {
             data-testid="test-fcecount"
             id="fcecount"
           >
-            FCE Count: 
+            FCE Count:
           </div>
           <button
             data-testid="test-reset"
             id="reset"
           >
-            Reset Graph
+            Reset Selection
           </button>
         </div>
         <nav
