@@ -126,9 +126,9 @@ export default class NodeGroup extends React.Component {
               key={entry.id_}
               ref={this.setRefEntry(entry)}
               hybrid={false}
-              parents={this.props.parentTree.parents[entry.id_]}
+              parents={this.props.connections.parents[entry.id_]}
               childs={childs}
-              inEdges={this.props.parentTree.inEdges[entry.id_]}
+              inEdges={this.props.connections.inEdges[entry.id_]}
               outEdges={outEdges}
               svg={svg}
               highlighted={highlighted}
@@ -256,6 +256,6 @@ NodeGroup.propTypes = {
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
   nodesJSON: PropTypes.array,
-  parentTree: PropTypes.object,
+  connections: PropTypes.object,
   svg: PropTypes.object
 };

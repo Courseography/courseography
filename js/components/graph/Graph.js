@@ -36,7 +36,7 @@ export default class Graph extends React.Component {
       draggingNode: null,
       currFocus: null,
       graphName: null,
-      parentTree: null
+      connections: null
     };
 
     this.svg = React.createRef();
@@ -189,7 +189,7 @@ export default class Graph extends React.Component {
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
           graphName: graphName,
-          parentTree: {'parents': parentsObj, 'inEdges': inEdgesObj}
+          connections: {'parents': parentsObj, 'inEdges': inEdgesObj}
         });
       })
       .catch(err => {
@@ -722,7 +722,7 @@ export default class Graph extends React.Component {
             edgesJSON={this.state.edgesJSON}
             highlightedNodes={this.state.highlightedNodes}
             onDraw={this.state.onDraw}
-            parentTree={this.state.parentTree}
+            connections={this.state.connections}
           />
           <BoolGroup
             ref={this.bools}
