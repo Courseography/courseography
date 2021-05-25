@@ -36,7 +36,11 @@ export default class Graph extends React.Component {
       draggingNode: null,
       currFocus: null,
       graphName: null,
-      connections: null
+      connections: null,
+      showInfoBox: false,
+      infoBoxXPos: 0,
+      infoBoxYPos: 0,
+      infoBoxNodeId: ""
     };
 
     this.svg = React.createRef();
@@ -44,7 +48,6 @@ export default class Graph extends React.Component {
     this.nodes = React.createRef();
     this.bools = React.createRef();
     this.edges = React.createRef();
-    this.infoBox = React.createRef();
     this.modal = React.createRef();
     this.exportModal = React.createRef();
   }
@@ -263,8 +266,6 @@ export default class Graph extends React.Component {
 
     this.clearAllTimeouts();
 
-    var infoBox = this.infoBox.current;
-
     var xPos = currentNode.props.JSON.pos[0];
     var yPos = currentNode.props.JSON.pos[1];
     var rightSide = xPos > 222;
@@ -278,11 +279,11 @@ export default class Graph extends React.Component {
     yPos = parseFloat(yPos);
 
     if (!this.state.onDraw) {
-      infoBox.setState({
-        xPos: xPos,
-        yPos: yPos,
-        nodeId: courseId,
-        showInfobox: true
+      this.setState({
+        showInfoBox: true,
+        infoBoxXPos: xPos,
+        infoBoxYPos: yPos,
+        infoBoxNodeId:courseId
       });
     }
     this.setState({ buttonHover: true });
@@ -293,10 +294,8 @@ export default class Graph extends React.Component {
     var currentNode = this.nodes.current[courseId];
     currentNode.unfocusPrereqs(this);
 
-    var infoBox = this.infoBox.current;
-
-    var timeout = setTimeout(function() {
-      infoBox.setState({ showInfobox: false });
+    var timeout = setTimeout(() => {
+      this.setState({showInfoBox: false});
     }, 400);
 
     this.setState({
@@ -359,24 +358,19 @@ export default class Graph extends React.Component {
 
   infoBoxMouseEnter = () => {
     this.clearAllTimeouts();
-
-    var infoBox = this.infoBox.current;
-    infoBox.setState({ showInfobox: true });
+    this.setState({showInfoBox: true});
   };
 
   infoBoxMouseLeave = () => {
-    var infoBox = this.infoBox.current;
-
-    var timeout = setTimeout(function() {
-      infoBox.setState({ showInfobox: false });
+    var timeout = setTimeout(() => {
+      this.setState({showInfoBox: false});
     }, 400);
 
     this.setState({ timeouts: this.state.timeouts.concat(timeout) });
   };
 
   infoBoxMouseClick = () => {
-    var infoBox = this.infoBox.current;
-    var newCourse = infoBox.state.nodeId.substring(0, 6);
+    var newCourse = this.state.infoBoxNodeId.substring(0, 6);
     this.setState({ courseId: newCourse });
     this.modal.current.openModal(newCourse);
   };
@@ -735,10 +729,13 @@ export default class Graph extends React.Component {
             edgesJSON={this.state.edgesJSON}
           />
           <InfoBox
-            ref={this.infoBox}
             onClick={this.infoBoxMouseClick}
             onMouseEnter={this.infoBoxMouseEnter}
             onMouseLeave={this.infoBoxMouseLeave}
+            showInfoBox={this.state.showInfoBox}
+            xPos={this.state.infoBoxXPos}
+            yPos={this.state.infoBoxYPos}
+            nodeId={this.state.infoBoxNodeId}
           />
         </svg>
       </div>

@@ -1,28 +1,20 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export default class InfoBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      xPos: "0",
-      yPos: "0",
-      nodeId: "",
-      showInfobox: false
-    };
-  }
 
   render() {
-    if (this.state.showInfobox) {
+    if (this.props.showInfoBox) {
       //TODO: move to CSS
       var gStyles = {
         cursor: "pointer",
         transition: "opacity .4s",
-        opacity: this.state.showInfobox ? 1 : 0
+        opacity: this.props.showInfoBox ? 1 : 0
       };
       var rectAttrs = {
-        id: this.state.nodeId + "-tooltip" + "-rect",
-        x: this.state.xPos,
-        y: this.state.yPos,
+        id: this.props.nodeId + "-tooltip" + "-rect",
+        x: this.props.xPos,
+        y: this.props.yPos,
         rx: "4",
         ry: "4",
         fill: "white",
@@ -33,9 +25,9 @@ export default class InfoBox extends React.Component {
       };
 
       var textAttrs = {
-        id: this.state.nodeId + "-tooltip" + "-text",
-        x: parseFloat(this.state.xPos) + 60 / 2 - 18,
-        y: parseFloat(this.state.yPos) + 30 / 2 + 6
+        id: this.props.nodeId + "-tooltip" + "-text",
+        x: this.props.xPos + 60 / 2 - 18,
+        y: this.props.yPos + 30 / 2 + 6
       };
 
       return (
@@ -43,7 +35,9 @@ export default class InfoBox extends React.Component {
           id="infoBox"
           className="tooltip-group"
           style={gStyles}
-          {...this.props}
+          onClick={this.props.onClick}
+          onMouseEnter={this.props.onMouseEnter}
+          onMouseLeave={this.props.onMouseLeave}
         >
           <rect {...rectAttrs} />
           <text {...textAttrs}>Info</text>
@@ -53,4 +47,14 @@ export default class InfoBox extends React.Component {
       return <g />;
     }
   }
+}
+
+InfoBox.propTypes = {
+  showInfoBox: PropTypes.bool,
+  nodeId: PropTypes.string,
+  xPos: PropTypes.number,
+  yPos: PropTypes.number,
+  onClick: PropTypes.func,
+  onMouseEnter: PropTypes.func,
+  onMouseLeave: PropTypes.func
 }
