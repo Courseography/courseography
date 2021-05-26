@@ -36,6 +36,7 @@ export default class Graph extends React.Component {
       draggingNode: null,
       currFocus: null,
       graphName: null,
+      connections: null,
       showInfoBox: false,
       infoBoxXPos: 0,
       infoBoxYPos: 0,
@@ -140,6 +141,8 @@ export default class Graph extends React.Component {
         var hybridsList = [];
         var boolsList = [];
         var edgesList = [];
+        var childrenObj = {};
+        var outEdgesObj = {};
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -162,6 +165,19 @@ export default class Graph extends React.Component {
             edgesList.push(entry);
           }
         });
+
+        nodesList.forEach(node => {
+          childrenObj[node.id_] = [];
+          outEdgesObj[node.id_] = [];
+        });
+
+        edgesList.forEach(edge => {
+          if (edge.source in childrenObj) {
+            childrenObj[edge.source].push(edge.target);
+            outEdgesObj[edge.source].push(edge.id_);
+          }
+        });
+
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -174,7 +190,8 @@ export default class Graph extends React.Component {
           zoomFactor: 1,
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
-          graphName: graphName
+          graphName: graphName,
+          connections: {'children': childrenObj, 'outEdges': outEdgesObj}
         });
       })
       .catch(err => {
@@ -698,6 +715,7 @@ export default class Graph extends React.Component {
             edgesJSON={this.state.edgesJSON}
             highlightedNodes={this.state.highlightedNodes}
             onDraw={this.state.onDraw}
+            connections={this.state.connections}
           />
           <BoolGroup
             ref={this.bools}
