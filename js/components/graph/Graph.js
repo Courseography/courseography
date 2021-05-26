@@ -664,7 +664,7 @@ export default class Graph extends React.Component {
         />
         <Button
           divId="reset-button"
-          text="Reset"
+          text="Reset View"
           mouseDown={this.resetZoomAndPan}
           mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
