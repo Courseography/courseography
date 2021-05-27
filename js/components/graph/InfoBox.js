@@ -5,10 +5,7 @@ export default class InfoBox extends React.Component {
 
   render() {
     if (this.props.showInfoBox) {
-      //TODO: move to CSS
       var gStyles = {
-        cursor: "pointer",
-        transition: "opacity .4s",
         opacity: this.props.showInfoBox ? 1 : 0
       };
       var rectAttrs = {
