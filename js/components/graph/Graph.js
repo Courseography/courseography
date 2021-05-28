@@ -179,6 +179,9 @@ export default class Graph extends React.Component {
           if (edge.target in parentsObj) {
             parentsObj[edge.target].push(edge.source);
             inEdgesObj[edge.target].push(edge.id_);
+          }
+
+          if (edge.source in childrenObj) {
             childrenObj[edge.source].push(edge.target);
             outEdgesObj[edge.source].push(edge.id_);
           }
