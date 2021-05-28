@@ -55,7 +55,7 @@ Object {
               data-testid="test-reset"
               id="reset"
             >
-              Reset Graph
+              Reset Selection
             </button>
           </div>
           <nav
@@ -262,7 +262,7 @@ Object {
             data-testid="test-reset"
             id="reset"
           >
-            Reset Graph
+            Reset Selection
           </button>
         </div>
         <nav

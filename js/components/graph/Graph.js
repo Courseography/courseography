@@ -143,6 +143,8 @@ export default class Graph extends React.Component {
         var edgesList = [];
         var parentsObj = {};
         var inEdgesObj = {};
+        var childrenObj = {};
+        var outEdgesObj = {};
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -169,12 +171,16 @@ export default class Graph extends React.Component {
         nodesList.forEach(node => {
           parentsObj[node.id_] = [];
           inEdgesObj[node.id_] = [];
+          childrenObj[node.id_] = [];
+          outEdgesObj[node.id_] = [];
         });
 
         edgesList.forEach(edge => {
           if (edge.target in parentsObj) {
             parentsObj[edge.target].push(edge.source);
             inEdgesObj[edge.target].push(edge.id_);
+            childrenObj[edge.source].push(edge.target);
+            outEdgesObj[edge.source].push(edge.id_);
           }
         });
 
@@ -191,7 +197,12 @@ export default class Graph extends React.Component {
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
           graphName: graphName,
-          connections: {'parents': parentsObj, 'inEdges': inEdgesObj}
+          connections: {
+            'parents': parentsObj,
+            'inEdges': inEdgesObj,
+            'children': childrenObj,
+            'outEdges': outEdgesObj
+          }
         });
       })
       .catch(err => {
@@ -681,7 +692,7 @@ export default class Graph extends React.Component {
         />
         <Button
           divId="reset-button"
-          text="Reset"
+          text="Reset View"
           mouseDown={this.resetZoomAndPan}
           mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}

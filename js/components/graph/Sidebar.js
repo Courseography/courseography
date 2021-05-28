@@ -14,10 +14,10 @@ export default class Sidebar extends React.Component {
     };
   }
 
-  componentWillUpdate(prevProps) { 
+  componentWillUpdate(prevProps) {
     if (prevProps.graphName !== this.state.graphName) {
       this.setState({ graphName: prevProps.graphName }, () => {
-        this.handleFocusEnabled(); 
+        this.handleFocusEnabled();
       });
     }
   }
@@ -119,7 +119,7 @@ export default class Sidebar extends React.Component {
     return (
       <div id="fce" className={contentHiddenClass}>
         <div id="fcecount" data-testid="test-fcecount">FCE Count: {fceString}</div>
-        <button id="reset" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Graph</button>
+        <button id="reset" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selection</button>
       </div>
     )
   }
@@ -181,7 +181,7 @@ export default class Sidebar extends React.Component {
           {this.renderSidebarNav()}
           {this.renderSidebarButtons()}
         </div>
-        
+
         <div id="sidebar-button" onClick={() => this.toggleSidebar("button")} data-testid="test-sidebar-button">
           <img id="sidebar-icon"
            className={flippedClass}
