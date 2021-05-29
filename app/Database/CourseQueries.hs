@@ -207,11 +207,15 @@ courseInfo dept = fmap createJSONResponse (getDeptCourses dept)
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept =
     liftIO $ runSqlite databasePath $ do
-        courses  :: [Entity Courses]  <- selectList [] []
-        meetings :: [Entity Meeting]  <- selectList [] []
-        allMeetTimes <- mapM buildMeetTimes meetings
-        let c = filter (T.isPrefixOf dept . coursesCode) $ map entityVal courses
-        mapM (buildCourse allMeetTimes) c
+        courses :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
+        let deptCourses = map entityVal courses
+        meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map coursesCode deptCourses] []
+        mapM (processCourse meetings) deptCourses
+    where
+        processCourse allMeetings course = do
+            let courseMeetings = filter (\m -> meetingCode (entityVal m) == coursesCode course) allMeetings
+            allTimes <- mapM buildMeetTimes courseMeetings
+            buildCourse allTimes course
 
 -- | Return a list of all departments.
 deptList :: IO Response
