@@ -5,21 +5,52 @@ import ReactDOM from 'react-dom';
 
 
 function filterCourse(inst, time, lec) {
-    return lec.instructor.indexOf(inst) > -1 &&
-           (time.length < 2 || hasTime(time, lec.time));
+    return lec.meetData.instructor.indexOf(inst) >= 0 && hasTime(time, lec.timeData);
 };
 
 
 function hasTime(timeStr, times) {
-    var time = ['MTWRF'.indexOf(timeStr[0]) + '',
-                timeStr.substr(1) + '-0'];
-    for (var i = 0; i < times.length; i++) {
-        if (time[0] === times[i][0] && time[1] === times[i][1]) {
-            return true;
-        }
+    if (timeStr === '') {
+        return true;  // Blank value means the time input has been left empty
     }
-    return false;
+    let day = 'MTWRF'.indexOf(timeStr[0]);
+    let hour = parseInt(timeStr.substr(1));
+    if (day < 0 || isNaN(hour)) {
+        return false;  // Invalid weekday or hour being searched for
+    }
+
+    return times.some(time => {
+        return (
+            time.weekDay === day &&
+            time.startHour <= hour && hour < time.endHour
+        );
+    });
 };
+
+
+function timeToString(timeData) {
+    let times = timeData.sort((t1, t2) => {
+        if (t1.weekDay > t2.weekDay || (t1.weekDay == t2.weekDay && t1.startHour > t2.startHour)) {
+            return 1;
+        } else if (t1.weekDay < t2.weekDay || (t1.weekDay == t2.weekDay && t1.startHour < t2.startHour)) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }).map(time => {
+        if (time.weekDay > 4) {
+            return '';
+        }
+        let s = 'MTWRF'[time.weekDay];
+        if (s === undefined) { console.log(time); return '';}
+        let startHour = time.startHour <= 12 ? time.startHour : time.startHour % 12;
+        let endHour = time.endHour <= 12 ? time.endHour : time.endHour % 12;
+        s += `${startHour}-${endHour}`;
+        return s;
+    }).filter(s => s.length > 0);
+
+    return times.join(', ');
+}
 
 
 class Search extends React.Component {
@@ -127,74 +158,51 @@ class Timetable extends React.Component {
     render() {
         var state = this.state;
         var courseRows = this.state.courses.filter((course) => {
-            var lecs = course.fallSession.lectures
-                                         .concat(course.springSession.lectures)
-                                         .concat(course.yearSession.lectures);
-
             return course.name.indexOf(state.codeSearch) > -1 &&
-                   lecs.some(({meetingData}) => filterCourse(state.instSearch, state.timeSearch, meetingData));
+                   course.allMeetingTimes.some(meetingData => filterCourse(state.instSearch, state.timeSearch, meetingData));
         }).map((course) => {
-            if (course.yearSession.lectures.length === 0) {
-                var fallLec = '';
-                var springLec = '';
+            let lectures = course.allMeetingTimes.filter(
+                meetingData => filterCourse(state.instSearch, state.timeSearch, meetingData)
+            ).sort((lec1, lec2) => {
+                if (lec1.meetData.section > lec2.meetData.section) {
+                    return 1;
+                } else if (lec1.meetData.section > lec2.meetData.section) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
 
-                fallLec = course.fallSession.lectures.filter(({meetingData}) => {
-                    return filterCourse(state.instSearch, state.timeSearch, meetingData);
-                }).map(({meetingData}) => {
-                    return (
-                        <tr>
-                        <td className="timetableSection">
-                            {meetingData.section}
-                        </td>
-                        <td className="timetableTime">{meetingData.timeStr}</td>
-                        <td className="timetableInstructor">{meetingData.instructor}</td>
-                        <td className="timetableCap">{meetingData.cap}</td>
-                        <td className="timetableWait">{meetingData.wait}</td>
-                        </tr>);
-                });
+            let lectureRows = {
+                'F': [], 'S': [], 'Y': []
+            };
+            for (let lecture of lectures) {
+                lectureRows[lecture.meetData.session].push(
+                    <tr key={`${course.name}-${lecture.meetData.session}-${lecture.meetData.section}`}>
+                    <td className="timetableSection">
+                        {lecture.meetData.section}
+                    </td>
+                    <td className="timetableTime">{timeToString(lecture.timeData)}</td>
+                    <td className="timetableInstructor">{lecture.meetData.instructor}</td>
+                    <td className="timetableCap">{lecture.meetData.enrol} / {lecture.meetData.cap}</td>
+                    <td className="timetableWait">{lecture.meetData.wait}</td>
+                    </tr>
+                );
+            }
 
-                springLec = course.springSession.lectures.filter(({meetingData}) => {
-                    return filterCourse(state.instSearch, state.timeSearch, meetingData);
-                }).map(({meetingData}) => {
-                    return (
-                        <tr key={meetingData.section}>
-                        <td className="timetableSection">
-                            {meetingData.section}
-                        </td>
-                        <td className="timetableTime">{meetingData.timeStr}</td>
-                        <td className="timetableInstructor">{meetingData.instructor}</td>
-                        <td className="timetableCap">{meetingData.cap}</td>
-                        <td className="timetableWait">{meetingData.wait}</td>
-                        </tr>);
-                });
-
+            if (lectureRows['Y'].length === 0) {
                 return (
                     <tr key={course.name}>
                         <td className="timetableCourseName">{course.name}</td>
-                        <td className="FOffering"><table className="courseTable"><tbody>{fallLec}</tbody></table></td>
-                        <td className="SOffering"><table className="courseTable"><tbody>{springLec}</tbody></table></td>
+                        <td className="FOffering"><table className="courseTable"><tbody>{lectureRows['F']}</tbody></table></td>
+                        <td className="SOffering"><table className="courseTable"><tbody>{lectureRows['S']}</tbody></table></td>
                     </tr>
                 );
             } else {
-                var yearLec = course.yearSession.lectures.filter(({meetingData}) => {
-                        return filterCourse(state.instSearch, state.timeSearch, meetingData);
-                    }).map(({meetingData}) => {
-                        return (
-                            <tr key={meetingData.section}>
-                            <td className="timetableSection">
-                                {meetingData.section}
-                            </td>
-                            <td className="timetableTime">{meetingData.time_str}</td>
-                            <td className="timetableInstructor">{meetingData.instructor}</td>
-                            <td className="timetableCap">{meetingData.cap}</td>
-                            <td className="timetableWait">{meetingData.wait}</td>
-                            </tr>);
-                    });
-
                 return (
                     <tr key={course.name}>
                         <td className="timetableCourseName">{course.name}</td>
-                        <td colSpan="2" className="YOffering"><table className="courseTable"><tbody>{yearLec}</tbody></table></td>
+                        <td colSpan="2" className="YOffering"><table className="courseTable"><tbody>{lectureRows['Y']}</tbody></table></td>
                     </tr>
                 );
             }
