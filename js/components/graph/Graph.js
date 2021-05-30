@@ -44,7 +44,6 @@ export default class Graph extends React.Component {
     };
 
     this.svg = React.createRef();
-    this.marker = React.createRef();
     this.nodes = React.createRef();
     this.bools = React.createRef();
     this.edges = React.createRef();
@@ -71,7 +70,6 @@ export default class Graph extends React.Component {
 
     // Need to hardcode these in because React does not understand these attributes
     var svgNode = this.svg.current;
-    var markerNode = this.marker.current;
 
     svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -82,13 +80,6 @@ export default class Graph extends React.Component {
       "xmlns:rdf",
       "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     );
-
-    markerNode.setAttribute("refX", 4);
-    markerNode.setAttribute("refY", 5);
-    markerNode.setAttribute("markerUnits", "strokeWidth");
-    markerNode.setAttribute("orient", "auto");
-    markerNode.setAttribute("markerWidth", 7);
-    markerNode.setAttribute("markerHeight", 7);
   }
 
   componentWillUpdate(prevProps) {
@@ -201,7 +192,6 @@ export default class Graph extends React.Component {
     // Need to hardcode these in because React does not understand these
     // attributes
     var svgNode = this.svg.current;
-    var markerNode = this.marker.current;
 
     svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -212,13 +202,6 @@ export default class Graph extends React.Component {
       "xmlns:rdf",
       "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     );
-
-    markerNode.setAttribute("refX", 4);
-    markerNode.setAttribute("refY", 5);
-    markerNode.setAttribute("markerUnits", "strokeWidth");
-    markerNode.setAttribute("orient", "auto");
-    markerNode.setAttribute("markerWidth", 7);
-    markerNode.setAttribute("markerHeight", 7);
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -394,7 +377,9 @@ export default class Graph extends React.Component {
     var polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" };
     return (
       <defs>
-        <marker id="arrowHead" ref={this.marker} viewBox="0 0 10 10">
+        <marker id="arrowHead" viewBox="0 0 10 10" refX="4" refY="5"
+            markerUnits="strokeWidth" markerWidth="7" markerHeight="7"
+            orient="auto">
           <polyline {...polylineAttrs} />
         </marker>
       </defs>
