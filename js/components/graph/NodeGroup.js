@@ -52,15 +52,7 @@ export default class NodeGroup extends React.Component {
     return (
       <g id="nodes">
         {this.props.hybridsJSON.map(entry => {
-          var childs = [];
-          var outEdges = [];
-          this.props.edgesJSON.map(element => {
-            // Note: hybrids shouldn't have any in edges
-            if (entry.id_ === element.source) {
-              childs.push(element.target);
-              outEdges.push(element.id_);
-            }
-          });
+
           // parse prereqs based on text
           var hybridText = "";
           entry.text.forEach(textTag => (hybridText += textTag.text));
@@ -107,9 +99,9 @@ export default class NodeGroup extends React.Component {
               hybrid={true}
               ref={this.setRefEntry(entry)}
               parents={parents}
-              childs={childs}
+              childs={this.props.connections.hybridChildren[entry.id_]}
               inEdges={[]}
-              outEdges={outEdges}
+              outEdges={this.props.connections.hybridOutEdges[entry.id_]}
               svg={svg}
               logicalType={"AND"}
             />
