@@ -141,6 +141,8 @@ export default class Graph extends React.Component {
         var hybridsList = [];
         var boolsList = [];
         var edgesList = [];
+        var parentsObj = {};
+        var inEdgesObj = {};
         var childrenObj = {};
         var outEdgesObj = {};
 
@@ -167,11 +169,18 @@ export default class Graph extends React.Component {
         });
 
         nodesList.forEach(node => {
+          parentsObj[node.id_] = [];
+          inEdgesObj[node.id_] = [];
           childrenObj[node.id_] = [];
           outEdgesObj[node.id_] = [];
         });
 
         edgesList.forEach(edge => {
+          if (edge.target in parentsObj) {
+            parentsObj[edge.target].push(edge.source);
+            inEdgesObj[edge.target].push(edge.id_);
+          }
+
           if (edge.source in childrenObj) {
             childrenObj[edge.source].push(edge.target);
             outEdgesObj[edge.source].push(edge.id_);
@@ -191,7 +200,12 @@ export default class Graph extends React.Component {
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
           graphName: graphName,
-          connections: {'children': childrenObj, 'outEdges': outEdgesObj}
+          connections: {
+            'parents': parentsObj,
+            'inEdges': inEdgesObj,
+            'children': childrenObj,
+            'outEdges': outEdgesObj
+          }
         });
       })
       .catch(err => {

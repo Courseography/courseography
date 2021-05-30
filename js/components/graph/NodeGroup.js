@@ -117,14 +117,6 @@ export default class NodeGroup extends React.Component {
         })}
         {this.props.nodesJSON.map(entry => {
           var highlighted = highlightedNodes.indexOf(entry.id_) >= 0;
-          var parents = [];
-          var inEdges = [];
-          this.props.edgesJSON.forEach(element => {
-            if (entry.id_ === element.target) {
-              parents.push(element.source);
-              inEdges.push(element.id_);
-            }
-          });
           hybridRelationships.forEach(element => {
             if (element[0] === entry.id_) {
               this.props.connections.children[entry.id_].push(element[1]);
@@ -137,9 +129,9 @@ export default class NodeGroup extends React.Component {
               key={entry.id_}
               ref={this.setRefEntry(entry)}
               hybrid={false}
-              parents={parents}
+              parents={this.props.connections.parents[entry.id_]}
               childs={this.props.connections.children[entry.id_]}
-              inEdges={inEdges}
+              inEdges={this.props.connections.inEdges[entry.id_]}
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
               highlighted={highlighted}
