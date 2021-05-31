@@ -52,45 +52,7 @@ export default class NodeGroup extends React.Component {
     return (
       <g id="nodes">
         {this.props.hybridsJSON.map(entry => {
-
-          // parse prereqs based on text
-          var hybridText = "";
-          entry.text.forEach(textTag => (hybridText += textTag.text));
-          var parents = [];
-          // First search for entire string (see Stats graph)
-          var prereqNode = this.findRelationship(hybridText);
-          if (prereqNode !== undefined) {
-            parents.push(prereqNode.id_);
-            hybridRelationships.push([prereqNode.id_, entry.id_]);
-          } else {
-            // Parse text first
-            var prereqs = parseAnd(hybridText)[0];
-            prereqs.forEach(course => {
-              if (typeof course === "string") {
-                prereqNode = this.findRelationship(course);
-                if (prereqNode !== undefined) {
-                  parents.push(prereqNode.id_);
-                  hybridRelationships.push([prereqNode.id_, entry.id_]);
-                } else {
-                  console.error("Could not find prereq for ", hybridText);
-                }
-              } else if (typeof course === "object") {
-                var orPrereq = [];
-                course.forEach(c => {
-                  var prereqNode = this.findRelationship(c);
-                  if (prereqNode !== undefined) {
-                    orPrereq.push(prereqNode.id_);
-                    hybridRelationships.push([prereqNode.id_, entry.id_]);
-                  } else {
-                    console.error("Could not find prereq for ", hybridText);
-                  }
-                });
-                if (orPrereq.length > 0) {
-                  parents.push(orPrereq);
-                }
-              }
-            });
-          }
+          var parents = this.props.connections.hybridParents[entry.id_];
           return (
             <Node
               JSON={entry}
@@ -242,6 +204,8 @@ function parseCourse(s, prefix) {
 
   return [s, ""];
 }
+
+export {parseAnd};
 
 NodeGroup.propTypes = {
   edgesJSON: PropTypes.array,

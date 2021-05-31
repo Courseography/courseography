@@ -7,6 +7,7 @@ import Button from "./Button";
 import EdgeGroup from "./EdgeGroup";
 import InfoBox from "./InfoBox";
 import NodeGroup from "./NodeGroup";
+import {parseAnd} from "./NodeGroup";
 import RegionGroup from "./RegionGroup";
 import * as focusInfo from "./sidebar/focus_descriptions";
 
@@ -109,7 +110,71 @@ export default class Graph extends React.Component {
       .getElementById("react-graph")
       .removeEventListener("wheel", this.onWheel);
   }
+/** Adds parents of hybridNode to the parents object, under it's id, and populates
+   * hybridRelationships with
+   *
+   * @param {Node} hybridNode
+   * @param {Array} nodesJSON
+   * @param {Array} hybridRelationships
+   * @param {Object} parents
+   */
+  populateParentsAndHybridRelationship(hybridNode, nodesJSON, hybridRelationships, parents){
 
+    /**
+     * Helper for hybrid computation. Finds the node with the same course label as the hybrid.
+     * @param  {string} course
+     * @param {Array} nodesJSON
+     * @return {Node}
+     */
+    var findRelationship = (course, nodesJSON) => {
+      var nodes = nodesJSON;
+      var node = nodes.find(
+        n =>
+          n.type_ === "Node" &&
+          n.text.some(textTag => textTag.text.includes(course))
+      );
+      return node;
+    }
+    // parse prereqs based on text
+    var hybridText = "";
+    hybridNode.text.forEach(textTag => (hybridText += textTag.text));
+    var nodeParents = [];
+    // First search for entire string (see Stats graph)
+    var prereqNode = findRelationship(hybridText, nodesJSON);
+    if (prereqNode !== undefined) {
+      nodeParents.push(prereqNode.id_);
+      hybridRelationships.push([prereqNode.id_, hybridNode.id_]);
+    } else {
+      // Parse text first
+      var prereqs = parseAnd(hybridText)[0];
+      prereqs.forEach(course => {
+        if (typeof course === "string") {
+          prereqNode = findRelationship(course, nodesJSON);
+          if (prereqNode !== undefined) {
+            nodeParents.push(prereqNode.id_);
+            hybridRelationships.push([prereqNode.id_, hybridNode.id_]);
+          } else {
+            console.error("Could not find prereq for ", hybridText);
+          }
+        } else if (typeof course === "object") {
+          var orPrereq = [];
+          course.forEach(c => {
+            var prereqNode = findRelationship(c, nodesJSON);
+            if (prereqNode !== undefined) {
+              orPrereq.push(prereqNode.id_);
+              hybridRelationships.push([prereqNode.id_, hybridNode.id_]);
+            } else {
+              console.error("Could not find prereq for ", hybridText);
+            }
+          });
+          if (orPrereq.length > 0) {
+            nodeParents.push(orPrereq);
+          }
+        }
+      });
+    }
+  parents[hybridNode.id_] = nodeParents;
+}
   getGraph = () => {
     let graphName = this.props.graphName.replace("-", " ");
     let url = new URL("/get-json-data", document.location);
@@ -147,7 +212,8 @@ export default class Graph extends React.Component {
         var outEdgesObj = {};
         var hybridChildrenObj = {};
         var hybridOutEdgesObj = {};
-
+        var hybridParentsObj = {};
+        var hybridRelationships = [];
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
         });
@@ -173,6 +239,7 @@ export default class Graph extends React.Component {
         hybridsList.forEach(hybrid => {
           hybridChildrenObj[hybrid.id_] = [];
           hybridOutEdgesObj[hybrid.id_] = [];
+          this.populateParentsAndHybridRelationship(hybrid, nodesList, hybridRelationships, hybridParentsObj);
         })
 
         nodesList.forEach(node => {
@@ -217,7 +284,8 @@ export default class Graph extends React.Component {
             'children': childrenObj,
             'outEdges': outEdgesObj,
             'hybridChildren': hybridChildrenObj,
-            'hybridOutEdges': hybridOutEdgesObj
+            'hybridOutEdges': hybridOutEdgesObj,
+            'hybridParents': hybridParentsObj
           }
         });
       })
