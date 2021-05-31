@@ -387,7 +387,7 @@ export default class Graph extends React.Component {
     var newCourse = this.state.infoBoxNodeId.substring(0, 6);
     this.setState({
       courseId: newCourse,
-      showCourseModal: !this.state.showCourseModal
+      showCourseModal: true
     });
   };
 
