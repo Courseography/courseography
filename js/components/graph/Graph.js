@@ -43,7 +43,6 @@ export default class Graph extends React.Component {
       infoBoxNodeId: ""
     };
 
-    this.svg = React.createRef();
     this.nodes = React.createRef();
     this.bools = React.createRef();
     this.edges = React.createRef();
@@ -67,19 +66,6 @@ export default class Graph extends React.Component {
       document.getElementById("nav-export")
         .addEventListener("click", this.exportModal.current.openModal);
     }
-
-    // Need to hardcode these in because React does not understand these attributes
-    var svgNode = this.svg.current;
-
-    svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    svgNode.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
-    svgNode.setAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-    svgNode.setAttribute("xmlns:cc", "http://creativecommons.org/ns#");
-    svgNode.setAttribute(
-      "xmlns:rdf",
-      "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    );
   }
 
   componentWillUpdate(prevProps) {
@@ -203,19 +189,6 @@ export default class Graph extends React.Component {
         console.error("Fetch API failed. Here are the headers: ");
         console.error(err);
       });
-    // Need to hardcode these in because React does not understand these
-    // attributes
-    var svgNode = this.svg.current;
-
-    svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    svgNode.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
-    svgNode.setAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-    svgNode.setAttribute("xmlns:cc", "http://creativecommons.org/ns#");
-    svgNode.setAttribute(
-      "xmlns:rdf",
-      "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    );
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -603,7 +576,11 @@ export default class Graph extends React.Component {
       width: "100%",
       height: "100%",
       viewBox: `${viewboxX} ${viewboxY} ${viewboxWidth} ${viewboxHeight}`,
-      preserveAspectRatio: "xMinYMin"
+      preserveAspectRatio: "xMinYMin",
+      "xmlns:svg": "http://www.w3.org/2000/svg",
+      "xmlns:dc": "http://purl.org/dc/elements/1.1/",
+      "xmlns:cc": "http://creativecommons.org/ns#",
+      "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     };
 
     var zoomInDisabled = this.state.zoomFactor <= 0.5;
@@ -689,8 +666,9 @@ export default class Graph extends React.Component {
         />
 
         <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
           {...svgAttrs}
-          ref={this.svg}
           version="1.1"
           className={
             this.state.highlightedNodes.length > 0 ? "highlight-nodes" : ""
