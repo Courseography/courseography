@@ -647,11 +647,7 @@ export default class Graph extends React.Component {
 
     return (
       <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
-        {this.state.showCourseModal ?
-          <CourseModal
-          courseChange={this.state.infoBoxNodeId}
-          callbackModal={this.callbackModal}
-          /> : null}
+        {this.state.showCourseModal && <CourseModal courseChange={this.state.courseId} callbackModal={this.callbackModal} />}
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
           divId="zoom-in-button"
