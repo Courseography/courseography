@@ -247,6 +247,12 @@ export default class Graph extends React.Component {
           inEdgesObj[node.id_] = [];
           childrenObj[node.id_] = [];
           outEdgesObj[node.id_] = [];
+
+          hybridRelationships.forEach(element => {
+            if (element[0] === node.id_){
+              childrenObj[node.id_].push(element[1]);
+            }
+          });
         });
 
         edgesList.forEach(edge => {
@@ -264,6 +270,7 @@ export default class Graph extends React.Component {
             hybridOutEdgesObj[edge.source].push(edge.id_);
           }
         });
+
 
         this.setState({
           labelsJSON: labelsList,
