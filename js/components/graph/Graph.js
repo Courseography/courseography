@@ -40,7 +40,8 @@ export default class Graph extends React.Component {
       showInfoBox: false,
       infoBoxXPos: 0,
       infoBoxYPos: 0,
-      infoBoxNodeId: ""
+      infoBoxNodeId: "",
+      showCourseModal: false
     };
 
     this.svg = React.createRef();
@@ -48,7 +49,6 @@ export default class Graph extends React.Component {
     this.nodes = React.createRef();
     this.bools = React.createRef();
     this.edges = React.createRef();
-    this.modal = React.createRef();
     this.exportModal = React.createRef();
   }
 
@@ -385,9 +385,15 @@ export default class Graph extends React.Component {
 
   infoBoxMouseClick = () => {
     var newCourse = this.state.infoBoxNodeId.substring(0, 6);
-    this.setState({ courseId: newCourse });
-    this.modal.current.openModal(newCourse);
+    this.setState({
+      courseId: newCourse,
+      showCourseModal: !this.state.showCourseModal
+    });
   };
+
+  callbackModal = () => {
+    this.setState({ showCourseModal: false });
+  }
 
   openExportModal = () => {
     this.exportModal.current.openModal();
@@ -641,7 +647,11 @@ export default class Graph extends React.Component {
 
     return (
       <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
-        <CourseModal ref={this.modal} />
+        {this.state.showCourseModal ?
+          <CourseModal
+          courseChange={this.state.infoBoxNodeId}
+          callbackModal={this.callbackModal}
+          /> : null}
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
           divId="zoom-in-button"

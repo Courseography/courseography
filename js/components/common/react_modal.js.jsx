@@ -50,7 +50,14 @@ class CourseModal extends React.Component {
   }
 
   closeModal() {
+    this.props.callbackModal();
     this.setState({ modalIsOpen: false });
+  }
+
+  componentDidUpdate (prevProps) {
+    if ((prevProps !== this.props) && (this.props.courseChange !== "")) {
+      this.openModal(this.props.courseChange);
+    };
   }
 
   render() {
