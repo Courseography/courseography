@@ -258,6 +258,7 @@ export default class Graph extends React.Component {
       }
     }
   };
+
   /**
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
@@ -305,6 +306,7 @@ export default class Graph extends React.Component {
       buttonHover: false
     });
   };
+
   /**
    * Drawing mode not implemented, so this function may not work.
    */
@@ -630,7 +632,6 @@ export default class Graph extends React.Component {
       this.state.verticalPanFactor === 0;
 
     // Mouse events for draw tool
-    // onDraw defaults to false
     var mouseEvents = {};
     if (this.state.onDraw) {
       mouseEvents = {
