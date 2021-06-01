@@ -391,7 +391,7 @@ export default class Graph extends React.Component {
     });
   };
 
-  callbackModal = () => {
+  onClose = () => {
     this.setState({ showCourseModal: false });
   }
 
@@ -647,7 +647,7 @@ export default class Graph extends React.Component {
 
     return (
       <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
-        {this.state.showCourseModal && <CourseModal courseChange={this.state.courseId} callbackModal={this.callbackModal} />}
+        <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
           divId="zoom-in-button"
