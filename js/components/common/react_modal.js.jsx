@@ -36,7 +36,6 @@ class CourseModal extends React.Component {
             course: course,
             sessions: course.allMeetingTimes.sort((firstLec, secondLec) =>
               firstLec.meetData.session > secondLec.meetData.session ? 1 : -1),
-            courseId: this.props.courseId,
             courseTitle: `${this.props.courseId.toUpperCase()} ${course.title}`
           });
         })
