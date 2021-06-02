@@ -229,6 +229,9 @@ export default class Graph extends React.Component {
     }
   };
 
+  /**
+   * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
+   */
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
@@ -274,6 +277,9 @@ export default class Graph extends React.Component {
     });
   };
 
+  /**
+   * Drawing mode not implemented, so this function may not work.
+   */
   nodeMouseDown = event => {
     if (
       this.state.drawMode === "draw-node" &&
@@ -283,6 +289,9 @@ export default class Graph extends React.Component {
     }
   };
 
+  /**
+   * Drawing mode not implemented, so this function may not work.
+   */
   drawMouseMove = event => {
     // in draw-node mode, drag a node as the mouse moves
     if (this.state.drawMode === "draw-node") {
@@ -303,6 +312,9 @@ export default class Graph extends React.Component {
     }
   };
 
+  /**
+   * Drawing mode not implemented, so this function may not work.
+   */
   drawMouseUp = event => {
     // in draw-node mode, drop a dragged node to a new location
     if (this.state.drawMode === "draw-node") {
@@ -444,7 +456,9 @@ export default class Graph extends React.Component {
     var mouseIsDown = clearInterval(this.state.mouseDown);
     this.setState({ mouseDown: mouseIsDown });
   };
-
+  /**
+   * Drawing not implemented, so onDraw currently defaults to false
+   */
   onKeyDown = event => {
     if (event.keyCode === 39) {
       this.panDirection("right", 5);
@@ -543,6 +557,8 @@ export default class Graph extends React.Component {
     * In draw-node creates a new node at the position of the click event on the SVG canvas.
     * In path-mode creates an elbow at the position of the click event on the SVG canvas,
       if the startNode is defined.
+
+      NOTE: Drawing mode is not fully implemented yet, so this method may not work as expected.
     * @param {object} e The mousedown event.
     */
   drawGraphObject = e => {
