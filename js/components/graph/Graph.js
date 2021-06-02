@@ -40,7 +40,10 @@ export default class Graph extends React.Component {
       showInfoBox: false,
       infoBoxXPos: 0,
       infoBoxYPos: 0,
-      infoBoxNodeId: ""
+      infoBoxNodeId: "",
+      panning: false,
+      panStartX: 0,
+      panStartY:0
     };
 
     this.nodes = React.createRef();
@@ -326,6 +329,37 @@ export default class Graph extends React.Component {
     }
   };
 
+  mouseDown = event => {
+    // maybe need to add listener stuff for mouseUp?
+    this.setState({
+      panning: true,
+      panStartX: event.clientX,
+      panStartY: event.clientY
+    });
+
+  }
+  mouseMove = event => {
+      if (this.state.panning){
+        var currentX = event.clientX;
+        var currentY = event.clientY;
+
+        var deltaX = currentX - this.state.panStartX;
+        var deltaY = currentY - this.state.panStartY;
+
+        this.setState({
+          horizontalPanFactor: -deltaX,
+          verticalPanFactor: -deltaY
+        });
+
+      }
+  }
+
+  mouseUp = () =>{
+    this.setState({
+      panning:false
+    })
+  }
+
   infoBoxMouseEnter = () => {
     this.clearAllTimeouts();
     this.setState({showInfoBox: true});
@@ -599,6 +633,13 @@ export default class Graph extends React.Component {
         onMouseUp: this.drawMouseUp,
         onMouseMove: this.drawMouseMove
       };
+    }
+    else {
+      mouseEvents = {
+        onMouseDown: this.mouseDown,
+        onMouseUp: this.mouseUp,
+        onMouseMove: this.mouseMove
+      }
     }
 
     return (
