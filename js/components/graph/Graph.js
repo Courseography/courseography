@@ -9,6 +9,7 @@ import InfoBox from "./InfoBox";
 import NodeGroup from "./NodeGroup";
 import RegionGroup from "./RegionGroup";
 import * as focusInfo from "./sidebar/focus_descriptions";
+import { svg } from "leaflet";
 
 export default class Graph extends React.Component {
   constructor(props) {
@@ -43,7 +44,7 @@ export default class Graph extends React.Component {
       infoBoxNodeId: "",
       panning: false,
       panStartX: 0,
-      panStartY:0
+      panStartY:0,
     };
 
     this.nodes = React.createRef();
@@ -51,6 +52,7 @@ export default class Graph extends React.Component {
     this.edges = React.createRef();
     this.modal = React.createRef();
     this.exportModal = React.createRef();
+    this.svg = React.createRef();
   }
 
   componentDidMount() {
@@ -340,6 +342,7 @@ export default class Graph extends React.Component {
   }
   mouseMove = event => {
       if (this.state.panning){
+        console.log("mouse moving");
         var currentX = event.clientX;
         var currentY = event.clientY;
 
@@ -347,8 +350,8 @@ export default class Graph extends React.Component {
         var deltaY = currentY - this.state.panStartY;
 
         this.setState({
-          horizontalPanFactor: -deltaX,
-          verticalPanFactor: -deltaY
+          horizontalPanFactor: - deltaX,
+          verticalPanFactor:   - deltaY
         });
 
       }
@@ -595,21 +598,32 @@ export default class Graph extends React.Component {
   render() {
     let containerWidth = 0;
     let containerHeight = 0;
-    if (document.getElementById("react-graph") !== null && document.getElementById("generateRoot")) {
-      containerWidth = document.getElementById("react-graph").clientWidth;
-      containerHeight = document.getElementById("generateRoot").clientHeight;
+    //NOTE: idk why we care about generateRoot, which is the name of the overarching div for the generate tab. Am removing.
+    if (document.getElementById("react-graph") !== null){
+
+      var reactGraph = document.getElementById("react-graph")
+      containerWidth = reactGraph.clientWidth;
+      containerHeight = reactGraph.clientHeight;
     }
+
+
 
     const viewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
     const viewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
-    const viewboxX = (this.state.width - viewboxWidth) / 2 + this.state.horizontalPanFactor;
-    const viewboxY = (this.state.height - viewboxHeight) / 2 + this.state.verticalPanFactor;
+    const ratio = containerWidth!=0 ? viewboxWidth / containerWidth: 1;
+    console.log("viewbox width is %d", viewboxWidth);
+    console.log("container width is %d", containerWidth);
+    console.log(`ratio is ${ratio}`);
+    const newViewboxX = (this.state.width - viewboxWidth) / 2 + this.state.horizontalPanFactor * ratio;
+    const newViewboxY = (this.state.height - viewboxHeight) / 2 + this.state.verticalPanFactor * ratio;
+
+
 
     // not all of these properties are supported in React
     var svgAttrs = {
       width: "100%",
       height: "100%",
-      viewBox: `${viewboxX} ${viewboxY} ${viewboxWidth} ${viewboxHeight}`,
+      viewBox: `${newViewboxX} ${newViewboxY} ${viewboxWidth} ${viewboxHeight}`,
       preserveAspectRatio: "xMinYMin",
       "xmlns:svg": "http://www.w3.org/2000/svg",
       "xmlns:dc": "http://purl.org/dc/elements/1.1/",
@@ -709,6 +723,7 @@ export default class Graph extends React.Component {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"
+          ref={this.svg}
           {...svgAttrs}
           version="1.1"
           className={
