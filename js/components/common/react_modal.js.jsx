@@ -25,15 +25,10 @@ class CourseModal extends React.Component {
       sessions: [],
       courseTitle: '',
     };
-    this.closeModal = this.closeModal.bind(this);
   }
 
-  closeModal() {
-    this.props.onClose();
-  }
-
-  componentDidUpdate (prevProps) {
-    if ((prevProps.courseId !== this.props.courseId) && (this.props.courseId !== "")) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.courseId !== this.props.courseId && this.props.courseId !== "") {
       getCourse(this.props.courseId)
         .then(course => {
           // Tutorials don't have a timeStr to print, so I've currently omitted them
@@ -53,7 +48,7 @@ class CourseModal extends React.Component {
       <ReactModal className='modal-class'
         overlayClassName='overlay'
         isOpen={this.props.showCourseModal}
-        onRequestClose={this.closeModal}
+        onRequestClose={this.props.onClose}
         ariaHideApp={false}
       >
         <div className='modal-header'>
