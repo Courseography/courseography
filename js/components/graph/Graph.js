@@ -44,8 +44,6 @@ export default class Graph extends React.Component {
       showCourseModal: false
     };
 
-    this.svg = React.createRef();
-    this.marker = React.createRef();
     this.nodes = React.createRef();
     this.bools = React.createRef();
     this.edges = React.createRef();
@@ -68,27 +66,6 @@ export default class Graph extends React.Component {
       document.getElementById("nav-export")
         .addEventListener("click", this.exportModal.current.openModal);
     }
-
-    // Need to hardcode these in because React does not understand these attributes
-    var svgNode = this.svg.current;
-    var markerNode = this.marker.current;
-
-    svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    svgNode.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
-    svgNode.setAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-    svgNode.setAttribute("xmlns:cc", "http://creativecommons.org/ns#");
-    svgNode.setAttribute(
-      "xmlns:rdf",
-      "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    );
-
-    markerNode.setAttribute("refX", 4);
-    markerNode.setAttribute("refY", 5);
-    markerNode.setAttribute("markerUnits", "strokeWidth");
-    markerNode.setAttribute("orient", "auto");
-    markerNode.setAttribute("markerWidth", 7);
-    markerNode.setAttribute("markerHeight", 7);
   }
 
   componentWillUpdate(prevProps) {
@@ -212,27 +189,6 @@ export default class Graph extends React.Component {
         console.error("Fetch API failed. Here are the headers: ");
         console.error(err);
       });
-    // Need to hardcode these in because React does not understand these
-    // attributes
-    var svgNode = this.svg.current;
-    var markerNode = this.marker.current;
-
-    svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    svgNode.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
-    svgNode.setAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-    svgNode.setAttribute("xmlns:cc", "http://creativecommons.org/ns#");
-    svgNode.setAttribute(
-      "xmlns:rdf",
-      "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    );
-
-    markerNode.setAttribute("refX", 4);
-    markerNode.setAttribute("refY", 5);
-    markerNode.setAttribute("markerUnits", "strokeWidth");
-    markerNode.setAttribute("orient", "auto");
-    markerNode.setAttribute("markerWidth", 7);
-    markerNode.setAttribute("markerHeight", 7);
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -273,6 +229,9 @@ export default class Graph extends React.Component {
     }
   };
 
+  /**
+   * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
+   */
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
@@ -318,6 +277,9 @@ export default class Graph extends React.Component {
     });
   };
 
+  /**
+   * Drawing mode not implemented, so this function may not work.
+   */
   nodeMouseDown = event => {
     if (
       this.state.drawMode === "draw-node" &&
@@ -327,6 +289,9 @@ export default class Graph extends React.Component {
     }
   };
 
+  /**
+   * Drawing mode not implemented, so this function may not work.
+   */
   drawMouseMove = event => {
     // in draw-node mode, drag a node as the mouse moves
     if (this.state.drawMode === "draw-node") {
@@ -347,6 +312,9 @@ export default class Graph extends React.Component {
     }
   };
 
+  /**
+   * Drawing mode not implemented, so this function may not work.
+   */
   drawMouseUp = event => {
     // in draw-node mode, drop a dragged node to a new location
     if (this.state.drawMode === "draw-node") {
@@ -414,7 +382,9 @@ export default class Graph extends React.Component {
     var polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" };
     return (
       <defs>
-        <marker id="arrowHead" ref={this.marker} viewBox="0 0 10 10">
+        <marker id="arrowHead" viewBox="0 0 10 10" refX="4" refY="5"
+            markerUnits="strokeWidth" markerWidth="7" markerHeight="7"
+            orient="auto">
           <polyline {...polylineAttrs} />
         </marker>
       </defs>
@@ -492,7 +462,9 @@ export default class Graph extends React.Component {
     var mouseIsDown = clearInterval(this.state.mouseDown);
     this.setState({ mouseDown: mouseIsDown });
   };
-
+  /**
+   * Drawing not implemented, so onDraw currently defaults to false
+   */
   onKeyDown = event => {
     if (event.keyCode === 39) {
       this.panDirection("right", 5);
@@ -591,6 +563,8 @@ export default class Graph extends React.Component {
     * In draw-node creates a new node at the position of the click event on the SVG canvas.
     * In path-mode creates an elbow at the position of the click event on the SVG canvas,
       if the startNode is defined.
+
+      NOTE: Drawing mode is not fully implemented yet, so this method may not work as expected.
     * @param {object} e The mousedown event.
     */
   drawGraphObject = e => {
@@ -624,7 +598,11 @@ export default class Graph extends React.Component {
       width: "100%",
       height: "100%",
       viewBox: `${viewboxX} ${viewboxY} ${viewboxWidth} ${viewboxHeight}`,
-      preserveAspectRatio: "xMinYMin"
+      preserveAspectRatio: "xMinYMin",
+      "xmlns:svg": "http://www.w3.org/2000/svg",
+      "xmlns:dc": "http://purl.org/dc/elements/1.1/",
+      "xmlns:cc": "http://creativecommons.org/ns#",
+      "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     };
 
     var zoomInDisabled = this.state.zoomFactor <= 0.5;
@@ -710,8 +688,9 @@ export default class Graph extends React.Component {
         />
 
         <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
           {...svgAttrs}
-          ref={this.svg}
           version="1.1"
           className={
             this.state.highlightedNodes.length > 0 ? "highlight-nodes" : ""
