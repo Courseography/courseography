@@ -23,42 +23,31 @@ class CourseModal extends React.Component {
       courseId: '',
       course: [],
       sessions: [],
-      modalIsOpen: false,
       courseTitle: '',
     };
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
   }
 
-  openModal(newCourse) {
-    if (newCourse === this.state.courseId) {
-      this.setState({ modalIsOpen: true });
-    } else {
-      getCourse(newCourse)
+  componentDidUpdate(prevProps) {
+    if (prevProps.courseId !== this.props.courseId && this.props.courseId !== "") {
+      getCourse(this.props.courseId)
         .then(course => {
-            //Tutorials don't have a timeStr to print, so I've currently omitted them
+          // Tutorials don't have a timeStr to print, so I've currently omitted them
           this.setState({
             course: course,
             sessions: course.allMeetingTimes.sort((firstLec, secondLec) =>
               firstLec.meetData.session > secondLec.meetData.session ? 1 : -1),
-            modalIsOpen: true,
-            courseId: newCourse,
-            courseTitle: `${newCourse.toUpperCase()} ${course.title}`
+            courseTitle: `${this.props.courseId.toUpperCase()} ${course.title}`
           });
         })
-    }
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false });
+    };
   }
 
   render() {
     return (
       <ReactModal className='modal-class'
         overlayClassName='overlay'
-        isOpen={this.state.modalIsOpen}
-        onRequestClose={this.closeModal}
+        isOpen={this.props.showCourseModal}
+        onRequestClose={this.props.onClose}
         ariaHideApp={false}
       >
         <div className='modal-header'>
