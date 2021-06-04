@@ -45,6 +45,7 @@ export default class Graph extends React.Component {
       panning: false,
       panStartX: 0,
       panStartY:0,
+      mouseTimeoutID:false,
     };
 
     this.nodes = React.createRef();
@@ -333,6 +334,7 @@ export default class Graph extends React.Component {
 
   mouseDown = event => {
     // maybe need to add listener stuff for mouseUp?
+    document.body.style.cursor = "grab";
     this.setState({
       panning: true,
       panStartX: event.clientX,
@@ -358,6 +360,7 @@ export default class Graph extends React.Component {
   }
 
   mouseUp = () =>{
+    document.body.style.cursor = "auto"
     this.setState({
       panning:false
     })
@@ -499,11 +502,21 @@ export default class Graph extends React.Component {
   };
 
   onWheel = event => {
+    clearTimeout(this.state.mouseTimeoutID);
     if (event.deltaY < 0) {
+      document.body.style.cursor = "zoom-in";
       this.incrementZoom(true, 0.005);
     } else if (event.deltaY > 0) {
+      document.body.style.cursor = "zoom-out";
       this.incrementZoom(false, 0.005);
     }
+    var timeoutID = setTimeout(() => {
+      document.body.style.cursor = "auto";
+    }, 250);
+    this.setState({
+      mouseTimeoutID: timeoutID
+    })
+
   };
 
   buttonMouseEnter = () => {
