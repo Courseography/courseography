@@ -434,28 +434,6 @@ export default class Graph extends React.Component {
     return Math.max(heightToContainerRatio, widthToContainerRatio);
   };
 
-  // panDirection = (direction, panFactorRate) => {
-  //   // onButtonRelease calls are required when a button becomes disabled
-  //   // because it loses its ability to detect mouseUp event
-  //   if (direction === "up") {
-  //     this.setState({
-  //       verticalPanFactor: this.state.verticalPanFactor - panFactorRate
-  //     });
-  //   } else if (direction === "left") {
-  //     this.setState({
-  //       horizontalPanFactor: this.state.horizontalPanFactor - panFactorRate
-  //     });
-  //   } else if (direction === "down") {
-  //     this.setState({
-  //       verticalPanFactor: this.state.verticalPanFactor + panFactorRate
-  //     });
-  //   } else if (direction === "right") {
-  //     this.setState({
-  //       horizontalPanFactor: this.state.horizontalPanFactor + panFactorRate
-  //     });
-  //   }
-  // };
-
   resetZoomAndPan = () => {
     this.setState({
       zoomFactor: 1,
@@ -463,20 +441,6 @@ export default class Graph extends React.Component {
       horizontalPanFactor: 0
     });
   };
-
-  // onButtonPress = (zoomOrPanFunction, direction, rateOfChange) => {
-  //   zoomOrPanFunction(direction, rateOfChange);
-  //   var mouseIsDown = setInterval(
-  //     () => zoomOrPanFunction(direction, rateOfChange),
-  //     500
-  //   );
-  //   this.setState({ mouseDown: mouseIsDown });
-  // };
-
-  // onButtonRelease = () => {
-  //   var mouseIsDown = clearInterval(this.state.mouseDown);
-  //   this.setState({ mouseDown: mouseIsDown });
-  // };
 
   mouseDownEvent = (event) => {
     this.setState({ mouseDown: true });
@@ -511,25 +475,6 @@ export default class Graph extends React.Component {
       return newViewBox;
     }
   }
-
-  /**
-   * Drawing not implemented, so onDraw currently defaults to false
-   */
-  // onKeyDown = event => {
-  //   if (event.keyCode === 39) {
-  //     this.panDirection("right", 5);
-  //   } else if (event.keyCode === 40) {
-  //     this.panDirection("down", 5);
-  //   } else if (event.keyCode === 37) {
-  //     this.panDirection("left", 5);
-  //   } else if (event.keyCode === 38) {
-  //     this.panDirection("up", 5);
-  //   } else if (this.state.onDraw) {
-  //     if (event.keyCode === 78) {
-  //       this.setState({ drawMode: "draw-node" });
-  //     }
-  //   }
-  // };
 
   onWheel = event => {
     if (event.deltaY < 0) {
@@ -631,17 +576,6 @@ export default class Graph extends React.Component {
   }
 
   render() {
-    // let containerWidth = 0;
-    // let containerHeight = 0;
-    // if (document.getElementById("react-graph") !== null && document.getElementById("generateRoot")) {
-    //   containerWidth = document.getElementById("react-graph").clientWidth;
-    //   containerHeight = document.getElementById("generateRoot").clientHeight;
-    // }
-
-    // const viewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
-    // const viewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
-    // const viewboxX = (this.state.width - viewboxWidth) / 2;
-    // const viewboxY = (this.state.height - viewboxHeight) / 2;
 
     // not all of these properties are supported in React
     var svgAttrs = {
@@ -654,9 +588,6 @@ export default class Graph extends React.Component {
       "xmlns:cc": "http://creativecommons.org/ns#",
       "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     };
-
-    // var zoomInDisabled = this.state.zoomFactor <= 0.5;
-    // var zoomOutDisabled = this.state.zoomFactor >= 1.1;
 
     var resetDisabled =
       this.state.zoomFactor === 1 &&
@@ -677,56 +608,6 @@ export default class Graph extends React.Component {
       <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
         <CourseModal ref={this.modal} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
-        {/* <Button
-          divId="zoom-in-button"
-          text="+"
-          mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
-          mouseUp={this.onButtonRelease}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-          disabled={zoomInDisabled}
-        />
-        <Button
-          divId="zoom-out-button"
-          text="&mdash;"
-          mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
-          mouseUp={this.onButtonRelease}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-          disabled={zoomOutDisabled}
-        />
-        <Button
-          divId="pan-up-button"
-          text="↑"
-          mouseDown={() => this.onButtonPress(this.panDirection, "up", 10)}
-          mouseUp={this.onButtonRelease}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        />
-        <Button
-          divId="pan-down-button"
-          text="↓"
-          mouseDown={() => this.onButtonPress(this.panDirection, "down", 10)}
-          mouseUp={this.onButtonRelease}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        />
-        <Button
-          divId="pan-right-button"
-          text="→"
-          mouseDown={() => this.onButtonPress(this.panDirection, "right", 10)}
-          mouseUp={this.onButtonRelease}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        />
-        <Button
-          divId="pan-left-button"
-          text="←"
-          mouseDown={() => this.onButtonPress(this.panDirection, "left", 10)}
-          mouseUp={this.onButtonRelease}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        /> */}
         <Button
           divId="reset-button"
           text="Reset View"
