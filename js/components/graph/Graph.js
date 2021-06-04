@@ -614,8 +614,8 @@ export default class Graph extends React.Component {
     console.log("viewbox width is %d", viewboxWidth);
     console.log("container width is %d", containerWidth);
     console.log(`ratio is ${ratio}`);
-    const newViewboxX = (this.state.width - viewboxWidth) / 2 + this.state.horizontalPanFactor * ratio;
-    const newViewboxY = (this.state.height - viewboxHeight) / 2 + this.state.verticalPanFactor * ratio;
+    const newViewboxX =  this.state.horizontalPanFactor * ratio;
+    const newViewboxY = this.state.verticalPanFactor * ratio;
 
 
 
