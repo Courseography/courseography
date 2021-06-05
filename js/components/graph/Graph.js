@@ -46,8 +46,8 @@ export default class Graph extends React.Component {
       mouseTimeoutID:false,
       viewboxX: 0,
       viewboxY: 0,
-      viewboxWidth: 0,
-      viewboxHeight:0,
+      viewboxWidth: window.innerWidth,
+      viewboxHeight:window.innerHeight,
       viewboxContainerRatio:1
     };
 
