@@ -210,8 +210,6 @@ export default class Graph extends React.Component {
         var inEdgesObj = {};
         var childrenObj = {};
         var outEdgesObj = {};
-        var hybridChildrenObj = {};
-        var hybridOutEdgesObj = {};
         var hybridParentsObj = {};
         var hybridRelationships = [];
         var labelsList = data.texts.filter(function(entry) {
@@ -237,8 +235,8 @@ export default class Graph extends React.Component {
         });
 
         hybridsList.forEach(hybrid => {
-          hybridChildrenObj[hybrid.id_] = [];
-          hybridOutEdgesObj[hybrid.id_] = [];
+          childrenObj[hybrid.id_] = [];
+          outEdgesObj[hybrid.id_] = [];
           this.populateParentsAndHybridRelationship(hybrid, nodesList, hybridRelationships, hybridParentsObj);
         })
 
@@ -265,10 +263,6 @@ export default class Graph extends React.Component {
             childrenObj[edge.source].push(edge.target);
             outEdgesObj[edge.source].push(edge.id_);
           }
-          if (edge.source in hybridChildrenObj){
-            hybridChildrenObj[edge.source].push(edge.target);
-            hybridOutEdgesObj[edge.source].push(edge.id_);
-          }
         });
 
 
@@ -290,8 +284,6 @@ export default class Graph extends React.Component {
             'inEdges': inEdgesObj,
             'children': childrenObj,
             'outEdges': outEdgesObj,
-            'hybridChildren': hybridChildrenObj,
-            'hybridOutEdges': hybridOutEdgesObj,
             'hybridParents': hybridParentsObj
           }
         });

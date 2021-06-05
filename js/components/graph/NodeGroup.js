@@ -61,9 +61,9 @@ export default class NodeGroup extends React.Component {
               hybrid={true}
               ref={this.setRefEntry(entry)}
               parents={parents}
-              childs={this.props.connections.hybridChildren[entry.id_]}
+              childs={this.props.connections.children[entry.id_]}
               inEdges={[]}
-              outEdges={this.props.connections.hybridOutEdges[entry.id_]}
+              outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
               logicalType={"AND"}
             />
