@@ -56,7 +56,6 @@ export default class Graph extends React.Component {
     this.edges = React.createRef();
     this.modal = React.createRef();
     this.exportModal = React.createRef();
-    this.svg = React.createRef();
     this.zoomIncrement = 0.010;
   }
 
@@ -750,7 +749,6 @@ export default class Graph extends React.Component {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"
-          ref={this.svg}
           {...svgAttrs}
           version="1.1"
           className={
