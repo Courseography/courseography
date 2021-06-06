@@ -26,12 +26,7 @@ export default class Graph extends React.Component {
       width: window.innerWidth,
       height: window.innerHeight,
       zoomFactor: 1,
-      horizontalPanFactor: 0,
-      verticalPanFactor: 0,
       mouseDown: false,
-      mousePos: {x:0, y:0},
-      viewBoxPos: {x:0, y:0},
-      viewBoxDim: {width:0, height:0},
       buttonHover: false,
       onDraw: this.props.edit,
       drawMode: this.props.initialDrawMode,
@@ -43,7 +38,18 @@ export default class Graph extends React.Component {
       showInfoBox: false,
       infoBoxXPos: 0,
       infoBoxYPos: 0,
-      infoBoxNodeId: ""
+      infoBoxNodeId: "",
+      panning: false,
+      panStartX: 0,
+      panStartY:0,
+      mouseTimeoutID:false,
+      viewBoxPos: {x:0, y:0},
+      viewBoxDim: {width:window.innerWidth, height:window.innerHeight},
+      // viewboxX: 0,
+      // viewboxY: 0,
+      // viewboxWidth: window.innerWidth,
+      // viewboxHeight:window.innerHeight,
+      viewboxContainerRatio:1
     };
 
     this.nodes = React.createRef();
@@ -51,24 +57,7 @@ export default class Graph extends React.Component {
     this.edges = React.createRef();
     this.modal = React.createRef();
     this.exportModal = React.createRef();
-  }
-
-  componentWillMount() {
-    let containerWidth = 0;
-    let containerHeight = 0;
-    if (document.getElementById("react-graph") !== null && document.getElementById("generateRoot")) {
-      containerWidth = document.getElementById("react-graph").clientWidth;
-      containerHeight = document.getElementById("generateRoot").clientHeight;
-    }
-
-    const viewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
-    const viewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
-    const viewboxX = (this.state.width - viewboxWidth) / 2;
-    const viewboxY = (this.state.height - viewboxHeight) / 2;
-    this.setState({
-      viewBoxPos: {x:viewboxX, y:viewboxY},
-      viewBoxDim: {width:viewboxWidth, height:viewboxHeight},
-    });
+    this.zoomIncrement = 0.010;
   }
 
   componentDidMount() {
@@ -195,8 +184,9 @@ export default class Graph extends React.Component {
           width: data.width,
           height: data.height,
           zoomFactor: 1,
-          horizontalPanFactor: 0,
-          verticalPanFactor: 0,
+          // viewboxX: 0,
+          // viewboxY: 0,
+          viewBoxPos: {x:0, y:0},
           graphName: graphName,
           connections: {
             'parents': parentsObj,
@@ -250,9 +240,6 @@ export default class Graph extends React.Component {
     }
   };
 
-  /**
-   * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
-   */
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
@@ -298,9 +285,6 @@ export default class Graph extends React.Component {
     });
   };
 
-  /**
-   * Drawing mode not implemented, so this function may not work.
-   */
   nodeMouseDown = event => {
     if (
       this.state.drawMode === "draw-node" &&
@@ -310,9 +294,6 @@ export default class Graph extends React.Component {
     }
   };
 
-  /**
-   * Drawing mode not implemented, so this function may not work.
-   */
   drawMouseMove = event => {
     // in draw-node mode, drag a node as the mouse moves
     if (this.state.drawMode === "draw-node") {
@@ -333,9 +314,6 @@ export default class Graph extends React.Component {
     }
   };
 
-  /**
-   * Drawing mode not implemented, so this function may not work.
-   */
   drawMouseUp = event => {
     // in draw-node mode, drop a dragged node to a new location
     if (this.state.drawMode === "draw-node") {
@@ -358,6 +336,50 @@ export default class Graph extends React.Component {
       }
     }
   };
+
+  adjustCoordsToViewbox = (clientX, clientY) =>{
+    return {adjustedX: clientX + this.state.viewBoxPos.x, adjustedY: clientY + this.state.viewBoxPos.y};
+  }
+
+  mouseDown = event => {
+    // maybe need to add listener stuff for mouseUp?
+    document.body.style.cursor = "grab";
+    console.log(`mouse down: startX:${event.clientX}, startY:${event.clientY}`);
+    const {adjustedX, adjustedY} = this.adjustCoordsToViewbox(event.clientX, event.clientY);
+    this.setState({
+      panning: true,
+      panStartX: adjustedX,
+      panStartY: adjustedY
+    });
+
+  }
+
+  mouseMove = event => {
+      if (this.state.panning){
+
+        var currentX = event.clientX;
+        var currentY = event.clientY;
+
+        var deltaX = currentX - this.state.panStartX;
+        var deltaY = currentY - this.state.panStartY;
+        this.setState({
+          viewBoxPos: {x: -deltaX * this.state.viewboxContainerRatio, y: -deltaY * this.state.viewboxContainerRatio},
+          // viewboxX: -deltaX * this.state.viewboxContainerRatio,
+          // viewboxY: -deltaY * this.state.viewboxContainerRatio
+        });
+
+      }
+  }
+
+  mouseUp = () =>{
+    console.log("mouse up");
+    document.body.style.cursor = "auto"
+    this.setState({
+      panning:false,
+      panStartX:0,
+      panStartY:0
+    })
+  }
 
   infoBoxMouseEnter = () => {
     this.clearAllTimeouts();
@@ -406,25 +428,32 @@ export default class Graph extends React.Component {
     );
   };
 
-  incrementZoom = (increase, zoomFactorRate) => {
-    // onButtonRelease calls are required when a button becomes disabled
-    // because it loses its ability to detect mouseUp event
-    if (increase) {
-      if (this.state.zoomFactor > 0.5) {
-        // zooming allowed
-        this.setState({ zoomFactor: this.state.zoomFactor - zoomFactorRate });
-      } else {
-        // button becomes disabled
-        this.mouseDownEvent();
-      }
-    } else {
-      if (this.state.zoomFactor < 1.1) {
-        this.setState({ zoomFactor: this.state.zoomFactor + zoomFactorRate });
-      } else {
-        this.mouseDownEvent();
-      }
+  zoomViewbox = (deltaY, containerWidth, containerHeight) => {
+    clearTimeout(this.state.mouseTimeoutID);
+    var newZoomFactor = this.state.zoomFactor;
+    if (deltaY < 0){
+      document.body.style.cursor = "zoom-in";
+      newZoomFactor -= this.zoomIncrement;
+    } else if (deltaY > 0){
+      document.body.style.cursor = "zoom-out";
+      newZoomFactor += this.zoomIncrement;
     }
-  };
+    const newViewboxWidth = Math.max(this.state.width, containerWidth) * newZoomFactor;
+    const newViewboxHeight = Math.max(this.state.height, containerHeight) * newZoomFactor;
+    const ratio = containerWidth!=0 ? newViewboxWidth / containerWidth: 1;
+
+    var timeoutID = setTimeout(() => {
+      document.body.style.cursor = "auto";
+    }, 250);
+    this.setState({
+      mouseTimeoutID: timeoutID,
+      viewBoxDim: {width:newViewboxWidth, height:newViewboxHeight},
+      // viewboxWidth: newViewboxWidth,
+      // viewboxHeight: newViewboxHeight,
+      viewboxContainerRatio: ratio,
+      zoomFactor: newZoomFactor
+    })
+  }
 
   calculateRatioGraphSizeToContainerSize = () => {
     var containerWidth = document.getElementById("react-graph").clientWidth;
@@ -434,54 +463,77 @@ export default class Graph extends React.Component {
     return Math.max(heightToContainerRatio, widthToContainerRatio);
   };
 
+  // panDirection = (direction, panFactorRate) => {
+  //   // onButtonRelease calls are required when a button becomes disabled
+  //   // because it loses its ability to detect mouseUp event
+  //   if (direction === "up") {
+  //     this.setState({
+  //       viewboxY: this.state.verticalPanFactor - panFactorRate
+  //     });
+  //   } else if (direction === "left") {
+  //     this.setState({
+  //       viewboxX: this.state.viewboxX - panFactorRate
+  //     });
+  //   } else if (direction === "down") {
+  //     this.setState({
+  //       viewboxY: this.state.verticalPanFactor + panFactorRate
+  //     });
+  //   } else if (direction === "right") {
+  //     this.setState({
+  //       viewboxX: this.state.viewboxX + panFactorRate
+  //     });
+  //   }
+  // };
+
   resetZoomAndPan = () => {
     this.setState({
       zoomFactor: 1,
-      verticalPanFactor: 0,
-      horizontalPanFactor: 0
+      viewBoxPos: {x:0, y:0},
+      // viewboxY: 0,
+      // viewboxX: 0
     });
   };
 
-  mouseDownEvent = (event) => {
-    this.setState({ mouseDown: true });
+  // onButtonPress = (zoomOrPanFunction, direction, rateOfChange) => {
+  //   zoomOrPanFunction(direction, rateOfChange);
+  //   var mouseIsDown = setInterval(
+  //     () => zoomOrPanFunction(direction, rateOfChange),
+  //     500
+  //   );
+  //   this.setState({ mouseDown: mouseIsDown });
+  // };
 
-    var pointerPosition = this.getPointFromEvent(event);
-    this.setState({
-      mousePos: {x:pointerPosition.x, y:pointerPosition.y}
-    });
-  }
+  // onButtonRelease = () => {
+  //   var mouseIsDown = clearInterval(this.state.mouseDown);
+  //   this.setState({ mouseDown: mouseIsDown });
+  // };
 
-  mouseUpEvent = (event) => {
-    var newViewBox = this.onMouseMove(event);
-    this.setState({
-      currMouseDown: false,
-      viewBoxPos: {x:newViewBox.x, y:newViewBox.y}
-    });
-  }
-
-  getPointFromEvent = (event) => {
-    var point = {x:event.clientX, y:event.clientY};
-    return point;
-  }
-
-  onMouseMove = (event) => {
-    if (this.state.mouseDown) {
-      // event.preventDefault();
-      var pointerPosition = this.getPointFromEvent(event);
-      var newViewBox = {
-        x:this.state.viewBoxPos.x - (pointerPosition.x - this.state.mousePos.x),
-        y:this.state.viewBoxPos.y - (pointerPosition.y - this.state.mousePos.y)
-      };
-      return newViewBox;
-    }
-  }
+  // onKeyDown = event => {
+  //   if (event.keyCode === 39) {
+  //     this.panDirection("right", 5);
+  //   } else if (event.keyCode === 40) {
+  //     this.panDirection("down", 5);
+  //   } else if (event.keyCode === 37) {
+  //     this.panDirection("left", 5);
+  //   } else if (event.keyCode === 38) {
+  //     this.panDirection("up", 5);
+  //   } else if (this.state.onDraw) {
+  //     if (event.keyCode === 78) {
+  //       this.setState({ drawMode: "draw-node" });
+  //     }
+  //   }
+  // };
 
   onWheel = event => {
-    if (event.deltaY < 0) {
-      this.incrementZoom(true, 0.005);
-    } else if (event.deltaY > 0) {
-      this.incrementZoom(false, 0.005);
+    let containerWidth = 0;
+    let containerHeight = 0;
+
+    if (document.getElementById("react-graph") !== null){
+      var reactGraph = document.getElementById("react-graph");
+      containerWidth = reactGraph.clientWidth;
+      containerHeight = reactGraph.clientHeight;
     }
+    this.zoomViewbox(event.deltaY, containerWidth, containerHeight);
   };
 
   buttonMouseEnter = () => {
@@ -495,8 +547,8 @@ export default class Graph extends React.Component {
   getRelativeCoords = event => {
     var x = event.nativeEvent.offsetX;
     var y = event.nativeEvent.offsetY;
-    x = x * this.state.zoomFactor + this.state.horizontalPanFactor;
-    y = y * this.state.zoomFactor + this.state.verticalPanFactor;
+    x = x * this.state.zoomFactor + this.state.viewBoxPos.x;
+    y = y * this.state.zoomFactor + this.state.viewBoxPos.y;
     return { x: x, y: y };
   };
 
@@ -558,8 +610,6 @@ export default class Graph extends React.Component {
     * In draw-node creates a new node at the position of the click event on the SVG canvas.
     * In path-mode creates an elbow at the position of the click event on the SVG canvas,
       if the startNode is defined.
-
-      NOTE: Drawing mode is not fully implemented yet, so this method may not work as expected.
     * @param {object} e The mousedown event.
     */
   drawGraphObject = e => {
@@ -577,6 +627,7 @@ export default class Graph extends React.Component {
 
   render() {
 
+
     // not all of these properties are supported in React
     var svgAttrs = {
       width: "100%",
@@ -589,10 +640,13 @@ export default class Graph extends React.Component {
       "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     };
 
+    // var zoomInDisabled = this.state.zoomFactor <= 0.5;
+    // var zoomOutDisabled = this.state.zoomFactor >= 1.1;
+
     var resetDisabled =
       this.state.zoomFactor === 1 &&
-      this.state.horizontalPanFactor === 0 &&
-      this.state.verticalPanFactor === 0;
+      this.state.viewboxX === 0 &&
+      this.state.viewboxY === 0;
 
     // Mouse events for draw tool
     var mouseEvents = {};
@@ -603,16 +657,73 @@ export default class Graph extends React.Component {
         onMouseMove: this.drawMouseMove
       };
     }
+    else {
+      mouseEvents = {
+        onMouseDown: this.mouseDown,
+        onMouseUp: this.mouseUp,
+        onMouseMove: this.mouseMove
+      }
+    }
 
     return (
       <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
         <CourseModal ref={this.modal} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
+        {/* <Button
+          divId="zoom-in-button"
+          text="+"
+          mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+          disabled={zoomInDisabled}
+        />
+        <Button
+          divId="zoom-out-button"
+          text="&mdash;"
+          mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+          disabled={zoomOutDisabled}
+        />
+        <Button
+          divId="pan-up-button"
+          text="↑"
+          mouseDown={() => this.onButtonPress(this.panDirection, "up", 10)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+        />
+        <Button
+          divId="pan-down-button"
+          text="↓"
+          mouseDown={() => this.onButtonPress(this.panDirection, "down", 10)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+        />
+        <Button
+          divId="pan-right-button"
+          text="→"
+          mouseDown={() => this.onButtonPress(this.panDirection, "right", 10)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+        />
+        <Button
+          divId="pan-left-button"
+          text="←"
+          mouseDown={() => this.onButtonPress(this.panDirection, "left", 10)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+        /> */}
         <Button
           divId="reset-button"
           text="Reset View"
           mouseDown={this.resetZoomAndPan}
-          mouseUp={this.mouseUpEvent}
+          mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
           disabled={resetDisabled}
@@ -627,8 +738,6 @@ export default class Graph extends React.Component {
             this.state.highlightedNodes.length > 0 ? "highlight-nodes" : ""
           }
           {...mouseEvents}
-          onMouseDown={this.mouseDownEvent}
-          onMouseUp={this.mouseUpEvent}
         >
           {this.renderArrowHead()}
           <RegionGroup
