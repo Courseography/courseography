@@ -45,13 +45,13 @@ export default class Graph extends React.Component {
       mouseTimeoutID:false,
       viewBoxPos: {x:0, y:0},
       viewBoxDim: {width:window.innerWidth, height:window.innerHeight},
-      viewboxContainerRatio:1
+      viewboxContainerRatio:1,
+      showCourseModal: false
     };
 
     this.nodes = React.createRef();
     this.bools = React.createRef();
     this.edges = React.createRef();
-    this.modal = React.createRef();
     this.exportModal = React.createRef();
     this.zoomIncrement = 0.010;
   }
@@ -388,9 +388,15 @@ export default class Graph extends React.Component {
 
   infoBoxMouseClick = () => {
     var newCourse = this.state.infoBoxNodeId.substring(0, 6);
-    this.setState({ courseId: newCourse });
-    this.modal.current.openModal(newCourse);
+    this.setState({
+      courseId: newCourse,
+      showCourseModal: true
+    });
   };
+
+  onClose = () => {
+    this.setState({ showCourseModal: false });
+  }
 
   openExportModal = () => {
     this.exportModal.current.openModal();
@@ -598,7 +604,7 @@ export default class Graph extends React.Component {
 
     return (
       <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
-        <CourseModal ref={this.modal} />
+        <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
           divId="reset-button"
