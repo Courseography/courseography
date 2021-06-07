@@ -45,7 +45,7 @@ export default class Graph extends React.Component {
       mouseTimeoutID:false,
       viewBoxPos: {x:0, y:0},
       viewBoxDim: {width:window.innerWidth, height:window.innerHeight},
-      viewboxContainerRatio:1,
+      viewBoxContainerRatio:1,
       showCourseModal: false
     };
 
@@ -54,6 +54,7 @@ export default class Graph extends React.Component {
     this.edges = React.createRef();
     this.exportModal = React.createRef();
     this.zoomIncrement = 0.010;
+    this.keyboardPanningIncrement = 10;
   }
 
   componentDidMount() {
@@ -357,7 +358,7 @@ export default class Graph extends React.Component {
         var deltaX = currentX - this.state.panStartX;
         var deltaY = currentY - this.state.panStartY;
         this.setState({
-          viewBoxPos: {x: -deltaX * this.state.viewboxContainerRatio, y: -deltaY * this.state.viewboxContainerRatio},
+          viewBoxPos: {x: -deltaX * this.state.viewBoxContainerRatio, y: -deltaY * this.state.viewBoxContainerRatio},
         });
 
       }
@@ -446,7 +447,7 @@ export default class Graph extends React.Component {
     this.setState({
       mouseTimeoutID: timeoutID,
       viewBoxDim: {width:newViewboxWidth, height:newViewboxHeight},
-      viewboxContainerRatio: ratio,
+      viewBoxContainerRatio: ratio,
       zoomFactor: newZoomFactor
     })
   }
@@ -567,6 +568,20 @@ export default class Graph extends React.Component {
     this.setState({ highlightedNodes: focuses });
   }
 
+  onKeyDown = event =>{
+    if (event.keyCode === 39){
+      this.setState({viewBoxPos: {x: this.state.viewBoxPos.x + this.keyboardPanningIncrement, y: this.state.viewBoxPos.y}});
+    } else if (event.keyCode === 40){
+      this.setState({viewBoxPos: {x: this.state.viewBoxPos.x, y: this.state.viewBoxPos.y + this.keyboardPanningIncrement}});
+    } else if (event.keyCode === 37){
+      this.setState({viewBoxPos: {x: this.state.viewBoxPos.x - this.keyboardPanningIncrement, y: this.state.viewBoxPos.y}});
+    } else if (event.keyCode === 38){
+      this.setState({viewBoxPos: {x: this.state.viewBoxPos.x, y: this.state.viewBoxPos.y - this.keyboardPanningIncrement}});
+    } else if (this.state.onDraw && event.keyCode === 78){
+        this.setState({drawMode: "draw-node"});
+    }
+  }
+
   render() {
     // not all of these properties are supported in React
     var svgAttrs = {
@@ -582,8 +597,8 @@ export default class Graph extends React.Component {
 
     var resetDisabled =
       this.state.zoomFactor === 1 &&
-      this.state.viewboxX === 0 &&
-      this.state.viewboxY === 0;
+      this.state.viewBoxX === 0 &&
+      this.state.viewBoxY === 0;
 
     // Mouse events for draw tool
     var mouseEvents = {};
