@@ -64,9 +64,6 @@ export default class Graph extends React.Component {
     document
       .getElementById("react-graph")
       .addEventListener("wheel", this.onWheel);
-    document
-      .getElementById("react-graph")
-      .addEventListener("mousedown", this.onMouseDownInGraph);
 
     // Enable "Export" link
     if (document.getElementById("nav-export")) {
@@ -649,6 +646,10 @@ export default class Graph extends React.Component {
         onMouseDown: this.drawGraphObject,
         onMouseUp: this.drawMouseUp,
         onMouseMove: this.drawMouseMove
+      };
+    } else {
+      mouseEvents = {
+        onMouseDown: this.onMouseDownInGraph
       };
     }
 
