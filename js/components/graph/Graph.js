@@ -64,6 +64,9 @@ export default class Graph extends React.Component {
     document
       .getElementById("react-graph")
       .addEventListener("wheel", this.onWheel);
+    document
+      .getElementById("react-graph")
+      .addEventListener("mousedown", this.onMouseDownInGraph);
 
     // Enable "Export" link
     if (document.getElementById("nav-export")) {
@@ -340,6 +343,76 @@ export default class Graph extends React.Component {
       }
     }
   };
+
+  /**
+   * Returns the position of the mouse adjusted to the viewbox's position
+   * @param {double} clientX
+   * @param {double} clientY
+   * @return {Object}
+   */
+  adjustCoordsToViewbox = (clientX, clientY) => {
+    return {
+      adjustedX: clientX + this.state.viewBoxPos.x,
+      adjustedY: clientY + this.state.viewBoxPos.y
+    };
+  }
+
+  /**
+   * Initializes the panning process by recording the position of the mouse pointer and adding event listeners.
+   * @param {*} event
+   */
+  onMouseDownInGraph = event => {
+    document.body.style.cursor = "grab";
+    const {adjustedX, adjustedY} = this.adjustCoordsToViewbox(event.clientX, event.clientY);
+
+    document.getElementById("react-graph").addEventListener("mouseup", this.onMouseUpInGraph);
+    document.getElementById("react-graph").addEventListener("mousemove", this.onMouseMoveInGraph);
+
+    this.setState({
+      mouseDown: true,
+      panning: true,
+      panStartX: adjustedX,
+      panStartY: adjustedY
+    });
+  }
+
+  /**
+   * Pans the graph by moving it in the direction that the mouse moved.
+   * @param {*} event
+   */
+  onMouseMoveInGraph = event => {
+    if (this.state.panning) {
+      var currentX = event.clientX;
+      var currentY = event.clientY;
+
+      var deltaX = currentX - this.state.panStartX;
+      var deltaY = currentY - this.state.panStartY;
+
+      this.setState({
+        viewBoxPos: {
+          x: -deltaX * this.state.viewboxContainerRatio,
+          y: -deltaY * this.state.viewboxContainerRatio
+        }
+      });
+    }
+  }
+
+  /**
+   * Stops the panning process by resetting states and removing additional listeners.
+   */
+  onMouseUpInGraph = () => {
+    document.body.style.cursor = "auto";
+
+    document.getElementById("react-graph").removeEventListener("mouseup", this.onMouseUpInGraph);
+    document.getElementById("react-graph").removeEventListener("mousemove", this.onMouseMoveInGraph);
+
+    this.setState({
+      mouseDown: false,
+      panning: false,
+      panStartX: 0,
+      panStartY: 0
+    });
+  }
 
   infoBoxMouseEnter = () => {
     this.clearAllTimeouts();
