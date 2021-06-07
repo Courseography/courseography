@@ -26,7 +26,6 @@ export default class Graph extends React.Component {
       width: window.innerWidth,
       height: window.innerHeight,
       zoomFactor: 1,
-      mouseDown: false,
       buttonHover: false,
       onDraw: this.props.edit,
       drawMode: this.props.initialDrawMode,
@@ -427,13 +426,23 @@ export default class Graph extends React.Component {
     );
   };
 
-  zoomViewbox = (deltaY, containerWidth, containerHeight) => {
+  zoomViewbox = (zoomIn) => {
     clearTimeout(this.state.mouseTimeoutID);
+
+    let containerWidth = 0;
+    let containerHeight = 0;
+
+    if (document.getElementById("react-graph") !== null){
+      var reactGraph = document.getElementById("react-graph");
+      containerWidth = reactGraph.clientWidth;
+      containerHeight = reactGraph.clientHeight;
+    }
+
     var newZoomFactor = this.state.zoomFactor;
-    if (deltaY < 0){
+    if (zoomIn){
       document.body.style.cursor = "zoom-in";
       newZoomFactor -= this.zoomIncrement;
-    } else if (deltaY > 0){
+    } else {
       document.body.style.cursor = "zoom-out";
       newZoomFactor += this.zoomIncrement;
     }
@@ -468,15 +477,8 @@ export default class Graph extends React.Component {
   };
 
   onWheel = event => {
-    let containerWidth = 0;
-    let containerHeight = 0;
-
-    if (document.getElementById("react-graph") !== null){
-      var reactGraph = document.getElementById("react-graph");
-      containerWidth = reactGraph.clientWidth;
-      containerHeight = reactGraph.clientHeight;
-    }
-    this.zoomViewbox(event.deltaY, containerWidth, containerHeight);
+    let zoomIn = event.deltaY < 0;
+    this.zoomViewbox(zoomIn);
   };
 
   buttonMouseEnter = () => {
@@ -568,16 +570,25 @@ export default class Graph extends React.Component {
     this.setState({ highlightedNodes: focuses });
   }
 
+  /** Allows panning and entering draw mode via the keyboard.
+   *
+   * @param {KeyboardEvent} event
+   */
   onKeyDown = event =>{
-    if (event.keyCode === 39){
+    console.log(event.key);
+    if (event.key === "ArrowRight"){
       this.setState({viewBoxPos: {x: this.state.viewBoxPos.x + this.keyboardPanningIncrement, y: this.state.viewBoxPos.y}});
-    } else if (event.keyCode === 40){
+    } else if (event.key === "ArrowDown"){
       this.setState({viewBoxPos: {x: this.state.viewBoxPos.x, y: this.state.viewBoxPos.y + this.keyboardPanningIncrement}});
-    } else if (event.keyCode === 37){
+    } else if (event.key === "ArrowLeft"){
       this.setState({viewBoxPos: {x: this.state.viewBoxPos.x - this.keyboardPanningIncrement, y: this.state.viewBoxPos.y}});
-    } else if (event.keyCode === 38){
+    } else if (event.key === "ArrowUp"){
       this.setState({viewBoxPos: {x: this.state.viewBoxPos.x, y: this.state.viewBoxPos.y - this.keyboardPanningIncrement}});
-    } else if (this.state.onDraw && event.keyCode === 78){
+    } else if (event.key === "+"){
+      this.zoomViewbox(true);
+    } else if (event.key === "-"){
+      this.zoomViewbox(false);
+    } else if (this.state.onDraw && event.key === "n"){
         this.setState({drawMode: "draw-node"});
     }
   }
@@ -594,6 +605,7 @@ export default class Graph extends React.Component {
       "xmlns:cc": "http://creativecommons.org/ns#",
       "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     };
+
 
     var resetDisabled =
       this.state.zoomFactor === 1 &&
@@ -621,6 +633,22 @@ export default class Graph extends React.Component {
       <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
+        <Button
+          divId="zoom-in-button"
+          text="+"
+          mouseDown={() => this.zoomViewbox(true)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+        />
+        <Button
+          divId="zoom-out-button"
+          text="&mdash;"
+          mouseDown={() => this.zoomViewbox(false)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+        />
         <Button
           divId="reset-button"
           text="Reset View"
