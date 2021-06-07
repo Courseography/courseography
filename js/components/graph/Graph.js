@@ -419,28 +419,6 @@ export default class Graph extends React.Component {
     return Math.max(heightToContainerRatio, widthToContainerRatio);
   };
 
-  panDirection = (direction, panFactorRate) => {
-    // onButtonRelease calls are required when a button becomes disabled
-    // because it loses its ability to detect mouseUp event
-    if (direction === "up") {
-      this.setState({
-        verticalPanFactor: this.state.verticalPanFactor - panFactorRate
-      });
-    } else if (direction === "left") {
-      this.setState({
-        horizontalPanFactor: this.state.horizontalPanFactor - panFactorRate
-      });
-    } else if (direction === "down") {
-      this.setState({
-        verticalPanFactor: this.state.verticalPanFactor + panFactorRate
-      });
-    } else if (direction === "right") {
-      this.setState({
-        horizontalPanFactor: this.state.horizontalPanFactor + panFactorRate
-      });
-    }
-  };
-
   resetZoomAndPan = () => {
     this.setState({
       zoomFactor: 1,
