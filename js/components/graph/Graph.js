@@ -497,7 +497,12 @@ export default class Graph extends React.Component {
     this.setState({
       zoomFactor: 1,
       viewBoxPos: {x: 0, y: 0},
+      mouseDown: true
     });
+  };
+
+  onButtonRelease = () => {
+    this.setState({mouseDown: false});
   };
 
   /**
