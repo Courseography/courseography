@@ -345,7 +345,8 @@ export default class Graph extends React.Component {
   };
 
   /**
-   * Returns the position of the mouse adjusted to the viewbox's position
+   * Returns the position of the mouse adjusted to the viewbox's new origin. This is so that the change
+   * in viewboxX and viewboxY are relative to the shifted viewbox origin after panning.
    * @param {double} clientX
    * @param {double} clientY
    * @return {Object}
@@ -638,8 +639,8 @@ export default class Graph extends React.Component {
 
     var resetDisabled =
       this.state.zoomFactor === 1 &&
-      this.state.viewBox.x === 0 &&
-      this.state.viewBox.y === 0;
+      this.state.viewBoxPos.x === 0 &&
+      this.state.viewBoxPos.y === 0;
 
     // Mouse events for draw tool
     var mouseEvents = {};
