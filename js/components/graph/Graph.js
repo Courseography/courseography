@@ -501,10 +501,6 @@ export default class Graph extends React.Component {
     });
   };
 
-  onButtonRelease = () => {
-    this.setState({mouseDown: false});
-  };
-
   /**
    * Drawing not implemented, so onDraw currently defaults to false
    */
@@ -666,7 +662,6 @@ export default class Graph extends React.Component {
           divId="zoom-in-button"
           text="+"
           mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
-          mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
           disabled={zoomInDisabled}
@@ -675,7 +670,6 @@ export default class Graph extends React.Component {
           divId="zoom-out-button"
           text="&mdash;"
           mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
-          mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
           disabled={zoomOutDisabled}
@@ -684,7 +678,6 @@ export default class Graph extends React.Component {
           divId="reset-button"
           text="Reset View"
           mouseDown={this.resetZoomAndPan}
-          mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
           disabled={resetDisabled}
