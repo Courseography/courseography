@@ -427,6 +427,10 @@ export default class Graph extends React.Component {
     );
   };
 
+  /** Zoom into the graph by calculating new viewbox dimensions
+   *
+   * @param {boolean} zoomIn - True if viewbox should be zoomed into
+   */
   zoomViewbox = (zoomIn) => {
     clearTimeout(this.state.mouseTimeoutID);
 
