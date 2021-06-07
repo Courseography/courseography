@@ -26,8 +26,6 @@ export default class Graph extends React.Component {
       width: window.innerWidth,
       height: window.innerHeight,
       zoomFactor: 1,
-      horizontalPanFactor: 0,
-      verticalPanFactor: 0,
       mouseDown: false,
       buttonHover: false,
       onDraw: this.props.edit,
@@ -41,6 +39,12 @@ export default class Graph extends React.Component {
       infoBoxXPos: 0,
       infoBoxYPos: 0,
       infoBoxNodeId: "",
+      panning: false,
+      panStartX: 0,
+      panStartY: 0,
+      viewBoxPos: {x: 0, y: 0},
+      viewBoxDim: {width: window.innerWidth, height: window.innerHeight},
+      viewboxContainerRatio: 1,
       showCourseModal: false
     };
 
@@ -174,8 +178,7 @@ export default class Graph extends React.Component {
           width: data.width,
           height: data.height,
           zoomFactor: 1,
-          horizontalPanFactor: 0,
-          verticalPanFactor: 0,
+          viewBoxPos: {x: 0, y: 0},
           graphName: graphName,
           connections: {
             'parents': parentsObj,
@@ -422,8 +425,7 @@ export default class Graph extends React.Component {
   resetZoomAndPan = () => {
     this.setState({
       zoomFactor: 1,
-      verticalPanFactor: 0,
-      horizontalPanFactor: 0
+      viewBoxPos: {x: 0, y: 0},
     });
   };
 
@@ -465,8 +467,8 @@ export default class Graph extends React.Component {
   getRelativeCoords = event => {
     var x = event.nativeEvent.offsetX;
     var y = event.nativeEvent.offsetY;
-    x = x * this.state.zoomFactor + this.state.horizontalPanFactor;
-    y = y * this.state.zoomFactor + this.state.verticalPanFactor;
+    x = x * this.state.zoomFactor + this.state.viewBoxPos.x;
+    y = y * this.state.zoomFactor + this.state.viewBoxPos.y;
     return { x: x, y: y };
   };
 
@@ -546,23 +548,11 @@ export default class Graph extends React.Component {
   }
 
   render() {
-    let containerWidth = 0;
-    let containerHeight = 0;
-    if (document.getElementById("react-graph") !== null && document.getElementById("generateRoot")) {
-      containerWidth = document.getElementById("react-graph").clientWidth;
-      containerHeight = document.getElementById("generateRoot").clientHeight;
-    }
-
-    const viewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
-    const viewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
-    const viewboxX = (this.state.width - viewboxWidth) / 2 + this.state.horizontalPanFactor;
-    const viewboxY = (this.state.height - viewboxHeight) / 2 + this.state.verticalPanFactor;
-
     // not all of these properties are supported in React
     var svgAttrs = {
       width: "100%",
       height: "100%",
-      viewBox: `${viewboxX} ${viewboxY} ${viewboxWidth} ${viewboxHeight}`,
+      viewBox: `${this.state.viewBoxPos.x} ${this.state.viewBoxPos.y} ${this.state.viewBoxDim.width} ${this.state.viewBoxDim.height}`,
       preserveAspectRatio: "xMinYMin",
       "xmlns:svg": "http://www.w3.org/2000/svg",
       "xmlns:dc": "http://purl.org/dc/elements/1.1/",
@@ -575,8 +565,8 @@ export default class Graph extends React.Component {
 
     var resetDisabled =
       this.state.zoomFactor === 1 &&
-      this.state.horizontalPanFactor === 0 &&
-      this.state.verticalPanFactor === 0;
+      this.state.viewBox.x === 0 &&
+      this.state.viewBox.y === 0;
 
     // Mouse events for draw tool
     var mouseEvents = {};
