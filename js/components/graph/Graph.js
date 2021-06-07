@@ -44,7 +44,7 @@ export default class Graph extends React.Component {
       panStartY: 0,
       viewBoxPos: {x: 0, y: 0},
       viewBoxDim: {width: window.innerWidth, height: window.innerHeight},
-      viewboxContainerRatio: 1,
+      viewBoxContainerRatio: 1,
       showCourseModal: false
     };
 
@@ -390,8 +390,8 @@ export default class Graph extends React.Component {
 
       this.setState({
         viewBoxPos: {
-          x: -deltaX * this.state.viewboxContainerRatio,
-          y: -deltaY * this.state.viewboxContainerRatio
+          x: -deltaX * this.state.viewBoxContainerRatio,
+          y: -deltaY * this.state.viewBoxContainerRatio
         }
       });
     }
