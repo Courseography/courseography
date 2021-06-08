@@ -109,6 +109,7 @@ export default class Graph extends React.Component {
       .getElementById("react-graph")
       .removeEventListener("wheel", this.onWheel);
   }
+
   getGraph = () => {
     let graphName = this.props.graphName.replace("-", " ");
     let url = new URL("/get-json-data", document.location);
@@ -144,6 +145,7 @@ export default class Graph extends React.Component {
         var inEdgesObj = {};
         var childrenObj = {};
         var outEdgesObj = {};
+
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
         });
@@ -166,13 +168,11 @@ export default class Graph extends React.Component {
           }
         });
 
-
         nodesList.forEach(node => {
           parentsObj[node.id_] = [];
           inEdgesObj[node.id_] = [];
           childrenObj[node.id_] = [];
           outEdgesObj[node.id_] = [];
-
         });
 
         hybridsList.forEach(hybrid => {
@@ -193,7 +193,6 @@ export default class Graph extends React.Component {
           }
         });
 
-
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -211,7 +210,7 @@ export default class Graph extends React.Component {
             'parents': parentsObj,
             'inEdges': inEdgesObj,
             'children': childrenObj,
-            'outEdges': outEdgesObj,
+            'outEdges': outEdgesObj
           }
         });
       })
@@ -866,7 +865,7 @@ function parseCourse(s, prefix) {
 }
 
 
-  /** Helper function that adds parents of hybridNode to the parents object, and adds hybrid nodes as children of the Nodes they represent
+/** Helper function that adds parents of hybridNode to the parents object, and adds hybrid nodes as children of the Nodes they represent
  *
  * @param {Node} hybridNode
  * @param {Array} nodesJSON
@@ -875,21 +874,6 @@ function parseCourse(s, prefix) {
  */
 function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj){
 
-  /**
-   * Helper for hybrid computation. Finds the node with the same course label as the hybrid.
-   * @param  {string} course
-   * @param {Array} nodesJSON
-   * @return {Node}
-   */
-  var findRelationship = (course, nodesJSON) => {
-    var nodes = nodesJSON;
-    var node = nodes.find(
-      n =>
-        n.type_ === "Node" &&
-        n.text.some(textTag => textTag.text.includes(course))
-    );
-    return node;
-  }
   // parse prereqs based on text
   var hybridText = "";
   hybridNode.text.forEach(textTag => (hybridText += textTag.text));
@@ -928,7 +912,23 @@ function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj){
       }
     });
   }
-parents[hybridNode.id_] = nodeParents;
+  parents[hybridNode.id_] = nodeParents;
+}
+
+/**
+ * Helper for hybrid computation. Finds the node with the same course label as the hybrid.
+ * @param  {string} course
+ * @param {Array} nodesJSON
+ * @return {Node}
+ */
+var findRelationship = (course, nodesJSON) => {
+  var nodes = nodesJSON;
+  var node = nodes.find(
+    n =>
+      n.type_ === "Node" &&
+      n.text.some(textTag => textTag.text.includes(course))
+  );
+  return node;
 }
 
 Graph.propTypes = {
