@@ -235,6 +235,9 @@ export default class Graph extends React.Component {
     }
   };
 
+  /**
+   * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
+   */
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
@@ -280,6 +283,9 @@ export default class Graph extends React.Component {
     });
   };
 
+  /**
+   * Drawing mode not implemented, so this function may not work.
+   */
   nodeMouseDown = event => {
     if (
       this.state.drawMode === "draw-node" &&
@@ -289,6 +295,9 @@ export default class Graph extends React.Component {
     }
   };
 
+  /**
+   * Drawing mode is not implemented, so this function may not work
+   */
   drawMouseMove = event => {
     // in draw-node mode, drag a node as the mouse moves
     if (this.state.drawMode === "draw-node") {
@@ -309,6 +318,9 @@ export default class Graph extends React.Component {
     }
   };
 
+  /**
+   * Drawing mode not implemented, so this function may not work.
+   */
   drawMouseUp = event => {
     // in draw-node mode, drop a dragged node to a new location
     if (this.state.drawMode === "draw-node") {
