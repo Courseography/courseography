@@ -4,47 +4,42 @@ import PropTypes from "prop-types";
 export default class InfoBox extends React.Component {
 
   render() {
-    if (this.props.showInfoBox) {
-      var gStyles = {
-        opacity: this.props.showInfoBox ? 1 : 0
-      };
-      var rectAttrs = {
-        id: this.props.nodeId + "-tooltip" + "-rect",
-        x: this.props.xPos,
-        y: this.props.yPos,
-        rx: "4",
-        ry: "4",
-        fill: "white",
-        stroke: "black",
-        strokeWidth: "2",
-        width: "60",
-        height: "30"
-      };
+    var className = this.props.showInfoBox ? "tooltip-group-display" : "tooltip-group-hidden";
 
-      var textAttrs = {
-        id: this.props.nodeId + "-tooltip" + "-text",
-        x: this.props.xPos + 60 / 2 - 18,
-        y: this.props.yPos + 30 / 2 + 6
-      };
+    var rectAttrs = {
+      id: this.props.nodeId + "-tooltip" + "-rect",
+      x: this.props.xPos,
+      y: this.props.yPos,
+      rx: "4",
+      ry: "4",
+      fill: "white",
+      stroke: "black",
+      strokeWidth: "2",
+      width: "60",
+      height: "30"
+    };
 
-      return (
-        <g
-          id="infoBox"
-          className="tooltip-group"
-          style={gStyles}
-          onClick={this.props.onClick}
-          onMouseEnter={this.props.onMouseEnter}
-          onMouseLeave={this.props.onMouseLeave}
-        >
-          <rect {...rectAttrs} />
-          <text {...textAttrs}>Info</text>
-        </g>
-      );
-    } else {
-      return <g />;
-    }
+    var textAttrs = {
+      id: this.props.nodeId + "-tooltip" + "-text",
+      x: this.props.xPos + 60 / 2 - 18,
+      y: this.props.yPos + 30 / 2 + 6
+    };
+
+    return (
+      <g
+        id="infoBox"
+        className={className}
+        onClick={this.props.onClick}
+        onMouseEnter={this.props.onMouseEnter}
+        onMouseLeave={this.props.onMouseLeave}
+      >
+        <rect {...rectAttrs} />
+        <text {...textAttrs}>Info</text>
+      </g>
+    );
   }
 }
+
 
 InfoBox.propTypes = {
   showInfoBox: PropTypes.bool,

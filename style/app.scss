@@ -2444,8 +2444,16 @@ main-filter input
   top  : -33px;
 }
 
-.tooltip-group
+.tooltip-group-display
 {
   cursor: pointer;
-  transition: opacity .4s;
+  transition: opacity 0.4s linear;
+  opacity:1;
+}
+
+.tooltip-group-hidden
+{
+  cursor: pointer;
+  transition: opacity 0.4s linear;
+  opacity:0;
 }
