@@ -339,7 +339,6 @@ export default class Graph extends React.Component {
   mouseDown = event => {
     // maybe need to add listener stuff for mouseUp?
     document.body.style.cursor = "grab";
-    console.log(`mouse down: startX:${event.clientX}, startY:${event.clientY}`);
     const {adjustedX, adjustedY} = this.adjustCoordsToViewbox(event.clientX, event.clientY);
     this.setState({
       panning: true,
@@ -365,7 +364,6 @@ export default class Graph extends React.Component {
   };
 
   mouseUp = () =>{
-    console.log("mouse up");
     document.body.style.cursor = "auto"
     this.setState({
       panning:false,
@@ -580,7 +578,6 @@ export default class Graph extends React.Component {
    * @param {KeyboardEvent} event
    */
   onKeyDown = event =>{
-    console.log(event.key);
     if (event.key === "ArrowRight"){
       this.setState({viewBoxPos: {x: this.state.viewBoxPos.x + this.keyboardPanningIncrement, y: this.state.viewBoxPos.y}});
     } else if (event.key === "ArrowDown"){
