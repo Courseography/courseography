@@ -642,7 +642,6 @@ export default class Graph extends React.Component {
           divId="zoom-in-button"
           text="+"
           mouseDown={() => this.zoomViewbox(true)}
-          mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
         />
@@ -650,7 +649,6 @@ export default class Graph extends React.Component {
           divId="zoom-out-button"
           text="&mdash;"
           mouseDown={() => this.zoomViewbox(false)}
-          mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
         />
@@ -658,7 +656,6 @@ export default class Graph extends React.Component {
           divId="reset-button"
           text="Reset View"
           mouseDown={this.resetZoomAndPan}
-          mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
           disabled={resetDisabled}
