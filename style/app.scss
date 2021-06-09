@@ -2443,3 +2443,17 @@ main-filter input
   left : -388px;
   top  : -33px;
 }
+
+.tooltip-group-display
+{
+  cursor: pointer;
+  transition: opacity 0.4s linear;
+  opacity:1;
+}
+
+.tooltip-group-hidden
+{
+  cursor: pointer;
+  transition: opacity 0.4s linear;
+  opacity:0;
+}

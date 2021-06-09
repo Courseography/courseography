@@ -9,7 +9,11 @@ describe("InfoBox", () => {
     const infoBoxProps = {
       onClick: jest.fn(),
       onMouseDown: jest.fn(),
-      onMouseLeave: jest.fn()
+      onMouseLeave: jest.fn(),
+      nodeId: "",
+      showInfoBox: false,
+      xPos: 0,
+      yPos: 0
     };
     const component = shallow(<InfoBox {...infoBoxProps} />);
     expect(component).toMatchSnapshot();
@@ -18,25 +22,25 @@ describe("InfoBox", () => {
   it("should appear when hovering over a course", async () => {
     const graph = await TestGraph.build();
     const aaa100 = graph.getByTestId("aaa100");
-    
-    expect(graph.textExists("Info")).toBe(false);
-    fireEvent.mouseOver(aaa100);
+
     const infoBox = graph.getNodeByText("Info");
-    expect(infoBox.classList.contains("tooltip-group")).toBe(true);
+    expect(infoBox.classList.contains("tooltip-group-hidden")).toBe(true);
+    fireEvent.mouseOver(aaa100);
+    expect(infoBox.classList.contains("tooltip-group-display")).toBe(true);
   });
-  
+
   it("should disappear a second after the the cursor isn't hovered over the course", async done => {
     const graph = await TestGraph.build();
     const aaa100 = graph.getByTestId("aaa100");
 
     fireEvent.mouseOver(aaa100);
     const infoBox = graph.getNodeByText("Info");
-    expect(infoBox.classList.contains("tooltip-group")).toBe(true);
+    expect(infoBox.classList.contains("tooltip-group-display")).toBe(true);
 
     fireEvent.mouseOut(aaa100);
 
     setTimeout(() => {
-      expect(graph.textExists("Info")).toBe(false);
+      expect(infoBox.classList.contains("tooltip-group-hidden")).toBe(true);
       done();
     }, 1000);
   });
