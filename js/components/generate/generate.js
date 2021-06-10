@@ -107,8 +107,8 @@ class GenerateForm extends React.Component {
           width: data.width,
           height: data.height,
           zoomFactor: 1,
-          horizontalPanFactor: 0,
-          verticalPanFactor: 0,
+          viewBoxPos: {x:0, y:0},
+          viewBoxDim: {width:data.width, height:data.height}
         });
       })
       .catch((err) => {
