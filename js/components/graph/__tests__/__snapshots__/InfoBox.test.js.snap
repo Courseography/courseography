@@ -1,3 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`InfoBox should match shallow snapshot 1`] = `<g />`;
+exports[`InfoBox should match shallow snapshot 1`] = `
+<g
+  className="tooltip-group-hidden"
+  id="infoBox"
+  onClick={[MockFunction]}
+  onMouseLeave={[MockFunction]}
+>
+  <rect
+    fill="white"
+    height="30"
+    id="-tooltip-rect"
+    rx="4"
+    ry="4"
+    stroke="black"
+    strokeWidth="2"
+    width="60"
+    x={0}
+    y={0}
+  />
+  <text
+    id="-tooltip-text"
+    x={12}
+    y={21}
+  >
+    Info
+  </text>
+</g>
+`;
