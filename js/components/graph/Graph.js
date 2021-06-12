@@ -42,8 +42,7 @@ export default class Graph extends React.Component {
       panning: false,
       panStartX: 0,
       panStartY: 0,
-      viewBoxPos: {x: 0, y: 0},
-      viewBoxDim: {width: window.innerWidth, height: window.innerHeight},
+      viewBoxPos: {x: 0, y: 0, width: window.innerWidth, height: window.innerHeight},
       viewBoxContainerRatio: 1,
       showCourseModal: false
     };
@@ -178,7 +177,7 @@ export default class Graph extends React.Component {
           width: data.width,
           height: data.height,
           zoomFactor: 1,
-          viewBoxPos: {x: 0, y: 0},
+          viewBoxPos: {x: 0, y: 0, width: window.innerWidth, height: window.innerHeight},
           graphName: graphName,
           connections: {
             'parents': parentsObj,
@@ -357,7 +356,7 @@ export default class Graph extends React.Component {
 
   /**
    * Initializes the panning process by recording the position of the mouse pointer and adding event listeners.
-   * @param {*} event
+   * @param {Event} event
    */
   onMouseDownInGraph = event => {
     document.body.style.cursor = "grab";
@@ -376,7 +375,7 @@ export default class Graph extends React.Component {
 
   /**
    * Pans the graph by moving it in the direction that the mouse moved.
-   * @param {*} event
+   * @param {Event} event
    */
   onMouseMoveInGraph = event => {
     if (this.state.panning) {
@@ -386,12 +385,13 @@ export default class Graph extends React.Component {
       var deltaX = currentX - this.state.panStartX;
       var deltaY = currentY - this.state.panStartY;
 
-      this.setState({
+      this.setState(prevState => ({
         viewBoxPos: {
+          ...prevState.viewBoxPos,
           x: -deltaX * this.state.viewBoxContainerRatio,
           y: -deltaY * this.state.viewBoxContainerRatio
         }
-      });
+      }));
     }
   }
 
@@ -496,7 +496,7 @@ export default class Graph extends React.Component {
   resetZoomAndPan = () => {
     this.setState({
       zoomFactor: 1,
-      viewBoxPos: {x: 0, y: 0},
+      viewBoxPos: {x: 0, y: 0, width: window.innerWidth, height: window.innerHeight},
       mouseDown: true
     });
   };
@@ -624,7 +624,7 @@ export default class Graph extends React.Component {
     var svgAttrs = {
       width: "100%",
       height: "100%",
-      viewBox: `${this.state.viewBoxPos.x} ${this.state.viewBoxPos.y} ${this.state.viewBoxDim.width} ${this.state.viewBoxDim.height}`,
+      viewBox: `${this.state.viewBoxPos.x} ${this.state.viewBoxPos.y} ${this.state.viewBoxPos.width} ${this.state.viewBoxPos.height}`,
       preserveAspectRatio: "xMinYMin",
       "xmlns:svg": "http://www.w3.org/2000/svg",
       "xmlns:dc": "http://purl.org/dc/elements/1.1/",
