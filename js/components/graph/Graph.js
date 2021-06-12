@@ -358,12 +358,9 @@ export default class Graph extends React.Component {
    * Initializes the panning process by recording the position of the mouse pointer and adding event listeners.
    * @param {Event} event
    */
-  onMouseDownInGraph = event => {
+  startPanning = event => {
     document.body.style.cursor = "grab";
     const {adjustedX, adjustedY} = this.adjustCoordsToViewbox(event.clientX, event.clientY);
-
-    document.getElementById("react-graph").addEventListener("mouseup", this.onMouseUpInGraph);
-    document.getElementById("react-graph").addEventListener("mousemove", this.onMouseMoveInGraph);
 
     this.setState({
       mouseDown: true,
@@ -377,7 +374,7 @@ export default class Graph extends React.Component {
    * Pans the graph by moving it in the direction that the mouse moved.
    * @param {Event} event
    */
-  onMouseMoveInGraph = event => {
+  panGraph = event => {
     if (this.state.panning) {
       var currentX = event.clientX;
       var currentY = event.clientY;
@@ -398,11 +395,8 @@ export default class Graph extends React.Component {
   /**
    * Stops the panning process by resetting states and removing additional listeners.
    */
-  onMouseUpInGraph = () => {
+  stopPanning = () => {
     document.body.style.cursor = "auto";
-
-    document.getElementById("react-graph").removeEventListener("mouseup", this.onMouseUpInGraph);
-    document.getElementById("react-graph").removeEventListener("mousemove", this.onMouseMoveInGraph);
 
     this.setState({
       mouseDown: false,
@@ -641,21 +635,26 @@ export default class Graph extends React.Component {
       this.state.viewBoxPos.y === 0;
 
     // Mouse events for draw tool
-    var mouseEvents = {};
+    var svgMouseEvents = {};
     if (this.state.onDraw) {
-      mouseEvents = {
+      svgMouseEvents = {
         onMouseDown: this.drawGraphObject,
         onMouseUp: this.drawMouseUp,
         onMouseMove: this.drawMouseMove
       };
     } else {
-      mouseEvents = {
-        onMouseDown: this.onMouseDownInGraph
+      svgMouseEvents = {
+        onMouseDown: this.startPanning
       };
     }
 
+    var reactGraphMouseEvents = {
+      onMouseMove: this.panGraph,
+      onMouseUp: this.stopPanning
+    }
+
     return (
-      <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
+      <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar} {...reactGraphMouseEvents}>
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
@@ -691,7 +690,7 @@ export default class Graph extends React.Component {
           className={
             this.state.highlightedNodes.length > 0 ? "highlight-nodes" : ""
           }
-          {...mouseEvents}
+          {...svgMouseEvents}
         >
           {this.renderArrowHead()}
           <RegionGroup
