@@ -167,6 +167,16 @@ export default class Graph extends React.Component {
           }
         });
 
+        let containerWidth = 0;
+        let containerHeight = 0;
+        if (document.getElementById("react-graph") !== null && document.getElementById("generateRoot")) {
+          containerWidth = document.getElementById("react-graph").clientWidth;
+          containerHeight = document.getElementById("generateRoot").clientHeight;
+        }
+
+        const viewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
+        const viewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
+
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -177,7 +187,7 @@ export default class Graph extends React.Component {
           width: data.width,
           height: data.height,
           zoomFactor: 1,
-          viewBoxPos: {x: 0, y: 0, width: window.innerWidth, height: window.innerHeight},
+          viewBoxPos: {x: 0, y: 0, width: viewboxWidth, height: viewboxHeight},
           graphName: graphName,
           connections: {
             'parents': parentsObj,
