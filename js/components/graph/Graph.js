@@ -344,7 +344,6 @@ export default class Graph extends React.Component {
   mouseDown = event => {
     // maybe need to add listener stuff for mouseUp?
     document.body.style.cursor = "grab";
-    console.log(`mouse down: startX:${event.clientX}, startY:${event.clientY}`);
     const {adjustedX, adjustedY} = this.adjustCoordsToViewbox(event.clientX, event.clientY);
     this.setState({
       panning: true,
@@ -370,7 +369,6 @@ export default class Graph extends React.Component {
   }
 
   mouseUp = () =>{
-    console.log("mouse up");
     document.body.style.cursor = "auto"
     this.setState({
       panning:false,
@@ -616,7 +614,7 @@ export default class Graph extends React.Component {
           divId="reset-button"
           text="Reset View"
           mouseDown={this.resetZoomAndPan}
-          mouseUp={this.onButtonRelease}
+          mouseUp={this.mouseUp}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
           disabled={resetDisabled}
