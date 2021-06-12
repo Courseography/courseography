@@ -29,8 +29,15 @@ jobs:
           command: |
             stack --no-terminal setup
             rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
+            cp app/DevelopmentConfig.hs app/Config.hs
             stack --no-terminal build --fast -j1 --ghc-options -Werror
             yarn install
+
+      - run:
+          name: Run tests
+          command: |
+            stack --no-terminal test
+            yarn test
 
       - save_cache:
           name: Cache Dependencies (Haskell)
@@ -40,12 +47,6 @@ jobs:
             - ".stack-work"
 
       - run:
-          name: Run tests
-          command: |
-            stack --no-terminal test
-            yarn test
-
-      - run:
           name: Lint JS
           command: |
             yarn run eslint
@@ -53,8 +54,7 @@ jobs:
       - run:
           name: Generate documentation
           command: |
-            stack --no-terminal build --fast -j1 --ghc-options -Werror
-            stack --no-terminal exec courseography docs
+            stack exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --ignore-all-exports app/Main.hs
 
       - store_artifacts:
           path: doc
