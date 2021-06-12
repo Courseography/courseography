@@ -53,6 +53,7 @@ jobs:
       - run:
           name: Generate documentation
           command: |
+            stack --no-terminal build --fast -j1 --ghc-options -Werror
             stack --no-terminal exec courseography docs
 
       - store_artifacts:
