@@ -359,7 +359,6 @@ export default class Graph extends React.Component {
    * @param {Event} event
    */
   startPanning = event => {
-    document.body.style.cursor = "grab";
     const {adjustedX, adjustedY} = this.adjustCoordsToViewbox(event.clientX, event.clientY);
 
     this.setState({
@@ -396,8 +395,6 @@ export default class Graph extends React.Component {
    * Stops the panning process by resetting states and removing additional listeners.
    */
   stopPanning = () => {
-    document.body.style.cursor = "auto";
-
     this.setState({
       mouseDown: false,
       panning: false,
@@ -654,7 +651,13 @@ export default class Graph extends React.Component {
     }
 
     return (
-      <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar} {...reactGraphMouseEvents}>
+      <div id="react-graph"
+        className={
+          this.state.panning ? "react-graph panning" : "react-graph"
+        }
+        onClick={this.props.closeSidebar}
+        {...reactGraphMouseEvents}
+      >
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
