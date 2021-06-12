@@ -10,7 +10,7 @@ jobs:
       - restore_cache:
           name: Restore Cached Dependencies (Haskell)
           keys:
-            - v1.3-courseography-haskell-{{ checksum "courseography.cabal" }}
+            - v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}
 
       - run:
           name: Install Package Dependencies
@@ -34,7 +34,7 @@ jobs:
 
       - save_cache:
           name: Cache Dependencies (Haskell)
-          key: v1.3-courseography-haskell-{{ checksum "courseography.cabal" }}
+          key: v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}
           paths:
             - "/root/.stack"
             - ".stack-work"
