@@ -611,6 +611,22 @@ export default class Graph extends React.Component {
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
+          divId="zoom-in-button"
+          text="+"
+          mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+        />
+        <Button
+          divId="zoom-out-button"
+          text="&mdash;"
+          mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
+          mouseUp={this.onButtonRelease}
+          onMouseEnter={this.buttonMouseEnter}
+          onMouseLeave={this.buttonMouseLeave}
+        />
+        <Button
           divId="reset-button"
           text="Reset View"
           mouseDown={this.resetZoomAndPan}
