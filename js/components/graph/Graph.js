@@ -42,7 +42,6 @@ export default class Graph extends React.Component {
       panning: false,
       panStartX: 0,
       panStartY:0,
-      mouseTimeoutID:false,
       viewBoxPos: {x:0, y:0},
       viewBoxDim: {width:window.innerWidth, height:window.innerHeight},
       viewBoxContainerRatio:1,
@@ -349,7 +348,6 @@ export default class Graph extends React.Component {
   };
 
   mouseDown = event => {
-    // maybe need to add listener stuff for mouseUp?
     document.body.style.cursor = "grab";
     const {adjustedX, adjustedY} = this.adjustCoordsToViewbox(event.clientX, event.clientY);
     this.setState({
@@ -442,7 +440,6 @@ export default class Graph extends React.Component {
    * @param {boolean} zoomIn - True if viewbox should be zoomed into
    */
   zoomViewbox = (zoomIn) => {
-    clearTimeout(this.state.mouseTimeoutID);
 
     let containerWidth = 0;
     let containerHeight = 0;
@@ -455,21 +452,15 @@ export default class Graph extends React.Component {
 
     var newZoomFactor = this.state.zoomFactor;
     if (zoomIn){
-      document.body.style.cursor = "zoom-in";
       newZoomFactor -= this.zoomIncrement;
     } else {
-      document.body.style.cursor = "zoom-out";
       newZoomFactor += this.zoomIncrement;
     }
     const newViewboxWidth = Math.max(this.state.width, containerWidth) * newZoomFactor;
     const newViewboxHeight = Math.max(this.state.height, containerHeight) * newZoomFactor;
     const ratio = containerWidth!=0 ? newViewboxWidth / containerWidth: 1;
 
-    var timeoutID = setTimeout(() => {
-      document.body.style.cursor = "auto";
-    }, 250);
     this.setState({
-      mouseTimeoutID: timeoutID,
       viewBoxDim: {width:newViewboxWidth, height:newViewboxHeight},
       viewBoxContainerRatio: ratio,
       zoomFactor: newZoomFactor
