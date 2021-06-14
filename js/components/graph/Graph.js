@@ -9,7 +9,6 @@ import InfoBox from "./InfoBox";
 import NodeGroup from "./NodeGroup";
 import RegionGroup from "./RegionGroup";
 import * as focusInfo from "./sidebar/focus_descriptions";
-import { svg } from "leaflet";
 
 export default class Graph extends React.Component {
   constructor(props) {
@@ -27,6 +26,8 @@ export default class Graph extends React.Component {
       width: window.innerWidth,
       height: window.innerHeight,
       zoomFactor: 1,
+      horizontalPanFactor: 0,
+      verticalPanFactor: 0,
       buttonHover: false,
       onDraw: this.props.edit,
       drawMode: this.props.initialDrawMode,
@@ -42,9 +43,8 @@ export default class Graph extends React.Component {
       panning: false,
       panStartX: 0,
       panStartY:0,
-      viewBoxPos: {x:0, y:0},
-      viewBoxDim: {width:window.innerWidth, height:window.innerHeight},
       viewBoxContainerRatio:1,
+      viewBoxDim: {width: window.innerWidth, height: window.innerHeight},
       showCourseModal: false
     };
 
@@ -180,7 +180,6 @@ export default class Graph extends React.Component {
           width: data.width,
           height: data.height,
           zoomFactor: 1,
-          viewBoxPos: {x:0, y:0},
           graphName: graphName,
           connections: {
             'parents': parentsObj,
@@ -343,44 +342,54 @@ export default class Graph extends React.Component {
     }
   };
 
-  adjustCoordsToViewbox = (clientX, clientY) =>{
-    return {adjustedX: clientX + this.state.viewBoxPos.x, adjustedY: clientY + this.state.viewBoxPos.y};
-  };
-
-  mouseDown = event => {
-    document.body.style.cursor = "grab";
-    const {adjustedX, adjustedY} = this.adjustCoordsToViewbox(event.clientX, event.clientY);
+  /**
+   * Initializes the panning process by recording the position of the mouse pointer.
+   * @param {Event} event
+   */
+  startPanning = event => {
+    console.log("starting panning");
+    console.log(`pan start X before it's set in start Panning ${this.state.panStartX}`);
     this.setState({
+      mouseDown: true,
       panning: true,
-      panStartX: adjustedX,
-      panStartY: adjustedY
+      panStartX: event.clientX + this.state.horizontalPanFactor,
+      panStartY: event.clientY + this.state.verticalPanFactor
     });
+  }
 
-  };
+  /**
+   * Pans the graph by moving it in the direction that the mouse moved.
+   * @param {Event} event
+   */
+  panGraph = event => {
+    if (this.state.panning) {
+      console.log("panGraph and panning is true")
+      var currentX = event.clientX;
+      var currentY = event.clientY;
 
-  mouseMove = event => {
-      if (this.state.panning){
+      var deltaX = currentX - this.state.panStartX;
+      var deltaY = currentY - this.state.panStartY;
+      console.log(`currentX: ${currentX}, panstartX: ${this.state.panStartX}`);
 
-        var currentX = event.clientX;
-        var currentY = event.clientY;
+      this.setState({
+        horizontalPanFactor: -deltaX,
+        verticalPanFactor: -deltaY
+      });
+    }
+  }
 
-        var deltaX = currentX - this.state.panStartX;
-        var deltaY = currentY - this.state.panStartY;
-        this.setState({
-          viewBoxPos: {x: -deltaX * this.state.viewBoxContainerRatio, y: -deltaY * this.state.viewBoxContainerRatio},
-        });
-
-      }
-  };
-
-  mouseUp = () =>{
-    document.body.style.cursor = "auto"
+  /**
+   * Stops the panning process by resetting states
+   */
+  stopPanning = () => {
+    console.log("stopping panning")
     this.setState({
-      panning:false,
-      panStartX:0,
-      panStartY:0
-    })
-  };
+      mouseDown: false,
+      panning: false,
+      panStartX: 0,
+      panStartY: 0
+    });
+  }
 
   infoBoxMouseEnter = () => {
     this.clearAllTimeouts();
@@ -478,7 +487,8 @@ export default class Graph extends React.Component {
   resetZoomAndPan = () => {
     this.setState({
       zoomFactor: 1,
-      viewBoxPos: {x:0, y:0},
+      verticalPanFactor: 0,
+      horizontalPanFactor: 0
     });
   };
 
@@ -498,8 +508,8 @@ export default class Graph extends React.Component {
   getRelativeCoords = event => {
     var x = event.nativeEvent.offsetX;
     var y = event.nativeEvent.offsetY;
-    x = x * this.state.zoomFactor + this.state.viewBoxPos.x;
-    y = y * this.state.zoomFactor + this.state.viewBoxPos.y;
+    x = x * this.state.zoomFactor + this.state.horizontalPanFactor;
+    y = y * this.state.zoomFactor + this.state.verticalPanFactor;
     return { x: x, y: y };
   };
 
@@ -582,13 +592,21 @@ export default class Graph extends React.Component {
    */
   onKeyDown = event =>{
     if (event.key === "ArrowRight"){
-      this.setState({viewBoxPos: {x: this.state.viewBoxPos.x + this.keyboardPanningIncrement, y: this.state.viewBoxPos.y}});
+      this.setState({
+        horizontalPanFactor: this.state.horizontalPanFactor + this.keyboardPanningIncrement
+      });
     } else if (event.key === "ArrowDown"){
-      this.setState({viewBoxPos: {x: this.state.viewBoxPos.x, y: this.state.viewBoxPos.y + this.keyboardPanningIncrement}});
+      this.setState({
+        verticalPanFactor: this.state.verticalPanFactor + this.keyboardPanningIncrement
+      });
     } else if (event.key === "ArrowLeft"){
-      this.setState({viewBoxPos: {x: this.state.viewBoxPos.x - this.keyboardPanningIncrement, y: this.state.viewBoxPos.y}});
+      this.setState({
+        horizontalPanFactor: this.state.horizontalPanFactor - this.keyboardPanningIncrement
+      });
     } else if (event.key === "ArrowUp"){
-      this.setState({viewBoxPos: {x: this.state.viewBoxPos.x, y: this.state.viewBoxPos.y - this.keyboardPanningIncrement}});
+      this.setState({
+        verticalPanFactor: this.state.verticalPanFactor - this.keyboardPanningIncrement
+      });
     } else if (event.key === "+"){
       this.zoomViewbox(true);
     } else if (event.key === "-"){
@@ -599,11 +617,15 @@ export default class Graph extends React.Component {
   };
 
   render() {
+    // TODO: add back in ratio multiplication
+    const viewboxX = (this.state.width - this.state.viewBoxDim.width) / 2 + this.state.horizontalPanFactor * this.state.viewBoxContainerRatio;
+    const viewboxY = (this.state.height - this.state.viewBoxDim.height) / 2 + this.state.verticalPanFactor * this.state.viewBoxContainerRatio;
+
     // not all of these properties are supported in React
     var svgAttrs = {
       width: "100%",
       height: "100%",
-      viewBox: `${this.state.viewBoxPos.x} ${this.state.viewBoxPos.y} ${this.state.viewBoxDim.width} ${this.state.viewBoxDim.height}`,
+      viewBox: `${viewboxX} ${viewboxY} ${this.state.viewBoxDim.width} ${this.state.viewBoxDim.height}`,
       preserveAspectRatio: "xMinYMin",
       "xmlns:svg": "http://www.w3.org/2000/svg",
       "xmlns:dc": "http://purl.org/dc/elements/1.1/",
@@ -618,24 +640,32 @@ export default class Graph extends React.Component {
       this.state.viewBoxY === 0;
 
     // Mouse events for draw tool
-    var mouseEvents = {};
+    var svgMouseEvents = {};
     if (this.state.onDraw) {
-      mouseEvents = {
+      svgMouseEvents = {
         onMouseDown: this.drawGraphObject,
         onMouseUp: this.drawMouseUp,
         onMouseMove: this.drawMouseMove
       };
+    } else {
+      svgMouseEvents = {
+        onMouseDown: this.startPanning
+      };
     }
-    else {
-      mouseEvents = {
-        onMouseDown: this.mouseDown,
-        onMouseUp: this.mouseUp,
-        onMouseMove: this.mouseMove
-      }
+
+    var reactGraphMouseEvents = {
+      onMouseMove: this.panGraph,
+      onMouseUp: this.stopPanning
     }
 
     return (
-      <div id="react-graph" className="react-graph" onClick={this.props.closeSidebar}>
+      <div id="react-graph"
+        className={
+          this.state.panning ? "react-graph panning" : "react-graph"
+        }
+        onClick={this.props.closeSidebar}
+        {...reactGraphMouseEvents}
+      >
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
@@ -669,7 +699,7 @@ export default class Graph extends React.Component {
           className={
             this.state.highlightedNodes.length > 0 ? "highlight-nodes" : ""
           }
-          {...mouseEvents}
+          {...svgMouseEvents}
         >
           {this.renderArrowHead()}
           <RegionGroup

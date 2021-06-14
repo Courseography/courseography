@@ -500,6 +500,11 @@ a:active
   shape-rendering   : geometricPrecision;
 }
 
+.panning
+{
+  cursor : grab;
+}
+
 .highlight-nodes
 {
   background-color : #808080;
@@ -557,7 +562,7 @@ a:active
 #reset-button
 {
   width : 52px;
-  top   : 31px;
+  top   : 30px;
   right : 30px;
   height: auto;
 }
