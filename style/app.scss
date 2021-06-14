@@ -2349,11 +2349,10 @@ div[id*='_inq']  .code:after
 
 #generateRoot
 {
-  height   : 100%;
-  position : relative;
+  height : 100%;
 }
 
-#react-graph
+#generateRoot #react-graph
 {
   position : static;
 }
