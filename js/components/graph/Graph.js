@@ -177,6 +177,8 @@ export default class Graph extends React.Component {
           width: data.width,
           height: data.height,
           zoomFactor: 1,
+          horizontalPanFactor: 0,
+          verticalPanFactor: 0,
           graphName: graphName,
           connections: {
             'parents': parentsObj,
@@ -467,9 +469,8 @@ export default class Graph extends React.Component {
   resetZoomAndPan = () => {
     this.setState({
       zoomFactor: 1,
-      horizontalPanFactor: 0,
       verticalPanFactor: 0,
-      mouseDown: true
+      horizontalPanFactor: 0
     });
   };
 
