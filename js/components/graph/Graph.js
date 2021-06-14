@@ -458,7 +458,7 @@ export default class Graph extends React.Component {
     let containerWidth = 0;
     let containerHeight = 0;
 
-    if (document.getElementById("react-graph") !== null && document.getElementById("generateRoot")){
+    if (document.getElementById("react-graph") !== null){
       var reactGraph = document.getElementById("react-graph");
       containerWidth = reactGraph.clientWidth;
       containerHeight = reactGraph.clientHeight;
@@ -472,8 +472,15 @@ export default class Graph extends React.Component {
     } else if (zoomMode === this.zoomEnum.RESET_ZOOM){
       newZoomFactor = 1
     }
-    const newViewboxWidth = Math.max(this.state.width, containerWidth) * newZoomFactor;
-    const newViewboxHeight = Math.max(this.state.height, containerHeight) * newZoomFactor;
+    let newViewboxWidth = this.state.width;
+    let newViewboxHeight = this.state.height;
+    if (document.getElementById("generateRoot")){
+      newViewboxWidth = Math.max(this.state.width, containerWidth) * newZoomFactor;
+      newViewboxHeight = Math.max(this.state.height, containerHeight) * newZoomFactor;
+    } else {
+      newViewboxWidth = this.state.width * newZoomFactor;
+      newViewboxHeight = this.state.height * newZoomFactor;
+    }
     const ratio = containerWidth!=0 ? newViewboxWidth / containerWidth: 1;
 
     this.setState({
