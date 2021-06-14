@@ -180,6 +180,7 @@ export default class Graph extends React.Component {
           width: data.width,
           height: data.height,
           zoomFactor: 1,
+          viewBoxDim: {width: data.width, height: data.height},
           graphName: graphName,
           connections: {
             'parents': parentsObj,
