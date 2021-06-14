@@ -54,6 +54,11 @@ export default class Graph extends React.Component {
     this.exportModal = React.createRef();
     this.zoomIncrement = 0.010;
     this.keyboardPanningIncrement = 10;
+    this.zoomEnum = {
+      "ZOOM_OUT": -1,
+      "RESET_ZOOM": 0,
+      "ZOOM_IN": 1
+    };
   }
 
   componentDidMount() {
@@ -447,24 +452,25 @@ export default class Graph extends React.Component {
 
   /** Zoom into the graph by calculating new viewbox dimensions
    *
-   * @param {boolean} zoomIn - True if viewbox should be zoomed into
+   * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
    */
-  zoomViewbox = (zoomIn) => {
-
+  zoomViewbox = (zoomMode) => {
     let containerWidth = 0;
     let containerHeight = 0;
 
-    if (document.getElementById("react-graph") !== null){
+    if (document.getElementById("react-graph") !== null && document.getElementById("generateRoot")){
       var reactGraph = document.getElementById("react-graph");
       containerWidth = reactGraph.clientWidth;
       containerHeight = reactGraph.clientHeight;
     }
 
     var newZoomFactor = this.state.zoomFactor;
-    if (zoomIn){
+    if (zoomMode === this.zoomEnum.ZOOM_IN){
       newZoomFactor -= this.zoomIncrement;
-    } else {
+    } else if (zoomMode === this.zoomEnum.ZOOM_OUT) {
       newZoomFactor += this.zoomIncrement;
+    } else if (zoomMode === this.zoomEnum.RESET_ZOOM){
+      newZoomFactor = 1
     }
     const newViewboxWidth = Math.max(this.state.width, containerWidth) * newZoomFactor;
     const newViewboxHeight = Math.max(this.state.height, containerHeight) * newZoomFactor;
@@ -486,8 +492,8 @@ export default class Graph extends React.Component {
   };
 
   resetZoomAndPan = () => {
+    this.zoomViewbox(this.zoomEnum.RESET_ZOOM);
     this.setState({
-      zoomFactor: 1,
       verticalPanFactor: 0,
       horizontalPanFactor: 0
     });
@@ -495,7 +501,11 @@ export default class Graph extends React.Component {
 
   onWheel = event => {
     let zoomIn = event.deltaY < 0;
-    this.zoomViewbox(zoomIn);
+    if (zoomIn){
+      this.zoomViewbox(this.zoomEnum.ZOOM_IN);
+    } else {
+      this.zoomViewbox(this.zoomEnum.ZOOM_OUT);
+    }
   };
 
   buttonMouseEnter = () => {
@@ -609,9 +619,9 @@ export default class Graph extends React.Component {
         verticalPanFactor: this.state.verticalPanFactor - this.keyboardPanningIncrement
       });
     } else if (event.key === "+"){
-      this.zoomViewbox(true);
+      this.zoomViewbox(this.zoomEnum.ZOOM_IN);
     } else if (event.key === "-"){
-      this.zoomViewbox(false);
+      this.zoomViewbox(this.zoomEnum.ZOOM_OUT);
     } else if (this.state.onDraw && event.key === "n"){
         this.setState({drawMode: "draw-node"});
     }
@@ -672,14 +682,14 @@ export default class Graph extends React.Component {
         <Button
           divId="zoom-in-button"
           text="+"
-          mouseDown={() => this.zoomViewbox(true)}
+          mouseDown={() => this.zoomViewbox(this.zoomEnum.ZOOM_IN)}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
         />
         <Button
           divId="zoom-out-button"
           text="&mdash;"
-          mouseDown={() => this.zoomViewbox(false)}
+          mouseDown={() => this.zoomViewbox(this.zoomEnum.ZOOM_OUT)}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
         />
