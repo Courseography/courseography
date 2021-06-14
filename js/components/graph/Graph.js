@@ -44,7 +44,6 @@ export default class Graph extends React.Component {
       panning: false,
       panStartX: 0,
       panStartY: 0,
-      viewBoxContainerRatio: 1,
       showCourseModal: false
     };
 
