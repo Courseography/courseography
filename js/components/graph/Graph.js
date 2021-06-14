@@ -45,7 +45,7 @@ export default class Graph extends React.Component {
       mouseTimeoutID:false,
       viewBoxPos: {x:0, y:0},
       viewBoxDim: {width:window.innerWidth, height:window.innerHeight},
-      viewboxContainerRatio:1,
+      viewboxContainerRatio: 1,
       showCourseModal: false
     };
 
@@ -574,8 +574,8 @@ export default class Graph extends React.Component {
   render() {
     // not all of these properties are supported in React
     var svgAttrs = {
-      width: "100%",
-      height: "100%",
+      width: "115%",
+      height: "115%",
       viewBox: `${this.state.viewBoxPos.x} ${this.state.viewBoxPos.y} ${this.state.viewBoxDim.width} ${this.state.viewBoxDim.height}`,
       preserveAspectRatio: "xMinYMin",
       "xmlns:svg": "http://www.w3.org/2000/svg",
@@ -613,7 +613,6 @@ export default class Graph extends React.Component {
         <Button
           divId="zoom-in-button"
           text="+"
-          mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
           mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
@@ -621,7 +620,6 @@ export default class Graph extends React.Component {
         <Button
           divId="zoom-out-button"
           text="&mdash;"
-          mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
           mouseUp={this.onButtonRelease}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
