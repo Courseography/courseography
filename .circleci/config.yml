@@ -10,7 +10,7 @@ jobs:
       - restore_cache:
           name: Restore Cached Dependencies (Haskell)
           keys:
-            - v1.3-courseography-haskell-{{ checksum "courseography.cabal" }}
+            - v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}
 
       - run:
           name: Install Package Dependencies
@@ -29,21 +29,22 @@ jobs:
           command: |
             stack --no-terminal setup
             rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
+            cp app/DevelopmentConfig.hs app/Config.hs
             stack --no-terminal build --fast -j1 --ghc-options -Werror
             yarn install
-
-      - save_cache:
-          name: Cache Dependencies (Haskell)
-          key: v1.3-courseography-haskell-{{ checksum "courseography.cabal" }}
-          paths:
-            - "/root/.stack"
-            - ".stack-work"
 
       - run:
           name: Run tests
           command: |
             stack --no-terminal test
             yarn test
+
+      - save_cache:
+          name: Cache Dependencies (Haskell)
+          key: v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}
+          paths:
+            - "/root/.stack"
+            - ".stack-work"
 
       - run:
           name: Lint JS
@@ -53,7 +54,7 @@ jobs:
       - run:
           name: Generate documentation
           command: |
-            stack --no-terminal exec courseography docs
+            stack exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --ignore-all-exports app/Main.hs
 
       - store_artifacts:
           path: doc
