@@ -74,6 +74,10 @@ class GenerateForm extends React.Component {
         var hybridsList = [];
         var boolsList = [];
         var edgesList = [];
+        var parentsObj = {};
+        var inEdgesObj = {};
+        var childrenObj = {};
+        var outEdgesObj = {};
 
         var labelsList = data.texts.filter(function(entry) {
             // filter for mark percentages, allow preceding characters for potential geq
@@ -97,6 +101,32 @@ class GenerateForm extends React.Component {
             edgesList.push(entry);
           }
         });
+
+        nodesList.forEach(node => {
+          parentsObj[node.id_] = [];
+          inEdgesObj[node.id_] = [];
+          childrenObj[node.id_] = [];
+          outEdgesObj[node.id_] = [];
+        });
+
+        hybridsList.forEach(hybrid => {
+          childrenObj[hybrid.id_] = [];
+          outEdgesObj[hybrid.id_] = [];
+          populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj);
+        })
+
+        edgesList.forEach(edge => {
+          if (edge.target in parentsObj) {
+            parentsObj[edge.target].push(edge.source);
+            inEdgesObj[edge.target].push(edge.id_);
+          }
+
+          if (edge.source in childrenObj) {
+            childrenObj[edge.source].push(edge.target);
+            outEdgesObj[edge.source].push(edge.id_);
+          }
+        });
+
         this.graph.current.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -109,6 +139,12 @@ class GenerateForm extends React.Component {
           zoomFactor: 1,
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
+          connections: {
+            'parents': parentsObj,
+            'inEdges': inEdgesObj,
+            'children': childrenObj,
+            'outEdges': outEdgesObj
+          }
         });
       })
       .catch((err) => {
