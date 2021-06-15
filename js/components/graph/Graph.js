@@ -10,6 +10,9 @@ import NodeGroup from "./NodeGroup";
 import RegionGroup from "./RegionGroup";
 import * as focusInfo from "./sidebar/focus_descriptions";
 
+const ZOOM_INCREMENT = 0.010;
+const KEYBOARD_PANNING_INCREMENT = 10;
+
 export default class Graph extends React.Component {
   constructor(props) {
     super(props);
@@ -52,8 +55,6 @@ export default class Graph extends React.Component {
     this.bools = React.createRef();
     this.edges = React.createRef();
     this.exportModal = React.createRef();
-    this.zoomIncrement = 0.010;
-    this.keyboardPanningIncrement = 10;
     this.zoomEnum = {
       "ZOOM_OUT": -1,
       "RESET_ZOOM": 0,
@@ -461,9 +462,9 @@ export default class Graph extends React.Component {
 
     var newZoomFactor = this.state.zoomFactor;
     if (zoomMode === this.zoomEnum.ZOOM_IN){
-      newZoomFactor -= this.zoomIncrement;
+      newZoomFactor -= ZOOM_INCREMENT;
     } else if (zoomMode === this.zoomEnum.ZOOM_OUT) {
-      newZoomFactor += this.zoomIncrement;
+      newZoomFactor += ZOOM_INCREMENT;
     } else if (zoomMode === this.zoomEnum.RESET_ZOOM){
       newZoomFactor = 1
     }
@@ -606,19 +607,19 @@ export default class Graph extends React.Component {
   onKeyDown = event =>{
     if (event.key === "ArrowRight"){
       this.setState({
-        horizontalPanFactor: this.state.horizontalPanFactor + this.keyboardPanningIncrement
+        horizontalPanFactor: this.state.horizontalPanFactor + KEYBOARD_PANNING_INCREMENT
       });
     } else if (event.key === "ArrowDown"){
       this.setState({
-        verticalPanFactor: this.state.verticalPanFactor + this.keyboardPanningIncrement
+        verticalPanFactor: this.state.verticalPanFactor + KEYBOARD_PANNING_INCREMENT
       });
     } else if (event.key === "ArrowLeft"){
       this.setState({
-        horizontalPanFactor: this.state.horizontalPanFactor - this.keyboardPanningIncrement
+        horizontalPanFactor: this.state.horizontalPanFactor - KEYBOARD_PANNING_INCREMENT
       });
     } else if (event.key === "ArrowUp"){
       this.setState({
-        verticalPanFactor: this.state.verticalPanFactor - this.keyboardPanningIncrement
+        verticalPanFactor: this.state.verticalPanFactor - KEYBOARD_PANNING_INCREMENT
       });
     } else if (event.key === "+"){
       this.zoomViewbox(this.zoomEnum.ZOOM_IN);
@@ -758,6 +759,8 @@ export default class Graph extends React.Component {
     );
   }
 }
+
+export {ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT}
 
 Graph.propTypes = {
   closeSidebar: PropTypes.func,
