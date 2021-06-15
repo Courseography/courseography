@@ -353,8 +353,6 @@ export default class Graph extends React.Component {
    * @param {Event} event
    */
   startPanning = event => {
-    console.log("starting panning");
-    console.log(`pan start X before it's set in start Panning ${this.state.panStartX}`);
     this.setState({
       mouseDown: true,
       panning: true,
@@ -369,13 +367,11 @@ export default class Graph extends React.Component {
    */
   panGraph = event => {
     if (this.state.panning) {
-      console.log("panGraph and panning is true")
       var currentX = event.clientX;
       var currentY = event.clientY;
 
       var deltaX = currentX - this.state.panStartX;
       var deltaY = currentY - this.state.panStartY;
-      console.log(`currentX: ${currentX}, panstartX: ${this.state.panStartX}`);
 
       this.setState({
         horizontalPanFactor: -deltaX,
@@ -388,7 +384,6 @@ export default class Graph extends React.Component {
    * Stops the panning process by resetting states
    */
   stopPanning = () => {
-    console.log("stopping panning")
     this.setState({
       mouseDown: false,
       panning: false,
