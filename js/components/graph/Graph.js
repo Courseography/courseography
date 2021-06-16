@@ -12,6 +12,11 @@ import * as focusInfo from "./sidebar/focus_descriptions";
 
 const ZOOM_INCREMENT = 0.010;
 const KEYBOARD_PANNING_INCREMENT = 10;
+const ZOOM_ENUM = {
+  "ZOOM_OUT": -1,
+  "RESET_ZOOM": 0,
+  "ZOOM_IN": 1
+};
 
 export default class Graph extends React.Component {
   constructor(props) {
@@ -46,7 +51,6 @@ export default class Graph extends React.Component {
       panning: false,
       panStartX: 0,
       panStartY:0,
-      viewBoxContainerRatio:1,
       viewBoxDim: {width: window.innerWidth, height: window.innerHeight},
       showCourseModal: false
     };
@@ -55,11 +59,6 @@ export default class Graph extends React.Component {
     this.bools = React.createRef();
     this.edges = React.createRef();
     this.exportModal = React.createRef();
-    this.zoomEnum = {
-      "ZOOM_OUT": -1,
-      "RESET_ZOOM": 0,
-      "ZOOM_IN": 1
-    };
   }
 
   componentDidMount() {
@@ -363,7 +362,7 @@ export default class Graph extends React.Component {
    * @param {Event} event
    */
   startPanning = event => {
-    if (event.type === "mouseDown") {
+    if (event.type === "mousedown") {
       this.setState({
         mouseDown: true,
         panning: true,
@@ -480,11 +479,11 @@ export default class Graph extends React.Component {
     }
 
     var newZoomFactor = this.state.zoomFactor;
-    if (zoomMode === this.zoomEnum.ZOOM_IN) {
+    if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
       newZoomFactor -= ZOOM_INCREMENT;
-    } else if (zoomMode === this.zoomEnum.ZOOM_OUT) {
+    } else if (zoomMode === ZOOM_ENUM.ZOOM_OUT) {
       newZoomFactor += ZOOM_INCREMENT;
-    } else if (zoomMode === this.zoomEnum.RESET_ZOOM) {
+    } else if (zoomMode === ZOOM_ENUM.RESET_ZOOM) {
       newZoomFactor = 1
     }
     let newViewboxWidth = this.state.width;
@@ -496,11 +495,9 @@ export default class Graph extends React.Component {
       newViewboxWidth = this.state.width * newZoomFactor;
       newViewboxHeight = this.state.height * newZoomFactor;
     }
-    const ratio = containerWidth!=0 ? newViewboxWidth / containerWidth: 1;
 
     this.setState({
       viewBoxDim: {width:newViewboxWidth, height:newViewboxHeight},
-      viewBoxContainerRatio: ratio,
       zoomFactor: newZoomFactor
     })
   }
@@ -514,7 +511,7 @@ export default class Graph extends React.Component {
   };
 
   resetZoomAndPan = () => {
-    this.zoomViewbox(this.zoomEnum.RESET_ZOOM);
+    this.zoomViewbox(ZOOM_ENUM.RESET_ZOOM);
     this.setState({
       verticalPanFactor: 0,
       horizontalPanFactor: 0
@@ -524,9 +521,9 @@ export default class Graph extends React.Component {
   onWheel = event => {
     let zoomIn = event.deltaY < 0;
     if (zoomIn) {
-      this.zoomViewbox(this.zoomEnum.ZOOM_IN);
+      this.zoomViewbox(ZOOM_ENUM.ZOOM_IN);
     } else {
-      this.zoomViewbox(this.zoomEnum.ZOOM_OUT);
+      this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT);
     }
   };
 
@@ -626,7 +623,7 @@ export default class Graph extends React.Component {
    *
    * @param {KeyboardEvent} event
    */
-  onKeyDown = event =>{
+  onKeyDown = event => {
     if (event.key === "ArrowRight") {
       this.setState({
         horizontalPanFactor: this.state.horizontalPanFactor + KEYBOARD_PANNING_INCREMENT
@@ -644,17 +641,23 @@ export default class Graph extends React.Component {
         verticalPanFactor: this.state.verticalPanFactor - KEYBOARD_PANNING_INCREMENT
       });
     } else if (event.key === "+") {
-      this.zoomViewbox(this.zoomEnum.ZOOM_IN);
+      this.zoomViewbox(ZOOM_ENUM.ZOOM_IN);
     } else if (event.key === "-") {
-      this.zoomViewbox(this.zoomEnum.ZOOM_OUT);
+      this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT);
     } else if (this.state.onDraw && event.key === "n") {
         this.setState({drawMode: "draw-node"});
     }
   };
 
   render() {
-    const viewboxX = (this.state.width - this.state.viewBoxDim.width) / 2 + this.state.horizontalPanFactor * this.state.viewBoxContainerRatio;
-    const viewboxY = (this.state.height - this.state.viewBoxDim.height) / 2 + this.state.verticalPanFactor * this.state.viewBoxContainerRatio;
+    let containerWidth = 0;
+    if (document.getElementById("react-graph") !== null && this.state.viewBoxDim.width !== this.state.width) {
+      containerWidth = document.getElementById("react-graph").clientWidth;
+    }
+
+    const viewBoxContainerRatio = containerWidth !==0 ? this.state.viewBoxDim.width / containerWidth: 1;
+    const viewboxX = (this.state.width - this.state.viewBoxDim.width) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
+    const viewboxY = (this.state.height - this.state.viewBoxDim.height) / 2 + this.state.verticalPanFactor * viewBoxContainerRatio;
 
     // not all of these properties are supported in React
     var svgAttrs = {
@@ -709,14 +712,14 @@ export default class Graph extends React.Component {
         <Button
           divId="zoom-in-button"
           text="+"
-          mouseDown={() => this.zoomViewbox(this.zoomEnum.ZOOM_IN)}
+          mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
         />
         <Button
           divId="zoom-out-button"
           text="&mdash;"
-          mouseDown={() => this.zoomViewbox(this.zoomEnum.ZOOM_OUT)}
+          mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
         />
