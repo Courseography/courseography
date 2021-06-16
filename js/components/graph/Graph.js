@@ -97,6 +97,9 @@ export default class Graph extends React.Component {
     document
       .getElementById("react-graph")
       .removeEventListener("wheel", this.onWheel);
+
+    document.body.removeEventListener('touchstart', this.processTouch, false);
+    document.body.removeEventListener('touchmove', this.startPanning, false);
   }
 
   getGraph = () => {
@@ -365,6 +368,20 @@ export default class Graph extends React.Component {
       panning: true,
       panStartX: event.clientX + this.state.horizontalPanFactor,
       panStartY: event.clientY + this.state.verticalPanFactor
+    });
+  }
+
+  /**
+   * Initializes the panning process by recording the position of the touch event.
+   * Right now only support for one finger is implemented.
+   * @param {Event} event
+   */
+  startTouchPanning = event => {
+    this.setState({
+      mouseDown: true,
+      panning: true,
+      panStartX: event.touches[0].clientX + this.state.horizontalPanFactor,
+      panStartY: event.touches[0].clientY + this.state.verticalPanFactor
     });
   }
 
@@ -669,13 +686,16 @@ export default class Graph extends React.Component {
       };
     } else {
       svgMouseEvents = {
-        onMouseDown: this.startPanning
+        onMouseDown: this.startPanning,
+        onTouchStart: this.startTouchPanning
       };
     }
 
-    var reactGraphMouseEvents = {
+    var reactGraphPointerEvents = {
       onMouseMove: this.panGraph,
-      onMouseUp: this.stopPanning
+      onMouseUp: this.stopPanning,
+      onTouchMove: this.panGraph,
+      onTouchEnd: this.stopPanning
     }
 
     return (
@@ -684,7 +704,7 @@ export default class Graph extends React.Component {
           this.state.panning ? "react-graph panning" : "react-graph"
         }
         onClick={this.props.closeSidebar}
-        {...reactGraphMouseEvents}
+        {...reactGraphPointerEvents}
       >
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
