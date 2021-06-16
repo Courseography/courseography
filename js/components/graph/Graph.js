@@ -51,7 +51,6 @@ export default class Graph extends React.Component {
       panning: false,
       panStartX: 0,
       panStartY:0,
-      viewBoxDim: {width: window.innerWidth, height: window.innerHeight},
       showCourseModal: false
     };
 
@@ -193,7 +192,6 @@ export default class Graph extends React.Component {
           zoomFactor: 1,
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
-          viewBoxDim: {width: data.width, height: data.height},
           graphName: graphName,
           connections: {
             'parents': parentsObj,
@@ -469,15 +467,6 @@ export default class Graph extends React.Component {
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
    */
   zoomViewbox = (zoomMode) => {
-    let containerWidth = 0;
-    let containerHeight = 0;
-
-    if (document.getElementById("react-graph") !== null) {
-      var reactGraph = document.getElementById("react-graph");
-      containerWidth = reactGraph.clientWidth;
-      containerHeight = reactGraph.clientHeight;
-    }
-
     var newZoomFactor = this.state.zoomFactor;
     if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
       newZoomFactor -= ZOOM_INCREMENT;
@@ -486,18 +475,8 @@ export default class Graph extends React.Component {
     } else if (zoomMode === ZOOM_ENUM.RESET_ZOOM) {
       newZoomFactor = 1
     }
-    let newViewboxWidth = this.state.width;
-    let newViewboxHeight = this.state.height;
-    if (document.getElementById("generateRoot")) {
-      newViewboxWidth = Math.max(this.state.width, containerWidth) * newZoomFactor;
-      newViewboxHeight = Math.max(this.state.height, containerHeight) * newZoomFactor;
-    } else {
-      newViewboxWidth = this.state.width * newZoomFactor;
-      newViewboxHeight = this.state.height * newZoomFactor;
-    }
 
     this.setState({
-      viewBoxDim: {width:newViewboxWidth, height:newViewboxHeight},
       zoomFactor: newZoomFactor
     })
   }
@@ -511,10 +490,10 @@ export default class Graph extends React.Component {
   };
 
   resetZoomAndPan = () => {
-    this.zoomViewbox(ZOOM_ENUM.RESET_ZOOM);
     this.setState({
       verticalPanFactor: 0,
-      horizontalPanFactor: 0
+      horizontalPanFactor: 0,
+      zoomFactor: 1
     });
   };
 
@@ -651,19 +630,33 @@ export default class Graph extends React.Component {
 
   render() {
     let containerWidth = 0;
-    if (document.getElementById("react-graph") !== null && this.state.viewBoxDim.width !== this.state.width) {
-      containerWidth = document.getElementById("react-graph").clientWidth;
+    let containerHeight = 0;
+    console.log("new changes");
+
+    if (document.getElementById("react-graph") !== null) {
+      let reactGraph = document.getElementById('react-graph');
+      containerWidth = reactGraph.clientWidth;
+      containerHeight = reactGraph.clientHeight;
+    }
+    let newViewboxWidth = this.state.width;
+    let newViewboxHeight = this.state.height;
+    if (document.getElementById("generateRoot")) {
+      newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
+      newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
+    } else {
+      newViewboxWidth = this.state.width * this.state.zoomFactor;
+      newViewboxHeight = this.state.height * this.state.zoomFactor;
     }
 
-    const viewBoxContainerRatio = containerWidth !==0 ? this.state.viewBoxDim.width / containerWidth: 1;
-    const viewboxX = (this.state.width - this.state.viewBoxDim.width) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
-    const viewboxY = (this.state.height - this.state.viewBoxDim.height) / 2 + this.state.verticalPanFactor * viewBoxContainerRatio;
+    const viewBoxContainerRatio = containerWidth !==0 ? newViewboxWidth / containerWidth: 1;
+    const viewboxX = (this.state.width - newViewboxWidth) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
+    const viewboxY = (this.state.height - newViewboxHeight) / 2 + this.state.verticalPanFactor * viewBoxContainerRatio;
 
     // not all of these properties are supported in React
     var svgAttrs = {
       width: "100%",
       height: "100%",
-      viewBox: `${viewboxX} ${viewboxY} ${this.state.viewBoxDim.width} ${this.state.viewBoxDim.height}`,
+      viewBox: `${viewboxX} ${viewboxY} ${newViewboxWidth} ${newViewboxHeight}`,
       preserveAspectRatio: "xMinYMin",
       "xmlns:svg": "http://www.w3.org/2000/svg",
       "xmlns:dc": "http://purl.org/dc/elements/1.1/",
