@@ -97,9 +97,6 @@ export default class Graph extends React.Component {
     document
       .getElementById("react-graph")
       .removeEventListener("wheel", this.onWheel);
-
-    document.body.removeEventListener('touchstart', this.processTouch, false);
-    document.body.removeEventListener('touchmove', this.startPanning, false);
   }
 
   getGraph = () => {
@@ -195,6 +192,8 @@ export default class Graph extends React.Component {
           width: data.width,
           height: data.height,
           zoomFactor: 1,
+          horizontalPanFactor: 0,
+          verticalPanFactor: 0,
           viewBoxDim: {width: data.width, height: data.height},
           graphName: graphName,
           connections: {
@@ -298,7 +297,7 @@ export default class Graph extends React.Component {
   };
 
   /**
-   * Drawing mode not implemented, so this function may not work.
+   * Drawing mode is not implemented, so this function may not work.
    */
   nodeMouseDown = event => {
     if (
@@ -359,30 +358,27 @@ export default class Graph extends React.Component {
   };
 
   /**
-   * Initializes the panning process by recording the position of the mouse pointer.
-   * @param {Event} event
-   */
-  startPanning = event => {
-    this.setState({
-      mouseDown: true,
-      panning: true,
-      panStartX: event.clientX + this.state.horizontalPanFactor,
-      panStartY: event.clientY + this.state.verticalPanFactor
-    });
-  }
-
-  /**
-   * Initializes the panning process by recording the position of the touch event.
+   * Initializes the panning process by recording the position of the mouse pointer or touch event.
    * Right now only support for one finger is implemented.
    * @param {Event} event
    */
-  startTouchPanning = event => {
-    this.setState({
-      mouseDown: true,
-      panning: true,
-      panStartX: event.touches[0].clientX + this.state.horizontalPanFactor,
-      panStartY: event.touches[0].clientY + this.state.verticalPanFactor
-    });
+  startPanning = event => {
+    if (event.type === "mouseDown") {
+      this.setState({
+        mouseDown: true,
+        panning: true,
+        panStartX: event.clientX + this.state.horizontalPanFactor,
+        panStartY: event.clientY + this.state.verticalPanFactor
+      });
+    } else {
+      event.preventDefault();
+      this.setState({
+        mouseDown: true,
+        panning: true,
+        panStartX: event.touches[0].clientX + this.state.horizontalPanFactor,
+        panStartY: event.touches[0].clientY + this.state.verticalPanFactor
+      });
+    }
   }
 
   /**
@@ -477,23 +473,23 @@ export default class Graph extends React.Component {
     let containerWidth = 0;
     let containerHeight = 0;
 
-    if (document.getElementById("react-graph") !== null){
+    if (document.getElementById("react-graph") !== null) {
       var reactGraph = document.getElementById("react-graph");
       containerWidth = reactGraph.clientWidth;
       containerHeight = reactGraph.clientHeight;
     }
 
     var newZoomFactor = this.state.zoomFactor;
-    if (zoomMode === this.zoomEnum.ZOOM_IN){
+    if (zoomMode === this.zoomEnum.ZOOM_IN) {
       newZoomFactor -= ZOOM_INCREMENT;
     } else if (zoomMode === this.zoomEnum.ZOOM_OUT) {
       newZoomFactor += ZOOM_INCREMENT;
-    } else if (zoomMode === this.zoomEnum.RESET_ZOOM){
+    } else if (zoomMode === this.zoomEnum.RESET_ZOOM) {
       newZoomFactor = 1
     }
     let newViewboxWidth = this.state.width;
     let newViewboxHeight = this.state.height;
-    if (document.getElementById("generateRoot")){
+    if (document.getElementById("generateRoot")) {
       newViewboxWidth = Math.max(this.state.width, containerWidth) * newZoomFactor;
       newViewboxHeight = Math.max(this.state.height, containerHeight) * newZoomFactor;
     } else {
@@ -527,7 +523,7 @@ export default class Graph extends React.Component {
 
   onWheel = event => {
     let zoomIn = event.deltaY < 0;
-    if (zoomIn){
+    if (zoomIn) {
       this.zoomViewbox(this.zoomEnum.ZOOM_IN);
     } else {
       this.zoomViewbox(this.zoomEnum.ZOOM_OUT);
@@ -608,6 +604,9 @@ export default class Graph extends React.Component {
     * In draw-node creates a new node at the position of the click event on the SVG canvas.
     * In path-mode creates an elbow at the position of the click event on the SVG canvas,
       if the startNode is defined.
+
+      NOTE: Drawing mode is not fully implemented yet, so this method may not work as expected.
+
     * @param {object} e The mousedown event.
     */
   drawGraphObject = e => {
@@ -628,40 +627,39 @@ export default class Graph extends React.Component {
    * @param {KeyboardEvent} event
    */
   onKeyDown = event =>{
-    if (event.key === "ArrowRight"){
+    if (event.key === "ArrowRight") {
       this.setState({
         horizontalPanFactor: this.state.horizontalPanFactor + KEYBOARD_PANNING_INCREMENT
       });
-    } else if (event.key === "ArrowDown"){
+    } else if (event.key === "ArrowDown") {
       this.setState({
         verticalPanFactor: this.state.verticalPanFactor + KEYBOARD_PANNING_INCREMENT
       });
-    } else if (event.key === "ArrowLeft"){
+    } else if (event.key === "ArrowLeft") {
       this.setState({
         horizontalPanFactor: this.state.horizontalPanFactor - KEYBOARD_PANNING_INCREMENT
       });
-    } else if (event.key === "ArrowUp"){
+    } else if (event.key === "ArrowUp") {
       this.setState({
         verticalPanFactor: this.state.verticalPanFactor - KEYBOARD_PANNING_INCREMENT
       });
-    } else if (event.key === "+"){
+    } else if (event.key === "+") {
       this.zoomViewbox(this.zoomEnum.ZOOM_IN);
-    } else if (event.key === "-"){
+    } else if (event.key === "-") {
       this.zoomViewbox(this.zoomEnum.ZOOM_OUT);
-    } else if (this.state.onDraw && event.key === "n"){
+    } else if (this.state.onDraw && event.key === "n") {
         this.setState({drawMode: "draw-node"});
     }
   };
 
   render() {
-    // TODO: add back in ratio multiplication
     const viewboxX = (this.state.width - this.state.viewBoxDim.width) / 2 + this.state.horizontalPanFactor * this.state.viewBoxContainerRatio;
     const viewboxY = (this.state.height - this.state.viewBoxDim.height) / 2 + this.state.verticalPanFactor * this.state.viewBoxContainerRatio;
 
     // not all of these properties are supported in React
     var svgAttrs = {
-      width: "115%",
-      height: "115%",
+      width: "100%",
+      height: "100%",
       viewBox: `${viewboxX} ${viewboxY} ${this.state.viewBoxDim.width} ${this.state.viewBoxDim.height}`,
       preserveAspectRatio: "xMinYMin",
       "xmlns:svg": "http://www.w3.org/2000/svg",
@@ -687,7 +685,7 @@ export default class Graph extends React.Component {
     } else {
       svgMouseEvents = {
         onMouseDown: this.startPanning,
-        onTouchStart: this.startTouchPanning
+        onTouchStart: this.startPanning
       };
     }
 
@@ -793,7 +791,7 @@ export {ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT}
  * @param {string} s
  * @returns {Array}
  */
- function parseAnd(s) {
+function parseAnd(s) {
   "use strict";
 
   var curr = s;
@@ -896,7 +894,7 @@ function parseCourse(s, prefix) {
  * @param {Object} parents
  * @param {Object} childrenObj
  */
- function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj){
+function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj) {
 
   // parse prereqs based on text
   var hybridText = "";
