@@ -668,8 +668,8 @@ export default class Graph extends React.Component {
 
     var resetDisabled =
       this.state.zoomFactor === 1 &&
-      this.state.viewBoxX === 0 &&
-      this.state.viewBoxY === 0;
+      this.state.horizontalPanFactor === 0 &&
+      this.state.verticalPanFactor === 0;
 
     // Mouse events for draw tool
     var svgMouseEvents = {};
