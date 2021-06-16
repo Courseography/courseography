@@ -9,7 +9,7 @@ describe("Graph Navigation", () => {
 		let initialX = parseInt(svg.getAttribute("viewBox").split(' ')[0]);
 		fireEvent.keyDown(document.body, {key: 'ArrowRight', code: "ArrowRight"});
 		let newX = parseInt(svg.getAttribute("viewBox").split(' ')[0]);
-		let expected = initialX + KEYBOARD_PANNING_INCREMENT;
+		let expected = initialX - KEYBOARD_PANNING_INCREMENT;
     expect(newX).toBe(expected);
 	});
 
@@ -19,7 +19,7 @@ describe("Graph Navigation", () => {
 		let initialX = parseInt(svg.getAttribute("viewBox").split(' ')[0]);
 		fireEvent.keyDown(document.body, {key: 'ArrowLeft', code: "ArrowLeft"});
 		let newX = parseInt(svg.getAttribute("viewBox").split(' ')[0]);
-		let expected = initialX - KEYBOARD_PANNING_INCREMENT;
+		let expected = initialX + KEYBOARD_PANNING_INCREMENT;
     expect(newX).toBe(expected);
 	});
 
@@ -29,7 +29,7 @@ describe("Graph Navigation", () => {
 		let initialY = parseInt(svg.getAttribute("viewBox").split(' ')[1]);
 		fireEvent.keyDown(document.body, {key: 'ArrowDown', code: "ArrowDown"});
 		let newY = parseInt(svg.getAttribute("viewBox").split(' ')[1]);
-		let expected = initialY + KEYBOARD_PANNING_INCREMENT;
+		let expected = initialY - KEYBOARD_PANNING_INCREMENT;
     expect(newY).toBe(expected);
 	});
 
@@ -39,7 +39,7 @@ describe("Graph Navigation", () => {
 		let initialY = parseInt(svg.getAttribute("viewBox").split(' ')[1]);
 		fireEvent.keyDown(document.body, {key: 'ArrowUp', code: "ArrowUp"});
 		let newY = parseInt(svg.getAttribute("viewBox").split(' ')[1]);
-		let expected = initialY - KEYBOARD_PANNING_INCREMENT;
+		let expected = initialY + KEYBOARD_PANNING_INCREMENT;
     expect(newY).toBe(expected);
 	});
 
