@@ -365,7 +365,6 @@ export default class Graph extends React.Component {
   startPanning = event => {
     if (event.type === "mouseDown") {
       this.setState({
-        mouseDown: true,
         panning: true,
         panStartX: event.clientX + this.state.horizontalPanFactor,
         panStartY: event.clientY + this.state.verticalPanFactor
@@ -373,7 +372,6 @@ export default class Graph extends React.Component {
     } else {
       event.preventDefault();
       this.setState({
-        mouseDown: true,
         panning: true,
         panStartX: event.touches[0].clientX + this.state.horizontalPanFactor,
         panStartY: event.touches[0].clientY + this.state.verticalPanFactor
@@ -405,7 +403,6 @@ export default class Graph extends React.Component {
    */
   stopPanning = () => {
     this.setState({
-      mouseDown: false,
       panning: false,
       panStartX: 0,
       panStartY: 0
