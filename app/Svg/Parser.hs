@@ -30,6 +30,7 @@ import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
 import Text.Read (readMaybe)
 import Data.Char (isSpace)
+import Data.List as List
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
 import Data.List.Split (splitOn)
@@ -282,18 +283,34 @@ parseEllipse :: GraphId
              -> [Tag T.Text]
              -> [Shape]
 parseEllipse key tags =
-    map (parseEllipseHelper key trans) (filter (TS.isTagOpenName "ellipse") tags)
+    zipWith (parseEllipseHelper key trans) (map fst ellipseGroups) (map getId ellipseGroups)
     where
+        -- Group ellipses and optionally an enclosing g tags
+        ellipseGroups :: [(Tag T.Text, Maybe (Tag T.Text))]
+        ellipseGroups =
+            map (\(t:ts) -> (t, List.find (TS.isTagOpenName "g") ts)) $
+            TS.partitions (TS.isTagOpenName "ellipse") $
+            List.reverse tags
+
         trans = getTransform $ head tags
+
+        getId (t, Nothing) = fromAttrib "id" t
+        getId (t1, Just t2) =
+            if T.null $ fromAttrib "id" t1
+            then
+                fromAttrib "id" t2
+            else
+                fromAttrib "id" t1
 
 
 parseEllipseHelper :: GraphId     -- ^ The related graph id.
                    -> Point       -- ^ The translation to apply.
                    -> Tag T.Text  -- ^ The open ellipse tag.
+                   -> T.Text      -- ^ The id of the shape.
                    -> Shape
-parseEllipseHelper key (dx, dy) ellipseTag =
+parseEllipseHelper key (dx, dy) ellipseTag id_ =
     Shape key
-          (fromAttrib "id" ellipseTag)
+          id_
           (readAttr "cx" ellipseTag + dx,
            readAttr "cy" ellipseTag + dy)
           (readAttr "rx" ellipseTag * 2)
