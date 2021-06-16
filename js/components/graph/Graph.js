@@ -14,7 +14,6 @@ const ZOOM_INCREMENT = 0.010;
 const KEYBOARD_PANNING_INCREMENT = 10;
 const ZOOM_ENUM = {
   "ZOOM_OUT": -1,
-  "RESET_ZOOM": 0,
   "ZOOM_IN": 1
 };
 
@@ -631,7 +630,6 @@ export default class Graph extends React.Component {
   render() {
     let containerWidth = 0;
     let containerHeight = 0;
-    console.log("new changes");
 
     if (document.getElementById("react-graph") !== null) {
       let reactGraph = document.getElementById('react-graph');
