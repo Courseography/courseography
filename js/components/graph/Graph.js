@@ -643,7 +643,7 @@ export default class Graph extends React.Component {
       newViewboxHeight = this.state.height * this.state.zoomFactor;
     }
 
-    const viewBoxContainerRatio = containerWidth !==0 ? newViewboxWidth / containerWidth: 1;
+    const viewBoxContainerRatio = containerHeight !==0 ? newViewboxHeight / containerHeight: 1;
     const viewboxX = (this.state.width - newViewboxWidth) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
     const viewboxY = (this.state.height - newViewboxHeight) / 2 + this.state.verticalPanFactor * viewBoxContainerRatio;
 
