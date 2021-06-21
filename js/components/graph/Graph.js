@@ -293,7 +293,7 @@ export default class Graph extends React.Component {
   };
 
   /**
-   * Drawing mode is not implemented, so this function may not work.
+   * Drawing mode not implemented, so this function may not work.
    */
   nodeMouseDown = event => {
     if (
@@ -305,7 +305,7 @@ export default class Graph extends React.Component {
   };
 
   /**
-   * Drawing mode is not implemented, so this function may not work
+   * Drawing mode not implemented, so this function may not work.
    */
   drawMouseMove = event => {
     // in draw-node mode, drag a node as the mouse moves
@@ -575,7 +575,6 @@ export default class Graph extends React.Component {
       if the startNode is defined.
 
       NOTE: Drawing mode is not fully implemented yet, so this method may not work as expected.
-
     * @param {object} e The mousedown event.
     */
   drawGraphObject = e => {
@@ -589,7 +588,7 @@ export default class Graph extends React.Component {
 
   highlightFocuses = focuses => {
     this.setState({ highlightedNodes: focuses });
-  };
+  }
 
   /** Allows panning and entering draw mode via the keyboard.
    *
@@ -640,7 +639,7 @@ export default class Graph extends React.Component {
       newViewboxHeight = this.state.height * this.state.zoomFactor;
     }
 
-    const viewBoxContainerRatio = containerHeight !==0 ? newViewboxHeight / containerHeight: 1;
+    const viewBoxContainerRatio = containerHeight !== 0 ? newViewboxHeight / containerHeight : 1;
     const viewboxX = (this.state.width - newViewboxWidth) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
     const viewboxY = (this.state.height - newViewboxHeight) / 2 + this.state.verticalPanFactor * viewBoxContainerRatio;
 
@@ -851,6 +850,7 @@ function parseOr(s) {
   return [orList, curr];
 }
 
+
 /**
  * Helper function for parsing hybrid node's text
  * @param {string} s
@@ -882,7 +882,7 @@ function parseCourse(s, prefix) {
  * @param {Object} parents
  * @param {Object} childrenObj
  */
-function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj) {
+function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj){
 
   // parse prereqs based on text
   var hybridText = "";
@@ -940,7 +940,6 @@ var findRelationship = (course, nodesJSON) => {
   );
   return node;
 }
-
 
 Graph.propTypes = {
   closeSidebar: PropTypes.func,
