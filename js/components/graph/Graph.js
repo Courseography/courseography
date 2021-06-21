@@ -395,7 +395,7 @@ export default class Graph extends React.Component {
   }
 
   /**
-   * Stops the panning process by resetting states
+   * Stops the panning process.
    */
   stopPanning = () => {
     this.setState({
@@ -471,7 +471,7 @@ export default class Graph extends React.Component {
     }
     this.setState({
       zoomFactor: newZoomFactor
-    })
+    });
   }
 
   calculateRatioGraphSizeToContainerSize = () => {
@@ -484,9 +484,9 @@ export default class Graph extends React.Component {
 
   resetZoomAndPan = () => {
     this.setState({
+      zoomFactor: 1,
       verticalPanFactor: 0,
-      horizontalPanFactor: 0,
-      zoomFactor: 1
+      horizontalPanFactor: 0
     });
   };
 
@@ -625,7 +625,7 @@ export default class Graph extends React.Component {
     let containerHeight = 0;
 
     if (document.getElementById("react-graph") !== null) {
-      let reactGraph = document.getElementById('react-graph');
+      let reactGraph = document.getElementById("react-graph");
       containerWidth = reactGraph.clientWidth;
       containerHeight = reactGraph.clientHeight;
     }
@@ -654,7 +654,6 @@ export default class Graph extends React.Component {
       "xmlns:cc": "http://creativecommons.org/ns#",
       "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     };
-
 
     var resetDisabled =
       this.state.zoomFactor === 1 &&
@@ -850,7 +849,6 @@ function parseOr(s) {
   return [orList, curr];
 }
 
-
 /**
  * Helper function for parsing hybrid node's text
  * @param {string} s
@@ -874,6 +872,7 @@ function parseCourse(s, prefix) {
 
   return [s, ""];
 }
+
 
 /** Helper function that adds parents of hybridNode to the parents object, and adds hybrid nodes as children of the Nodes they represent
  *
