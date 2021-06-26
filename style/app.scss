@@ -146,12 +146,14 @@ body
 #nav-links
 {
   list-style  : none;
-  min-width   : 687px;
-  padding-top : 10px;
+  min-width   : fit-content;
+  padding     : 10 0 0 0;
   margin      : 0 0 0 0;
   display     : inline-block;
   height      : 50px;
   position    : absolute;
+  left        : 50%;
+  transform   : translate(-50%, 0);
 }
 
 #nav-links a
