@@ -133,7 +133,6 @@ body
   margin           : 0 0 0 0;
   padding          : 0px 0.5em 0px 0.5em;
   background-color : #5c497e;
-  border           : solid 1px #000000;
   color            : #ffffff;
   height           : 50px;
 }
@@ -158,6 +157,7 @@ body
 #nav-links a
 {
   font-weight : normal;
+  color       : #FFFFFF;
 }
 
 #nav-links > li
@@ -165,12 +165,6 @@ body
   text-align : center;
   display    : inline-block;
   padding    : 0px 10px 0px 10px;
-}
-
-#nav-links > li > a
-{
-  color       : #ffffff;
-  text-shadow : 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;;
 }
 
 #nav-links > li > a:hover
