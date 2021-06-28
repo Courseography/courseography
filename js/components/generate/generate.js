@@ -5,6 +5,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import Graph from "../graph/Graph";
+import Disclaimer from '../common/Disclaimer';
 
 class GenerateForm extends React.Component {
   constructor(props) {
@@ -156,6 +157,7 @@ class GenerateForm extends React.Component {
   render() {
     return (
       <div style={{'display': 'flex', 'flexDirection': 'row', 'height': '100%'}}>
+      <Disclaimer />
       <div id="generateDiv" style={{'position': 'initial', 'padding': '0 0.5em', 'height': '100%', 'fontSize': '12pt'}}>
         <h1 id="header-title">Search for courses</h1>
         <form id="generateForm">

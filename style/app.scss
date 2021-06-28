@@ -238,9 +238,28 @@ a:active
   padding   : 0px 1em 0px 1em;
   font-size : 11pt;
   position: absolute;
-  top: 50px;
   background-color: ffdd61;
   padding: 5 15 5 15;
+  z-index: 1;
+}
+
+#closeDisclaimer
+{
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-weight: bold;
+  font-size: 30px;
+  position: absolute;
+  left: 95%;
+  top: 20px;
+}
+
+.disclaimer-popup.dismiss
+{
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+  visibility: hidden;
+  opacity: 0;
 }
 
 .ui-dialog

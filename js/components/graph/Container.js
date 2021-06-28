@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Disclaimer from "../common/Disclaimer"
 import Graph from "./Graph";
 import Sidebar from "./Sidebar";
 
@@ -85,6 +86,7 @@ export default class Container extends React.Component {
   render() {
     return (
       <div>
+        <Disclaimer />
         <Graph
           ref={this.graph}
           closeSidebar={() => this.sidebar.current.toggleSidebar("graph")}
