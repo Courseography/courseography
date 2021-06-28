@@ -198,6 +198,5 @@ Sidebar.propTypes = {
   graphs: PropTypes.array,
   graphName: PropTypes.string,
   highlightFocus: PropTypes.func,
-  reset: PropTypes.func,
   updateGraph: PropTypes.func
 };

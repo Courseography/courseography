@@ -14,7 +14,7 @@ describe("Sidebar", () => {
     fireEvent.click(sidebar.getByTestId("test-sidebar-button"));
     expect(sidebar.getByTestId("test-sidebar").classList.contains("opened")).toBe(true);
   });
-  
+
   it("Focus buttons should be hidden when graphs are active", async() => {
     const sidebar = await TestSidebar.build();
     fireEvent.click(sidebar.getByTestId("test-sidebar-button"));
@@ -53,14 +53,6 @@ describe("Sidebar", () => {
     expect(container.getByText("FCE Count: 0.5")).toBeDefined();
   });
 
-  it("Clicking the reset button should reset the FCE Count to 0.0", async () => {
-    const container = await TestContainer.build();
-    expect(container.getByText("FCE Count: 0.0")).toBeDefined();
-    fireEvent.click(container.getByTestId("aaa100"));
-    expect(container.getByText("FCE Count: 0.5")).toBeDefined();
-    fireEvent.click(container.getByTestId("test-reset"));
-    expect(container.getByText("FCE Count: 0.0")).toBeDefined();
-  });
 
   it("Clicking on a graph button should change the graph", async () => {
     const container = await TestContainer.build();

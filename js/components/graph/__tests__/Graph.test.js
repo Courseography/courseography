@@ -1,5 +1,5 @@
 import TestGraph from './TestGraph';
-import { fireEvent } from "@testing-library/react";
+import { fireEvent} from '@testing-library/react';
 import {ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT} from '../Graph';
 
 describe("Graph Navigation", () => {

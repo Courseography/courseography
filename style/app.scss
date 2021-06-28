@@ -522,8 +522,8 @@ a:active
   color            : #5c497e;
   cursor           : pointer;
   display          : inline-block;
-  width            : 25px;
-  height           : 25px;
+  width            : 30px;
+  height           : 30px;
   padding          : 0;
   position         : absolute;
 }
@@ -555,16 +555,14 @@ a:active
 
 #zoom-out-button
 {
-  top   : 4px;
-  right : 57px;
+  top   : 34px;
+  right : 30px;
 }
 
 #reset-view-button
 {
-  width : 70px;
-  top   : 30px;
+  top   : 70px;
   right : 30px;
-  height: auto;
 }
 
 .opened
@@ -599,7 +597,7 @@ a:active
 #reset-selection-button
 {
   width : 70px;
-  top   : 75px;
+  top   : 110px;
   right : 30px;
   height: auto;
 }

@@ -706,18 +706,19 @@ export default class Graph extends React.Component {
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
         />
-        <Button
-          divId="reset-view-button"
-          text="Reset View"
-          mouseDown={this.resetZoomAndPan}
+        <img
+          src="/static/res/ico/reset-view.png"
+          id="reset-view-button"
+          className={resetDisabled ? "graph-control-button disabled": "graph-control-button"}
+          alt="Reset View Button"
+          title="Click to reset view"
+          onClick={this.resetZoomAndPan}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
-          disabled={resetDisabled}
-        />
+          ></img>
         <Button
           divId="reset-selection-button"
-          data-testid="test-reset"
-          onClick = {this.reset}
+          mouseDown = {this.reset}
           text="Reset Selection"
         />
 

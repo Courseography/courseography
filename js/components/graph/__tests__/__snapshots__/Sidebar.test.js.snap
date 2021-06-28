@@ -51,12 +51,6 @@ Object {
             >
               FCE Count: 
             </div>
-            <button
-              data-testid="test-reset"
-              id="reset"
-            >
-              Reset Selection
-            </button>
           </div>
           <nav
             id="sidebar-nav"
@@ -258,12 +252,6 @@ Object {
           >
             FCE Count: 
           </div>
-          <button
-            data-testid="test-reset"
-            id="reset"
-          >
-            Reset Selection
-          </button>
         </div>
         <nav
           id="sidebar-nav"
