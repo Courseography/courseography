@@ -707,13 +707,20 @@ export default class Graph extends React.Component {
           onMouseLeave={this.buttonMouseLeave}
         />
         <Button
-          divId="reset-button"
+          divId="reset-view-button"
           text="Reset View"
           mouseDown={this.resetZoomAndPan}
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
           disabled={resetDisabled}
         />
+        <Button
+          divId="reset-selection-button"
+          data-testid="test-reset"
+          onClick = {this.reset}
+          text="Reset Selection"
+        />
+
 
         <svg
           xmlns="http://www.w3.org/2000/svg"

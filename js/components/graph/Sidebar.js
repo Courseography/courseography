@@ -119,7 +119,6 @@ export default class Sidebar extends React.Component {
     return (
       <div id="fce" className={contentHiddenClass}>
         <div id="fcecount" data-testid="test-fcecount">FCE Count: {fceString}</div>
-        <button id="reset" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selection</button>
       </div>
     )
   }

@@ -559,9 +559,9 @@ a:active
   right : 57px;
 }
 
-#reset-button
+#reset-view-button
 {
-  width : 52px;
+  width : 70px;
   top   : 30px;
   right : 30px;
   height: auto;
@@ -596,14 +596,12 @@ a:active
   font-size        : 18px;
 }
 
-#reset
+#reset-selection-button
 {
-  text-align : center;
-  float      : left;
-  width      : 47%;
-  height     : 40px;
-  border     : solid 1px #000000;
-  cursor     : pointer;
+  width : 70px;
+  top   : 75px;
+  right : 30px;
+  height: auto;
 }
 
 #reset:hover
