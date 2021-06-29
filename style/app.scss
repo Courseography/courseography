@@ -248,16 +248,25 @@ a:active
   color : #af16af;
 }
 
+#disclaimerDiv label
+{
+  font-weight : lighter;
+  color       : #696969;
+  position    : absolute;
+  left        : 82%;
+  top         : 30px;
+}
+
 #closeDisclaimer
 {
   cursor      : pointer;
   background  : none;
   border      : none;
   font-weight : bold;
-  font-size   : 30px;
+  font-size   : 35px;
   position    : absolute;
   left        : 95%;
-  top         : 20px;
+  top         : 17px;
 }
 
 .disclaimer-popup.dismiss
@@ -265,6 +274,11 @@ a:active
   transition : visibility 0s 0.5s, opacity 0.5s linear;
   visibility : hidden;
   opacity    : 0;
+}
+
+#disclaimerCheck
+{
+  margin : 5 5 0 5;
 }
 
 .ui-dialog
