@@ -687,10 +687,13 @@ export default class Graph extends React.Component {
         className={
           this.state.panning ? "react-graph panning" : "react-graph"
         }
-        onClick={this.props.closeSidebar}
         {...reactGraphPointerEvents}
       >
-        <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
+        <CourseModal
+          showCourseModal={this.state.showCourseModal}
+          courseId={this.state.courseId}
+          onClose={this.onClose}
+        />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
           divId="zoom-in-button"
@@ -713,6 +716,11 @@ export default class Graph extends React.Component {
           onMouseEnter={this.buttonMouseEnter}
           onMouseLeave={this.buttonMouseLeave}
           disabled={resetDisabled}
+        />
+        <Button
+          divId="focus-button"
+          text="Focus"
+          mouseDown={this.props.closeSidebar}
         />
 
         <svg
