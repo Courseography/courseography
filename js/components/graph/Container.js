@@ -84,9 +84,12 @@ export default class Container extends React.Component {
   }
 
   render() {
+    var DontShowDisclaimer = localStorage.getItem('DontShowDisclaimer');
     return (
       <div>
-        <Disclaimer />
+        {DontShowDisclaimer !== 'true' &&
+          <Disclaimer />
+        }
         <Graph
           ref={this.graph}
           closeSidebar={() => this.sidebar.current.toggleSidebar("graph")}
