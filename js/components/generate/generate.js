@@ -155,12 +155,9 @@ class GenerateForm extends React.Component {
   }
 
   render() {
-    var DontShowDisclaimer = localStorage.getItem('DontShowDisclaimer');
     return (
       <div style={{'display': 'flex', 'flexDirection': 'row', 'height': '100%'}}>
-      {DontShowDisclaimer !== 'true' &&
-          <Disclaimer />
-      }
+      <Disclaimer />
       <div id="generateDiv" style={{'position': 'initial', 'padding': '0 0.5em', 'height': '100%', 'fontSize': '12pt'}}>
         <h1 id="header-title">Search for courses</h1>
         <form id="generateForm">

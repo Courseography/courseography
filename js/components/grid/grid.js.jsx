@@ -165,13 +165,10 @@ class Grid extends React.Component {
 
   render() {
     const updatedList = this.state.hoveredLecture ? this.state.selectedLectures.concat(this.state.hoveredLecture) : this.state.selectedLectures;
-    var DontShowDisclaimer = localStorage.getItem('DontShowDisclaimer');
 
     return (
       <div>
-        {DontShowDisclaimer !== 'true' &&
-          <Disclaimer />
-        }
+        <Disclaimer />
         <CoursePanel
           selectedCourses={this.state.selectedCourses}
           selectedLectures={this.state.selectedLectures}
