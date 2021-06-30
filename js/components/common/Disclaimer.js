@@ -25,7 +25,6 @@ export default class Disclaimer extends React.Component {
         const calendar = <a href="http://calendar.artsci.utoronto.ca/">Calendar</a>;
 
         if (this.state.dontShowDisclaimer === 'true') {
-            console.log(this.state.dontShowDisclaimer);
             return (null);
         } else {
             return (
