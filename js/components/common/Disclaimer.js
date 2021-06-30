@@ -28,15 +28,15 @@ export default class Disclaimer extends React.Component {
             return (null);
         } else {
             return (
-                <div id="disclaimerDiv" className="disclaimer-popup">
+                <div id="disclaimerDiv" className="popup-banner">
                     <p><b>DISCLAIMER:</b> Both the {timetable} and {calendar} take precedence over the information
                     presented here. It's important that you double-check your course selection, prerequisites,
                     and your program plans. Some graph edges may represent a corequisite rather than a prerequisite.</p>
                     <label>
-                        <input type="checkbox" id="disclaimerCheck" onClick={this.handleCheck} />
+                        <input type="checkbox" id="disclaimerCheck" class="dont-show-checkbox" onClick={this.handleCheck} />
                         Do not show this again
                     </label>
-                    <button id="closeDisclaimer" onClick={this.handleClose}>&times;</button>
+                    <button id="closeDisclaimer" class="close-banner" onClick={this.handleClose}>&times;</button>
                 </div>
             )
         }

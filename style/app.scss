@@ -233,22 +233,28 @@ a:active
   color           : #4c004c;
 }
 
-#disclaimerDiv
+.popup-banner
 {
-  padding          : 0px 1em 0px 1em;
   font-size        : 11pt;
   position         : absolute;
-  background-color : ffdd61;
-  padding          : 5 15 5 15;
+  background-color : #ffdd61;
+  padding          : 5px 15px 5px 15px;
   z-index          : 1;
 }
 
-#disclaimerDiv a
+.popup-banner.dismiss
+{
+  transition : visibility 0s 0.5s, opacity 0.5s linear;
+  visibility : hidden;
+  opacity    : 0;
+}
+
+.popup-banner a
 {
   color : #af16af;
 }
 
-#disclaimerDiv label
+.poup-banner label
 {
   font-weight : lighter;
   color       : #696969;
@@ -257,7 +263,7 @@ a:active
   top         : 30px;
 }
 
-#closeDisclaimer
+.close-banner
 {
   cursor      : pointer;
   background  : none;
@@ -269,16 +275,9 @@ a:active
   top         : 17px;
 }
 
-.disclaimer-popup.dismiss
+.dont-show-checkbox
 {
-  transition : visibility 0s 0.5s, opacity 0.5s linear;
-  visibility : hidden;
-  opacity    : 0;
-}
-
-#disclaimerCheck
-{
-  margin : 5 5 0 5;
+  margin : 5px 5px 0 5px;
 }
 
 .ui-dialog
