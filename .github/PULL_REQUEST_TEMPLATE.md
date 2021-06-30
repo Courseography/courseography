@@ -22,6 +22,7 @@
 - [ ] Refactoring (internal change to codebase, without changing functionality)
 - [ ] Test update (change that modifies or updates tests only)
 - [ ] Documentation update (change that modifies or updates documentation only)
+- [ ] User Interface Change
 - [ ] Other (please specify):
 
 ## Testing
