@@ -715,7 +715,7 @@ export default class Graph extends React.Component {
           >
           <img
             src="/static/res/ico/reset-view.png"
-            alt="Reset View Button"
+            alt="Reset View"
             title="Click to reset view"
             ></img>
         </Button>
