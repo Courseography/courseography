@@ -50,7 +50,8 @@ header page =
             -- H.li $ toLink "post" "Check My POSt!"
             H.li $ toLink "/about" "About"
         if page `elem` ["graph", "grid"]
-        then H.img ! A.id "nav-export" ! A.src "/static/res/ico/export.png"
+        then H.button ! A.id "nav-export" $ do
+            H.img ! A.src "/static/res/ico/export.png"
         else ""
 
 disclaimer :: H.Html

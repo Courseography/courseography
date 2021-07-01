@@ -220,11 +220,17 @@ body
 
 #nav-export
 {
-  cursor : pointer;
+  cursor: pointer;
   position: absolute;
-  width:60px;
+  width: 60px;
   right: 16px;
   top: 10px;
+  background: transparent;
+  border: none;
+}
+#nav-export img {
+  width: inherit;
+  height: inherit;
 }
 
 a,
