@@ -547,6 +547,14 @@ a:active
   color            : #9c9c9c;
 }
 
+.graph-control-button img {
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 #zoom-in-button
 {
   top   : 4px;

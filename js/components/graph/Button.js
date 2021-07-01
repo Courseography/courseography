@@ -13,6 +13,7 @@ export default function Button(props) {
       disabled={props.disabled}
     >
       {props.text}
+      {props.children}
     </button>
   );
 }
@@ -24,5 +25,6 @@ Button.propTypes = {
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   disabled: PropTypes.bool,
-  text: PropTypes.string
+  text: PropTypes.string,
+  children: PropTypes.node
 };
