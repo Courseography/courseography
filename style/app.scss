@@ -233,6 +233,7 @@ a:active
   color           : #4c004c;
 }
 
+// PRCOM: less saturated yellow
 .popup-banner
 {
   font-size        : 11pt;
@@ -242,22 +243,15 @@ a:active
   z-index          : 1;
 }
 
-.popup-banner.dismiss
-{
-  transition : visibility 0s 0.5s, opacity 0.5s linear;
-  visibility : hidden;
-  opacity    : 0;
-}
-
+// PRCOM: dont change the color, underline instead
 .popup-banner a
 {
   color : #af16af;
 }
 
+// PRCOM: don't overuse absolute positioning
 .popup-banner label
 {
-  font-weight : lighter;
-  color       : #696969;
   position    : absolute;
   left        : 82%;
   top         : 30px;
@@ -265,7 +259,6 @@ a:active
 
 .close-banner
 {
-  cursor      : pointer;
   background  : none;
   border      : none;
   font-weight : bold;

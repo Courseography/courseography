@@ -165,7 +165,6 @@ class Grid extends React.Component {
 
   render() {
     const updatedList = this.state.hoveredLecture ? this.state.selectedLectures.concat(this.state.hoveredLecture) : this.state.selectedLectures;
-
     return (
       <div>
         <Disclaimer />

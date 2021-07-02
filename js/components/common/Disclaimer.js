@@ -1,5 +1,6 @@
 import React from "react";
 
+// PRCOM: Change the design of the disclaimer and make it more obvious it is "on top"
 /**
  * A React component representing the disclaimer popup
  */
@@ -7,38 +8,38 @@ export default class Disclaimer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dontShowDisclaimer: localStorage.getItem('DontShowDisclaimer')
+            hidden: localStorage.getItem('hide-disclaimer') === 'true'
         }
     }
 
     handleClose = () => {
-        let disclaimer = document.getElementById("disclaimerDiv");
-        disclaimer.classList.toggle("dismiss");
+        this.setState({hidden: true});
     }
 
     handleCheck = () => {
-        localStorage.setItem('DontShowDisclaimer', 'true');
+        // PRCOM: check whether the box is checked or not
+        localStorage.setItem('hide-disclaimer', 'true');
     }
 
     render() {
         const timetable = <a href="https://timetable.iit.artsci.utoronto.ca/">Official Timetable</a>;
-        const calendar = <a href="http://calendar.artsci.utoronto.ca/">Calendar</a>;
+        const calendar = <a href="https://artsci.calendar.utoronto.ca/">Academic Calendar</a>;
 
-        if (this.state.dontShowDisclaimer === 'true') {
+        if (this.state.hidden) {
             return (null);
         } else {
             return (
-                <div id="disclaimerDiv" className="popup-banner">
+                <div className="popup-banner">
                     <p><b>DISCLAIMER:</b> Both the {timetable} and {calendar} take precedence over the information
                     presented here. It's important that you double-check your course selection, prerequisites,
                     and your program plans. Some graph edges may represent a corequisite rather than a prerequisite.</p>
                     <label>
-                        <input type="checkbox" id="disclaimerCheck" class="dont-show-checkbox" onClick={this.handleCheck} />
+                        <input type="checkbox" class="dont-show-checkbox" onClick={this.handleCheck} />
                         Do not show this again
                     </label>
-                    <button id="closeDisclaimer" class="close-banner" onClick={this.handleClose}>&times;</button>
+                    <button class="close-banner" onClick={this.handleClose}>&times;</button>
                 </div>
-            )
+            );
         }
     }
 }
