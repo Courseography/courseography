@@ -133,7 +133,6 @@ body
   margin           : 0 0 0 0;
   padding          : 0px 0.5em 0px 0.5em;
   background-color : #5c497e;
-  border           : solid 1px #000000;
   color            : #ffffff;
   height           : 50px;
 }
@@ -147,30 +146,27 @@ body
 #nav-links
 {
   list-style  : none;
-  min-width   : 687px;
-  padding-top : 10px;
+  padding     : 11px 0 0 0;
   margin      : 0 0 0 0;
   display     : inline-block;
   height      : 50px;
   position    : absolute;
+  left        : 50%;
+  transform   : translate(-50%, 0);
 }
 
 #nav-links a
 {
   font-weight : normal;
+  color       : #ffffff;
+  font-size   : 20px;
 }
 
 #nav-links > li
 {
   text-align : center;
   display    : inline-block;
-  padding    : 0px 10px 0px 10px;
-}
-
-#nav-links > li > a
-{
-  color       : #ffffff;
-  text-shadow : 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;;
+  padding    : 0 25px 0 25px;
 }
 
 #nav-links > li > a:hover
@@ -213,9 +209,9 @@ body
 
 #courseography-header
 {
-  width          : 280px;
-  height         : 50px;
-  padding-bottom : 3px;
+  width          : 200px;
+  padding-top    : 10px;
+  margin         : 0 10px 0 30px;
 }
 
 #nav-export
