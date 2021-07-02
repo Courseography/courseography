@@ -243,10 +243,9 @@ a:active
   z-index          : 1;
 }
 
-// PRCOM: dont change the color, underline instead
 .popup-banner a
 {
-  color : #af16af;
+  text-decoration: underline;
 }
 
 // PRCOM: don't overuse absolute positioning
