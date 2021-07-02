@@ -17,8 +17,12 @@ export default class Disclaimer extends React.Component {
     }
 
     handleCheck = () => {
-        // PRCOM: check whether the box is checked or not
-        localStorage.setItem('hide-disclaimer', 'true');
+        let checkbox = document.getElementById("disclaimerCheck");
+        if (checkbox.checked) {
+            localStorage.setItem('hide-disclaimer', 'true');
+        } else {
+            localStorage.setItem('hide-disclaimer', 'false');
+        }
     }
 
     render() {
@@ -34,7 +38,7 @@ export default class Disclaimer extends React.Component {
                     presented here. It's important that you double-check your course selection, prerequisites,
                     and your program plans. Some graph edges may represent a corequisite rather than a prerequisite.</p>
                     <label>
-                        <input type="checkbox" class="dont-show-checkbox" onClick={this.handleCheck} />
+                        <input type="checkbox" id="disclaimerCheck" class="dont-show-checkbox" onClick={this.handleCheck} />
                         Do not show this again
                     </label>
                     <button class="close-banner" onClick={this.handleClose}>&times;</button>
