@@ -135,6 +135,8 @@ body
   background-color : #5c497e;
   color            : #ffffff;
   height           : 50px;
+  display          : flex;
+  flex-direction   : row;
 }
 
 .header img
@@ -150,9 +152,6 @@ body
   margin      : 0 0 0 0;
   display     : inline-block;
   height      : 50px;
-  position    : absolute;
-  left        : 50%;
-  transform   : translate(-50%, 0);
 }
 
 #nav-links a
@@ -211,17 +210,15 @@ body
 {
   width          : 200px;
   padding-top    : 10px;
-  margin         : 0 10px 0 30px;
+  margin         : 0 auto 0 30px;
 }
 
 #nav-export
 {
-  position: absolute;
   width: 60px;
-  right: 16px;
-  top: 10px;
   background: transparent;
   border: none;
+  margin:auto 0 auto auto;
 }
 #nav-export img {
   width: inherit;
