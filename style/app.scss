@@ -233,42 +233,63 @@ a:active
   color           : #4c004c;
 }
 
-.popup-banner
+.popup-card
 {
-  font-size        : 11pt;
-  position         : absolute;
-  background-color : #ffeba3;
-  padding          : 5px 15px 5px 15px;
+  position         : fixed;
   z-index          : 1;
+  width            : 20%;
+  bottom           : 10px;
+  right            : 10px;
+  padding          : 25px 25px 10px 25px;
+  background-color : #ffffff;
+  box-shadow       : 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  border-radius    : 5px;
 }
 
-.popup-banner a
+.popup-content
 {
-  text-decoration: underline;
+  font-size      : 11pt;
+  display        : flex;
+  flex-direction :column;
 }
 
-// PRCOM: don't overuse absolute positioning
-.popup-banner label
+.popup-content a
 {
-  position    : absolute;
-  left        : 82%;
-  top         : 30px;
+  text-decoration : underline;
 }
 
-.close-banner
+.popup-content h3
+{
+  margin-top : 0;
+}
+
+.close-popup
 {
   background  : none;
   border      : none;
   font-weight : bold;
   font-size   : 35px;
+  line-height : 1;
   position    : absolute;
-  left        : 95%;
-  top         : 17px;
+  top         : 0;
+  right       : 0;
+  width       : 35px;
+  margin      : 10px;
 }
 
-.dont-show-checkbox
+.accept-popup
 {
-  margin : 5px 5px 0 5px;
+  background : #5c497e;
+  border     : none;
+  color      : white;
+  font-size  : 16px;
+  padding    : 10px;
+}
+
+.popup-content label
+{
+  align-self : center;
+  margin     : 5px;
 }
 
 .ui-dialog
@@ -650,6 +671,7 @@ a:active
   height   : calc(100% - 50px);
   width    : 100%;
   position : relative;
+  background: #f0f5f8;
 }
 
 #sidebar

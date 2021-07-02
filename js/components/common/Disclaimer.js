@@ -33,15 +33,21 @@ export default class Disclaimer extends React.Component {
             return (null);
         } else {
             return (
-                <div className="popup-banner">
-                    <p><b>DISCLAIMER:</b> Both the {timetable} and {calendar} take precedence over the information
-                    presented here. It's important that you double-check your course selection, prerequisites,
-                    and your program plans. Some graph edges may represent a corequisite rather than a prerequisite.</p>
-                    <label>
-                        <input type="checkbox" id="disclaimerCheck" class="dont-show-checkbox" onClick={this.handleCheck} />
-                        Do not show this again
-                    </label>
-                    <button class="close-banner" onClick={this.handleClose}>&times;</button>
+                <div className="popup-card">
+                    <button class="close-popup" onClick={this.handleClose}>&times;</button>
+                    <div className="popup-content">
+                        <h3>Disclaimer</h3>
+                        <p>Please confirm your plans with official sources like the {timetable} and
+                        {calendar} as they are more reliable. Also, some graph edges may represent corequisites.</p>
+                        {/* <p>Both the {timetable} and {calendar} take precedence over the information presented here.
+                        It's important that you double-check your course selection, prerequisites, and your
+                        program plans.Some graph edges may represent a corequisite rather than a prerequisite.</p> */}
+                        <button class="accept-popup" onClick={this.handleClose}>Understood</button>
+                        <label>
+                            <input type="checkbox" id="disclaimerCheck" class="dont-show-checkbox" onClick={this.handleCheck} />
+                            Do not show this again
+                        </label>
+                    </div>
                 </div>
             );
         }
