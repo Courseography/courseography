@@ -51,7 +51,7 @@ header page =
             H.li $ toLink "/about" "About"
         if page `elem` ["graph", "grid"]
         then H.button ! A.id "nav-export" $ do
-            H.img ! A.src "/static/res/ico/export.png"
+            H.img ! A.src "/static/res/ico/export.png" ! A.alt "Export"
         else ""
 
 disclaimer :: H.Html
