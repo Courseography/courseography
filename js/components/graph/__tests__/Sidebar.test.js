@@ -65,4 +65,12 @@ describe("Sidebar", () => {
       expect(container.getByText("AAA100")).toBeNull();
     })
   });
+  it("Clicking the reset button should reset the FCE Count to 0.0", async () => {
+        const container = await TestContainer.build();
+        expect(container.getByText("FCE Count: 0.0")).toBeDefined();
+        fireEvent.click(container.getByTestId("aaa100"));
+        expect(container.getByText("FCE Count: 0.5")).toBeDefined();
+        fireEvent.click(container.getByTestId("test-reset"));
+        expect(container.getByText("FCE Count: 0.0")).toBeDefined();
+      });
 });

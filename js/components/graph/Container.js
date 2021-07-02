@@ -105,6 +105,7 @@ export default class Container extends React.Component {
           graphs={this.state.graphs}
           graphName={this.state.graphName}
           highlightFocus={this.highlightFocus}
+          reset={() => this.graph.current.reset()}
           updateGraph={this.updateGraph}
         />
       </div>

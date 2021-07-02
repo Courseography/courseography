@@ -546,9 +546,6 @@ a:active
 .graph-control-button img {
   width: inherit;
   height: inherit;
-  position: absolute;
-  right: -1px;
-  top: 0;
 }
 
 #zoom-in-button
@@ -598,12 +595,14 @@ a:active
   font-size        : 18px;
 }
 
-#reset-selection-button
+#reset
 {
-  width : 70px;
-  top   : 110px;
-  right : 30px;
-  height: auto;
+  text-align : center;
+  float      : left;
+  width      : 47%;
+  height     : 40px;
+  border     : solid 1px #000000;
+  cursor     : pointer;
 }
 
 #reset:hover

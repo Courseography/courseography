@@ -717,14 +717,8 @@ export default class Graph extends React.Component {
             src="/static/res/ico/reset-view.png"
             alt="Reset View"
             title="Click to reset view"
-            ></img>
+            />
         </Button>
-        <Button
-          divId="reset-selection-button"
-          mouseDown = {this.reset}
-          text="Reset Selection"
-        />
-
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
