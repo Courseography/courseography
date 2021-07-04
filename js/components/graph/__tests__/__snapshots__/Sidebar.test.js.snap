@@ -63,17 +63,6 @@ Object {
           >
             <ul>
               <li
-                class=""
-                data-testid="test-graphs-nav"
-                id="graphs-nav"
-              >
-                <div
-                  class="nav-section"
-                >
-                  Graphs
-                </div>
-              </li>
-              <li
                 class="active "
                 data-testid="test-focuses-nav"
                 id="focuses-nav"
@@ -87,22 +76,6 @@ Object {
             </ul>
           </nav>
           <div>
-            <div
-              class="hidden"
-              data-testid="test-graph-buttons"
-              id="graphs"
-            >
-              <div
-                class="graph-button"
-                data-testid="test-graph-0"
-                id="graph-undefined"
-              />
-              <div
-                class="graph-button"
-                data-testid="test-graph-1"
-                id="graph-undefined"
-              />
-            </div>
             <div
               class=""
               data-testid="test-focus-buttons"
@@ -270,17 +243,6 @@ Object {
         >
           <ul>
             <li
-              class=""
-              data-testid="test-graphs-nav"
-              id="graphs-nav"
-            >
-              <div
-                class="nav-section"
-              >
-                Graphs
-              </div>
-            </li>
-            <li
               class="active "
               data-testid="test-focuses-nav"
               id="focuses-nav"
@@ -294,22 +256,6 @@ Object {
           </ul>
         </nav>
         <div>
-          <div
-            class="hidden"
-            data-testid="test-graph-buttons"
-            id="graphs"
-          >
-            <div
-              class="graph-button"
-              data-testid="test-graph-0"
-              id="graph-undefined"
-            />
-            <div
-              class="graph-button"
-              data-testid="test-graph-1"
-              id="graph-undefined"
-            />
-          </div>
           <div
             class=""
             data-testid="test-focus-buttons"

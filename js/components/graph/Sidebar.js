@@ -111,19 +111,10 @@ export default class Sidebar extends React.Component {
   renderSidebarNav = () => {
     const focusDisabled = this.state.focusDisabled ? "disabled" : "";
     const focusActiveClass = this.state.graphActive === 0 ? "active" : "";
-    const graphActiveClass = this.state.graphActive === 1 ? "active" : "";
 
     return (
       <nav id="sidebar-nav">
         <ul>
-          <li
-            id="graphs-nav"
-            className={graphActiveClass}
-            onClick={() => this.showFocuses(false)}
-            data-testid="test-graphs-nav"
-          >
-            <div className="nav-section">Graphs</div>
-          </li>
 
           <li
             id="focuses-nav"

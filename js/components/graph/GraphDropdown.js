@@ -10,12 +10,14 @@ export default class GraphDropdown extends React.Component{
 			className={className}
 			onMouseEnter={this.props.onMouseEnter}
 			onMouseLeave={this.props.onMouseLeave}
+			data-testid={"test-graph-dropdown"}
 		>
       {this.props.graphs.map((graph, i) => {
       return <li
 							key={i}
 							className="graph-dropdown-button"
 							onClick={() => this.props.updateGraph(graph.title)}
+							data-testid={"test-graph-" + i}
 							>
         			{graph.title}
       				</li>
