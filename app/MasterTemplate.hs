@@ -41,7 +41,7 @@ header page =
         H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
              ! H.customAttribute "context" (textValue page)
         H.ul ! A.id "nav-links" $ do
-            H.li $ toLink "/graph" "Graph"
+            H.li ! A.id "nav-graph" $ toLink "/graph" "Graph"
             H.li $ toLink "/grid" "Grid"
             if page `elem` ["graph", "grid"]
             then H.li $ H.a ! A.id "nav-export" $ "Export"
