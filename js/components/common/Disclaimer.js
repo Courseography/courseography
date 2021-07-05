@@ -33,14 +33,14 @@ export default class Disclaimer extends React.Component {
         } else {
             return (
                 <div className="popup-card">
-                    <button class="close-popup" onClick={this.handleClose}>&times;</button>
+                    <button className="close-popup" onClick={this.handleClose}>&times;</button>
                     <div className="popup-content">
                         <h3>Disclaimer</h3>
                         <p>Please make sure to confirm your course selections and prerequisites with
                          official sources like the {timetable} and {calendar} as they are more reliable and up-to-date. </p>
-                        <button class="accept-popup" onClick={this.handleClose}>Understood</button>
+                        <button className="accept-popup" onClick={this.handleClose}>Understood</button>
                         <label>
-                            <input type="checkbox" id="disclaimerCheck" class="dont-show-checkbox" onClick={this.handleCheck} />
+                            <input type="checkbox" id="disclaimerCheck" className="dont-show-checkbox" onClick={this.handleCheck} />
                             Do not show this again
                         </label>
                     </div>
