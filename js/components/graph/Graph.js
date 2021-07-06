@@ -717,11 +717,6 @@ export default class Graph extends React.Component {
           onMouseLeave={this.buttonMouseLeave}
           disabled={resetDisabled}
         />
-        <Button
-          divId="focus-button"
-          text="Focus"
-          mouseDown={this.props.closeSidebar}
-        />
 
         <svg
           xmlns="http://www.w3.org/2000/svg"

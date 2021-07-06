@@ -128,9 +128,10 @@ export default class Sidebar extends React.Component {
     const focusDisabled = this.state.focusDisabled ? "disabled" : "";
     const focusActiveClass = this.state.graphActive === 0 ? "active" : "";
     const graphActiveClass = this.state.graphActive === 1 ? "active" : "";
+    const navHiddenClass = this.state.contentHidden ? "hidden" : "";
 
     return (
-      <nav id="sidebar-nav">
+      <nav id="sidebar-nav" className={navHiddenClass}>
         <ul>
           <li
             id="graphs-nav"
@@ -171,7 +172,7 @@ export default class Sidebar extends React.Component {
   }
 
   render() {
-    const flippedClass = this.state.toggled ? "flip" : "";
+    // const flippedClass = this.state.toggled ? "flip" : "";
     const sidebarClass = this.state.toggled ? "opened" : "";
 
     return (
@@ -183,10 +184,11 @@ export default class Sidebar extends React.Component {
         </div>
 
         <div id="sidebar-button" onClick={() => this.toggleSidebar("button")} data-testid="test-sidebar-button">
-          <img id="sidebar-icon"
+          {/* <img id="sidebar-icon"
            className={flippedClass}
            src="/static/res/ico/sidebar.png"
-          />
+          /> */}
+          Sidebar
         </div>
       </div>
     )
