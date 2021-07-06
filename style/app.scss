@@ -133,9 +133,10 @@ body
   margin           : 0 0 0 0;
   padding          : 0px 0.5em 0px 0.5em;
   background-color : #5c497e;
-  border           : solid 1px #000000;
   color            : #ffffff;
   height           : 50px;
+  display          : flex;
+  flex-direction   : row;
 }
 
 .header img
@@ -147,30 +148,24 @@ body
 #nav-links
 {
   list-style  : none;
-  min-width   : 687px;
-  padding-top : 10px;
+  padding     : 11px 0 0 0;
   margin      : 0 0 0 0;
   display     : inline-block;
   height      : 50px;
-  position    : absolute;
 }
 
 #nav-links a
 {
   font-weight : normal;
+  color       : #ffffff;
+  font-size   : 20px;
 }
 
 #nav-links > li
 {
   text-align : center;
   display    : inline-block;
-  padding    : 0px 10px 0px 10px;
-}
-
-#nav-links > li > a
-{
-  color       : #ffffff;
-  text-shadow : 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;;
+  padding    : 0 25px 0 25px;
 }
 
 #nav-links > li > a:hover
@@ -213,13 +208,21 @@ body
 
 #courseography-header
 {
-  width          : 270px;
-  height         : 40px;
+  width          : 200px;
+  padding-top    : 10px;
+  margin         : 0 auto 0 30px;
 }
 
 #nav-export
 {
-  cursor : pointer;
+  width: 60px;
+  background: transparent;
+  border: none;
+  margin:auto 0 auto auto;
+}
+#nav-export img {
+  width: inherit;
+  height: inherit;
 }
 
 a,
@@ -521,8 +524,8 @@ a:active
   color            : #5c497e;
   cursor           : pointer;
   display          : inline-block;
-  width            : 25px;
-  height           : 25px;
+  width            : 30px;
+  height           : 30px;
   padding          : 0;
   position         : absolute;
 }
@@ -546,6 +549,11 @@ a:active
   color            : #9c9c9c;
 }
 
+.graph-control-button img {
+  width: inherit;
+  height: inherit;
+}
+
 #zoom-in-button
 {
   top   : 4px;
@@ -554,16 +562,14 @@ a:active
 
 #zoom-out-button
 {
-  top   : 4px;
-  right : 57px;
+  top   : 34px;
+  right : 30px;
 }
 
-#reset-button
+#reset-view-button
 {
-  width : 52px;
-  top   : 30px;
+  top   : 70px;
   right : 30px;
-  height: auto;
 }
 
 .opened
