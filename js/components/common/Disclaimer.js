@@ -15,9 +15,8 @@ export default class Disclaimer extends React.Component {
         this.setState({hidden: true});
     }
 
-    handleCheck = () => {
-        let checkbox = document.getElementById("disclaimerCheck");
-        if (checkbox.checked) {
+    handleCheck = event => {
+        if (event.target.checked) {
             localStorage.setItem('hide-disclaimer', 'true');
         } else {
             localStorage.setItem('hide-disclaimer', 'false');
