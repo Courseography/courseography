@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Disclaimer from "../common/Disclaimer"
+import Disclaimer from "../common/Disclaimer";
 import Graph from "./Graph";
 import Sidebar from "./Sidebar";
 

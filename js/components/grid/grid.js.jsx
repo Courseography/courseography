@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import { CoursePanel } from './course_panel.js.jsx';
 import { Row } from './calendar.js.jsx';
 import { ExportModal } from '../common/export.js.jsx';
-import Disclaimer from '../common/Disclaimer'
+import Disclaimer from '../common/Disclaimer';
 
 /**
  * Renders the course panel, the Fall and Spring timetable grids and search panel.

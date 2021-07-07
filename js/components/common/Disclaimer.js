@@ -8,7 +8,7 @@ export default class Disclaimer extends React.Component {
         super(props);
         this.state = {
             hidden: localStorage.getItem('hide-disclaimer') === 'true'
-        }
+        };
     }
 
     handleClose = () => {
@@ -29,7 +29,7 @@ export default class Disclaimer extends React.Component {
         const calendar = <a href="https://artsci.calendar.utoronto.ca/">Academic Calendar</a>;
 
         if (this.state.hidden) {
-            return (null);
+            return null;
         } else {
             return (
                 <div className="popup-card">
