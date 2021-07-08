@@ -83,9 +83,9 @@ export default class Sidebar extends React.Component {
     if (this.state.toggled) {
       // close graph
       this.setState({
+        toggled: false,
         contentHidden: true,
         graphActive: 1,
-        toggled: false,
       })
     } else if (!this.state.toggled && location === "button") {
       // open graph
@@ -174,10 +174,11 @@ export default class Sidebar extends React.Component {
   render() {
     // const flippedClass = this.state.toggled ? "flip" : "";
     const sidebarClass = this.state.toggled ? "opened" : "";
+    const currBackGroundColor = this.state.toggled ? "#7a6a96" : "";
 
     return (
       <div>
-        <div id="sidebar" className={sidebarClass} data-testid="test-sidebar">
+        <div id="sidebar" className={sidebarClass} style={{ backgroundColor: currBackGroundColor }} data-testid="test-sidebar">
           {this.renderSidebarHeader()}
           {this.renderSidebarNav()}
           {this.renderSidebarButtons()}
