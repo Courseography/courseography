@@ -15,6 +15,5 @@ gridResponse =
             []
             (do header "grid"
                 H.div ! A.id "grid-body"! A.class_ "row main" $ ""
-                disclaimer
             )
             timetableScripts
