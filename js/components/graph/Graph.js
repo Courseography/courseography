@@ -675,11 +675,17 @@ export default class Graph extends React.Component {
       onTouchEnd: this.stopPanning
     }
 
+    let reactGraphClass = "react-graph";
+    if (this.state.panning) {
+      reactGraphClass += " panning";
+    }
+    if (this.state.highlightedNodes.length > 0) {
+      reactGraphClass += " highlight-nodes"
+    }
+
     return (
       <div id="react-graph"
-        className={
-          this.state.panning ? "react-graph panning" : "react-graph"
-        }
+        className={reactGraphClass}
         onClick={this.props.closeSidebar}
         {...reactGraphPointerEvents}
       >
@@ -718,9 +724,6 @@ export default class Graph extends React.Component {
           xmlnsXlink="http://www.w3.org/1999/xlink"
           {...svgAttrs}
           version="1.1"
-          className={
-            this.state.highlightedNodes.length > 0 ? "highlight-nodes" : ""
-          }
           {...svgMouseEvents}
         >
           {this.renderArrowHead()}
