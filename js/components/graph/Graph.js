@@ -629,15 +629,9 @@ export default class Graph extends React.Component {
       containerWidth = reactGraph.clientWidth;
       containerHeight = reactGraph.clientHeight;
     }
-    let newViewboxWidth = this.state.width;
-    let newViewboxHeight = this.state.height;
-    if (document.getElementById("generateRoot")) {
-      newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
-      newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
-    } else {
-      newViewboxWidth = this.state.width * this.state.zoomFactor;
-      newViewboxHeight = this.state.height * this.state.zoomFactor;
-    }
+
+    let newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
+    let newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
 
     const viewBoxContainerRatio = containerHeight !== 0 ? newViewboxHeight / containerHeight : 1;
     const viewboxX = (this.state.width - newViewboxWidth) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
@@ -645,7 +639,6 @@ export default class Graph extends React.Component {
 
     // not all of these properties are supported in React
     var svgAttrs = {
-      width: "100%",
       height: "100%",
       viewBox: `${viewboxX} ${viewboxY} ${newViewboxWidth} ${newViewboxHeight}`,
       preserveAspectRatio: "xMinYMin",
