@@ -629,15 +629,9 @@ export default class Graph extends React.Component {
       containerWidth = reactGraph.clientWidth;
       containerHeight = reactGraph.clientHeight;
     }
-    let newViewboxWidth = this.state.width;
-    let newViewboxHeight = this.state.height;
-    if (document.getElementById("generateRoot")) {
-      newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
-      newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
-    } else {
-      newViewboxWidth = this.state.width * this.state.zoomFactor;
-      newViewboxHeight = this.state.height * this.state.zoomFactor;
-    }
+
+    let newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
+    let newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
 
     const viewBoxContainerRatio = containerHeight !== 0 ? newViewboxHeight / containerHeight : 1;
     const viewboxX = (this.state.width - newViewboxWidth) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
@@ -645,7 +639,6 @@ export default class Graph extends React.Component {
 
     // not all of these properties are supported in React
     var svgAttrs = {
-      width: "100%",
       height: "100%",
       viewBox: `${viewboxX} ${viewboxY} ${newViewboxWidth} ${newViewboxHeight}`,
       preserveAspectRatio: "xMinYMin",
@@ -682,11 +675,17 @@ export default class Graph extends React.Component {
       onTouchEnd: this.stopPanning
     }
 
+    let reactGraphClass = "react-graph";
+    if (this.state.panning) {
+      reactGraphClass += " panning";
+    }
+    if (this.state.highlightedNodes.length > 0) {
+      reactGraphClass += " highlight-nodes"
+    }
+
     return (
       <div id="react-graph"
-        className={
-          this.state.panning ? "react-graph panning" : "react-graph"
-        }
+        className={reactGraphClass}
         onClick={this.props.closeSidebar}
         {...reactGraphPointerEvents}
       >
@@ -725,9 +724,6 @@ export default class Graph extends React.Component {
           xmlnsXlink="http://www.w3.org/1999/xlink"
           {...svgAttrs}
           version="1.1"
-          className={
-            this.state.highlightedNodes.length > 0 ? "highlight-nodes" : ""
-          }
           {...svgMouseEvents}
         >
           {this.renderArrowHead()}

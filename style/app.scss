@@ -536,14 +536,13 @@ a:active
 
 #react-graph
 {
-  width      : calc(100% - 40px);
+  width      : 100%;
   height     : 100%;
   overflow   : hidden;
   margin     : 0 0 0 0;
   display    : inline-block;
   position   : absolute;
   text-align : center;
-  left       : 40px;
 }
 
 #react-graphRootSVG
