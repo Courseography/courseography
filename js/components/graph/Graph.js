@@ -80,7 +80,9 @@ export default class Graph extends React.Component {
 
     if (document.getElementById("nav-graph")) {
       document.getElementById("nav-graph")
-        .addEventListener("mouseover", () => this.setState({showGraphDropdown: true}))
+        .addEventListener("mouseenter", this.setShowGraphDropdown);
+      document.getElementById("nav-graph")
+        .addEventListener("mouseleave", this.hideGraphDropdown);
     }
   }
 
@@ -433,15 +435,15 @@ export default class Graph extends React.Component {
     });
   };
 
-  graphDropdownMouseEnter = () => {
+  setShowGraphDropdown = () => {
     this.clearAllTimeouts();
     this.setState({showGraphDropdown: true})
   }
 
-  graphDropdownMouseLeave =  () => {
+  hideGraphDropdown =  () => {
     var timeout = setTimeout(() => {
       this.setState({showGraphDropdown: false})
-    })
+    }, 500);
     this.setState({ timeouts: this.state.timeouts.concat(timeout)})
   }
 
@@ -713,8 +715,8 @@ export default class Graph extends React.Component {
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <GraphDropdown
           showGraphDropdown={this.state.showGraphDropdown}
-          onMouseEnter={this.graphDropdownMouseEnter}
-          onMouseLeave={this.graphDropdownMouseLeave}
+          onMouseMove={this.setShowGraphDropdown}
+          onMouseLeave={this.hideGraphDropdown}
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
