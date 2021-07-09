@@ -135,6 +135,8 @@ body
   background-color : #5c497e;
   color            : #ffffff;
   height           : 50px;
+  display          : flex;
+  flex-direction   : row;
 }
 
 .header img
@@ -150,9 +152,6 @@ body
   margin      : 0 0 0 0;
   display     : inline-block;
   height      : 50px;
-  position    : absolute;
-  left        : 50%;
-  transform   : translate(-50%, 0);
 }
 
 #nav-links a
@@ -211,12 +210,19 @@ body
 {
   width          : 200px;
   padding-top    : 10px;
-  margin         : 0 10px 0 30px;
+  margin         : 0 auto 0 30px;
 }
 
 #nav-export
 {
-  cursor : pointer;
+  width: 60px;
+  background: transparent;
+  border: none;
+  margin:auto 0 auto auto;
+}
+#nav-export img {
+  width: inherit;
+  height: inherit;
 }
 
 a,
@@ -229,10 +235,63 @@ a:active
   color           : #4c004c;
 }
 
-#disclaimerDiv
+.popup-card
 {
-  padding   : 0px 1em 0px 1em;
-  font-size : 11pt;
+  position         : fixed;
+  z-index          : 1;
+  width            : 20%;
+  bottom           : 10px;
+  right            : 10px;
+  padding          : 25px 25px 10px 25px;
+  background-color : #ffffff;
+  box-shadow       : 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  border-radius    : 5px;
+}
+
+.popup-content
+{
+  font-size      : 11pt;
+  display        : flex;
+  flex-direction : column;
+}
+
+.popup-content a
+{
+  text-decoration : underline;
+}
+
+.popup-content h3
+{
+  margin-top : 0;
+}
+
+.close-popup
+{
+  background  : none;
+  border      : none;
+  font-weight : bold;
+  font-size   : 35px;
+  line-height : 1;
+  position    : absolute;
+  top         : 0;
+  right       : 0;
+  width       : 35px;
+  margin      : 10px;
+}
+
+.accept-popup
+{
+  background : #5c497e;
+  border     : none;
+  color      : white;
+  font-size  : 16px;
+  padding    : 10px;
+}
+
+.popup-content label
+{
+  align-self : center;
+  margin     : 5px;
 }
 
 .ui-dialog
@@ -398,6 +457,7 @@ a:active
   top              : 0;
   bottom           : 0;
   background-color : rgba(0,0,0,150.0);
+  z-index          : 2;
 }
 
 .ui-dialog-titlebar
@@ -476,14 +536,13 @@ a:active
 
 #react-graph
 {
-  width      : calc(100% - 40px);
+  width      : 100%;
   height     : 100%;
   overflow   : hidden;
   margin     : 0 0 0 0;
   display    : inline-block;
   position   : absolute;
   text-align : center;
-  left       : 40px;
 }
 
 #react-graphRootSVG
@@ -518,8 +577,8 @@ a:active
   color            : #5c497e;
   cursor           : pointer;
   display          : inline-block;
-  width            : 25px;
-  height           : 25px;
+  width            : 30px;
+  height           : 30px;
   padding          : 0;
   position         : absolute;
 }
@@ -543,6 +602,11 @@ a:active
   color            : #9c9c9c;
 }
 
+.graph-control-button img {
+  width: inherit;
+  height: inherit;
+}
+
 #zoom-in-button
 {
   top   : 4px;
@@ -551,16 +615,14 @@ a:active
 
 #zoom-out-button
 {
-  top   : 4px;
-  right : 57px;
+  top   : 34px;
+  right : 30px;
 }
 
-#reset-button
+#reset-view-button
 {
-  width : 52px;
-  top   : 30px;
+  top   : 70px;
   right : 30px;
-  height: auto;
 }
 
 .opened
@@ -610,9 +672,10 @@ a:active
 
 #container
 {
-  height   : calc(100% - 100px);
+  height   : calc(100% - 50px);
   width    : 100%;
   position : relative;
+  background: #f0f5f8;
 }
 
 #sidebar
