@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 export default class GraphDropdown extends React.Component{
 	render() {
+		let halfComponentWidth = 328;
+		let graphTabLeft = document.querySelector("a[href='/graph").getBoundingClientRect().left;
 		var className = this.props.showGraphDropdown ? "graph-dropdown-display": "graph-dropdown-hidden";
 
     return (
@@ -11,6 +13,7 @@ export default class GraphDropdown extends React.Component{
 			onMouseEnter={this.props.onMouseEnter}
 			onMouseLeave={this.props.onMouseLeave}
 			data-testid={"test-graph-dropdown"}
+			style={{left:graphTabLeft - halfComponentWidth}}
 		>
       {this.props.graphs.map((graph, i) => {
       return <li
