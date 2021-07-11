@@ -4,29 +4,31 @@ import * as focusInfo from "./sidebar/focus_descriptions.js";
 
 export default class Focus extends React.Component {
   getDetailsInfo = () => {
-    let detailsStyle, detailsText;
-    if (this.props.openDetails) {
-      detailsStyle = { height:"128px" };
-      detailsText = focusInfo[this.props.pId + "Description"];
-    } else {
-      detailsStyle = { height:"2px" };
-      detailsText = "";
-    }
+    let detailsStyle = { height:"128px" };
+    let detailsText = focusInfo[this.props.pId + "Description"];
+
     return { "detailsStyle": detailsStyle, "detailsText": detailsText };
   }
 
   render() {
-    const detailsInfo = this.getDetailsInfo();
     const divId = this.props.pId + '-details';
+    let detailsInfo, detailsDiv;
+    if (this.props.selected) {
+      detailsInfo = this.getDetailsInfo();
+      detailsDiv = <div
+                    id={divId}
+                    className="details"
+                    style={detailsInfo["detailsStyle"]}
+                    dangerouslySetInnerHTML={{__html: detailsInfo["detailsText"]}}
+                  />;
+    } else {
+      detailsDiv = null;
+    }
+
     return (
       <div onClick={() => this.props.highlightFocus(this.props.pId)}>
-        <p id={this.props.pId} className="focus">{this.props.focusName}</p>
-        <div 
-          id={divId}
-          className="details"
-          style={detailsInfo["detailsStyle"]}
-          dangerouslySetInnerHTML={{__html: detailsInfo["detailsText"]}}
-        />
+        <button id={this.props.pId} className="focus">{this.props.focusName}</button>
+        {detailsDiv}
       </div>
     )
   }
@@ -35,6 +37,6 @@ export default class Focus extends React.Component {
 Focus.propTypes = {
   focusName: PropTypes.string,
   highlightFocus: PropTypes.func,
-  openDetails: PropTypes.bool,
+  selected: PropTypes.bool,
   pId: PropTypes.string
 };

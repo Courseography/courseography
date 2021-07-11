@@ -109,7 +109,9 @@ export default class Container extends React.Component {
           reset={() => this.graph.current.reset()}
           updateGraph={this.updateGraph}
         />
-        <FocusBar />
+        <FocusBar
+          highlightFocus={this.highlightFocus}
+        />
       </div>
     )
   }
