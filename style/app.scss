@@ -855,6 +855,20 @@ a:active
   background-color : #dedede;
 }
 
+.focus-menu-toggle
+{
+  position: fixed;
+  bottom: 0;
+  left: 25px;
+  border-radius: 17px 17px 0 0;
+  border: none;
+  background-color: #a273d3;
+  color: white;
+  padding: 7px 15px 0 15px;
+  font-size: 20px;
+  width: 150px;
+}
+
 .flip
 {
   -webkit-transform : scaleX(-1);

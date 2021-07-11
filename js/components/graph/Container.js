@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Disclaimer from "../common/Disclaimer";
 import Graph from "./Graph";
 import Sidebar from "./Sidebar";
+import FocusBar from "./FocusBar";
 
 export default class Container extends React.Component {
   constructor(props) {
@@ -108,6 +109,7 @@ export default class Container extends React.Component {
           reset={() => this.graph.current.reset()}
           updateGraph={this.updateGraph}
         />
+        <FocusBar />
       </div>
     )
   }
