@@ -59,8 +59,11 @@ export default class FocusBar extends React.Component {
         return (
             <div className="focus-menu-bar">
                 {button}
-                <div className="focuses">
+                <div className="focuses-list">
                     {this.generateFocusTabs()}
+                </div>
+                <div style={{width: "150px", textAlign: "center"}}>
+                    i
                 </div>
             </div>
         );

@@ -855,11 +855,21 @@ a:active
   background-color : #dedede;
 }
 
-.focus-menu-toggle
+.focus-menu-bar
 {
   position: fixed;
   bottom: 0;
-  left: 25px;
+  width: calc(100% - 50px);
+  margin-left: 25px;
+  margin-right: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.focus-menu-toggle
+{
+  position: relative;
   border-radius: 17px 17px 0 0;
   border: none;
   background-color: #a273d3;
@@ -867,6 +877,24 @@ a:active
   padding: 7px 15px 0 15px;
   font-size: 20px;
   width: 150px;
+}
+
+.focuses-list
+{
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.focus
+{
+  border-radius: 17px 17px 0 0;
+  border: none;
+  background-color: #a273d3;
+  color: white;
+  padding: 7px 7px 0 7px;
+  font-size: 15px;
+  width: 120px;
 }
 
 .flip
