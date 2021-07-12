@@ -4,7 +4,12 @@ exports[`GraphDropdown should match shallow snapshot 1`] = `
 <ul
   className="graph-dropdown-hidden"
   data-testid="test-graph-dropdown"
-  onMouseEnter={[MockFunction]}
   onMouseLeave={[MockFunction]}
+  onMouseMove={[MockFunction]}
+  style={
+    Object {
+      "left": 462,
+    }
+  }
 />
 `;

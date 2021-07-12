@@ -4,7 +4,10 @@ import PropTypes from "prop-types";
 export default class GraphDropdown extends React.Component{
 	render() {
 		let halfComponentWidth = 328;
-		let graphTabLeft = document.querySelector("a[href='/graph").getBoundingClientRect().left;
+		let graphTabLeft = 790;
+		if (document.querySelector["a[href='/graph'"]){
+			graphTabLeft = document.querySelector("a[href='/graph'").getBoundingClientRect().left;
+		}
 		var className = this.props.showGraphDropdown ? "graph-dropdown-display": "graph-dropdown-hidden";
 
 		// using onMouseMove rather than mouse enter to handle case where the nav-graph's OnMouseLeave handler is called after GraphDropdown's mouseenter
