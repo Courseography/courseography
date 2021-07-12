@@ -79,6 +79,7 @@ export default class Graph extends React.Component {
     }
 
     if (document.getElementById("nav-graph")) {
+      console.log("adding listeners");
       document.getElementById("nav-graph")
         .addEventListener("mouseenter", this.setShowGraphDropdown);
       document.getElementById("nav-graph")
