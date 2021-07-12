@@ -9,17 +9,30 @@ Object {
     <nav>
       
     
-      <li>
+      <ul>
         
         
-        <a
-          id="nav-export"
-        >
-          Export
-        </a>
+        <li>
+          
+            
+          <a
+            id="nav-graph"
+          >
+            Graph
+          </a>
+          
+            
+          <a
+            id="nav-export"
+          >
+            Export
+          </a>
+          
+        
+        </li>
         
     
-      </li>
+      </ul>
       
 
     </nav>
