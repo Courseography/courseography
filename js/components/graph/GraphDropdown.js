@@ -17,7 +17,7 @@ export default class GraphDropdown extends React.Component{
 			className={className}
 			onMouseMove={() => {console.log("Mouse is moving");this.props.onMouseMove();}}
 			// onMouseLeave={() => {console.log("Mouse is leaving"); this.props.onMouseLeave();}}
-			onMouseLeave={this.props.onMouseLeave}
+			onMouseLeave={() => {console.log("Mouse is leaving graph dropdown");this.props.onMouseLeave()}}
 			data-testid={"test-graph-dropdown"}
 			style={{left:graphTabLeft - halfComponentWidth}}
 		>
