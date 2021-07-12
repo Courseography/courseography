@@ -1,4 +1,7 @@
+import React from "react";
 import TestContainer from "./TestContainer";
+import GraphDropdown from "../GraphDropdown";
+import { shallow } from "enzyme";
 import { fireEvent} from "@testing-library/react";
 
 function sleep(ms){
@@ -6,17 +9,17 @@ function sleep(ms){
 }
 
 describe("GraphDropdown", () => {
-  // it("should match shallow snapshot", () => {
-  //   const graphDropdownProps = {
-	// 		onMouseMove: jest.fn(),
-	// 		onMouseLeave: jest.fn(),
-	// 		showGraphDropdown:false,
-	// 		graphs: [],
-	// 		updateGraph: jest.fn()
-  //   };
-  //   const component = shallow(<GraphDropdown {...graphDropdownProps} />);
-  //   expect(component).toMatchSnapshot();
-  // });
+  it("should match shallow snapshot", () => {
+    const graphDropdownProps = {
+			onMouseMove: jest.fn(),
+			onMouseLeave: jest.fn(),
+			showGraphDropdown:false,
+			graphs: [],
+			updateGraph: jest.fn()
+    };
+    const component = shallow(<GraphDropdown {...graphDropdownProps} />);
+    expect(component).toMatchSnapshot();
+  });
 	it("should appear when hovering over the graph tab and be hidden before", async () => {
 		const mouseEnter = new MouseEvent("mouseenter", {
 			bubbles: false,
@@ -36,10 +39,6 @@ describe("GraphDropdown", () => {
 			bubbles: false,
 			cancelable: false
 		});
-		const mouseLeave = new MouseEvent("mouseleave", {
-			bubbles: false,
-			cancelable: false
-		})
 
 		const container = await TestContainer.build();
 		const graphNav = container.getByText("Graph");
@@ -48,8 +47,8 @@ describe("GraphDropdown", () => {
 		fireEvent(graphNav, mouseEnter);
 		expect(graphDropdown.classList.contains("graph-dropdown-display")).toBe(true);
 
-		fireEvent(graphDropdown, mouseLeave);
-		await sleep(1000);
+		fireEvent.mouseOut(graphDropdown);
+		await sleep(600);
 		expect(graphDropdown.classList.contains("graph-dropdown-hidden")).toBe(true);
 	});
 
@@ -71,23 +70,7 @@ describe("GraphDropdown", () => {
 		expect(graphDropdown.classList.contains("graph-dropdown-display")).toBe(true);
 
 		fireEvent(graphNav, mouseLeave);
-		await sleep(1000);
+		await sleep(600);
 		expect(graphDropdown.classList.contains("graph-dropdown-hidden")).toBe(true);
 	});
-	// it("should disappear a second after the cursor isn't hovered on the graph tab", async () => {
-	// 	const graph = await TestGraph.build();
-	// 	const graphDropdown = graph.getByTestId("test-graph-dropdown");
-	// 	const graphNav = graph.getNodeByText("Graph");
-	// 	fireEvent.mouseOver(graphNav);
-	// 	expect(graphDropdown.classList.contains("graph-dropdown-display")).toBe(true);
-	// 	fireEvent.mouseOut(graphNav);
-  //   setTimeout(() => {
-  //     expect(graphDropdown.classList.contains("graph-dropdown-hidden")).toBe(true);
-  //   }, 1000);
-
-	// });
-	/*
-	TODO: Implement tests for "appearing when hovering over the graph tab", "disappearing a second after the cursor isn't hovered on the dropdown",
-	and "disappearing a second after the cursor isn't hovered on the graph tab"
-	*/
 });
