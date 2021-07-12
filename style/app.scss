@@ -837,7 +837,12 @@ a:active
   pointer-events   : none;
 }
 
-.graph-dropdown-button:hover
+.graph-dropdown-item
+{
+  margin: 5px 0;
+}
+
+.graph-dropdown-item:hover
 {
   cursor           : pointer;
   background-color : #dedede;
@@ -2475,37 +2480,38 @@ main-filter input
 
 .tooltip-group-display
 {
-  cursor: pointer;
-  transition: opacity 0.4s linear;
-  opacity:1;
+  cursor     : pointer;
+  transition : opacity 0.4s linear;
+  opacity    : 1;
 }
 
 .tooltip-group-hidden
 {
-  cursor: pointer;
-  transition: opacity 0.4s linear;
-  opacity:0;
+  cursor     : pointer;
+  transition : opacity 0.4s linear;
+  opacity    : 0;
 }
 
 .graph-dropdown-hidden
 {
-  opacity:0;
-  position:absolute;
-  list-style: none;
-  display:inline-block;
-  column-count: 2;
-  height:0;
-  overflow:hidden;
-  transition: opacity 0.4s linear;
+  opacity    : 0;
+  position   : absolute;
+  display    : inline-block;
+  height     : 0;
+  overflow   : hidden;
+  transition : opacity 0.4s linear;
 }
 .graph-dropdown-display
 {
-  column-count: 2;
-  background-color:#CBC9CD;
-  list-style: none;
-  font-size:15px;
-  display: inline-block;
-  position:absolute;
-  opacity:1;
-  transition: opacity 0.4s linear;
+  column-count     : 2;
+  background-color : #8c68cc;
+  list-style       : none;
+  font-size        : 15px;
+  color: white;
+  text-align       : left;
+  padding-left     : 0;
+  display          : inline-block;
+  position         : absolute;
+  opacity          : 1;
+  transition       : opacity 0.4s linear;
 }
