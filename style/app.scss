@@ -839,7 +839,7 @@ a:active
 
 .graph-dropdown-item
 {
-  margin: 5px 0;
+  margin: 20px;
 }
 
 .graph-dropdown-item:hover
@@ -2503,15 +2503,38 @@ main-filter input
 }
 .graph-dropdown-display
 {
-  column-count     : 2;
-  background-color : #8c68cc;
-  list-style       : none;
+  background-color : #8a75ae;
   font-size        : 15px;
-  color: white;
-  text-align       : left;
-  padding-left     : 0;
   display          : inline-block;
   position         : absolute;
   opacity          : 1;
   transition       : opacity 0.4s linear;
+  display          : flex;
+  flex-direction   : row;
+}
+.graph-dropdown-display ul
+{
+  list-style       : none;
+  text-align       : left;
+  padding-left     : 0;
+}
+.graph-dropdown-display h1,h2,h3,h4
+{
+  border-bottom : solid black;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.unofficial-section, .official-section
+{
+  display: flex;
+  flex-direction: column;
+}
+.unofficial-section
+{
+  border-left : 1px solid black;
+}
+.unofficial-section .unofficial-columns
+{
+  display : flex;
 }
