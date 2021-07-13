@@ -837,11 +837,6 @@ a:active
   pointer-events   : none;
 }
 
-.graph-dropdown-item
-{
-  margin: 20px;
-}
-
 .graph-dropdown-item:hover
 {
   cursor           : pointer;
@@ -2506,35 +2501,17 @@ main-filter input
   background-color : #8a75ae;
   font-size        : 15px;
   display          : inline-block;
-  position         : absolute;
   opacity          : 1;
   transition       : opacity 0.4s linear;
-  display          : flex;
-  flex-direction   : row;
-}
-.graph-dropdown-display ul
-{
   list-style       : none;
-  text-align       : left;
-  padding-left     : 0;
+  padding-left     : 20px;
+  column-count: 3;
+  text-align: left;
+  border-bottom: 10px solid #8a75ae;
 }
-.graph-dropdown-display h1,h2,h3,h4
+.graph-dropdown-display h5
 {
-  border-bottom : solid black;
-  width: max-content;
-  margin-left: auto;
-  margin-right: auto;
-}
-.unofficial-section, .official-section
-{
-  display: flex;
-  flex-direction: column;
-}
-.unofficial-section
-{
-  border-left : 1px solid black;
-}
-.unofficial-section .unofficial-columns
-{
-  display : flex;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }

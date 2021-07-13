@@ -8,8 +8,34 @@ exports[`GraphDropdown should match shallow snapshot 1`] = `
   onMouseMove={[MockFunction]}
   style={
     Object {
-      "left": 462,
+      "left": [MockFunction],
     }
   }
-/>
+>
+  <div>
+    <h5>
+      Official Graphs
+    </h5>
+  </div>
+  <div>
+    <h5>
+      (Unofficial) Sciences
+    </h5>
+  </div>
+  <div>
+    <h5>
+      (Unofficial) Business
+    </h5>
+  </div>
+  <div>
+    <h5>
+      (Unofficial) Social Studies
+    </h5>
+  </div>
+  <div>
+    <h5>
+      (Unofficial) Languages
+    </h5>
+  </div>
+</ul>
 `;
