@@ -172,7 +172,7 @@ export default class Sidebar extends React.Component {
   }
 
   render() {
-    // const flippedClass = this.state.toggled ? "flip" : "";
+    const flippedClass = this.state.toggled ? "flip" : "";
     const sidebarClass = this.state.toggled ? "opened" : "";
     const currBackGroundColor = this.state.toggled ? "#7a6a96" : "";
 
@@ -185,11 +185,10 @@ export default class Sidebar extends React.Component {
         </div>
 
         <div id="sidebar-button" onClick={() => this.toggleSidebar("button")} data-testid="test-sidebar-button">
-          {/* <img id="sidebar-icon"
+          <img id="sidebar-icon"
            className={flippedClass}
-           src="/static/res/ico/sidebar.png"
-          /> */}
-          Sidebar
+           src="/static/res/ico/tempSidebar.png"
+          />
         </div>
       </div>
     )
