@@ -145,6 +145,12 @@ body
   margin  : 0px 0px 5px 0px;
 }
 
+#nav-bar
+{
+  flex       : 1;
+  text-align : center;
+}
+
 #nav-links
 {
   list-style  : none;
@@ -206,6 +212,11 @@ body
   margin         : 5px 0 5px 0;
 }
 
+#logo-div
+{
+  width : 250px;
+}
+
 #courseography-header
 {
   width          : 200px;
@@ -215,12 +226,20 @@ body
 
 #nav-export
 {
+  width      : 250px;
+  text-align : right;
+}
+
+#nav-export-button
+{
   width: 60px;
   background: transparent;
   border: none;
   margin:auto 0 auto auto;
+  padding-top: 9px;
 }
-#nav-export img {
+
+#nav-export-button img {
   width: inherit;
   height: inherit;
 }
