@@ -16,6 +16,5 @@ graphResponse =
                 (do
                     header "graph"
                     H.div ! A.id "container" $ ""
-                    disclaimer
                 )
                 graphScripts
