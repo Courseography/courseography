@@ -3,15 +3,15 @@ import PropTypes from "prop-types";
 import Focus from "./Focus";
 
 const computerScienceFocusData = [
-    ["sci", "Scientific Computing"],
-    ["AI", "Artificial Intelligence"],
-    ["NLP", "Natural Language Processing"],
-    ["vision", "Computer Vision"],
-    ["systems", "Computer Systems"],
-    ["game", "Video Games"],
-    ["HCI", "Human Computer Interaction"],
-    ["theory", "Theory of Computation"],
     ["web", "Web Technologies"],
+    ["theory", "Theory of Computation"],
+    ["HCI", "HumanComp Interaction"],
+    ["game", "Video Games"],
+    ["systems", "Computer Systems"],
+    ["vision", "Computer Vision"],
+    ["NLP", "Computational Linguistics"],
+    ["AI", "Artificial Intelligence"],
+    ["sci", "Scientific Computing"],
   ];
 
 export default class FocusBar extends React.Component {
@@ -41,6 +41,7 @@ export default class FocusBar extends React.Component {
                 pId={focus[0]}
                 data-testid={"test-focus-" + i}
                 focusName={focus[1]}
+                order={i}
                 openDetails={openDetails}
                 highlightFocus={(id) => this.props.highlightFocus(id)}
               />
@@ -49,19 +50,23 @@ export default class FocusBar extends React.Component {
     }
 
     render() {
-        let button = <button></button>;
+        let button, focuses;
         if (this.state.open) {
             button = <button className="focus-menu-toggle" onClick={this.handleClick}>⪡ CLOSE</button>;
+            focuses = (
+            <div className="focuses-list">
+                {this.generateFocusTabs()}
+            </div>
+            );
+
         } else {
-            button = <button className="focus-menu-toggle" onClick={this.handleClick}>FOCUSES ⪢</button>
+            button = <button className="focus-menu-toggle" onClick={this.handleClick}>FOCUSES ⪢</button>;
         }
 
         return (
             <div className="focus-menu-bar">
                 {button}
-                <div className="focuses-list">
-                    {this.generateFocusTabs()}
-                </div>
+                {focuses}
                 <div style={{width: "150px", textAlign: "center"}}>
                     i
                 </div>
