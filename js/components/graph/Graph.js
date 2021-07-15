@@ -51,7 +51,6 @@ export default class Graph extends React.Component {
       panStartX: 0,
       panStartY:0,
       showCourseModal: false,
-      selectedCourses: [],
     };
 
     this.nodes = React.createRef();
