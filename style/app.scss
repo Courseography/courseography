@@ -837,6 +837,11 @@ a:active
   pointer-events   : none;
 }
 
+.graph-dropdown-item
+{
+  text-indent: 2em;
+}
+
 .graph-dropdown-item:hover
 {
   cursor           : pointer;
@@ -2508,8 +2513,9 @@ main-filter input
   column-count: 3;
   text-align: left;
   border-bottom: 10px solid #8a75ae;
+  position:absolute;
 }
-.graph-dropdown-display h5
+.graph-dropdown-display h4
 {
   font-weight: bold;
   margin-top: 5px;

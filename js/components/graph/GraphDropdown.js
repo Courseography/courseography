@@ -60,23 +60,23 @@ export default class GraphDropdown extends React.Component{
 			data-testid={"test-graph-dropdown"}
 		>
 			<div>
-				<h5>Official Graphs</h5>
+				<h4>Official Graphs</h4>
 				{this.generateDropdownItems(officialColumn)}
 			</div>
 			<div>
-				<h5>(Unofficial) Sciences</h5>
+				<h4>(Unofficial) Sciences</h4>
 				{this.generateDropdownItems(sciencesColumn)}
 			</div>
 			<div>
-				<h5>(Unofficial) Business</h5>
+				<h4>(Unofficial) Business</h4>
 				{this.generateDropdownItems(businessColumn)}
 			</div>
 			<div>
-				<h5>(Unofficial) Social Studies</h5>
+				<h4>(Unofficial) Social Studies</h4>
 				{this.generateDropdownItems(socialStudiesColumn)}
 			</div>
 			<div>
-				<h5>(Unofficial) Languages</h5>
+				<h4>(Unofficial) Languages</h4>
 				{this.generateDropdownItems(languagesColumn)}
 			</div>
 		</ul>
@@ -85,14 +85,13 @@ export default class GraphDropdown extends React.Component{
 	}
 
 	render() {
-		let halfComponentWidth = 478;
+		let halfComponentWidth = 412;
 		let graphTabLeft = 790;
 		if (document.querySelector["a[href='/graph'"]){
 			graphTabLeft = document.querySelector("a[href='/graph'").getBoundingClientRect().left;
 		}
 		var className = this.props.showGraphDropdown ? "graph-dropdown-display": "graph-dropdown-hidden";
-
-		return this.createDropdown(className, this.props.onMouseMove, this.props.onMouseLeave, this.props.updateGraph, graphTabLeft - halfComponentWidth);
+		return this.createDropdown(className, graphTabLeft - halfComponentWidth);
 	}
 }
 
