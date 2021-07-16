@@ -705,7 +705,7 @@ export default class Graph extends React.Component {
           // I will need to update the graph name later once the other PR is done
           graphName={this.state.graphName}
           graphs={this.props.graphs}
-          reset={() => this.reset}
+          reset={this.reset}
           updateGraph={this.updateGraph}
         />
         <CourseModal
