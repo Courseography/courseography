@@ -9,6 +9,7 @@ import InfoBox from "./InfoBox";
 import NodeGroup from "./NodeGroup";
 import RegionGroup from "./RegionGroup";
 import * as focusInfo from "./sidebar/focus_descriptions";
+import Sidebar from "./Sidebar";
 
 const ZOOM_INCREMENT = 0.010;
 const KEYBOARD_PANNING_INCREMENT = 10;
@@ -445,6 +446,10 @@ export default class Graph extends React.Component {
     }
   }
 
+  updateGraph = graphName => {
+    this.setState({ graphName: graphName.replace("-", " ") });
+  }
+
   renderArrowHead = () => {
     var polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" };
     return (
@@ -620,6 +625,10 @@ export default class Graph extends React.Component {
     }
   };
 
+  // closeSidebar = () => {
+  //   this.sidebar.current.toggleSidebar("graph")
+  // }
+
   render() {
     let containerWidth = 0;
     let containerHeight = 0;
@@ -686,9 +695,17 @@ export default class Graph extends React.Component {
     return (
       <div id="react-graph"
         className={reactGraphClass}
-        onClick={this.props.closeSidebar}
+        // onClick={this.props.closeSidebar}
         {...reactGraphPointerEvents}
       >
+        <Sidebar
+          fceCount = {this.props.fceCount}
+          // I will need to update the graph name later once the other PR is done
+          graphName={this.state.graphName}
+          graphs={this.props.graphs}
+          reset={() => this.reset}
+          updateGraph={this.updateGraph}
+        />
         <CourseModal
           showCourseModal={this.state.showCourseModal}
           courseId={this.state.courseId}
@@ -954,7 +971,9 @@ Graph.propTypes = {
   incrementFCECount: PropTypes.func,
   initialDrawMode: PropTypes.string,
   setFCECount: PropTypes.func,
-  start_blank: PropTypes.bool
+  start_blank: PropTypes.bool,
+  fceCount: PropTypes.number,
+  graphs: PropTypes.array,
 };
 
 Graph.defaultProps = {

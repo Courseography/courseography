@@ -1,13 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-// import Focus from "./Focus";
 
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       contentHidden: true,
-      toggled: false
+      toggled: false,
     };
   }
 
@@ -85,7 +84,7 @@ export default class Sidebar extends React.Component {
         </div>
         <div id="sidebar" className={sidebarClass} style={{ backgroundColor: currBackGroundColor }} data-testid="test-sidebar">
           {this.renderSearchBar()}
-          {this.renderCourses()}
+          {/* {this.renderCourses()} */}
           <button id="reset" data-testid="test-reset" className={resetHidden} onClick={() => this.props.reset()}>Reset Selections</button>
         </div>
       </div>
@@ -94,11 +93,9 @@ export default class Sidebar extends React.Component {
 }
 
 Sidebar.propTypes = {
-  currFocus: PropTypes.string,
   fceCount: PropTypes.number,
   graphs: PropTypes.array,
   graphName: PropTypes.string,
-  highlightFocus: PropTypes.func,
   reset: PropTypes.func,
   updateGraph: PropTypes.func
 };
