@@ -58,6 +58,7 @@ export default class Graph extends React.Component {
     this.bools = React.createRef();
     this.edges = React.createRef();
     this.exportModal = React.createRef();
+    this.sidebar = React.createRef();
   }
 
   componentDidMount() {
@@ -625,9 +626,9 @@ export default class Graph extends React.Component {
     }
   };
 
-  // closeSidebar = () => {
-  //   this.sidebar.current.toggleSidebar("graph")
-  // }
+  closeSidebar = () => {
+    this.sidebar.current.toggleSidebar("graph")
+  }
 
   render() {
     let containerWidth = 0;
@@ -695,10 +696,11 @@ export default class Graph extends React.Component {
     return (
       <div id="react-graph"
         className={reactGraphClass}
-        // onClick={this.props.closeSidebar}
+        onClick={this.closeSidebar}
         {...reactGraphPointerEvents}
       >
         <Sidebar
+          ref={this.sidebar}
           fceCount = {this.props.fceCount}
           // I will need to update the graph name later once the other PR is done
           graphName={this.state.graphName}
@@ -963,7 +965,6 @@ var findRelationship = (course, nodesJSON) => {
 }
 
 Graph.propTypes = {
-  closeSidebar: PropTypes.func,
   currFocus: PropTypes.string,
   edit: PropTypes.bool,
   getLocalGraph: PropTypes.func,

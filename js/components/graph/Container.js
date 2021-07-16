@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import Disclaimer from "../common/Disclaimer";
 import Graph from "./Graph";
-// import Sidebar from "./Sidebar";
 
 export default class Container extends React.Component {
   constructor(props) {
@@ -14,7 +13,6 @@ export default class Container extends React.Component {
       graphs: []
     }
     this.graph = React.createRef();
-    // this.sidebar = React.createRef();
   }
 
   componentWillMount() {
@@ -38,10 +36,6 @@ export default class Container extends React.Component {
       this.graph.current.openExportModal();
     });
   }
-
-  // updateGraph = graphName => {
-  //   this.setState({ graphName: graphName.replace("-", " ") });
-  // }
 
   getLocalGraph = () => {
     // Gets graph from local storage, if it exists
@@ -89,7 +83,6 @@ export default class Container extends React.Component {
         <Disclaimer />
         <Graph
           ref={this.graph}
-          // closeSidebar={() => this.sidebar.current.toggleSidebar("graph")}
           currFocus={this.state.currFocus}
           edit={this.props.edit}
           fceCount = {this.state.fceCount}
@@ -101,16 +94,6 @@ export default class Container extends React.Component {
           start_blank={this.props.start_blank}
           graphs={this.state.graphs}
         />
-        {/* <Sidebar
-          ref={this.sidebar}
-          currFocus={this.state.currFocus}
-          fceCount = {this.state.fceCount}
-          graphs={this.state.graphs}
-          graphName={this.state.graphName}
-          highlightFocus={this.highlightFocus}
-          reset={() => this.graph.current.reset()}
-          updateGraph={this.updateGraph}
-        /> */}
       </div>
     )
   }
