@@ -2,40 +2,14 @@
 
 exports[`GraphDropdown should match shallow snapshot 1`] = `
 <ul
-  className="graph-dropdown-hidden"
+  className="hidden"
   data-testid="test-graph-dropdown"
   onMouseLeave={[MockFunction]}
   onMouseMove={[MockFunction]}
   style={
     Object {
-      "left": 378,
+      "left": 0,
     }
   }
->
-  <div>
-    <h4>
-      Official Graphs
-    </h4>
-  </div>
-  <div>
-    <h4>
-      (Unofficial) Sciences
-    </h4>
-  </div>
-  <div>
-    <h4>
-      (Unofficial) Business
-    </h4>
-  </div>
-  <div>
-    <h4>
-      (Unofficial) Social Studies
-    </h4>
-  </div>
-  <div>
-    <h4>
-      (Unofficial) Languages
-    </h4>
-  </div>
-</ul>
+/>
 `;

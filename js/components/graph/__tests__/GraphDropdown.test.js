@@ -29,7 +29,7 @@ describe("GraphDropdown", () => {
     const container = await TestContainer.build();
     const graphNav = container.getByText("Graph");
     const graphDropdown  = container.getByTestId("test-graph-dropdown");
-    expect(graphDropdown.classList.contains("graph-dropdown-hidden")).toBe(true);
+    expect(graphDropdown.classList.contains("hidden")).toBe(true);
     fireEvent(graphNav, mouseEnter);
     expect(graphDropdown.classList.contains("graph-dropdown-display")).toBe(true);
   });
@@ -43,13 +43,13 @@ describe("GraphDropdown", () => {
     const container = await TestContainer.build();
     const graphNav = container.getByText("Graph");
     const graphDropdown  = container.getByTestId("test-graph-dropdown");
-    expect(graphDropdown.classList.contains("graph-dropdown-hidden")).toBe(true);
+    expect(graphDropdown.classList.contains("hidden")).toBe(true);
     fireEvent(graphNav, mouseEnter);
     expect(graphDropdown.classList.contains("graph-dropdown-display")).toBe(true);
 
     fireEvent.mouseOut(graphDropdown);
     await sleep(600);
-    expect(graphDropdown.classList.contains("graph-dropdown-hidden")).toBe(true);
+    expect(graphDropdown.classList.contains("hidden")).toBe(true);
   });
 
   it("should disappear a second after the cursor isn't hovered on the graph tab", async () => {
@@ -65,12 +65,12 @@ describe("GraphDropdown", () => {
     const container = await TestContainer.build();
     const graphNav = container.getByText("Graph");
     const graphDropdown  = container.getByTestId("test-graph-dropdown");
-    expect(graphDropdown.classList.contains("graph-dropdown-hidden")).toBe(true);
+    expect(graphDropdown.classList.contains("hidden")).toBe(true);
     fireEvent(graphNav, mouseEnter);
     expect(graphDropdown.classList.contains("graph-dropdown-display")).toBe(true);
 
     fireEvent(graphNav, mouseLeave);
     await sleep(600);
-    expect(graphDropdown.classList.contains("graph-dropdown-hidden")).toBe(true);
+    expect(graphDropdown.classList.contains("hidden")).toBe(true);
   });
 });

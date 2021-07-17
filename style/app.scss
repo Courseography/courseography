@@ -839,12 +839,11 @@ a:active
 
 .graph-dropdown-item
 {
-  text-indent: 2em;
+  cursor           : pointer;
 }
 
 .graph-dropdown-item:hover
 {
-  cursor           : pointer;
   background-color : #dedede;
 }
 
@@ -2480,44 +2479,31 @@ main-filter input
 
 .tooltip-group-display
 {
-  cursor     : pointer;
-  transition : opacity 0.4s linear;
-  opacity    : 1;
+  cursor: pointer;
+  transition: opacity 0.4s linear;
+  opacity: 1;
 }
 
 .tooltip-group-hidden
 {
-  cursor     : pointer;
-  transition : opacity 0.4s linear;
-  opacity    : 0;
+  cursor: pointer;
+  transition: opacity 0.4s linear;
+  opacity: 0;
 }
 
-.graph-dropdown-hidden
+.hidden
 {
-  opacity    : 0;
-  position   : absolute;
-  display    : inline-block;
-  height     : 0;
-  overflow   : hidden;
-  transition : opacity 0.4s linear;
+  display : none
 }
 .graph-dropdown-display
 {
   background-color : #8a75ae;
+  column-count     : 2;
   font-size        : 15px;
   display          : inline-block;
-  opacity          : 1;
-  transition       : opacity 0.4s linear;
   list-style       : none;
-  padding-left     : 20px;
-  column-count: 3;
-  text-align: left;
-  border-bottom: 10px solid #8a75ae;
-  position:absolute;
-}
-.graph-dropdown-display h4
-{
-  font-weight: bold;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  padding-left     : 0;
+  text-align       : left;
+  border-bottom    : 10px solid #8a75ae;
+  position         : absolute;
 }
