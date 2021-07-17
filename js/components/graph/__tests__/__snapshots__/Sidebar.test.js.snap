@@ -16,6 +16,7 @@ Object {
           
             
           <a
+            href="/graph"
             id="nav-graph"
           >
             Graph
