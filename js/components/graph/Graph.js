@@ -437,16 +437,15 @@ export default class Graph extends React.Component {
 
   setShowGraphDropdown = () => {
     this.clearAllTimeouts();
-    this.setState({showGraphDropdown: true})
+    this.setState({showGraphDropdown: true});
   }
 
   hideGraphDropdown =  () => {
     var timeout = setTimeout(() => {
-      this.setState({showGraphDropdown: false})
+      this.setState({showGraphDropdown: false});
     }, 500);
-    this.setState({ timeouts: this.state.timeouts.concat(timeout)})
+    this.setState({timeouts: this.state.timeouts.concat(timeout)});
   }
-
 
   onClose = () => {
     this.setState({ showCourseModal: false });
