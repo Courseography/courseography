@@ -69,11 +69,12 @@ export default class Sidebar extends React.Component {
     const sidebarClass = !this.state.hidden ? "opened" : "";
     const currBackGroundColor = !this.state.hidden ? "#ffffff" : "";
     const resetHidden = !this.state.hidden ? "" : "hidden";
+    const buttonPos = !this.state.hidden ? "440" : "0";
 
     return (
       <div>
         {this.renderFCE()}
-        <div id="sidebar-button" onClick={() => this.toggleSidebar("button")} data-testid="test-sidebar-button">
+        <div id="sidebar-button" style={{transform: `translateY(${buttonPos}px)`}} onClick={() => this.toggleSidebar("button")} data-testid="test-sidebar-button">
           <img id="sidebar-icon"
            className={flippedClass}
            src="/static/res/ico/tempSidebar.png"

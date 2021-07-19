@@ -679,7 +679,7 @@ a:active
 
 #sidebar
 {
-  height           : 60%;
+  height           : 450px;
   float            : left;
   position         : absolute;
 }
@@ -694,6 +694,7 @@ a:active
   position         : absolute;
   margin-left      : 60px;
   text-align       : center;
+  z-index          : 2;
 }
 
 #sidebar-button:hover
