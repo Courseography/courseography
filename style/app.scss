@@ -569,10 +569,10 @@ a:active
 {
   text-align       : center;
   background-color : #ffffff;
-  border           : solid 1px #5c497e;
-  border-radius    : 6px;
   outline          : none;
   font-size        : 14px;
+  border-radius    : 6px;
+  // border           : solid 1px #5c497e;
   font-weight      : bold;
   color            : #5c497e;
   cursor           : pointer;
@@ -597,34 +597,33 @@ a:active
 
 .graph-control-button:disabled
 {
-  // border           : solid 1px #9c9c9c;
   background-color : #dedede;
   color            : #9c9c9c;
 }
 
 .graph-control-button img {
-  width: inherit;
+  width: 90%;
   height: inherit;
 }
 
 #zoom-in-button
 {
-  // top   : 4px;
-  // right : 30px;
   position:relative;
 }
 
 #zoom-out-button
 {
   position: relative;
-  // top   : 34px;
-  // right : 30px;
 }
 
 #reset-view-button
 {
-  top   : 70px;
-  right : 30px;
+  top            : 70px;
+  right          : 30px;
+  box-shadow     : 1px 0px 5px 0px #5c497e ;
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
 }
 
 .opened
@@ -2515,8 +2514,16 @@ main-filter input
   top   : 4px;
   right : 30px;
   position:absolute;
-  box-shadow: 5px 8px 5px 0px #5c497e ;
+  box-shadow: 1px 0px 5px 0px #5c497e ;
   display:flex;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: rgb(140, 158, 140);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.graph-zoom-button
+{
+  border: none;
+  border-radius: 0px;
 }
