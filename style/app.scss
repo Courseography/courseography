@@ -145,7 +145,7 @@ body
   margin  : 0px 0px 5px 0px;
 }
 
-#nav-bar
+.nav-middle
 {
   flex       : 1;
   text-align : center;
@@ -212,7 +212,7 @@ body
   margin         : 5px 0 5px 0;
 }
 
-#logo-div
+.nav-left
 {
   width : 250px;
 }
@@ -224,13 +224,13 @@ body
   margin         : 0 auto 0 30px;
 }
 
-#nav-export
+.nav-right
 {
   width      : 250px;
   text-align : right;
 }
 
-#nav-export-button
+#nav-export
 {
   width: 60px;
   background: transparent;

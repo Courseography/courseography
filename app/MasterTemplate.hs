@@ -38,10 +38,10 @@ masterTemplate title headers body scripts =
 header :: T.Text -> H.Html
 header page =
     H.nav ! A.class_ "row header" $ do
-        H.div ! A.id "logo-div" $ do
+        H.div ! A.class_ "nav-left" $ do
             H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
                 ! H.customAttribute "context" (textValue page)
-        H.div ! A.id "nav-bar" $ do
+        H.div ! A.class_ "nav-middle" $ do
             H.ul ! A.id "nav-links" $ do
                 H.li $ toLink "/graph" "Graph"
                 H.li $ toLink "/grid" "Grid"
@@ -52,7 +52,7 @@ header page =
                 -- H.li $ toLink "post" "Check My POSt!"
                 H.li $ toLink "/about" "About"
         if page `elem` ["graph", "grid"]
-        then H.div ! A.id "nav-export" $ do
-            H.button ! A.id "nav-export-button" $ do
+        then H.div ! A.class_ "nav-right" $ do
+            H.button ! A.id "nav-export" $ do
                 H.img ! A.src "/static/res/ico/export.png" ! A.alt "Export"
         else ""
