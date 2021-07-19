@@ -26,6 +26,8 @@ export default class TestGraph {
       graphName: "Computer Science",
       setFCECount: () => {},
       incrementFCECount: () => {},
+      graphs: [],
+      updateGraph: () => {}
     };
 
     const rtlGraph = render(<Graph {...graphProps} />);
