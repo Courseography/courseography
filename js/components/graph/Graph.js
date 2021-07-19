@@ -31,7 +31,6 @@ export default class Graph extends React.Component {
       edgesJSON: [],
       highlightedNodes: [],
       timeouts: [],
-      fceCount: 0,
       width: window.innerWidth,
       height: window.innerHeight,
       zoomFactor: 1,
@@ -51,9 +50,10 @@ export default class Graph extends React.Component {
       infoBoxNodeId: "",
       panning: false,
       panStartX: 0,
-      panStartY:0,
+      panStartY: 0,
       showCourseModal: false,
-      showGraphDropdown:false
+      showGraphDropdown: false,
+      selectedNodes: []
     };
 
     this.nodes = React.createRef();
@@ -248,8 +248,14 @@ export default class Graph extends React.Component {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5);
+        this.setState(prevState => ({
+          selectedNodes: prevState.selectedNodes.filter(course => course !== courseId)
+        }));
       } else {
         this.props.incrementFCECount(0.5);
+        this.setState(prevState => ({
+          selectedNodes: [...prevState.selectedNodes, courseId]
+        }))
       }
     }
   };
@@ -716,6 +722,7 @@ export default class Graph extends React.Component {
           // I will need to update the graph name later once the other PR is done
           graphName={this.state.graphName}
           reset={this.reset}
+          activeCourses={this.state.selectedNodes}
         />
         <CourseModal
           showCourseModal={this.state.showCourseModal}

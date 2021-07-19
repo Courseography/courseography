@@ -37,6 +37,10 @@ export default class Container extends React.Component {
     });
   }
 
+  updateGraph = graphName => {
+    this.setState({ graphName: graphName.replace("-", " ") });
+  }
+
   getLocalGraph = () => {
     // Gets graph from local storage, if it exists
     let graphName;

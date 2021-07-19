@@ -10,7 +10,11 @@ export default class Sidebar extends React.Component {
   }
 
   getCurrentCourses = () => {
-    return <div>Test</div>
+    return this.props.activeCourses.map((course, i) => {
+      return (
+        <div key={i}>{course}</div>
+      )
+    });
   }
 
   toggleSidebar = location => {
@@ -43,6 +47,10 @@ export default class Sidebar extends React.Component {
 
     return (
       <form action="/" method="get" className={searchHidden}>
+        <label htmlFor="header-search">
+            {/* For screen readers */}
+            <span className="label-hidden">Search blog posts</span>
+        </label>
         <input
             type="text"
             id="header-search"
@@ -59,7 +67,7 @@ export default class Sidebar extends React.Component {
 
     return (
       <div id="courses" className={coursesHidden}>
-        {this.getCurrentCourses}
+        {this.getCurrentCourses()}
       </div>
     )
   }
@@ -82,7 +90,7 @@ export default class Sidebar extends React.Component {
         </div>
         <div id="sidebar" className={sidebarClass} style={{ backgroundColor: currBackGroundColor }} data-testid="test-sidebar">
           {this.renderSearchBar()}
-          {/* {this.renderCourses()} */}
+          {this.renderCourses()}
           <button id="reset" data-testid="test-reset" className={resetHidden} onClick={() => this.props.reset()}>Reset Selections</button>
         </div>
       </div>
@@ -94,4 +102,5 @@ Sidebar.propTypes = {
   fceCount: PropTypes.number,
   graphName: PropTypes.string,
   reset: PropTypes.func,
+  activeCourses: PropTypes.array
 };
