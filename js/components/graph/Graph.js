@@ -51,14 +51,13 @@ export default class Graph extends React.Component {
       panning: false,
       panStartX: 0,
       panStartY:0,
-      showCourseModal: false,
+      showCourseModal: false
     };
 
     this.nodes = React.createRef();
     this.bools = React.createRef();
     this.edges = React.createRef();
     this.exportModal = React.createRef();
-    this.sidebar = React.createRef();
   }
 
   componentDidMount() {
@@ -626,10 +625,6 @@ export default class Graph extends React.Component {
     }
   };
 
-  closeSidebar = () => {
-    this.sidebar.current.toggleSidebar("graph")
-  }
-
   render() {
     let containerWidth = 0;
     let containerHeight = 0;
@@ -696,7 +691,6 @@ export default class Graph extends React.Component {
     return (
       <div id="react-graph"
         className={reactGraphClass}
-        onClick={this.closeSidebar}
         {...reactGraphPointerEvents}
       >
         <Sidebar
@@ -704,9 +698,7 @@ export default class Graph extends React.Component {
           fceCount = {this.props.fceCount}
           // I will need to update the graph name later once the other PR is done
           graphName={this.state.graphName}
-          graphs={this.props.graphs}
           reset={this.reset}
-          updateGraph={this.updateGraph}
         />
         <CourseModal
           showCourseModal={this.state.showCourseModal}

@@ -5,8 +5,7 @@ export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      contentHidden: true,
-      toggled: false,
+      hidden: true
     };
   }
 
@@ -15,17 +14,15 @@ export default class Sidebar extends React.Component {
   }
 
   toggleSidebar = location => {
-    if (this.state.toggled) {
+    if (!this.state.hidden) {
       // close graph
       this.setState({
-        toggled: false,
-        contentHidden: true,
+        hidden: true
       })
-    } else if (!this.state.toggled && location === "button") {
+    } else if (this.state.hidden && location === "button") {
       // open graph
       this.setState({
-        toggled: true,
-        contentHidden: false,
+        hidden: false
       });
     }
   }
@@ -42,7 +39,7 @@ export default class Sidebar extends React.Component {
   }
 
   renderSearchBar = () => {
-    const searchHidden = this.state.toggled ? "" : "hidden";
+    const searchHidden = !this.state.hidden ? "" : "hidden";
 
     return (
       <form action="/" method="get" className={searchHidden}>
@@ -58,7 +55,7 @@ export default class Sidebar extends React.Component {
   }
 
   renderCourses = () => {
-    const coursesHidden = this.state.toggled ? "" : "hidden";
+    const coursesHidden = !this.state.hidden ? "" : "hidden";
 
     return (
       <div id="courses" className={coursesHidden}>
@@ -68,10 +65,10 @@ export default class Sidebar extends React.Component {
   }
 
   render() {
-    const flippedClass = this.state.toggled ? "flip" : "";
-    const sidebarClass = this.state.toggled ? "opened" : "";
-    const currBackGroundColor = this.state.toggled ? "#ffffff" : "";
-    const resetHidden = this.state.toggled ? "" : "hidden";
+    const flippedClass = !this.state.hidden ? "flip" : "";
+    const sidebarClass = !this.state.hidden ? "opened" : "";
+    const currBackGroundColor = !this.state.hidden ? "#ffffff" : "";
+    const resetHidden = !this.state.hidden ? "" : "hidden";
 
     return (
       <div>
@@ -94,7 +91,6 @@ export default class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   fceCount: PropTypes.number,
-  graphs: PropTypes.array,
   graphName: PropTypes.string,
   reset: PropTypes.func,
 };
