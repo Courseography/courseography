@@ -572,7 +572,7 @@ a:active
   outline          : none;
   font-size        : 14px;
   border-radius    : 6px;
-  // border           : solid 1px #5c497e;
+  border           : none;
   font-weight      : bold;
   color            : #5c497e;
   cursor           : pointer;
@@ -620,10 +620,10 @@ a:active
 {
   top            : 70px;
   right          : 30px;
-  box-shadow     : 1px 0px 5px 0px #5c497e ;
   display        : flex;
   align-items    : center;
   justify-content: center;
+  box-shadow: 1px 0px 5px 0px gray;
 }
 
 .opened
@@ -2514,7 +2514,7 @@ main-filter input
   top   : 4px;
   right : 30px;
   position:absolute;
-  box-shadow: 1px 0px 5px 0px #5c497e ;
+  box-shadow: 1px 0px 5px 0px gray ;
   display:flex;
   flex-direction: column;
   background-color: rgb(140, 158, 140);
