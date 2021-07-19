@@ -2501,20 +2501,20 @@ main-filter input
 
 .zoom-button-group
 {
-  top   : 4px;
-  right : 30px;
-  position:absolute;
-  box-shadow: 1px 0px 5px 0px gray ;
-  display:flex;
-  flex-direction: column;
-  background-color: rgb(140, 158, 140);
-  border-radius: 6px;
-  overflow: hidden;
+  top              : 4px;
+  right            : 30px;
+  position         : absolute;
+  box-shadow       : 1px 0px 5px 0px gray ;
+  display          : flex;
+  flex-direction   : column;
+  background-color : rgb(140, 158, 140);
+  border-radius    : 6px;
+  overflow         : hidden;
 }
 
 #graph-zoom-button
 {
-  border: none;
-  border-radius: 0px;
-  position: relative;
+  border        : none;
+  border-radius : 0px;
+  position      : relative;
 }
