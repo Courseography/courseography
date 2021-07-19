@@ -597,7 +597,7 @@ a:active
 
 .graph-control-button:disabled
 {
-  border           : solid 1px #9c9c9c;
+  // border           : solid 1px #9c9c9c;
   background-color : #dedede;
   color            : #9c9c9c;
 }
@@ -609,14 +609,16 @@ a:active
 
 #zoom-in-button
 {
-  top   : 4px;
-  right : 30px;
+  // top   : 4px;
+  // right : 30px;
+  position:relative;
 }
 
 #zoom-out-button
 {
-  top   : 34px;
-  right : 30px;
+  position: relative;
+  // top   : 34px;
+  // right : 30px;
 }
 
 #reset-view-button
@@ -2506,4 +2508,15 @@ main-filter input
   text-align       : left;
   position         : absolute;
   padding          : 10px;
+}
+
+.zoom-button-group
+{
+  top   : 4px;
+  right : 30px;
+  position:absolute;
+  box-shadow: 5px 8px 5px 0px #5c497e ;
+  display:flex;
+  flex-direction: column;
+  background-color: #ffffff;
 }
