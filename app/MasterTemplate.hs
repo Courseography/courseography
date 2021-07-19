@@ -51,8 +51,8 @@ header page =
                 -- TODO: re-enable after handling new first-year courses
                 -- H.li $ toLink "post" "Check My POSt!"
                 H.li $ toLink "/about" "About"
-        if page `elem` ["graph", "grid"]
-        then H.div ! A.class_ "nav-right" $ do
-            H.button ! A.id "nav-export" $ do
+        H.div ! A.class_ "nav-right" $ do
+            if page `elem` ["graph", "grid"]
+            then H.button ! A.id "nav-export" $ do
                 H.img ! A.src "/static/res/ico/export.png" ! A.alt "Export"
-        else ""
+            else ""
