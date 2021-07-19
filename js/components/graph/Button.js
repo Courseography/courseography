@@ -5,7 +5,7 @@ export default function Button(props) {
   return (
     <button
       id={props.divId}
-      className={"graph-control-button " + props.additionalClasses}
+      className="graph-control-button"
       onMouseDown={props.mouseDown}
       onMouseUp={props.mouseUp}
       onMouseEnter={props.onMouseEnter}
@@ -27,5 +27,4 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   text: PropTypes.string,
   children: PropTypes.node,
-  additionalClasses: PropTypes.string
 };

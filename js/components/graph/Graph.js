@@ -721,16 +721,14 @@ export default class Graph extends React.Component {
         />
         <div className="zoom-button-group">
           <Button
-            divId="zoom-in-button"
+            divId="graph-zoom-button"
             text="+"
-            additionalClasses="graph-zoom-button"
             mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
             onMouseEnter={this.buttonMouseEnter}
             onMouseLeave={this.buttonMouseLeave}
           />
           <Button
-            divId="zoom-out-button"
-            additionalClasses="graph-zoom-button"
+            divId="graph-zoom-button"
             text="&mdash;"
             mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
             onMouseEnter={this.buttonMouseEnter}

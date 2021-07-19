@@ -606,16 +606,6 @@ a:active
   height: inherit;
 }
 
-#zoom-in-button
-{
-  position:relative;
-}
-
-#zoom-out-button
-{
-  position: relative;
-}
-
 #reset-view-button
 {
   top            : 70px;
@@ -2522,8 +2512,9 @@ main-filter input
   overflow: hidden;
 }
 
-.graph-zoom-button
+#graph-zoom-button
 {
   border: none;
   border-radius: 0px;
+  position: relative;
 }
