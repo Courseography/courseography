@@ -827,20 +827,12 @@ a:active
   pointer-events   : none;
 }
 
-.graph-button
+.graph-dropdown-item
 {
-  display          : block;
   cursor           : pointer;
-  font-size        : 20px;
-  border           : solid 1px #000000;
-  border-radius    : 6px;
-  text-align       : center;
-  width            : 90%;
-  background-color : #ffffff;
-  margin-bottom    : 20px;
 }
 
-.graph-button:hover
+.graph-dropdown-item:hover
 {
   background-color : #dedede;
 }
@@ -2479,12 +2471,29 @@ main-filter input
 {
   cursor: pointer;
   transition: opacity 0.4s linear;
-  opacity:1;
+  opacity: 1;
 }
 
 .tooltip-group-hidden
 {
   cursor: pointer;
   transition: opacity 0.4s linear;
-  opacity:0;
+  opacity: 0;
+}
+
+.hidden
+{
+  display : none
+}
+.graph-dropdown-display
+{
+  background-color : #8a75ae;
+  column-count     : 2;
+  font-size        : 15px;
+  display          : inline-block;
+  list-style       : none;
+  padding-left     : 0;
+  text-align       : left;
+  position         : absolute;
+  padding          : 10px;
 }

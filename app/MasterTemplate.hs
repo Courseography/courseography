@@ -41,7 +41,7 @@ header page =
         H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
             ! H.customAttribute "context" (textValue page)
         H.ul ! A.id "nav-links" $ do
-            H.li $ toLink "/graph" "Graph"
+            H.li ! A.id "nav-graph" $ toLink "/graph" "Graph▼"
             H.li $ toLink "/grid" "Grid"
             H.li $ toLink "/generate" "Generate (beta)"
             -- H.li $ toLink "/timesearch" "Search"

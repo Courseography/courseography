@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GraphDropdown should match shallow snapshot 1`] = `
+<ul
+  className="hidden"
+  data-testid="test-graph-dropdown"
+  onMouseLeave={[MockFunction]}
+  onMouseMove={[MockFunction]}
+  style={
+    Object {
+      "left": 0,
+    }
+  }
+/>
+`;

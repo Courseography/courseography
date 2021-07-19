@@ -93,6 +93,7 @@ export default class Container extends React.Component {
           setFCECount={this.setFCECount}
           start_blank={this.props.start_blank}
           graphs={this.state.graphs}
+          updateGraph={this.updateGraph}
         />
       </div>
     )
