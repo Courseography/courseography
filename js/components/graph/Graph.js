@@ -308,6 +308,20 @@ export default class Graph extends React.Component {
     });
   };
 
+  handleItemClick = id => {
+    var currentNode = this.nodes.current[id];
+    currentNode.toggleSelection(this);
+    if (currentNode.state.selected) {
+      this.setState(prevState => ({
+        selectedNodes: prevState.selectedNodes.filter(course => course !== id)
+      }));
+    } else {
+      this.setState(prevState => ({
+        selectedNodes: [...prevState.selectedNodes, id]
+      }))
+    }
+  }
+
   /**
    * Drawing mode not implemented, so this function may not work.
    */
@@ -725,6 +739,7 @@ export default class Graph extends React.Component {
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
           nodesJSON={this.state.nodesJSON}
+          itemClick={this.handleItemClick}
         />
         <CourseModal
           showCourseModal={this.state.showCourseModal}

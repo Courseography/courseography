@@ -69,7 +69,13 @@ export default class Sidebar extends React.Component {
         <input type="text" onChange={(e) => {this.setState({ results: filteredSearch(posts, e.target.value) })}}/>
       </div>
       <ul id="courseDropdown">
-        {this.state.results.map((result, i) => <li key={i}>{result.toUpperCase()}</li>)}
+        {this.state.results.map((result, i) =>
+        <li
+          key={i}
+          className="item"
+          onClick={() => this.props.itemClick(result)}>
+            {result.toUpperCase()}
+        </li>)}
       </ul>
     </div>
     )
@@ -90,7 +96,7 @@ export default class Sidebar extends React.Component {
     const buttonPos = !this.state.hidden ? "440" : "0";
 
     return (
-      <div>
+      <div style={{ height: "0px" }}>
         {this.renderFCE()}
         <div id="sidebar-button" style={{transform: `translateY(${buttonPos}px)`}} onClick={() => this.toggleSidebar("button")} data-testid="test-sidebar-button">
           <img id="sidebar-icon"
@@ -113,5 +119,6 @@ Sidebar.propTypes = {
   graphName: PropTypes.string,
   reset: PropTypes.func,
   activeCourses: PropTypes.array,
-  nodesJSON: PropTypes.array
+  nodesJSON: PropTypes.array,
+  itemClick: PropTypes.func
 };
