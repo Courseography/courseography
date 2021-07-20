@@ -38,7 +38,8 @@ masterTemplate title headers body scripts =
 header :: T.Text -> H.Html
 header page =
     H.nav ! A.class_ "row header" $ do
-        H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
+        H.a ! A.href "https://courseography.cdf.toronto.edu/graph" $ do
+            H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
              ! H.customAttribute "context" (textValue page)
         H.ul ! A.id "nav-links" $ do
             H.li ! A.id "nav-graph" $ toLink "/graph" "Graph▼"
