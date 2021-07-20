@@ -5,16 +5,21 @@ export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hidden: true
+      hidden: true,
+      courses: [],
+      results: []
     };
   }
 
-  getCurrentCourses = () => {
-    return this.props.activeCourses.map((course, i) => {
-      return (
-        <div key={i}>{course}</div>
-      )
-    });
+  componentDidUpdate(prevProps) {
+    if (prevProps.activeCourses !== this.props.activeCourses) {
+      var curr = this.props.activeCourses.map((course, i) => {
+        return (
+          <div key={i}>{course.toUpperCase()}</div>
+        )
+      });
+      this.setState({ courses: curr });
+    }
   }
 
   toggleSidebar = location => {
@@ -32,7 +37,7 @@ export default class Sidebar extends React.Component {
   }
 
   // Sidebar rendering methods
-  renderFCE= () => {
+  renderFCE = () => {
     const fceString = Number.isInteger(this.props.fceCount) ? this.props.fceCount + ".0" : this.props.fceCount
 
     return (
@@ -43,31 +48,37 @@ export default class Sidebar extends React.Component {
   }
 
   renderSearchBar = () => {
-    const searchHidden = !this.state.hidden ? "" : "hidden";
+    const posts = this.props.nodesJSON.map(node => node.id_);
+
+    const filteredSearch = (posts, query) => {
+      if (!query) {
+        return posts;
+      }
+
+      return posts.filter((post) => {
+        return post.includes(query);
+      });
+    }
 
     return (
-      <form action="/" method="get" className={searchHidden}>
+    <div>
+      <div>
         <label htmlFor="header-search">
-            {/* For screen readers */}
-            <span className="label-hidden">Search blog posts</span>
+          <span className="label-hidden">Search courses</span>
         </label>
-        <input
-            type="text"
-            id="header-search"
-            placeholder="Search courses"
-            name="s"
-        />
-        <input type="submit" value="search"/>
-    </form>
+        <input type="text" onChange={(e) => {this.setState({ results: filteredSearch(posts, e.target.value) })}}/>
+      </div>
+      <ul id="courseDropdown">
+        {this.state.results.map((result, i) => <li key={i}>{result.toUpperCase()}</li>)}
+      </ul>
+    </div>
     )
   }
 
   renderCourses = () => {
-    const coursesHidden = !this.state.hidden ? "" : "hidden";
-
     return (
-      <div id="courses" className={coursesHidden}>
-        {this.getCurrentCourses()}
+      <div id="courses">
+        {this.state.courses}
       </div>
     )
   }
@@ -75,8 +86,7 @@ export default class Sidebar extends React.Component {
   render() {
     const flippedClass = !this.state.hidden ? "flip" : "";
     const sidebarClass = !this.state.hidden ? "opened" : "";
-    const currBackGroundColor = !this.state.hidden ? "#ffffff" : "";
-    const resetHidden = !this.state.hidden ? "" : "hidden";
+    const allHidden = !this.state.hidden ? "" : "hidden";
     const buttonPos = !this.state.hidden ? "440" : "0";
 
     return (
@@ -88,10 +98,10 @@ export default class Sidebar extends React.Component {
            src="/static/res/ico/tempSidebar.png"
           />
         </div>
-        <div id="sidebar" className={sidebarClass} style={{ backgroundColor: currBackGroundColor }} data-testid="test-sidebar">
+        <div id="sidebar" className={`${allHidden} ${sidebarClass}`} data-testid="test-sidebar">
           {this.renderSearchBar()}
           {this.renderCourses()}
-          <button id="reset" data-testid="test-reset" className={resetHidden} onClick={() => this.props.reset()}>Reset Selections</button>
+          <button id="reset" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selections</button>
         </div>
       </div>
     )
@@ -102,5 +112,6 @@ Sidebar.propTypes = {
   fceCount: PropTypes.number,
   graphName: PropTypes.string,
   reset: PropTypes.func,
-  activeCourses: PropTypes.array
+  activeCourses: PropTypes.array,
+  nodesJSON: PropTypes.array
 };

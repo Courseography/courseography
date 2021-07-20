@@ -627,7 +627,8 @@ a:active
 
 .opened
 {
-  width : 160px !important;
+  width            : 160px !important;
+  background-color : #ffffff;
 }
 
 .hidden
@@ -706,6 +707,19 @@ a:active
   margin-left      : 60px;
   text-align       : center;
   z-index          : 2;
+}
+
+#courseDropdown
+{
+  overflow        : scroll;
+  list-style-type : none;
+  height          : 100px;
+  z-index         : 2;
+}
+
+#courseDropdown .li
+{
+  font-size: smaller;
 }
 
 #sidebar-button:hover

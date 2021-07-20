@@ -468,6 +468,7 @@ export default class Graph extends React.Component {
     this.nodes.current.reset();
     this.bools.current.reset();
     this.edges.current.reset();
+    this.setState({ selectedNodes: [] });
     if (this.state.currFocus !== null) {
       this.highlightFocuses([]);
     }
@@ -723,6 +724,7 @@ export default class Graph extends React.Component {
           graphName={this.state.graphName}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
+          nodesJSON={this.state.nodesJSON}
         />
         <CourseModal
           showCourseModal={this.state.showCourseModal}
