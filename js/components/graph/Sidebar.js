@@ -11,6 +11,11 @@ export default class Sidebar extends React.Component {
     };
   }
 
+  /**
+   * If the active course props change, update the rendered courses that are in the sidebar.
+   * @param  {prevProps} prevProps
+   * @return {HTMLDivElement} A course item
+   */
   componentDidUpdate(prevProps) {
     if (prevProps.activeCourses !== this.props.activeCourses) {
       var curr = this.props.activeCourses.map((course, i) => {
@@ -37,6 +42,10 @@ export default class Sidebar extends React.Component {
   }
 
   // Sidebar rendering methods
+  /**
+   * Render the FCE counter above the sidebar on the left side.
+   * @return {HTMLDivElement} FCE to the DOM
+   */
   renderFCE = () => {
     const fceString = Number.isInteger(this.props.fceCount) ? this.props.fceCount + ".0" : this.props.fceCount
 
@@ -47,6 +56,10 @@ export default class Sidebar extends React.Component {
     )
   }
 
+  /**
+   * Render the search bar and dropdown results within the sidebar dropdown.
+   * @return {HTMLDivElement} Searchbar to the DOM
+   */
   renderSearchBar = () => {
     const posts = this.props.nodesJSON.map(node => node.id_);
 

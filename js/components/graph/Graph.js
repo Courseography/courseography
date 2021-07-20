@@ -308,9 +308,14 @@ export default class Graph extends React.Component {
     });
   };
 
+  /**
+   * This handles clicking of dropdown items from the side bar search.
+   * @param  {string} id
+   */
   handleItemClick = id => {
     var currentNode = this.nodes.current[id];
     currentNode.toggleSelection(this);
+    /** This checks whether the item is being selected or deselected, and updates that in the state. */
     if (currentNode.state.selected) {
       this.setState(prevState => ({
         selectedNodes: prevState.selectedNodes.filter(course => course !== id)
