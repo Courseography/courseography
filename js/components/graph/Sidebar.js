@@ -14,12 +14,14 @@ export default class Sidebar extends React.Component {
    * @return {array} list of div's for each course that is active
    */
   getCourses = () => {
-    let temp = [...this.props.activeCourses];
-    return temp.map((course, i) => {
-      return (
-          <div key={i} id="course-selection">{course.toUpperCase()}</div>
-      )
-    });
+    if (this.props.activeCourses){
+      let temp = [...this.props.activeCourses];
+      return temp.map((course) => {
+        return (
+            <div key={'active'.concat(' ', course)} data-testid={'test'.concat(' ', course)} id="course-selection">{course.toUpperCase()}</div>
+        )
+      });
+    }
   }
 
   toggleSidebar = location => {
@@ -53,7 +55,7 @@ export default class Sidebar extends React.Component {
 
   renderCourses = () => {
     return (
-      <div className="courses">
+      <div className="courses" data-testid="test-course-selection">
         {this.getCourses()}
       </div>
     )
@@ -77,7 +79,7 @@ export default class Sidebar extends React.Component {
         <div id="sidebar" className={`${allHidden} ${sidebarClass}`} data-testid="test-sidebar">
           <label id="selected-courses">Selected courses:</label>
           {this.renderCourses()}
-          <button id="reset-selections" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selections</button>
+          <button id="reset-selections" data-testid="test-reset-sidebar" onClick={() => this.props.reset()}>Reset Selections</button>
         </div>
       </div>
     )
