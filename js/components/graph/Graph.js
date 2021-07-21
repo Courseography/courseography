@@ -53,7 +53,7 @@ export default class Graph extends React.Component {
       panStartY: 0,
       showCourseModal: false,
       showGraphDropdown: false,
-      selectedNodes: []
+      selectedNodes: new Set()
     };
 
     this.nodes = React.createRef();
@@ -719,20 +719,12 @@ export default class Graph extends React.Component {
         {...reactGraphPointerEvents}
       >
         <Sidebar
-          ref={this.sidebar}
           fceCount = {this.props.fceCount}
-          // I will need to update the graph name later once the other PR is done
-          graphName={this.state.graphName}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
           nodesJSON={this.state.nodesJSON}
-          itemClick={this.handleItemClick}
         />
-        <CourseModal
-          showCourseModal={this.state.showCourseModal}
-          courseId={this.state.courseId}
-          onClose={this.onClose}
-        />
+        <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <GraphDropdown
           showGraphDropdown={this.state.showGraphDropdown}

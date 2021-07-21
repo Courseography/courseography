@@ -5,24 +5,21 @@ export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hidden: true,
-      courses: [],
+      hidden: true
     };
   }
 
   /**
-   * If the active course props change, update the rendered courses that are in the sidebar.
-   * @param  {prevProps} prevProps
+   * Update the rendered courses that are in the sidebar.
+   * @return {array} list of div's for each course that is active
    */
-  componentDidUpdate(prevProps) {
-    if (prevProps.activeCourses !== this.props.activeCourses) {
-      var curr = this.props.activeCourses.map((course, i) => {
-        return (
+  getCourses = () => {
+    let temp = [...this.props.activeCourses];
+    return temp.map((course, i) => {
+      return (
           <div key={i}>{course.toUpperCase()}</div>
-        )
-      });
-      this.setState({ courses: curr });
-    }
+      )
+    });
   }
 
   toggleSidebar = location => {
@@ -57,7 +54,7 @@ export default class Sidebar extends React.Component {
   renderCourses = () => {
     return (
       <div id="courses">
-        {this.state.courses}
+        {this.getCourses()}
       </div>
     )
   }
@@ -88,9 +85,7 @@ export default class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   fceCount: PropTypes.number,
-  graphName: PropTypes.string,
   reset: PropTypes.func,
-  activeCourses: PropTypes.array,
+  activeCourses: PropTypes.instanceOf(Set),
   nodesJSON: PropTypes.array,
-  itemClick: PropTypes.func
 };
