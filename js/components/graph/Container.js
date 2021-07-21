@@ -99,16 +99,16 @@ export default class Container extends React.Component {
           initialDrawMode="draw-node"
           setFCECount={this.setFCECount}
           start_blank={this.props.start_blank}
+          graphs={this.state.graphs}
+          updateGraph={this.updateGraph}
         />
         <Sidebar
           ref={this.sidebar}
           currFocus={this.state.currFocus}
           fceCount = {this.state.fceCount}
-          graphs={this.state.graphs}
           graphName={this.state.graphName}
           highlightFocus={this.highlightFocus}
           reset={() => this.graph.current.reset()}
-          updateGraph={this.updateGraph}
         />
       </div>
     )

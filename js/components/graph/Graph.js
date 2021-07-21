@@ -8,6 +8,7 @@ import EdgeGroup from "./EdgeGroup";
 import InfoBox from "./InfoBox";
 import NodeGroup from "./NodeGroup";
 import RegionGroup from "./RegionGroup";
+import GraphDropdown from "./GraphDropdown";
 import * as focusInfo from "./sidebar/focus_descriptions";
 
 const ZOOM_INCREMENT = 0.010;
@@ -50,7 +51,8 @@ export default class Graph extends React.Component {
       panning: false,
       panStartX: 0,
       panStartY:0,
-      showCourseModal: false
+      showCourseModal: false,
+      showGraphDropdown:false
     };
 
     this.nodes = React.createRef();
@@ -74,6 +76,13 @@ export default class Graph extends React.Component {
     if (document.getElementById("nav-export")) {
       document.getElementById("nav-export")
         .addEventListener("click", this.exportModal.current.openModal);
+    }
+
+    if (document.getElementById("nav-graph")) {
+      document.getElementById("nav-graph")
+        .addEventListener("mouseenter", this.setShowGraphDropdown);
+      document.getElementById("nav-graph")
+        .addEventListener("mouseleave", this.hideGraphDropdown);
     }
   }
 
@@ -426,6 +435,18 @@ export default class Graph extends React.Component {
     });
   };
 
+  setShowGraphDropdown = () => {
+    this.clearAllTimeouts();
+    this.setState({showGraphDropdown: true});
+  }
+
+  hideGraphDropdown =  () => {
+    var timeout = setTimeout(() => {
+      this.setState({showGraphDropdown: false});
+    }, 500);
+    this.setState({timeouts: this.state.timeouts.concat(timeout)});
+  }
+
   onClose = () => {
     this.setState({ showCourseModal: false });
   }
@@ -692,6 +713,13 @@ export default class Graph extends React.Component {
       >
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
+        <GraphDropdown
+          showGraphDropdown={this.state.showGraphDropdown}
+          onMouseMove={this.setShowGraphDropdown}
+          onMouseLeave={this.hideGraphDropdown}
+          graphs={this.props.graphs}
+          updateGraph={this.props.updateGraph}
+        />
         <Button
           divId="zoom-in-button"
           text="+"
@@ -951,7 +979,9 @@ Graph.propTypes = {
   incrementFCECount: PropTypes.func,
   initialDrawMode: PropTypes.string,
   setFCECount: PropTypes.func,
-  start_blank: PropTypes.bool
+  start_blank: PropTypes.bool,
+  graphs: PropTypes.array,
+  updateGraph: PropTypes.func
 };
 
 Graph.defaultProps = {
