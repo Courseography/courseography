@@ -644,7 +644,9 @@ a:active
 
 .opened
 {
-  width            : 160px !important;
+  height           : 350px;
+  margin-top       : 20px;
+  width            : 140px !important;
   background-color : #ffffff;
 }
 
@@ -655,60 +657,67 @@ a:active
 
 #fce
 {
-  height      : 50px;
-  width       : 160px;
-  padding-top : 10px;
+  height      : 40px;
+  width       : 140px;
+  padding-top : 20px;
 }
 
 #fcecount
 {
+  border-radius    : 10px;
   height           : 40px;
-  width            : 160px;
+  width            : 140px;
   float            : left;
   background-color : #ffffff;
-  padding-top      : 5px;
+  padding-top      : 8px;
   text-align       : center;
-  font-size        : 18px;
+  font-size        : 16px;
 }
 
-.label-hidden {
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-}
-
-#reset
+.label-hidden
 {
-  margin-top : 10px;
-  text-align : center;
-  float      : center;
-  width      : 47%;
-  height     : 40px;
-  cursor     : pointer;
-  font-size: small;
+  clip        : rect(0 0 0 0);
+  clip-path   : inset(50%);
+  height      : 1px;
+  overflow    : hidden;
+  position    : absolute;
+  white-space : nowrap;
+  width       : 1px;
 }
 
-#reset:hover
+#reset-selections
 {
-  background-color : #222222;
-  color            : #ffffff;
+  margin           : 10px;
+  text-align       : center;
+  float            : center;
+  width            : 90px;
+  height           : 20px;
+  cursor           : pointer;
+  border-radius    : 15px;
+  font-size        : 10px;
+  background-color : #ffffff;
+  color            : #c8afce;
+  border           : #e8e9eb;
+  box-shadow: 3px 3px 3px #e8e9eb;
+  outline          : none;
+}
+
+#reset-selections:hover
+{
+  background-color : #cac4d4;
 }
 
 #container
 {
-  height   : calc(100% - 50px);
-  width    : 100%;
-  position : relative;
-  background: #f0f5f8;
+  height     : calc(100% - 50px);
+  width      : 100%;
+  position   : relative;
+  background : #f0f5f8;
 }
 
 #sidebar
 {
-  height           : 450px;
+  border-radius    : 20px;
   float            : left;
   position         : absolute;
 }
@@ -716,32 +725,42 @@ a:active
 #sidebar-button
 {
   cursor           : pointer;
-  width            : 40px;
-  height           : 20px;
+  border-radius    : 10px;
+  width            : 30px;
+  height           : 15px;
   float            : left;
   background-color : #d9d9d9;
   position         : absolute;
+  margin-top       : 10px;
   margin-left      : 60px;
   text-align       : center;
   z-index          : 2;
 }
 
-#courseDropdown
+#selected-courses
 {
-  overflow        : scroll;
-  list-style-type : none;
-  height          : 100px;
-  z-index         : 2;
+  padding-top: 10px;
+  font-size        : small;
+  text-decoration  : underline;
+  color            : #a47cb8;
+  background-color : none;
 }
 
-#courseDropdown .li
+.courses
 {
-  font-size: smaller;
+  overflow         : auto;
+  height           : 250px;
+  background-color : none;
+  width            : 105px;
+  display          : inline-block;
 }
 
-#courseDropdown .item:hover
+#course-selection
 {
-  cursor: pointer;
+  width: 105px;
+  font-size: small;
+  background-color: none;
+  text-align: center;
 }
 
 #sidebar-button:hover
@@ -751,8 +770,8 @@ a:active
 
 #sidebar-icon
 {
-  width        : 20px;
-  height       : 20px;
+  width        : 15px;
+  height       : 15px;
 }
 
 #focuses-nav, #graph-nav

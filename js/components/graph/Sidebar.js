@@ -17,7 +17,7 @@ export default class Sidebar extends React.Component {
     let temp = [...this.props.activeCourses];
     return temp.map((course, i) => {
       return (
-          <div key={i}>{course.toUpperCase()}</div>
+          <div key={i} id="course-selection">{course.toUpperCase()}</div>
       )
     });
   }
@@ -53,7 +53,7 @@ export default class Sidebar extends React.Component {
 
   renderCourses = () => {
     return (
-      <div id="courses">
+      <div className="courses">
         {this.getCourses()}
       </div>
     )
@@ -63,7 +63,7 @@ export default class Sidebar extends React.Component {
     const flippedClass = !this.state.hidden ? "flip" : "";
     const sidebarClass = !this.state.hidden ? "opened" : "";
     const allHidden = !this.state.hidden ? "" : "hidden";
-    const buttonPos = !this.state.hidden ? "440" : "0";
+    const buttonPos = !this.state.hidden ? "350" : "0";
 
     return (
       <div style={{ height: "0px" }}>
@@ -75,8 +75,9 @@ export default class Sidebar extends React.Component {
           />
         </div>
         <div id="sidebar" className={`${allHidden} ${sidebarClass}`} data-testid="test-sidebar">
+          <label id="selected-courses">Selected courses:</label>
           {this.renderCourses()}
-          <button id="reset" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selections</button>
+          <button id="reset-selections" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selections</button>
         </div>
       </div>
     )

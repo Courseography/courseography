@@ -169,6 +169,10 @@ export default class Graph extends React.Component {
           inEdgesObj[node.id_] = [];
           childrenObj[node.id_] = [];
           outEdgesObj[node.id_] = [];
+          // Quickly adding any active nodes from local storage into the selected nodes
+          if (localStorage.getItem(node.id_) === 'active') {
+            this.state.selectedNodes.add(node.id_);
+          }
         });
 
         hybridsList.forEach(hybrid => {
@@ -248,14 +252,10 @@ export default class Graph extends React.Component {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5);
-        this.setState(prevState => ({
-          selectedNodes: prevState.selectedNodes.filter(course => course !== courseId)
-        }));
+        this.state.selectedNodes.delete(courseId);
       } else {
         this.props.incrementFCECount(0.5);
-        this.setState(prevState => ({
-          selectedNodes: [...prevState.selectedNodes, courseId]
-        }))
+        this.state.selectedNodes.add(courseId);
       }
     }
   };
@@ -468,7 +468,7 @@ export default class Graph extends React.Component {
     this.nodes.current.reset();
     this.bools.current.reset();
     this.edges.current.reset();
-    this.setState({ selectedNodes: [] });
+    this.setState({ selectedNodes: new Set() });
     if (this.state.currFocus !== null) {
       this.highlightFocuses([]);
     }
