@@ -13,7 +13,9 @@ export default class Focus extends React.Component {
   render() {
     const divId = this.props.pId + '-details';
     let detailsInfo, detailsDiv;
+    let focusClass = "focus";
     if (this.props.selected) {
+      focusClass += " active-focus"
       detailsInfo = this.getDetailsInfo();
       detailsDiv = <div
                     id={divId}
@@ -26,7 +28,7 @@ export default class Focus extends React.Component {
     }
 
     return (
-      <div className="focus" style={{'--background-color': this.props.color}}>
+      <div className={focusClass} style={{'--background-color': this.props.color}}>
         <button id={this.props.pId} onClick={() => this.props.highlightFocus(this.props.pId)}>
           {this.props.focusName}
         </button>

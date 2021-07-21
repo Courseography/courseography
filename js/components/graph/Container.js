@@ -110,7 +110,9 @@ export default class Container extends React.Component {
           updateGraph={this.updateGraph}
         />
         <FocusBar
+          focusBarEnabled={this.state.graphName === "Computer Science"}
           highlightFocus={this.highlightFocus}
+          currFocus={this.state.currFocus}
         />
       </div>
     )
