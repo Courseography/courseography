@@ -14,7 +14,6 @@ export default class Sidebar extends React.Component {
   /**
    * If the active course props change, update the rendered courses that are in the sidebar.
    * @param  {prevProps} prevProps
-   * @return {HTMLDivElement} A course item
    */
   componentDidUpdate(prevProps) {
     if (prevProps.activeCourses !== this.props.activeCourses) {
@@ -77,6 +76,7 @@ export default class Sidebar extends React.Component {
     <div>
       <div>
         <label htmlFor="header-search">
+          {/* For text to speech purposes */}
           <span className="label-hidden">Search courses</span>
         </label>
         <input type="text" onChange={(e) => {this.setState({ results: filteredSearch(posts, e.target.value) })}}/>

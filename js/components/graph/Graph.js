@@ -317,10 +317,12 @@ export default class Graph extends React.Component {
     currentNode.toggleSelection(this);
     /** This checks whether the item is being selected or deselected, and updates that in the state. */
     if (currentNode.state.selected) {
+      this.props.incrementFCECount(-0.5);
       this.setState(prevState => ({
         selectedNodes: prevState.selectedNodes.filter(course => course !== id)
       }));
     } else {
+      this.props.incrementFCECount(0.5);
       this.setState(prevState => ({
         selectedNodes: [...prevState.selectedNodes, id]
       }))
