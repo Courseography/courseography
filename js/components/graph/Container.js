@@ -100,14 +100,14 @@ export default class Container extends React.Component {
           initialDrawMode="draw-node"
           setFCECount={this.setFCECount}
           start_blank={this.props.start_blank}
+          graphs={this.state.graphs}
+          updateGraph={this.updateGraph}
         />
         <Sidebar
           ref={this.sidebar}
           fceCount = {this.state.fceCount}
-          graphs={this.state.graphs}
           graphName={this.state.graphName}
           reset={() => this.graph.current.reset()}
-          updateGraph={this.updateGraph}
         />
         <FocusBar
           focusBarEnabled={this.state.graphName === "Computer Science"}

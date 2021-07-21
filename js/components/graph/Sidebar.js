@@ -18,22 +18,6 @@ export default class Sidebar extends React.Component {
     }
   }
 
-  createGraphButtons = () => {
-    return this.props.graphs.map((graph, i) => {
-      return (
-        <div
-          className="graph-button"
-          id={"graph-" + graph.id}
-          data-testid={"test-graph-" + i}
-          key={i}
-          onClick={() => this.props.updateGraph(graph.title)}
-        >
-          {graph.title}
-        </div>
-      )
-    });
-  }
-
   toggleSidebar = location => {
     if (this.state.toggled) {
       // close graph
@@ -66,32 +50,17 @@ export default class Sidebar extends React.Component {
   }
 
   renderSidebarNav = () => {
-    const graphActiveClass = this.state.graphActive === 1 ? "active" : "";
-
     return (
       <nav id="sidebar-nav">
         <ul>
-          <li
-            id="graphs-nav"
-            className={graphActiveClass}
-            onClick={() => this.showFocuses(false)}
-            data-testid="test-graphs-nav"
-          >
-            <div className="nav-section">Graphs</div>
-          </li>
         </ul>
       </nav>
     )
   }
 
   renderSidebarButtons = () => {
-    const graphHiddenClass = this.state.graphActive === 0 ? "hidden" : "";
-
     return (
       <div>
-        <div id="graphs" className={graphHiddenClass} data-testid="test-graph-buttons">
-          {this.createGraphButtons()}
-        </div>
       </div>
     )
   }
@@ -121,8 +90,6 @@ export default class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   fceCount: PropTypes.number,
-  graphs: PropTypes.array,
   graphName: PropTypes.string,
   reset: PropTypes.func,
-  updateGraph: PropTypes.func
 };

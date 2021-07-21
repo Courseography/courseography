@@ -20,9 +20,12 @@ fetchMock.get('/graphs', testContainerData);
 
 document.body.innerHTML = `
 <nav>
-    <li>
-        <a id="nav-export">Export</a>
-    </li>
+    <ul>
+        <li>
+            <a id="nav-graph" href="/graph">Graph</a>
+            <a id="nav-export">Export</a>
+        </li>
+    </ul>
 </nav>
 <div id="react-graph" class="react-graph"></div>
 <div id="fcecount"></div>`;
