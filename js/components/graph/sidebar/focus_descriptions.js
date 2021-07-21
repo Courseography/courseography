@@ -114,7 +114,7 @@ export var webFocusList = [
 
 // Focus descriptions
 export var HCIDescription =
-  "Human-Computer Interaction (HCI) is the scientific study of the use of " +
+  "<p>Human-Computer Interaction (HCI) is the scientific study of the use of " +
   "computers by people and the design discipline that informs the creation of " +
   "systems and software that are useful, usable, and enjoyable for the people " +
   "who use them. HCI students have exciting opportunities for research and graduate " +
@@ -134,10 +134,10 @@ export var HCIDescription =
   "Mechanical and Industrial Engineering, such as MIE240H, MIE343H, MIE344H, MIE448H, and " +
   "MIE449H. Human factors is a sister discipline to human-computer interaction that approaches " +
   "problems in slightly different ways. <br>" +
-  "<em>[3.]</em> WDW260H1";
+  "<em>[3.]</em> WDW260H1</p>";
 
 export var sciDescription =
-  "Scientific computing studies the world around us. Known and unknown quantities " +
+  "<p>Scientific computing studies the world around us. Known and unknown quantities " +
   "are related through certain rules, e.g. physical laws, formulating mathematical " +
   "problems. These problems are solved by numerical methods implemented as algorithms " +
   "and run on computers. The numerical methods are analyzed and their performance (e.g. " +
@@ -156,10 +156,10 @@ export var sciDescription =
   "<em>[1.]</em> MAT224H1/MAT240H1, MAT244H1, MAT334H1/MAT354H1, MAT337H1/MAT357H1 <br> <br>" +
   "It is also recommended that students in this focus consider taking a half-course or two from " +
   "the basic sciences (such as physics, chemistry, biology), as these sciences provide the sources " +
-  "of many problems solved by numerical techniques.";
+  "of many problems solved by numerical techniques.</p>";
 
 export var AIDescription =
-  "Artificial Intelligence (AI) is aimed at understanding and replicating the computational processes " +
+  "<p>Artificial Intelligence (AI) is aimed at understanding and replicating the computational processes " +
   "underlying intelligent behaviour. These behaviours include the perception of one's environment, " +
   "learning how that environment is structured, communicating with other agents, and reasoning to guide " +
   "one's actions. This focus is designed to provide students with an introduction to some of the key " +
@@ -177,10 +177,10 @@ export var AIDescription =
   "c) CSC321H1, CSC411H1, CSC412H1 <br>" +
   "d) CSC384H1, CSC486H1 <br> <br>" +
   "Suggested Related Courses: <br> <br>" +
-  "<em>[1.]</em> CSC200Y1, CSC324H1, COG250Y1, PSY270H1, PHL232H1, PHL342H1, STA414H1";
+  "<em>[1.]</em> CSC200Y1, CSC324H1, COG250Y1, PSY270H1, PHL232H1, PHL342H1, STA414H1</p>";
 
 export var NLPDescription =
-  "How can we build and analyze systems for enabling users to communicate with computers using human " +
+  "<p>How can we build and analyze systems for enabling users to communicate with computers using human " +
   "language (also called natural language), and for automatically processing the vast amounts of data " +
   "on the web available in the form of text? The focus covers appropriate material on natural language " +
   "interfaces, as well as tools such as document summarization, intelligent search over the web, and so " +
@@ -196,10 +196,10 @@ export var NLPDescription =
   "Other relevant CSC courses, depending on the student's interests, include other courses in " +
   "artificial intelligence such as CSC384H1 or CSC420H1. Linguistics, Psychology, and Cognitive " +
   "Science are all directly relevant to this focus, and we recommend that interested students take " +
-  "additional courses from any or all of them.";
+  "additional courses from any or all of them.</p>";
 
 export var visionDescription =
-  "Computer vision is the science and technology of machines that can see. As a science, the goal " +
+  "<p>Computer vision is the science and technology of machines that can see. As a science, the goal " +
   "of computer vision is to understand the computational processes required for a machine to come " +
   "to an understanding of the content of a set of images. The data here may be a single snapshot, " +
   "a video sequence, or a set of images from different viewpoints or provided by medical scanners. <br> <br>" +
@@ -221,10 +221,10 @@ export var visionDescription =
   "but is not necessarily complete. The ordering is alphabetical and not indicative of importance. " +
   "Note: there are prerequisites for many of these courses that we do not list here. <br> <br>" +
   "APM462H1, COG250Y1, CSC384H, CSC485H1, CSC486H1, ECE216H, PHL232H1, PHY385H1, PSL440Y1, PSY270H1, " +
-  "PSY280H1, STA257H1/STA261H1";
+  "PSY280H1, STA257H1/STA261H1</p>";
 
 export var systemsDescription =
-  "Software systems are complex and interesting. Poorly done systems can be incredibly expensive: " +
+  "<p>Software systems are complex and interesting. Poorly done systems can be incredibly expensive: " +
   "they can cost society billions of dollars, and sometimes make the difference between life and death. " +
   "Rapid changes in technology and applications means that the underlying systems must continually " +
   "adapt. This focus takes you under the covers of software systems, laying bare the layers and " +
@@ -236,10 +236,10 @@ export var systemsDescription =
   "Suggested Related Courses: <br> <br>" +
   "<em>[1.]</em> CSC301H1, CSC309H1, CSC410H1, ECE489H1 <br> <br>" +
   "Relevant courses offered at UTM: CSC347H5, CSC423H5, CSC427H5 <br>" +
-  "Relevant courses offered by Engineering: ECE454H1, ECE568H1";
+  "Relevant courses offered by Engineering: ECE454H1, ECE568H1</p>";
 
 export var gameDescription =
-  "Video game design combines several disciplines within computer science, including software " +
+  "<p>Video game design combines several disciplines within computer science, including software " +
   "engineering, graphics, artificial intelligence and human-computer interaction. It also " +
   "incorporates elements of economics, psychology, music and creative writing, requiring video game " +
   "researchers to have a diverse, multidisciplinary set of skills. <br> <br>" +
@@ -252,10 +252,10 @@ export var gameDescription =
   "Suggested Related Courses: <br> <br> " +
   "<em>[1.]</em> CSC358H1, CSC458H1, CSC428H1 <br> " +
   "<em>[2.]</em> MUS300H1, CIN212H/INI222H1, CIN432H1/INI465H1, ENG235H1 <br> " +
-  "<em>[3.]</em> ECO326H1, RSM482H1/MGT2056H";
+  "<em>[3.]</em> ECO326H1, RSM482H1/MGT2056H</p>";
 
 export var theoryDescription =
-  "Why is it easy to sort a list of numbers, but hard to break Internet encryption schemes? " +
+  "<p>Why is it easy to sort a list of numbers, but hard to break Internet encryption schemes? " +
   "Is finding a solution to a problem harder than checking that a solution is correct? Can we " +
   "find good approximate solutions, even when the exact solutions seem out of reach? Theory of " +
   "Computation studies the inherent complexity of fundamental algorithmic problems. On one hand, " +
@@ -294,10 +294,10 @@ export var theoryDescription =
   "Suggested Related Courses: <br> <br>" +
   "<em>[1.]</em> BCB410H1 <br>" +
   "<em>[2.]</em> CSC320H1/CSC418H1/CSC420H1, CSC321H1/CSC384H1/CSC411H1/CSC485H1, CSC343H1/CSC443H1, " +
-  "CSC351H1/CSC456H1, CSC358H1/CSC458H1, CSC412H1/CSC465H1/CSC486H1, CSC488H1";
+  "CSC351H1/CSC456H1, CSC358H1/CSC458H1, CSC412H1/CSC465H1/CSC486H1, CSC488H1</p>";
 
 export var webDescription =
-  "The Web and Internet Technologies focus introduces students to the systems and algorithms that " +
+  "<p>The Web and Internet Technologies focus introduces students to the systems and algorithms that " +
   "power today's large-scale web and Internet applications such as search engines, social networking " +
   "applications, web data mining applications, and content distribution networks. The focus covers both " +
   "the algorithm foundations of Web and Internet Technologies, as well as the implementation and system " +
@@ -312,4 +312,4 @@ export var webDescription =
   "<em>[2.]</em> 0.5 FCEs from the following: CSC310H1, CSC443H1, CSC469H1 <br> <br>" +
   "Suggested Related Courses: <br> <br>" +
   "<em>[1.]</em> Courses offered at UTM: CSC347H5, CSC423H5, CSC427H5 <br>" +
-  "<em>[2.]</em> ECE568H1";
+  "<em>[2.]</em> ECE568H1</p>";

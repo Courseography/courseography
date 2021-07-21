@@ -835,6 +835,7 @@ a:active
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-end;
 }
 
 .focus-menu-toggle
@@ -847,7 +848,6 @@ a:active
   padding: 7px 15px 0 15px;
   font-size: 20px;
   width: 150px;
-  align-self: flex-end;
 }
 
 .focuses-list
@@ -927,6 +927,28 @@ a:active
 .active-focus::after
 {
   border-color : transparent transparent transparent var(--background-color);
+}
+
+.focus-info
+{
+  width: 150px;
+  text-align: right;
+  margin: 5px;
+}
+
+.focus-info button
+{
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: white;
+  color: #a273d3;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 26px;
+  font-family: serif;
+  box-shadow: 1px 2px 6px 1px rgb(0 0 0 / 35%);
 }
 
 .flip
