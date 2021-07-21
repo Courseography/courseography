@@ -43,7 +43,7 @@ header page =
                 ! H.customAttribute "context" (textValue page)
         H.div ! A.class_ "nav-middle" $ do
             H.ul ! A.id "nav-links" $ do
-                H.li $ toLink "/graph" "Graph"
+                H.li $ A.id "nav-graph" $ toLink "/graph" "Graph"
                 H.li $ toLink "/grid" "Grid"
                 H.li $ toLink "/generate" "Generate (beta)"
                 -- H.li $ toLink "/timesearch" "Search"
