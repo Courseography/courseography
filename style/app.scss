@@ -145,6 +145,12 @@ body
   margin  : 0px 0px 5px 0px;
 }
 
+.nav-middle
+{
+  flex       : 1;
+  text-align : center;
+}
+
 #nav-links
 {
   list-style  : none;
@@ -206,11 +212,21 @@ body
   margin         : 5px 0 5px 0;
 }
 
+.nav-left
+{
+  width : 250px;
+}
+
 #courseography-header
 {
   width          : 200px;
   padding-top    : 10px;
-  margin         : 0 auto 0 30px;
+}
+
+.nav-right
+{
+  width      : 250px;
+  text-align : right;
 }
 
 #nav-export
@@ -218,8 +234,9 @@ body
   width: 60px;
   background: transparent;
   border: none;
-  margin:auto 0 auto auto;
+  padding-top: 9px;
 }
+
 #nav-export img {
   width: inherit;
   height: inherit;
@@ -2479,16 +2496,16 @@ main-filter input
 
 .tooltip-group-display
 {
-  cursor: pointer;
-  transition: opacity 0.4s linear;
-  opacity: 1;
+  cursor     : pointer;
+  transition : opacity 0.4s linear;
+  opacity    : 1;
 }
 
 .tooltip-group-hidden
 {
-  cursor: pointer;
-  transition: opacity 0.4s linear;
-  opacity: 0;
+  cursor     : pointer;
+  transition : opacity 0.4s linear;
+  opacity    : 0;
 }
 
 .hidden
