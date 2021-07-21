@@ -7,7 +7,6 @@ export default class Sidebar extends React.Component {
     this.state = {
       hidden: true,
       courses: [],
-      results: []
     };
   }
 
@@ -55,45 +54,6 @@ export default class Sidebar extends React.Component {
     )
   }
 
-  /**
-   * Render the search bar and dropdown results within the sidebar dropdown.
-   * @return {HTMLDivElement} Searchbar to the DOM
-   */
-  renderSearchBar = () => {
-    const posts = this.props.nodesJSON.map(node => node.id_);
-
-    const filteredSearch = (posts, query) => {
-      if (!query) {
-        return posts;
-      }
-
-      return posts.filter((post) => {
-        return post.includes(query);
-      });
-    }
-
-    return (
-    <div>
-      <div>
-        <label htmlFor="header-search">
-          {/* For text to speech purposes */}
-          <span className="label-hidden">Search courses</span>
-        </label>
-        <input type="text" onChange={(e) => {this.setState({ results: filteredSearch(posts, e.target.value) })}}/>
-      </div>
-      <ul id="courseDropdown">
-        {this.state.results.map((result, i) =>
-        <li
-          key={i}
-          className="item"
-          onClick={() => this.props.itemClick(result)}>
-            {result.toUpperCase()}
-        </li>)}
-      </ul>
-    </div>
-    )
-  }
-
   renderCourses = () => {
     return (
       <div id="courses">
@@ -118,7 +78,6 @@ export default class Sidebar extends React.Component {
           />
         </div>
         <div id="sidebar" className={`${allHidden} ${sidebarClass}`} data-testid="test-sidebar">
-          {this.renderSearchBar()}
           {this.renderCourses()}
           <button id="reset" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selections</button>
         </div>
