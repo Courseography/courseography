@@ -18,7 +18,7 @@ const computerScienceFocusData = [
   ];
 
 const COLORS = ["#d472c7", "#ce73d3", "#c974d2", "#c672d2", "#bd71d3", "#b575d5", "#b072d3", "#ab72d3", "#a172d2"];
-const SelectedColors = ["#e67ad7", "#e380e8", "#de82e8", "#d67be3", "#d07de8", "#c781eb", "#bf7ce6", "#b87be3", "#b07ce6"];
+const selectedColors = ["#e67ad7", "#e380e8", "#de82e8", "#d67be3", "#d07de8", "#c781eb", "#bf7ce6", "#b87be3", "#b07ce6"];
 
 export default class FocusBar extends React.Component {
     constructor(props) {
@@ -61,7 +61,7 @@ export default class FocusBar extends React.Component {
                 pId={focus[0]}
                 data-testid={"test-focus-" + i}
                 focusName={focus[1]}
-                color={selected ? SelectedColors[i] : COLORS[i]}
+                color={selected ? selectedColors[i] : COLORS[i]}
                 selected={selected}
                 selectFocus={(id) => this.selectFocus(id)}
               />
