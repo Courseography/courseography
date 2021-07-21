@@ -38,18 +38,22 @@ masterTemplate title headers body scripts =
 header :: T.Text -> H.Html
 header page =
     H.nav ! A.class_ "row header" $ do
-        H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
-            ! H.customAttribute "context" (textValue page)
-        H.ul ! A.id "nav-links" $ do
-            H.li ! A.id "nav-graph" $ toLink "/graph" "Graph▼"
-            H.li $ toLink "/grid" "Grid"
-            H.li $ toLink "/generate" "Generate (beta)"
-            -- H.li $ toLink "/timesearch" "Search"
-            -- H.li $ toLink "/draw" "Draw"
-            -- TODO: re-enable after handling new first-year courses
-            -- H.li $ toLink "post" "Check My POSt!"
-            H.li $ toLink "/about" "About"
-        if page `elem` ["graph", "grid"]
-        then H.button ! A.id "nav-export" $ do
-            H.img ! A.src "/static/res/ico/export.png" ! A.alt "Export"
-        else ""
+        H.div ! A.class_ "nav-left" $ do
+            H.a ! A.href "/graph" $ do
+                H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
+                    ! H.customAttribute "context" (textValue page)
+        H.div ! A.class_ "nav-middle" $ do
+            H.ul ! A.id "nav-links" $ do
+                H.li ! A.id "nav-graph" $ toLink "/graph" "Graph"
+                H.li $ toLink "/grid" "Grid"
+                H.li $ toLink "/generate" "Generate (beta)"
+                -- H.li $ toLink "/timesearch" "Search"
+                -- H.li $ toLink "/draw" "Draw"
+                -- TODO: re-enable after handling new first-year courses
+                -- H.li $ toLink "post" "Check My POSt!"
+                H.li $ toLink "/about" "About"
+        H.div ! A.class_ "nav-right" $ do
+            if page `elem` ["graph", "grid"]
+            then H.button ! A.id "nav-export" $ do
+                H.img ! A.src "/static/res/ico/export.png" ! A.alt "Export"
+            else ""
