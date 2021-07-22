@@ -580,7 +580,7 @@ a:active
   width            : 30px;
   height           : 30px;
   padding          : 5px;
-  position         : absolute;
+  position         : relative;
 }
 
 .graph-control-button:hover
@@ -609,8 +609,6 @@ a:active
 
 #reset-view-button
 {
-  top             : 70px;
-  right           : 30px;
   display         : flex;
   align-items     : center;
   justify-content : center;
@@ -2500,21 +2498,20 @@ main-filter input
   padding          : 10px;
 }
 
-.zoom-button-group
+.button-group
 {
-  top              : 4px;
-  right            : 30px;
-  position         : absolute;
   box-shadow       : 1px 0px 5px 0px gray;
   display          : flex;
   flex-direction   : column;
   border-radius    : 6px;
-  overflow         : hidden;
+  margin-top       : 10px;
 }
 
-#graph-zoom-button
+.graph-button-group
 {
-  border        : none;
-  border-radius : 0px;
-  position      : relative;
+  top              : 80px;
+  right            : 30px;
+  position         : absolute;
+  display          : flex;
+  flex-direction   : column;
 }
