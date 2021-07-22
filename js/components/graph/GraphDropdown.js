@@ -6,7 +6,7 @@ export default class GraphDropdown extends React.Component{
   render() {
     let className = "hidden";
     let graphTabLeft = 0;
-    if (document.getElementById("nav-graph")){
+    if (this.props.graphs.length !== 0 && document.getElementById("nav-graph")){
       graphTabLeft = document.getElementById("nav-graph").getBoundingClientRect().left;
       if (this.props.showGraphDropdown){
         className = "graph-dropdown-display";

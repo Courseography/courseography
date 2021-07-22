@@ -224,6 +224,7 @@ class GenerateForm extends React.Component {
     <Graph
       ref={this.graph}
       start_blank={true}
+      graphs={[]}
     />
     </div>
     )
