@@ -688,19 +688,22 @@ a:active
 
 .expanded
 {
-  z-index: 2;
-  width: 140px;
-  display: flex;
-  flex-direction: column;
+  width          : 140px;
+  display        : flex;
+  flex-direction : column;
+  position: inherit;
+  z-index: 1;
 }
 
 .collapsed
 {
-  z-index: 2;
-  width: 140px;
-  display: flex;
-  flex-direction: column;
-  visibility: hidden !important;
+  width          : 140px;
+  height         : 70px;
+  display        : flex;
+  flex-direction : column;
+  visibility     : hidden !important;
+  position: inherit;
+  z-index: 1;
 }
 
 .expanded > #sidebar
