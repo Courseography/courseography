@@ -700,6 +700,7 @@ a:active
   width: 140px;
   display: flex;
   flex-direction: column;
+  visibility: hidden !important;
 }
 
 .expanded > #sidebar
@@ -718,11 +719,6 @@ a:active
   -ms-transform     : rotate(180deg);
   -o-transform      : rotate(180deg);
   transform         : rotate(180deg);
-}
-
-.collapsed
-{
-  visibility: hidden !important;
 }
 
 .collapsed > #sidebar
