@@ -53,7 +53,7 @@ export default class Sidebar extends React.Component {
     const openedClass = this.state.hidden ? "collapsed" : "expanded";
 
     return (
-      <div className={openedClass}>
+      <div className={openedClass} onMouseEnter={() => this.props.toggleZoom()} onMouseLeave={() => this.props.toggleZoom()}>
         {this.renderFCE()}
         <div id="sidebar" data-testid="test-sidebar">
           <h3 id="selected-courses">Selected courses</h3>
@@ -73,4 +73,5 @@ Sidebar.propTypes = {
   reset: PropTypes.func,
   activeCourses: PropTypes.instanceOf(Set),
   nodesJSON: PropTypes.array,
+  toggleZoom: PropTypes.func
 };

@@ -654,6 +654,7 @@ a:active
   text-align       : center;
   font-size        : 16px;
   visibility       : visible;
+  box-shadow       : 2px 2px 2px #e8e9eb;
 }
 
 #reset-selections
@@ -691,8 +692,8 @@ a:active
   width          : 140px;
   display        : flex;
   flex-direction : column;
-  position: inherit;
-  z-index: 1;
+  z-index        : 1;
+  position       : inherit;
 }
 
 .collapsed
@@ -702,8 +703,8 @@ a:active
   display        : flex;
   flex-direction : column;
   visibility     : hidden !important;
-  position: inherit;
-  z-index: 1;
+  z-index        : 1;
+  position       : inherit;
 }
 
 .expanded > #sidebar
@@ -712,7 +713,7 @@ a:active
   width            : 140px !important;
   background-color : #ffffff;
   border-radius    : 20px;
-  box-shadow       : 3px 3px 3px #e8e9eb;
+  box-shadow       : 2px 2px 2px #e8e9eb;
 }
 
 .expanded > #sidebar > #sidebar-button > #sidebar-icon

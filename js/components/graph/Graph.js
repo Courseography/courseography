@@ -33,6 +33,7 @@ export default class Graph extends React.Component {
       timeouts: [],
       width: window.innerWidth,
       height: window.innerHeight,
+      zoomEnabled: true,
       zoomFactor: 1,
       horizontalPanFactor: 0,
       verticalPanFactor: 0,
@@ -498,15 +499,21 @@ export default class Graph extends React.Component {
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
    */
   zoomViewbox = (zoomMode) => {
-    var newZoomFactor = this.state.zoomFactor;
-    if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
-      newZoomFactor -= ZOOM_INCREMENT;
-    } else if (zoomMode === ZOOM_ENUM.ZOOM_OUT) {
-      newZoomFactor += ZOOM_INCREMENT;
+    if (this.state.zoomEnabled) {
+      var newZoomFactor = this.state.zoomFactor;
+      if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
+        newZoomFactor -= ZOOM_INCREMENT;
+      } else if (zoomMode === ZOOM_ENUM.ZOOM_OUT) {
+        newZoomFactor += ZOOM_INCREMENT;
+      }
+      this.setState({
+        zoomFactor: newZoomFactor
+      });
     }
-    this.setState({
-      zoomFactor: newZoomFactor
-    });
+  }
+
+  toggleZoom = () => {
+    this.setState({zoomEnabled:!this.state.zoomEnabled});
   }
 
   calculateRatioGraphSizeToContainerSize = () => {
@@ -729,6 +736,7 @@ export default class Graph extends React.Component {
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
           nodesJSON={this.state.nodesJSON}
+          toggleZoom={this.toggleZoom}
         />
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
