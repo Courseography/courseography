@@ -26,5 +26,5 @@ Button.propTypes = {
   onMouseLeave: PropTypes.func,
   disabled: PropTypes.bool,
   text: PropTypes.string,
-  children: PropTypes.node,
+  children: PropTypes.node
 };

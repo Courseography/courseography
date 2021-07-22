@@ -569,17 +569,17 @@ a:active
 {
   text-align       : center;
   background-color : #ffffff;
-  outline          : none;
-  font-size        : 14px;
-  border-radius    : 6px;
   border           : none;
+  border-radius    : 6px;
+  outline          : none;
+  font-size        : 18px;
   font-weight      : bold;
   color            : #5c497e;
   cursor           : pointer;
   display          : inline-block;
   width            : 30px;
   height           : 30px;
-  padding          : 0;
+  padding          : 5px;
   position         : absolute;
 }
 
@@ -601,19 +601,20 @@ a:active
   color            : #9c9c9c;
 }
 
-.graph-control-button img {
-  width: 90%;
-  height: inherit;
+.graph-control-button img
+{
+  width : inherit;
+  height : inherit;
 }
 
 #reset-view-button
 {
-  top            : 70px;
-  right          : 30px;
-  display        : flex;
-  align-items    : center;
-  justify-content: center;
-  box-shadow: 1px 0px 5px 0px gray;
+  top             : 70px;
+  right           : 30px;
+  display         : flex;
+  align-items     : center;
+  justify-content : center;
+  box-shadow      : 1px 0px 5px 0px gray;
 }
 
 .opened
@@ -2504,10 +2505,9 @@ main-filter input
   top              : 4px;
   right            : 30px;
   position         : absolute;
-  box-shadow       : 1px 0px 5px 0px gray ;
+  box-shadow       : 1px 0px 5px 0px gray;
   display          : flex;
   flex-direction   : column;
-  background-color : rgb(140, 158, 140);
   border-radius    : 6px;
   overflow         : hidden;
 }
