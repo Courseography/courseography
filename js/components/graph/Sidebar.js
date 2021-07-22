@@ -11,7 +11,7 @@ export default class Sidebar extends React.Component {
 
   toggleSidebar = () => {
       this.setState({ hidden: !this.state.hidden });
-    }
+  }
 
   // Sidebar rendering methods
   /**
@@ -53,12 +53,12 @@ export default class Sidebar extends React.Component {
     const openedClass = this.state.hidden ? "collapsed" : "expanded";
 
     return (
-      <div className={openedClass} onMouseEnter={() => this.props.toggleZoom()} onMouseLeave={() => this.props.toggleZoom()}>
+      <div className={openedClass} data-testid="test-toggle" onMouseEnter={() => this.props.toggleZoom()} onMouseLeave={() => this.props.toggleZoom()}>
         {this.renderFCE()}
         <div id="sidebar" data-testid="test-sidebar">
           <h3 id="selected-courses">Selected courses</h3>
           {this.renderActiveCourses()}
-          <button id="reset-selections" data-testid="test-reset-sidebar" onClick={() => this.props.reset()}>Reset Selections</button>
+          <button id="reset-selections" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selections</button>
           <div id="sidebar-button" onClick={() => this.toggleSidebar()} data-testid="test-sidebar-button">
             <img id="sidebar-icon" src="/static/res/ico/sidebar.png"/>
           </div>

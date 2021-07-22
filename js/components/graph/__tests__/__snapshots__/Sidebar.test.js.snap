@@ -50,59 +50,8 @@ Object {
     />
     <div>
       <div
-        style="height: 0px;"
-      >
-        <div
-          id="fce"
-        >
-          <div
-            data-testid="test-fcecount"
-            id="fcecount"
-          >
-            FCE Count: 
-          </div>
-        </div>
-        <div
-          data-testid="test-sidebar-button"
-          id="sidebar-button"
-          style="transform: translateY(0px);"
-        >
-          <img
-            class=""
-            id="sidebar-icon"
-            src="/static/res/ico/tempSidebar.png"
-          />
-        </div>
-        <div
-          class="hidden "
-          data-testid="test-sidebar"
-          id="sidebar"
-        >
-          <label
-            id="selected-courses"
-          >
-            Selected courses:
-          </label>
-          <div
-            class="courses"
-            data-testid="test-course-selection"
-          />
-          <button
-            data-testid="test-reset-sidebar"
-            id="reset-selections"
-          >
-            Reset Selections
-          </button>
-        </div>
-      </div>
-    </div>
-  </body>,
-  "container": <div>
-    <div
-      style="height: 0px;"
-    >
-      <div
-        id="fce"
+        class="collapsed"
+        data-testid="test-toggle"
       >
         <div
           data-testid="test-fcecount"
@@ -110,38 +59,77 @@ Object {
         >
           FCE Count: 
         </div>
+        <div
+          data-testid="test-sidebar"
+          id="sidebar"
+        >
+          <h3
+            id="selected-courses"
+          >
+            Selected courses
+          </h3>
+          <div
+            class="courses"
+            data-testid="test-course-selection"
+          />
+          <button
+            data-testid="test-reset"
+            id="reset-selections"
+          >
+            Reset Selections
+          </button>
+          <div
+            data-testid="test-sidebar-button"
+            id="sidebar-button"
+          >
+            <img
+              id="sidebar-icon"
+              src="/static/res/ico/sidebar.png"
+            />
+          </div>
+        </div>
       </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="collapsed"
+      data-testid="test-toggle"
+    >
       <div
-        data-testid="test-sidebar-button"
-        id="sidebar-button"
-        style="transform: translateY(0px);"
+        data-testid="test-fcecount"
+        id="fcecount"
       >
-        <img
-          class=""
-          id="sidebar-icon"
-          src="/static/res/ico/tempSidebar.png"
-        />
+        FCE Count: 
       </div>
       <div
-        class="hidden "
         data-testid="test-sidebar"
         id="sidebar"
       >
-        <label
+        <h3
           id="selected-courses"
         >
-          Selected courses:
-        </label>
+          Selected courses
+        </h3>
         <div
           class="courses"
           data-testid="test-course-selection"
         />
         <button
-          data-testid="test-reset-sidebar"
+          data-testid="test-reset"
           id="reset-selections"
         >
           Reset Selections
         </button>
+        <div
+          data-testid="test-sidebar-button"
+          id="sidebar-button"
+        >
+          <img
+            id="sidebar-icon"
+            src="/static/res/ico/sidebar.png"
+          />
+        </div>
       </div>
     </div>
   </div>,
