@@ -9,34 +9,9 @@ export default class Sidebar extends React.Component {
     };
   }
 
-  /**
-   * Update the rendered courses that are in the sidebar.
-   * @return {array} list of div's for each course that is active
-   */
-  getCourses = () => {
-    if (this.props.activeCourses){
-      let temp = [...this.props.activeCourses];
-      return temp.map((course) => {
-        return (
-            <div key={'active'.concat(' ', course)} data-testid={'test'.concat(' ', course)} id="course-selection">{course.toUpperCase()}</div>
-        )
-      });
+  toggleSidebar = () => {
+      this.setState({ hidden: !this.state.hidden });
     }
-  }
-
-  toggleSidebar = location => {
-    if (!this.state.hidden) {
-      // close graph
-      this.setState({
-        hidden: true
-      })
-    } else if (this.state.hidden && location === "button") {
-      // open graph
-      this.setState({
-        hidden: false
-      });
-    }
-  }
 
   // Sidebar rendering methods
   /**
@@ -47,39 +22,46 @@ export default class Sidebar extends React.Component {
     const fceString = Number.isInteger(this.props.fceCount) ? this.props.fceCount + ".0" : this.props.fceCount
 
     return (
-      <div id="fce">
-        <div id="fcecount" data-testid="test-fcecount">FCE Count: {fceString}</div>
-      </div>
+       <div id="fcecount" data-testid="test-fcecount">FCE Count: {fceString}</div>
     )
   }
 
-  renderCourses = () => {
+  /**
+   * Render courses that are in the sidebar.
+   * @return {array} list of div's for each course that is active
+   */
+   renderCourses = () => {
+    let temp = this.props.activeCourses ? [...this.props.activeCourses] : [];
+    // sort the list of rendered courses, purely numerically and ignoring course code (to group up by year)
+    temp.sort((a,b) => a.slice(3, 5) - b.slice(3, 5));
+    return temp.map((course) => {
+      return (
+          <div key={`active ${course}`} data-testid={`test ${course}`} id="course-selection">{course.toUpperCase()}</div>
+      );
+    });
+  }
+
+  renderActiveCourses = () => {
     return (
       <div className="courses" data-testid="test-course-selection">
-        {this.getCourses()}
+        {this.renderCourses()}
       </div>
-    )
+    );
   }
 
   render() {
-    const flippedClass = !this.state.hidden ? "flip" : "";
-    const sidebarClass = !this.state.hidden ? "opened" : "";
-    const allHidden = !this.state.hidden ? "" : "hidden";
-    const buttonPos = !this.state.hidden ? "350" : "0";
+    const openedClass = this.state.hidden ? "collapsed" : "expanded";
 
     return (
-      <div style={{ height: "0px" }}>
+      <div className={openedClass}>
         {this.renderFCE()}
-        <div id="sidebar-button" style={{transform: `translateY(${buttonPos}px)`}} onClick={() => this.toggleSidebar("button")} data-testid="test-sidebar-button">
-          <img id="sidebar-icon"
-           className={flippedClass}
-           src="/static/res/ico/tempSidebar.png"
-          />
-        </div>
-        <div id="sidebar" className={`${allHidden} ${sidebarClass}`} data-testid="test-sidebar">
-          <label id="selected-courses">Selected courses:</label>
-          {this.renderCourses()}
+        <div id="sidebar" data-testid="test-sidebar">
+          <h3 id="selected-courses">Selected courses</h3>
+          {this.renderActiveCourses()}
           <button id="reset-selections" data-testid="test-reset-sidebar" onClick={() => this.props.reset()}>Reset Selections</button>
+          <div id="sidebar-button" onClick={() => this.toggleSidebar()} data-testid="test-sidebar-button">
+            <img id="sidebar-icon" src="/static/res/ico/sidebar.png"/>
+          </div>
         </div>
       </div>
     )

@@ -50,7 +50,7 @@ export default class Graph extends React.Component {
       infoBoxNodeId: "",
       panning: false,
       panStartX: 0,
-      panStartY: 0,
+      panStartY:0,
       showCourseModal: false,
       showGraphDropdown: false,
       selectedNodes: new Set()
@@ -141,6 +141,7 @@ export default class Graph extends React.Component {
         var inEdgesObj = {};
         var childrenObj = {};
         var outEdgesObj = {};
+        var storedNodes = [];
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -171,9 +172,11 @@ export default class Graph extends React.Component {
           outEdgesObj[node.id_] = [];
           // Quickly adding any active nodes from local storage into the selected nodes
           if (localStorage.getItem(node.id_) === 'active') {
-            this.state.selectedNodes.add(node.id_);
+            storedNodes.push(node.id_)
           }
         });
+
+        this.setState({ selectedNodes: new Set(storedNodes) });
 
         hybridsList.forEach(hybrid => {
           childrenObj[hybrid.id_] = [];
@@ -252,10 +255,13 @@ export default class Graph extends React.Component {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5);
-        this.state.selectedNodes.delete(courseId);
+        var tempSub = this.state.selectedNodes;
+        tempSub.delete(courseId)
+        this.setState({ selectedNodes: tempSub });
       } else {
         this.props.incrementFCECount(0.5);
-        this.state.selectedNodes.add(courseId);
+        var tempAdd = this.state.selectedNodes;
+        this.setState({ selectedNodes: tempAdd.add(courseId) });
       }
     }
   };
@@ -719,7 +725,7 @@ export default class Graph extends React.Component {
         {...reactGraphPointerEvents}
       >
         <Sidebar
-          fceCount = {this.props.fceCount}
+          fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
           nodesJSON={this.state.nodesJSON}
@@ -994,7 +1000,7 @@ Graph.propTypes = {
   start_blank: PropTypes.bool,
   fceCount: PropTypes.number,
   graphs: PropTypes.array,
-  updateGraph: PropTypes.func,
+  updateGraph: PropTypes.func
 };
 
 Graph.defaultProps = {
