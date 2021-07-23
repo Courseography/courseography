@@ -50,14 +50,13 @@ describe("Sidebar", () => {
     expect(sidebar.queryByTestId("test aaa303")).toBeNull();
   });
 
-  // it("Clicking the reset selections clears the Selected Courses and resets FCE", async () => {
-  //   afterEach(cleanup);
-  //   const container = await TestContainer.build();
-  //   fireEvent.click(container.getByTestId("aaa100"));
-  //   const sidebar = await TestSidebar.build();
-  //   fireEvent.click(getByTestId(sidebar, "test-reset"));
-  //   expect(container.getByText("FCE Count: 0.0")).toBeDefined();
-  //   expect(sidebar.queryByTestId("test aaa100")).toBeNull();
-  // });
+  it("Clicking the reset selections clears the Selected Courses and resets FCE", async () => {
+    const container = await TestContainer.build();
+    fireEvent.click(container.getByTestId("aaa100"));
+    fireEvent.click(container.getByTestId("test-reset"));
+    expect(container.getByText("FCE Count: 0.0")).toBeDefined();
+    const sidebar = await TestSidebar.build();
+    expect(sidebar.queryByTestId("test aaa100")).toBeNull();
+  });
 
 });
