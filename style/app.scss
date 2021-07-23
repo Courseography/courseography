@@ -586,18 +586,18 @@ a:active
 {
   text-align       : center;
   background-color : #ffffff;
-  border           : solid 1px #5c497e;
+  border           : none;
   border-radius    : 6px;
   outline          : none;
-  font-size        : 14px;
+  font-size        : 18px;
   font-weight      : bold;
   color            : #5c497e;
   cursor           : pointer;
   display          : inline-block;
   width            : 30px;
   height           : 30px;
-  padding          : 0;
-  position         : absolute;
+  padding          : 5px;
+  position         : relative;
 }
 
 .graph-control-button:hover
@@ -614,32 +614,22 @@ a:active
 
 .graph-control-button:disabled
 {
-  border           : solid 1px #9c9c9c;
   background-color : #dedede;
   color            : #9c9c9c;
 }
 
-.graph-control-button img {
-  width: inherit;
-  height: inherit;
-}
-
-#zoom-in-button
+.graph-control-button img
 {
-  top   : 4px;
-  right : 30px;
-}
-
-#zoom-out-button
-{
-  top   : 34px;
-  right : 30px;
+  width : inherit;
+  height : inherit;
 }
 
 #reset-view-button
 {
-  top   : 70px;
-  right : 30px;
+  display         : flex;
+  align-items     : center;
+  justify-content : center;
+  box-shadow      : 1px 0px 5px 0px gray;
 }
 
 #container
@@ -2468,4 +2458,22 @@ main-filter input
   text-align       : left;
   position         : absolute;
   padding          : 10px;
+}
+
+.button-group
+{
+  box-shadow       : 1px 0px 5px 0px gray;
+  display          : flex;
+  flex-direction   : column;
+  border-radius    : 6px;
+  margin-top       : 10px;
+}
+
+.graph-button-group
+{
+  top              : 80px;
+  right            : 30px;
+  position         : absolute;
+  display          : flex;
+  flex-direction   : column;
 }

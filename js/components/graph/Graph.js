@@ -741,33 +741,37 @@ export default class Graph extends React.Component {
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
-        <Button
-          divId="zoom-in-button"
-          text="+"
-          mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        />
-        <Button
-          divId="zoom-out-button"
-          text="&mdash;"
-          mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        />
-        <Button
-          divId="reset-view-button"
-          mouseDown={this.resetZoomAndPan}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-          disabled={resetDisabled}
-          >
-          <img
-            src="/static/res/ico/reset-view.png"
-            alt="Reset View"
-            title="Click to reset view"
+        <div className="graph-button-group">
+          <div className="button-group">
+            <Button
+              text="+"
+              mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
+              onMouseEnter={this.buttonMouseEnter}
+              onMouseLeave={this.buttonMouseLeave}
             />
-        </Button>
+            <Button
+              text="&ndash;"
+              mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
+              onMouseEnter={this.buttonMouseEnter}
+              onMouseLeave={this.buttonMouseLeave}
+            />
+          </div>
+          <div className="button-group">
+              <Button
+                divId="reset-view-button"
+                mouseDown={this.resetZoomAndPan}
+                onMouseEnter={this.buttonMouseEnter}
+                onMouseLeave={this.buttonMouseLeave}
+                disabled={resetDisabled}
+                >
+              <img
+                src="/static/res/ico/reset-view.png"
+                alt="Reset View"
+                title="Click to reset view"
+                />
+              </Button>
+          </div>
+        </div>
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
