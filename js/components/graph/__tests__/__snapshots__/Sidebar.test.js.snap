@@ -52,19 +52,20 @@ Object {
       <div
         class="collapsed"
         data-testid="test-toggle"
+        id="sidebar"
       >
         <div
+          class="fcecount"
           data-testid="test-fcecount"
-          id="fcecount"
         >
           FCE Count: 
         </div>
         <div
+          class="sidebar-dropdown"
           data-testid="test-sidebar"
-          id="sidebar"
         >
           <h3
-            id="selected-courses"
+            class="selected-courses"
           >
             Selected courses
           </h3>
@@ -73,20 +74,20 @@ Object {
             data-testid="test-course-selection"
           />
           <button
+            class="reset-selections"
             data-testid="test-reset"
-            id="reset-selections"
           >
             Reset Selections
           </button>
-          <div
-            data-testid="test-sidebar-button"
-            id="sidebar-button"
-          >
-            <img
-              id="sidebar-icon"
-              src="/static/res/ico/sidebar.png"
-            />
-          </div>
+        </div>
+        <div
+          class="sidebar-button"
+          data-testid="test-sidebar-button"
+        >
+          <img
+            id="sidebar-icon"
+            src="/static/res/ico/sidebar.png"
+          />
         </div>
       </div>
     </div>
@@ -95,19 +96,20 @@ Object {
     <div
       class="collapsed"
       data-testid="test-toggle"
+      id="sidebar"
     >
       <div
+        class="fcecount"
         data-testid="test-fcecount"
-        id="fcecount"
       >
         FCE Count: 
       </div>
       <div
+        class="sidebar-dropdown"
         data-testid="test-sidebar"
-        id="sidebar"
       >
         <h3
-          id="selected-courses"
+          class="selected-courses"
         >
           Selected courses
         </h3>
@@ -116,20 +118,20 @@ Object {
           data-testid="test-course-selection"
         />
         <button
+          class="reset-selections"
           data-testid="test-reset"
-          id="reset-selections"
         >
           Reset Selections
         </button>
-        <div
-          data-testid="test-sidebar-button"
-          id="sidebar-button"
-        >
-          <img
-            id="sidebar-icon"
-            src="/static/res/ico/sidebar.png"
-          />
-        </div>
+      </div>
+      <div
+        class="sidebar-button"
+        data-testid="test-sidebar-button"
+      >
+        <img
+          id="sidebar-icon"
+          src="/static/res/ico/sidebar.png"
+        />
       </div>
     </div>
   </div>,
