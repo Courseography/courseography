@@ -33,7 +33,6 @@ export default class Graph extends React.Component {
       timeouts: [],
       width: window.innerWidth,
       height: window.innerHeight,
-      zoomEnabled: true,
       zoomFactor: 1,
       horizontalPanFactor: 0,
       verticalPanFactor: 0,
@@ -86,6 +85,8 @@ export default class Graph extends React.Component {
       document.getElementById("nav-graph")
         .addEventListener("mouseleave", this.hideGraphDropdown);
     }
+
+    document.getElementById("sidebar").addEventListener("wheel", (event) => event.stopPropagation())
   }
 
   componentWillUpdate(prevProps) {
@@ -142,7 +143,7 @@ export default class Graph extends React.Component {
         var inEdgesObj = {};
         var childrenObj = {};
         var outEdgesObj = {};
-        var storedNodes = [];
+        var storedNodes = new Set();
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -173,11 +174,9 @@ export default class Graph extends React.Component {
           outEdgesObj[node.id_] = [];
           // Quickly adding any active nodes from local storage into the selected nodes
           if (localStorage.getItem(node.id_) === 'active') {
-            storedNodes.push(node.id_)
+            storedNodes.add(node.id_)
           }
         });
-
-        this.setState({ selectedNodes: new Set(storedNodes) });
 
         hybridsList.forEach(hybrid => {
           childrenObj[hybrid.id_] = [];
@@ -215,7 +214,8 @@ export default class Graph extends React.Component {
             'inEdges': inEdgesObj,
             'children': childrenObj,
             'outEdges': outEdgesObj
-          }
+          },
+          selectedNodes: storedNodes
         });
       })
       .catch(err => {
@@ -499,21 +499,15 @@ export default class Graph extends React.Component {
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
    */
   zoomViewbox = (zoomMode) => {
-    if (this.state.zoomEnabled) {
-      var newZoomFactor = this.state.zoomFactor;
-      if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
-        newZoomFactor -= ZOOM_INCREMENT;
-      } else if (zoomMode === ZOOM_ENUM.ZOOM_OUT) {
-        newZoomFactor += ZOOM_INCREMENT;
-      }
-      this.setState({
-        zoomFactor: newZoomFactor
-      });
+    var newZoomFactor = this.state.zoomFactor;
+    if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
+      newZoomFactor -= ZOOM_INCREMENT;
+    } else if (zoomMode === ZOOM_ENUM.ZOOM_OUT) {
+      newZoomFactor += ZOOM_INCREMENT;
     }
-  }
-
-  toggleZoom = () => {
-    this.setState({zoomEnabled:!this.state.zoomEnabled});
+    this.setState({
+      zoomFactor: newZoomFactor
+    });
   }
 
   calculateRatioGraphSizeToContainerSize = () => {
