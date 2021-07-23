@@ -642,43 +642,6 @@ a:active
   right : 30px;
 }
 
-#fcecount
-{
-  border-radius    : 10px;
-  line-height      : 40px;
-  height           : 40px;
-  width            : 140px;
-  float            : left;
-  background-color : #ffffff;
-  margin-top       : 20px;
-  text-align       : center;
-  font-size        : 16px;
-  visibility       : visible;
-  box-shadow       : 2px 2px 2px #e8e9eb;
-}
-
-#reset-selections
-{
-  margin           : 10px;
-  text-align       : center;
-  float            : center;
-  width            : 90px;
-  height           : 20px;
-  cursor           : pointer;
-  border-radius    : 15px;
-  font-size        : 10px;
-  background-color : #ffffff;
-  color            : #c8afce;
-  border           : #e8e9eb;
-  box-shadow       : 3px 3px 3px #e8e9eb;
-  outline          : none;
-}
-
-#reset-selections:hover
-{
-  background-color : #cac4d4;
-}
-
 #container
 {
   height   : calc(100% - 50px);
@@ -752,7 +715,12 @@ a:active
 
 .collapsed > #sidebar > #sidebar-button
 {
-  margin-top : -10px;
+  margin-top : -25px;
+}
+
+.expanded > #sidebar > #sidebar-button
+{
+  margin-top : -5px;
 }
 
 #sidebar-button
@@ -769,8 +737,8 @@ a:active
 
 #selected-courses
 {
-  margin-top       : 0px;
-  margin-bottom    : 0px;
+  margin-top       : 10px;
+  margin-bottom    : 10px;
   font-size        : small;
   color            : #a47cb8;
 }
@@ -792,13 +760,50 @@ a:active
 
 #sidebar-button:hover
 {
-  background-color : #cac4d4;
+  background-color: #cac4d4;
 }
 
 #sidebar-icon
 {
-  width        : 15px;
-  height       : 15px;
+  width : 15px;
+  height: 15px;
+}
+
+#fcecount
+{
+  border-radius    : 10px;
+  line-height      : 40px;
+  height           : 40px;
+  width            : 140px;
+  float            : left;
+  background-color : #ffffff;
+  margin-top       : 20px;
+  text-align       : center;
+  font-size        : 16px;
+  visibility       : visible;
+  box-shadow       : 2px 2px 2px #e8e9eb;
+}
+
+#reset-selections
+{
+  margin           : 10px;
+  text-align       : center;
+  float            : center;
+  width            : 90px;
+  height           : 20px;
+  cursor           : pointer;
+  border-radius    : 15px;
+  font-size        : 10px;
+  background-color : #ffffff;
+  color            : #c8afce;
+  border           : #e8e9eb;
+  box-shadow       : 3px 3px 3px #e8e9eb;
+  outline          : none;
+}
+
+#reset-selections:hover
+{
+  background-color : #cac4d4;
 }
 
 .spotlight
