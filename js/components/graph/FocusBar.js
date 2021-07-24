@@ -47,7 +47,7 @@ export default class FocusBar extends React.Component {
 
             return (
               <FocusTab
-                key={i}
+                key={focus[0]}
                 pId={focus[0]}
                 data-testid={"test-focus-" + i}
                 focusName={focus[1]}
