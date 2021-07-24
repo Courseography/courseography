@@ -106,7 +106,6 @@ export default class Container extends React.Component {
         <Sidebar
           ref={this.sidebar}
           fceCount = {this.state.fceCount}
-          graphName={this.state.graphName}
           reset={() => this.graph.current.reset()}
         />
         <FocusBar

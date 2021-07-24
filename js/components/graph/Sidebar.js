@@ -7,16 +7,8 @@ export default class Sidebar extends React.Component {
     this.state = {
       contentHidden: true,
       graphActive: 0,
-      graphName: "",
       toggled: false
     };
-  }
-
-  componentWillUpdate(prevProps) {
-    if (prevProps.graphName !== this.state.graphName) {
-      this.setState({ graphName: prevProps.graphName });
-      //PRCOM: You can delete this state and prop entirely, I don't think it's used any more.
-    }
   }
 
   toggleSidebar = location => {
@@ -91,6 +83,5 @@ export default class Sidebar extends React.Component {
 
 Sidebar.propTypes = {
   fceCount: PropTypes.number,
-  graphName: PropTypes.string,
   reset: PropTypes.func,
 };
