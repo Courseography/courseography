@@ -96,11 +96,11 @@ class FocusModal extends React.Component {
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.focusId !== this.props.focusId && this.props.focusId !== "") {
+  componentDidMount() {
+    if (this.props.focusId !== "") {
       let focusData = computerScienceFocusData[this.props.focusId];
       this.setState({
-        focustitle: focusData[0],
+        focusTitle: focusData[0],
         focusInfo: focusData[1]
       });
     };
@@ -128,16 +128,16 @@ class FocusModal extends React.Component {
 
 class FocusDescription extends React.Component {
   render() {
-    let requiredCoursesList = this.props.focusInfo.requiredCourses.map((courses) => <li>{courses}</li>);
-    let relatedCoursesList = this.props.focusInfo.relatedCourses.map((courses) => <li>{courses}</li>);
+    let requiredCoursesList = this.props.focusInfo.requiredCourses.map((courses, i) => <li key={"required-"+i}>{courses}</li>);
+    let relatedCoursesList = this.props.focusInfo.relatedCourses.map((courses, i) => <li key={"related-"+i}>{courses}</li>);
 
     return (
       <div>
         <p>{this.props.focusInfo.description}</p>
         <p><strong>Required Courses:</strong></p>
-        <ul>{requiredCoursesList}</ul>
+        <ol>{requiredCoursesList}</ol>
         <p><strong>Suggested Related Courses:</strong></p>
-        <ul>{relatedCoursesList}</ul>
+        <ol>{relatedCoursesList}</ol>
       </div>
     );
   }
