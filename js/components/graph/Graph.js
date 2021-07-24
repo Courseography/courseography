@@ -651,8 +651,15 @@ export default class Graph extends React.Component {
       containerHeight = reactGraph.clientHeight;
     }
 
-    let newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
-    let newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
+    let newViewboxHeight= this.state.height;
+    let newViewboxWidth = this.state.width;
+    if (document.getElementById("generateRoot") !== null) {
+      newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
+      newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
+    } else {
+      newViewboxWidth = this.state.width * this.state.zoomFactor;
+      newViewboxHeight = this.state.height * this.state.zoomFactor;
+    }
 
     const viewBoxContainerRatio = containerHeight !== 0 ? newViewboxHeight / containerHeight : 1;
     const viewboxX = (this.state.width - newViewboxWidth) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
@@ -661,8 +668,9 @@ export default class Graph extends React.Component {
     // not all of these properties are supported in React
     var svgAttrs = {
       height: "100%",
+      width: "100%",
       viewBox: `${viewboxX} ${viewboxY} ${newViewboxWidth} ${newViewboxHeight}`,
-      preserveAspectRatio: "xMinYMin",
+      preserveAspectRatio: "xMidYMin",
       "xmlns:svg": "http://www.w3.org/2000/svg",
       "xmlns:dc": "http://purl.org/dc/elements/1.1/",
       "xmlns:cc": "http://creativecommons.org/ns#",
@@ -719,33 +727,37 @@ export default class Graph extends React.Component {
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
-        <Button
-          divId="zoom-in-button"
-          text="+"
-          mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        />
-        <Button
-          divId="zoom-out-button"
-          text="&mdash;"
-          mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        />
-        <Button
-          divId="reset-view-button"
-          mouseDown={this.resetZoomAndPan}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-          disabled={resetDisabled}
-          >
-          <img
-            src="/static/res/ico/reset-view.png"
-            alt="Reset View"
-            title="Click to reset view"
+        <div className="graph-button-group">
+          <div className="button-group">
+            <Button
+              text="+"
+              mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
+              onMouseEnter={this.buttonMouseEnter}
+              onMouseLeave={this.buttonMouseLeave}
             />
-        </Button>
+            <Button
+              text="&ndash;"
+              mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
+              onMouseEnter={this.buttonMouseEnter}
+              onMouseLeave={this.buttonMouseLeave}
+            />
+          </div>
+          <div className="button-group">
+              <Button
+                divId="reset-view-button"
+                mouseDown={this.resetZoomAndPan}
+                onMouseEnter={this.buttonMouseEnter}
+                onMouseLeave={this.buttonMouseLeave}
+                disabled={resetDisabled}
+                >
+              <img
+                src="/static/res/ico/reset-view.png"
+                alt="Reset View"
+                title="Click to reset view"
+                />
+              </Button>
+          </div>
+        </div>
 
         <svg
           xmlns="http://www.w3.org/2000/svg"

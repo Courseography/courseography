@@ -39,8 +39,9 @@ header :: T.Text -> H.Html
 header page =
     H.nav ! A.class_ "row header" $ do
         H.div ! A.class_ "nav-left" $ do
-            H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
-                ! H.customAttribute "context" (textValue page)
+            H.a ! A.href "/graph" $ do
+                H.img ! A.id "courseography-header" ! A.src "/static/res/img/logo.png"
+                    ! H.customAttribute "context" (textValue page)
         H.div ! A.class_ "nav-middle" $ do
             H.ul ! A.id "nav-links" $ do
                 H.li ! A.id "nav-graph" $ toLink "/graph" "Graph"
