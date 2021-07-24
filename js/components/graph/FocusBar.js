@@ -25,7 +25,6 @@ export default class FocusBar extends React.Component {
         super(props);
         this.state = {
             open: false,
-            selectedFocus: [] //PRCOM: use null
         };
     }
 
@@ -39,15 +38,6 @@ export default class FocusBar extends React.Component {
     }
 
     selectFocus = id => {
-        if (this.state.selectedFocus[0] === id) {
-            this.setState({
-              selectedFocus: []
-            });
-          } else {
-            this.setState({
-              selectedFocus: computerScienceFocusData.find(focus => focus[0] == id)
-            });
-          }
         this.props.highlightFocus(id);
     }
 
