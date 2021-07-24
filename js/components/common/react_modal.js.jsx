@@ -653,4 +653,4 @@ function convertTimeToString(time) {
   return (time === 12.5 ? 12 : Math.floor(time)) % 12 + ':30' + meridiem;
 }
 
-export { CourseModal, MapModal };
+export { CourseModal, MapModal, FocusModal };

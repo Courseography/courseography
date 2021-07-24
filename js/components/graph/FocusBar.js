@@ -1,8 +1,6 @@
 import React from 'react';
-import ReactModal from 'react-modal';
 import PropTypes from "prop-types";
 import Focus from "./Focus";
-import * as focusInfo from "./sidebar/focus_descriptions.js";
 
 // These lists are in reverse order to what ends up appearing on the screen
 const computerScienceFocusData = [
@@ -25,8 +23,7 @@ export default class FocusBar extends React.Component {
         super(props);
         this.state = {
             open: false,
-            selectedFocus: [],
-            showFocusModal: false
+            selectedFocus: []
         };
     }
 
@@ -69,24 +66,8 @@ export default class FocusBar extends React.Component {
           });
     }
 
-    getDetailsInfo = () => {
-        let detailsText = focusInfo[this.state.selectedFocus[0] + "Description"];
-        return {__html: detailsText};
-    }
-
-    changeShowFocusModal = value => {
-        this.setState({
-            showFocusModal: value
-        });
-    }
-
     render() {
-        let button, focuses, focusModal, focusInfoButton;
-        let detailsInfo;
-        if (this.state.selectedFocus.length > 0) {
-            detailsInfo = this.getDetailsInfo();
-        }
-
+        let button, focuses;
         if (this.props.focusBarEnabled) {
             if(this.state.open) {
                 button = <button className="focus-menu-toggle" onClick={this.handleClick}>⪡ CLOSE</button>;
@@ -95,27 +76,6 @@ export default class FocusBar extends React.Component {
                         {this.generateFocusTabs()}
                     </div>
                 );
-                if(this.state.selectedFocus.length > 0) {
-                    focusModal = (
-                        <ReactModal className='modal-class'
-                            overlayClassName='overlay'
-                            isOpen={this.state.showFocusModal}
-                            onRequestClose={() => this.changeShowFocusModal(false)}
-                            ariaHideApp={false}
-                        >
-                            <div className='modal-header'>
-                                {this.state.selectedFocus[1]}
-                            </div>
-                            <div className='modal-body' dangerouslySetInnerHTML={detailsInfo}>
-                            </div>
-                        </ReactModal>
-                    );
-                    focusInfoButton = (
-                        <button onClick={() => this.changeShowFocusModal(true)}>
-                            i
-                        </button>
-                    );
-                }
             } else {
                 button = <button className="focus-menu-toggle" onClick={this.handleClick}>FOCUSES ⪢</button>;
             }
@@ -125,10 +85,6 @@ export default class FocusBar extends React.Component {
             <div className="focus-menu-bar">
                 {button}
                 {focuses}
-                <div className="focus-info">
-                    {focusModal}
-                    {focusInfoButton}
-                </div>
             </div>
         );
     }
