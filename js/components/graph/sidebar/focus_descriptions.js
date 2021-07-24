@@ -333,3 +333,15 @@ export var webDescription = {
     "ENV281H1, ENV381H1"
   ]
 }
+
+export const computerScienceFocusData = {
+  web: ["Web Technologies", webDescription],
+  theory: ["Theory of Computation", theoryDescription],
+  hci: ["HumanComp Interaction", HCIDescription],
+  game: ["Video Games", gameDescription],
+  systems: ["Computer Systems", systemsDescription],
+  vision: ["Computer Vision", visionDescription],
+  NLP: ["Computational Linguistics", NLPDescription],
+  AI: ["Artificial Intelligence", AIDescription],
+  sci: ["Scientific Computing", sciDescription]
+}
