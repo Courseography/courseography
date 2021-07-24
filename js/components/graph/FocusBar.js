@@ -28,8 +28,7 @@ export default class FocusBar extends React.Component {
         };
     }
 
-    //PRCOM: pick a better function name
-    handleClick = () => {
+    toggleFocusBar = () => {
         if (this.state.open) {
             this.setState({open: false});
         } else {
@@ -64,14 +63,14 @@ export default class FocusBar extends React.Component {
         let button, focuses;
         if (this.props.focusBarEnabled) {
             if(this.state.open) {
-                button = <button className="focus-menu-toggle" onClick={this.handleClick}>⪡ CLOSE</button>;
+                button = <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>⪡ CLOSE</button>;
                 focuses = (
                     <div className="focuses-list">
                         {this.generateFocusTabs()}
                     </div>
                 );
             } else {
-                button = <button className="focus-menu-toggle" onClick={this.handleClick}>FOCUSES ⪢</button>;
+                button = <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>FOCUSES ⪢</button>;
             }
         }
 
