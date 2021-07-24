@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import Focus from "./Focus";
+import FocusTab from "./FocusTab.js";
 
 // These lists are in reverse order to what ends up appearing on the screen
 const computerScienceFocusData = [
@@ -56,7 +56,7 @@ export default class FocusBar extends React.Component {
             const selected = this.props.currFocus == focus[0];
 
             return (
-              <Focus
+              <FocusTab
                 key={i}
                 pId={focus[0]}
                 data-testid={"test-focus-" + i}

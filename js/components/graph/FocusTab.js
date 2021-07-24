@@ -2,8 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { FocusModal } from "../common/react_modal.js.jsx";
 
-//PRCOM: change the name of this component to FocusTab
-export default class Focus extends React.Component {
+export default class FocusTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +21,8 @@ export default class Focus extends React.Component {
       <div>
         <div
           className={this.props.selected ? "focus active-focus" : "focus"}
-          style={{'--background-color': this.props.color}}>
+          style={{'--background-color': this.props.color}}
+        >
           <button id={this.props.pId} onClick={() => this.props.selectFocus(this.props.pId)}>
             {this.props.focusName}
           </button>
@@ -38,7 +38,7 @@ export default class Focus extends React.Component {
   }
 }
 
-Focus.propTypes = {
+FocusTab.propTypes = {
   focusName: PropTypes.string,
   color: PropTypes.string,
   selectFocus: PropTypes.func,
