@@ -15,18 +15,21 @@ const computerScienceFocusData = [
     ["sci", "Scientific Computing"],
   ];
 
+// PRCOM: try a different method
 const COLORS = ["#d472c7", "#ce73d3", "#c974d2", "#c672d2", "#bd71d3", "#b575d5", "#b072d3", "#ab72d3", "#a172d2"];
 const selectedColors = ["#e67ad7", "#e380e8", "#de82e8", "#d67be3", "#d07de8", "#c781eb", "#bf7ce6", "#b87be3", "#b07ce6"];
+// PRCOM: make the tab bigger instead
 
 export default class FocusBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             open: false,
-            selectedFocus: []
+            selectedFocus: [] //PRCOM: use null
         };
     }
 
+    //PRCOM: pick a better function name
     handleClick = () => {
         if (this.state.open) {
             this.setState({open: false});
@@ -62,6 +65,7 @@ export default class FocusBar extends React.Component {
                 selected={selected}
                 selectFocus={(id) => this.selectFocus(id)}
               />
+              // PRCOM: you could use onClick here instead of inside
             )
           });
     }
@@ -81,6 +85,7 @@ export default class FocusBar extends React.Component {
             }
         }
 
+        // PRCOM: remove variables
         return (
             <div className="focus-menu-bar">
                 {button}

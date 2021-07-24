@@ -15,6 +15,7 @@ export default class Sidebar extends React.Component {
   componentWillUpdate(prevProps) {
     if (prevProps.graphName !== this.state.graphName) {
       this.setState({ graphName: prevProps.graphName });
+      //PRCOM: You can delete this state and prop entirely, I don't think it's used any more.
     }
   }
 
