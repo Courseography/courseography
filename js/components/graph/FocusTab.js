@@ -18,21 +18,17 @@ export default class FocusTab extends React.Component {
 
   render() {
     return (
-      <div>
-        <div
-          className={this.props.selected ? "focus active-focus" : "focus"}
-          style={{'--background-color': this.props.color}}
-        >
-          <button id={this.props.pId} onClick={() => this.props.selectFocus(this.props.pId)}>
-            {this.props.focusName}
-          </button>
+      <div
+        className={this.props.selected ? "focus active-focus" : "focus"}
+        style={{'--background-color': this.props.color}}
+      >
+        <button id={this.props.pId} onClick={() => this.props.selectFocus(this.props.pId)}>
+          {this.props.focusName}
+        </button>
+        <div className="focus-info">
+          <FocusModal showFocusModal={this.state.showFocusModal} focusId={this.props.pId} onClose={() => this.toggleFocusModal(false)} />
+          {this.props.selected && <button onClick={() => this.toggleFocusModal(true)}>i</button>}
         </div>
-        {this.props.selected &&
-          <div className="focus-info">
-            <FocusModal showFocusModal={this.state.showFocusModal} focusId={this.props.pId} onClose={() => this.toggleFocusModal(false)} />
-            <button onClick={() => this.toggleFocusModal(true)}>i</button>
-          </div>
-        }
       </div>
     )
   }

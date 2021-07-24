@@ -832,14 +832,14 @@ a:active
   margin-left: 25px;
   margin-right: 25px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-end;
 }
 
 .focus-menu-toggle
 {
-  position: relative;
+  position: fixed;
+  left: 25px;
   border-radius: 17px 17px 0 0;
   border: none;
   background-color: #a273d3;
@@ -932,7 +932,10 @@ a:active
 {
   width: 150px;
   text-align: right;
-  margin: 5px;
+  margin-right: 20px;
+  position: fixed;
+  right: 5px;
+  bottom: 5px;
 }
 
 .focus-info button
