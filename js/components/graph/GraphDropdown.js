@@ -36,6 +36,10 @@ export default class GraphDropdown extends React.Component{
   }
 }
 
+GraphDropdown.defaultProps = {
+  graphs: []
+}
+
 GraphDropdown.propTypes = {
   showGraphDropdown: PropTypes.bool,
   onMouseMove: PropTypes.func,
