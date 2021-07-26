@@ -5,12 +5,12 @@ export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hidden: true
+      collapsed: true
     };
   }
 
   toggleSidebar = () => {
-      this.setState({ hidden: !this.state.hidden });
+      this.setState({ collapsed: !this.state.collapsed });
   }
 
   // Sidebar rendering methods
@@ -46,10 +46,11 @@ export default class Sidebar extends React.Component {
   }
 
   render() {
-    const collapsedClass = this.state.hidden ? "collapsed" : "expanded";
+    const collapsedClass = this.state.collapsed ? "collapsed" : "expanded";
+    const masterSidebarClass = `${collapsedClass} sidebar`;
 
     return (
-      <div className={collapsedClass} id="sidebar" data-testid="test-toggle">
+      <div className={masterSidebarClass} data-testid="test-toggle">
         {this.renderFCE()}
         <div className="sidebar-dropdown" data-testid="test-sidebar">
           <h3 className="selected-courses">Selected courses</h3>
@@ -67,6 +68,5 @@ export default class Sidebar extends React.Component {
 Sidebar.propTypes = {
   fceCount: PropTypes.number,
   reset: PropTypes.func,
-  activeCourses: PropTypes.instanceOf(Set),
-  nodesJSON: PropTypes.array
+  activeCourses: PropTypes.instanceOf(Set)
 };

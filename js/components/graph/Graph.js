@@ -86,7 +86,7 @@ export default class Graph extends React.Component {
         .addEventListener("mouseleave", this.hideGraphDropdown);
     }
 
-    document.getElementById("sidebar").addEventListener("wheel", (event) => event.stopPropagation())
+    document.querySelector(".sidebar").addEventListener("wheel", (event) => event.stopPropagation())
   }
 
   componentWillUpdate(prevProps) {
@@ -729,8 +729,6 @@ export default class Graph extends React.Component {
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
-          nodesJSON={this.state.nodesJSON}
-          toggleZoom={this.toggleZoom}
         />
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />

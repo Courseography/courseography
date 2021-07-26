@@ -640,27 +640,30 @@ a:active
   background: #f0f5f8;
 }
 
-#sidebar
+.collapsed.sidebar
+{
+  box-shadow : none;
+  border     : none;
+}
+
+.sidebar
 {
   display          : flex;
   flex-direction   : column;
   z-index          : 1;
   position         : inherit;
-  width            : 140px;
+  width            : 160px;
   background-color : #ffffff;
-  border-radius    : 20px;
-  box-shadow       : 2px 2px 2px #e8e9eb;
+  border-radius    : 10px;
+  box-shadow       : 4px 4px 4px #e8e9eb;
+  border           : solid #d3d4d6;
+  border-width     : 0 1px;
   margin-top       : 20px;
+  margin-left      : 10px;
 }
 
-.expanded
+.sidebar-dropdown
 {
-  visibility : visible;
-}
-
-.expanded > .sidebar-dropdown
-{
-  height           : 350px;
   padding          : 10px;
 }
 
@@ -673,7 +676,7 @@ a:active
   transform         : rotate(180deg);
 }
 
-div#sidebar.collapsed
+div.sidebar.collapsed
 {
   height: 40px;
 }
@@ -681,7 +684,6 @@ div#sidebar.collapsed
 .collapsed > .sidebar-dropdown
 {
   display: none;
-  visibility: hidden;
 }
 
 .sidebar-button
@@ -690,36 +692,35 @@ div#sidebar.collapsed
   border-radius    : 10px;
   width            : 30px;
   height           : 15px;
-  background-color : #d9d9d9;
+  background-color : #5c497e;
   margin-top       : -5px;
-  margin-left      : 60px;
-  text-align       : center;
+  margin-left      : 70px;
 }
 
 .selected-courses
 {
   margin-top       : 0px;
   margin-bottom    : 10px;
-  font-size        : 12px;
-  color            : #a47cb8;
+  font-size        : 14px;
+  color            : #946aa8;
 }
 
 .courses
 {
   overflow         : auto;
   max-height       : 275px;
-  max-width        : 120px;
+  max-width        : 140px;
   display          : inline-block;
 }
 
 .course-selection
 {
-  font-size  : 12px;
+  font-size  : 14px;
 }
 
 .sidebar-button:hover
 {
-  background-color: #cac4d4;
+  background-color: #675d79;
 }
 
 #sidebar-icon
@@ -735,28 +736,34 @@ div#sidebar.collapsed
   background-color : #ffffff;
   text-align       : center;
   font-size        : 16px;
-  box-shadow       : 2px 2px 2px #e8e9eb;
+  box-shadow       : 4px 4px 4px #e8e9eb;
+  border           : solid #d3d4d6;
+  border-width     : 0 1px;
+}
+
+.expanded > .fcecount
+{
+  box-shadow : none;
+  border     : none;
 }
 
 .reset-selections
 {
   margin           : 10px;
   text-align       : center;
-  width            : 90px;
-  height           : 20px;
-  cursor           : pointer;
+  padding          : 5px 10px 5px 10px;
   border-radius    : 15px;
-  font-size        : 10px;
-  background-color : #ffffff;
-  color            : #c8afce;
-  border           : #e8e9eb;
-  box-shadow       : 3px 3px 3px #e8e9eb;
+  font-size        : 12px;
+  background-color : #f5f5f5;
+  color            : #946aa8;
+  border: none;
+  box-shadow       : 3px 3px 3px #dadbdd;
   outline          : none;
 }
 
 .reset-selections:hover
 {
-  background-color : #cac4d4;
+  background-color : #cfccd4;
 }
 
 .spotlight

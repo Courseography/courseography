@@ -50,9 +50,8 @@ Object {
     />
     <div>
       <div
-        class="collapsed"
+        class="collapsed sidebar"
         data-testid="test-toggle"
-        id="sidebar"
       >
         <div
           class="fcecount"
@@ -94,9 +93,8 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="collapsed"
+      class="collapsed sidebar"
       data-testid="test-toggle"
-      id="sidebar"
     >
       <div
         class="fcecount"
