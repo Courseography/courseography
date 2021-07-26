@@ -2524,3 +2524,8 @@ main-filter input
   position         : absolute;
   padding          : 10px;
 }
+
+.show-dropdown-arrow::after
+{
+  content : "▼"
+}
