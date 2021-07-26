@@ -707,15 +707,18 @@ div.sidebar.collapsed
 
 .courses
 {
-  overflow         : auto;
-  max-height       : 275px;
-  max-width        : 140px;
-  display          : inline-block;
+  overflow   : auto;
+  max-height : 275px;
+  max-width  : 140px;
+  display    : flex;
+  flex-flow  : column wrap;
 }
 
 .course-selection
 {
   font-size  : 14px;
+  margin-right: auto;
+  order: 2;
 }
 
 .sidebar-button:hover
