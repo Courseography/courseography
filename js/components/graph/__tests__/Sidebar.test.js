@@ -15,22 +15,6 @@ describe("Sidebar", () => {
     expect(sidebar.getByTestId("test-sidebar").classList.contains("opened")).toBe(true);
   });
 
-  it("When focuses are clicked, focuses should be active", async() => {
-    const sidebar = await TestSidebar.build();
-    fireEvent.click(sidebar.getByTestId("test-sidebar-button"));
-    fireEvent.click(sidebar.getByTestId("test-focuses-nav"));
-    expect(sidebar.getByTestId("test-focuses-nav").classList.contains("active")).toBe(true);
-    expect(sidebar.getByTestId("test-focus-buttons").classList.contains("hidden")).toBe(false);
-  });
-
-  it("Focuses should be disabled for non computer science graphs", async() => {
-    const container = await TestContainer.build();
-    fireEvent.click(container.getByTestId("test-sidebar-button"));
-    expect(container.getByTestId("test-focuses-nav").classList.contains("disabled")).toBe(false);
-    fireEvent.click(container.getByTestId("test-graph-1"));
-    expect(container.getByTestId("test-focuses-nav").classList.contains("disabled")).toBe(true);
-  });
-
   it("Clicking a graph button should increase the FCE Count", async () => {
     const container = await TestContainer.build();
     expect(container.getByText("FCE Count: 0.0")).toBeDefined();
