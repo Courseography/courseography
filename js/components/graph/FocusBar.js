@@ -31,10 +31,6 @@ export default class FocusBar extends React.Component {
         }
     }
 
-    selectFocus = id => {
-        this.props.highlightFocus(id);
-    }
-
     generateFocusTabs = () => {
         return computerScienceFocusData.map((focus, i) => {
             const selected = this.props.currFocus == focus[0];
@@ -46,7 +42,7 @@ export default class FocusBar extends React.Component {
                 data-testid={"test-focus-" + i}
                 focusName={focus[1]}
                 selected={selected}
-                selectFocus={(id) => this.selectFocus(id)}
+                highlightFocus={(id) => this.props.highlightFocus(id)}
               />
             )
           });

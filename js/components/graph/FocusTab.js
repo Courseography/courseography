@@ -19,7 +19,7 @@ export default class FocusTab extends React.Component {
   render() {
     return (
       <div className={this.props.selected ? "focus active-focus" : "focus"}>
-        <button id={this.props.pId} onClick={() => this.props.selectFocus(this.props.pId)}>
+        <button id={this.props.pId} onClick={() => this.props.highlightFocus(this.props.pId)}>
           {this.props.focusName}
         </button>
         <div className="focus-info">
@@ -33,7 +33,7 @@ export default class FocusTab extends React.Component {
 
 FocusTab.propTypes = {
   focusName: PropTypes.string,
-  selectFocus: PropTypes.func,
+  highlightFocus: PropTypes.func,
   selected: PropTypes.bool,
   pId: PropTypes.string
 };
