@@ -49,27 +49,18 @@ export default class FocusBar extends React.Component {
     }
 
     render() {
-        let button, focuses;
-        if (this.props.focusBarEnabled) {
-            if(this.state.open) {
-                button = <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>⪡ CLOSE</button>;
-                focuses = (
+        if (!this.props.focusBarEnabled) {
+            return null;
+        } else {
+            return (
+                <div className="focus-menu-bar">
+                    <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>{this.state.open ? "⪡ CLOSE" : "FOCUSES ⪢"}</button>
                     <div className="focuses-list">
-                        {this.generateFocusTabs()}
+                        {this.state.open && this.generateFocusTabs()}
                     </div>
-                );
-            } else {
-                button = <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>FOCUSES ⪢</button>;
-            }
+                </div>
+            );
         }
-
-        // PRCOM: remove variables
-        return (
-            <div className="focus-menu-bar">
-                {button}
-                {focuses}
-            </div>
-        );
     }
 }
 
