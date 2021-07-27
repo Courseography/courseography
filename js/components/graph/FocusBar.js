@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import FocusTab from "./FocusTab.js";
 
 // These lists are in reverse order to what ends up appearing on the screen
-const computerScienceFocusData = [
+const computerScienceFocusLabels = [
     ["web", "Web Technologies"],
     ["theory", "Theory of Computation"],
     ["HCI", "HumanComp Interaction"],
@@ -32,7 +32,7 @@ export default class FocusBar extends React.Component {
     }
 
     generateFocusTabs = () => {
-        return computerScienceFocusData.map((focus, i) => {
+        return computerScienceFocusLabels.map((focus, i) => {
             const selected = this.props.currFocus == focus[0];
 
             return (
