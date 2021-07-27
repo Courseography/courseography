@@ -10,6 +10,7 @@ import NodeGroup from "./NodeGroup";
 import RegionGroup from "./RegionGroup";
 import GraphDropdown from "./GraphDropdown";
 import * as focusInfo from "./sidebar/focus_descriptions";
+import Sidebar from "./Sidebar";
 
 const ZOOM_INCREMENT = 0.010;
 const KEYBOARD_PANNING_INCREMENT = 10;
@@ -30,7 +31,6 @@ export default class Graph extends React.Component {
       edgesJSON: [],
       highlightedNodes: [],
       timeouts: [],
-      fceCount: 0,
       width: window.innerWidth,
       height: window.innerHeight,
       zoomFactor: 1,
@@ -52,7 +52,8 @@ export default class Graph extends React.Component {
       panStartX: 0,
       panStartY:0,
       showCourseModal: false,
-      showGraphDropdown:false
+      showGraphDropdown: false,
+      selectedNodes: new Set()
     };
 
     this.nodes = React.createRef();
@@ -84,6 +85,8 @@ export default class Graph extends React.Component {
       document.getElementById("nav-graph")
         .addEventListener("mouseleave", this.hideGraphDropdown);
     }
+
+    document.querySelector(".sidebar").addEventListener("wheel", (event) => event.stopPropagation())
   }
 
   componentWillUpdate(prevProps) {
@@ -140,6 +143,7 @@ export default class Graph extends React.Component {
         var inEdgesObj = {};
         var childrenObj = {};
         var outEdgesObj = {};
+        var storedNodes = new Set();
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -168,6 +172,10 @@ export default class Graph extends React.Component {
           inEdgesObj[node.id_] = [];
           childrenObj[node.id_] = [];
           outEdgesObj[node.id_] = [];
+          // Quickly adding any active nodes from local storage into the selected nodes
+          if (localStorage.getItem(node.id_) === 'active') {
+            storedNodes.add(node.id_)
+          }
         });
 
         hybridsList.forEach(hybrid => {
@@ -206,7 +214,8 @@ export default class Graph extends React.Component {
             'inEdges': inEdgesObj,
             'children': childrenObj,
             'outEdges': outEdgesObj
-          }
+          },
+          selectedNodes: storedNodes
         });
       })
       .catch(err => {
@@ -247,8 +256,13 @@ export default class Graph extends React.Component {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5);
+        var tempSub = this.state.selectedNodes;
+        tempSub.delete(courseId)
+        this.setState({ selectedNodes: tempSub });
       } else {
         this.props.incrementFCECount(0.5);
+        var tempAdd = this.state.selectedNodes;
+        this.setState({ selectedNodes: tempAdd.add(courseId) });
       }
     }
   };
@@ -461,6 +475,7 @@ export default class Graph extends React.Component {
     this.nodes.current.reset();
     this.bools.current.reset();
     this.edges.current.reset();
+    this.setState({ selectedNodes: new Set() });
     if (this.state.currFocus !== null) {
       this.highlightFocuses([]);
     }
@@ -715,9 +730,13 @@ export default class Graph extends React.Component {
     return (
       <div id="react-graph"
         className={reactGraphClass}
-        onClick={this.props.closeSidebar}
         {...reactGraphPointerEvents}
       >
+        <Sidebar
+          fceCount={this.props.fceCount}
+          reset={this.reset}
+          activeCourses={this.state.selectedNodes}
+        />
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <GraphDropdown
@@ -982,7 +1001,6 @@ var findRelationship = (course, nodesJSON) => {
 }
 
 Graph.propTypes = {
-  closeSidebar: PropTypes.func,
   currFocus: PropTypes.string,
   edit: PropTypes.bool,
   getLocalGraph: PropTypes.func,
@@ -991,6 +1009,7 @@ Graph.propTypes = {
   initialDrawMode: PropTypes.string,
   setFCECount: PropTypes.func,
   start_blank: PropTypes.bool,
+  fceCount: PropTypes.number,
   graphs: PropTypes.array,
   updateGraph: PropTypes.func
 };
