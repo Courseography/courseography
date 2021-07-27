@@ -64,7 +64,6 @@ export default class FocusBar extends React.Component {
     }
 }
 
-// TODO: check tabs vs spaces
 FocusBar.propTypes = {
     focusBarEnabled: PropTypes.bool,
     highlightFocus: PropTypes.func,
