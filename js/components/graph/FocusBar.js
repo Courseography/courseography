@@ -32,14 +32,13 @@ export default class FocusBar extends React.Component {
     }
 
     generateFocusTabs = () => {
-        return computerScienceFocusLabels.map((focus, i) => {
+        return computerScienceFocusLabels.map((focus) => {
             const selected = this.props.currFocus == focus[0];
 
             return (
               <FocusTab
                 key={focus[0]}
                 pId={focus[0]}
-                data-testid={"test-focus-" + i}
                 focusName={focus[1]}
                 selected={selected}
                 highlightFocus={(id) => this.props.highlightFocus(id)}

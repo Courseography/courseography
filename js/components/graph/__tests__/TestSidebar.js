@@ -10,8 +10,7 @@ export default class TestSidebar {
   static async build() {
     const sidebarProps = {
       currFocus: null,
-      graphs: [ "Computer Science", "Biology"],
-      graphName: "Computer Science"
+      graphs: [ "Computer Science", "Biology"]
     };
 
     const sidebar = render(<Sidebar {...sidebarProps} />);
