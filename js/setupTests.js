@@ -23,7 +23,6 @@ document.body.innerHTML = `
     <ul>
         <li>
             <a id="nav-graph" href="/graph">Graph</a>
-            <a id="nav-export">Export</a>
         </li>
     </ul>
 </nav>
