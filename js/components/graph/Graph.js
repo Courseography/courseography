@@ -53,7 +53,7 @@ export default class Graph extends React.Component {
       panStartY: 0,
       showCourseModal: false,
       showGraphDropdown: false,
-      selectedNodes: []
+      selectedNodes: new Set()
     };
 
     this.nodes = React.createRef();
@@ -85,6 +85,8 @@ export default class Graph extends React.Component {
       document.getElementById("nav-graph")
         .addEventListener("mouseleave", this.hideGraphDropdown);
     }
+
+    document.querySelector(".sidebar").addEventListener("wheel", (event) => event.stopPropagation())
   }
 
   componentWillUpdate(prevProps) {
@@ -141,6 +143,7 @@ export default class Graph extends React.Component {
         var inEdgesObj = {};
         var childrenObj = {};
         var outEdgesObj = {};
+        var storedNodes = new Set();
 
         var labelsList = data.texts.filter(function(entry) {
           return entry.rId.startsWith("tspan");
@@ -169,6 +172,10 @@ export default class Graph extends React.Component {
           inEdgesObj[node.id_] = [];
           childrenObj[node.id_] = [];
           outEdgesObj[node.id_] = [];
+          // Quickly adding any active nodes from local storage into the selected nodes
+          if (localStorage.getItem(node.id_) === 'active') {
+            storedNodes.add(node.id_)
+          }
         });
 
         hybridsList.forEach(hybrid => {
@@ -207,7 +214,8 @@ export default class Graph extends React.Component {
             'inEdges': inEdgesObj,
             'children': childrenObj,
             'outEdges': outEdgesObj
-          }
+          },
+          selectedNodes: storedNodes
         });
       })
       .catch(err => {
@@ -248,14 +256,13 @@ export default class Graph extends React.Component {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5);
-        this.setState(prevState => ({
-          selectedNodes: prevState.selectedNodes.filter(course => course !== courseId)
-        }));
+        var tempSub = this.state.selectedNodes;
+        tempSub.delete(courseId)
+        this.setState({ selectedNodes: tempSub });
       } else {
         this.props.incrementFCECount(0.5);
-        this.setState(prevState => ({
-          selectedNodes: [...prevState.selectedNodes, courseId]
-        }))
+        var tempAdd = this.state.selectedNodes;
+        this.setState({ selectedNodes: tempAdd.add(courseId) });
       }
     }
   };
@@ -489,7 +496,7 @@ export default class Graph extends React.Component {
     this.nodes.current.reset();
     this.bools.current.reset();
     this.edges.current.reset();
-    this.setState({ selectedNodes: [] });
+    this.setState({ selectedNodes: new Set() });
     if (this.state.currFocus !== null) {
       this.highlightFocuses([]);
     }
@@ -680,8 +687,15 @@ export default class Graph extends React.Component {
       containerHeight = reactGraph.clientHeight;
     }
 
-    let newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
-    let newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
+    let newViewboxHeight= this.state.height;
+    let newViewboxWidth = this.state.width;
+    if (document.getElementById("generateRoot") !== null) {
+      newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
+      newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
+    } else {
+      newViewboxWidth = this.state.width * this.state.zoomFactor;
+      newViewboxHeight = this.state.height * this.state.zoomFactor;
+    }
 
     const viewBoxContainerRatio = containerHeight !== 0 ? newViewboxHeight / containerHeight : 1;
     const viewboxX = (this.state.width - newViewboxWidth) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
@@ -740,20 +754,13 @@ export default class Graph extends React.Component {
         {...reactGraphPointerEvents}
       >
         <Sidebar
-          ref={this.sidebar}
-          fceCount = {this.props.fceCount}
-          // I will need to update the graph name later once the other PR is done
-          graphName={this.state.graphName}
+          fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
           nodesJSON={this.state.nodesJSON}
           itemClick={this.handleItemClick}
         />
-        <CourseModal
-          showCourseModal={this.state.showCourseModal}
-          courseId={this.state.courseId}
-          onClose={this.onClose}
-        />
+        <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <GraphDropdown
           showGraphDropdown={this.state.showGraphDropdown}
@@ -762,33 +769,37 @@ export default class Graph extends React.Component {
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
-        <Button
-          divId="zoom-in-button"
-          text="+"
-          mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        />
-        <Button
-          divId="zoom-out-button"
-          text="&mdash;"
-          mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-        />
-        <Button
-          divId="reset-view-button"
-          mouseDown={this.resetZoomAndPan}
-          onMouseEnter={this.buttonMouseEnter}
-          onMouseLeave={this.buttonMouseLeave}
-          disabled={resetDisabled}
-          >
-          <img
-            src="/static/res/ico/reset-view.png"
-            alt="Reset View"
-            title="Click to reset view"
+        <div className="graph-button-group">
+          <div className="button-group">
+            <Button
+              text="+"
+              mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
+              onMouseEnter={this.buttonMouseEnter}
+              onMouseLeave={this.buttonMouseLeave}
             />
-        </Button>
+            <Button
+              text="&ndash;"
+              mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
+              onMouseEnter={this.buttonMouseEnter}
+              onMouseLeave={this.buttonMouseLeave}
+            />
+          </div>
+          <div className="button-group">
+              <Button
+                divId="reset-view-button"
+                mouseDown={this.resetZoomAndPan}
+                onMouseEnter={this.buttonMouseEnter}
+                onMouseLeave={this.buttonMouseLeave}
+                disabled={resetDisabled}
+                >
+              <img
+                src="/static/res/ico/reset-view.png"
+                alt="Reset View"
+                title="Click to reset view"
+                />
+              </Button>
+          </div>
+        </div>
 
         <svg
           xmlns="http://www.w3.org/2000/svg"

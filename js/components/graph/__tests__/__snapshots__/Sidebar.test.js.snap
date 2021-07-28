@@ -49,178 +49,41 @@ Object {
       id="fcecount"
     />
     <div>
-      <div>
+      <div
+        class="collapsed sidebar"
+        data-testid="test-toggle"
+      >
         <div
-          class=""
-          data-testid="test-sidebar"
-          id="sidebar"
+          class="fcecount"
+          data-testid="test-fcecount"
         >
-          <div
-            class="hidden"
-            id="fce"
-          >
-            <div
-              data-testid="test-fcecount"
-              id="fcecount"
-            >
-              FCE Count: 
-            </div>
-            <button
-              data-testid="test-reset"
-              id="reset"
-            >
-              Reset Selection
-            </button>
-          </div>
-          <nav
-            id="sidebar-nav"
-          >
-            <ul>
-              <li
-                class="active "
-                data-testid="test-focuses-nav"
-                id="focuses-nav"
-              >
-                <div
-                  class="nav-section"
-                >
-                  Focuses
-                </div>
-              </li>
-            </ul>
-          </nav>
-          <div>
-            <div
-              class=""
-              data-testid="test-focus-buttons"
-              id="focuses"
-            >
-              <div>
-                <p
-                  class="focus"
-                  id="sci"
-                >
-                  Scientific Computing
-                </p>
-                <div
-                  class="details"
-                  id="sci-details"
-                  style="height: 2px;"
-                />
-              </div>
-              <div>
-                <p
-                  class="focus"
-                  id="AI"
-                >
-                  Artificial Intelligence
-                </p>
-                <div
-                  class="details"
-                  id="AI-details"
-                  style="height: 2px;"
-                />
-              </div>
-              <div>
-                <p
-                  class="focus"
-                  id="NLP"
-                >
-                  Natural Language Processing
-                </p>
-                <div
-                  class="details"
-                  id="NLP-details"
-                  style="height: 2px;"
-                />
-              </div>
-              <div>
-                <p
-                  class="focus"
-                  id="vision"
-                >
-                  Computer Vision
-                </p>
-                <div
-                  class="details"
-                  id="vision-details"
-                  style="height: 2px;"
-                />
-              </div>
-              <div>
-                <p
-                  class="focus"
-                  id="systems"
-                >
-                  Computer Systems
-                </p>
-                <div
-                  class="details"
-                  id="systems-details"
-                  style="height: 2px;"
-                />
-              </div>
-              <div>
-                <p
-                  class="focus"
-                  id="game"
-                >
-                  Video Games
-                </p>
-                <div
-                  class="details"
-                  id="game-details"
-                  style="height: 2px;"
-                />
-              </div>
-              <div>
-                <p
-                  class="focus"
-                  id="HCI"
-                >
-                  Human Computer Interaction
-                </p>
-                <div
-                  class="details"
-                  id="HCI-details"
-                  style="height: 2px;"
-                />
-              </div>
-              <div>
-                <p
-                  class="focus"
-                  id="theory"
-                >
-                  Theory of Computation
-                </p>
-                <div
-                  class="details"
-                  id="theory-details"
-                  style="height: 2px;"
-                />
-              </div>
-              <div>
-                <p
-                  class="focus"
-                  id="web"
-                >
-                  Web Technologies
-                </p>
-                <div
-                  class="details"
-                  id="web-details"
-                  style="height: 2px;"
-                />
-              </div>
-            </div>
-          </div>
+          FCE Count: 
         </div>
         <div
+          class="sidebar-dropdown"
+          data-testid="test-sidebar"
+        >
+          <h3
+            class="selected-courses"
+          >
+            Selected courses
+          </h3>
+          <div
+            class="courses"
+            data-testid="test-course-selection"
+          />
+          <button
+            class="reset-selections"
+            data-testid="test-reset"
+          >
+            Reset Selections
+          </button>
+        </div>
+        <div
+          class="sidebar-button"
           data-testid="test-sidebar-button"
-          id="sidebar-button"
         >
           <img
-            class=""
             id="sidebar-icon"
             src="/static/res/ico/sidebar.png"
           />
@@ -229,178 +92,41 @@ Object {
     </div>
   </body>,
   "container": <div>
-    <div>
+    <div
+      class="collapsed sidebar"
+      data-testid="test-toggle"
+    >
       <div
-        class=""
-        data-testid="test-sidebar"
-        id="sidebar"
+        class="fcecount"
+        data-testid="test-fcecount"
       >
-        <div
-          class="hidden"
-          id="fce"
-        >
-          <div
-            data-testid="test-fcecount"
-            id="fcecount"
-          >
-            FCE Count: 
-          </div>
-          <button
-            data-testid="test-reset"
-            id="reset"
-          >
-            Reset Selection
-          </button>
-        </div>
-        <nav
-          id="sidebar-nav"
-        >
-          <ul>
-            <li
-              class="active "
-              data-testid="test-focuses-nav"
-              id="focuses-nav"
-            >
-              <div
-                class="nav-section"
-              >
-                Focuses
-              </div>
-            </li>
-          </ul>
-        </nav>
-        <div>
-          <div
-            class=""
-            data-testid="test-focus-buttons"
-            id="focuses"
-          >
-            <div>
-              <p
-                class="focus"
-                id="sci"
-              >
-                Scientific Computing
-              </p>
-              <div
-                class="details"
-                id="sci-details"
-                style="height: 2px;"
-              />
-            </div>
-            <div>
-              <p
-                class="focus"
-                id="AI"
-              >
-                Artificial Intelligence
-              </p>
-              <div
-                class="details"
-                id="AI-details"
-                style="height: 2px;"
-              />
-            </div>
-            <div>
-              <p
-                class="focus"
-                id="NLP"
-              >
-                Natural Language Processing
-              </p>
-              <div
-                class="details"
-                id="NLP-details"
-                style="height: 2px;"
-              />
-            </div>
-            <div>
-              <p
-                class="focus"
-                id="vision"
-              >
-                Computer Vision
-              </p>
-              <div
-                class="details"
-                id="vision-details"
-                style="height: 2px;"
-              />
-            </div>
-            <div>
-              <p
-                class="focus"
-                id="systems"
-              >
-                Computer Systems
-              </p>
-              <div
-                class="details"
-                id="systems-details"
-                style="height: 2px;"
-              />
-            </div>
-            <div>
-              <p
-                class="focus"
-                id="game"
-              >
-                Video Games
-              </p>
-              <div
-                class="details"
-                id="game-details"
-                style="height: 2px;"
-              />
-            </div>
-            <div>
-              <p
-                class="focus"
-                id="HCI"
-              >
-                Human Computer Interaction
-              </p>
-              <div
-                class="details"
-                id="HCI-details"
-                style="height: 2px;"
-              />
-            </div>
-            <div>
-              <p
-                class="focus"
-                id="theory"
-              >
-                Theory of Computation
-              </p>
-              <div
-                class="details"
-                id="theory-details"
-                style="height: 2px;"
-              />
-            </div>
-            <div>
-              <p
-                class="focus"
-                id="web"
-              >
-                Web Technologies
-              </p>
-              <div
-                class="details"
-                id="web-details"
-                style="height: 2px;"
-              />
-            </div>
-          </div>
-        </div>
+        FCE Count: 
       </div>
       <div
+        class="sidebar-dropdown"
+        data-testid="test-sidebar"
+      >
+        <h3
+          class="selected-courses"
+        >
+          Selected courses
+        </h3>
+        <div
+          class="courses"
+          data-testid="test-course-selection"
+        />
+        <button
+          class="reset-selections"
+          data-testid="test-reset"
+        >
+          Reset Selections
+        </button>
+      </div>
+      <div
+        class="sidebar-button"
         data-testid="test-sidebar-button"
-        id="sidebar-button"
       >
         <img
-          class=""
           id="sidebar-icon"
           src="/static/res/ico/sidebar.png"
         />

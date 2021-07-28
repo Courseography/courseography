@@ -586,18 +586,18 @@ a:active
 {
   text-align       : center;
   background-color : #ffffff;
-  border           : solid 1px #5c497e;
+  border           : none;
   border-radius    : 6px;
   outline          : none;
-  font-size        : 14px;
+  font-size        : 18px;
   font-weight      : bold;
   color            : #5c497e;
   cursor           : pointer;
   display          : inline-block;
   width            : 30px;
   height           : 30px;
-  padding          : 0;
-  position         : absolute;
+  padding          : 5px;
+  position         : relative;
 }
 
 .graph-control-button:hover
@@ -614,88 +614,22 @@ a:active
 
 .graph-control-button:disabled
 {
-  border           : solid 1px #9c9c9c;
   background-color : #dedede;
   color            : #9c9c9c;
 }
 
-.graph-control-button img {
-  width: inherit;
-  height: inherit;
-}
-
-#zoom-in-button
+.graph-control-button img
 {
-  top   : 4px;
-  right : 30px;
-}
-
-#zoom-out-button
-{
-  top   : 34px;
-  right : 30px;
+  width : inherit;
+  height : inherit;
 }
 
 #reset-view-button
 {
-  top   : 70px;
-  right : 30px;
-}
-
-.opened
-{
-  width            : 160px !important;
-  background-color : #ffffff;
-}
-
-.hidden
-{
-  display : none;
-}
-
-#fce
-{
-  height      : 50px;
-  width       : 160px;
-  padding-top : 10px;
-}
-
-#fcecount
-{
-  height           : 40px;
-  width            : 160px;
-  float            : left;
-  background-color : #ffffff;
-  padding-top      : 5px;
-  text-align       : center;
-  font-size        : 18px;
-}
-
-.label-hidden {
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-}
-
-#reset
-{
-  margin-top : 10px;
-  text-align : center;
-  float      : center;
-  width      : 47%;
-  height     : 40px;
-  cursor     : pointer;
-  font-size: small;
-}
-
-#reset:hover
-{
-  background-color : #222222;
-  color            : #ffffff;
+  display         : flex;
+  align-items     : center;
+  justify-content : center;
+  box-shadow      : 1px 0px 5px 0px gray;
 }
 
 #container
@@ -706,143 +640,116 @@ a:active
   background: #f0f5f8;
 }
 
-#sidebar
+.sidebar
 {
-  height           : 450px;
-  float            : left;
-  position         : absolute;
+  display          : flex;
+  flex-direction   : column;
+  z-index          : 1;
+  position         : inherit;
+  width            : 160px;
+  background-color : #ffffff;
+  border-radius    : 10px;
+  box-shadow       : 4px 4px 4px gray;
+  border           : solid #d3d4d6;
+  border-width     : 0 1px;
+  margin-top       : 20px;
+  margin-left      : 10px;
 }
 
-#sidebar-button
+.sidebar-dropdown
+{
+  padding          : 10px;
+}
+
+.expanded > .sidebar-button > #sidebar-icon
+{
+  -webkit-transform : rotate(180deg);
+  -moz-transform    : rotate(180deg);
+  -ms-transform     : rotate(180deg);
+  -o-transform      : rotate(180deg);
+  transform         : rotate(180deg);
+}
+
+div.sidebar.collapsed
+{
+  height: 40px;
+}
+
+.collapsed > .sidebar-dropdown
+{
+  display: none;
+}
+
+.sidebar-button
 {
   cursor           : pointer;
-  width            : 40px;
-  height           : 20px;
-  float            : left;
-  background-color : #d9d9d9;
-  position         : absolute;
-  margin-left      : 60px;
-  text-align       : center;
-  z-index          : 2;
+  border-radius    : 10px;
+  width            : 30px;
+  height           : 15px;
+  background-color : #5c497e;
+  margin-top       : -5px;
+  margin-left      : 70px;
 }
 
-#courseDropdown
+.selected-courses
 {
-  overflow        : scroll;
-  list-style-type : none;
-  height          : 100px;
-  z-index         : 2;
+  margin-top       : 0px;
+  margin-bottom    : 10px;
+  font-size        : 14px;
+  color            : #946aa8;
 }
 
-#courseDropdown .li
+.courses
 {
-  font-size: smaller;
+  overflow        : auto;
+  max-height      : 275px;
+  max-width       : 140px;
+  display         : flex;
+  justify-content : space-between;
+  flex-direction  : column;
 }
 
-#courseDropdown .item:hover
+.course-selection
 {
-  cursor: pointer;
+  font-size    : 14px;
+  margin-right : auto;
 }
 
-#sidebar-button:hover
+.sidebar-button:hover
 {
-  background-color : #cac4d4;
+  background-color: #675d79;
 }
 
 #sidebar-icon
 {
-  width        : 20px;
-  height       : 20px;
+  width : 15px;
+  height: 15px;
 }
 
-#focuses-nav, #graph-nav
+.fcecount
 {
-  cursor : pointer;
-}
-
-#sidebar-nav
-{
-  width            : 100%;
-  font-size        : 13px;
-  background-color : #cac4d4;
-  border           : solid 1px #dedede;
-  box-shadow       : 0 2px 2px -1px rgba(0, 0, 0, 0.055);
-  display          : block;
-  overflow         : hidden;
-}
-
-#sidebar-nav ul
-{
-  width  : 100%;
-  margin : 0 0 0 0;
-}
-
-#sidebar-nav ul li
-{
-  list-style-type    : none;
-  display            : inline-block;
-  width              : 48%;
-  -webkit-transition : all 0.2s;
-  -moz-transition    : all 0.2s;
-  -ms-transition     : all 0.2s;
-  -o-transition      : all 0.2s;
-  transition         : all 0.2s;
-}
-
-#sidebar-nav ul li:hover
-{
-  background-color : #5C497E !important;
-}
-
-#sidebar-nav ul li:hover a
-{
-  color : white !important;
-}
-
-#sidebar-nav ul li .nav-section
-{
-  color           : #000000;
-  display         : inline-block;
-  line-height     : 30px;
-  text-align      : center;
-  width           : 95%;
-  text-decoration : none;
-}
-
-#focuses, #graphs
-{
-  margin-top  : 25px;
-  margin-left : 25px;
-  height      : 70%;
-  overflow-y  : scroll;
-}
-
-.focus
-{
-  display          : block;
-  cursor           : pointer;
-  font-size        : 20px;
-  border           : solid 1px #000000;
+  line-height      : 40px;
   text-align       : center;
-  width            : 90%;
-  background-color : #ffffff;
-  border-radius    : 6px;
+  font-size        : 16px;
 }
 
-.focus:hover
+.reset-selections
 {
-  background-color : #dedede;
-}
-
-#close-focus
-{
-  display          : block;
-  cursor           : pointer;
-  background-color : #cac4d4;
-  font-size        : 20px;
-  border           : solid 1px #000000;
+  margin           : 10px;
   text-align       : center;
-  width            : 90%;
+  padding          : 5px 10px 5px 10px;
+  border-radius    : 15px;
+  font-size        : 12px;
+  background-color : #f5f5f5;
+  color            : #946aa8;
+  border: none;
+  box-shadow       : 3px 3px 3px #dadbdd;
+  outline          : none;
+}
+
+.reset-selections:hover
+{
+  background-color : #cfccd4;
 }
 
 .spotlight
@@ -2544,4 +2451,22 @@ main-filter input
   text-align       : left;
   position         : absolute;
   padding          : 10px;
+}
+
+.button-group
+{
+  box-shadow       : 1px 0px 5px 0px gray;
+  display          : flex;
+  flex-direction   : column;
+  border-radius    : 6px;
+  margin-top       : 10px;
+}
+
+.graph-button-group
+{
+  top              : 80px;
+  right            : 30px;
+  position         : absolute;
+  display          : flex;
+  flex-direction   : column;
 }
