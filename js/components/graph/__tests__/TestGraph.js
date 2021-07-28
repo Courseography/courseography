@@ -1,6 +1,6 @@
 import React from "react";
 import Graph from "../Graph";
-import { render, wait } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 
 export default class TestGraph {
   constructor(graph) {
@@ -31,7 +31,7 @@ export default class TestGraph {
     };
 
     const rtlGraph = render(<Graph {...graphProps} />);
-    await wait(() => rtlGraph.queryByText("AAA100") !== null);
+    await waitFor(() => rtlGraph.queryByText("AAA100") !== null);
     return new TestGraph(rtlGraph);
   }
 
