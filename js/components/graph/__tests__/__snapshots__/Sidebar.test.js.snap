@@ -4,46 +4,46 @@ exports[`Sidebar should match shallow snapshot 1`] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body>
-
+    
 
     <nav>
-
-
+      
+    
       <ul>
-
-
+        
+        
         <li>
-
-
+          
+            
           <a
             href="/graph"
             id="nav-graph"
           >
             Graph
           </a>
-
-
+          
+            
           <a
             id="nav-export"
           >
             Export
           </a>
-
-
+          
+        
         </li>
-
-
+        
+    
       </ul>
-
+      
 
     </nav>
-
+    
 
     <div
       class="react-graph"
       id="react-graph"
     />
-
+    
 
     <div
       id="fcecount"
@@ -57,7 +57,7 @@ Object {
           class="fcecount"
           data-testid="test-fcecount"
         >
-          FCE Count:
+          FCE Count: 
         </div>
         <div
           class="sidebar-dropdown"
@@ -100,7 +100,7 @@ Object {
         class="fcecount"
         data-testid="test-fcecount"
       >
-        FCE Count:
+        FCE Count: 
       </div>
       <div
         class="sidebar-dropdown"

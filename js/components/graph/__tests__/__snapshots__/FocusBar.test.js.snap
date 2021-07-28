@@ -54,7 +54,6 @@ Object {
       >
         <button
           class="focus-menu-toggle"
-          data-testid="test-focusbar-button"
         >
           FOCUSES ⪢
         </button>
@@ -70,7 +69,6 @@ Object {
     >
       <button
         class="focus-menu-toggle"
-        data-testid="test-focusbar-button"
       >
         FOCUSES ⪢
       </button>

@@ -18,7 +18,7 @@ describe("FocusBar", () => {
     it("Pressing the focusbar button should open it", async () => {
         const focusBar = await TestFocusBar.build();
         expect(focusBar.queryByRole("button", {name: /Scientific Computing/i})).toBeNull;
-        fireEvent.click(focusBar.getByTestId("test-focusbar-button"));
+        fireEvent.click(focusBar.getByRole("button", {name: /FOCUSES ⪢/i}));
         expect(focusBar.getByRole("button", {name: /Scientific Computing/i})).toBeInTheDocument;
     });
 });
