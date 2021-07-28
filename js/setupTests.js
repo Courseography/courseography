@@ -21,8 +21,8 @@ fetchMock.get('/graphs', testContainerData);
 document.body.innerHTML = `
 <nav>
     <ul>
-        <li>
-            <a id="nav-graph" href="/graph">Graph</a>
+        <li id="nav-graph">
+            <a  href="/graph">Graph</a>
         </li>
     </ul>
 </nav>
