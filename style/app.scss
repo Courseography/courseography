@@ -752,6 +752,31 @@ div.sidebar.collapsed
   background-color : #cfccd4;
 }
 
+.label-hidden
+{
+  display: none;
+}
+
+.course-dropdown
+{
+  max-height      : 100px;
+  display         : flex;
+  justify-content : space-between;
+  flex-direction  : column;
+  overflow: scroll;
+}
+
+.dropdown-item
+{
+  font-size    : 14px;
+  margin-right : auto;
+}
+
+.dropdown-item:hover
+{
+  cursor: pointer;
+}
+
 .spotlight
 {
   fill   : white;

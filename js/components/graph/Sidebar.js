@@ -45,22 +45,20 @@ export default class Sidebar extends React.Component {
     }
 
     return (
-    <div>
+    <div className="search-container">
       <div>
         <label htmlFor="header-search">
           {/* For text to speech purposes */}
           <span className="label-hidden">Search courses</span>
         </label>
-        <input type="text" onChange={(e) => {this.setState({ results: filteredSearch(posts, e.target.value) })}}/>
+        <input className="search-bar" type="text" onChange={(e) => {this.setState({ results: filteredSearch(posts, e.target.value) })}}/>
       </div>
-      <ul id="courseDropdown">
-        {this.state.results.map((result, i) =>
-        <li
-          key={i}
-          className="item"
-          onClick={() => this.props.itemClick(result)}>
-            {result.toUpperCase()}
-        </li>)}
+      <ul className="course-dropdown">
+        {this.state.results.map((result) =>
+        <li key={`search ${result}`} className="dropdown-item" onClick={() => this.props.itemClick(result)}>
+          {result.toUpperCase()}
+        </li>
+        )}
       </ul>
     </div>
     )
