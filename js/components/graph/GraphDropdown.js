@@ -10,12 +10,11 @@ export default class GraphDropdown extends React.Component{
       let navGraph = document.getElementById("nav-graph");
       if (this.props.graphs.length === 0) {
         navGraph.classList.remove("show-dropdown-arrow");
-      }
-      else {
+      } else {
         if (!navGraph.classList.contains("show-dropdown-arrow")) {
           navGraph.classList.add("show-dropdown-arrow");
         }
-        if (this.props.showGraphDropdown){
+        if (this.props.showGraphDropdown) {
           graphTabLeft = navGraph.getBoundingClientRect().left;
           className = "graph-dropdown-display";
         }
