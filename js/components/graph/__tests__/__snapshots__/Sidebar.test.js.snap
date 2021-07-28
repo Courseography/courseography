@@ -4,87 +4,86 @@ exports[`Sidebar should match shallow snapshot 1`] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body>
-    
+
 
     <nav>
-      
-    
+
+
       <ul>
-        
-        
+
+
         <li>
-          
-            
+
+
           <a
             href="/graph"
             id="nav-graph"
           >
             Graph
           </a>
-          
-            
+
+
           <a
             id="nav-export"
           >
             Export
           </a>
-          
-        
+
+
         </li>
-        
-    
+
+
       </ul>
-      
+
 
     </nav>
-    
+
 
     <div
       class="react-graph"
       id="react-graph"
     />
-    
+
 
     <div
       id="fcecount"
     />
     <div>
-      <div>
+      <div
+        class="collapsed sidebar"
+        data-testid="test-toggle"
+      >
         <div
-          class=""
-          data-testid="test-sidebar"
-          id="sidebar"
+          class="fcecount"
+          data-testid="test-fcecount"
         >
-          <div
-            class="hidden"
-            id="fce"
-          >
-            <div
-              data-testid="test-fcecount"
-              id="fcecount"
-            >
-              FCE Count: 
-            </div>
-            <button
-              data-testid="test-reset"
-              id="reset"
-            >
-              Reset Selection
-            </button>
-          </div>
-          <nav
-            id="sidebar-nav"
-          >
-            <ul />
-          </nav>
-          <div />
+          FCE Count:
         </div>
         <div
+          class="sidebar-dropdown"
+          data-testid="test-sidebar"
+        >
+          <h3
+            class="selected-courses"
+          >
+            Selected courses
+          </h3>
+          <div
+            class="courses"
+            data-testid="test-course-selection"
+          />
+          <button
+            class="reset-selections"
+            data-testid="test-reset"
+          >
+            Reset Selections
+          </button>
+        </div>
+        <div
+          class="sidebar-button"
           data-testid="test-sidebar-button"
-          id="sidebar-button"
         >
           <img
-            class=""
             id="sidebar-icon"
             src="/static/res/ico/sidebar.png"
           />
@@ -93,42 +92,47 @@ Object {
     </div>
   </body>,
   "container": <div>
-    <div>
+    <div
+      class="collapsed sidebar"
+      data-testid="test-toggle"
+    >
       <div
-        class=""
-        data-testid="test-sidebar"
-        id="sidebar"
+        class="fcecount"
+        data-testid="test-fcecount"
       >
+        FCE Count:
+      </div>
+      <div
+        class="sidebar-dropdown"
+        data-testid="test-sidebar"
+      >
+        <h3
+          class="selected-courses"
+        >
+          Selected courses
+        </h3>
         <div
-          class="hidden"
-          id="fce"
+          class="courses"
+          data-testid="test-course-selection"
+        />
+        <button
+          class="reset-selections"
+          data-testid="test-reset"
         >
-          <div
-            data-testid="test-fcecount"
-            id="fcecount"
-          >
-            FCE Count: 
-          </div>
-          <button
-            data-testid="test-reset"
-            id="reset"
-          >
-            Reset Selection
-          </button>
-        </div>
-        <nav
-          id="sidebar-nav"
-        >
+<<<<<<< HEAD
           <ul />
         </nav>
         <div />
+=======
+          Reset Selections
+        </button>
+>>>>>>> 3ac9a7dae7b2c067358cf0128cfca023cf5993b4
       </div>
       <div
+        class="sidebar-button"
         data-testid="test-sidebar-button"
-        id="sidebar-button"
       >
         <img
-          class=""
           id="sidebar-icon"
           src="/static/res/ico/sidebar.png"
         />
