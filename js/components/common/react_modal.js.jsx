@@ -86,7 +86,9 @@ class Description extends React.Component {
   }
 }
 
-
+/**
+ * This component handles the modal popup that appears when viewing the description of a focus
+ */
 class FocusModal extends React.Component {
   constructor(props) {
     super(props);
@@ -125,7 +127,9 @@ class FocusModal extends React.Component {
   }
 }
 
-
+/**
+ * React component forming the template for the description of a focus. It is the content of a FocusModal
+ */
 class FocusDescription extends React.Component {
   render() {
     let requiredCoursesList = this.props.focusInfo.requiredCourses.map((courses, i) => <li key={"required-"+i}>{courses}</li>);

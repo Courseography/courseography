@@ -119,14 +119,8 @@ Object {
           class="reset-selections"
           data-testid="test-reset"
         >
-<<<<<<< HEAD
-          <ul />
-        </nav>
-        <div />
-=======
           Reset Selections
         </button>
->>>>>>> 3ac9a7dae7b2c067358cf0128cfca023cf5993b4
       </div>
       <div
         class="sidebar-button"

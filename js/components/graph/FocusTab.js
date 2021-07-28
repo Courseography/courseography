@@ -2,6 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { FocusModal } from "../common/react_modal.js.jsx";
 
+/**
+ * React component representing an item on the focus menu bar
+ */
 export default class FocusTab extends React.Component {
   constructor(props) {
     super(props);
@@ -10,6 +13,10 @@ export default class FocusTab extends React.Component {
     };
   }
 
+  /**
+   * Change whether the modal popup describing this focus is shown
+   * @param {bool} value
+   */
   toggleFocusModal = value => {
     this.setState({
       showFocusModal: value
