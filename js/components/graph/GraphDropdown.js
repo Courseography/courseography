@@ -6,10 +6,18 @@ export default class GraphDropdown extends React.Component{
   render() {
     let className = "hidden";
     let graphTabLeft = 0;
-    if (document.querySelector("a[href='/graph']")){
-      graphTabLeft = document.querySelector("a[href='/graph']").getBoundingClientRect().left;
-      if (this.props.showGraphDropdown){
-        className = "graph-dropdown-display";
+    if (this.props.graphs.length !== 0 && document.querySelector("#nav-graph > a")) {
+      let navGraph = document.querySelector("#nav-graph > a");
+      if (this.props.graphs.length === 0) {
+        navGraph.classList.remove("show-dropdown-arrow");
+      } else {
+        if (!navGraph.classList.contains("show-dropdown-arrow")) {
+          navGraph.classList.add("show-dropdown-arrow");
+        }
+        if (this.props.showGraphDropdown) {
+          graphTabLeft = navGraph.getBoundingClientRect().left;
+          className = "graph-dropdown-display";
+        }
       }
     }
 
@@ -34,6 +42,10 @@ export default class GraphDropdown extends React.Component{
       </ul>
       )
   }
+}
+
+GraphDropdown.defaultProps = {
+  graphs: []
 }
 
 GraphDropdown.propTypes = {
