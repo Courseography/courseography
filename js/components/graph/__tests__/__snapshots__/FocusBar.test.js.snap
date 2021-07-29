@@ -12,21 +12,15 @@ Object {
       <ul>
         
         
-        <li>
+        <li
+          id="nav-graph"
+        >
           
             
           <a
             href="/graph"
-            id="nav-graph"
           >
             Graph
-          </a>
-          
-            
-          <a
-            id="nav-export"
-          >
-            Export
           </a>
           
         

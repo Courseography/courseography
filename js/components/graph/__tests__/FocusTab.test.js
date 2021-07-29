@@ -1,14 +1,14 @@
 import { fireEvent } from "@testing-library/react";
 import TestContainer from "./TestContainer";
-import TestFocusBar from "./TestFocusBar";
 
 describe("FocusTab", () => {
   it("When focuses are clicked, focuses should be active", async () => {
-    const focusBar = await TestFocusBar.build();
-    fireEvent.click(focusBar.getByRole("button", {name: /FOCUSES ⪢/i}));
-    expect(focusBar.getByRole("button", {name: /scientific computing/i}).classList.contains("active-focus")).toBe(false);
-    fireEvent.click(focusBar.getByRole("button", {name: /scientific computing/i}));
-    expect(focusBar.getByRole("button", {name: /scientific computing/i}).classList.contains("active-focus")).toBe(true);
+    const container = await TestContainer.build();
+    fireEvent.click(container.getByRole("button", {name: /FOCUSES ⪢/i}));
+    let focusDiv = container.getByRole("button", {name: /scientific computing/i}).closest("div");
+    expect(focusDiv.classList.contains("active-focus")).toBe(false);
+    fireEvent.click(container.getByRole("button", {name: /scientific computing/i}));
+    expect(focusDiv.classList.contains("active-focus")).toBe(true);
   });
 
   it("When focuses are clicked, the graph should be highlighted", async () => {
