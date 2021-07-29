@@ -79,10 +79,10 @@ export default class Graph extends React.Component {
         .addEventListener("click", this.exportModal.current.openModal);
     }
 
-    if (document.getElementById("nav-graph")) {
-      document.getElementById("nav-graph")
+    if (document.querySelector("#nav-graph > a")) {
+      document.querySelector("#nav-graph > a")
         .addEventListener("mouseenter", this.setShowGraphDropdown);
-      document.getElementById("nav-graph")
+      document.querySelector("#nav-graph > a")
         .addEventListener("mouseleave", this.hideGraphDropdown);
     }
 
