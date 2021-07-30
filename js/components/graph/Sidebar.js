@@ -53,7 +53,7 @@ export default class Sidebar extends React.Component {
         </label>
         <input className="search-bar" type="text" onChange={(e) => {this.setState({ results: filteredSearch(posts, e.target.value) })}}/>
       </div>
-      <ul className="course-dropdown">
+      <ul className="search-dropdown">
         {this.state.results.map((result) =>
         <li key={`search ${result}`} className="dropdown-item" onClick={() => this.props.itemClick(result)}>
           {result.toUpperCase()}
@@ -80,7 +80,7 @@ export default class Sidebar extends React.Component {
             data-testid={`test ${course}`}
             onClick={() => this.props.itemClick(course)}
             className="course-selection">
-              {course}
+              {course.toUpperCase()}
             </div>
           );
         })}

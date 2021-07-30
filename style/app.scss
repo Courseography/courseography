@@ -762,7 +762,17 @@ div.sidebar.collapsed
   display: none;
 }
 
-.course-dropdown
+.search-container
+{
+  display: inline-block;
+}
+
+.search-bar
+{
+  margin : 0 auto;
+}
+
+.search-dropdown
 {
   max-height      : 100px;
   display         : flex;
