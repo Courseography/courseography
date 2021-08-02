@@ -24,6 +24,6 @@ describe("FocusTab", () => {
     expect(container.queryByRole("button", {name: "i"})).toBeNull;
     fireEvent.click(container.getByRole("button", {name: /FOCUSES ⪢/i}));
     fireEvent.click(container.getByRole("button", {name: /scientific computing/i}));
-    expect(container.queryByRole("button", {name: "i"})).toBeInTheDocument;
+    expect(container.queryByRole("button", {name: /Focus Description/i})).toBeInTheDocument;
   });
 });

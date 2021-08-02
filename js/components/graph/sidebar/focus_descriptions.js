@@ -337,8 +337,8 @@ export var webDescription = {
 export const computerScienceFocusData = {
   web: ["Web Technologies", webDescription],
   theory: ["Theory of Computation", theoryDescription],
-  HCI: ["HumanComp Interaction", HCIDescription],
-  game: ["Video Games", gameDescription],
+  HCI: ["Human\u2011Computer Interaction", HCIDescription],
+  game: ["Game Design", gameDescription],
   systems: ["Computer Systems", systemsDescription],
   vision: ["Computer Vision", visionDescription],
   NLP: ["Computational Linguistics", NLPDescription],

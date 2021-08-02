@@ -49,7 +49,7 @@ Object {
         <button
           class="focus-menu-toggle"
         >
-          FOCUSES ⪢
+          Focuses ⪢
         </button>
         <div
           class="focuses-list"
@@ -64,7 +64,7 @@ Object {
       <button
         class="focus-menu-toggle"
       >
-        FOCUSES ⪢
+        Focuses ⪢
       </button>
       <div
         class="focuses-list"

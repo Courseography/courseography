@@ -781,102 +781,87 @@ div.sidebar.collapsed
 
 .focus-menu-bar
 {
-  position: fixed;
-  bottom: 0;
-  width: calc(100% - 50px);
-  margin-left: 25px;
-  margin-right: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  position        : fixed;
+  bottom          : 0;
+  width           : calc(100% - 50px);
+  margin-left     : 25px;
+  margin-right    : 25px;
+  display         : flex;
+  justify-content : center;
+  align-items     : flex-end;
 }
 
 .focus-menu-toggle
 {
-  position: fixed;
-  left: 25px;
-  border-radius: 17px 17px 0 0;
-  border: none;
-  background-color: #a273d3;
-  color: white;
-  padding: 7px 15px 0 15px;
-  font-size: 20px;
-  width: 150px;
-}
-
-.focuses-list
-{
-  display: inline-block;
-  position: relative;
-  top: 3px;
+  position         : fixed;
+  left             : 25px;
+  border-radius    : 17px 17px 0 0;
+  border           : none;
+  background-color : #a273d3;
+  color            : white;
+  padding          : 7px 15px 0 15px;
+  font-size        : 20px;
+  width            : 150px;
 }
 
 .focus
 {
-  position: relative;
-  float: right;
-  margin: 5px -7px 0;
-  border-top-left-radius: 17px;
-  border-top-right-radius: 30px 53px;
-  background-color: #a172d2;
-  border: none;
-  box-shadow: 0px 12px 20px 6px rgb(0 0 0 / 50%);
-  padding: 3px 7px 0 7px;
-  width: 130px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position                : relative;
+  float                   : right;
+  margin                  : 5px -7px 0;
+  border-top-left-radius  : 17px;
+  border-top-right-radius : 30px 53px;
+  background-color        : #a172d2;
+  box-shadow              : 0px 12px 20px 6px rgb(0 0 0 / 50%);
+  padding                 : 3px 7px 0 7px;
+  width                   : 130px;
+  height                  : 45px;
+  display                 : flex;
+  align-items             : center;
+  justify-content         : center;
 }
 
 .focus button
 {
-  border: none;
-  background-color: transparent;
-  color: white;
-  font-size: 13px;
-  text-align: center;
-  width: 98px;
-  height: inherit;
-  cursor: pointer;
+  border           : none;
+  background-color : transparent;
+  color            : white;
+  font-size        : 13px;
+  width            : 114px;
 }
 
-.focus:after{
-  content: "";
-  background-color: transparent;
-  height: 70px;
-  width: 40px;
-  border-radius: 50%;
-  border-width: 13px;
-  top: -5px;
-  border-style: solid;
-  position: absolute;
-  border-color: transparent transparent transparent #a172d2;
-  transform: rotate(315deg);
-  right: -32px;
+.focus::after, .active-focus::before, .focus:hover::before
+{
+  content          : "";
+  background-color : transparent;
+  height           : 70px;
+  width            : 40px;
+  border-radius    : 50%;
+  border-width     : 13px;
+  top              : -5px;
+  border-style     : solid;
+  position         : absolute;
+}
+
+.focus:after
+{
+  border-color     : transparent transparent transparent #a172d2;
+  transform        : rotate(315deg);
+  right            : -32px;
 }
 
 .active-focus, .focus:hover
 {
-  z-index: 2;
-  border-top-left-radius: 30px 53px;
-  background-color: #bf7ce6;
+  z-index                : 2;
+  border-top-left-radius : 30px 53px;
+  background-color       : #bf7ce6;
 }
 
 .active-focus::before, .focus:hover::before
 {
-  content: "";
-  background-color: transparent;
-  height: 70px;
-  width: 40px;
-  border-radius: 50%;
-  border-width: 13px;
-  top: -5px;
-  border-style: solid;
-  position: absolute;
-  transform: rotate(-315deg);
-  right: 121px;
-  border-color : transparent #bf7ce6 transparent transparent;
+  transform        : rotate(-315deg);
+  right            : 121px;
+  border-color     : transparent #bf7ce6 transparent transparent;
 }
 
 .active-focus::after, .focus:hover::after
@@ -886,27 +871,27 @@ div.sidebar.collapsed
 
 .focus-info
 {
-  width: 150px;
-  text-align: right;
-  margin-right: 20px;
-  position: fixed;
-  right: 5px;
-  bottom: 5px;
+  width        : 150px;
+  text-align   : right;
+  margin-right : 20px;
+  position     : fixed;
+  right        : 5px;
+  bottom       : 5px;
 }
 
 .focus-info button
 {
-  border-radius: 100%;
-  width: 40px;
-  height: 40px;
-  border: none;
-  background-color: white;
-  color: #a273d3;
-  font-style: italic;
-  font-weight: bold;
-  font-size: 26px;
-  font-family: serif;
-  box-shadow: 1px 2px 6px 1px rgb(0 0 0 / 35%);
+  border-radius    : 100%;
+  width            : 40px;
+  height           : 40px;
+  border           : none;
+  background-color : white;
+  color            : #a273d3;
+  font-style       : italic;
+  font-weight      : bold;
+  font-size        : 26px;
+  font-family      : serif;
+  box-shadow       : 1px 2px 6px 1px rgb(0 0 0 / 35%);
 }
 
 .flip

@@ -31,7 +31,7 @@ export default class FocusTab extends React.Component {
         </button>
         <div className="focus-info">
           <FocusModal showFocusModal={this.state.showFocusModal} focusId={this.props.pId} onClose={() => this.toggleFocusModal(false)} />
-          {this.props.selected && <button onClick={() => this.toggleFocusModal(true)}>i</button>}
+          {this.props.selected && <button onClick={() => this.toggleFocusModal(true)} aria-label="Focus Description">i</button>}
         </div>
       </div>
     )

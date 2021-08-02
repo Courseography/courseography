@@ -6,8 +6,8 @@ import FocusTab from "./FocusTab.js";
 const computerScienceFocusLabels = [
   ["web", "Web Technologies"],
   ["theory", "Theory of Computation"],
-  ["HCI", "HumanComp Interaction"],
-  ["game", "Video Games"],
+  ["HCI", "Human\u2011Computer Interaction"],
+  ["game", "Game Design"],
   ["systems", "Computer Systems"],
   ["vision", "Computer Vision"],
   ["NLP", "Computational Linguistics"],
@@ -30,30 +30,26 @@ export default class FocusBar extends React.Component {
    * Changes whether the focus bar is open or not
    */
   toggleFocusBar = () => {
-    if (this.state.open) {
-      this.setState({open: false});
-    } else {
-      this.setState({open: true});
-    }
-}
+    this.setState({open: !this.state.open});
+  }
 
   /**
    * Creates the menu items of the focus bar using the FocusTab component
    * @returns an array of FocusTab components
    */
   generateFocusTabs = () => {
-    return computerScienceFocusLabels.map((focus) => {
-      const selected = this.props.currFocus == focus[0];
+    return computerScienceFocusLabels.map(([focusId, focusTitle]) => {
+      const selected = this.props.currFocus === focusId;
 
       return (
         <FocusTab
-          key={focus[0]}
-          pId={focus[0]}
-          focusName={focus[1]}
+          key={focusId}
+          pId={focusId}
+          focusName={focusTitle}
           selected={selected}
           highlightFocus={(id) => this.props.highlightFocus(id)}
         />
-      )
+      );
     });
   }
 
@@ -63,7 +59,7 @@ export default class FocusBar extends React.Component {
     } else {
       return (
         <div className="focus-menu-bar">
-          <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>{this.state.open ? "⪡ CLOSE" : "FOCUSES ⪢"}</button>
+          <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>{this.state.open ? "⪡ Close" : "Focuses ⪢"}</button>
           <div className="focuses-list">
             {this.state.open && this.generateFocusTabs()}
           </div>
