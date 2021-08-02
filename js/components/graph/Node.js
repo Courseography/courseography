@@ -246,11 +246,14 @@ export default class Node extends React.Component {
     var rectAttrs = {
       height: this.props.JSON.height,
       width: this.props.JSON.width,
-      rx: "4",
-      ry: "4",
       x: this.props.JSON.pos[0],
       y: this.props.JSON.pos[1]
     };
+
+    if (this.props.className === "node"){
+      rectAttrs["rx"] = "8";
+      rectAttrs["ry"] = "8";
+    }
 
     var rectStyle = {
       fill: this.props.JSON.fill
