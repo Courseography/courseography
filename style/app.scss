@@ -156,8 +156,9 @@ body
   list-style  : none;
   padding     : 11px 0 0 0;
   margin      : 0 0 0 0;
-  display     : inline-block;
+  display     : inline-flex;
   height      : 50px;
+  align-items : flex-end;
 }
 
 #nav-links a
@@ -171,7 +172,7 @@ body
 {
   text-align : center;
   display    : inline-block;
-  padding    : 0 25px 0 25px;
+  padding    : 0 25px 2px 25px;
 }
 
 #nav-links > li > a:hover
@@ -2453,7 +2454,7 @@ main-filter input
   padding          : 10px;
 }
 
-.show-dropdown-arrow::after
+.show-dropdown-arrow > a::after
 {
   content      : "▼";
   padding-left : 5px;
@@ -2476,4 +2477,19 @@ main-filter input
   position         : absolute;
   display          : flex;
   flex-direction   : column;
+}
+
+.selected-page
+{
+  border-bottom : 4px solid #deddbb;
+}
+
+#nav-links > .selected-page > a
+{
+  color : #deddbb;
+}
+
+#nav-generate
+{
+  white-space: nowrap;
 }
