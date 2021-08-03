@@ -11,10 +11,37 @@ exports[`Course Node should match shallow snapshot 1`] = `
   shapeRendering="geometricPrecision"
   textRendering="geometricPrecision"
 >
+  <filter
+    height="130%"
+    id="dropshadow"
+  >
+    <feGaussianBlur
+      in="SourceAlpha"
+      stdDeviation="3"
+    />
+    <feOffset
+      dx="2"
+      dy="2"
+      result="offsetblur"
+    />
+    <feComponentTransfer>
+      <feFuncA
+        slope="0.8"
+        type="linear"
+      />
+    </feComponentTransfer>
+    <feMerge>
+      <feMergeNode />
+      <feMergeNode
+        in="SourceGraphic"
+      />
+    </feMerge>
+  </filter>
   <rect
+    filter="url(#dropshadow)"
     height={30}
-    rx="4"
-    ry="4"
+    rx="8"
+    ry="8"
     style={
       Object {
         "fill": "#5dd5b8",
@@ -42,10 +69,35 @@ exports[`Hybrid Node should match snapshot 1`] = `
   shapeRendering="geometricPrecision"
   textRendering="geometricPrecision"
 >
+  <filter
+    height="130%"
+    id="dropshadow"
+  >
+    <feGaussianBlur
+      in="SourceAlpha"
+      stdDeviation="3"
+    />
+    <feOffset
+      dx="2"
+      dy="2"
+      result="offsetblur"
+    />
+    <feComponentTransfer>
+      <feFuncA
+        slope="0.8"
+        type="linear"
+      />
+    </feComponentTransfer>
+    <feMerge>
+      <feMergeNode />
+      <feMergeNode
+        in="SourceGraphic"
+      />
+    </feMerge>
+  </filter>
   <rect
+    filter=""
     height={24}
-    rx="4"
-    ry="4"
     style={
       Object {
         "fill": "#888888",
