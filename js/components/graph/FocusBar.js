@@ -47,7 +47,7 @@ export default class FocusBar extends React.Component {
           pId={focusId}
           focusName={focusTitle}
           selected={selected}
-          highlightFocus={(id) => this.props.highlightFocus(id)}
+          highlightFocus={this.props.highlightFocus}
         />
       );
     });
