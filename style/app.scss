@@ -2454,7 +2454,7 @@ main-filter input
   padding          : 10px;
 }
 
-.show-dropdown-arrow::after
+.show-dropdown-arrow > a::after
 {
   content      : "▼";
   padding-left : 5px;
