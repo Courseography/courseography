@@ -852,15 +852,16 @@ div.sidebar.collapsed
 
 .active-focus, .focus:hover
 {
-  z-index                : 2;
+  z-index                : 1;
   border-top-left-radius : 30px 53px;
   background-color       : #bf7ce6;
+  width                  : 153px;
 }
 
 .active-focus::before, .focus:hover::before
 {
   transform        : rotate(-315deg);
-  right            : 121px;
+  right            : 145px;
   border-color     : transparent #bf7ce6 transparent transparent;
 }
 
@@ -869,27 +870,20 @@ div.sidebar.collapsed
   border-color : transparent transparent transparent #bf7ce6;
 }
 
-.focus-info
-{
-  width        : 150px;
-  text-align   : right;
-  margin-right : 20px;
-  position     : fixed;
-  right        : 5px;
-  bottom       : 5px;
-}
-
 .focus-info button
 {
   border-radius    : 100%;
-  width            : 40px;
-  height           : 40px;
+  width            : 25px;
+  height           : 25px;
+  position         : relative;
+  margin-right     : 3px;
+  z-index          : 1;
   border           : none;
   background-color : white;
   color            : #a273d3;
   font-style       : italic;
   font-weight      : bold;
-  font-size        : 26px;
+  font-size        : 19px;
   font-family      : serif;
   box-shadow       : 1px 2px 6px 1px rgb(0 0 0 / 35%);
 }
