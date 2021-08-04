@@ -4,6 +4,7 @@ import Leaflet from 'leaflet';
 import { Circle, CircleMarker, FeatureGroup, Map, Marker, Polygon, Polyline, Popup, TileLayer, Tooltip } from 'react-leaflet';
 import L from 'leaflet'
 import { getCourse } from '../common/utils';
+import { computerScienceFocusData } from '../graph/sidebar/focus_descriptions';
 
 class ModalContent extends React.Component {
   render() {
@@ -80,6 +81,67 @@ class Description extends React.Component {
           return <p key={i}>{lecture.meetData.code + lecture.meetData.session + '-' + lecture.meetData.section}</p>;
         })}
         {/*<Video urls={this.props.course.videoUrls} />*/}
+      </div>
+    );
+  }
+}
+
+/**
+ * This component handles the modal popup that appears when viewing the description of a focus
+ */
+class FocusModal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      focusTitle: '',
+      focusInfo: null,
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.focusId !== "") {
+      let focusData = computerScienceFocusData[this.props.focusId];
+      this.setState({
+        focusTitle: focusData[0],
+        focusInfo: focusData[1]
+      });
+    };
+  }
+
+  render() {
+    return (
+      <ReactModal className='modal-class'
+        overlayClassName='overlay'
+        isOpen={this.props.showFocusModal}
+        onRequestClose={this.props.onClose}
+        ariaHideApp={false}
+      >
+        <div className='modal-header'>
+          {this.state.focusTitle}
+        </div>
+        <div className='modal-body'>
+          <FocusDescription focusInfo={this.state.focusInfo}/>
+        </div>
+      </ReactModal>
+    );
+  }
+}
+
+/**
+ * React component forming the template for the description of a focus. It is the content of a FocusModal
+ */
+class FocusDescription extends React.Component {
+  render() {
+    let requiredCoursesList = this.props.focusInfo.requiredCourses.map((courses, i) => <li key={"required-"+i}>{courses}</li>);
+    let relatedCoursesList = this.props.focusInfo.relatedCourses.map((courses, i) => <li key={"related-"+i}>{courses}</li>);
+
+    return (
+      <div>
+        <p>{this.props.focusInfo.description}</p>
+        <p><strong>Required Courses:</strong></p>
+        <ol>{requiredCoursesList}</ol>
+        <p><strong>Suggested Related Courses:</strong></p>
+        <ol>{relatedCoursesList}</ol>
       </div>
     );
   }
@@ -595,4 +657,4 @@ function convertTimeToString(time) {
   return (time === 12.5 ? 12 : Math.floor(time)) % 12 + ':30' + meridiem;
 }
 
-export { CourseModal, MapModal };
+export { CourseModal, MapModal, FocusModal };
