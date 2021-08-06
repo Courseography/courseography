@@ -32,36 +32,36 @@ export default class Sidebar extends React.Component {
    * @return {HTMLDivElement} Searchbar to the DOM
    */
    renderSearchBar = () => {
-    const posts = this.props.nodesJSON.map(node => node.id_);
+    if (this.props.nodesJSON) {
+      const filteredSearch = (posts, query) => {
+        if (!query) {
+          return;
+        }
 
-    const filteredSearch = (posts, query) => {
-      if (!query) {
-        return posts;
+        return this.props.nodesJSON.filter((post) => {
+          return post.includes(query);
+        });
       }
 
-      return posts.filter((post) => {
-        return post.includes(query);
-      });
-    }
-
-    return (
-    <div className="search-container">
-      <div>
-        <label htmlFor="header-search">
-          {/* For text to speech purposes */}
-          <span className="label-hidden">Search courses</span>
-        </label>
-        <input className="search-bar" type="text" onChange={(e) => {this.setState({ results: filteredSearch(posts, e.target.value) })}}/>
+      return (
+      <div className="search-container">
+        <div>
+          <label htmlFor="header-search">
+            {/* For text to speech purposes */}
+            <span className="label-hidden">Search courses</span>
+          </label>
+          <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: filteredSearch(this.props.nodesJSON, e.target.value) })}}/>
+        </div>
+        <ul className="search-dropdown">
+          {this.state.results.map((result) =>
+          <li key={`search ${result}`} className="dropdown-item" onClick={() => this.props.courseClick(result)}>
+            {result.toUpperCase()}
+          </li>
+          )}
+        </ul>
       </div>
-      <ul className="search-dropdown">
-        {this.state.results.map((result) =>
-        <li key={`search ${result}`} className="dropdown-item" onClick={() => this.props.itemClick(result)}>
-          {result.toUpperCase()}
-        </li>
-        )}
-      </ul>
-    </div>
-    )
+      )
+    }
   }
 
   /**
@@ -78,7 +78,7 @@ export default class Sidebar extends React.Component {
           return (
             <div key={`active ${course}`}
             data-testid={`test ${course}`}
-            onClick={() => this.props.itemClick(course)}
+            onClick={() => this.props.courseClick(course)}
             className="course-selection">
               {course.toUpperCase()}
             </div>
@@ -114,5 +114,5 @@ Sidebar.propTypes = {
   reset: PropTypes.func,
   activeCourses: PropTypes.instanceOf(Set),
   nodesJSON: PropTypes.array,
-  itemClick: PropTypes.func
+  courseClick: PropTypes.func
 };

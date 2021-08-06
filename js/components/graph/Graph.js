@@ -318,7 +318,7 @@ export default class Graph extends React.Component {
    * This handles clicking of dropdown items from the side bar search.
    * @param  {string} id
    */
-   handleItemClick = id => {
+   handleCourseClick = id => {
     var currentNode = this.nodes.current[id];
     currentNode.toggleSelection(this);
     var temp = [...this.state.selectedNodes]
@@ -754,8 +754,8 @@ export default class Graph extends React.Component {
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
-          nodesJSON={this.state.nodesJSON}
-          itemClick={this.handleItemClick}
+          nodesJSON={this.state.nodesJSON.map(node => node.id_)}
+          courseClick={this.handleCourseClick}
         />
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
@@ -1031,7 +1031,7 @@ Graph.propTypes = {
   start_blank: PropTypes.bool,
   fceCount: PropTypes.number,
   graphs: PropTypes.array,
-  updateGraph: PropTypes.func,
+  updateGraph: PropTypes.func
 };
 
 Graph.defaultProps = {

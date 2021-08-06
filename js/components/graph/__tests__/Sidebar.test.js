@@ -59,4 +59,11 @@ describe("Sidebar", () => {
     expect(sidebar.queryByTestId("test aaa100")).toBeNull();
   });
 
+  // it('updates on change', async () => {
+  //   const sidebar = await TestSidebar.build();
+  //   const input = sidebar.getByTestId('test-search-bar')
+  //   fireEvent.change(input, { target: { value: 'AAA100' } })
+  //   expect(input.value).toBe('AAA100')
+  // })
+
 });
