@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Disclaimer from "../common/Disclaimer";
 import Graph from "./Graph";
+import FocusBar from "./FocusBar";
 
 export default class Container extends React.Component {
   constructor(props) {
@@ -98,6 +99,11 @@ export default class Container extends React.Component {
           start_blank={this.props.start_blank}
           graphs={this.state.graphs}
           updateGraph={this.updateGraph}
+        />
+        <FocusBar
+          focusBarEnabled={this.state.graphName === "Computer Science"}
+          highlightFocus={this.highlightFocus}
+          currFocus={this.state.currFocus}
         />
       </div>
     )

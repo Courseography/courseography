@@ -746,7 +746,7 @@ export default class Graph extends React.Component {
     }
 
     return (
-      <div id="react-graph"
+      <div id="react-graph" data-testid="react-graph"
         className={reactGraphClass}
         {...reactGraphPointerEvents}
       >

@@ -10,6 +10,7 @@ import Config (enableCdn)
 import Util.Blaze
 import Scripts (globalScripts)
 
+
 masterTemplate :: T.Text -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
     H.html $ do
@@ -44,14 +45,22 @@ header page =
                     ! H.customAttribute "context" (textValue page)
         H.div ! A.class_ "nav-middle" $ do
             H.ul ! A.id "nav-links" $ do
-                H.li ! A.id "nav-graph" $ toLink "/graph" "Graph"
-                H.li $ toLink "/grid" "Grid"
-                H.li $ toLink "/generate" "Generate (beta)"
+                if page == "graph"
+                    then H.li ! A.id "nav-graph" ! A.class_ "selected-page" $ toLink "/graph" "Graph"
+                else H.li ! A.id "nav-graph" $ toLink "/graph" "Graph"
+                if page == "grid"
+                    then H.li ! A.class_ "selected-page" $ toLink "/grid"  "Grid"
+                else H.li $toLink "/grid" "Grid"
+                if page == "generate-prerequisites"
+                    then H.li ! A.class_ "selected-page" $ toLink "/generate" "Generate (beta)"
+                else H.li ! A.id "nav-generate" $ toLink "/generate" "Generate (beta)"
                 -- H.li $ toLink "/timesearch" "Search"
                 -- H.li $ toLink "/draw" "Draw"
                 -- TODO: re-enable after handling new first-year courses
                 -- H.li $ toLink "post" "Check My POSt!"
-                H.li $ toLink "/about" "About"
+                if page == "about"
+                    then H.li ! A.class_ "selected-page" $ toLink "/about" "About"
+                else H.li $ toLink "/about" "About"
         H.div ! A.class_ "nav-right" $ do
             if page `elem` ["graph", "grid"]
             then H.button ! A.id "nav-export" $ do

@@ -156,8 +156,9 @@ body
   list-style  : none;
   padding     : 11px 0 0 0;
   margin      : 0 0 0 0;
-  display     : inline-block;
+  display     : inline-flex;
   height      : 50px;
+  align-items : stretch;
 }
 
 #nav-links a
@@ -171,7 +172,7 @@ body
 {
   text-align : center;
   display    : inline-block;
-  padding    : 0 25px 0 25px;
+  padding    : 0 25px 2px 25px;
 }
 
 #nav-links > li > a:hover
@@ -340,7 +341,7 @@ a:active
 }
 
 
-.modal-body p
+.modal-body p, ol
 {
   font-size   : 12pt;
   margin      : 5pt 0px 5pt 0px;
@@ -798,19 +799,6 @@ div.sidebar.collapsed
   stroke : none;
 }
 
-.details
-{
-  border        : solid 1px #000000;
-  width         : 90%;
-  height        : 0px;
-  margin-bottom : 7px;
-  overflow      : auto;
-  font-size     : 14px;
-  color         : #ffffff;
-  padding-left  : 5px;
-  padding-right : 5px;
-}
-
 .active
 {
   background-color : #7a6a96;
@@ -830,6 +818,115 @@ div.sidebar.collapsed
 .graph-dropdown-item:hover
 {
   background-color : #dedede;
+}
+
+.focus-menu-bar
+{
+  position        : fixed;
+  bottom          : 0;
+  width           : calc(100% - 50px);
+  margin-left     : 25px;
+  margin-right    : 25px;
+  display         : flex;
+  justify-content : center;
+  align-items     : flex-end;
+}
+
+.focus-menu-toggle
+{
+  position         : fixed;
+  left             : 25px;
+  border-radius    : 17px 17px 0 0;
+  border           : none;
+  background-color : #a273d3;
+  color            : white;
+  padding          : 7px 15px 0 15px;
+  font-size        : 20px;
+  width            : 150px;
+}
+
+.focus
+{
+  position                : relative;
+  float                   : right;
+  margin                  : 5px -7px 0;
+  border-top-left-radius  : 17px;
+  border-top-right-radius : 30px 53px;
+  background-color        : #a172d2;
+  box-shadow              : 0px 12px 20px 6px rgb(0 0 0 / 50%);
+  padding                 : 3px 7px 0 7px;
+  width                   : 130px;
+  height                  : 45px;
+  display                 : flex;
+  align-items             : center;
+  justify-content         : center;
+}
+
+.focus button
+{
+  border           : none;
+  background-color : transparent;
+  color            : white;
+  font-size        : 13px;
+  width            : 114px;
+}
+
+.focus::after, .active-focus::before, .focus:hover::before
+{
+  content          : "";
+  background-color : transparent;
+  height           : 70px;
+  width            : 40px;
+  border-radius    : 50%;
+  border-width     : 13px;
+  top              : -5px;
+  border-style     : solid;
+  position         : absolute;
+}
+
+.focus:after
+{
+  border-color     : transparent transparent transparent #a172d2;
+  transform        : rotate(315deg);
+  right            : -32px;
+}
+
+.active-focus, .focus:hover
+{
+  z-index                : 1;
+  border-top-left-radius : 30px 53px;
+  background-color       : #bf7ce6;
+  width                  : 153px;
+}
+
+.active-focus::before, .focus:hover::before
+{
+  transform        : rotate(-315deg);
+  right            : 145px;
+  border-color     : transparent #bf7ce6 transparent transparent;
+}
+
+.active-focus::after, .focus:hover::after
+{
+  border-color : transparent transparent transparent #bf7ce6;
+}
+
+.focus-info button
+{
+  border-radius    : 100%;
+  width            : 25px;
+  height           : 25px;
+  position         : relative;
+  margin-right     : 3px;
+  z-index          : 1;
+  border           : none;
+  background-color : white;
+  color            : #a273d3;
+  font-style       : italic;
+  font-weight      : bold;
+  font-size        : 19px;
+  font-family      : serif;
+  box-shadow       : 1px 2px 6px 1px rgb(0 0 0 / 35%);
 }
 
 .flip
@@ -2493,7 +2590,7 @@ main-filter input
   padding          : 10px;
 }
 
-.show-dropdown-arrow::after
+.show-dropdown-arrow > a::after
 {
   content      : "▼";
   padding-left : 5px;
@@ -2516,4 +2613,19 @@ main-filter input
   position         : absolute;
   display          : flex;
   flex-direction   : column;
+}
+
+.selected-page
+{
+  border-bottom : 4px solid #deddbb;
+}
+
+#nav-links > .selected-page > a
+{
+  color : #deddbb;
+}
+
+#nav-generate
+{
+  white-space: nowrap;
 }
