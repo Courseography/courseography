@@ -917,6 +917,11 @@ g.hybrid > rect
   stroke : black;
 }
 
+g.hybrid.inactive > rect
+{
+  stroke-width: 0;
+}
+
 
 g.active > rect
 {
