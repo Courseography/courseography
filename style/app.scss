@@ -1,3 +1,5 @@
+$graph-overlay-top-margin: 25px;
+$graph-overlay-side-margin: 15px;
 @-webkit-keyframes spin
 {
 0.0%
@@ -653,8 +655,8 @@ a:active
   box-shadow       : 4px 4px 4px gray;
   border           : solid #d3d4d6;
   border-width     : 0 1px;
-  margin-top       : 20px;
-  margin-left      : 10px;
+  margin-top       : $graph-overlay-top-margin;
+  margin-left      : $graph-overlay-side-margin;
 }
 
 .sidebar-dropdown
@@ -2568,8 +2570,8 @@ main-filter input
 
 .graph-button-group
 {
-  top              : 80px;
-  right            : 30px;
+  top              : $graph-overlay-top-margin - 10;
+  right            : $graph-overlay-side-margin;
   position         : absolute;
   display          : flex;
   flex-direction   : column;
