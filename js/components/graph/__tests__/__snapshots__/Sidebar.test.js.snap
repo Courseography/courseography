@@ -57,6 +57,23 @@ Object {
           class="sidebar-dropdown"
           data-testid="test-sidebar"
         >
+          <div>
+            <label
+              for="header-search"
+            >
+              <span
+                class="label-hidden"
+              >
+                Search courses
+              </span>
+            </label>
+            <input
+              class="search-bar"
+              data-testid="test-search-bar"
+              id="header-search"
+              type="text"
+            />
+          </div>
           <h3
             class="selected-courses"
           >
@@ -100,6 +117,23 @@ Object {
         class="sidebar-dropdown"
         data-testid="test-sidebar"
       >
+        <div>
+          <label
+            for="header-search"
+          >
+            <span
+              class="label-hidden"
+            >
+              Search courses
+            </span>
+          </label>
+          <input
+            class="search-bar"
+            data-testid="test-search-bar"
+            id="header-search"
+            type="text"
+          />
+        </div>
         <h3
           class="selected-courses"
         >

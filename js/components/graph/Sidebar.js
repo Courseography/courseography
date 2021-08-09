@@ -14,6 +14,16 @@ export default class Sidebar extends React.Component {
       this.setState({ collapsed: !this.state.collapsed });
   }
 
+  filteredSearch = (posts, query) => {
+    if (!query || !posts) {
+      return;
+    }
+
+    return posts.filter((post) => {
+      return post.includes(query);
+    });
+  }
+
   // Sidebar rendering methods
   /**
    * Render the FCE counter above the sidebar on the left side.
@@ -28,54 +38,23 @@ export default class Sidebar extends React.Component {
   }
 
   /**
-   * Render the search bar and dropdown results within the sidebar dropdown.
+   * Render the dropdown results within the sidebar dropdown.
    * @return {HTMLDivElement} Searchbar to the DOM
    */
-   renderSearchBar = () => {
+   renderDropdown = () => {
     if (this.props.nodesJSON) {
-      const filteredSearch = (posts, query) => {
-        if (!query) {
-          return;
-        }
 
-        return posts.filter((post) => {
-          return post.includes(query);
-        });
-      }
-
-      if (this.state.results) {
-        return (
-          <div className="search-container">
-            <div>
-              <label htmlFor="header-search">
-                {/* For text to speech purposes */}
-                <span className="label-hidden">Search courses</span>
-              </label>
-              <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: filteredSearch(this.props.nodesJSON, e.target.value) })}}/>
-            </div>
-            <ul className="search-dropdown">
-              {this.state.results.map((result) =>
-              <li key={`search ${result}`} className="dropdown-item" onClick={() => this.props.courseClick(result)}>
-                {result.toUpperCase()}
-              </li>
-              )}
-            </ul>
-          </div>
-          )
-      } else {
-        return (
-          <div className="search-container">
-            <div>
-              <label htmlFor="header-search">
-                {/* For text to speech purposes */}
-                <span className="label-hidden">Search courses</span>
-              </label>
-              <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: filteredSearch(this.props.nodesJSON, e.target.value) })}}/>
-            </div>
-            <ul className="search-dropdown" />
-          </div>
+      let showDropdown = this.state.results ? '' : 'hidden';
+      let masterDropdown = `${showDropdown} search-dropdown`;
+      return (
+          <ul className={masterDropdown} data-testid='test-searchDropdown'>
+            {this.state.results?.map((result) =>
+            <li key={`search ${result}`} data-testid={`test-search-${result}`}className="dropdown-item" onClick={() => this.props.courseClick(result)}>
+              {result.toUpperCase()}
+            </li>
+            )}
+          </ul>
         )
-      }
     }
   }
 
@@ -111,7 +90,14 @@ export default class Sidebar extends React.Component {
       <div className={masterSidebarClass} data-testid="test-toggle">
         {this.renderFCE()}
         <div className="sidebar-dropdown" data-testid="test-sidebar">
-          {this.renderSearchBar()}
+          <div>
+            <label htmlFor="header-search">
+              {/* For text to speech purposes */}
+              <span className="label-hidden">Search courses</span>
+            </label>
+            <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: this.filteredSearch(this.props.nodesJSON, e.target.value) })}}/>
+          </div>
+          {this.renderDropdown()}
           <h3 className="selected-courses">Selected courses</h3>
           {this.renderActiveCourses()}
           <button className="reset-selections" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selections</button>

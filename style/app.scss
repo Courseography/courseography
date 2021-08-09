@@ -659,7 +659,7 @@ a:active
 
 .sidebar-dropdown
 {
-  padding          : 10px;
+  padding: 10px;
 }
 
 .expanded > .sidebar-button > #sidebar-icon
@@ -694,7 +694,7 @@ div.sidebar.collapsed
 
 .selected-courses
 {
-  margin-top       : 0px;
+  margin-top       : 10px;
   margin-bottom    : 10px;
   font-size        : 14px;
   color            : #946aa8;
@@ -763,12 +763,6 @@ div.sidebar.collapsed
   display: none;
 }
 
-.search-container
-{
-  display: inline-block;
-  max-width: 145px;
-}
-
 .search-bar
 {
   margin : 0 auto;
@@ -777,10 +771,12 @@ div.sidebar.collapsed
 .search-dropdown
 {
   max-height      : 100px;
+  max-width       : 145px;
   display         : flex;
   justify-content : space-between;
   flex-direction  : column;
   overflow        : scroll;
+  margin-bottom   : 0px;
 }
 
 .dropdown-item
