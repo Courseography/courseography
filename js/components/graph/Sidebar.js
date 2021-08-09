@@ -38,29 +38,44 @@ export default class Sidebar extends React.Component {
           return;
         }
 
-        return this.props.nodesJSON.filter((post) => {
+        return posts.filter((post) => {
           return post.includes(query);
         });
       }
 
-      return (
-      <div className="search-container">
-        <div>
-          <label htmlFor="header-search">
-            {/* For text to speech purposes */}
-            <span className="label-hidden">Search courses</span>
-          </label>
-          <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: filteredSearch(this.props.nodesJSON, e.target.value) })}}/>
-        </div>
-        <ul className="search-dropdown">
-          {this.state.results.map((result) =>
-          <li key={`search ${result}`} className="dropdown-item" onClick={() => this.props.courseClick(result)}>
-            {result.toUpperCase()}
-          </li>
-          )}
-        </ul>
-      </div>
-      )
+      if (this.state.results) {
+        return (
+          <div className="search-container">
+            <div>
+              <label htmlFor="header-search">
+                {/* For text to speech purposes */}
+                <span className="label-hidden">Search courses</span>
+              </label>
+              <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: filteredSearch(this.props.nodesJSON, e.target.value) })}}/>
+            </div>
+            <ul className="search-dropdown">
+              {this.state.results.map((result) =>
+              <li key={`search ${result}`} className="dropdown-item" onClick={() => this.props.courseClick(result)}>
+                {result.toUpperCase()}
+              </li>
+              )}
+            </ul>
+          </div>
+          )
+      } else {
+        return (
+          <div className="search-container">
+            <div>
+              <label htmlFor="header-search">
+                {/* For text to speech purposes */}
+                <span className="label-hidden">Search courses</span>
+              </label>
+              <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: filteredSearch(this.props.nodesJSON, e.target.value) })}}/>
+            </div>
+            <ul className="search-dropdown" />
+          </div>
+        )
+      }
     }
   }
 
