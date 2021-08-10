@@ -167,14 +167,19 @@ export default class Graph extends React.Component {
           }
         });
 
+        var noDuplicatesNodesList = [];
         nodesList.forEach(node => {
-          parentsObj[node.id_] = [];
-          inEdgesObj[node.id_] = [];
-          childrenObj[node.id_] = [];
-          outEdgesObj[node.id_] = [];
-          // Quickly adding any active nodes from local storage into the selected nodes
-          if (localStorage.getItem(node.id_) === 'active') {
-            storedNodes.add(node.id_)
+          if (!(node.id_ in parentsObj)) {
+            parentsObj[node.id_] = [];
+            inEdgesObj[node.id_] = [];
+            childrenObj[node.id_] = [];
+            outEdgesObj[node.id_] = [];
+            // Quickly adding any active nodes from local storage into the selected nodes
+            if (localStorage.getItem(node.id_) === 'active') {
+              storedNodes.add(node.id_)
+            }
+
+            noDuplicatesNodesList.push(node);
           }
         });
 
@@ -199,7 +204,7 @@ export default class Graph extends React.Component {
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
-          nodesJSON: nodesList,
+          nodesJSON: noDuplicatesNodesList,
           hybridsJSON: hybridsList,
           boolsJSON: boolsList,
           edgesJSON: edgesList,
