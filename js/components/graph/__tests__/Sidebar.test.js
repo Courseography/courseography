@@ -32,9 +32,9 @@ describe("Sidebar", () => {
     const container = await TestContainer.build();
     fireEvent.click(container.getByTestId("aaa100"));
     const sidebar = await TestSidebar.build();
-    expect(sidebar.getByTestId("test aaa100")).toBeDefined();
+    expect(sidebar.getByTestId("test AAA100")).toBeDefined();
     fireEvent.click(container.getByTestId("aaa100"));
-    expect(sidebar.queryByTestId("test aaa100")).toBeNull();
+    expect(sidebar.queryByTestId("test AAA100")).toBeNull();
   });
 
   it("Clicking graph buttons add and remove the courses to the Selected Courses", async () => {
@@ -42,12 +42,12 @@ describe("Sidebar", () => {
     fireEvent.click(container.getByTestId("aaa100"));
     fireEvent.click(container.getByTestId("aaa303"));
     const sidebar = await TestSidebar.build();
-    expect(sidebar.getByTestId("test aaa100")).toBeDefined();
-    expect(sidebar.getByTestId("test aaa303")).toBeDefined();
+    expect(sidebar.getByTestId("test AAA100")).toBeDefined();
+    expect(sidebar.getByTestId("test AAA303")).toBeDefined();
     fireEvent.click(container.getByTestId("aaa100"));
     fireEvent.click(container.getByTestId("aaa303"));
-    expect(sidebar.queryByTestId("test aaa100")).toBeNull();
-    expect(sidebar.queryByTestId("test aaa303")).toBeNull();
+    expect(sidebar.queryByTestId("test AAA100")).toBeNull();
+    expect(sidebar.queryByTestId("test AAA303")).toBeNull();
   });
 
   it("Clicking the reset selections clears the Selected Courses and resets FCE", async () => {
@@ -56,7 +56,7 @@ describe("Sidebar", () => {
     fireEvent.click(container.getByTestId("test-reset"));
     expect(container.getByText("FCE Count: 0.0")).toBeDefined();
     const sidebar = await TestSidebar.build();
-    expect(sidebar.queryByTestId("test aaa100")).toBeNull();
+    expect(sidebar.queryByTestId("test AAA100")).toBeNull();
   });
 
 });
