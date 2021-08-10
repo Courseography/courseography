@@ -38,7 +38,7 @@ export default class Sidebar extends React.Component {
       <div className="courses" data-testid="test-course-selection">
         {temp.map((course) => {
           return (
-            <div key={`active ${course}`} data-testid={`test ${course}`} className="course-selection">{course.toUpperCase()}</div>
+            <div key={`active ${course}`} data-testid={`test ${course}`} className="course-selection">{course}</div>
           );
         })}
       </div>

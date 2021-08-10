@@ -79,6 +79,7 @@ class GenerateForm extends React.Component {
         var inEdgesObj = {};
         var childrenObj = {};
         var outEdgesObj = {};
+        var storedNodes = new Set();
 
         var labelsList = data.texts.filter(function(entry) {
             // filter for mark percentages, allow preceding characters for potential geq
@@ -108,6 +109,10 @@ class GenerateForm extends React.Component {
           inEdgesObj[node.id_] = [];
           childrenObj[node.id_] = [];
           outEdgesObj[node.id_] = [];
+          // Quickly adding any active nodes from local storage into the selected nodes
+          if (localStorage.getItem(node.id_) === 'active') {
+            storedNodes.add(node.text[node.text.length - 1].text)
+          }
         });
 
         hybridsList.forEach(hybrid => {
@@ -145,7 +150,8 @@ class GenerateForm extends React.Component {
             'inEdges': inEdgesObj,
             'children': childrenObj,
             'outEdges': outEdgesObj
-          }
+          },
+          selectedNodes: storedNodes
         });
       })
       .catch((err) => {

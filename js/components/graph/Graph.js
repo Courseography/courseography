@@ -174,7 +174,7 @@ export default class Graph extends React.Component {
           outEdgesObj[node.id_] = [];
           // Quickly adding any active nodes from local storage into the selected nodes
           if (localStorage.getItem(node.id_) === 'active') {
-            storedNodes.add(node.id_)
+            storedNodes.add(node.text[node.text.length - 1].text)
           }
         });
 
