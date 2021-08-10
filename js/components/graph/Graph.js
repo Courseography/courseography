@@ -86,7 +86,9 @@ export default class Graph extends React.Component {
         .addEventListener("mouseleave", this.hideGraphDropdown);
     }
 
-    document.querySelector(".sidebar").addEventListener("wheel", (event) => event.stopPropagation())
+    if (document.querySelector(".sidebar")) {
+      document.querySelector(".sidebar").addEventListener("wheel", (event) => event.stopPropagation())
+    }
   }
 
   componentWillUpdate(prevProps) {
@@ -732,11 +734,11 @@ export default class Graph extends React.Component {
         className={reactGraphClass}
         {...reactGraphPointerEvents}
       >
-        <Sidebar
+        {this.state.connections !== null && <Sidebar
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
-        />
+        />}
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <GraphDropdown
@@ -746,7 +748,7 @@ export default class Graph extends React.Component {
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
-        <div className="graph-button-group">
+        {this.state.connections !== null && <div className="graph-button-group">
           <div className="button-group">
             <Button
               text="+"
@@ -776,7 +778,7 @@ export default class Graph extends React.Component {
                 />
               </Button>
           </div>
-        </div>
+        </div>}
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
