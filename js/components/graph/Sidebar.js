@@ -49,7 +49,7 @@ export default class Sidebar extends React.Component {
       return (
           <ul className={masterDropdown} data-testid='test-searchDropdown'>
             {this.state.results?.map((result) =>
-            <li key={`search ${result}`} data-testid={`test-search-${result}`}className="dropdown-item" onClick={() => this.props.courseClick(result)}>
+            <li aria-label="test-li" key={`search ${result}`} className="dropdown-item" onClick={() => this.props.courseClick(result)}>
               {result.toUpperCase()}
             </li>
             )}

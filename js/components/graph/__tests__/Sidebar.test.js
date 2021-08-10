@@ -1,5 +1,4 @@
 import { fireEvent } from "@testing-library/react";
-// import { within } from "@testing-library/react";
 import TestSidebar from "./TestSidebar";
 import TestContainer from "./TestContainer";
 
@@ -72,6 +71,7 @@ describe("Sidebar", () => {
     expect(sidebar.queryByTestId("test-searchDropdown")).toBeNull();
     const input = sidebar.getByTestId('test-search-bar');
     fireEvent.change(input, { target: { value: 'AAA100' } });
+    expect(input.value).toBe('AAA100');
     expect(sidebar.queryByTestId("test-searchDropdown")).toBeDefined();
   });
 
@@ -81,7 +81,9 @@ describe("Sidebar", () => {
   //   fireEvent.change(input, { target: { value: 'AAA100' } });
   //   const container = await TestContainer.build();
   //   expect(container.getByText("FCE Count: 0.0")).toBeDefined();
-  //   fireEvent.click(within(container.getByTestId('test-searchDropdown')).getByTestId("test-search-AAA100"));
+  //   const liArr = sidebar.getAllByLabelText('test-li');
+  //   expect(liArr[0].textContent).toBe('AAA100');
+  //   fireEvent.click(liArr[0]);
   //   expect(container.getByText("FCE Count: 0.5")).toBeDefined();
   //   expect(sidebar.getByTestId("test aaa100")).toBeDefined();
   //   fireEvent.click(sidebar.getByTestId("test-search-AAA100"));
