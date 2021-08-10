@@ -734,7 +734,7 @@ export default class Graph extends React.Component {
         className={reactGraphClass}
         {...reactGraphPointerEvents}
       >
-        {this.state.connections !== null && <Sidebar
+        {this.state.nodesJSON.length > 1 && <Sidebar
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
@@ -748,7 +748,7 @@ export default class Graph extends React.Component {
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
-        {this.state.connections !== null && <div className="graph-button-group">
+        {this.state.nodesJSON.length > 1 && <div className="graph-button-group">
           <div className="button-group">
             <Button
               text="+"
