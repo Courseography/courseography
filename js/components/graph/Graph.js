@@ -250,6 +250,8 @@ export default class Graph extends React.Component {
   nodeClick = event => {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
+    var courseLabelArray = currentNode.props.JSON.text;
+    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text;
     var wasSelected = currentNode.state.selected;
     currentNode.toggleSelection(this);
     if (typeof this.props.incrementFCECount === 'function') {
@@ -257,12 +259,12 @@ export default class Graph extends React.Component {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5);
         var tempSub = this.state.selectedNodes;
-        tempSub.delete(courseId)
+        tempSub.delete(courseLabel);
         this.setState({ selectedNodes: tempSub });
       } else {
         this.props.incrementFCECount(0.5);
         var tempAdd = this.state.selectedNodes;
-        this.setState({ selectedNodes: tempAdd.add(courseId) });
+        this.setState({ selectedNodes: tempAdd.add(courseLabel) });
       }
     }
   };
