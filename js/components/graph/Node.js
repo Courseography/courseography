@@ -265,18 +265,7 @@ export default class Node extends React.Component {
     return (
       <g {...gAttrs} id={this.props.JSON.id_} className={newClassName} data-testid={this.getDataTestId()}>
         {ellipse}
-        <filter id="dropshadow" height="130%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-          <feOffset dx="2" dy="2" result="offsetblur"/>
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="0.8"/>
-          </feComponentTransfer>
-          <feMerge>
-            <feMergeNode/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-        <rect {...rectAttrs} style={rectStyle} filter={this.props.className === "hybrid" ? "" : "url(#dropshadow)"} />
+        <rect {...rectAttrs} style={rectStyle} filter={this.props.className === "hybrid" ? "" : `url(#${this.props.nodeDropshadowFilter})`} />
         {this.props.JSON.text.map(function(textTag, i) {
           var textAttrs = {
             x: textXOffset,
@@ -306,5 +295,6 @@ Node.propTypes = {
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
   parents: PropTypes.array,
-  svg: PropTypes.object
+  svg: PropTypes.object,
+  nodeDropshadowFilter: PropTypes.string
 };
