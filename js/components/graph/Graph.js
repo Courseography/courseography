@@ -18,6 +18,10 @@ const ZOOM_ENUM = {
   "ZOOM_OUT": -1,
   "ZOOM_IN": 1
 };
+const TIMEOUT_NAMES_ENUM = {
+  "INFOBOX": 0,
+  "DROPDOWN": 1
+}
 
 export default class Graph extends React.Component {
   constructor(props) {
@@ -30,7 +34,8 @@ export default class Graph extends React.Component {
       boolsJSON: [],
       edgesJSON: [],
       highlightedNodes: [],
-      timeouts: [],
+      infoboxTimeouts: [],
+      dropdownTimeouts: [],
       width: window.innerWidth,
       height: window.innerHeight,
       zoomFactor: 1,
@@ -86,7 +91,9 @@ export default class Graph extends React.Component {
         .addEventListener("mouseleave", this.hideGraphDropdown);
     }
 
-    document.querySelector(".sidebar").addEventListener("wheel", (event) => event.stopPropagation())
+    if (document.querySelector(".sidebar")) {
+      document.querySelector(".sidebar").addEventListener("wheel", (event) => event.stopPropagation())
+    }
   }
 
   componentWillUpdate(prevProps) {
@@ -239,12 +246,17 @@ export default class Graph extends React.Component {
     }
   }
 
-  clearAllTimeouts = () => {
-    for (var i = 0; i < this.state.timeouts.length; i++) {
-      clearTimeout(this.state.timeouts[i]);
+  clearAllTimeouts = (timeoutName) => {
+    switch (timeoutName){
+      case TIMEOUT_NAMES_ENUM.INFOBOX:
+        this.state.infoboxTimeouts.forEach(timeout => clearTimeout(timeout))
+        this.setState({infoboxTimeouts: []})
+        break;
+      case TIMEOUT_NAMES_ENUM.DROPDOWN:
+        this.state.dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
+        this.setState({dropdownTimeouts: []})
+        break;
     }
-
-    this.setState({ timeouts: [] });
   };
 
   nodeClick = event => {
@@ -274,7 +286,7 @@ export default class Graph extends React.Component {
     var currentNode = this.nodes.current[courseId];
     currentNode.focusPrereqs(this);
 
-    this.clearAllTimeouts();
+    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX);
 
     var xPos = currentNode.props.JSON.pos[0];
     var yPos = currentNode.props.JSON.pos[1];
@@ -309,7 +321,7 @@ export default class Graph extends React.Component {
     }, 400);
 
     this.setState({
-      timeouts: this.state.timeouts.concat(timeout),
+      infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout),
       buttonHover: false
     });
   };
@@ -449,7 +461,7 @@ export default class Graph extends React.Component {
   }
 
   infoBoxMouseEnter = () => {
-    this.clearAllTimeouts();
+    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX);
     this.setState({showInfoBox: true});
   };
 
@@ -458,7 +470,7 @@ export default class Graph extends React.Component {
       this.setState({showInfoBox: false});
     }, 400);
 
-    this.setState({ timeouts: this.state.timeouts.concat(timeout) });
+    this.setState({ infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout) });
   };
 
   infoBoxMouseClick = () => {
@@ -470,7 +482,7 @@ export default class Graph extends React.Component {
   };
 
   setShowGraphDropdown = () => {
-    this.clearAllTimeouts();
+    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.DROPDOWN);
     this.setState({showGraphDropdown: true});
   }
 
@@ -478,7 +490,7 @@ export default class Graph extends React.Component {
     var timeout = setTimeout(() => {
       this.setState({showGraphDropdown: false});
     }, 500);
-    this.setState({timeouts: this.state.timeouts.concat(timeout)});
+    this.setState({dropdownTimeouts: this.state.dropdownTimeouts.concat(timeout)});
   }
 
   onClose = () => {
@@ -752,13 +764,13 @@ export default class Graph extends React.Component {
         className={reactGraphClass}
         {...reactGraphPointerEvents}
       >
-        <Sidebar
+        {this.state.nodesJSON.length > 1 && <Sidebar
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
           courses={this.state.nodesJSON.map(node => node.id_)}
           courseClick={this.handleCourseClick}
-        />
+        />}
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <GraphDropdown
@@ -768,7 +780,7 @@ export default class Graph extends React.Component {
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
-        <div className="graph-button-group">
+        {this.state.nodesJSON.length > 1 && <div className="graph-button-group">
           <div className="button-group">
             <Button
               text="+"
@@ -798,7 +810,7 @@ export default class Graph extends React.Component {
                 />
               </Button>
           </div>
-        </div>
+        </div>}
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
