@@ -326,10 +326,12 @@ export default class Graph extends React.Component {
       this.setState({
         selectedNodes: new Set(temp.filter(course => course !== id))
       });
+      this.props.incrementFCECount(-0.5);
     } else {
       this.setState({
         selectedNodes: new Set([...temp, id])
       });
+      this.props.incrementFCECount(0.5);
     }
   }
 
@@ -754,7 +756,7 @@ export default class Graph extends React.Component {
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
-          nodesJSON={this.state.nodesJSON.map(node => node.id_)}
+          courses={this.state.nodesJSON.map(node => node.id_)}
           courseClick={this.handleCourseClick}
         />
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />

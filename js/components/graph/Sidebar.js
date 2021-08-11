@@ -14,13 +14,13 @@ export default class Sidebar extends React.Component {
       this.setState({ collapsed: !this.state.collapsed });
   }
 
-  filteredSearch = (posts, query) => {
-    if (!query || !posts) {
+  filteredSearch = (Query) => {
+    if (!Query || !this.props.courses) {
       return;
     }
 
-    return posts.filter((post) => {
-      return post.includes(query);
+    return this.props.courses.filter((Course) => {
+      return Course.includes(Query);
     });
   }
 
@@ -42,7 +42,7 @@ export default class Sidebar extends React.Component {
    * @return {HTMLDivElement} Searchbar to the DOM
    */
    renderDropdown = () => {
-    if (this.props.nodesJSON) {
+    if (this.props.courses) {
 
       let showDropdown = this.state.results ? '' : 'hidden';
       let masterDropdown = `${showDropdown} search-dropdown`;
@@ -95,7 +95,7 @@ export default class Sidebar extends React.Component {
               {/* For text to speech purposes */}
               <span className="label-hidden">Search courses</span>
             </label>
-            <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: this.filteredSearch(this.props.nodesJSON, e.target.value) })}}/>
+            <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: this.filteredSearch(e.target.value) })}}/>
           </div>
           {this.renderDropdown()}
           <h3 className="selected-courses">Selected courses</h3>
@@ -114,6 +114,6 @@ Sidebar.propTypes = {
   fceCount: PropTypes.number,
   reset: PropTypes.func,
   activeCourses: PropTypes.instanceOf(Set),
-  nodesJSON: PropTypes.array,
+  courses: PropTypes.array,
   courseClick: PropTypes.func
 };
