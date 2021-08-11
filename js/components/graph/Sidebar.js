@@ -14,13 +14,13 @@ export default class Sidebar extends React.Component {
       this.setState({ collapsed: !this.state.collapsed });
   }
 
-  filteredSearch = (Query) => {
-    if (!Query || !this.props.courses) {
+  filteredSearch = (query) => {
+    if (!query || !this.props.courses) {
       return;
     }
 
-    return this.props.courses.filter((Course) => {
-      return Course.includes(Query);
+    return this.props.courses.filter((course) => {
+      return course.includes(query) || course.toUpperCase().includes(query);
     });
   }
 
