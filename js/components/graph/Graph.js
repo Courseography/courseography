@@ -18,6 +18,10 @@ const ZOOM_ENUM = {
   "ZOOM_OUT": -1,
   "ZOOM_IN": 1
 };
+const TIMEOUT_NAMES_ENUM = {
+  "INFOBOX": 0,
+  "DROPDOWN": 1
+}
 
 export default class Graph extends React.Component {
   constructor(props) {
@@ -30,7 +34,8 @@ export default class Graph extends React.Component {
       boolsJSON: [],
       edgesJSON: [],
       highlightedNodes: [],
-      timeouts: [],
+      infoboxTimeouts: [],
+      dropdownTimeouts: [],
       width: window.innerWidth,
       height: window.innerHeight,
       zoomFactor: 1,
@@ -241,12 +246,17 @@ export default class Graph extends React.Component {
     }
   }
 
-  clearAllTimeouts = () => {
-    for (var i = 0; i < this.state.timeouts.length; i++) {
-      clearTimeout(this.state.timeouts[i]);
+  clearAllTimeouts = (timeoutName) => {
+    switch (timeoutName){
+      case TIMEOUT_NAMES_ENUM.INFOBOX:
+        this.state.infoboxTimeouts.forEach(timeout => clearTimeout(timeout))
+        this.setState({infoboxTimeouts: []})
+        break;
+      case TIMEOUT_NAMES_ENUM.DROPDOWN:
+        this.state.dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
+        this.setState({dropdownTimeouts: []})
+        break;
     }
-
-    this.setState({ timeouts: [] });
   };
 
   nodeClick = event => {
@@ -277,7 +287,7 @@ export default class Graph extends React.Component {
     var currentNode = this.nodes.current[courseId];
     currentNode.focusPrereqs(this);
 
-    this.clearAllTimeouts();
+    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX);
 
     var xPos = currentNode.props.JSON.pos[0];
     var yPos = currentNode.props.JSON.pos[1];
@@ -312,7 +322,7 @@ export default class Graph extends React.Component {
     }, 400);
 
     this.setState({
-      timeouts: this.state.timeouts.concat(timeout),
+      infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout),
       buttonHover: false
     });
   };
@@ -431,7 +441,7 @@ export default class Graph extends React.Component {
   }
 
   infoBoxMouseEnter = () => {
-    this.clearAllTimeouts();
+    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX);
     this.setState({showInfoBox: true});
   };
 
@@ -440,7 +450,7 @@ export default class Graph extends React.Component {
       this.setState({showInfoBox: false});
     }, 400);
 
-    this.setState({ timeouts: this.state.timeouts.concat(timeout) });
+    this.setState({ infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout) });
   };
 
   infoBoxMouseClick = () => {
@@ -452,7 +462,7 @@ export default class Graph extends React.Component {
   };
 
   setShowGraphDropdown = () => {
-    this.clearAllTimeouts();
+    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.DROPDOWN);
     this.setState({showGraphDropdown: true});
   }
 
@@ -460,7 +470,7 @@ export default class Graph extends React.Component {
     var timeout = setTimeout(() => {
       this.setState({showGraphDropdown: false});
     }, 500);
-    this.setState({timeouts: this.state.timeouts.concat(timeout)});
+    this.setState({dropdownTimeouts: this.state.dropdownTimeouts.concat(timeout)});
   }
 
   onClose = () => {
