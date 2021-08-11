@@ -17,11 +17,20 @@ class GenerateForm extends React.Component {
       maxDepth: 0,
       location: ['utsg'],
       includeRaws: false,
-      includeGrades: false
+      includeGrades: false,
+      fceCount: 0
     };
 
     this.graph = React.createRef();
   }
+
+  setFCECount = credits => {
+    this.setState({ fceCount: credits });
+  };
+
+  incrementFCECount = credits => {
+    this.setState({ fceCount: this.state.fceCount + credits });
+  };
 
   handleInputChange = (event) => {
     const target = event.target;
@@ -224,6 +233,9 @@ class GenerateForm extends React.Component {
     <Graph
       ref={this.graph}
       start_blank={true}
+      fceCount = {this.state.fceCount}
+      incrementFCECount={this.incrementFCECount}
+      setFCECount={this.setFCECount}
     />
     </div>
     )
