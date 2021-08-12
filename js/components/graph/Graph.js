@@ -771,7 +771,7 @@ export default class Graph extends React.Component {
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
-          courses={this.state.nodesJSON.map(node => node.id_)}
+          courses={this.state.nodesJSON.map(node => [node.id_, node.text[node.text.length - 1].text])}
           courseClick={this.handleCourseClick}
         />}
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
