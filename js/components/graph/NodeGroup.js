@@ -22,21 +22,6 @@ export default class NodeGroup extends React.Component {
   }
 
   /**
-   * Helper for hybrid computation. Finds the node with the same course label as the hybrid.
-   * @param  {string} course
-   * @return {Node}
-   */
-  findRelationship = course => {
-    var nodes = this.props.nodesJSON;
-    var node = nodes.find(
-      n =>
-        n.type_ === "Node" &&
-        n.text.some(textTag => textTag.text.includes(course))
-    );
-    return node;
-  }
-
-  /**
    *
    * @param {*} entry
    * @return
