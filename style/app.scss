@@ -661,7 +661,7 @@ a:active
 
 .sidebar-dropdown
 {
-  padding          : 10px;
+  padding: 10px;
 }
 
 .expanded > .sidebar-button > #sidebar-icon
@@ -696,7 +696,7 @@ div.sidebar.collapsed
 
 .selected-courses
 {
-  margin-top       : 0px;
+  margin-top       : 10px;
   margin-bottom    : 10px;
   font-size        : 14px;
   color            : #946aa8;
@@ -716,6 +716,11 @@ div.sidebar.collapsed
 {
   font-size    : 14px;
   margin-right : auto;
+}
+
+.course-selection:hover
+{
+  cursor: pointer;
 }
 
 .sidebar-button:hover
@@ -753,6 +758,39 @@ div.sidebar.collapsed
 .reset-selections:hover
 {
   background-color : #cfccd4;
+}
+
+.label-hidden
+{
+  display: none;
+}
+
+.search-bar
+{
+  margin : 0 auto;
+}
+
+.search-dropdown
+{
+  max-height      : 100px;
+  max-width       : 145px;
+  display         : flex;
+  justify-content : space-between;
+  flex-direction  : column;
+  overflow        : scroll;
+  margin-bottom   : 0px;
+  list-style      : none;
+}
+
+.dropdown-item
+{
+  font-size    : 14px;
+  margin-right : auto;
+}
+
+.dropdown-item:hover
+{
+  cursor: pointer;
 }
 
 .spotlight

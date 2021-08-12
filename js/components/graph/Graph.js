@@ -55,7 +55,7 @@ export default class Graph extends React.Component {
       infoBoxNodeId: "",
       panning: false,
       panStartX: 0,
-      panStartY:0,
+      panStartY: 0,
       showCourseModal: false,
       showGraphDropdown: false,
       selectedNodes: new Set()
@@ -263,19 +263,18 @@ export default class Graph extends React.Component {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
     var wasSelected = currentNode.state.selected;
+    var temp = this.state.selectedNodes;
     currentNode.toggleSelection(this);
     if (typeof this.props.incrementFCECount === 'function') {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5);
-        var tempSub = this.state.selectedNodes;
-        tempSub.delete(courseId)
-        this.setState({ selectedNodes: tempSub });
+        temp.delete(courseId)
       } else {
         this.props.incrementFCECount(0.5);
-        var tempAdd = this.state.selectedNodes;
-        this.setState({ selectedNodes: tempAdd.add(courseId) });
+        temp.add(courseId)
       }
+      this.setState({ selectedNodes: temp });
     }
   };
 
@@ -326,6 +325,27 @@ export default class Graph extends React.Component {
       buttonHover: false
     });
   };
+
+  /**
+   * This handles clicking of dropdown items from the side bar search.
+   * @param  {string} id
+   */
+   handleCourseClick = id => {
+    var currentNode = this.nodes.current[id];
+    currentNode.toggleSelection(this);
+    var temp = [...this.state.selectedNodes]
+    if (currentNode.state.selected) {
+      this.setState({
+        selectedNodes: new Set(temp.filter(course => course !== id))
+      });
+      this.props.incrementFCECount(-0.5);
+    } else {
+      this.setState({
+        selectedNodes: new Set([...temp, id])
+      });
+      this.props.incrementFCECount(0.5);
+    }
+  }
 
   /**
    * Drawing mode not implemented, so this function may not work.
@@ -748,6 +768,8 @@ export default class Graph extends React.Component {
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
+          courses={this.state.nodesJSON.map(node => node.id_)}
+          courseClick={this.handleCourseClick}
         />}
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
         <ExportModal context="graph" session="" ref={this.exportModal} />

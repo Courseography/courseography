@@ -5,12 +5,23 @@ export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      collapsed: true
+      collapsed: true,
+      results: []
     };
   }
 
   toggleSidebar = () => {
       this.setState({ collapsed: !this.state.collapsed });
+  }
+
+  filteredSearch = (query) => {
+    if (!query || !this.props.courses) {
+      return;
+    }
+
+    return this.props.courses.filter((course) => {
+      return course.includes(query) || course.toUpperCase().includes(query);
+    });
   }
 
   // Sidebar rendering methods
@@ -27,6 +38,27 @@ export default class Sidebar extends React.Component {
   }
 
   /**
+   * Render the dropdown results within the sidebar dropdown.
+   * @return {HTMLDivElement} Searchbar to the DOM
+   */
+   renderDropdown = () => {
+    if (this.props.courses) {
+
+      let showDropdown = this.state.results ? '' : 'hidden';
+      let masterDropdown = `${showDropdown} search-dropdown`;
+      return (
+          <ul className={masterDropdown} data-testid='test-searchDropdown'>
+            {this.state.results?.map((result) =>
+            <li aria-label="test-li" key={`search ${result}`} className="dropdown-item" onClick={() => this.props.courseClick(result)}>
+              {result.toUpperCase()}
+            </li>
+            )}
+          </ul>
+        )
+    }
+  }
+
+  /**
    * Render courses that are in the sidebar.
    * @return {HTMLBodyElement} list of div's for each course that is active
    */
@@ -38,7 +70,12 @@ export default class Sidebar extends React.Component {
       <div className="courses" data-testid="test-course-selection">
         {temp.map((course) => {
           return (
-            <div key={`active ${course}`} data-testid={`test ${course}`} className="course-selection">{course.toUpperCase()}</div>
+            <div key={`active ${course}`}
+            data-testid={`test ${course}`}
+            onClick={() => this.props.courseClick(course)}
+            className="course-selection">
+              {course.toUpperCase()}
+            </div>
           );
         })}
       </div>
@@ -53,6 +90,14 @@ export default class Sidebar extends React.Component {
       <div className={masterSidebarClass} data-testid="test-toggle">
         {this.renderFCE()}
         <div className="sidebar-dropdown" data-testid="test-sidebar">
+          <div>
+            <label htmlFor="header-search">
+              {/* For text to speech purposes */}
+              <span className="label-hidden">Search courses</span>
+            </label>
+            <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: this.filteredSearch(e.target.value) })}}/>
+          </div>
+          {this.renderDropdown()}
           <h3 className="selected-courses">Selected courses</h3>
           {this.renderActiveCourses()}
           <button className="reset-selections" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selections</button>
@@ -68,5 +113,7 @@ export default class Sidebar extends React.Component {
 Sidebar.propTypes = {
   fceCount: PropTypes.number,
   reset: PropTypes.func,
-  activeCourses: PropTypes.instanceOf(Set)
+  activeCourses: PropTypes.instanceOf(Set),
+  courses: PropTypes.array,
+  courseClick: PropTypes.func
 };
