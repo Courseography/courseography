@@ -20,7 +20,7 @@ export default class Sidebar extends React.Component {
     }
 
     return this.props.courses.filter(([courseId, courseLabel]) => {
-      return courseId.includes(query) || courseId.toUpperCase().includes(query) || courseLabel.includes(query);
+      return courseId.includes(query) || courseId.toUpperCase().includes(query) || courseLabel.includes(query.toUpperCase());
     });
   }
 

@@ -767,11 +767,12 @@ export default class Graph extends React.Component {
         className={reactGraphClass}
         {...reactGraphPointerEvents}
       >
-        {this.state.nodesJSON.length > 1 && <Sidebar
+        {// Filtering by node.text.length is a temporary fix for a bug on Generate where the first node is empty
+          this.state.nodesJSON.length > 1 && <Sidebar
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
-          courses={this.state.nodesJSON.map(node => [node.id_, node.text[node.text.length - 1].text])}
+          courses={this.state.nodesJSON.map(node => [node.id_, node.text.length > 0 ? node.text[node.text.length - 1].text : ""])}
           courseClick={this.handleCourseClick}
         />}
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
