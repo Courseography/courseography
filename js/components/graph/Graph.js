@@ -167,6 +167,8 @@ export default class Graph extends React.Component {
           }
         });
 
+        // The duplicate filter is a temporary fix, as previously there were two nodes, Hybrid and Node,
+        // that were placed in the same spot on some graphs where there should be only a Hybrid node.
         var noDuplicatesNodesList = [];
         nodesList.forEach(node => {
           if (!(node.id_ in parentsObj)) {
