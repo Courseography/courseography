@@ -334,15 +334,17 @@ export default class Graph extends React.Component {
    handleCourseClick = id => {
     var currentNode = this.nodes.current[id];
     currentNode.toggleSelection(this);
-    var temp = [...this.state.selectedNodes]
+    var courseLabelArray = currentNode.props.JSON.text;
+    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text;
+    var temp = [...this.state.selectedNodes];
     if (currentNode.state.selected) {
       this.setState({
-        selectedNodes: new Set(temp.filter(course => course !== id))
+        selectedNodes: new Set(temp.filter(course => course !== courseLabel))
       });
       this.props.incrementFCECount(-0.5);
     } else {
       this.setState({
-        selectedNodes: new Set([...temp, id])
+        selectedNodes: new Set([...temp, courseLabel])
       });
       this.props.incrementFCECount(0.5);
     }

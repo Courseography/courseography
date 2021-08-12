@@ -46,6 +46,7 @@ export default class Sidebar extends React.Component {
 
       let showDropdown = this.state.results ? '' : 'hidden';
       let masterDropdown = `${showDropdown} search-dropdown`;
+      // FIXME: result casing
       return (
           <ul className={masterDropdown} data-testid='test-searchDropdown'>
             {this.state.results?.map((result) =>
