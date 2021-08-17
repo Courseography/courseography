@@ -19,8 +19,8 @@ export default class Sidebar extends React.Component {
       return;
     }
 
-    return this.props.courses.filter((course) => {
-      return course.includes(query) || course.toUpperCase().includes(query);
+    return this.props.courses.filter(([courseId, courseLabel]) => {
+      return courseId.includes(query) || courseId.toUpperCase().includes(query) || courseLabel.includes(query.toUpperCase());
     });
   }
 
@@ -48,9 +48,9 @@ export default class Sidebar extends React.Component {
       let masterDropdown = `${showDropdown} search-dropdown`;
       return (
           <ul className={masterDropdown} data-testid='test-searchDropdown'>
-            {this.state.results?.map((result) =>
-            <li aria-label="test-li" key={`search ${result}`} className="dropdown-item" onClick={() => this.props.courseClick(result)}>
-              {result.toUpperCase()}
+            {this.state.results?.map(([resultId, resultLabel]) =>
+            <li aria-label="test-li" key={`search ${resultId}`} className="dropdown-item" onClick={() => this.props.courseClick(resultId)}>
+              {resultLabel}
             </li>
             )}
           </ul>
@@ -74,7 +74,7 @@ export default class Sidebar extends React.Component {
             data-testid={`test ${course}`}
             onClick={() => this.props.courseClick(course)}
             className="course-selection">
-              {course.toUpperCase()}
+              {course}
             </div>
           );
         })}

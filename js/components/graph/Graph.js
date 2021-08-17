@@ -186,7 +186,7 @@ export default class Graph extends React.Component {
             outEdgesObj[node.id_] = [];
             // Quickly adding any active nodes from local storage into the selected nodes
             if (localStorage.getItem(node.id_) === 'active') {
-              storedNodes.add(node.id_)
+              storedNodes.add(node.text[node.text.length - 1].text);
             }
 
             noDuplicatesNodesList.push(node);
@@ -270,6 +270,8 @@ export default class Graph extends React.Component {
   nodeClick = event => {
     var courseId = event.currentTarget.id;
     var currentNode = this.nodes.current[courseId];
+    var courseLabelArray = currentNode.props.JSON.text;
+    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text;
     var wasSelected = currentNode.state.selected;
     var temp = this.state.selectedNodes;
     currentNode.toggleSelection(this);
@@ -277,12 +279,11 @@ export default class Graph extends React.Component {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5);
-        temp.delete(courseId)
+        temp.delete(courseLabel);
       } else {
         this.props.incrementFCECount(0.5);
-        temp.add(courseId)
+        temp.add(courseLabel)
       }
-      this.setState({ selectedNodes: temp });
     }
   };
 
@@ -341,15 +342,17 @@ export default class Graph extends React.Component {
    handleCourseClick = id => {
     var currentNode = this.nodes.current[id];
     currentNode.toggleSelection(this);
-    var temp = [...this.state.selectedNodes]
+    var courseLabelArray = currentNode.props.JSON.text;
+    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text;
+    var temp = [...this.state.selectedNodes];
     if (currentNode.state.selected) {
       this.setState({
-        selectedNodes: new Set(temp.filter(course => course !== id))
+        selectedNodes: new Set(temp.filter(course => course !== courseLabel))
       });
       this.props.incrementFCECount(-0.5);
     } else {
       this.setState({
-        selectedNodes: new Set([...temp, id])
+        selectedNodes: new Set([...temp, courseLabel])
       });
       this.props.incrementFCECount(0.5);
     }
@@ -772,11 +775,12 @@ export default class Graph extends React.Component {
         className={reactGraphClass}
         {...reactGraphPointerEvents}
       >
-        {this.state.nodesJSON.length > 1 && <Sidebar
+        {// Filtering by node.text.length is a temporary fix for a bug on Generate where the first node is empty
+          this.state.nodesJSON.length > 1 && <Sidebar
           fceCount={this.props.fceCount}
           reset={this.reset}
           activeCourses={this.state.selectedNodes}
-          courses={this.state.nodesJSON.map(node => node.id_)}
+          courses={this.state.nodesJSON.map(node => [node.id_, node.text.length > 0 ? node.text[node.text.length - 1].text : ""])}
           courseClick={this.handleCourseClick}
         />}
         <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
