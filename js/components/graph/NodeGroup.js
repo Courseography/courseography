@@ -22,21 +22,6 @@ export default class NodeGroup extends React.Component {
   }
 
   /**
-   * Helper for hybrid computation. Finds the node with the same course label as the hybrid.
-   * @param  {string} course
-   * @return {Node}
-   */
-  findRelationship = course => {
-    var nodes = this.props.nodesJSON;
-    var node = nodes.find(
-      n =>
-        n.type_ === "Node" &&
-        n.text.some(textTag => textTag.text.includes(course))
-    );
-    return node;
-  }
-
-  /**
    *
    * @param {*} entry
    * @return
@@ -64,6 +49,7 @@ export default class NodeGroup extends React.Component {
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
               logicalType={"AND"}
+              nodeDropshadowFilter={this.props.nodeDropshadowFilter}
             />
           );
         })}
@@ -87,6 +73,7 @@ export default class NodeGroup extends React.Component {
               onMouseLeave={this.props.nodeMouseLeave}
               onMouseDown={this.props.nodeMouseDown}
               editMode={this.props.editMode}
+              nodeDropshadowFilter={this.props.nodeDropshadowFilter}
             />
           );
         })}
@@ -108,5 +95,6 @@ NodeGroup.propTypes = {
   nodeMouseLeave: PropTypes.func,
   nodesJSON: PropTypes.array,
   connections: PropTypes.object,
-  svg: PropTypes.object
+  svg: PropTypes.object,
+  nodeDropshadowFilter: PropTypes.string
 };

@@ -246,11 +246,14 @@ export default class Node extends React.Component {
     var rectAttrs = {
       height: this.props.JSON.height,
       width: this.props.JSON.width,
-      rx: "4",
-      ry: "4",
       x: this.props.JSON.pos[0],
       y: this.props.JSON.pos[1]
     };
+
+    if (this.props.className === "node"){
+      rectAttrs["rx"] = "8";
+      rectAttrs["ry"] = "8";
+    }
 
     var rectStyle = {
       fill: this.props.JSON.fill
@@ -262,7 +265,7 @@ export default class Node extends React.Component {
     return (
       <g {...gAttrs} id={this.props.JSON.id_} className={newClassName} data-testid={this.getDataTestId()}>
         {ellipse}
-        <rect {...rectAttrs} style={rectStyle} />
+        <rect {...rectAttrs} style={rectStyle} filter={this.props.className === "hybrid" ? "" : `url(#${this.props.nodeDropshadowFilter})`} />
         {this.props.JSON.text.map(function(textTag, i) {
           var textAttrs = {
             x: textXOffset,
@@ -292,5 +295,6 @@ Node.propTypes = {
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
   parents: PropTypes.array,
-  svg: PropTypes.object
+  svg: PropTypes.object,
+  nodeDropshadowFilter: PropTypes.string
 };
