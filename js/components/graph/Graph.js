@@ -65,6 +65,7 @@ export default class Graph extends React.Component {
     this.bools = React.createRef();
     this.edges = React.createRef();
     this.exportModal = React.createRef();
+    this.nodeDropshadowFilter = "dropshadow";
   }
 
   componentDidMount() {
@@ -826,6 +827,17 @@ export default class Graph extends React.Component {
           version="1.1"
           {...svgMouseEvents}
         >
+          <filter id={this.nodeDropshadowFilter} height="130%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="2" dy="2" result="offsetblur"/>
+            <feComponentTransfer>
+              <feFuncA type="linear" slope="0.8"/>
+            </feComponentTransfer>
+            <feMerge>
+              <feMergeNode/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
           {this.renderArrowHead()}
           <RegionGroup
             regionsJSON={this.state.regionsJSON}
@@ -844,6 +856,7 @@ export default class Graph extends React.Component {
             highlightedNodes={this.state.highlightedNodes}
             onDraw={this.state.onDraw}
             connections={this.state.connections}
+            nodeDropshadowFilter={this.nodeDropshadowFilter}
           />
           <BoolGroup
             ref={this.bools}

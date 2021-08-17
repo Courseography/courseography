@@ -49,6 +49,7 @@ export default class NodeGroup extends React.Component {
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
               logicalType={"AND"}
+              nodeDropshadowFilter={this.props.nodeDropshadowFilter}
             />
           );
         })}
@@ -72,6 +73,7 @@ export default class NodeGroup extends React.Component {
               onMouseLeave={this.props.nodeMouseLeave}
               onMouseDown={this.props.nodeMouseDown}
               editMode={this.props.editMode}
+              nodeDropshadowFilter={this.props.nodeDropshadowFilter}
             />
           );
         })}
@@ -93,5 +95,6 @@ NodeGroup.propTypes = {
   nodeMouseLeave: PropTypes.func,
   nodesJSON: PropTypes.array,
   connections: PropTypes.object,
-  svg: PropTypes.object
+  svg: PropTypes.object,
+  nodeDropshadowFilter: PropTypes.string
 };

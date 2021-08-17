@@ -12,9 +12,10 @@ exports[`Course Node should match shallow snapshot 1`] = `
   textRendering="geometricPrecision"
 >
   <rect
+    filter="url(#undefined)"
     height={30}
-    rx="4"
-    ry="4"
+    rx="8"
+    ry="8"
     style={
       Object {
         "fill": "#5dd5b8",
@@ -43,9 +44,8 @@ exports[`Hybrid Node should match snapshot 1`] = `
   textRendering="geometricPrecision"
 >
   <rect
+    filter=""
     height={24}
-    rx="4"
-    ry="4"
     style={
       Object {
         "fill": "#888888",
