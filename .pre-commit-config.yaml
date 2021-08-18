@@ -12,6 +12,18 @@ repos:
     hooks:
       - id: prettier
         exclude: ^app/$
+  - repo: https://github.com/awebdeveloper/pre-commit-stylelint
+    rev: 8f63da497580898a7e0ceef6bf9e72cc0af07828
+    hooks:
+      - id: stylelint
+        args: ["--fix"]
+        additional_dependencies:
+          [
+            "stylelint@13.13.1",
+            "stylelint-config-sass-guidelines@8.0.0",
+            "stylelint-config-prettier@8.0.1",
+          ]
+        types_or: ["css", "scss"]
 exclude: |
   (?x)^(
       db/.*|
