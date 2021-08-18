@@ -4,12 +4,12 @@ module Scripts (
     )
     where
 
-import           Text.Blaze ((!))
+import Config (enableCdn)
+import qualified Data.Text as T
+import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import qualified Data.Text as T
 import Util.Blaze
-import Config (enableCdn)
 
 -- | Scripts that are loaded on every page.
 globalScripts :: [T.Text]

@@ -1,16 +1,6 @@
-{-# LANGUAGE DataKinds,
-             DeriveGeneric,
-             DerivingStrategies,
-             EmptyDataDecls,
-             FlexibleContexts,
-             FlexibleInstances,
-             GADTs,
-             GeneralizedNewtypeDeriving,
-             MultiParamTypeClasses,
-             StandaloneDeriving,
-             QuasiQuotes,
-             TemplateHaskell,
-             TypeFamilies,
+{-# LANGUAGE DataKinds, DeriveGeneric, DerivingStrategies, EmptyDataDecls, FlexibleContexts,
+             FlexibleInstances, GADTs, GeneralizedNewtypeDeriving, MultiParamTypeClasses,
+             QuasiQuotes, StandaloneDeriving, TemplateHaskell, TypeFamilies,
              UndecidableInstances #-}
 
 {-|
@@ -28,19 +18,20 @@ straightforward.
 
 module Database.Tables where
 
-import Database.Persist.TH
-import Database.DataType
+import Control.Applicative ((<|>))
+import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), Value (..), genericToJSON, withObject,
+                   (.!=), (.:?))
+import Data.Aeson.Types (Options (..), Parser, defaultOptions)
 import Data.Char (toLower)
-import qualified Data.Text as T
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (fromMaybe)
-import Text.Read (readMaybe)
-import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..), genericToJSON, withObject)
-import Data.Aeson.Types (Parser, defaultOptions, Options(..))
+import qualified Data.Text as T
+import Database.DataType
+import Database.Persist.Sqlite (Key, SqlPersistM, entityVal, selectFirst, (==.))
+import Database.Persist.TH
 import GHC.Generics
+import Text.Read (readMaybe)
 import WebParsing.ReqParser (parseReqs)
-import Control.Applicative((<|>))
-import Database.Persist.Sqlite(Key, SqlPersistM, entityVal, selectFirst, (==.))
 
 -- | A two-dimensional point.
 type Point = (Double, Double)

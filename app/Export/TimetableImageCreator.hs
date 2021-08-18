@@ -5,11 +5,11 @@
 module Export.TimetableImageCreator
     (renderTable, renderTableHelper, times) where
 
-import Diagrams.Prelude
-import Diagrams.Backend.SVG.CmdLine
-import Diagrams.Backend.SVG
 import Data.List (intersperse)
 import qualified Data.Text as T
+import Diagrams.Backend.SVG
+import Diagrams.Backend.SVG.CmdLine
+import Diagrams.Prelude
 
 days :: [T.Text]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]

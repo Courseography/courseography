@@ -1,13 +1,13 @@
 module Response.Image
     (graphImageResponse, timetableImageResponse, returnImageData) where
 
-import Happstack.Server
+import Control.Monad.IO.Class (liftIO)
 import qualified Data.ByteString as BS
-import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64 as BEnc
+import qualified Data.Text as T
 import Export.GetImages (getActiveGraphImage, getTimetableImage)
 import Export.ImageConversion
-import qualified Data.Text as T
+import Happstack.Server
 
 -- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.
 graphImageResponse :: String -> ServerPart Response

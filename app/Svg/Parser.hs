@@ -16,24 +16,24 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs, parseDynamicSvg) where
 
-import Data.Maybe (fromMaybe)
-import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
-import Database.Persist.Sqlite (runSqlite, SqlPersistM)
-import Text.HTML.TagSoup (Tag)
+import Config (databasePath, graphPath)
 import Control.Monad.IO.Class (liftIO)
-import Database.Tables hiding (graphWidth, paths, texts, shapes, graphHeight)
-import Database.DataType
-import Svg.Database (insertGraph, insertElements, deleteGraphs)
-import Config (graphPath, databasePath)
-import qualified Text.Parsec as P
-import Text.Parsec ((<|>))
-import Text.Parsec.String (Parser)
-import Text.Read (readMaybe)
 import Data.Char (isSpace)
 import Data.List as List
+import Data.List.Split (splitOn)
+import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
-import Data.List.Split (splitOn)
+import Database.DataType
+import Database.Persist.Sqlite (SqlPersistM, runSqlite)
+import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
+import Svg.Database (deleteGraphs, insertElements, insertGraph)
+import Text.HTML.TagSoup (Tag)
+import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
+import Text.Parsec ((<|>))
+import qualified Text.Parsec as P
+import Text.Parsec.String (Parser)
+import Text.Read (readMaybe)
 
 
 parsePrebuiltSvgs :: IO ()

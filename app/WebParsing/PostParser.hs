@@ -1,22 +1,22 @@
 module WebParsing.PostParser
     (addPostToDatabase) where
 
-import qualified Data.Text as T
+import Control.Monad.Trans (liftIO)
 import Data.Either (fromRight)
 import Data.List (find)
+import Data.List.Split (keepDelimsL, split, splitWhen, whenElt)
 import Data.Text (strip)
-import Control.Monad.Trans (liftIO)
+import qualified Data.Text as T
+import Database.DataType (PostType (..))
+import Database.Persist (insertUnique)
+import Database.Persist.Sqlite (SqlPersistM, insert_)
+import Database.Tables
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Data.List.Split (split, splitWhen, whenElt, keepDelimsL)
-import Database.Tables
-import Database.DataType (PostType(..))
-import Database.Persist.Sqlite (insert_, SqlPersistM)
-import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import Text.Parsec.Text (Parser)
-import WebParsing.ReqParser (parseReqs)
 import WebParsing.ParsecCombinators (parseUntil, text)
+import WebParsing.ReqParser (parseReqs)
 
 
 addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()

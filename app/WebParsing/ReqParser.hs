@@ -1,11 +1,11 @@
 {-# LANGUAGE FlexibleContexts #-}
 module WebParsing.ReqParser where
 
+import Data.Char (isSpace, toLower, toUpper)
+import Database.Requirement
+import Text.Parsec ((<|>))
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
-import Text.Parsec ((<|>))
-import Database.Requirement
-import Data.Char (toLower, toUpper, isSpace)
 
 -- define separators
 fromSeparator :: Parser String

@@ -5,11 +5,11 @@
 module Export.ImageConversion
     (createImageFile, removeFile) where
 
-import System.Process (createProcess, shell, waitForProcess, ProcessHandle)
-import GHC.IO.Handle.Types
-import Turtle.Prelude (rm)
-import Filesystem.Path.CurrentOS as Path
 import Data.List.Split (splitOn)
+import Filesystem.Path.CurrentOS as Path
+import GHC.IO.Handle.Types
+import System.Process (ProcessHandle, createProcess, shell, waitForProcess)
+import Turtle.Prelude (rm)
 
 -- | Opens a new process to convert an SVG (inName) to a PNG (outName)
 -- Note: hGetContents can be used to read Handles. Useful when trying to read from

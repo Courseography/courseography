@@ -8,11 +8,11 @@ Module containing test cases for Requirement Parsers.
 module ParserTests.ParserTests
 ( reqTestSuite ) where
 
+import Database.Requirement
+import Test.HUnit (Test (..), assertEqual)
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
-import Database.Requirement
 import WebParsing.ReqParser
-import Test.HUnit ( assertEqual, Test(..) )
 
 -- Function to facilitate test case creation given a string, Req tuple
 createTest :: (Eq a, Show a) => Parser a -> String -> [(String, a)] -> Test

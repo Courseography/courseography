@@ -19,9 +19,9 @@ module Svg.Builder
 
 import Data.Char (toLower)
 import Data.List (find)
-import Database.Tables hiding (texts, shapes)
-import Database.DataType
 import qualified Data.Text as T
+import Database.DataType
+import Database.Tables hiding (shapes, texts)
 
 -- * Builder functions
 

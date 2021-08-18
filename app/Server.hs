@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, CPP #-}
+{-# LANGUAGE CPP, OverloadedStrings #-}
 
 {-|
 Description: Configure and run the server for Courseography.
@@ -9,17 +9,17 @@ responses.
 module Server
     (runServer) where
 
-import Control.Concurrent (killThread, forkIO)
-import Happstack.Server hiding (host)
-import Filesystem.Path.CurrentOS as Path
-import System.Directory (getCurrentDirectory)
-import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
-import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
-import System.Process (createProcess, CreateProcess, shell)
-import Data.String (fromString)
 import Config (markdownPath, serverConf)
+import Control.Concurrent (forkIO, killThread)
+import Data.String (fromString)
 import qualified Data.Text.Lazy.IO as LazyIO
+import Filesystem.Path.CurrentOS as Path
+import Happstack.Server hiding (host)
 import Routes (routeResponses)
+import System.Directory (getCurrentDirectory)
+import System.IO (BufferMode (LineBuffering), hSetBuffering, stderr, stdout)
+import System.Log.Logger (Priority (INFO), rootLoggerName, setLevel, updateGlobalLogger)
+import System.Process (CreateProcess, createProcess, shell)
 
 webpackProcess :: CreateProcess
 webpackProcess = shell "yarn run watch"

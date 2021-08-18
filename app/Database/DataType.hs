@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, DeriveGeneric #-}
+{-# LANGUAGE DeriveGeneric, TemplateHaskell #-}
 
 {-|
     Module      : Database.DataType
@@ -10,9 +10,9 @@ a restriction on Template Haskell.
 -}
 module Database.DataType where
 
+import Data.Aeson
 import Database.Persist.TH
 import GHC.Generics
-import Data.Aeson
 
 -- | Defines a datatype of a shape, used in Shape json table.
 data ShapeType = BoolNode | Node | Hybrid | Region

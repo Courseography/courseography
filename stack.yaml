@@ -16,6 +16,7 @@ extra-deps:
   - monoid-extras-0.5.1
   - svg-builder-0.1.1
   - regex-posix-clib-2.7
+  - stylish-haskell-0.12.0.0
 compiler-check: newer-minor
 resolver: lts-17.10
 dump-logs: all

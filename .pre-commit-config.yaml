@@ -24,6 +24,15 @@ repos:
             "stylelint-config-prettier@8.0.1",
           ]
         types_or: ["css", "scss"]
+  - repo: local
+    hooks:
+      - id: stylish-haskell
+        name: Check Haskell files with stylish-haskell
+        entry: stack exec stylish-haskell -- -r -i
+        language: system
+        files: ^app/
+        types: ["haskell"]
+
 exclude: |
   (?x)^(
       db/.*|
@@ -37,3 +46,6 @@ exclude: |
       \.yarn/.*|
       \.pnp\.js|
   )$
+
+ci:
+  skip: [stylish-haskell]

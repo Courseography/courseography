@@ -1,32 +1,31 @@
 module WebParsing.ArtSciParser
     (parseArtSci, getDeptList, parseBuildings) where
 
+import Config (databasePath, fasCalendarUrl, programsUrl)
+import Control.Monad.IO.Class (liftIO)
+import Data.CSV
 import Data.List (findIndex, nubBy)
 import Data.Maybe (fromMaybe)
-import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
-import Text.Parsec (count, many, parse)
-import Text.Parsec.Text (Parser)
-import qualified Text.Parsec.Char as P
-import WebParsing.ParsecCombinators (text)
-import Network.HTTP.Simple (parseRequest, getResponseBody, httpLBS)
-import qualified Text.HTML.TagSoup as TS
-import Text.HTML.TagSoup (Tag)
-import Database.Persist.Sqlite (runSqlite, SqlPersistM, insertMany_)
-import Database.Persist (insertUnique)
 import Database.CourseInsertion (insertCourse)
-import Database.Tables (Courses(..), Department(..), Building(..))
-import WebParsing.ReqParser (parseReqs)
-import Config (databasePath)
-import WebParsing.PostParser (addPostToDatabase)
-import Data.CSV
-import Text.ParserCombinators.Parsec (parseFromFile)
-import Text.HTML.TagSoup.Match (tagOpen, tagOpenAttrLit, tagOpenAttrNameLit, anyAttrValue)
-import System.Directory (getCurrentDirectory)
+import Database.Persist (insertUnique)
+import Database.Persist.Sqlite (SqlPersistM, insertMany_, runSqlite)
+import Database.Tables (Building (..), Courses (..), Department (..))
 import Filesystem.Path.CurrentOS as Path
-import Config (fasCalendarUrl, programsUrl)
+import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
+import System.Directory (getCurrentDirectory)
+import Text.HTML.TagSoup (Tag)
+import qualified Text.HTML.TagSoup as TS
+import Text.HTML.TagSoup.Match (anyAttrValue, tagOpen, tagOpenAttrLit, tagOpenAttrNameLit)
+import Text.Parsec (count, many, parse)
+import qualified Text.Parsec.Char as P
+import Text.Parsec.Text (Parser)
+import Text.ParserCombinators.Parsec (parseFromFile)
+import WebParsing.ParsecCombinators (text)
+import WebParsing.PostParser (addPostToDatabase)
+import WebParsing.ReqParser (parseReqs)
 
 -- The file name is building.csv and it is in the courseography/db folder
 buildingsCSV :: IO Prelude.FilePath

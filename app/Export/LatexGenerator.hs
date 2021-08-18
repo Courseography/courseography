@@ -6,9 +6,9 @@ module Export.LatexGenerator
     (generateTex) where
 
 import Text.LaTeX
-import Text.LaTeX.Packages.Graphicx
 import Text.LaTeX.Packages.Fancyhdr
 import Text.LaTeX.Packages.Geometry
+import Text.LaTeX.Packages.Graphicx
 
 -- | Create a TEX file named texName that includes all of the images in
 -- imageNames

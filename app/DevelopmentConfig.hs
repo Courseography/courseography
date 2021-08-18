@@ -28,8 +28,8 @@ module Config (
 
 import Data.Text (Text)
 import Data.Time (Day, fromGregorian)
-import Happstack.Server (Conf(..), LogAccess, nullConf)
-import System.Log.Logger (logM, Priority(INFO))
+import Happstack.Server (Conf (..), LogAccess, nullConf)
+import System.Log.Logger (Priority (INFO), logM)
 
 -- SERVER CONFIGURATION
 

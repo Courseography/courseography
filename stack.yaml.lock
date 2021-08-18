@@ -60,6 +60,13 @@ packages:
       sha256: 5bf20952472d930323766d250f5fbbe3fe6f2cd3d931e5cf7b62a238ab2099ff
   original:
     hackage: regex-posix-clib-2.7
+- completed:
+    hackage: stylish-haskell-0.12.0.0@sha256:211408633a162da6ebc716ac5cdd17fc29eb437467085651885a9e0541d0d228,6012
+    pantry-tree:
+      size: 3724
+      sha256: 39da543c90a73c9ad95e0374abc47b11c71a39e9635afc61fd21b97295b889b0
+  original:
+    hackage: stylish-haskell-0.12.0.0
 snapshots:
 - completed:
     size: 567241

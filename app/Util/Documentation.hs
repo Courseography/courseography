@@ -7,8 +7,8 @@ for the Haskell source files of Courseography.
 -}
 module Util.Documentation where
 
-import System.Process (callCommand)
 import System.Directory (createDirectoryIfMissing)
+import System.Process (callCommand)
 
 -- | Path to documentation directory
 docPath :: String

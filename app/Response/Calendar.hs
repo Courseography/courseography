@@ -1,25 +1,20 @@
 module Response.Calendar
     (calendarResponse) where
 
-import Data.List (sort, groupBy, sortBy)
+import Config (databasePath, fallEndDate, fallStartDate, holidays, outDay, winterEndDate,
+               winterStartDate)
+import Control.Monad.IO.Class (liftIO)
+import Data.List (groupBy, sort, sortBy)
 import Data.List.Split (splitOn)
 import Data.Ord (comparing)
-import Data.Time (Day, formatTime, getCurrentTime, defaultTimeLocale, toGregorian)
-import Data.Time.Calendar.OrdinalDate (mondayStartWeek, fromMondayStartWeek)
-import Happstack.Server (ServerPart, Response, toResponse)
-import Control.Monad.IO.Class (liftIO)
-import Database.Persist.Sqlite (runSqlite, (==.), entityVal, selectList, entityKey)
-import Database.CourseQueries (returnMeeting)
 import qualified Data.Text as T
-import Text.Read (readMaybe)
+import Data.Time (Day, defaultTimeLocale, formatTime, getCurrentTime, toGregorian)
+import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
+import Database.CourseQueries (returnMeeting)
+import Database.Persist.Sqlite (entityKey, entityVal, runSqlite, selectList, (==.))
 import Database.Tables
-import Config (fallStartDate,
-               fallEndDate,
-               winterStartDate,
-               winterEndDate,
-               outDay,
-               holidays,
-               databasePath)
+import Happstack.Server (Response, ServerPart, toResponse)
+import Text.Read (readMaybe)
 
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response

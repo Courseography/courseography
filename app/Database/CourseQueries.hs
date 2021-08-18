@@ -22,19 +22,19 @@ module Database.CourseQueries
      getMeetingTime,
      buildTime) where
 
-import Happstack.Server.SimpleHTTP
+import Config (databasePath)
+import Control.Monad.IO.Class (MonadIO, liftIO)
+import Data.Aeson (object, toJSON, (.=))
+import Data.List
+import Data.Maybe (fromJust, fromMaybe)
+import qualified Data.Text as T
+import Database.DataType
 import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
-import Control.Monad.IO.Class (liftIO, MonadIO)
-import Util.Happstack (createJSONResponse)
-import qualified Data.Text as T
-import Data.List
-import Data.Maybe (fromJust, fromMaybe)
-import Config (databasePath)
-import Data.Aeson ((.=), toJSON, object)
-import Database.DataType
+import Happstack.Server.SimpleHTTP
 import Svg.Builder
+import Util.Happstack (createJSONResponse)
 
 -- | Queries the database for all matching lectures, tutorials,
 meetingQuery :: T.Text -> SqlPersistM [MeetTime']

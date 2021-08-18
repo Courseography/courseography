@@ -7,15 +7,15 @@ generate graphs before retrieving and structuring the necessary data.
 -}
 module DynamicGraphs.CourseFinder (lookupCourses) where
 
-import qualified Data.Text.Lazy as T
+import Control.Monad.Trans.Class (lift)
+import Control.Monad.Trans.State (StateT, execStateT, modify)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
-import Control.Monad.Trans.State (StateT, execStateT, modify)
-import Control.Monad.Trans.Class (lift)
+import qualified Data.Text.Lazy as T
 import Database.CourseQueries (prereqsForCourse)
-import Database.Requirement (Req(..))
+import Database.Requirement (Req (..))
+import DynamicGraphs.GraphOptions (GraphOptions (..))
 import WebParsing.ReqParser (parseReqs)
-import DynamicGraphs.GraphOptions (GraphOptions(..))
 
 lookupCourses :: GraphOptions -> [T.Text] -> IO (Map.Map T.Text Req)
 lookupCourses options courses =
