@@ -8,7 +8,6 @@ module Export.TimetableImageCreator
 import Data.List (intersperse)
 import qualified Data.Text as T
 import Diagrams.Backend.SVG
-import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Prelude
 
 days :: [T.Text]
