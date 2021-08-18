@@ -47,7 +47,7 @@ getBuildingsFromCSV buildingCSVFile = do
     case buildingCSVData of
         Left _ -> error "csv parse error"
         Right buildingData -> do
-            return $ map (\b -> Building (T.pack (b !! 0))
+            return $ map (\b -> Building (T.pack (head b))
                                         (T.pack (b !! 1))
                                         (T.pack (b !! 2))
                                         (T.pack (b !! 3))
@@ -80,7 +80,7 @@ getDeptList tags =
             let aTags = TS.partitions (tagOpenAttrNameLit "a" "href" (const True)) tableTags
                 depts = map (\t -> (TS.fromAttrib "href" $ head t, T.strip $ TS.innerText t)) aTags
             in
-                filter (\(a, b) -> (not $ T.null a) && (not $ T.null b)) depts
+                filter (\(a, b) -> not (T.null a) && not (T.null b)) depts
 
 -- | Insert department names to database
 insertDepts :: [T.Text] -> SqlPersistM ()

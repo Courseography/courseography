@@ -54,7 +54,7 @@ returnCourse lowerStr = runSqlite databasePath $ do
       Nothing -> return Nothing
       Just course -> do
         meetings <- meetingQuery courseStr
-        fmap Just $ buildCourse meetings
+        Just <$> buildCourse meetings
                                 (entityVal course)
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
@@ -116,7 +116,7 @@ buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime'
 buildMeetTimes meet = do
     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
     parsedTime <- mapM (buildTime . entityVal) allTimes
-    return $ Tables.MeetTime' (entityVal meet) (parsedTime)
+    return $ Tables.MeetTime' (entityVal meet) parsedTime
 
 -- ** Other queries
 
@@ -242,9 +242,8 @@ getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
                                         MeetingSection ==. getMeetingSection meetingSection_,
                                         MeetingSession ==. meetingSession_]
                                        []
-    allTimes <- selectList [TimesMeeting ==. fromJust (fmap entityKey maybeEntityMeetings)] []
-    parsedTimes <- mapM (buildTime . entityVal) allTimes
-    return parsedTimes
+    allTimes <- selectList [TimesMeeting ==. entityKey (fromJust maybeEntityMeetings)] []
+    mapM (buildTime . entityVal) allTimes
 
 getMeetingSection :: T.Text -> T.Text
 getMeetingSection sec

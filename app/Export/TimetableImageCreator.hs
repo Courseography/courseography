@@ -75,7 +75,7 @@ getBackground s
     | otherwise = pomegranate
 
 header :: T.Text -> Diagram B
-header session = hcat ((makeSessionCell session) : map makeHeaderCell days) # centerX === headerBorder
+header session = hcat (makeSessionCell session : map makeHeaderCell days) # centerX === headerBorder
 
 makeSessionCell :: T.Text -> Diagram B
 makeSessionCell s =
@@ -108,7 +108,7 @@ makeTable s session = vsep 0.04 $ header session: intersperse rowBorder (map mak
 -- |Creates a timetable by zipping the time and course tables.
 renderTable :: String -> T.Text -> T.Text -> IO ()
 renderTable filename courses session = do
-    let courseTable = partition5 $ map (\x -> if T.null x then [] else [x]) $ T.splitOn "_" courses
+    let courseTable = partition5 $ map (\x -> [x | not (T.null x)]) $ T.splitOn "_" courses
     renderTableHelper filename (zipWith (:) times courseTable) session
     where
         partition5 [] = []

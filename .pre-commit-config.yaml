@@ -32,7 +32,12 @@ repos:
         language: system
         files: ^app/
         types: ["haskell"]
-
+      - id: hlint
+        name: Check Haskell files with HLint
+        entry: stack exec hlint
+        language: system
+        files: ^app/
+        types: ["haskell"]
 exclude: |
   (?x)^(
       db/.*|
@@ -49,4 +54,4 @@ exclude: |
   )$
 
 ci:
-  skip: [stylish-haskell]
+  skip: [hlint, stylish-haskell]

@@ -4,9 +4,8 @@ module Response.Calendar
 import Config (databasePath, fallEndDate, fallStartDate, holidays, outDay, winterEndDate,
                winterStartDate)
 import Control.Monad.IO.Class (liftIO)
-import Data.List (groupBy, sort, sortBy)
+import Data.List (groupBy, sort, sortOn)
 import Data.List.Split (splitOn)
-import Data.Ord (comparing)
 import qualified Data.Text as T
 import Data.Time (Day, defaultTimeLocale, formatTime, getCurrentTime, toGregorian)
 import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
@@ -65,7 +64,7 @@ getCoursesInfo courses = map courseInfo allCourses
         allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
-pullDatabase :: (Code, Section, Session) -> IO (MeetTime')
+pullDatabase :: (Code, Section, Session) -> IO MeetTime'
 pullDatabase (code, section, session) = runSqlite databasePath $ do
     meet <- returnMeeting code fullSection session
     allTimes <- selectList [TimesMeeting ==. entityKey meet] []
@@ -169,7 +168,7 @@ type InfoTimeFieldsByDay = [[Time]]
 orderTimeFields :: [Time] -> InfoTimeFieldsByDay
 orderTimeFields timeFields = groupBy (\x y -> weekDay x == weekDay y) sortedList
     where
-        sortedList = sortBy (comparing weekDay) timeFields
+        sortedList = sortOn weekDay timeFields
 
 -- ** Start time
 
@@ -182,7 +181,7 @@ startTimesByCourse dataInOrder _ = startTime dataInOrder
 -- | Obtains the start times for each course by day.
 startTime :: InfoTimeFieldsByDay -> StartTimesByDay
 startTime =
-    map (\dataByDay -> map formatTimes (timesOrdered dataByDay))
+    map (map formatTimes . timesOrdered)
     where
         timesOrdered dataDay = sort $ map startHour dataDay
 
@@ -197,7 +196,7 @@ endTimesByCourse dataInOrder _ = endTime dataInOrder
 -- | Obtains the end times for each course by day.
 endTime :: InfoTimeFieldsByDay -> EndTimesByDay
 endTime =
-    map (\dataByDay -> map formatTimes (timesOrdered dataByDay))
+    map (map formatTimes . timesOrdered)
     where
         timesOrdered dataDay = sort $ map endHour dataDay
 

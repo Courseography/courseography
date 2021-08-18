@@ -242,13 +242,10 @@ textToSVG styled type_ xPos' text =
             Region -> regionFontSize
             _ -> nodeFontSize
 
-        fill =
-            if type_ == Hybrid
-            then A.fill "white"
-            else
-                if T.null $ textFill text
-                then mempty
-                else A.fill $ textValue $ textFill text
+        fill
+          | type_ == Hybrid = A.fill "white"
+          | T.null $ textFill text = mempty
+          | otherwise = A.fill $ textValue $ textFill text
 
         baseStyles = mconcat
             [A.stroke "none",

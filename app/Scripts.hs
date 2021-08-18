@@ -24,13 +24,13 @@ jQueryScripts = if enableCdn
 
 graphScripts :: H.Html
 graphScripts = do
-    mapM_ toScript $
+    mapM_ toScript
         ["/static/js/vendor/bootstrap.min.3.1.1.js"]
     H.script ! A.src "/static/js/graph/app.js" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
-    mapM_ toScript $
+    mapM_ toScript
         [if enableCdn
          then "https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"
          else "/static/js/vendor/bootstrap.min.3.1.1.js"
@@ -39,7 +39,7 @@ timetableScripts = do
 
 drawScripts :: H.Html
 drawScripts = do
-    mapM_ toScript $
+    mapM_ toScript
         ["/static/js/draw/variables.js",
          "/static/js/draw/path.js",
          "/static/js/draw/setup.js",

@@ -169,7 +169,7 @@ intersectsWithShape shapes text =
 
 -- | Strips disallowed characters from string for DOM id
 sanitizeId :: T.Text -> T.Text
-sanitizeId = T.filter (\c -> notElem c (",()/<>% " :: String))
+sanitizeId = T.filter (\c -> c `notElem` (",()/<>% " :: String))
 
 -- | Return shape tolerance according to type of shape.
 -- BoolNode is with 20.0 tolerance, which Node and Hybrid are with 9.0 tolerance.
