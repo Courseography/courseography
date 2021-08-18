@@ -57,6 +57,25 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 1. Run `$ stack run` to start the server
 2. Navigate to `http://localhost:8000/graph` in your browser
 
+#### Developers
+
+If you are contributing to Courseography, you should install our pre-commit hooks:
+
+1. Install Python 3.
+2. In the project repository, install the [`pre-commit`](https://pre-commit.com/#installation) Python package: `$ pip install pre-commit`.
+3. Run `pre-commit install` to install the hooks.
+4. Finally, run `pre-commit run` to test out the hooks. You should see the following:
+
+   ```console
+   $ pre-commit run
+   Trim Trailing Whitespace.............................(no files to check)Skipped
+   Fix End of Files.....................................(no files to check)Skipped
+   Check Yaml...........................................(no files to check)Skipped
+   prettier.............................................(no files to check)Skipped
+   stylelint............................................(no files to check)Skipped
+   Check Haskell files with stylish-haskell.............(no files to check)Skipped
+   ```
+
 ## Contributors
 
 This project would not exist without the contributions of many students in the Department of Computer Science. In alphabetical order, our contributors are:
