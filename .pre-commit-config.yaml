@@ -45,6 +45,7 @@ exclude: |
       \.stack-work/.*|
       \.yarn/.*|
       \.pnp\.js|
+      .*/__snapshots__/.*|
   )$
 
 ci:
