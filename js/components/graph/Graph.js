@@ -1,31 +1,31 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { CourseModal } from "../common/react_modal.js.jsx";
-import { ExportModal } from "../common/export.js.jsx";
-import BoolGroup from "./BoolGroup";
-import Button from "./Button";
-import EdgeGroup from "./EdgeGroup";
-import InfoBox from "./InfoBox";
-import NodeGroup from "./NodeGroup";
-import RegionGroup from "./RegionGroup";
-import GraphDropdown from "./GraphDropdown";
-import * as focusInfo from "./sidebar/focus_descriptions";
-import Sidebar from "./Sidebar";
+import React from "react"
+import PropTypes from "prop-types"
+import { CourseModal } from "../common/react_modal.js.jsx"
+import { ExportModal } from "../common/export.js.jsx"
+import BoolGroup from "./BoolGroup"
+import Button from "./Button"
+import EdgeGroup from "./EdgeGroup"
+import InfoBox from "./InfoBox"
+import NodeGroup from "./NodeGroup"
+import RegionGroup from "./RegionGroup"
+import GraphDropdown from "./GraphDropdown"
+import * as focusInfo from "./sidebar/focus_descriptions"
+import Sidebar from "./Sidebar"
 
-const ZOOM_INCREMENT = 0.010;
-const KEYBOARD_PANNING_INCREMENT = 10;
+const ZOOM_INCREMENT = 0.01
+const KEYBOARD_PANNING_INCREMENT = 10
 const ZOOM_ENUM = {
-  "ZOOM_OUT": -1,
-  "ZOOM_IN": 1
-};
+  ZOOM_OUT: -1,
+  ZOOM_IN: 1,
+}
 const TIMEOUT_NAMES_ENUM = {
-  "INFOBOX": 0,
-  "DROPDOWN": 1
+  INFOBOX: 0,
+  DROPDOWN: 1,
 }
 
-export default class Graph extends React.Component {
+export class Graph extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       labelsJSON: [],
       regionsJSON: [],
@@ -58,71 +58,73 @@ export default class Graph extends React.Component {
       panStartY: 0,
       showCourseModal: false,
       showGraphDropdown: false,
-      selectedNodes: new Set()
-    };
+      selectedNodes: new Set(),
+    }
 
-    this.nodes = React.createRef();
-    this.bools = React.createRef();
-    this.edges = React.createRef();
-    this.exportModal = React.createRef();
-    this.nodeDropshadowFilter = "dropshadow";
+    this.nodes = React.createRef()
+    this.bools = React.createRef()
+    this.edges = React.createRef()
+    this.exportModal = React.createRef()
+    this.nodeDropshadowFilter = "dropshadow"
   }
 
   componentDidMount() {
     if (!this.props.start_blank) {
-      this.getGraph();
+      this.getGraph()
     }
 
     // can't detect keydown event when adding event listener to react-graph
-    document.body.addEventListener("keydown", this.onKeyDown);
-    document
-      .getElementById("react-graph")
-      .addEventListener("wheel", this.onWheel);
+    document.body.addEventListener("keydown", this.onKeyDown)
+    document.getElementById("react-graph").addEventListener("wheel", this.onWheel)
 
     // Enable "Export" link
     if (document.getElementById("nav-export")) {
-      document.getElementById("nav-export")
-        .addEventListener("click", this.exportModal.current.openModal);
+      document
+        .getElementById("nav-export")
+        .addEventListener("click", this.exportModal.current.openModal)
     }
 
     if (document.querySelector("#nav-graph > a")) {
-      document.querySelector("#nav-graph > a")
-        .addEventListener("mouseenter", this.setShowGraphDropdown);
-      document.querySelector("#nav-graph > a")
-        .addEventListener("mouseleave", this.hideGraphDropdown);
+      document
+        .querySelector("#nav-graph > a")
+        .addEventListener("mouseenter", this.setShowGraphDropdown)
+      document
+        .querySelector("#nav-graph > a")
+        .addEventListener("mouseleave", this.hideGraphDropdown)
     }
 
     if (document.querySelector(".sidebar")) {
-      document.querySelector(".sidebar").addEventListener("wheel", (event) => event.stopPropagation())
+      document
+        .querySelector(".sidebar")
+        .addEventListener("wheel", event => event.stopPropagation())
     }
   }
 
-  componentWillUpdate(prevProps) {
+  UNSAFE_componentWillUpdate(prevProps) {
     if (this.state.currFocus !== prevProps.currFocus) {
       this.setState({ currFocus: prevProps.currFocus }, () => {
-        let focuses = this.state.currFocus === null ? [] : focusInfo[this.state.currFocus + "FocusList"];
-        this.highlightFocuses(focuses);
-      });
+        let focuses =
+          this.state.currFocus === null
+            ? []
+            : focusInfo[this.state.currFocus + "FocusList"]
+        this.highlightFocuses(focuses)
+      })
     }
     if (!!this.state.graphName && this.state.graphName !== prevProps.graphName) {
-      this.getGraph();
+      this.getGraph()
     }
   }
 
   componentWillUnmount() {
-    document.body.removeEventListener("keydown", this.onKeyDown);
-    document
-      .getElementById("react-graph")
-      .removeEventListener("wheel", this.onWheel);
+    document.body.removeEventListener("keydown", this.onKeyDown)
+    document.getElementById("react-graph").removeEventListener("wheel", this.onWheel)
   }
 
   getGraph = () => {
-    let graphName = this.props.graphName.replace("-", " ");
-    let url = new URL("/get-json-data", document.location);
-    const params = { graphName: graphName };
-    Object.keys(params).forEach(key =>
-      url.searchParams.append(key, params[key])
-    );
+    let graphName = this.props.graphName.replace("-", " ")
+    let url = new URL("/get-json-data", document.location)
+    const params = { graphName: graphName }
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
     fetch(url)
       .then(headers => {
@@ -132,84 +134,84 @@ export default class Graph extends React.Component {
             status: headers.status,
             statusText: headers.statusText,
             type: headers.type,
-            url: headers.url
-          };
+            url: headers.url,
+          }
           throw new Error(
             "When fetching from the url with info " + JSON.stringify(headerInfo)
-          );
+          )
         }
-        return headers.json(); // only received headers, waiting for data
+        return headers.json() // only received headers, waiting for data
       })
       .then(data => {
-        localStorage.setItem("active-graph", graphName);
-        var regionsList = [];
-        var nodesList = [];
-        var hybridsList = [];
-        var boolsList = [];
-        var edgesList = [];
-        var parentsObj = {};
-        var inEdgesObj = {};
-        var childrenObj = {};
-        var outEdgesObj = {};
-        var storedNodes = new Set();
+        localStorage.setItem("active-graph", graphName)
+        var regionsList = []
+        var nodesList = []
+        var hybridsList = []
+        var boolsList = []
+        var edgesList = []
+        var parentsObj = {}
+        var inEdgesObj = {}
+        var childrenObj = {}
+        var outEdgesObj = {}
+        var storedNodes = new Set()
 
-        var labelsList = data.texts.filter(function(entry) {
-          return entry.rId.startsWith("tspan");
-        });
+        var labelsList = data.texts.filter(function (entry) {
+          return entry.rId.startsWith("tspan")
+        })
 
-        data.shapes.forEach(function(entry) {
+        data.shapes.forEach(function (entry) {
           if (entry.type_ === "Node") {
-            nodesList.push(entry);
+            nodesList.push(entry)
           } else if (entry.type_ === "Hybrid") {
-            hybridsList.push(entry);
+            hybridsList.push(entry)
           } else if (entry.type_ === "BoolNode") {
-            boolsList.push(entry);
+            boolsList.push(entry)
           }
-        });
+        })
 
-        data.paths.forEach(function(entry) {
+        data.paths.forEach(function (entry) {
           if (entry.isRegion) {
-            regionsList.push(entry);
+            regionsList.push(entry)
           } else {
-            edgesList.push(entry);
+            edgesList.push(entry)
           }
-        });
+        })
 
         // The duplicate filter is a temporary fix, as previously there were two nodes, Hybrid and Node,
         // that were placed in the same spot on some graphs where there should be only a Hybrid node.
-        var noDuplicatesNodesList = [];
+        var noDuplicatesNodesList = []
         nodesList.forEach(node => {
           if (!(node.id_ in parentsObj)) {
-            parentsObj[node.id_] = [];
-            inEdgesObj[node.id_] = [];
-            childrenObj[node.id_] = [];
-            outEdgesObj[node.id_] = [];
+            parentsObj[node.id_] = []
+            inEdgesObj[node.id_] = []
+            childrenObj[node.id_] = []
+            outEdgesObj[node.id_] = []
             // Quickly adding any active nodes from local storage into the selected nodes
-            if (localStorage.getItem(node.id_) === 'active') {
-              storedNodes.add(node.text[node.text.length - 1].text);
+            if (localStorage.getItem(node.id_) === "active") {
+              storedNodes.add(node.text[node.text.length - 1].text)
             }
 
-            noDuplicatesNodesList.push(node);
+            noDuplicatesNodesList.push(node)
           }
-        });
+        })
 
         hybridsList.forEach(hybrid => {
-          childrenObj[hybrid.id_] = [];
-          outEdgesObj[hybrid.id_] = [];
-          populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj);
+          childrenObj[hybrid.id_] = []
+          outEdgesObj[hybrid.id_] = []
+          populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
         })
 
         edgesList.forEach(edge => {
           if (edge.target in parentsObj) {
-            parentsObj[edge.target].push(edge.source);
-            inEdgesObj[edge.target].push(edge.id_);
+            parentsObj[edge.target].push(edge.source)
+            inEdgesObj[edge.target].push(edge.id_)
           }
 
           if (edge.source in childrenObj) {
-            childrenObj[edge.source].push(edge.target);
-            outEdgesObj[edge.source].push(edge.id_);
+            childrenObj[edge.source].push(edge.target)
+            outEdgesObj[edge.source].push(edge.id_)
           }
-        });
+        })
 
         this.setState({
           labelsJSON: labelsList,
@@ -225,136 +227,136 @@ export default class Graph extends React.Component {
           verticalPanFactor: 0,
           graphName: graphName,
           connections: {
-            'parents': parentsObj,
-            'inEdges': inEdgesObj,
-            'children': childrenObj,
-            'outEdges': outEdgesObj
+            parents: parentsObj,
+            inEdges: inEdgesObj,
+            children: childrenObj,
+            outEdges: outEdgesObj,
           },
-          selectedNodes: storedNodes
-        });
+          selectedNodes: storedNodes,
+        })
       })
       .catch(err => {
-        console.error("Fetch API failed. Here are the headers: ");
-        console.error(err);
-      });
-  };
+        console.error("Fetch API failed. Here are the headers: ")
+        console.error(err)
+      })
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.nodesJSON !== this.state.nodesJSON) {
-      var totalFCEs = 0;
+      var totalFCEs = 0
       this.state.nodesJSON.forEach(nodeJSON => {
-        let node = this.nodes.current[nodeJSON.id_];
+        let node = this.nodes.current[nodeJSON.id_]
         if (!node.props.hybrid && node.state.selected) {
-          totalFCEs += 0.5;
+          totalFCEs += 0.5
         }
-      });
+      })
       if (this.props.setFCECount) {
-        this.props.setFCECount(totalFCEs);
+        this.props.setFCECount(totalFCEs)
       }
     }
   }
 
-  clearAllTimeouts = (timeoutName) => {
-    switch (timeoutName){
+  clearAllTimeouts = timeoutName => {
+    switch (timeoutName) {
       case TIMEOUT_NAMES_ENUM.INFOBOX:
         this.state.infoboxTimeouts.forEach(timeout => clearTimeout(timeout))
-        this.setState({infoboxTimeouts: []})
-        break;
+        this.setState({ infoboxTimeouts: [] })
+        break
       case TIMEOUT_NAMES_ENUM.DROPDOWN:
         this.state.dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
-        this.setState({dropdownTimeouts: []})
-        break;
+        this.setState({ dropdownTimeouts: [] })
+        break
     }
-  };
+  }
 
   nodeClick = event => {
-    var courseId = event.currentTarget.id;
-    var currentNode = this.nodes.current[courseId];
-    var courseLabelArray = currentNode.props.JSON.text;
-    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text;
-    var wasSelected = currentNode.state.selected;
-    var temp = this.state.selectedNodes;
-    currentNode.toggleSelection(this);
-    if (typeof this.props.incrementFCECount === 'function') {
+    var courseId = event.currentTarget.id
+    var currentNode = this.nodes.current[courseId]
+    var courseLabelArray = currentNode.props.JSON.text
+    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
+    var wasSelected = currentNode.state.selected
+    var temp = this.state.selectedNodes
+    currentNode.toggleSelection(this)
+    if (typeof this.props.incrementFCECount === "function") {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
-        this.props.incrementFCECount(-0.5);
-        temp.delete(courseLabel);
+        this.props.incrementFCECount(-0.5)
+        temp.delete(courseLabel)
       } else {
-        this.props.incrementFCECount(0.5);
+        this.props.incrementFCECount(0.5)
         temp.add(courseLabel)
       }
     }
-  };
+  }
 
   /**
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
   nodeMouseEnter = event => {
-    var courseId = event.currentTarget.id;
-    var currentNode = this.nodes.current[courseId];
-    currentNode.focusPrereqs(this);
+    var courseId = event.currentTarget.id
+    var currentNode = this.nodes.current[courseId]
+    currentNode.focusPrereqs(this)
 
-    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX);
+    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
 
-    var xPos = currentNode.props.JSON.pos[0];
-    var yPos = currentNode.props.JSON.pos[1];
-    var rightSide = xPos > 222;
+    var xPos = currentNode.props.JSON.pos[0]
+    var yPos = currentNode.props.JSON.pos[1]
+    var rightSide = xPos > 222
     // The tooltip is offset with a 'padding' of 5.
     if (rightSide) {
-      xPos = parseFloat(xPos) - 65;
+      xPos = parseFloat(xPos) - 65
     } else {
-      xPos = parseFloat(xPos) + parseFloat(currentNode.props.JSON.width) + 5;
+      xPos = parseFloat(xPos) + parseFloat(currentNode.props.JSON.width) + 5
     }
 
-    yPos = parseFloat(yPos);
+    yPos = parseFloat(yPos)
 
     if (!this.state.onDraw) {
       this.setState({
         showInfoBox: true,
         infoBoxXPos: xPos,
         infoBoxYPos: yPos,
-        infoBoxNodeId:courseId
-      });
+        infoBoxNodeId: courseId,
+      })
     }
-    this.setState({ buttonHover: true });
-  };
+    this.setState({ buttonHover: true })
+  }
 
   nodeMouseLeave = event => {
-    var courseId = event.currentTarget.id;
-    var currentNode = this.nodes.current[courseId];
-    currentNode.unfocusPrereqs(this);
+    var courseId = event.currentTarget.id
+    var currentNode = this.nodes.current[courseId]
+    currentNode.unfocusPrereqs(this)
 
     var timeout = setTimeout(() => {
-      this.setState({showInfoBox: false});
-    }, 400);
+      this.setState({ showInfoBox: false })
+    }, 400)
 
     this.setState({
       infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout),
-      buttonHover: false
-    });
-  };
+      buttonHover: false,
+    })
+  }
 
   /**
    * This handles clicking of dropdown items from the side bar search.
    * @param  {string} id
    */
-   handleCourseClick = id => {
-    var currentNode = this.nodes.current[id];
-    currentNode.toggleSelection(this);
-    var courseLabelArray = currentNode.props.JSON.text;
-    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text;
-    var temp = [...this.state.selectedNodes];
+  handleCourseClick = id => {
+    var currentNode = this.nodes.current[id]
+    currentNode.toggleSelection(this)
+    var courseLabelArray = currentNode.props.JSON.text
+    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
+    var temp = [...this.state.selectedNodes]
     if (currentNode.state.selected) {
       this.setState({
-        selectedNodes: new Set(temp.filter(course => course !== courseLabel))
-      });
-      this.props.incrementFCECount(-0.5);
+        selectedNodes: new Set(temp.filter(course => course !== courseLabel)),
+      })
+      this.props.incrementFCECount(-0.5)
     } else {
       this.setState({
-        selectedNodes: new Set([...temp, courseLabel])
-      });
-      this.props.incrementFCECount(0.5);
+        selectedNodes: new Set([...temp, courseLabel]),
+      })
+      this.props.incrementFCECount(0.5)
     }
   }
 
@@ -362,13 +364,10 @@ export default class Graph extends React.Component {
    * Drawing mode not implemented, so this function may not work.
    */
   nodeMouseDown = event => {
-    if (
-      this.state.drawMode === "draw-node" &&
-      event.currentTarget.id.startsWith("n")
-    ) {
-      this.setState({ draggingNode: event.currentTarget.id });
+    if (this.state.drawMode === "draw-node" && event.currentTarget.id.startsWith("n")) {
+      this.setState({ draggingNode: event.currentTarget.id })
     }
-  };
+  }
 
   /**
    * Drawing mode not implemented, so this function may not work.
@@ -377,21 +376,21 @@ export default class Graph extends React.Component {
     // in draw-node mode, drag a node as the mouse moves
     if (this.state.drawMode === "draw-node") {
       if (this.state.draggingNode !== null) {
-        var newPos = this.getRelativeCoords(event);
-        var currentNode;
+        var newPos = this.getRelativeCoords(event)
+        var currentNode
         for (var node of this.state.nodesJSON) {
           if (node.id_ === this.state.draggingNode) {
-            currentNode = node;
+            currentNode = node
           }
         }
-        currentNode.pos = [newPos.x - 20, newPos.y - 15];
-        currentNode.text[0].pos = [newPos.x, newPos.y + 5];
-        var newNodesJSON = [...this.state.nodesJSON];
-        newNodesJSON.push(currentNode);
-        this.setState({ nodesJSON: newNodesJSON });
+        currentNode.pos = [newPos.x - 20, newPos.y - 15]
+        currentNode.text[0].pos = [newPos.x, newPos.y + 5]
+        var newNodesJSON = [...this.state.nodesJSON]
+        newNodesJSON.push(currentNode)
+        this.setState({ nodesJSON: newNodesJSON })
       }
     }
-  };
+  }
 
   /**
    * Drawing mode not implemented, so this function may not work.
@@ -400,24 +399,24 @@ export default class Graph extends React.Component {
     // in draw-node mode, drop a dragged node to a new location
     if (this.state.drawMode === "draw-node") {
       if (this.state.draggingNode !== null) {
-        var newPos = this.getRelativeCoords(event);
-        var currentNode;
+        var newPos = this.getRelativeCoords(event)
+        var currentNode
         for (var node of this.state.nodesJSON) {
           if (node.id_ === this.state.draggingNode) {
-            currentNode = node;
+            currentNode = node
           }
         }
-        currentNode.pos = [newPos.x - 20, newPos.y - 15];
-        currentNode.text[0].pos = [newPos.x, newPos.y + 5];
-        var newNodesJSON = [...this.state.nodesJSON];
-        newNodesJSON.push(currentNode);
+        currentNode.pos = [newPos.x - 20, newPos.y - 15]
+        currentNode.text[0].pos = [newPos.x, newPos.y + 5]
+        var newNodesJSON = [...this.state.nodesJSON]
+        newNodesJSON.push(currentNode)
         this.setState({
           nodesJSON: newNodesJSON,
-          draggingNode: null
-        });
+          draggingNode: null,
+        })
       }
     }
-  };
+  }
 
   /**
    * Initializes the panning process by recording the position of the mouse pointer or touch event.
@@ -429,15 +428,15 @@ export default class Graph extends React.Component {
       this.setState({
         panning: true,
         panStartX: event.clientX + this.state.horizontalPanFactor,
-        panStartY: event.clientY + this.state.verticalPanFactor
-      });
+        panStartY: event.clientY + this.state.verticalPanFactor,
+      })
     } else {
-      event.preventDefault();
+      event.preventDefault()
       this.setState({
         panning: true,
         panStartX: event.touches[0].clientX + this.state.horizontalPanFactor,
-        panStartY: event.touches[0].clientY + this.state.verticalPanFactor
-      });
+        panStartY: event.touches[0].clientY + this.state.verticalPanFactor,
+      })
     }
   }
 
@@ -447,16 +446,16 @@ export default class Graph extends React.Component {
    */
   panGraph = event => {
     if (this.state.panning) {
-      var currentX = event.clientX;
-      var currentY = event.clientY;
+      var currentX = event.clientX
+      var currentY = event.clientY
 
-      var deltaX = currentX - this.state.panStartX;
-      var deltaY = currentY - this.state.panStartY;
+      var deltaX = currentX - this.state.panStartX
+      var deltaY = currentY - this.state.panStartY
 
       this.setState({
         horizontalPanFactor: -deltaX,
-        verticalPanFactor: -deltaY
-      });
+        verticalPanFactor: -deltaY,
+      })
     }
   }
 
@@ -467,152 +466,163 @@ export default class Graph extends React.Component {
     this.setState({
       panning: false,
       panStartX: 0,
-      panStartY: 0
-    });
+      panStartY: 0,
+    })
   }
 
   infoBoxMouseEnter = () => {
-    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX);
-    this.setState({showInfoBox: true});
-  };
+    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
+    this.setState({ showInfoBox: true })
+  }
 
   infoBoxMouseLeave = () => {
     var timeout = setTimeout(() => {
-      this.setState({showInfoBox: false});
-    }, 400);
+      this.setState({ showInfoBox: false })
+    }, 400)
 
-    this.setState({ infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout) });
-  };
-
-  infoBoxMouseClick = () => {
-    var newCourse = this.state.infoBoxNodeId.substring(0, 6);
     this.setState({
-      courseId: newCourse,
-      showCourseModal: true
-    });
-  };
-
-  setShowGraphDropdown = () => {
-    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.DROPDOWN);
-    this.setState({showGraphDropdown: true});
+      infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout),
+    })
   }
 
-  hideGraphDropdown =  () => {
+  infoBoxMouseClick = () => {
+    var newCourse = this.state.infoBoxNodeId.substring(0, 6)
+    this.setState({
+      courseId: newCourse,
+      showCourseModal: true,
+    })
+  }
+
+  setShowGraphDropdown = () => {
+    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.DROPDOWN)
+    this.setState({ showGraphDropdown: true })
+  }
+
+  hideGraphDropdown = () => {
     var timeout = setTimeout(() => {
-      this.setState({showGraphDropdown: false});
-    }, 500);
-    this.setState({dropdownTimeouts: this.state.dropdownTimeouts.concat(timeout)});
+      this.setState({ showGraphDropdown: false })
+    }, 500)
+    this.setState({
+      dropdownTimeouts: this.state.dropdownTimeouts.concat(timeout),
+    })
   }
 
   onClose = () => {
-    this.setState({ showCourseModal: false });
+    this.setState({ showCourseModal: false })
   }
 
   openExportModal = () => {
-    this.exportModal.current.openModal();
-  };
+    this.exportModal.current.openModal()
+  }
 
   // Reset graph
   reset = () => {
-    this.props.setFCECount(0);
-    this.nodes.current.reset();
-    this.bools.current.reset();
-    this.edges.current.reset();
-    this.setState({ selectedNodes: new Set() });
+    this.props.setFCECount(0)
+    this.nodes.current.reset()
+    this.bools.current.reset()
+    this.edges.current.reset()
+    this.setState({ selectedNodes: new Set() })
     if (this.state.currFocus !== null) {
-      this.highlightFocuses([]);
+      this.highlightFocuses([])
     }
   }
 
   renderArrowHead = () => {
-    var polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" };
+    var polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" }
     return (
       <defs>
-        <marker id="arrowHead" viewBox="0 0 10 10" refX="4" refY="5"
-            markerUnits="strokeWidth" markerWidth="7" markerHeight="7"
-            orient="auto">
+        <marker
+          id="arrowHead"
+          viewBox="0 0 10 10"
+          refX="4"
+          refY="5"
+          markerUnits="strokeWidth"
+          markerWidth="7"
+          markerHeight="7"
+          orient="auto"
+        >
           <polyline {...polylineAttrs} />
         </marker>
       </defs>
-    );
-  };
+    )
+  }
 
   /** Zoom into the graph by calculating new viewbox dimensions
    *
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
    */
-  zoomViewbox = (zoomMode) => {
-    var newZoomFactor = this.state.zoomFactor;
+  zoomViewbox = zoomMode => {
+    var newZoomFactor = this.state.zoomFactor
     if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
-      newZoomFactor -= ZOOM_INCREMENT;
+      newZoomFactor -= ZOOM_INCREMENT
     } else if (zoomMode === ZOOM_ENUM.ZOOM_OUT) {
-      newZoomFactor += ZOOM_INCREMENT;
+      newZoomFactor += ZOOM_INCREMENT
     }
     this.setState({
-      zoomFactor: newZoomFactor
-    });
+      zoomFactor: newZoomFactor,
+    })
   }
 
   calculateRatioGraphSizeToContainerSize = () => {
-    var containerWidth = document.getElementById("react-graph").clientWidth;
-    var containerHeight = document.getElementById("react-graph").clientHeight;
-    var heightToContainerRatio = this.state.height / containerHeight;
-    var widthToContainerRatio = this.state.width / containerWidth;
-    return Math.max(heightToContainerRatio, widthToContainerRatio);
-  };
+    var containerWidth = document.getElementById("react-graph").clientWidth
+    var containerHeight = document.getElementById("react-graph").clientHeight
+    var heightToContainerRatio = this.state.height / containerHeight
+    var widthToContainerRatio = this.state.width / containerWidth
+    return Math.max(heightToContainerRatio, widthToContainerRatio)
+  }
 
   resetZoomAndPan = () => {
     this.setState({
       zoomFactor: 1,
       verticalPanFactor: 0,
-      horizontalPanFactor: 0
-    });
-  };
+      horizontalPanFactor: 0,
+    })
+  }
 
   onWheel = event => {
-    let zoomIn = event.deltaY < 0;
+    let zoomIn = event.deltaY < 0
     if (zoomIn) {
-      this.zoomViewbox(ZOOM_ENUM.ZOOM_IN);
+      this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)
     } else {
-      this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT);
+      this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)
     }
-  };
+  }
 
   buttonMouseEnter = () => {
-    this.setState({ buttonHover: true });
-  };
+    this.setState({ buttonHover: true })
+  }
 
   buttonMouseLeave = () => {
-    this.setState({ buttonHover: false });
-  };
+    this.setState({ buttonHover: false })
+  }
 
   getRelativeCoords = event => {
-    var x = event.nativeEvent.offsetX;
-    var y = event.nativeEvent.offsetY;
-    x = x * this.state.zoomFactor + this.state.horizontalPanFactor;
-    y = y * this.state.zoomFactor + this.state.verticalPanFactor;
-    return { x: x, y: y };
-  };
+    var x = event.nativeEvent.offsetX
+    var y = event.nativeEvent.offsetY
+    x = x * this.state.zoomFactor + this.state.horizontalPanFactor
+    y = y * this.state.zoomFactor + this.state.verticalPanFactor
+    return { x: x, y: y }
+  }
 
   drawNode = (x, y) => {
-    var xPos, yPos;
+    var xPos, yPos
 
     // if node would extend offscreen, instead place it at the
     // edge. Give 2 pixels extra for node border width.
     if (x + 42 > this.state.width) {
-      xPos = this.state.width - 42;
+      xPos = this.state.width - 42
     } else if (x < 2) {
-      xPos = 2;
+      xPos = 2
     } else {
-      xPos = x;
+      xPos = x
     }
 
     if (y + 34 > this.state.height) {
-      yPos = this.state.height - 34;
+      yPos = this.state.height - 34
     } else if (y < 2) {
-      yPos = 2;
+      yPos = 2
     } else {
-      yPos = y;
+      yPos = y
     }
 
     // text is an empty string for now until implementation,
@@ -623,8 +633,8 @@ export default class Graph extends React.Component {
       graph: 0,
       pos: [xPos, yPos + 20],
       rId: "text" + this.state.drawNodeID,
-      text: "la"
-    };
+      text: "la",
+    }
 
     var nodeJSON = {
       fill: "#" + document.getElementById("select-colour").value,
@@ -637,16 +647,16 @@ export default class Graph extends React.Component {
       stroke: "",
       text: [textJSON],
       tolerance: 9,
-      type_: "Node"
-    };
+      type_: "Node",
+    }
 
-    var newNodesJSON = [...this.state.nodesJSON];
-    newNodesJSON.push(nodeJSON);
+    var newNodesJSON = [...this.state.nodesJSON]
+    newNodesJSON.push(nodeJSON)
     this.setState({
       nodesJSON: newNodesJSON,
-      drawNodeID: this.state.drawNodeID + 1
-    });
-  };
+      drawNodeID: this.state.drawNodeID + 1,
+    })
+  }
 
   /**
     * In draw-node creates a new node at the position of the click event on the SVG canvas.
@@ -657,16 +667,16 @@ export default class Graph extends React.Component {
     * @param {object} e The mousedown event.
     */
   drawGraphObject = e => {
-    var pos = this.getRelativeCoords(e);
+    var pos = this.getRelativeCoords(e)
     // check if the user is trying to draw a node. Also check
     // if the user is trying to press a button instead (ie zoom buttons)
     if (this.state.drawMode === "draw-node" && !this.state.buttonHover) {
-      this.drawNode(pos.x, pos.y);
+      this.drawNode(pos.x, pos.y)
     }
-  };
+  }
 
   highlightFocuses = focuses => {
-    this.setState({ highlightedNodes: focuses });
+    this.setState({ highlightedNodes: focuses })
   }
 
   /** Allows panning and entering draw mode via the keyboard.
@@ -676,52 +686,61 @@ export default class Graph extends React.Component {
   onKeyDown = event => {
     if (event.key === "ArrowRight") {
       this.setState({
-        horizontalPanFactor: this.state.horizontalPanFactor - KEYBOARD_PANNING_INCREMENT
-      });
+        horizontalPanFactor:
+          this.state.horizontalPanFactor - KEYBOARD_PANNING_INCREMENT,
+      })
     } else if (event.key === "ArrowDown") {
       this.setState({
-        verticalPanFactor: this.state.verticalPanFactor - KEYBOARD_PANNING_INCREMENT
-      });
+        verticalPanFactor: this.state.verticalPanFactor - KEYBOARD_PANNING_INCREMENT,
+      })
     } else if (event.key === "ArrowLeft") {
       this.setState({
-        horizontalPanFactor: this.state.horizontalPanFactor + KEYBOARD_PANNING_INCREMENT
-      });
+        horizontalPanFactor:
+          this.state.horizontalPanFactor + KEYBOARD_PANNING_INCREMENT,
+      })
     } else if (event.key === "ArrowUp") {
       this.setState({
-        verticalPanFactor: this.state.verticalPanFactor + KEYBOARD_PANNING_INCREMENT
-      });
+        verticalPanFactor: this.state.verticalPanFactor + KEYBOARD_PANNING_INCREMENT,
+      })
     } else if (event.key === "+") {
-      this.zoomViewbox(ZOOM_ENUM.ZOOM_IN);
+      this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)
     } else if (event.key === "-") {
-      this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT);
+      this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)
     } else if (this.state.onDraw && event.key === "n") {
-        this.setState({drawMode: "draw-node"});
+      this.setState({ drawMode: "draw-node" })
     }
-  };
+  }
 
   render() {
-    let containerWidth = 0;
-    let containerHeight = 0;
+    let containerWidth = 0
+    let containerHeight = 0
 
     if (document.getElementById("react-graph") !== null) {
-      let reactGraph = document.getElementById("react-graph");
-      containerWidth = reactGraph.clientWidth;
-      containerHeight = reactGraph.clientHeight;
+      let reactGraph = document.getElementById("react-graph")
+      containerWidth = reactGraph.clientWidth
+      containerHeight = reactGraph.clientHeight
     }
 
-    let newViewboxHeight= this.state.height;
-    let newViewboxWidth = this.state.width;
+    let newViewboxHeight = this.state.height
+    let newViewboxWidth = this.state.width
     if (document.getElementById("generateRoot") !== null) {
-      newViewboxHeight = Math.max(this.state.height, containerHeight) * this.state.zoomFactor;
-      newViewboxWidth = Math.max(this.state.width, containerWidth) * this.state.zoomFactor;
+      newViewboxHeight =
+        Math.max(this.state.height, containerHeight) * this.state.zoomFactor
+      newViewboxWidth =
+        Math.max(this.state.width, containerWidth) * this.state.zoomFactor
     } else {
-      newViewboxWidth = this.state.width * this.state.zoomFactor;
-      newViewboxHeight = this.state.height * this.state.zoomFactor;
+      newViewboxWidth = this.state.width * this.state.zoomFactor
+      newViewboxHeight = this.state.height * this.state.zoomFactor
     }
 
-    const viewBoxContainerRatio = containerHeight !== 0 ? newViewboxHeight / containerHeight : 1;
-    const viewboxX = (this.state.width - newViewboxWidth) / 2 + this.state.horizontalPanFactor * viewBoxContainerRatio;
-    const viewboxY = (this.state.height - newViewboxHeight) / 2 + this.state.verticalPanFactor * viewBoxContainerRatio;
+    const viewBoxContainerRatio =
+      containerHeight !== 0 ? newViewboxHeight / containerHeight : 1
+    const viewboxX =
+      (this.state.width - newViewboxWidth) / 2 +
+      this.state.horizontalPanFactor * viewBoxContainerRatio
+    const viewboxY =
+      (this.state.height - newViewboxHeight) / 2 +
+      this.state.verticalPanFactor * viewBoxContainerRatio
 
     // not all of these properties are supported in React
     var svgAttrs = {
@@ -732,58 +751,71 @@ export default class Graph extends React.Component {
       "xmlns:svg": "http://www.w3.org/2000/svg",
       "xmlns:dc": "http://purl.org/dc/elements/1.1/",
       "xmlns:cc": "http://creativecommons.org/ns#",
-      "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    };
+      "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    }
 
     var resetDisabled =
       this.state.zoomFactor === 1 &&
       this.state.horizontalPanFactor === 0 &&
-      this.state.verticalPanFactor === 0;
+      this.state.verticalPanFactor === 0
 
     // Mouse events for draw tool
-    var svgMouseEvents = {};
+    var svgMouseEvents = {}
     if (this.state.onDraw) {
       svgMouseEvents = {
         onMouseDown: this.drawGraphObject,
         onMouseUp: this.drawMouseUp,
-        onMouseMove: this.drawMouseMove
-      };
+        onMouseMove: this.drawMouseMove,
+      }
     } else {
       svgMouseEvents = {
         onMouseDown: this.startPanning,
-        onTouchStart: this.startPanning
-      };
+        onTouchStart: this.startPanning,
+      }
     }
 
     var reactGraphPointerEvents = {
       onMouseMove: this.panGraph,
       onMouseUp: this.stopPanning,
       onTouchMove: this.panGraph,
-      onTouchEnd: this.stopPanning
+      onTouchEnd: this.stopPanning,
     }
 
-    let reactGraphClass = "react-graph";
+    let reactGraphClass = "react-graph"
     if (this.state.panning) {
-      reactGraphClass += " panning";
+      reactGraphClass += " panning"
     }
     if (this.state.highlightedNodes.length > 0) {
       reactGraphClass += " highlight-nodes"
     }
 
     return (
-      <div id="react-graph" data-testid="react-graph"
+      <div
+        id="react-graph"
+        data-testid="react-graph"
         className={reactGraphClass}
         {...reactGraphPointerEvents}
       >
-        {// Filtering by node.text.length is a temporary fix for a bug on Generate where the first node is empty
-          this.state.nodesJSON.length > 1 && <Sidebar
-          fceCount={this.props.fceCount}
-          reset={this.reset}
-          activeCourses={this.state.selectedNodes}
-          courses={this.state.nodesJSON.map(node => [node.id_, node.text.length > 0 ? node.text[node.text.length - 1].text : ""])}
-          courseClick={this.handleCourseClick}
-        />}
-        <CourseModal showCourseModal={this.state.showCourseModal} courseId={this.state.courseId} onClose={this.onClose} />
+        {
+          // Filtering by node.text.length is a temporary fix for a bug on Generate where the first node is empty
+          this.state.nodesJSON.length > 1 && (
+            <Sidebar
+              fceCount={this.props.fceCount}
+              reset={this.reset}
+              activeCourses={this.state.selectedNodes}
+              courses={this.state.nodesJSON.map(node => [
+                node.id_,
+                node.text.length > 0 ? node.text[node.text.length - 1].text : "",
+              ])}
+              courseClick={this.handleCourseClick}
+            />
+          )
+        }
+        <CourseModal
+          showCourseModal={this.state.showCourseModal}
+          courseId={this.state.courseId}
+          onClose={this.onClose}
+        />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <GraphDropdown
           showGraphDropdown={this.state.showGraphDropdown}
@@ -792,37 +824,39 @@ export default class Graph extends React.Component {
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
-        {this.state.nodesJSON.length > 1 && <div className="graph-button-group">
-          <div className="button-group">
-            <Button
-              text="+"
-              mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
-              onMouseEnter={this.buttonMouseEnter}
-              onMouseLeave={this.buttonMouseLeave}
-            />
-            <Button
-              text="&ndash;"
-              mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
-              onMouseEnter={this.buttonMouseEnter}
-              onMouseLeave={this.buttonMouseLeave}
-            />
-          </div>
-          <div className="button-group">
+        {this.state.nodesJSON.length > 1 && (
+          <div className="graph-button-group">
+            <div className="button-group">
+              <Button
+                text="+"
+                mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
+                onMouseEnter={this.buttonMouseEnter}
+                onMouseLeave={this.buttonMouseLeave}
+              />
+              <Button
+                text="&ndash;"
+                mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
+                onMouseEnter={this.buttonMouseEnter}
+                onMouseLeave={this.buttonMouseLeave}
+              />
+            </div>
+            <div className="button-group">
               <Button
                 divId="reset-view-button"
                 mouseDown={this.resetZoomAndPan}
                 onMouseEnter={this.buttonMouseEnter}
                 onMouseLeave={this.buttonMouseLeave}
                 disabled={resetDisabled}
-                >
-              <img
-                src="/static/res/ico/reset-view.png"
-                alt="Reset View"
-                title="Click to reset view"
+              >
+                <img
+                  src="/static/res/ico/reset-view.png"
+                  alt="Reset View"
+                  title="Click to reset view"
                 />
               </Button>
+            </div>
           </div>
-        </div>}
+        )}
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -832,14 +866,14 @@ export default class Graph extends React.Component {
           {...svgMouseEvents}
         >
           <filter id={this.nodeDropshadowFilter} height="130%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-            <feOffset dx="2" dy="2" result="offsetblur"/>
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+            <feOffset dx="2" dy="2" result="offsetblur" />
             <feComponentTransfer>
-              <feFuncA type="linear" slope="0.8"/>
+              <feFuncA type="linear" slope="0.8" />
             </feComponentTransfer>
             <feMerge>
-              <feMergeNode/>
-              <feMergeNode in="SourceGraphic"/>
+              <feMergeNode />
+              <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
           {this.renderArrowHead()}
@@ -868,11 +902,7 @@ export default class Graph extends React.Component {
             edgesJSON={this.state.edgesJSON}
             svg={this}
           />
-          <EdgeGroup
-            svg={this}
-            ref={this.edges}
-            edgesJSON={this.state.edgesJSON}
-          />
+          <EdgeGroup svg={this} ref={this.edges} edgesJSON={this.state.edgesJSON} />
           <InfoBox
             onClick={this.infoBoxMouseClick}
             onMouseEnter={this.infoBoxMouseEnter}
@@ -884,11 +914,11 @@ export default class Graph extends React.Component {
           />
         </svg>
       </div>
-    );
+    )
   }
 }
 
-export {ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT}
+export { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT }
 
 /** Helper function for parsing hybrid node's text
  *
@@ -896,29 +926,25 @@ export {ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT}
  * @returns {Array}
  */
 function parseAnd(s) {
-  "use strict";
+  "use strict"
 
-  var curr = s;
-  var andList = [];
+  var curr = s
+  var andList = []
   while (curr.length > 0) {
-    if (
-      curr.charAt(0) === "," ||
-      curr.charAt(0) === ";" ||
-      curr.charAt(0) === " "
-    ) {
-      curr = curr.substr(1);
+    if (curr.charAt(0) === "," || curr.charAt(0) === ";" || curr.charAt(0) === " ") {
+      curr = curr.substr(1)
     } else {
-      var result = parseOr(curr);
+      var result = parseOr(curr)
       if (curr === result[1]) {
-        console.error("Parsing failed for " + s + "  with curr = " + curr);
-        break;
+        console.error("Parsing failed for " + s + "  with curr = " + curr)
+        break
       } else {
-        curr = result[1];
-        andList.push(result[0]);
+        curr = result[1]
+        andList.push(result[0])
       }
     }
   }
-  return [andList, curr];
+  return [andList, curr]
 }
 
 /**
@@ -927,44 +953,44 @@ function parseAnd(s) {
  * @returns {Array}
  */
 function parseOr(s) {
-  "use strict";
+  "use strict"
 
-  var curr = s;
-  var orList = [];
-  var tmp;
-  var result;
-  var coursePrefix;
+  var curr = s
+  var orList = []
+  var tmp
+  var result
+  var coursePrefix
   while (curr.length > 0 && curr.charAt(0) !== "," && curr.charAt(0) !== ";") {
     if (curr.charAt(0) === "(") {
-      tmp = curr.substr(1, curr.indexOf(")"));
+      tmp = curr.substr(1, curr.indexOf(")"))
       if (coursePrefix === undefined && tmp.length >= 6) {
-        coursePrefix = tmp.substr(0, 3).toUpperCase();
+        coursePrefix = tmp.substr(0, 3).toUpperCase()
       }
-      result = parseCourse(tmp, coursePrefix);
+      result = parseCourse(tmp, coursePrefix)
 
-      orList.append(result[0]);
-      curr = curr.substr(curr.indexOf(")") + 1);
+      orList.append(result[0])
+      curr = curr.substr(curr.indexOf(")") + 1)
     } else if (curr.charAt(0) === " " || curr.charAt(0) === "/") {
-      curr = curr.substr(1);
+      curr = curr.substr(1)
     } else {
       if (coursePrefix === undefined && curr.length >= 6) {
-        coursePrefix = curr.substr(0, 3).toUpperCase();
+        coursePrefix = curr.substr(0, 3).toUpperCase()
       }
-      result = parseCourse(curr, coursePrefix);
+      result = parseCourse(curr, coursePrefix)
       if (curr === result[1]) {
-        console.error("Parsing failed for " + s + " with curr = " + curr);
-        break;
+        console.error("Parsing failed for " + s + " with curr = " + curr)
+        break
       }
-      curr = result[1];
-      orList.push(result[0]);
+      curr = result[1]
+      orList.push(result[0])
     }
   }
 
   if (orList.length === 1) {
-    orList = orList[0];
+    orList = orList[0]
   }
 
-  return [orList, curr];
+  return [orList, curr]
 }
 
 /**
@@ -974,23 +1000,22 @@ function parseOr(s) {
  * @returns {Array}
  */
 function parseCourse(s, prefix) {
-  "use strict";
+  "use strict"
 
-  var start = s.search(/[,/]/);
+  var start = s.search(/[,/]/)
 
   if (start === 3) {
-    return [prefix + s.substr(0, start), s.substr(start)];
+    return [prefix + s.substr(0, start), s.substr(start)]
   } else if (start > 0) {
-    return [s.substr(0, start).toUpperCase(), s.substr(start)];
+    return [s.substr(0, start).toUpperCase(), s.substr(start)]
   }
 
   if (s.length === 3) {
-    return [prefix + s, ""];
+    return [prefix + s, ""]
   }
 
-  return [s, ""];
+  return [s, ""]
 }
-
 
 /** Helper function that adds parents of hybridNode to the parents object, and adds hybrid nodes as children of the Nodes they represent
  *
@@ -999,47 +1024,46 @@ function parseCourse(s, prefix) {
  * @param {Object} parents
  * @param {Object} childrenObj
  */
-function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj){
-
+export function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj) {
   // parse prereqs based on text
-  var hybridText = "";
-  hybridNode.text.forEach(textTag => (hybridText += textTag.text));
-  var nodeParents = [];
+  var hybridText = ""
+  hybridNode.text.forEach(textTag => (hybridText += textTag.text))
+  var nodeParents = []
   // First search for entire string (see Stats graph)
-  var prereqNode = findRelationship(hybridText, nodesJSON);
+  var prereqNode = findRelationship(hybridText, nodesJSON)
   if (prereqNode !== undefined) {
-    nodeParents.push(prereqNode.id_);
-    childrenObj[prereqNode.id_].push(hybridNode.id_);
+    nodeParents.push(prereqNode.id_)
+    childrenObj[prereqNode.id_].push(hybridNode.id_)
   } else {
     // Parse text first
-    var prereqs = parseAnd(hybridText)[0];
+    var prereqs = parseAnd(hybridText)[0]
     prereqs.forEach(course => {
       if (typeof course === "string") {
-        prereqNode = findRelationship(course, nodesJSON);
+        prereqNode = findRelationship(course, nodesJSON)
         if (prereqNode !== undefined) {
-          nodeParents.push(prereqNode.id_);
-          childrenObj[prereqNode.id_].push(hybridNode.id_);
+          nodeParents.push(prereqNode.id_)
+          childrenObj[prereqNode.id_].push(hybridNode.id_)
         } else {
-          console.error("Could not find prereq for ", hybridText);
+          console.error("Could not find prereq for ", hybridText)
         }
       } else if (typeof course === "object") {
-        var orPrereq = [];
+        var orPrereq = []
         course.forEach(c => {
-          var prereqNode = findRelationship(c, nodesJSON);
+          var prereqNode = findRelationship(c, nodesJSON)
           if (prereqNode !== undefined) {
-            orPrereq.push(prereqNode.id_);
-            childrenObj[prereqNode.id_].push(hybridNode.id_);
+            orPrereq.push(prereqNode.id_)
+            childrenObj[prereqNode.id_].push(hybridNode.id_)
           } else {
-            console.error("Could not find prereq for ", hybridText);
+            console.error("Could not find prereq for ", hybridText)
           }
-        });
+        })
         if (orPrereq.length > 0) {
-          nodeParents.push(orPrereq);
+          nodeParents.push(orPrereq)
         }
       }
-    });
+    })
   }
-  parents[hybridNode.id_] = nodeParents;
+  parents[hybridNode.id_] = nodeParents
 }
 
 /**
@@ -1049,13 +1073,11 @@ function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj){
  * @return {Node}
  */
 var findRelationship = (course, nodesJSON) => {
-  var nodes = nodesJSON;
+  var nodes = nodesJSON
   var node = nodes.find(
-    n =>
-      n.type_ === "Node" &&
-      n.text.some(textTag => textTag.text.includes(course))
-  );
-  return node;
+    n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course))
+  )
+  return node
 }
 
 Graph.propTypes = {
@@ -1069,11 +1091,11 @@ Graph.propTypes = {
   start_blank: PropTypes.bool,
   fceCount: PropTypes.number,
   graphs: PropTypes.array,
-  updateGraph: PropTypes.func
-};
+  updateGraph: PropTypes.func,
+}
 
 Graph.defaultProps = {
   currFocus: null,
-  graphName: '',
-  start_blank: false
-};
+  graphName: "",
+  start_blank: false,
+}

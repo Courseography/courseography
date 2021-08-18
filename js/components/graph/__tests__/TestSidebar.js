@@ -1,6 +1,6 @@
-import React from "react";
-import Sidebar from "../Sidebar";
-import { render } from "@testing-library/react";
+import React from "react"
+import Sidebar from "../Sidebar"
+import { render } from "@testing-library/react"
 
 export default class TestSidebar {
   /**
@@ -10,10 +10,10 @@ export default class TestSidebar {
   static async build() {
     const sidebarProps = {
       currFocus: null,
-      graphs: [ "Computer Science", "Biology"]
-    };
+      graphs: ["Computer Science", "Biology"],
+    }
 
-    const sidebar = render(<Sidebar {...sidebarProps} />);
-    return sidebar;
+    const sidebar = render(<Sidebar {...sidebarProps} />)
+    return sidebar
   }
 }

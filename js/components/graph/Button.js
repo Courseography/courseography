@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from "react"
+import PropTypes from "prop-types"
 
 export default function Button(props) {
   return (
@@ -15,7 +15,7 @@ export default function Button(props) {
       {props.text}
       {props.children}
     </button>
-  );
+  )
 }
 
 Button.propTypes = {
@@ -26,5 +26,5 @@ Button.propTypes = {
   onMouseLeave: PropTypes.func,
   disabled: PropTypes.bool,
   text: PropTypes.string,
-  children: PropTypes.node
-};
+  children: PropTypes.node,
+}

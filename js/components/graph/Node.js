@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { refLookUp } from "../common/utils";
+import PropTypes from "prop-types"
+import React from "react"
+import { refLookUp } from "../common/utils"
 
 /** React component class representing a Node on the graph
  *
@@ -27,17 +27,17 @@ import { refLookUp } from "../common/utils";
 export default class Node extends React.Component {
   /** Create a node */
   constructor(props) {
-    super(props);
-    var state = localStorage.getItem(this.props.JSON.id_);
+    super(props)
+    var state = localStorage.getItem(this.props.JSON.id_)
     if (this.props.editMode) {
-      state = ""; // TODO: define what editMode is
+      state = "" // TODO: define what editMode is
     } else if (state === null) {
-      state = this.props.parents.length === 0 ? "takeable" : "inactive";
+      state = this.props.parents.length === 0 ? "takeable" : "inactive"
     }
     this.state = {
       status: state,
-      selected: ["active", "overridden"].indexOf(state) >= 0
-    };
+      selected: ["active", "overridden"].indexOf(state) >= 0,
+    }
   }
 
   /**
@@ -46,9 +46,9 @@ export default class Node extends React.Component {
    */
   isSelected = () => {
     if (this.props.hybrid) {
-      return this.state.status === "active";
+      return this.state.status === "active"
     } else {
-      return this.state.selected;
+      return this.state.selected
     }
   }
 
@@ -57,7 +57,7 @@ export default class Node extends React.Component {
    * @return {boolean}
    */
   arePrereqsSatisfied = () => {
-    var svg = this.props.svg;
+    var svg = this.props.svg
     /**
      * Recursively checks that preceding nodes are selected
      * @param  {string|Array} element Node(s)/other on the graph
@@ -66,18 +66,18 @@ export default class Node extends React.Component {
     function isAllTrue(element) {
       if (typeof element === "string") {
         if (svg.nodes.current[element] !== undefined) {
-          return svg.nodes.current[element].isSelected();
+          return svg.nodes.current[element].isSelected()
         } else if (svg.bools.current[element] !== undefined) {
-          return svg.bools.current[element].isSelected();
+          return svg.bools.current[element].isSelected()
         } else {
-          return false;
+          return false
         }
       } else {
-        return element.some(isAllTrue);
+        return element.some(isAllTrue)
       }
     }
 
-    return this.props.parents.every(isAllTrue);
+    return this.props.parents.every(isAllTrue)
   }
 
   /**
@@ -85,22 +85,22 @@ export default class Node extends React.Component {
    * @param  {boolean} recursive whether we should recurse on its children
    */
   updateNode = recursive => {
-    var newState;
+    var newState
     if (this.arePrereqsSatisfied()) {
       if (this.isSelected() || this.props.hybrid) {
-        newState = "active";
+        newState = "active"
       } else {
-        newState = "takeable";
+        newState = "takeable"
       }
     } else {
       if (this.isSelected() && !this.props.hybrid) {
-        newState = "overridden";
+        newState = "overridden"
       } else {
-        newState = "inactive";
+        newState = "inactive"
       }
     }
 
-    var nodeId = this.props.JSON.id_;
+    var nodeId = this.props.JSON.id_
 
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
@@ -109,76 +109,74 @@ export default class Node extends React.Component {
         ["active", "overridden"].indexOf(this.state.status) >= 0 &&
       this.state.status !== "missing"
     ) {
-      localStorage.setItem(nodeId, newState);
-      this.setState({ status: newState });
-      return;
+      localStorage.setItem(nodeId, newState)
+      this.setState({ status: newState })
+      return
     }
 
     if (recursive === undefined || recursive) {
-      var svg = this.props.svg;
-      this.setState({ status: newState }, function() {
-        localStorage.setItem(nodeId, newState);
-        this.props.childs.forEach(function(node) {
-          var currentNode = refLookUp(node, svg);
+      var svg = this.props.svg
+      this.setState({ status: newState }, function () {
+        localStorage.setItem(nodeId, newState)
+        this.props.childs.forEach(function (node) {
+          var currentNode = refLookUp(node, svg)
           if (currentNode !== undefined) {
-            currentNode.updateNode();
+            currentNode.updateNode()
           }
-        });
-        var allEdges = this.props.outEdges.concat(this.props.inEdges);
+        })
+        var allEdges = this.props.outEdges.concat(this.props.inEdges)
         allEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge];
+          var currentEdge = svg.edges.current[edge]
           if (currentEdge !== undefined) {
-            currentEdge.updateStatus();
+            currentEdge.updateStatus()
           }
-        });
-      });
+        })
+      })
     } else {
-      this.setState({ status: newState });
-      localStorage.setItem(nodeId, newState);
+      this.setState({ status: newState })
+      localStorage.setItem(nodeId, newState)
     }
   }
 
   /** Controls the selection and deselection of a node by switching states and updating the graph */
   toggleSelection = () => {
-    this.setState({ selected: !this.state.selected }, function() {
-      this.updateNode();
-    });
+    this.setState({ selected: !this.state.selected }, function () {
+      this.updateNode()
+    })
   }
 
   /** Sets the status of all missing prerequisites to 'missing' */
   focusPrereqs = () => {
-    var svg = this.props.svg;
+    var svg = this.props.svg
     // Missing prerequisites need to have their status updated to 'missing'
-    if (
-      ["inactive", "overridden", "takeable"].indexOf(this.state.status) >= 0
-    ) {
+    if (["inactive", "overridden", "takeable"].indexOf(this.state.status) >= 0) {
       this.setState({ status: "missing" }, () => {
         this.props.inEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge];
+          var currentEdge = svg.edges.current[edge]
           if (currentEdge === null || currentEdge === undefined) {
-            return;
+            return
           }
-          var sourceNode = refLookUp(currentEdge.props.source, svg);
+          var sourceNode = refLookUp(currentEdge.props.source, svg)
           if (!sourceNode.isSelected()) {
-            currentEdge.setState({ status: "missing" });
+            currentEdge.setState({ status: "missing" })
           }
-        });
+        })
         this.props.parents.forEach(node => {
           if (typeof node === "string") {
-            var currentNode = refLookUp(node, svg);
+            var currentNode = refLookUp(node, svg)
             if (currentNode !== undefined) {
-              currentNode.focusPrereqs();
+              currentNode.focusPrereqs()
             }
           } else {
             node.forEach(n => {
-              var currentNode = refLookUp(n, svg);
+              var currentNode = refLookUp(n, svg)
               if (currentNode !== undefined) {
-                currentNode.focusPrereqs();
+                currentNode.focusPrereqs()
               }
-            });
+            })
           }
-        });
-      });
+        })
+      })
     }
   }
 
@@ -187,41 +185,41 @@ export default class Node extends React.Component {
    *  active, inactive, overridden, takeable
    */
   unfocusPrereqs = () => {
-    var svg = this.props.svg;
-    this.updateNode(false);
-    this.props.parents.forEach(function(node) {
+    var svg = this.props.svg
+    this.updateNode(false)
+    this.props.parents.forEach(function (node) {
       if (typeof node === "string") {
-        var currentNode = refLookUp(node, svg);
-        currentNode.unfocusPrereqs();
+        var currentNode = refLookUp(node, svg)
+        currentNode.unfocusPrereqs()
       } else {
         node.forEach(n => {
-          var currentNode = refLookUp(n, svg);
-          currentNode.unfocusPrereqs();
-        });
+          var currentNode = refLookUp(n, svg)
+          currentNode.unfocusPrereqs()
+        })
       }
-    });
-    this.props.inEdges.forEach(function(edge) {
-      var currentEdge = svg.edges.current[edge];
+    })
+    this.props.inEdges.forEach(function (edge) {
+      var currentEdge = svg.edges.current[edge]
       if (currentEdge.state.status === "missing") {
-        currentEdge.updateStatus();
+        currentEdge.updateStatus()
       }
-    });
+    })
   }
 
   getDataTestId = () => {
     if (this.props.hybrid) {
-      return `h(${this.props.parents.join(',')})`;
+      return `h(${this.props.parents.join(",")})`
     }
-    return this.props.JSON.id_;
+    return this.props.JSON.id_
   }
 
   render() {
-    let ellipse = null;
-    var newClassName = this.props.className + " " + this.state.status;
+    let ellipse = null
+    var newClassName = this.props.className + " " + this.state.status
     if (this.props.highlighted) {
-      var attrs = this.props.JSON;
-      var width = parseFloat(attrs.width) / 2;
-      var height = parseFloat(attrs.height) / 2;
+      var attrs = this.props.JSON
+      var width = parseFloat(attrs.width) / 2
+      var height = parseFloat(attrs.height) / 2
       ellipse = (
         <ellipse
           className="spotlight"
@@ -230,7 +228,7 @@ export default class Node extends React.Component {
           rx={width + 9}
           ry={height + 8.5}
         />
-      );
+      )
     }
 
     var gAttrs = {
@@ -240,45 +238,58 @@ export default class Node extends React.Component {
       onWheel: this.props.svg.onWheel,
       onMouseEnter: this.props.onMouseEnter,
       onMouseLeave: this.props.onMouseLeave,
-      onClick: this.props.onClick
-    };
+      onClick: this.props.onClick,
+    }
 
     var rectAttrs = {
       height: this.props.JSON.height,
       width: this.props.JSON.width,
       x: this.props.JSON.pos[0],
-      y: this.props.JSON.pos[1]
-    };
+      y: this.props.JSON.pos[1],
+    }
 
-    if (this.props.className === "node"){
-      rectAttrs["rx"] = "8";
-      rectAttrs["ry"] = "8";
+    if (this.props.className === "node") {
+      rectAttrs["rx"] = "8"
+      rectAttrs["ry"] = "8"
     }
 
     var rectStyle = {
-      fill: this.props.JSON.fill
-    };
+      fill: this.props.JSON.fill,
+    }
 
-    var textXOffset = this.props.JSON.pos[0] + this.props.JSON.width / 2;
+    var textXOffset = this.props.JSON.pos[0] + this.props.JSON.width / 2
 
     // TODO: Look at this.props to see what we need to give the g
     return (
-      <g {...gAttrs} id={this.props.JSON.id_} className={newClassName} data-testid={this.getDataTestId()}>
+      <g
+        {...gAttrs}
+        id={this.props.JSON.id_}
+        className={newClassName}
+        data-testid={this.getDataTestId()}
+      >
         {ellipse}
-        <rect {...rectAttrs} style={rectStyle} filter={this.props.className === "hybrid" ? "" : `url(#${this.props.nodeDropshadowFilter})`} />
-        {this.props.JSON.text.map(function(textTag, i) {
+        <rect
+          {...rectAttrs}
+          style={rectStyle}
+          filter={
+            this.props.className === "hybrid"
+              ? ""
+              : `url(#${this.props.nodeDropshadowFilter})`
+          }
+        />
+        {this.props.JSON.text.map(function (textTag, i) {
           var textAttrs = {
             x: textXOffset,
-            y: textTag.pos[1]
-          };
+            y: textTag.pos[1],
+          }
           return (
             <text {...textAttrs} key={i}>
               {textTag.text}
             </text>
-          );
+          )
         })}
       </g>
-    );
+    )
   }
 }
 
@@ -296,5 +307,5 @@ Node.propTypes = {
   outEdges: PropTypes.array,
   parents: PropTypes.array,
   svg: PropTypes.object,
-  nodeDropshadowFilter: PropTypes.string
-};
+  nodeDropshadowFilter: PropTypes.string,
+}

@@ -1,0 +1,16 @@
+app/
+db/
+doc/
+graphs/
+
+# TODO: review this file
+js/components/draw/
+
+public/
+
+vendor/
+*.min.*
+
+.stack-work/
+.yarn/
+.pnp.js/

@@ -1,27 +1,31 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from "react"
+import PropTypes from "prop-types"
 
 export default class Sidebar extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       collapsed: true,
-      results: []
-    };
+      results: [],
+    }
   }
 
   toggleSidebar = () => {
-      this.setState({ collapsed: !this.state.collapsed });
+    this.setState({ collapsed: !this.state.collapsed })
   }
 
-  filteredSearch = (query) => {
+  filteredSearch = query => {
     if (!query || !this.props.courses) {
-      return;
+      return
     }
 
     return this.props.courses.filter(([courseId, courseLabel]) => {
-      return courseId.includes(query) || courseId.toUpperCase().includes(query) || courseLabel.includes(query.toUpperCase());
-    });
+      return (
+        courseId.includes(query) ||
+        courseId.toUpperCase().includes(query) ||
+        courseLabel.includes(query.toUpperCase())
+      )
+    })
   }
 
   // Sidebar rendering methods
@@ -30,10 +34,14 @@ export default class Sidebar extends React.Component {
    * @return {HTMLDivElement} FCE to the DOM
    */
   renderFCE = () => {
-    const fceString = Number.isInteger(this.props.fceCount) ? this.props.fceCount + ".0" : this.props.fceCount
+    const fceString = Number.isInteger(this.props.fceCount)
+      ? this.props.fceCount + ".0"
+      : this.props.fceCount
 
     return (
-      <div className="fcecount" data-testid="test-fcecount">FCE Count: {fceString}</div>
+      <div className="fcecount" data-testid="test-fcecount">
+        FCE Count: {fceString}
+      </div>
     )
   }
 
@@ -41,20 +49,24 @@ export default class Sidebar extends React.Component {
    * Render the dropdown results within the sidebar dropdown.
    * @return {HTMLDivElement} Searchbar to the DOM
    */
-   renderDropdown = () => {
+  renderDropdown = () => {
     if (this.props.courses) {
-
-      let showDropdown = this.state.results ? '' : 'hidden';
-      let masterDropdown = `${showDropdown} search-dropdown`;
+      let showDropdown = this.state.results ? "" : "hidden"
+      let masterDropdown = `${showDropdown} search-dropdown`
       return (
-          <ul className={masterDropdown} data-testid='test-searchDropdown'>
-            {this.state.results?.map(([resultId, resultLabel]) =>
-            <li aria-label="test-li" key={`search ${resultId}`} className="dropdown-item" onClick={() => this.props.courseClick(resultId)}>
+        <ul className={masterDropdown} data-testid="test-searchDropdown">
+          {this.state.results?.map(([resultId, resultLabel]) => (
+            <li
+              aria-label="test-li"
+              key={`search ${resultId}`}
+              className="dropdown-item"
+              onClick={() => this.props.courseClick(resultId)}
+            >
               {resultLabel}
             </li>
-            )}
-          </ul>
-        )
+          ))}
+        </ul>
+      )
     }
   }
 
@@ -63,28 +75,30 @@ export default class Sidebar extends React.Component {
    * @return {HTMLBodyElement} list of div's for each course that is active
    */
   renderActiveCourses = () => {
-    let temp = this.props.activeCourses ? [...this.props.activeCourses] : [];
+    let temp = this.props.activeCourses ? [...this.props.activeCourses] : []
     // sort the list of rendered courses, alphabetically
-    temp.sort((a,b) => a.localeCompare(b));
+    temp.sort((a, b) => a.localeCompare(b))
     return (
       <div className="courses" data-testid="test-course-selection">
-        {temp.map((course) => {
+        {temp.map(course => {
           return (
-            <div key={`active ${course}`}
-            data-testid={`test ${course}`}
-            onClick={() => this.props.courseClick(course)}
-            className="course-selection">
+            <div
+              key={`active ${course}`}
+              data-testid={`test ${course}`}
+              onClick={() => this.props.courseClick(course)}
+              className="course-selection"
+            >
               {course}
             </div>
-          );
+          )
         })}
       </div>
-    );
+    )
   }
 
   render() {
-    const collapsedClass = this.state.collapsed ? "collapsed" : "expanded";
-    const masterSidebarClass = `${collapsedClass} sidebar`;
+    const collapsedClass = this.state.collapsed ? "collapsed" : "expanded"
+    const masterSidebarClass = `${collapsedClass} sidebar`
 
     return (
       <div className={masterSidebarClass} data-testid="test-toggle">
@@ -95,15 +109,33 @@ export default class Sidebar extends React.Component {
               {/* For text to speech purposes */}
               <span className="label-hidden">Search courses</span>
             </label>
-            <input id="header-search" className="search-bar" data-testid="test-search-bar" type="text" onChange={(e) => {this.setState({ results: this.filteredSearch(e.target.value) })}}/>
+            <input
+              id="header-search"
+              className="search-bar"
+              data-testid="test-search-bar"
+              type="text"
+              onChange={e => {
+                this.setState({ results: this.filteredSearch(e.target.value) })
+              }}
+            />
           </div>
           {this.renderDropdown()}
           <h3 className="selected-courses">Selected courses</h3>
           {this.renderActiveCourses()}
-          <button className="reset-selections" data-testid="test-reset" onClick={() => this.props.reset()}>Reset Selections</button>
+          <button
+            className="reset-selections"
+            data-testid="test-reset"
+            onClick={() => this.props.reset()}
+          >
+            Reset Selections
+          </button>
         </div>
-        <div className="sidebar-button" onClick={() => this.toggleSidebar()} data-testid="test-sidebar-button">
-          <img id="sidebar-icon" src="/static/res/ico/sidebar.png"/>
+        <div
+          className="sidebar-button"
+          onClick={() => this.toggleSidebar()}
+          data-testid="test-sidebar-button"
+        >
+          <img id="sidebar-icon" src="/static/res/ico/sidebar.png" />
         </div>
       </div>
     )
@@ -115,5 +147,5 @@ Sidebar.propTypes = {
   reset: PropTypes.func,
   activeCourses: PropTypes.instanceOf(Set),
   courses: PropTypes.array,
-  courseClick: PropTypes.func
-};
+  courseClick: PropTypes.func,
+}

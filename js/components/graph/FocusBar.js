@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from "prop-types";
-import FocusTab from "./FocusTab.js";
+import React from "react"
+import PropTypes from "prop-types"
+import FocusTab from "./FocusTab.js"
 
 // These lists are in reverse order to what ends up appearing on the screen
 const computerScienceFocusLabels = [
@@ -13,24 +13,24 @@ const computerScienceFocusLabels = [
   ["NLP", "Computational Linguistics"],
   ["AI", "Artificial Intelligence"],
   ["sci", "Scientific Computing"],
-];
+]
 
 /**
  * React component representing the focus menu bar
  */
 export default class FocusBar extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       open: false,
-    };
+    }
   }
 
   /**
    * Changes whether the focus bar is open or not
    */
   toggleFocusBar = () => {
-    this.setState({open: !this.state.open});
+    this.setState({ open: !this.state.open })
   }
 
   /**
@@ -39,7 +39,7 @@ export default class FocusBar extends React.Component {
    */
   generateFocusTabs = () => {
     return computerScienceFocusLabels.map(([focusId, focusTitle]) => {
-      const selected = this.props.currFocus === focusId;
+      const selected = this.props.currFocus === focusId
 
       return (
         <FocusTab
@@ -49,22 +49,24 @@ export default class FocusBar extends React.Component {
           selected={selected}
           highlightFocus={this.props.highlightFocus}
         />
-      );
-    });
+      )
+    })
   }
 
   render() {
     if (!this.props.focusBarEnabled) {
-      return null;
+      return null
     } else {
       return (
         <div className="focus-menu-bar">
-          <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>{this.state.open ? "⪡ Close" : "Focuses ⪢"}</button>
+          <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>
+            {this.state.open ? "⪡ Close" : "Focuses ⪢"}
+          </button>
           <div className="focuses-list">
             {this.state.open && this.generateFocusTabs()}
           </div>
         </div>
-      );
+      )
     }
   }
 }
@@ -73,4 +75,4 @@ FocusBar.propTypes = {
   focusBarEnabled: PropTypes.bool,
   highlightFocus: PropTypes.func,
   currFocus: PropTypes.string,
-};
+}

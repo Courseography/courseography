@@ -44,7 +44,7 @@ strictRoutes aboutContents privacyContents = [
     ]
 
 strictMatchDir :: (String, ServerPart Response) -> ServerPartT IO Response
-strictMatchDir (pathname, response) = 
+strictMatchDir (pathname, response) =
     mplus (do noTrailingSlash       -- enforce no trailing slash in the URI
               dir pathname nullDir  -- enforce that no segments occur after pathname
               response)

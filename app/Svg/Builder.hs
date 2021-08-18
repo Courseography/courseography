@@ -75,7 +75,7 @@ buildRect texts entity elementId =
         id_ = case shapeType_ entity of
               Hybrid -> T.pack $ 'h' : show elementId
               Node -> if shapeId_ entity == ""
-                  then T.map toLower . sanitizeId $ textString 
+                  then T.map toLower . sanitizeId $ textString
                   else shapeId_ entity
               BoolNode -> shapeId_ entity
               Region -> ""
@@ -100,8 +100,8 @@ buildEllipses texts entity elementId =
                               ) texts
     in
         entity {
-            shapeId_ = 
-                if shapeId_ entity == "" 
+            shapeId_ =
+                if shapeId_ entity == ""
                     then T.pack $ "bool" ++ show elementId
                     else shapeId_ entity,
             shapeText = ellipseText

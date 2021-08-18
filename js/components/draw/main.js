@@ -1,14 +1,13 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+import "core-js/stable"
+import "regenerator-runtime/runtime"
 
-import React from "react";
-import ReactDOM from "react-dom";
-import Graph from '../graph/Graph';
+import React from "react"
+import ReactDOM from "react-dom"
+import { Graph } from "../graph/Graph"
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    return ReactDOM.render(
-        <Graph start_blank={true} edit={true} initialDrawMode="draw-node" />,
-        document.getElementById('react-graph')
-    );
+document.addEventListener("DOMContentLoaded", () => {
+  return ReactDOM.render(
+    <Graph start_blank={true} edit={true} initialDrawMode="draw-node" />,
+    document.getElementById("react-graph")
+  )
 })

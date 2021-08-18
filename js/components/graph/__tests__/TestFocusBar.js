@@ -1,6 +1,6 @@
-import React from "react";
-import FocusBar from "../FocusBar";
-import { render } from "@testing-library/react";
+import React from "react"
+import FocusBar from "../FocusBar"
+import { render } from "@testing-library/react"
 
 export default class TestFocusBar {
   /**
@@ -10,10 +10,10 @@ export default class TestFocusBar {
   static async build() {
     const focusBarProps = {
       currFocus: null,
-      focusBarEnabled: true
-    };
+      focusBarEnabled: true,
+    }
 
-    const focusBar = render(<FocusBar {...focusBarProps} />);
-    return focusBar;
+    const focusBar = render(<FocusBar {...focusBarProps} />)
+    return focusBar
   }
 }

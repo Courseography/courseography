@@ -9,15 +9,15 @@ export default {
           secRoom: null,
           startingTime: 12,
           fstRoom: "MY 150",
-          weekDay: 1
+          weekDay: 1,
         },
         {
           endingTime: 14,
           secRoom: null,
           startingTime: 13,
           fstRoom: "MY 150",
-          weekDay: 3
-        }
+          weekDay: 3,
+        },
       ],
       meetData: {
         cap: 200,
@@ -27,8 +27,8 @@ export default {
         enrol: 192,
         code: "AAA100H1",
         session: "F",
-        section: "LEC0102"
-      }
+        section: "LEC0102",
+      },
     },
     {
       timeData: [
@@ -37,15 +37,15 @@ export default {
           secRoom: null,
           startingTime: 13,
           fstRoom: "BA 1160",
-          weekDay: 2
+          weekDay: 2,
         },
         {
           endingTime: 14,
           secRoom: null,
           startingTime: 13,
           fstRoom: "BA 1160",
-          weekDay: 4
-        }
+          weekDay: 4,
+        },
       ],
       meetData: {
         cap: 196,
@@ -55,8 +55,8 @@ export default {
         enrol: 184,
         code: "AAA100H1",
         session: "F",
-        section: "LEC0201"
-      }
+        section: "LEC0201",
+      },
     },
     {
       timeData: [
@@ -65,8 +65,8 @@ export default {
           secRoom: null,
           startingTime: 18,
           fstRoom: "MY 150",
-          weekDay: 1
-        }
+          weekDay: 1,
+        },
       ],
       meetData: {
         cap: 200,
@@ -76,8 +76,8 @@ export default {
         enrol: 174,
         code: "AAA100H1",
         session: "F",
-        section: "LEC5102"
-      }
+        section: "LEC5102",
+      },
     },
     {
       timeData: [
@@ -86,15 +86,15 @@ export default {
           secRoom: null,
           startingTime: 13,
           fstRoom: "MY 150",
-          weekDay: 3
+          weekDay: 3,
         },
         {
           endingTime: 14,
           secRoom: null,
           startingTime: 12,
           fstRoom: "MY 150",
-          weekDay: 1
-        }
+          weekDay: 1,
+        },
       ],
       meetData: {
         cap: 200,
@@ -104,8 +104,8 @@ export default {
         enrol: 177,
         code: "AAA100H1",
         session: "F",
-        section: "LEC0101"
-      }
+        section: "LEC0101",
+      },
     },
     {
       timeData: [
@@ -114,8 +114,8 @@ export default {
           secRoom: null,
           startingTime: 18,
           fstRoom: "MY 150",
-          weekDay: 1
-        }
+          weekDay: 1,
+        },
       ],
       meetData: {
         cap: 200,
@@ -125,8 +125,8 @@ export default {
         enrol: 173,
         code: "AAA100H1",
         session: "F",
-        section: "LEC5101"
-      }
+        section: "LEC5101",
+      },
     },
     {
       timeData: [
@@ -135,8 +135,8 @@ export default {
           secRoom: null,
           startingTime: 25,
           fstRoom: null,
-          weekDay: 5
-        }
+          weekDay: 5,
+        },
       ],
       meetData: {
         cap: 200,
@@ -146,8 +146,8 @@ export default {
         enrol: 171,
         code: "AAA100H1",
         session: "F",
-        section: "LEC9901"
-      }
+        section: "LEC9901",
+      },
     },
     {
       timeData: [
@@ -156,15 +156,15 @@ export default {
           secRoom: "MY 150",
           startingTime: 13,
           fstRoom: null,
-          weekDay: 4
+          weekDay: 4,
         },
         {
           endingTime: 15,
           secRoom: "MY 150",
           startingTime: 13,
           fstRoom: null,
-          weekDay: 1
-        }
+          weekDay: 1,
+        },
       ],
       meetData: {
         cap: 200,
@@ -174,8 +174,8 @@ export default {
         enrol: 195,
         code: "AAA100H1",
         session: "S",
-        section: "LEC0102"
-      }
+        section: "LEC0102",
+      },
     },
     {
       timeData: [],
@@ -187,8 +187,8 @@ export default {
         enrol: 0,
         code: "AAA100H1",
         session: "S",
-        section: "LEC0201"
-      }
+        section: "LEC0201",
+      },
     },
     {
       timeData: [
@@ -197,8 +197,8 @@ export default {
           secRoom: "Contact Dept",
           startingTime: 16,
           fstRoom: null,
-          weekDay: 0
-        }
+          weekDay: 0,
+        },
       ],
       meetData: {
         cap: 36,
@@ -208,8 +208,8 @@ export default {
         enrol: 17,
         code: "AAA100H1",
         session: "S",
-        section: "TUT0301"
-      }
+        section: "TUT0301",
+      },
     },
     {
       timeData: [
@@ -218,8 +218,8 @@ export default {
           secRoom: "MY 315",
           startingTime: 13,
           fstRoom: null,
-          weekDay: 3
-        }
+          weekDay: 3,
+        },
       ],
       meetData: {
         cap: 72,
@@ -229,8 +229,8 @@ export default {
         enrol: 67,
         code: "AAA100H1",
         session: "S",
-        section: "LEC0301"
-      }
+        section: "LEC0301",
+      },
     },
     {
       timeData: [
@@ -239,8 +239,8 @@ export default {
           secRoom: "MY 150",
           startingTime: 18,
           fstRoom: null,
-          weekDay: 1
-        }
+          weekDay: 1,
+        },
       ],
       meetData: {
         cap: 200,
@@ -250,8 +250,8 @@ export default {
         enrol: 186,
         code: "AAA100H1",
         session: "S",
-        section: "LEC5102"
-      }
+        section: "LEC5102",
+      },
     },
     {
       timeData: [
@@ -260,15 +260,15 @@ export default {
           secRoom: "MY 150",
           startingTime: 13,
           fstRoom: null,
-          weekDay: 1
+          weekDay: 1,
         },
         {
           endingTime: 14,
           secRoom: "MY 150",
           startingTime: 13,
           fstRoom: null,
-          weekDay: 4
-        }
+          weekDay: 4,
+        },
       ],
       meetData: {
         cap: 200,
@@ -278,8 +278,8 @@ export default {
         enrol: 190,
         code: "AAA100H1",
         session: "S",
-        section: "LEC0101"
-      }
+        section: "LEC0101",
+      },
     },
     {
       timeData: [
@@ -288,8 +288,8 @@ export default {
           secRoom: "MY 150",
           startingTime: 18,
           fstRoom: null,
-          weekDay: 1
-        }
+          weekDay: 1,
+        },
       ],
       meetData: {
         cap: 200,
@@ -299,8 +299,8 @@ export default {
         enrol: 192,
         code: "AAA100H1",
         session: "S",
-        section: "LEC5101"
-      }
+        section: "LEC5101",
+      },
     },
     {
       timeData: [
@@ -309,8 +309,8 @@ export default {
           secRoom: "Contact Dept",
           startingTime: 16,
           fstRoom: null,
-          weekDay: 4
-        }
+          weekDay: 4,
+        },
       ],
       meetData: {
         cap: 36,
@@ -320,8 +320,8 @@ export default {
         enrol: 20,
         code: "AAA100H1",
         session: "S",
-        section: "TUT0303"
-      }
+        section: "TUT0303",
+      },
     },
     {
       timeData: [
@@ -330,8 +330,8 @@ export default {
           secRoom: null,
           startingTime: 25,
           fstRoom: null,
-          weekDay: 5
-        }
+          weekDay: 5,
+        },
       ],
       meetData: {
         cap: 196,
@@ -341,8 +341,8 @@ export default {
         enrol: 182,
         code: "AAA100H1",
         session: "S",
-        section: "LEC9901"
-      }
+        section: "LEC9901",
+      },
     },
     {
       timeData: [
@@ -351,8 +351,8 @@ export default {
           secRoom: "Contact Dept",
           startingTime: 16,
           fstRoom: null,
-          weekDay: 2
-        }
+          weekDay: 2,
+        },
       ],
       meetData: {
         cap: 36,
@@ -362,9 +362,9 @@ export default {
         enrol: 29,
         code: "AAA100H1",
         session: "S",
-        section: "TUT0302"
-      }
-    }
+        section: "TUT0302",
+      },
+    },
   ],
   videoUrls: [],
   breadth: "The Physical and Mathematical Universes (5)",
@@ -373,5 +373,5 @@ export default {
   title: "Introduction to AAA Thinking",
   description:
     "AAA100H1 is about learning about all things triple A. We literally memorize a list of AAA acronyms from here: https://acronyms.thefreedictionary.com/AAA",
-  coreqs: null
-};
+  coreqs: null,
+}

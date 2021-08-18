@@ -18,7 +18,7 @@ import qualified Data.Text as T
 insertGraph :: T.Text   -- ^ The title of the graph that is being inserted.
             -> Double   -- ^ The width dimension of the graph
             -> Double   -- ^ The height dimension of the graph
-            -> Bool     -- ^ True if graph is dynamically generated            
+            -> Bool     -- ^ True if graph is dynamically generated
             -> SqlPersistM GraphId -- ^ The unique identifier of the inserted graph.
 insertGraph graphName graphWidth graphHeight graphDynamic = do
     runMigration migrateAll

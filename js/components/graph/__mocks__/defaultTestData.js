@@ -13,14 +13,14 @@ export default {
           text: "AAA100",
           pos: [676.445738, 59.379107999999995],
           fill: "",
-          align: "begin"
-        }
+          align: "begin",
+        },
       ],
       width: 65,
       stroke: "",
       pos: [674.184078, 38.09390799999999],
       fill: "#5dd5b8",
-      id_: "aaa100"
+      id_: "aaa100",
     },
     {
       graph: 1,
@@ -33,7 +33,7 @@ export default {
           text: "AAA101",
           pos: [596.555968, 25.379107999999995],
           fill: "",
-          align: "begin"
+          align: "begin",
         },
         {
           graph: 1,
@@ -41,14 +41,14 @@ export default {
           text: "(H101)",
           pos: [596.555968, 34.379107999999995],
           fill: "",
-          align: "begin"
-        }
+          align: "begin",
+        },
       ],
       width: 65,
       stroke: "",
       pos: [594.294128, 10.09390799999999],
       fill: "#5dd5b8",
-      id_: "aaa101"
+      id_: "aaa101",
     },
     {
       graph: 1,
@@ -61,14 +61,14 @@ export default {
           text: "(H101)",
           pos: [596.555968, 59.379107999999995],
           fill: "",
-          align: "begin"
-        }
+          align: "begin",
+        },
       ],
       width: 52.768799,
       stroke: "",
       pos: [600.585648, 41.51310800000002],
       fill: "#888888",
-      id_: "h101"
+      id_: "h101",
     },
     {
       graph: 1,
@@ -81,14 +81,14 @@ export default {
           text: "AAA102",
           pos: [469.783538, 59.379107999999995],
           fill: "",
-          align: "begin"
-        }
+          align: "begin",
+        },
       ],
       width: 65.185,
       stroke: "",
       pos: [465.499658, 37.09390799999999],
       fill: "#b1c8d1",
-      id_: "aaa102"
+      id_: "aaa102",
     },
     {
       graph: 1,
@@ -101,14 +101,14 @@ export default {
           text: "AAA201",
           pos: [596.555968, 110.15400799999999],
           fill: "",
-          align: "begin"
-        }
+          align: "begin",
+        },
       ],
       width: 65,
       stroke: "",
       pos: [594.294128, 88.86880799999999],
       fill: "#5dd5b8",
-      id_: "aaa201"
+      id_: "aaa201",
     },
     {
       graph: 1,
@@ -121,14 +121,14 @@ export default {
           text: "and",
           pos: [735.713858, 148.968708],
           fill: "",
-          align: "begin"
-        }
+          align: "begin",
+        },
       ],
       width: 19.7600002,
       stroke: "",
       pos: [766.452148, 146.883608],
       fill: "",
-      id_: "bool1"
+      id_: "bool1",
     },
     {
       graph: 1,
@@ -141,14 +141,14 @@ export default {
           text: "AAA303",
           pos: [735.713858, 201.168708],
           fill: "",
-          align: "begin"
-        }
+          align: "begin",
+        },
       ],
       width: 65,
       stroke: "",
       pos: [733.452148, 179.883608],
       fill: "#e68080",
-      id_: "aaa303"
+      id_: "aaa303",
     },
     {
       graph: 1,
@@ -161,14 +161,14 @@ export default {
           text: "or",
           pos: [550, 103],
           fill: "",
-          align: "begin"
-        }
+          align: "begin",
+        },
       ],
       width: 19.7600002,
       stroke: "",
       pos: [550, 100],
       fill: "",
-      id_: "bool2"
+      id_: "bool2",
     },
     {
       graph: 1,
@@ -181,14 +181,14 @@ export default {
           text: "AAA202",
           pos: [500, 201.168708],
           fill: "",
-          align: "begin"
-        }
+          align: "begin",
+        },
       ],
       width: 65,
       stroke: "",
       pos: [500, 179.883608],
       fill: "#e68080",
-      id_: "aaa202"
+      id_: "aaa202",
     },
   ],
   texts: [
@@ -198,7 +198,7 @@ export default {
       text: "AAA102",
       pos: [469.783538, 59.379107999999995],
       fill: "",
-      align: "begin"
+      align: "begin",
     },
     {
       graph: 1,
@@ -206,7 +206,7 @@ export default {
       text: "AAA100",
       pos: [676.445738, 59.379107999999995],
       fill: "",
-      align: "begin"
+      align: "begin",
     },
     {
       graph: 1,
@@ -214,7 +214,7 @@ export default {
       text: "AAA101",
       pos: [596.555968, 50.379107999999995],
       fill: "",
-      align: "begin"
+      align: "begin",
     },
     {
       graph: 1,
@@ -222,7 +222,7 @@ export default {
       text: "AAA201",
       pos: [596.555968, 110.15400799999999],
       fill: "",
-      align: "begin"
+      align: "begin",
     },
     {
       graph: 1,
@@ -230,7 +230,7 @@ export default {
       text: "AAA303",
       pos: [735.713858, 161.168708],
       fill: "",
-      align: "begin"
+      align: "begin",
     },
     {
       graph: 1,
@@ -238,7 +238,7 @@ export default {
       text: "AAA202",
       pos: [735.713858, 161.168708],
       fill: "",
-      align: "begin"
+      align: "begin",
     },
     {
       graph: 1,
@@ -246,7 +246,7 @@ export default {
       text: "and",
       pos: [1012.903868, 246.655709],
       fill: "",
-      align: "begin"
+      align: "begin",
     },
     {
       graph: 1,
@@ -254,7 +254,7 @@ export default {
       text: "or",
       pos: [500, 28],
       fill: "",
-      align: "begin"
+      align: "begin",
     },
   ],
   paths: [
@@ -262,42 +262,42 @@ export default {
       graph: 1,
       points: [
         [626.794148, 68.11810799999999],
-        [626.794148, 80.89120799999999]
+        [626.794148, 80.89120799999999],
       ],
       isRegion: false,
       stroke: "",
       fill: "none",
       id_: "p6",
       source: "h101",
-      target: "aaa201"
+      target: "aaa201",
     },
     {
       graph: 1,
       points: [
         [659.307448, 103.86880799999999],
         [765.952148, 103.86880799999999],
-        [765.952148, 131.888008]
+        [765.952148, 131.888008],
       ],
       isRegion: false,
       stroke: "",
       fill: "none",
       id_: "p8",
       source: "aaa201",
-      target: "bool1"
+      target: "bool1",
     },
     {
       graph: 1,
       points: [
         [515, 70],
         [515, 144],
-        [748, 144]
+        [748, 144],
       ],
       isRegion: false,
       stroke: "",
       fill: "none",
       id_: "p9",
       source: "aaa102",
-      target: "bool1"
+      target: "bool1",
     },
     {
       graph: 1,
@@ -310,12 +310,12 @@ export default {
       fill: "none",
       id_: "p11",
       source: "bool1",
-      target: "aaa303"
+      target: "aaa303",
     },
     {
       graph: 1,
       points: [
-        [515,70],
+        [515, 70],
         [540, 90],
       ],
       isRegion: false,
@@ -323,7 +323,7 @@ export default {
       fill: "none",
       id_: "p12",
       source: "aaa102",
-      target: "bool2"
+      target: "bool2",
     },
     {
       graph: 1,
@@ -336,7 +336,7 @@ export default {
       fill: "none",
       id_: "p13",
       source: "aaa201",
-      target: "bool2"
+      target: "bool2",
     },
     {
       graph: 1,
@@ -349,7 +349,7 @@ export default {
       fill: "none",
       id_: "p14",
       source: "bool2",
-      target: "aaa202"
+      target: "aaa202",
     },
-  ]
-};
+  ],
+}

@@ -5,7 +5,7 @@ flags:
     _regex-posix-clib: true
 extra-package-dbs: []
 packages:
-- .
+  - .
 allow-newer: true
 extra-deps:
   - diagrams-lib-1.4.3
@@ -19,4 +19,4 @@ extra-deps:
 compiler-check: newer-minor
 resolver: lts-17.10
 dump-logs: all
-require-stack-version: ! '>= 1.6'
+require-stack-version: ! ">= 1.6"

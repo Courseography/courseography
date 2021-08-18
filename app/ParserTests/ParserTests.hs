@@ -75,7 +75,7 @@ fcesInputs = [
 
 gradeBefInputs :: [(String, Req)]
 gradeBefInputs = [
-      ("minimum mark of A- in CSC236H1", GRADE "A-" $ J "CSC236H1" "") 
+      ("minimum mark of A- in CSC236H1", GRADE "A-" $ J "CSC236H1" "")
     , ("minimum grade of 75% CSC236H1", GRADE "75" $ J "CSC236H1" "")
     , ("minimum of 75% CSC236H1", GRADE "75" $ J "CSC236H1" "")
     , ("minimum (75%) CSC236H1", GRADE "75" $ J "CSC236H1" "")
@@ -94,8 +94,8 @@ gradeAftInputs = [
     , ("CSC236H1 (75%)", GRADE "75" $ J "CSC236H1" "")
     , ("CSC236H1(75%)", GRADE "75" $ J "CSC236H1" "")
     , ("CSC263H1 (C+)", GRADE "C+" $ J "CSC263H1" "")
-    , ("CSC263H1 B-", GRADE "B-" $ J "CSC263H1" "") 
-    , ("CSC263H1 with a minimum grade of 60%", GRADE "60" $ J "CSC263H1" "") 
+    , ("CSC263H1 B-", GRADE "B-" $ J "CSC263H1" "")
+    , ("CSC263H1 with a minimum grade of 60%", GRADE "60" $ J "CSC263H1" "")
     , ("CSC263H1 with a minimum mark of B-", GRADE "B-" $ J "CSC263H1" "")
     , ("CSC236H1 (at least 75% or more)", GRADE "75" $ J "CSC236H1" "")
     , ("CSC236H1 ( 75% or higher )", GRADE "75" $ J "CSC236H1" "")

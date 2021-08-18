@@ -9,7 +9,7 @@ import Data.Char (toLower, toUpper, isSpace)
 
 -- define separators
 fromSeparator :: Parser String
-fromSeparator = Parsec.spaces 
+fromSeparator = Parsec.spaces
                 >> Parsec.choice (map (Parsec.try . Parsec.string) [
             "of any of the following:",
             "from the following: ",
@@ -23,7 +23,7 @@ completionPrefix = Parsec.choice (map (Parsec.try . Parsec.string) [
     "Completion of at least",
     "Completion of a minimum of",
     "Completion of"
-    ]) 
+    ])
     >> Parsec.spaces
 
 fceSeparator :: Parser ()
@@ -38,10 +38,10 @@ fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
             >> Parsec.spaces
 
 includingSeparator :: Parser String
-includingSeparator = Parsec.optional (Parsec.string ",") 
+includingSeparator = Parsec.optional (Parsec.string ",")
                      >> Parsec.spaces
                      >> Parsec.string "including"
-                     
+
 
 lParen :: Parser Char
 lParen = Parsec.char '('
@@ -293,14 +293,14 @@ andParser = do
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
 fcesParser :: Parser Req
-fcesParser = do 
+fcesParser = do
     _ <- Parsec.optional completionPrefix
     fces <- creditsParser
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
     req <- Parsec.try andParser <|> Parsec.try orParser
-    return $ FCES fces req  
+    return $ FCES fces req
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
