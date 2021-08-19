@@ -24,8 +24,8 @@ module Css.Constants
      regionFontSize
      ) where
 
-import Prelude hiding ((**))
 import Data.Text as T
+import Prelude hiding ((**))
 
 {- Colors -}
 

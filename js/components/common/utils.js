@@ -6,8 +6,7 @@
  * @returns {React.PropTypes.Node}
  */
 export function refLookUp(targetNode, svg) {
-    return svg.nodes.current[targetNode] ||
-        svg.bools.current[targetNode];
+  return svg.nodes.current[targetNode] || svg.bools.current[targetNode]
 }
 
 /**
@@ -16,13 +15,11 @@ export function refLookUp(targetNode, svg) {
  * @returns {Promise} Promise object representing the JSON object containing course information.
  */
 export function getCourse(courseName) {
-    'use strict';
+  "use strict"
 
-    return fetch(
-        'course?name=' + courseName,
-        )
-        .then(response => response.json())
-        .catch(error => {
-            throw(error);
-        });
+  return fetch("course?name=" + courseName)
+    .then(response => response.json())
+    .catch(error => {
+      throw error
+    })
 }

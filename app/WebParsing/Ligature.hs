@@ -23,4 +23,4 @@ expandLigature c = singleton c
 
 -- | Expand all ligatures in the text
 expand :: Text -> Text
-expand txt = concatMap expandLigature txt
+expand = concatMap expandLigature

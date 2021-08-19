@@ -1,33 +1,33 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { refLookUp } from "../common/utils";
+import PropTypes from "prop-types"
+import React from "react"
+import { refLookUp } from "../common/utils"
 
 /**
  * Class representing an edge from a Node/Bool to a Node/Bool
  */
 export default class Edge extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = { status: "inactive" };
+    super(props)
+    this.state = { status: "inactive" }
   }
 
   /**
    * Update the status of the Edge, based on the status of the Node/Bool it points from/to
    */
-  updateStatus = () =>{
-    var source = refLookUp(this.props.source, this.props.svg);
-    var target = refLookUp(this.props.target, this.props.svg);
+  updateStatus = () => {
+    var source = refLookUp(this.props.source, this.props.svg)
+    var target = refLookUp(this.props.target, this.props.svg)
     if (source === undefined || target === undefined) {
-      return;
+      return
     }
     if (!source.isSelected() && target.state.status === "missing") {
-      this.setState({ status: "missing" });
+      this.setState({ status: "missing" })
     } else if (!source.isSelected()) {
-      this.setState({ status: "inactive" });
+      this.setState({ status: "inactive" })
     } else if (!target.isSelected()) {
-      this.setState({ status: "takeable" });
+      this.setState({ status: "takeable" })
     } else {
-      this.setState({ status: "active" });
+      this.setState({ status: "active" })
     }
   }
   /**
@@ -39,15 +39,15 @@ export default class Edge extends React.Component {
    */
   componentDidUpdate(prevProps, prevState) {
     if (this.state.status !== prevState.status) {
-      this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
+      this.props.updateEdgeStatus(this.props.edgeID, this.state.status)
     }
   }
 
   render() {
-    var pathAttrs = { d: "M" };
+    var pathAttrs = { d: "M" }
     this.props.points.forEach(p => {
-      pathAttrs.d += p[0] + "," + p[1] + " ";
-    });
+      pathAttrs.d += p[0] + "," + p[1] + " "
+    })
 
     return (
       <path
@@ -56,7 +56,7 @@ export default class Edge extends React.Component {
         data-testid={`${this.props.source}->${this.props.target}`}
         markerEnd="url(#arrowHead)"
       />
-    );
+    )
   }
 }
 
@@ -72,5 +72,5 @@ Edge.propTypes = {
   /** Node that the edge is pointing to */
   target: PropTypes.string,
   /** function called when the edge's state has changed */
-  updateEdgeStatus: PropTypes.func
-};
+  updateEdgeStatus: PropTypes.func,
+}

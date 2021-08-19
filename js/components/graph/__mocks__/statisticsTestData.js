@@ -287,7 +287,11 @@ export default {
     },
     {
       graph: 1,
-      points: [[515, 70], [515, 144], [748, 144]],
+      points: [
+        [515, 70],
+        [515, 144],
+        [748, 144],
+      ],
       isRegion: false,
       stroke: "",
       fill: "none",
@@ -297,7 +301,10 @@ export default {
     },
     {
       graph: 1,
-      points: [[765.952148, 155], [765.952148, 171]],
+      points: [
+        [765.952148, 155],
+        [765.952148, 171],
+      ],
       isRegion: false,
       stroke: "",
       fill: "none",
@@ -307,7 +314,10 @@ export default {
     },
     {
       graph: 1,
-      points: [[515, 70], [540, 90]],
+      points: [
+        [515, 70],
+        [540, 90],
+      ],
       isRegion: false,
       stroke: "",
       fill: "none",
@@ -317,7 +327,10 @@ export default {
     },
     {
       graph: 1,
-      points: [[592, 100], [570, 100]],
+      points: [
+        [592, 100],
+        [570, 100],
+      ],
       isRegion: false,
       stroke: "",
       fill: "none",
@@ -327,7 +340,10 @@ export default {
     },
     {
       graph: 1,
-      points: [[550, 100], [550, 173]],
+      points: [
+        [550, 100],
+        [550, 173],
+      ],
       isRegion: false,
       stroke: "",
       fill: "none",
@@ -336,4 +352,4 @@ export default {
       target: "bbb202",
     },
   ],
-};
+}

@@ -1,12 +1,12 @@
 module Response.About
     (aboutResponse) where
 
-import           Text.Blaze ((!))
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as A
 import Data.Text.Lazy (Text)
 import Happstack.Server
 import MasterTemplate
+import Text.Blaze ((!))
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as A
 import Util.Blaze (mdToHTML)
 
 aboutResponse :: Text -> ServerPart Response

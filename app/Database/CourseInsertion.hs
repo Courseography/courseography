@@ -11,14 +11,15 @@ module Database.CourseInsertion
     (insertCourse,
      saveGraphJSON) where
 
-import qualified Data.Text as T
-import qualified Data.ByteString.Lazy.Char8 as BSL
-import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
-import Database.Persist.Class (selectKeysList)
-import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (==.), runSqlite)
-import Database.Tables hiding (texts, shapes, paths, breadth, distribution)
 import qualified Data.Aeson as Aeson
+import qualified Data.ByteString.Lazy.Char8 as BSL
+import qualified Data.Text as T
+import Database.Persist.Class (selectKeysList)
+import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, runSqlite, selectFirst,
+                                (==.))
+import Database.Tables hiding (breadth, distribution, paths, shapes, texts)
+import Happstack.Server.SimpleHTTP (Response, toResponse)
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: BSL.ByteString -> T.Text -> IO Response

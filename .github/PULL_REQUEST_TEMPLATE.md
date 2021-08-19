@@ -10,9 +10,11 @@
 ## Your Changes
 
 <!--- Describe your changes here. -->
+
 **Description**:
 
 **Type of change** (select all that apply):
+
 <!--- Put an `x` in all the boxes that apply. -->
 <!--- Remove any lines that do not apply. -->
 
@@ -40,6 +42,5 @@
 ## Checklist
 
 - [ ] I have performed a self-review of my own code.
-- [ ] I have verified that the CircleCI tests have
-  passed. <!-- (check after opening pull request) -->
+- [ ] I have verified that the CircleCI tests have passed. <!-- (check after opening pull request) -->
 - [ ] I have added tests for my changes. <!-- (delete this checklist item if not applicable) -->

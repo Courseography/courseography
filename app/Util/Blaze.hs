@@ -8,12 +8,12 @@ module Util.Blaze
      toLink,
      mdToHTML) where
 
-import           Text.Blaze ((!))
+import qualified Data.Text as T
+import Data.Text.Lazy (Text)
+import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import Text.Markdown (markdown, def)
-import Data.Text.Lazy (Text)
-import qualified Data.Text as T
+import Text.Markdown (def, markdown)
 
 -- |Sets the html attributes to the href of the style sheet.
 toStylesheet :: T.Text -> H.Html

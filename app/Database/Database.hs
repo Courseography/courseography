@@ -9,14 +9,14 @@ inserting it into the database. Run when @cabal run database@ is executed.
 module Database.Database
     (setupDatabase) where
 
-import Database.Persist.Sqlite (runSqlite, runMigration, insert_)
-import Database.Tables
-import WebParsing.ParseAll (parseAll)
-import Database.CourseVideoSeed (seedVideos)
 import Config (databasePath)
-import System.Directory (createDirectoryIfMissing)
-import Data.Text as T (length, findIndex, take, unpack, reverse)
 import Data.Maybe (fromMaybe)
+import Data.Text as T (findIndex, length, reverse, take, unpack)
+import Database.CourseVideoSeed (seedVideos)
+import Database.Persist.Sqlite (insert_, runMigration, runSqlite)
+import Database.Tables
+import System.Directory (createDirectoryIfMissing)
+import WebParsing.ParseAll (parseAll)
 
 
 distTableSetUpStr :: String

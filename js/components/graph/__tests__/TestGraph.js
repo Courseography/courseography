@@ -1,15 +1,15 @@
-import React from "react";
-import Graph from "../Graph";
-import { render, waitFor } from "@testing-library/react";
+import React from "react"
+import { Graph } from "../Graph"
+import { render, waitFor } from "@testing-library/react"
 
 export default class TestGraph {
   constructor(graph) {
     if (typeof graph === "undefined") {
       throw new Error(
         "Cannot call constructor directly. Please call `await TestGraph.build()`"
-      );
+      )
     }
-    this.rtlGraph = graph;
+    this.rtlGraph = graph
   }
 
   /**
@@ -27,12 +27,12 @@ export default class TestGraph {
       setFCECount: () => {},
       incrementFCECount: () => {},
       graphs: [],
-      updateGraph: () => {}
-    };
+      updateGraph: () => {},
+    }
 
-    const rtlGraph = render(<Graph {...graphProps} />);
-    await waitFor(() => rtlGraph.queryByText("AAA100") !== null);
-    return new TestGraph(rtlGraph);
+    const rtlGraph = render(<Graph {...graphProps} />)
+    await waitFor(() => rtlGraph.queryByText("AAA100") !== null)
+    return new TestGraph(rtlGraph)
   }
 
   /**
@@ -40,7 +40,7 @@ export default class TestGraph {
    * @return {DOM Element} -  for example, SVGElement
    */
   getNodeByText(text) {
-    return this.rtlGraph.getByText(text).parentNode;
+    return this.rtlGraph.getByText(text).parentNode
   }
 
   /**
@@ -48,7 +48,7 @@ export default class TestGraph {
    * @returns {DOM Element}
    */
   getByTestId(testId) {
-    return this.rtlGraph.getByTestId(testId);
+    return this.rtlGraph.getByTestId(testId)
   }
 
   /**
@@ -56,6 +56,6 @@ export default class TestGraph {
    * @returns {boolean} - whether the exact text exists on the webpage
    */
   textExists(text) {
-    return this.rtlGraph.queryByText(text) !== null;
+    return this.rtlGraph.queryByText(text) !== null
   }
 }

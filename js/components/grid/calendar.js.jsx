@@ -1,5 +1,5 @@
-import React from 'react';
-import { MapModal } from '../common/react_modal.js.jsx';
+import React from "react"
+import { MapModal } from "../common/react_modal.js.jsx"
 
 /*
  * Holds the containers of the Fall and Spring timetables,
@@ -9,31 +9,33 @@ export class Row extends React.Component {
   render() {
     // Create a list of lecture objects
     let lectures = this.props.lectureSections.map(
-      (lectureSection, index, lectureSections) => createNewLectures(lectureSection, index, lectureSections));
-    lectures = [].concat.apply([], lectures);
+      (lectureSection, index, lectureSections) =>
+        createNewLectures(lectureSection, index, lectureSections)
+    )
+    lectures = [].concat.apply([], lectures)
 
-    let fallLectures = lectures.filter((lecture) => {
-      return lecture.session === 'F' || lecture.session === 'Y'
-    });
+    let fallLectures = lectures.filter(lecture => {
+      return lecture.session === "F" || lecture.session === "Y"
+    })
 
-    let springLectures = lectures.filter((lecture) => {
-      return lecture.session === 'S' || lecture.session === 'Y'
-    });
+    let springLectures = lectures.filter(lecture => {
+      return lecture.session === "S" || lecture.session === "Y"
+    })
 
     // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
-    let fallSession, springSession;
-    [fallSession, springSession] = initializeSessions(lectures);
+    let fallSession, springSession
+    ;[fallSession, springSession] = initializeSessions(lectures)
 
     // For each session, set the 'width' attribute of each Lecture
     // (go to Lecture constructor for definition of 'width')
-    setWidths(fallSession);
-    setWidths(springSession);
+    setWidths(fallSession)
+    setWidths(springSession)
 
     // Fill session colSpans dictionaries
-    let fallColSpans = {'M': 0, 'T': 0, 'W': 0, 'R': 0, 'F': 0};
-    let springColSpans = {'M': 0, 'T': 0, 'W': 0, 'R': 0, 'F': 0};
-    storeColSpans(fallSession, fallColSpans);
-    storeColSpans(springSession, springColSpans);
+    let fallColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
+    let springColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
+    storeColSpans(fallSession, fallColSpans)
+    storeColSpans(springSession, springColSpans)
     // Generate a container for each of the Fall and Spring timetables individually
     return (
       <div className="col-md-9 col-xs-12" id="grid-body">
@@ -50,7 +52,7 @@ export class Row extends React.Component {
           lectures={springLectures}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -69,7 +71,7 @@ class TimetableContainer extends React.Component {
           lectures={this.props.lectures}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -78,28 +80,32 @@ class TimetableContainer extends React.Component {
  */
 class Timetable extends React.Component {
   constructor(props) {
-    super(props);
-    this.modal = React.createRef();
-    this.displayMap = this.displayMap.bind(this);
+    super(props)
+    this.modal = React.createRef()
+    this.displayMap = this.displayMap.bind(this)
   }
 
   displayMap(session) {
-    this.modal.current.openModal();
+    this.modal.current.openModal()
   }
 
   render() {
-    return(
+    return (
       <table className={"timetable table"} id={"timetable-" + this.props.session}>
-        <MapModal ref={this.modal} lectures={this.props.lectures}/>
+        <MapModal ref={this.modal} lectures={this.props.lectures} />
         <TimetableHeader
           session={this.props.session}
           lecturesByTime={this.props.lecturesByTime}
           headColSpans={this.props.headColSpans}
           openMap={this.displayMap}
         />
-        <TimetableBody session={this.props.session} lecturesByTime={this.props.lecturesByTime} headColSpans={this.props.headColSpans}/>
+        <TimetableBody
+          session={this.props.session}
+          lecturesByTime={this.props.lecturesByTime}
+          headColSpans={this.props.headColSpans}
+        />
       </table>
-    );
+    )
   }
 }
 
@@ -109,19 +115,18 @@ class Timetable extends React.Component {
  */
 class TimetableHeader extends React.Component {
   render() {
-    const dayStrings = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-    let colSpans = this.props.headColSpans;
+    const dayStrings = ["Mon", "Tue", "Wed", "Thu", "Fri"]
+    let colSpans = this.props.headColSpans
 
-    let dayCells = [];
+    let dayCells = []
     for (let i = 0; i < 5; i++) {
-      let dayString = dayStrings[i];
+      let dayString = dayStrings[i]
       // Store the React element for this day-cell
       dayCells.push(
-        <th scope="col" colSpan={colSpans[i]}
-          key={"day-header-" + i}>
+        <th scope="col" colSpan={colSpans[i]} key={"day-header-" + i}>
           {dayString}
         </th>
-      );
+      )
     }
 
     if (this.props.session === "F") {
@@ -130,13 +135,17 @@ class TimetableHeader extends React.Component {
           <tr>
             <th className="timetable-dummy-cell"></th>
             <th className="term-name">
-              <img src="/static/res/ico/blue-marker.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
+              <img
+                src="/static/res/ico/blue-marker.png"
+                className="map-icon"
+                onClick={() => this.props.openMap(this.props.session)}
+              />
               Fall
             </th>
             {dayCells}
           </tr>
         </thead>
-      );
+      )
     } else {
       return (
         <thead>
@@ -144,12 +153,16 @@ class TimetableHeader extends React.Component {
             {dayCells}
             <th className="term-name">
               Spring
-              <img src="/static/res/ico/blue-marker.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
+              <img
+                src="/static/res/ico/blue-marker.png"
+                className="map-icon"
+                onClick={() => this.props.openMap(this.props.session)}
+              />
             </th>
             <th className="timetable-dummy-cell"></th>
           </tr>
         </thead>
-      );
+      )
     }
   }
 }
@@ -159,20 +172,20 @@ class TimetableHeader extends React.Component {
  */
 class TimetableBody extends React.Component {
   render() {
-    let rows = [];
+    let rows = []
     // For each row from 8 o'clock to 22 o'clock, there is an 'Hour' and 'Half hour' row
-    for (let i = 8; i < 22; i+=0.5) {
+    for (let i = 8; i < 22; i += 0.5) {
       rows.push(
         <TimetableRow
           session={this.props.session}
           time={i}
-          key={'timetable-row-' + i + this.props.session}
+          key={"timetable-row-" + i + this.props.session}
           currentLectures={this.props.lecturesByTime[i]}
           headColSpans={this.props.headColSpans}
         />
-      );
+      )
     }
-    return <tbody>{rows}</tbody>;
+    return <tbody>{rows}</tbody>
   }
 }
 
@@ -182,38 +195,40 @@ class TimetableBody extends React.Component {
  */
 class TimetableRow extends React.Component {
   render() {
-    let tableData = [];
-    const dummyCell = <td key="timetable-dummy-cell" className="timetable-dummy-cell"></td>;
-    const currTime = this.props.time;
-    const currSess = this.props.session;
+    let tableData = []
+    const dummyCell = (
+      <td key="timetable-dummy-cell" className="timetable-dummy-cell"></td>
+    )
+    const currTime = this.props.time
+    const currSess = this.props.session
 
     // The dictionary of lectures for this hour
-    const currentLectures = this.props.currentLectures;
-    const headColSpans = this.props.headColSpans;
+    const currentLectures = this.props.currentLectures
+    const headColSpans = this.props.headColSpans
 
     for (let day = 0; day < 5; day++) {
       // Variables for calculations
-      const headerColSpan = headColSpans[day];
-      let totalColSpans = 0;
+      const headerColSpan = headColSpans[day]
+      let totalColSpans = 0
 
       // Get the list of lectures at this time-day slot, as well as the list of lectures
       // occuring one hour prior this time-day slot
-      const currentLectureList = currentLectures[day];
+      const currentLectureList = currentLectures[day]
 
       if (currentLectureList.length !== 0) {
         // Render every lecture at this day-time slot (there can be more than one in a conflict case)
         currentLectureList.forEach(lecture => {
-
           // The 'colSpan' of the cells taken by this lecture, in this time-day slot
           // This should always be an integer value, since headerColSpan is the product of all
           // possible lecture widths in that day.
-          const lecColSpan = headerColSpan / lecture.width;
+          const lecColSpan = headerColSpan / lecture.width
 
           if (lecture.startTime === currTime) {
-            const rowSpan = 2 * (lecture.endTime - lecture.startTime);
+            const rowSpan = 2 * (lecture.endTime - lecture.startTime)
             tableData.push(
-              <td id={'' + day.toString() + currTime + '-0' + totalColSpans + currSess}
-                key={'' + day.toString() + currTime + '-0' + totalColSpans + currSess}
+              <td
+                id={"" + day.toString() + currTime + "-0" + totalColSpans + currSess}
+                key={"" + day.toString() + currTime + "-0" + totalColSpans + currSess}
                 data-in-conflict={lecture.inConflict}
                 data-satisfied={lecture.dataSatisfied}
                 rowSpan={rowSpan}
@@ -225,12 +240,12 @@ class TimetableRow extends React.Component {
               >
                 {lecture.courseCode}
               </td>
-            );
+            )
           }
           // Record the total width taken up by this time-day slot so far,
           // from all the lectures generated
-          totalColSpans += lecColSpan;
-        });
+          totalColSpans += lecColSpan
+        })
       }
       // In the case where there are not enough cells to fill the headerColSpan
       // of this time-day cell or if there are no courses to be generated at this time-day cell,
@@ -238,70 +253,79 @@ class TimetableRow extends React.Component {
       // Note: totalColSpans is 0 if there are no courses to be generated at this time-day cell
       for (let i = totalColSpans; i < headerColSpan; i++) {
         tableData.push(
-          <td id={'' + day.toString() + currTime + '-0' + i + currSess}
-            key={'' + day.toString() + currTime + '-0' + i + currSess}
+          <td
+            id={"" + day.toString() + currTime + "-0" + i + currSess}
+            key={"" + day.toString() + currTime + "-0" + i + currSess}
             data-in-conflict="false"
             data-satisfied="true"
             rowSpan="1"
-            className={currTime % 1 === 0 ? "timetable-cell-tophalf" : "timetable-cell-bottomhalf"}>
-          </td>
-        );
+            className={
+              currTime % 1 === 0
+                ? "timetable-cell-tophalf"
+                : "timetable-cell-bottomhalf"
+            }
+          ></td>
+        )
       }
     }
 
     if (currTime % 1 === 0) {
       // Convert <time> to a 12-hour clock system
-      const adjustedTime = (currTime === 12 ? 12 : currTime % 12) + ':00';
-      const timeCell = <td key="timetable-time" className="timetable-time" rowSpan="2">{adjustedTime}</td>
+      const adjustedTime = (currTime === 12 ? 12 : currTime % 12) + ":00"
+      const timeCell = (
+        <td key="timetable-time" className="timetable-time" rowSpan="2">
+          {adjustedTime}
+        </td>
+      )
 
       // Adjust the order at which these cells are rendered
-      if (currSess === 'F') {
-        tableData.unshift(timeCell);
-        tableData.unshift(dummyCell);
-      } else if (currSess === 'S') {
-        tableData.push(timeCell);
-        tableData.push(dummyCell);
+      if (currSess === "F") {
+        tableData.unshift(timeCell)
+        tableData.unshift(dummyCell)
+      } else if (currSess === "S") {
+        tableData.push(timeCell)
+        tableData.push(dummyCell)
       }
     } else {
       // Adjust the order at which these cells are rendered
-      if (this.props.session === 'F') {
-        tableData.unshift(dummyCell);
-      } else if (this.props.session === 'S') {
-        tableData.push(dummyCell);
+      if (this.props.session === "F") {
+        tableData.unshift(dummyCell)
+      } else if (this.props.session === "S") {
+        tableData.push(dummyCell)
       }
     }
-    return <tr>{tableData}</tr>;
+    return <tr>{tableData}</tr>
   }
 }
 
 /**
-  * Helper function to initialize the <fallSession> and <springSession> 2-D dictionaries
-  * @param {list} lectures : List of 'Lecture' objects
-  */
+ * Helper function to initialize the <fallSession> and <springSession> 2-D dictionaries
+ * @param {list} lectures : List of 'Lecture' objects
+ */
 function initializeSessions(lectures) {
-  let fallSession = {};
-  let springSession = {};
-  for (let i = 7; i < 22; i+=0.5) {
-    fallSession[i] = {0: [], 1: [], 2: [], 3: [], 4: []};
-    springSession[i] = {0: [], 1: [], 2: [], 3: [], 4: []};
+  let fallSession = {}
+  let springSession = {}
+  for (let i = 7; i < 22; i += 0.5) {
+    fallSession[i] = { 0: [], 1: [], 2: [], 3: [], 4: [] }
+    springSession[i] = { 0: [], 1: [], 2: [], 3: [], 4: [] }
   }
 
   lectures.forEach(lecture => {
-    if (lecture.session === 'F' || lecture.session === 'Y') {
-      for (let i = lecture.startTime; i < lecture.endTime; i+=0.5) {
+    if (lecture.session === "F" || lecture.session === "Y") {
+      for (let i = lecture.startTime; i < lecture.endTime; i += 0.5) {
         // Store this Lecture in its active time-slot (denoted by <i>),
         // and in the list in its active day slot (denoted by <lecture.day>), in <fallSession>.
-        fallSession[i][lecture.day].push(lecture);
+        fallSession[i][lecture.day].push(lecture)
       }
     }
-    if (lecture.session === 'S' || lecture.session === 'Y') {
+    if (lecture.session === "S" || lecture.session === "Y") {
       // Same process as above for spring lectures in <springSession>
-      for (let i = lecture.startTime; i < lecture.endTime; i+=0.5) {
-        springSession[i][lecture.day].push(lecture);
+      for (let i = lecture.startTime; i < lecture.endTime; i += 0.5) {
+        springSession[i][lecture.day].push(lecture)
       }
     }
-  });
-  return [fallSession, springSession];
+  })
+  return [fallSession, springSession]
 }
 
 /**
@@ -310,29 +334,29 @@ function initializeSessions(lectures) {
  * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
  */
 function setWidths(session) {
-  for (let i = 8; i < 22; i+=0.5) {
-    const timeRow = session[i];
+  for (let i = 8; i < 22; i += 0.5) {
+    const timeRow = session[i]
     // Reset all widths back to 1 and inConflict to false if this time slot is the startTime of
     // the lecture
     for (let day = 0; day < 5; day++) {
-      const timeDaySlot = timeRow[day];
+      const timeDaySlot = timeRow[day]
       timeDaySlot.forEach(lecture => {
         // Do not set the width back to 1 if there is already a conflict (this situation applies to
         // 'Y' session lectures)
         if (lecture.startTime === i && lecture.width === 1) {
-          lecture.width = 1;
-          lecture.inConflict = false;
+          lecture.width = 1
+          lecture.inConflict = false
         }
         // If in this time-and-day slot there is a lecture conflict
         if (lectureConflict(timeDaySlot)) {
           // Readjust (if needed) the 'width's of the lectures at this slot
           if (lecture.width < timeDaySlot.length) {
-            lecture.width = timeDaySlot.length;
+            lecture.width = timeDaySlot.length
           }
           // Also specify that this lecture is in conflict
-          lecture.inConflict = true;
+          lecture.inConflict = true
         }
-      });
+      })
     }
   }
 }
@@ -343,11 +367,11 @@ function setWidths(session) {
  */
 function storeColSpans(session, colSpans) {
   // For each day, stores all possible 'width' values every lecture at that day could have
-  let widths = storeWidths(session);
+  let widths = storeWidths(session)
   for (let day = 0; day < 5; day++) {
     // The 'colSpan' attribute of a header day cell is defined as the product of all
     // possible widths that could occur at that day
-    colSpans[day] = widths[day].reduce((a, b) => a * b, 1);
+    colSpans[day] = widths[day].reduce((a, b) => a * b, 1)
   }
 }
 
@@ -356,33 +380,33 @@ function storeColSpans(session, colSpans) {
  * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
  */
 function storeWidths(session) {
-  let widths = {};
+  let widths = {}
   // Iterate through every time-day slot in the session
   for (let day = 0; day < 5; day++) {
-    widths[day] = [];
-    for (let i = 8; i < 22; i+=0.5) {
-      const timeRow = session[i];
-      const timeDaySlot = timeRow[day];
+    widths[day] = []
+    for (let i = 8; i < 22; i += 0.5) {
+      const timeRow = session[i]
+      const timeDaySlot = timeRow[day]
       // If there are lectures running at this time-day slot
       if (timeDaySlot.length > 0) {
         // Retrieve a lecture width at this time-day slot
-        const width = timeDaySlot[0].width;
+        const width = timeDaySlot[0].width
         // Store the width of this lecture, if it hasn't already been stored
         if (widths[day].indexOf(width) < 0) {
-          widths[day].push(width);
+          widths[day].push(width)
         }
       }
     }
   }
-  return widths;
+  return widths
 }
 
 /**
  * Helper function which returns if there is a course conflict at a time-and-day slot
  * (denoted by the number of courses in the list at this time-and-day slot)
-*/
+ */
 function lectureConflict(courseList) {
-  return courseList.length > 1;
+  return courseList.length > 1
 }
 
 /**
@@ -391,18 +415,21 @@ function lectureConflict(courseList) {
  *                            takes place
  * @return {array} An array of objects representing each disconnected time period the given
  *                  lecture occurs in
-*/
+ */
 function createNewLectures(lectureSection, index, lectureSections) {
   // dataSatisfied is false if a tutorial or practical for a course is selected in a particular session(F or S) and there
   // is no lecture selected for that course in the given session.
-  lectureSection.dataSatisfied = false;
-  const lectureSelected = lectureSections.filter((lecture) => {
-      return lecture.lectureCode.substring(0, 1) === "L" &&
-        lecture.courseCode.substring(0, 6) === lectureSection.courseCode.substring(0, 6) &&
-        lecture.session === lectureSection.session
-  });
+  lectureSection.dataSatisfied = false
+  const lectureSelected = lectureSections.filter(lecture => {
+    return (
+      lecture.lectureCode.substring(0, 1) === "L" &&
+      lecture.courseCode.substring(0, 6) ===
+        lectureSection.courseCode.substring(0, 6) &&
+      lecture.session === lectureSection.session
+    )
+  })
   if (lectureSelected.length > 0) {
-    lectureSection.dataSatisfied = true;
+    lectureSection.dataSatisfied = true
   }
 
   const dayStrings = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -418,8 +445,8 @@ function createNewLectures(lectureSection, index, lectureSections) {
       secRoom: time.secondRoom,
       inConflict: false,
       width: 1,
-      dataSatisfied: lectureSection.dataSatisfied
+      dataSatisfied: lectureSection.dataSatisfied,
     }
-  });
-  return lectures;
+  })
+  return lectures
 }

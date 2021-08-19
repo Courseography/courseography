@@ -1,12 +1,12 @@
 module Response.Post
     (postResponse) where
 
-import           Text.Blaze ((!))
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as A
 import Happstack.Server
 import MasterTemplate
 import Scripts
+import Text.Blaze ((!))
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as A
 
 postResponse :: ServerPart Response
 postResponse =

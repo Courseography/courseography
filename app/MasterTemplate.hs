@@ -1,14 +1,14 @@
 module MasterTemplate
     (masterTemplate, header) where
 
-import           Text.Blaze ((!))
+import Config (enableCdn)
+import qualified Data.Text as T
+import Scripts (globalScripts)
+import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import qualified Data.Text as T
 import Text.Blaze.Internal (textValue)
-import Config (enableCdn)
 import Util.Blaze
-import Scripts (globalScripts)
 
 
 masterTemplate :: T.Text -> [H.Html] -> H.Html -> H.Html -> H.Html

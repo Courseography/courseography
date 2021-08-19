@@ -5,10 +5,10 @@
 module Database.CourseVideoSeed
     (courseVideos, seedVideos) where
 
-import Data.Text (Text)
-import Database.Tables hiding (Text)
-import Database.Persist.Sqlite (runSqlite, updateWhere, (=.), (==.), SqlPersistM)
 import Config (databasePath)
+import Data.Text (Text)
+import Database.Persist.Sqlite (SqlPersistM, runSqlite, updateWhere, (=.), (==.))
+import Database.Tables hiding (Text)
 
 -- | Defines the constant list of ordered pairs pertaining to the routes for
 -- course videos. The first Text variable in each ordered pair is the course.

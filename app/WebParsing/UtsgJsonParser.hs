@@ -3,15 +3,16 @@ module WebParsing.UtsgJsonParser
       getOrgs,
       insertAllMeetings) where
 
-import Data.Aeson ((.:?), (.!=), decode, FromJSON(parseJSON), Value(..), Object)
+import Config (databasePath, orgApiUrl, timetableApiUrl)
+import Control.Monad.IO.Class (liftIO)
+import Data.Aeson (FromJSON (parseJSON), Object, Value (..), decode, (.!=), (.:?))
+import qualified Data.HashMap.Strict as HM
 import Data.Maybe (catMaybes)
 import qualified Data.Text as T
-import qualified Data.HashMap.Strict as HM
-import Control.Monad.IO.Class (liftIO)
+import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, runSqlite, selectFirst, (==.))
+import Database.Tables (Courses (..), EntityField (CoursesCode), MeetTime (..), Meeting (..),
+                        buildTimes)
 import Network.HTTP.Conduit (simpleHttp)
-import Config (databasePath, timetableApiUrl, orgApiUrl)
-import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), MeetTime(..), buildTimes)
-import Database.Persist.Sqlite (runSqlite, insert, SqlPersistM, (==.), insertMany_, selectFirst)
 
 -- | Parse all timetable data.
 getAllCourses :: IO ()
@@ -61,6 +62,6 @@ instance FromJSON DB where
       course <- parseJSON (Object o)
       session :: T.Text <- o .:? "section" .!= "F"
       meetingTimesMap :: HM.HashMap T.Text MeetTime <- o .:? "meetings" .!= HM.empty
-      let allMeetingsTimes = map (\m -> m {meetInfo = (meetInfo m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
+      let allMeetingsTimes = map (\m -> m {meetInfo = (meetInfo m) { meetingCode = coursesCode course, meetingSession = session}}) (HM.elems meetingTimesMap)
       return $ DB (course, allMeetingsTimes)
     parseJSON _ = fail "Invalid section"

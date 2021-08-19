@@ -8,11 +8,11 @@ Module containing test cases for Requirement Parsers.
 module ParserTests.ParserTests
 ( reqTestSuite ) where
 
+import Database.Requirement
+import Test.HUnit (Test (..), assertEqual)
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
-import Database.Requirement
 import WebParsing.ReqParser
-import Test.HUnit ( assertEqual, Test(..) )
 
 -- Function to facilitate test case creation given a string, Req tuple
 createTest :: (Eq a, Show a) => Parser a -> String -> [(String, a)] -> Test
@@ -75,7 +75,7 @@ fcesInputs = [
 
 gradeBefInputs :: [(String, Req)]
 gradeBefInputs = [
-      ("minimum mark of A- in CSC236H1", GRADE "A-" $ J "CSC236H1" "") 
+      ("minimum mark of A- in CSC236H1", GRADE "A-" $ J "CSC236H1" "")
     , ("minimum grade of 75% CSC236H1", GRADE "75" $ J "CSC236H1" "")
     , ("minimum of 75% CSC236H1", GRADE "75" $ J "CSC236H1" "")
     , ("minimum (75%) CSC236H1", GRADE "75" $ J "CSC236H1" "")
@@ -94,8 +94,8 @@ gradeAftInputs = [
     , ("CSC236H1 (75%)", GRADE "75" $ J "CSC236H1" "")
     , ("CSC236H1(75%)", GRADE "75" $ J "CSC236H1" "")
     , ("CSC263H1 (C+)", GRADE "C+" $ J "CSC263H1" "")
-    , ("CSC263H1 B-", GRADE "B-" $ J "CSC263H1" "") 
-    , ("CSC263H1 with a minimum grade of 60%", GRADE "60" $ J "CSC263H1" "") 
+    , ("CSC263H1 B-", GRADE "B-" $ J "CSC263H1" "")
+    , ("CSC263H1 with a minimum grade of 60%", GRADE "60" $ J "CSC263H1" "")
     , ("CSC263H1 with a minimum mark of B-", GRADE "B-" $ J "CSC263H1" "")
     , ("CSC236H1 (at least 75% or more)", GRADE "75" $ J "CSC236H1" "")
     , ("CSC236H1 ( 75% or higher )", GRADE "75" $ J "CSC236H1" "")
@@ -107,12 +107,12 @@ gradeAftInputs = [
 artSciInputs :: [(String, Req)]
 artSciInputs = [
       ("BIO220H1 (ecology and evolutionary biology)", J "BIO220H1" "ecology and evolutionary biology")
-    , ("EEB223H1/ STA220H1 (recommended)/ STA257H1 (recommended)", (OR [J "EEB223H1" "",J "STA220H1" "recommended",J "STA257H1" "recommended"]))
-    , ("EEB223H1 (ecology and evo), STA220H1 (recommended)/ STA257H1 (recommended)", (AND [J "EEB223H1" "ecology and evo",OR [J "STA220H1" "recommended",J "STA257H1" "recommended"]]))
-    , ("EEB223H1 (ecology and evo)/ STA220H1 (recommended)/ STA257H1", (OR [J "EEB223H1" "ecology and evo",J "STA220H1" "recommended",J "STA257H1" ""]))
+    , ("EEB223H1/ STA220H1 (recommended)/ STA257H1 (recommended)", OR [J "EEB223H1" "",J "STA220H1" "recommended",J "STA257H1" "recommended"])
+    , ("EEB223H1 (ecology and evo), STA220H1 (recommended)/ STA257H1 (recommended)", AND [J "EEB223H1" "ecology and evo",OR [J "STA220H1" "recommended",J "STA257H1" "recommended"]])
+    , ("EEB223H1 (ecology and evo)/ STA220H1 (recommended)/ STA257H1", OR [J "EEB223H1" "ecology and evo",J "STA220H1" "recommended",J "STA257H1" ""])
     , ("EEB223H1 (ecology and evo)/ STA220H1 (B-)/ STA257H1", OR [J "EEB223H1" "ecology and evo", GRADE "B-" $ J "STA220H1" "", J "STA257H1" ""])
-    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", (FCES "0.5" $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""]))
-    , ("MATB23H3/STA220H1 (recommended)/STA257H1 (recommended)", (OR [J "MATB23H3" "",J "STA220H1" "recommended",J "STA257H1" "recommended"]))
+    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", FCES "0.5" $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""])
+    , ("MATB23H3/STA220H1 (recommended)/STA257H1 (recommended)", OR [J "MATB23H3" "",J "STA220H1" "recommended",J "STA257H1" "recommended"])
     ]
 
 noPrereqInputs :: [(String, Req)]

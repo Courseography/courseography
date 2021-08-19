@@ -6,7 +6,7 @@ There is an option for you to post schedules and graphs to your Facebook account
 
 ##Changes to this privacy statement
 
-We may amend this Privacy Statement from time to time. If we make changes in the way we use personal information, we will notify you by posting an announcement on our website. Users are bound by any changes to the Privacy Statement when he or she uses or otherwise accesses Courseography after such changes have been first posted. 
+We may amend this Privacy Statement from time to time. If we make changes in the way we use personal information, we will notify you by posting an announcement on our website. Users are bound by any changes to the Privacy Statement when he or she uses or otherwise accesses Courseography after such changes have been first posted.
 
 ##Questions or concerns
 

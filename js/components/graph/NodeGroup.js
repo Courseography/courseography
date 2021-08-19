@@ -1,24 +1,24 @@
-import PropTypes from "prop-types";
-import React from "react";
-import Node from "./Node";
+import PropTypes from "prop-types"
+import React from "react"
+import Node from "./Node"
 
 /** A React component class representing a group of Nodes on the graph */
 export default class NodeGroup extends React.Component {
   /** Returns nodes to their original unselected state, with a status of "takeable" or "inactive" */
   reset = () => {
     this.props.nodesJSON.forEach(nodeJSON => {
-      var node = this[nodeJSON.id_];
-      var state = node.props.parents.length === 0 ? "takeable" : "inactive";
-      node.setState({ status: state, selected: false });
-      localStorage.setItem(node.props.JSON.id_, state);
-    });
+      var node = this[nodeJSON.id_]
+      var state = node.props.parents.length === 0 ? "takeable" : "inactive"
+      node.setState({ status: state, selected: false })
+      localStorage.setItem(node.props.JSON.id_, state)
+    })
 
     this.props.hybridsJSON.forEach(hybridJSON => {
-      var hybrid = this[hybridJSON.id_];
-      var state = hybrid.props.parents.length === 0 ? "takeable" : "inactive";
-      hybrid.setState({ status: state, selected: false });
-      localStorage.setItem(hybrid.props.JSON.id_, state);
-    });
+      var hybrid = this[hybridJSON.id_]
+      var state = hybrid.props.parents.length === 0 ? "takeable" : "inactive"
+      hybrid.setState({ status: state, selected: false })
+      localStorage.setItem(hybrid.props.JSON.id_, state)
+    })
   }
 
   /**
@@ -27,12 +27,12 @@ export default class NodeGroup extends React.Component {
    * @return
    */
   setRefEntry = entry => {
-    return (elem) => elem && (this[entry.id_] = elem);
+    return elem => elem && (this[entry.id_] = elem)
   }
 
   render() {
-    var svg = this.props.svg;
-    var highlightedNodes = this.props.highlightedNodes;
+    var svg = this.props.svg
+    var highlightedNodes = this.props.highlightedNodes
     return (
       <g id="nodes">
         {this.props.hybridsJSON.map(entry => {
@@ -51,10 +51,10 @@ export default class NodeGroup extends React.Component {
               logicalType={"AND"}
               nodeDropshadowFilter={this.props.nodeDropshadowFilter}
             />
-          );
+          )
         })}
         {this.props.nodesJSON.map(entry => {
-          var highlighted = highlightedNodes.indexOf(entry.id_) >= 0;
+          var highlighted = highlightedNodes.indexOf(entry.id_) >= 0
           return (
             <Node
               JSON={entry}
@@ -75,14 +75,12 @@ export default class NodeGroup extends React.Component {
               editMode={this.props.editMode}
               nodeDropshadowFilter={this.props.nodeDropshadowFilter}
             />
-          );
+          )
         })}
       </g>
-    );
+    )
   }
 }
-
-
 
 NodeGroup.propTypes = {
   edgesJSON: PropTypes.array,
@@ -96,5 +94,5 @@ NodeGroup.propTypes = {
   nodesJSON: PropTypes.array,
   connections: PropTypes.object,
   svg: PropTypes.object,
-  nodeDropshadowFilter: PropTypes.string
-};
+  nodeDropshadowFilter: PropTypes.string,
+}

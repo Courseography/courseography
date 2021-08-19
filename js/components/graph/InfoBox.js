@@ -1,10 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from "react"
+import PropTypes from "prop-types"
 
 export default class InfoBox extends React.Component {
-
   render() {
-    var className = this.props.showInfoBox ? "tooltip-group-display" : "tooltip-group-hidden";
+    var className = this.props.showInfoBox
+      ? "tooltip-group-display"
+      : "tooltip-group-hidden"
 
     var rectAttrs = {
       id: this.props.nodeId + "-tooltip" + "-rect",
@@ -16,14 +17,14 @@ export default class InfoBox extends React.Component {
       stroke: "black",
       strokeWidth: "2",
       width: "60",
-      height: "30"
-    };
+      height: "30",
+    }
 
     var textAttrs = {
       id: this.props.nodeId + "-tooltip" + "-text",
       x: this.props.xPos + 60 / 2 - 18,
-      y: this.props.yPos + 30 / 2 + 6
-    };
+      y: this.props.yPos + 30 / 2 + 6,
+    }
 
     return (
       <g
@@ -36,10 +37,9 @@ export default class InfoBox extends React.Component {
         <rect {...rectAttrs} />
         <text {...textAttrs}>Info</text>
       </g>
-    );
+    )
   }
 }
-
 
 InfoBox.propTypes = {
   showInfoBox: PropTypes.bool,
@@ -48,5 +48,5 @@ InfoBox.propTypes = {
   yPos: PropTypes.number,
   onClick: PropTypes.func,
   onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func
+  onMouseLeave: PropTypes.func,
 }

@@ -1,22 +1,23 @@
 module WebParsing.PostParser
     (addPostToDatabase) where
 
-import qualified Data.Text as T
-import Data.Either (fromRight)
-import Data.List (find)
-import Data.Text (strip)
 import Control.Monad.Trans (liftIO)
+import Data.Either (fromRight)
+import Data.Functor (void)
+import Data.List (find)
+import Data.List.Split (keepDelimsL, split, splitWhen, whenElt)
+import Data.Text (strip)
+import qualified Data.Text as T
+import Database.DataType (PostType (..))
+import Database.Persist (insertUnique)
+import Database.Persist.Sqlite (SqlPersistM, insert_)
+import Database.Tables
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Data.List.Split (split, splitWhen, whenElt, keepDelimsL)
-import Database.Tables
-import Database.DataType (PostType(..))
-import Database.Persist.Sqlite (insert_, SqlPersistM)
-import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import Text.Parsec.Text (Parser)
-import WebParsing.ReqParser (parseReqs)
 import WebParsing.ParsecCombinators (parseUntil, text)
+import WebParsing.ReqParser (parseReqs)
 
 
 addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
@@ -36,7 +37,7 @@ addPostToDatabase programElements = do
                     mapM_ (insert_ . PostCategory key) requirements
                 Nothing -> return ()
     where
-        isRequirementSection tag = or [tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag, tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag]
+        isRequirementSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag || tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag
 
 
 -- | Parse a Post value from its title.
@@ -50,8 +51,8 @@ postInfoParser = do
     where
         parseDepartmentName :: Parser T.Text
         parseDepartmentName = parseUntil $ P.choice [
-            P.lookAhead parsePostType >> return (),
-            P.char '(' >> return ()
+            void (P.lookAhead parsePostType),
+            void (P.char '(')
             ]
 
         parsePostType :: Parser PostType
@@ -78,7 +79,7 @@ reqHtmlToLines tags =
 
         isNoteSection :: [Tag T.Text] -> Bool
         isNoteSection (sectionTitleTag:_) =
-            isTagText sectionTitleTag && (any (flip T.isInfixOf $ fromTagText $ sectionTitleTag) ["Notes", "NOTES"])
+            isTagText sectionTitleTag && any (flip T.isInfixOf $ fromTagText sectionTitleTag) ["Notes", "NOTES"]
         isNoteSection [] = False
 
         splitLines :: [Tag T.Text] -> [[Tag T.Text]]
@@ -95,7 +96,7 @@ parseRequirement :: [T.Text] -> [T.Text]
 parseRequirement requirement = map parseSingleReq $ filter isReq requirement
     where
         isReq t = T.length t >= 7 &&
-            not (any (flip T.isInfixOf $ t) ["First", "Second", "Third", "Higher"])
+            not (any (`T.isInfixOf` t) ["First", "Second", "Third", "Higher"])
 
         parseSingleReq =
             T.pack . show .

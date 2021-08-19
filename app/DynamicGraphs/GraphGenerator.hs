@@ -8,31 +8,25 @@ module DynamicGraphs.GraphGenerator
   )
   where
 
-import Data.GraphViz.Attributes as A
-import Data.GraphViz.Attributes.Complete as AC
-import Data.GraphViz.Types.Generalised (
-  DotEdge(..),
-  DotGraph(..),
-  DotNode(..),
-  DotStatement(..),
-  GlobalAttributes(..)
-  )
-import DynamicGraphs.CourseFinder (lookupCourses)
-import qualified Data.Map.Strict as Map
-import Database.Requirement (Req(..))
-import Data.Sequence as Seq
-import Data.Hash.MD5 (Str(Str), md5s)
-import Data.Text.Lazy (Text, pack, isPrefixOf, isInfixOf, last, take)
-import Data.Containers.ListUtils (nubOrd)
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
-import Control.Monad (liftM)
-import DynamicGraphs.GraphOptions (GraphOptions(..), defaultGraphOptions)
-import Prelude hiding (last)
-import Data.Maybe (fromMaybe, mapMaybe)
-import Data.Graph (Tree(Node))
+import Data.Containers.ListUtils (nubOrd)
 import Data.Foldable (toList)
+import Data.Graph (Tree (Node))
+import Data.GraphViz.Attributes as A
+import Data.GraphViz.Attributes.Complete as AC
+import Data.GraphViz.Types.Generalised (DotEdge (..), DotGraph (..), DotNode (..),
+                                        DotStatement (..), GlobalAttributes (..))
+import Data.Hash.MD5 (Str (Str), md5s)
 import Data.List (elemIndex)
+import qualified Data.Map.Strict as Map
+import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Sequence as Seq
+import Data.Text.Lazy (Text, isInfixOf, isPrefixOf, last, pack, take)
+import Database.Requirement (Req (..))
+import DynamicGraphs.CourseFinder (lookupCourses)
+import DynamicGraphs.GraphOptions (GraphOptions (..), defaultGraphOptions)
+import Prelude hiding (last)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
@@ -68,7 +62,7 @@ sampleGraph = fst $ State.runState (reqsToGraph
 --  multiple Reqs using the same GRADE requirement
 reqsToGraph :: GraphOptions -> [(Text, Req)] -> State GeneratorState (DotGraph Text)
 reqsToGraph options reqs = do
-    allStmts <- liftM concatUnique $ mapM (reqToStmts options) reqs
+    allStmts <- concatUnique <$> mapM (reqToStmts options) reqs
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . concat
@@ -190,7 +184,7 @@ reqToStmtsTree options parentID (FCES creds req) = do
 
 
 prefixedByOneOf :: Text -> [Text] -> Bool
-prefixedByOneOf name = any (flip isPrefixOf name)
+prefixedByOneOf name = any (`isPrefixOf` name)
 
 makeNode :: Text -> Maybe Color -> State GeneratorState (DotNode Text)
 makeNode name nodeCol = do
@@ -229,7 +223,7 @@ makeEdge id1 id2 description =
             Just a -> [textLabel a]
 
 mappendTextWithCounter :: Text -> Integer -> Text
-mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show counter))
+mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` pack (show counter)
 
 -- ** Graphviz configuration
 

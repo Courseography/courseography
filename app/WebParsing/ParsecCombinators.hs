@@ -4,8 +4,8 @@ module WebParsing.ParsecCombinators
      text,
      parseUntil) where
 
-import qualified Text.Parsec as P
 import qualified Data.Text as T
+import qualified Text.Parsec as P
 import Text.Parsec.Text (Parser)
 
 

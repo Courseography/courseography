@@ -16,24 +16,25 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs, parseDynamicSvg) where
 
-import Data.Maybe (fromMaybe)
-import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
-import Database.Persist.Sqlite (runSqlite, SqlPersistM)
-import Text.HTML.TagSoup (Tag)
+import Config (databasePath, graphPath)
 import Control.Monad.IO.Class (liftIO)
-import Database.Tables hiding (graphWidth, paths, texts, shapes, graphHeight)
-import Database.DataType
-import Svg.Database (insertGraph, insertElements, deleteGraphs)
-import Config (graphPath, databasePath)
-import qualified Text.Parsec as P
-import Text.Parsec ((<|>))
-import Text.Parsec.String (Parser)
-import Text.Read (readMaybe)
+import Data.Bifunctor (bimap)
 import Data.Char (isSpace)
 import Data.List as List
+import Data.List.Split (splitOn)
+import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
-import Data.List.Split (splitOn)
+import Database.DataType
+import Database.Persist.Sqlite (SqlPersistM, runSqlite)
+import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
+import Svg.Database (deleteGraphs, insertElements, insertGraph)
+import Text.HTML.TagSoup (Tag)
+import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
+import Text.Parsec ((<|>))
+import qualified Text.Parsec as P
+import Text.Parsec.String (Parser)
+import Text.Read (readMaybe)
 
 
 parsePrebuiltSvgs :: IO ()
@@ -193,7 +194,7 @@ parseRect key tags =
     let
         rectOpenTags = filter (\tag -> TS.isTagOpenName "rect" tag || TS.isTagOpenName "polygon" tag) tags
     in
-        map (\tag -> if (TS.isTagOpenName "rect" tag) then makeRect tag else makePoly tag) rectOpenTags
+        map (\tag -> if TS.isTagOpenName "rect" tag then makeRect tag else makePoly tag) rectOpenTags
     where
         gOpen = head tags
         styles' = styles gOpen
@@ -204,8 +205,9 @@ parseRect key tags =
             updateShape fill' $
                 Shape key
                   ""
-                  (readAttr "x" rectOpenTag + fst trans,
-                   readAttr "y" rectOpenTag + snd trans)
+                  (bimap
+                   (readAttr "x" rectOpenTag +) (readAttr "y" rectOpenTag +)
+                   trans)
                   (readAttr "width" rectOpenTag)
                   (readAttr "height" rectOpenTag)
                   fill'
@@ -213,15 +215,15 @@ parseRect key tags =
                   []
                   Node
         makePoly polyOpenTag =
-          let points = map (\coord -> parseCoord $ T.pack coord) $ splitOn " " $ T.unpack $ fromAttrib "points" polyOpenTag
+          let points = map (parseCoord . T.pack) $ splitOn " " $ T.unpack $ fromAttrib "points" polyOpenTag
           in
             updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
                 (fromAttrib "id" $ head tags)
-                ((fst $ points !! 1) + fst trans, -- get x value
-                (snd $ points !! 1) + snd trans) -- get y value
-                ((fst $ points !! 0) - (fst $ points !! 1)) -- calculate width
-                ((snd $ points !! 2) - (snd $ points !! 1)) -- calculate height
+                (fst (points !! 1) + fst trans, -- get x value
+                snd (points !! 1) + snd trans) -- get y value
+                (fst (head points) - fst (points !! 1)) -- calculate width
+                (snd (points !! 2) - snd (points !! 1)) -- calculate height
                 fill
                 ""
                 []
@@ -237,8 +239,8 @@ parsePath key tags =
     where
         trans = getTransform $ head tags
         edgeInfo =
-            if (length splitArr) == 2
-                then (T.pack (splitArr !! 0), T.pack (splitArr !! 1)) -- not super type-safe
+            if length splitArr == 2
+                then (T.pack (head splitArr), T.pack (splitArr !! 1)) -- not super type-safe
                 else ("", "")
             where splitArr = splitOn "|" (T.unpack (fromAttrib "id" $ head tags))
 
@@ -256,17 +258,15 @@ parsePathHelper key trans (src, dst) pathTag =
         fillAttr = styleVal "fill" styles'
         isRegion = not (T.null fillAttr) && fillAttr /= "none"
     in
-        if T.null d || null realD || (T.last d == 'z' && not isRegion)
-    then []
-    else [updatePath fillAttr $
-            Path key
-                ""
-                (removeDups realD)
-                ""
-                ""
-                isRegion
-                src
-                dst]
+        [updatePath fillAttr $
+        Path key
+            ""
+            (removeDups realD)
+            ""
+            ""
+            isRegion
+            src
+            dst | not (T.null d || null realD || (T.last d == 'z' && not isRegion))]
     where
         -- Remove consecutive duplicated points
         removeDups :: Eq a => [a] -> [a]

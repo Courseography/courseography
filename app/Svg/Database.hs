@@ -10,15 +10,15 @@ here as well at some point in the future.
 module Svg.Database
     (insertGraph, insertElements, deleteGraphs) where
 
-import Database.Persist.Sqlite
-import Database.Tables hiding (graphWidth, graphHeight, graphDynamic, paths, shapes, texts)
 import qualified Data.Text as T
+import Database.Persist.Sqlite
+import Database.Tables hiding (graphDynamic, graphHeight, graphWidth, paths, shapes, texts)
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: T.Text   -- ^ The title of the graph that is being inserted.
             -> Double   -- ^ The width dimension of the graph
             -> Double   -- ^ The height dimension of the graph
-            -> Bool     -- ^ True if graph is dynamically generated            
+            -> Bool     -- ^ True if graph is dynamically generated
             -> SqlPersistM GraphId -- ^ The unique identifier of the inserted graph.
 insertGraph graphName graphWidth graphHeight graphDynamic = do
     runMigration migrateAll

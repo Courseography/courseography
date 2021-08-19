@@ -1,15 +1,15 @@
 {-# LANGUAGE FlexibleContexts #-}
 module WebParsing.ReqParser where
 
+import Data.Char (isSpace, toLower, toUpper)
+import Database.Requirement
+import Text.Parsec ((<|>))
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
-import Text.Parsec ((<|>))
-import Database.Requirement
-import Data.Char (toLower, toUpper, isSpace)
 
 -- define separators
 fromSeparator :: Parser String
-fromSeparator = Parsec.spaces 
+fromSeparator = Parsec.spaces
                 >> Parsec.choice (map (Parsec.try . Parsec.string) [
             "of any of the following:",
             "from the following: ",
@@ -23,7 +23,7 @@ completionPrefix = Parsec.choice (map (Parsec.try . Parsec.string) [
     "Completion of at least",
     "Completion of a minimum of",
     "Completion of"
-    ]) 
+    ])
     >> Parsec.spaces
 
 fceSeparator :: Parser ()
@@ -38,10 +38,10 @@ fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
             >> Parsec.spaces
 
 includingSeparator :: Parser String
-includingSeparator = Parsec.optional (Parsec.string ",") 
+includingSeparator = Parsec.optional (Parsec.string ",")
                      >> Parsec.spaces
                      >> Parsec.string "including"
-                     
+
 
 lParen :: Parser Char
 lParen = Parsec.char '('
@@ -111,15 +111,14 @@ letterParser :: Parser String
 letterParser = do
     letter <- Parsec.try (do
         letterGrade <- Parsec.oneOf "ABCDEF"
-        Parsec.notFollowedBy $ Parsec.letter
+        Parsec.notFollowedBy Parsec.letter
         return letterGrade)
     plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
     return $ letter : plusminus
 
 infoParser :: Parser String
 infoParser= do
-    info <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
-    return $ info
+    Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
 
 
 -- | Parser for a grade, which can be in one of the following forms:
@@ -144,8 +143,7 @@ coBefParser = do
     grade <- cutoffHelper <|> gradeParser
     Parsec.spaces
     _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
-    req <- singleParser
-    return $ GRADE grade req
+    GRADE grade <$> singleParser
 
     where
     cutoffHelper = do
@@ -180,7 +178,7 @@ coAftParser = do
         _ <- Parsec.manyTill (Parsec.noneOf "()")
             (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
                 _ <- gradeParser
-                Parsec.notFollowedBy $ Parsec.alphaNum
+                Parsec.notFollowedBy Parsec.alphaNum
                 return "")))
         grade <- gradeParser
         Parsec.spaces
@@ -247,8 +245,7 @@ justParser = do
     where
     markInfoParser :: Parser (Either String String)
     markInfoParser = do
-        grade <- Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
-        return grade
+        Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
 
 -- parse for single course with or without cutoff OR a req within parentheses
 courseParser :: Parser Req
@@ -293,14 +290,14 @@ andParser = do
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
 fcesParser :: Parser Req
-fcesParser = do 
+fcesParser = do
     _ <- Parsec.optional completionPrefix
     fces <- creditsParser
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
     req <- Parsec.try andParser <|> Parsec.try orParser
-    return $ FCES fces req  
+    return $ FCES fces req
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req

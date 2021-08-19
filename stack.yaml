@@ -5,7 +5,7 @@ flags:
     _regex-posix-clib: true
 extra-package-dbs: []
 packages:
-- .
+  - .
 allow-newer: true
 extra-deps:
   - diagrams-lib-1.4.3
@@ -16,7 +16,10 @@ extra-deps:
   - monoid-extras-0.5.1
   - svg-builder-0.1.1
   - regex-posix-clib-2.7
+  - stylish-haskell-0.12.0.0
+  - hlint-3.2.7
+  - apply-refact-0.9.2.0
 compiler-check: newer-minor
 resolver: lts-17.10
 dump-logs: all
-require-stack-version: ! '>= 1.6'
+require-stack-version: ! ">= 1.6"

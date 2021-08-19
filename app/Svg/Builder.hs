@@ -19,9 +19,9 @@ module Svg.Builder
 
 import Data.Char (toLower)
 import Data.List (find)
-import Database.Tables hiding (texts, shapes)
-import Database.DataType
 import qualified Data.Text as T
+import Database.DataType
+import Database.Tables hiding (shapes, texts)
 
 -- * Builder functions
 
@@ -75,7 +75,7 @@ buildRect texts entity elementId =
         id_ = case shapeType_ entity of
               Hybrid -> T.pack $ 'h' : show elementId
               Node -> if shapeId_ entity == ""
-                  then T.map toLower . sanitizeId $ textString 
+                  then T.map toLower . sanitizeId $ textString
                   else shapeId_ entity
               BoolNode -> shapeId_ entity
               Region -> ""
@@ -100,8 +100,8 @@ buildEllipses texts entity elementId =
                               ) texts
     in
         entity {
-            shapeId_ = 
-                if shapeId_ entity == "" 
+            shapeId_ =
+                if shapeId_ entity == ""
                     then T.pack $ "bool" ++ show elementId
                     else shapeId_ entity,
             shapeText = ellipseText
@@ -169,7 +169,7 @@ intersectsWithShape shapes text =
 
 -- | Strips disallowed characters from string for DOM id
 sanitizeId :: T.Text -> T.Text
-sanitizeId = T.filter (\c -> notElem c (",()/<>% " :: String))
+sanitizeId = T.filter (\c -> c `notElem` (",()/<>% " :: String))
 
 -- | Return shape tolerance according to type of shape.
 -- BoolNode is with 20.0 tolerance, which Node and Hybrid are with 9.0 tolerance.

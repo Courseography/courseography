@@ -5,10 +5,10 @@
 module Export.PdfGenerator
     (createPDF) where
 
-import System.Process (createProcess, shell, waitForProcess, ProcessHandle)
-import GHC.IO.Handle.Types
-import Export.ImageConversion (removeFile)
 import Data.List.Utils (replace)
+import Export.ImageConversion (removeFile)
+import GHC.IO.Handle.Types
+import System.Process (ProcessHandle, createProcess, shell, waitForProcess)
 
 -- | Opens a new process to create a PDF from a TEX (texName) and deletes
 -- the tex file and extra files created by pdflatex

@@ -9,20 +9,20 @@ starts the server.
 -}
 module Main where
 
-import System.IO (stderr, hPutStrLn)
-import System.Environment (getArgs)
-import Data.Maybe (fromMaybe)
 import Data.List (intercalate)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (fromMaybe)
+import System.Environment (getArgs)
+import System.IO (hPutStrLn, stderr)
 
 -- internal dependencies
-import Server (runServer)
 import Database.Database (setupDatabase)
+import Server (runServer)
 import Svg.Parser (parsePrebuiltSvgs)
 import Util.Documentation (generateDocs)
 
 -- dynamic graph generation
-import DynamicGraphs.WriteRunDot(generatePrereqsForCourses)
+import DynamicGraphs.WriteRunDot (generatePrereqsForCourses)
 
 -- | A map of command-line arguments to their corresponding IO actions.
 taskMap :: Map.Map String ([String] -> IO ())

@@ -11,15 +11,17 @@
     "$": "readonly",
     "getURLParameter": "readonly"
   },
-  "overrides": [{
-    "files": ["*.js"],
-    "env": {
-      "jest": true,
-      "node": true,
-      "es6": true
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "env": {
+        "jest": true,
+        "node": true,
+        "es6": true
+      }
     }
-  }],
-  "parser": "babel-eslint",
+  ],
+  "parser": "@babel/eslint-parser",
   "rules": {
     "no-console": "off",
     "react/no-find-dom-node": "off",

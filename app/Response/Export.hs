@@ -2,16 +2,16 @@ module Response.Export
     (returnPDF, exportTimetableImageResponse, exportTimetablePDFResponse) where
 
 import Control.Monad.IO.Class (liftIO)
-import Happstack.Server
 import qualified Data.ByteString as BS
+import Data.ByteString.Base64.Lazy as BEnc
 import qualified Data.ByteString.Lazy as L
+import qualified Data.Text as T
 import Export.GetImages
 import Export.ImageConversion (removeFile)
-import Export.PdfGenerator
 import Export.LatexGenerator
+import Export.PdfGenerator
+import Happstack.Server
 import Response.Image (returnImageData)
-import qualified Data.Text as T
-import Data.ByteString.Base64.Lazy as BEnc
 
 -- | Returns an image of the timetable requested by the user.
 exportTimetableImageResponse :: T.Text -> String -> ServerPart Response

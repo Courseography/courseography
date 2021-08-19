@@ -2,24 +2,25 @@ module DynamicGraphs.WriteRunDot where
 
 import Control.Monad (forM_)
 import Control.Monad.IO.Class (liftIO)
-import Data.GraphViz hiding (Str)
-import System.FilePath (combine, normalise)
-import System.Directory (createDirectoryIfMissing)
-import DynamicGraphs.GraphGenerator (coursesToPrereqGraph, coursesToPrereqGraphExcluding, graphProfileHash)
-import Happstack.Server (ServerPart, askRq)
-import Happstack.Server.Types (takeRequestBody, unBody)
-import Happstack.Server.SimpleHTTP (Response)
-import qualified Data.Text as T
+import Data.Aeson (decode)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
-import Svg.Parser (parseDynamicSvg)
-import Data.Text.Encoding (decodeUtf8)
-import Data.Hash.MD5 (Str(Str), md5s)
-import Database.CourseQueries (getGraph)
-import Data.Aeson (decode)
-import Data.Maybe (fromMaybe, fromJust)
+import Data.GraphViz hiding (Str)
+import Data.Hash.MD5 (Str (Str), md5s)
 import Data.List (sort)
-import DynamicGraphs.GraphOptions (GraphOptions(..), CourseGraphOptions(..))
+import Data.Maybe (fromJust, fromMaybe)
+import qualified Data.Text as T
+import Data.Text.Encoding (decodeUtf8)
+import Database.CourseQueries (getGraph)
+import DynamicGraphs.GraphGenerator (coursesToPrereqGraph, coursesToPrereqGraphExcluding,
+                                     graphProfileHash)
+import DynamicGraphs.GraphOptions (CourseGraphOptions (..), GraphOptions (..))
+import Happstack.Server (ServerPart, askRq)
+import Happstack.Server.SimpleHTTP (Response)
+import Happstack.Server.Types (takeRequestBody, unBody)
+import Svg.Parser (parseDynamicSvg)
+import System.Directory (createDirectoryIfMissing)
+import System.FilePath (combine, normalise)
 
 doDots :: PrintDotRepr dg n => [(FilePath, dg n)] -> IO ()
 doDots cases = do

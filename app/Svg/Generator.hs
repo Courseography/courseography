@@ -11,34 +11,24 @@ as well as generating images on the fly for Facebook posting.
 module Svg.Generator
     (buildSVG) where
 
-import Svg.Builder
-import Database.Tables hiding (texts, paths)
-import Database.DataType
+import Config (databasePath)
 import Control.Monad.IO.Class (liftIO)
-import Database.Persist.Sqlite
+import Css.Constants (aiDark, boolFontSize, graphicsDark, hciDark, hybridFontSize, introDark,
+                      mathDark, nodeFontSize, numDark, regionFontSize, seDark, systemsDark,
+                      theoryDark)
+import qualified Data.Map.Strict as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
+import Database.DataType
+import Database.Persist.Sqlite
+import Database.Tables hiding (paths, texts)
+import Svg.Builder
+import Text.Blaze (toMarkup)
+import Text.Blaze.Internal (stringValue, textValue)
+import Text.Blaze.Svg.Renderer.String (renderSvg)
 import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
-import Text.Blaze.Svg.Renderer.String (renderSvg)
-import Text.Blaze.Internal (stringValue, textValue)
-import Text.Blaze (toMarkup)
-import Css.Constants (theoryDark,
-                      seDark,
-                      systemsDark,
-                      hciDark,
-                      graphicsDark,
-                      numDark,
-                      aiDark,
-                      introDark,
-                      mathDark,
-                      nodeFontSize,
-                      hybridFontSize,
-                      boolFontSize,
-                      regionFontSize)
-import qualified Data.Map.Strict as M
-import Config (databasePath)
 
 
 -- | This is the main function that retrieves a stored graph
@@ -252,13 +242,10 @@ textToSVG styled type_ xPos' text =
             Region -> regionFontSize
             _ -> nodeFontSize
 
-        fill =
-            if type_ == Hybrid
-            then A.fill "white"
-            else
-                if T.null $ textFill text
-                then mempty
-                else A.fill $ textValue $ textFill text
+        fill
+          | type_ == Hybrid = A.fill "white"
+          | T.null $ textFill text = mempty
+          | otherwise = A.fill $ textValue $ textFill text
 
         baseStyles = mconcat
             [A.stroke "none",

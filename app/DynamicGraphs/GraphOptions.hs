@@ -1,6 +1,6 @@
 module DynamicGraphs.GraphOptions where
 
-import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), withObject)
+import Data.Aeson (FromJSON (parseJSON), withObject, (.!=), (.:?))
 import qualified Data.Text.Lazy as T
 
 data GraphOptions =
