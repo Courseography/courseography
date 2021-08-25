@@ -68,7 +68,9 @@ class Grid extends React.Component {
     }
 
     // Enable "Export" link
-    $("#nav-export").click(() => this.exportModal.openModal())
+    document.getElementById("nav-export")?.addEventListener("click", () => {
+      this.exportModal.openModal()
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {

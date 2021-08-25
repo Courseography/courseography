@@ -85,7 +85,7 @@ function makeNode(posX, posY, jsonObj) {
   } else {
     var nodeWidth = 40
     var nodeHeight = 32
-    var nodeFill = "#" + $("#select-colour").val()
+    var nodeFill = "#" + document.getElementById("select-colour").value
     var nodeId_ = "n" + nodeId
     var nodeTolerance = 9
 
@@ -472,7 +472,7 @@ function finishRegion() {
     curPath.elbows.length >= 3
   ) {
     curPath.setAttributeNS(null, "d", curPath.getAttribute("d") + "Z")
-    curPath.setAttributeNS(null, "style", "fill:#" + $("#select-colour").val())
+    curPath.setAttributeNS(null, "style", "fill:#" + document.getElementById("select-colour").value)
     curPath.addEventListener("mousedown", regionClicked, false)
     curPath.setAttributeNS(null, "pointer-events", "boundingBox") // to solve point in polygon problem
     curPath.setAttributeNS(null, "class", "region")

@@ -1,29 +1,21 @@
 /* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */
 
-$('.mode').each(function () {
-    'use strict';
+for (const node of document.getElementsByClassName('mode')) {
+    node.addEventListener('click', () => changeMode(node.id))
+}
 
-    $(this).click(function () {
-        changeMode(this.id);});
-    });
-
-$('#add-text').click(function () {
-    addText();
-    });
-
-$('#finish-region').click(function () {
-    finishRegion();
-    });
+document.getElementById('add-text').addEventListener('click', addText)
+document.getElementById('finish-region').addEventListener('click', finishRegion)
 
 $('#colour-table').on('click', 'td', function() {
     document.getElementById('select-colour').jscolor.fromString($(this).css('backgroundColor'));
 });
 
-$('#save-graph').click(function () {
+document.getElementById('save-graph').addEventListener('click', () => {
     $.ajax({
         url: '/save-json',
         data: {'jsonData' : convertSvgToJson(),
-               'nameData' : $('#area-of-study').val()},
+               'nameData' : document.getElementById('area-of-study').value},
         method: 'POST',
         success: function(status) {
             console.log(status);
@@ -34,23 +26,23 @@ $('#save-graph').click(function () {
     });
 });
 
-$('#submit-graph-name').click(function() {
-       $.ajax({
-            url: '/get-json-data',
-            data: {graphName : $('#area-of-study').val()},
-            dataType: 'json',
-            success: function(data) {
-                var div = document.getElementById('main');
-                document.body.removeChild(div);
-                setupSVGCanvas();
-                svgDoc.appendChild(setupMarker());
-                renderJson(JSON.stringify(data));
-            },
-            error: function(xhr, status, err) {
-                console.error('graphs', status, err.toString());
-            }
-        });
+document.getElementById('submit-graph-name').addEventListener('click', () => {
+    $.ajax({
+        url: '/get-json-data',
+        data: {graphName : document.getElementById('area-of-study').value},
+        dataType: 'json',
+        success: function(data) {
+            var div = document.getElementById('main');
+            document.body.removeChild(div);
+            setupSVGCanvas();
+            svgDoc.appendChild(setupMarker());
+            renderJson(JSON.stringify(data));
+        },
+        error: function(xhr, status, err) {
+            console.error('graphs', status, err.toString());
+        }
     });
+});
 
 document.addEventListener('keydown', keyboard, false);
 
@@ -62,7 +54,7 @@ document.addEventListener('keydown', keyboard, false);
 function keyboard(e) {
     'use strict';
 
-    if (! $("#course-code").is(":focus")) {
+    if (document.getElementById("course-code") == document.activeElement) {
         if (e.which === 78) {
             changeMode("node-mode"); // n
         } else if (e.which === 80) {
@@ -87,7 +79,7 @@ function keyboard(e) {
 function changeMode(id) {
     'use strict';
 
-    $('#' + mode).toggleClass('clicked');
+    document.getElementById(mode).classList.toggle('clicked');
 
     if (mode === 'path-mode') {
         // clean up partial temp path
@@ -117,7 +109,7 @@ function changeMode(id) {
     }
 
     mode = id;
-    $('#' + mode).toggleClass('clicked');
+    document.getElementById(mode).classList.toggle('clicked');
 }
 
 

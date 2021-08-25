@@ -6,10 +6,6 @@ import testContainerData from "./components/graph/__mocks__/testContainerData"
 import aaa100CourseInfo from "./components/graph/__mocks__/aaa100-course-info"
 import statisticsTestData from "./components/graph/__mocks__/statisticsTestData"
 import fetchMock from "fetch-mock"
-import $ from "../public/js/vendor/jquery.min.1.10.2"
-
-// Need to import jQuery globally as we are loading it through Haskell
-global.$ = global.jQuery = $
 
 fetchMock.get("http://localhost/get-json-data?graphName=Computer+Science", testData)
 fetchMock.get(

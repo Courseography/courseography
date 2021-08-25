@@ -1,5 +1,6 @@
 const path = require("path")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const webpack = require("webpack")
 
 const presets = [
   ["@babel/preset-env", { useBuiltIns: "usage", corejs: 3 }],
@@ -55,6 +56,10 @@ module.exports = {
       // both options are optional
       filename: "[name].css",
       chunkFilename: "[id].css",
+    }),
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
     }),
   ],
   mode: "development",

@@ -3,7 +3,6 @@ module MasterTemplate
 
 import Config (enableCdn)
 import qualified Data.Text as T
-import Scripts (globalScripts)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
@@ -31,7 +30,6 @@ masterTemplate title headers body scripts =
                 "/static/style/app.css"]
         H.body $ do
             body
-            mapM_ toScript globalScripts
             scripts
 
 -- Insert the header of the Grid and Graph. This contains the year of the timetable, and

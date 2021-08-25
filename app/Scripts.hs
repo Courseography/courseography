@@ -1,41 +1,18 @@
 module Scripts (
-    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, generateScripts,
-    globalScripts
+    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, generateScripts
     )
     where
 
-import Config (enableCdn)
-import qualified Data.Text as T
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Util.Blaze
 
--- | Scripts that are loaded on every page.
-globalScripts :: [T.Text]
-globalScripts = jQueryScripts
-
-jQueryScripts :: [T.Text]
-jQueryScripts = if enableCdn
-                then ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
-                      "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"]
-                else ["/static/js/vendor/jquery.min.1.10.2.js",
-                      "/static/js/vendor/jquery-ui.min.1.10.4.js"]
-
 graphScripts :: H.Html
-graphScripts = do
-    mapM_ toScript
-        ["/static/js/vendor/bootstrap.min.3.1.1.js"]
-    H.script ! A.src "/static/js/graph/app.js" $ ""
+graphScripts = H.script ! A.src "/static/js/graph/app.js" $ ""
 
 timetableScripts :: H.Html
-timetableScripts = do
-    mapM_ toScript
-        [if enableCdn
-         then "https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"
-         else "/static/js/vendor/bootstrap.min.3.1.1.js"
-         ]
-    H.script ! A.src "/static/js/grid/app.js" $ ""
+timetableScripts = H.script ! A.src "/static/js/grid/app.js" $ ""
 
 drawScripts :: H.Html
 drawScripts = do

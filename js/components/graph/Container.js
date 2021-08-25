@@ -34,8 +34,8 @@ export default class Container extends React.Component {
         }
       )
 
-    // Need to use jQuery because nav-export is still a Haskell generated HTML component
-    $("#nav-export").click(() => {
+    // Enable "Export" link
+    document.getElementById("nav-export")?.addEventListener("click", () => {
       this.graph.current.openExportModal()
     })
   }
