@@ -154,14 +154,14 @@ class Timetable extends React.Component {
   }
 
   componentDidMount() {
-    $("#codeFilter").keyup(() => {
-      this.setState({ codeSearch: $("#codeFilter").val() })
+    document.getElementById("codeFilter").addEventListener("keyup", e => {
+      this.setState({ codeSearch: e.target.value })
     })
-    $("#instFilter").keyup(() => {
-      this.setState({ instSearch: $("#instFilter").val() })
+    document.getElementById("instFilter").addEventListener("keyup", e => {
+      this.setState({ codeSearch: e.target.value })
     })
-    $("#timeFilter").keyup(() => {
-      this.setState({ timeSearch: $("#timeFilter").val() })
+    document.getElementById("timeFilter").addEventListener("keyup", e => {
+      this.setState({ codeSearch: e.target.value })
     })
   }
 

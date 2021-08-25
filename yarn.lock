@@ -4223,6 +4223,7 @@ __metadata:
     fetch-mock: ^7.3.1
     handlebars: ^4.7.7
     jest: 26.6.3
+    jquery: ^3.6.0
     leaflet: ^1.5.1
     lodash: ^4.17.19
     mini-css-extract-plugin: ^1.5.1
@@ -7978,6 +7979,13 @@ fsevents@^1.2.7:
   bin:
     jest: bin/jest.js
   checksum: 4ffcfefa2b30999a71c205e1aacf2b3d7af10f36c17ba1baf45677684116ad5aa6a5bb162ad2dd418f9ea99d18f24b70d8c83fb317b765a3acac361a50e9db9f
+  languageName: node
+  linkType: hard
+
+"jquery@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "jquery@npm:3.6.0"
+  checksum: a0a819022a1bdff5efa79bbd9d4d7352de5bd32dabe42108e6ec0797238dba36c09c108e0eea2724f5d03acc1b30ee87d76bec80e15b9510106532292ebe6ba4
   languageName: node
   linkType: hard
 
