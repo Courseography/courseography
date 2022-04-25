@@ -19,13 +19,15 @@ export default class Sidebar extends React.Component {
       return
     }
 
-    return this.props.courses.filter(([courseId, courseLabel]) => {
-      return (
-        courseId.includes(query) ||
-        courseId.toUpperCase().includes(query) ||
-        courseLabel.includes(query.toUpperCase())
-      )
-    })
+    return this.props.courses
+      .filter(([courseId, courseLabel]) => {
+        return (
+          courseId.includes(query) ||
+          courseId.toUpperCase().includes(query) ||
+          courseLabel.includes(query.toUpperCase())
+        )
+      })
+      .sort()
   }
 
   // Sidebar rendering methods
@@ -101,7 +103,11 @@ export default class Sidebar extends React.Component {
     const masterSidebarClass = `${collapsedClass} sidebar`
 
     return (
-      <div className={masterSidebarClass} data-testid="test-toggle">
+      <div
+        className={masterSidebarClass}
+        data-testid="test-toggle"
+        onWheel={e => e.stopPropagation()}
+      >
         {this.renderFCE()}
         <div className="sidebar-dropdown" data-testid="test-sidebar">
           <div>

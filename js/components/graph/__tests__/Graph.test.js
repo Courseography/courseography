@@ -101,14 +101,14 @@ describe("Graph Navigation", () => {
   })
 
   it("Should zoom in when the mouse wheel is scrolled down", async () => {
-    await TestGraph.build()
+    const graph = await TestGraph.build()
     let svg = document.querySelector("svg")
     let initialDims = svg
       .getAttribute("viewBox")
       .split(" ")
       .splice(2)
       .map(dim => parseFloat(dim))
-    let reactGraph = document.getElementById("react-graph")
+    let reactGraph = graph.getByTestId("react-graph")
     fireEvent.wheel(reactGraph, { deltaY: -1 })
     let newDims = svg
       .getAttribute("viewBox")
@@ -121,14 +121,14 @@ describe("Graph Navigation", () => {
   })
 
   it("Should zoom out when the mouse wheel is scrolled up", async () => {
-    await TestGraph.build()
+    const graph = await TestGraph.build()
     let svg = document.querySelector("svg")
     let initialDims = svg
       .getAttribute("viewBox")
       .split(" ")
       .splice(2)
       .map(dim => parseFloat(dim))
-    let reactGraph = document.getElementById("react-graph")
+    let reactGraph = graph.getByTestId("react-graph")
     fireEvent.wheel(reactGraph, { deltaY: 1 })
     let newDims = svg
       .getAttribute("viewBox")

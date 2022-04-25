@@ -6,13 +6,13 @@ import FocusTab from "./FocusTab.js"
 const computerScienceFocusLabels = [
   ["web", "Web Technologies"],
   ["theory", "Theory of Computation"],
+  ["sci", "Scientific Computing"],
   ["HCI", "Human\u2011Computer Interaction"],
   ["game", "Game Design"],
-  ["systems", "Computer Systems"],
   ["vision", "Computer Vision"],
+  ["systems", "Computer Systems"],
   ["NLP", "Computational Linguistics"],
   ["AI", "Artificial Intelligence"],
-  ["sci", "Scientific Computing"],
 ]
 
 /**
