@@ -1,4 +1,4 @@
-$graph-overlay-top-margin: 25px;
+$graph-overlay-top-margin: 15px;
 $graph-overlay-side-margin: 15px;
 @keyframes spin {
   0.0% {
@@ -120,7 +120,6 @@ body {
 
 .header img {
   display: inline-block;
-  margin: 0 0 5px;
 }
 
 .nav-middle {
@@ -170,13 +169,12 @@ body {
 #nav-export {
   background: transparent;
   border: 0;
-  padding-top: 9px;
-  width: 60px;
+  padding: 15px 0 0;
+  width: 40px;
 }
 
 #nav-export img {
-  height: inherit;
-  width: inherit;
+  width: 100%;
 }
 
 a,
@@ -485,6 +483,7 @@ ol {
   font-size: 18px;
   font-weight: bold;
   height: 30px;
+  line-height: 20px;
   outline: none;
   padding: 5px;
   position: relative;
@@ -508,8 +507,8 @@ ol {
 }
 
 .graph-control-button img {
-  height: inherit;
-  width: inherit;
+  height: 100%;
+  width: 100%;
 }
 
 #reset-view-button {
@@ -517,6 +516,7 @@ ol {
   box-shadow: 1px 0 5px 0 #808080;
   display: flex;
   justify-content: center;
+  padding: 4px;
 }
 
 #container {
@@ -534,9 +534,9 @@ ol {
   box-shadow: 4px 4px 4px #808080;
   display: flex;
   flex-direction: column;
-  margin-left: $graph-overlay-side-margin;
-  margin-top: $graph-overlay-top-margin;
   position: absolute;
+  right: $graph-overlay-side-margin;
+  top: $graph-overlay-top-margin + 120px;
   width: 160px;
   z-index: 1;
 }
@@ -590,6 +590,8 @@ div.sidebar.collapsed {
 .course-selection {
   font-size: 14px;
   margin-right: auto;
+  text-align: center;
+  width: 100%;
 }
 
 .course-selection:hover {
@@ -634,6 +636,7 @@ div.sidebar.collapsed {
 
 .search-bar {
   margin: 0 auto;
+  width: 100%;
 }
 
 .search-dropdown {
@@ -644,12 +647,14 @@ div.sidebar.collapsed {
   margin-bottom: 0;
   max-height: 100px;
   max-width: 145px;
-  overflow: scroll;
+  overflow: auto;
+  padding-left: 0;
+  text-align: center;
 }
 
 .dropdown-item {
   font-size: 14px;
-  margin-right: auto;
+  width: 100%;
 }
 
 .dropdown-item:hover {
@@ -676,6 +681,7 @@ div.sidebar.collapsed {
 
 .graph-dropdown-item:hover {
   background-color: #dedede;
+  color: #000;
 }
 
 .focus-menu-bar {
@@ -2170,13 +2176,13 @@ main-filter input {
 }
 
 .graph-dropdown-display {
-  background-color: #8a75ae;
+  background-color: #5c497e;
+  color: #fff;
   column-count: 2;
   display: inline-block;
   font-size: 15px;
   list-style: none;
-  padding: 10px;
-  padding-left: 0;
+  padding: 8px;
   position: absolute;
   text-align: left;
 }
@@ -2200,7 +2206,7 @@ main-filter input {
   flex-direction: column;
   position: absolute;
   right: $graph-overlay-side-margin;
-  top: $graph-overlay-top-margin - 10;
+  top: $graph-overlay-top-margin;
 }
 
 .selected-page {

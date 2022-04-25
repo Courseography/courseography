@@ -75,7 +75,6 @@ export class Graph extends React.Component {
 
     // can't detect keydown event when adding event listener to react-graph
     document.body.addEventListener("keydown", this.onKeyDown)
-    document.getElementById("react-graph").addEventListener("wheel", this.onWheel)
 
     // Enable "Export" link
     if (document.getElementById("nav-export")) {
@@ -117,7 +116,6 @@ export class Graph extends React.Component {
 
   componentWillUnmount() {
     document.body.removeEventListener("keydown", this.onKeyDown)
-    document.getElementById("react-graph").removeEventListener("wheel", this.onWheel)
   }
 
   getGraph = () => {
@@ -342,6 +340,7 @@ export class Graph extends React.Component {
    * @param  {string} id
    */
   handleCourseClick = id => {
+    id = id.toLowerCase()
     var currentNode = this.nodes.current[id]
     currentNode.toggleSelection(this)
     var courseLabelArray = currentNode.props.JSON.text
@@ -779,6 +778,7 @@ export class Graph extends React.Component {
       onMouseUp: this.stopPanning,
       onTouchMove: this.panGraph,
       onTouchEnd: this.stopPanning,
+      onWheel: this.onWheel,
     }
 
     let reactGraphClass = "react-graph"
