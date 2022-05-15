@@ -39,10 +39,10 @@ programPrefix = Parsec.choice (map caseInsensitiveStr [
 degreeType :: Parser String
 degreeType = do
     Parsec.spaces
-    degree <- Parsec.choice (map caseInsensitiveStr [
+    degree <- Parsec.choice $ map caseInsensitiveStr [
         "major",
         "specialist"
-        ])
+        ]
     Parsec.spaces
     return degree
 
@@ -290,7 +290,7 @@ justParser = do
 
 -- Parses for single course or a group of programs with or without cutoff OR a req within parentheses
 -- Programs need to be parsed in groups because of the concatenation issue
--- explained in he docstring of `programGroupParser`
+-- explained in the docstring of `programGroupParser`
 courseOrProgParser :: Parser Req
 courseOrProgParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,
@@ -313,7 +313,7 @@ programParser = do
         ]
     return $ PROGRAM program
 
--- Turns nested ORs into a single OR
+-- Flattens nested ORs into a single OR
 -- eg. OR [OR ["CS major, "Math major"], RAW "permission from instructor"]
 -- Nested ORs occur because the way programs are related through ORs is
 -- different than that of courses. So they each have their orParser, which
