@@ -315,6 +315,16 @@ programParser = do
         ]
     return $ PROGRAM program
 
+-- Turns nested ORs into a single OR
+-- eg. OR [OR ["CS major, "Math major"], RAW "permission from instructor"]
+-- Nested ORs occur because the way programs are related through ORs is
+-- different than that of courses. So they each have their orParser, which
+-- may be related throuhg another OR
+flattenOr :: [Req] -> [Req]
+flattenOr [] = []
+flattenOr (OR x:xs) = x ++ flattenOr xs
+flattenOr (x:xs) = x:flattenOr xs
+
 -- | Parser for reqs related through the "one of the following" condition
 -- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
 oneOfParser :: Parser Req
@@ -326,7 +336,7 @@ oneOfParser = do
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR (x:xs)
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- | Parser for reqs related through an OR.
 orParser :: Parser Req
@@ -335,7 +345,7 @@ orParser = do
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR (x:xs)
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
@@ -372,13 +382,14 @@ programGroupParser = do
 
 programOrParser :: Parser Req
 programOrParser = do
+    Parsec.spaces
     _ <- programPrefix
     progs <- Parsec.sepBy (Parsec.try programGroupParser) progOrSeparator
     _ <- Parsec.many $ Parsec.noneOf ".;,"
     case progs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR (x:xs) -- TODO: x or xs could be an OR, so we need to flatten them
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."

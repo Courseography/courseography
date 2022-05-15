@@ -118,8 +118,8 @@ artSciInputs = [
 programOrInputs :: [(String, Req)]
 programOrInputs = [
       ("Admission to Vic One", PROGRAM "Vic One")
-    --, ("Enrolment in the International Relations program or in a History major or specialist program, or permission of instructor", OR [PROGRAM "International Relations",PROGRAM "History major",PROGRAM "History specialist", RAW "permission of instructor"])
-    --, ("Enrolment in the International Relations program or in a History or Political Science major or specialist program", OR [PROGRAM "International Relations",PROGRAM "History major",PROGRAM "History specialist",PROGRAM "Political Science major",PROGRAM "Political Science specialist"])
+    , ("Enrolment in the International Relations program or in a History major or specialist program, or permission of instructor", OR [PROGRAM "International Relations",PROGRAM "History major",PROGRAM "History specialist", RAW "permission of instructor"])
+    , ("Enrolment in the International Relations program or in a History or Political Science major or specialist program", OR [PROGRAM "International Relations",PROGRAM "History major",PROGRAM "History specialist",PROGRAM "Political Science major",PROGRAM "Political Science specialist"])
     --, ("Enrolment in ASMAJ1618. A student must be in third or fourth year.", AND [PROGRAM "ASMAJ1618",RAW "A student must be in third or fourth year."])
     , ("Enrolment in the PSY Research Specialist program, and PSY309H1, and one of PSY319H1/ PSY329H1/ PSY339H1", AND [PROGRAM "PSY Research Specialist",J "PSY309H1" "",OR [J "PSY319H1" "",J "PSY329H1" "",J "PSY339H1" ""]])
     , ("70% in SOC212H1 and enrolment in Sociology program", AND [GRADE "70" (J "SOC212H1" ""),PROGRAM "Sociology"])
