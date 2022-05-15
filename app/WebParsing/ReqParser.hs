@@ -385,7 +385,7 @@ programOrParser = do
     Parsec.spaces
     _ <- programPrefix
     progs <- Parsec.sepBy (Parsec.try programGroupParser) progOrSeparator
-    _ <- Parsec.many $ Parsec.noneOf ".;,"
+    _ <- Parsec.many $ Parsec.noneOf ".;,)"
     case progs of
         [] -> fail "Empty Req."
         [x] -> return x

@@ -123,7 +123,7 @@ programOrInputs = [
     --, ("Enrolment in ASMAJ1618. A student must be in third or fourth year.", AND [PROGRAM "ASMAJ1618",RAW "A student must be in third or fourth year."])
     , ("Enrolment in the PSY Research Specialist program, and PSY309H1, and one of PSY319H1/ PSY329H1/ PSY339H1", AND [PROGRAM "PSY Research Specialist",J "PSY309H1" "",OR [J "PSY319H1" "",J "PSY329H1" "",J "PSY339H1" ""]])
     , ("70% in SOC212H1 and enrolment in Sociology program", AND [GRADE "70" (J "SOC212H1" ""),PROGRAM "Sociology"])
-    --, ("(70% in SOC212H1 and enrolment in Sociology program)", AND [GRADE "70" (J "SOC212H1" ""),PROGRAM "Sociology"])
+    , ("(70% in SOC212H1 and enrolment in Sociology program)", AND [GRADE "70" (J "SOC212H1" ""),PROGRAM "Sociology"])
     , ("Admission to International Relations Major or Specialist program", OR [PROGRAM "International Relations Major",PROGRAM "International Relations Specialist"])
     , ("Instructor’s permission required for admission to course", RAW "Instructor\8217s permission required for admission to course")
     ]
