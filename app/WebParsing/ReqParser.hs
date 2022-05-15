@@ -3,8 +3,8 @@ module WebParsing.ReqParser where
 
 import Data.Char (isSpace, toLower, toUpper)
 import Database.Requirement
-import Text.Parsec ((<|>))
 import qualified Text.Parsec as Parsec
+import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
 
 -- define separators
@@ -25,6 +25,27 @@ completionPrefix = Parsec.choice (map (Parsec.try . Parsec.string) [
     "Completion of"
     ])
     >> Parsec.spaces
+
+-- TODO: should only use lowercase admission to not match
+-- "Instructor's permission required for admission to course"
+-- but the rest should be case insensitive
+programPrefix :: Parser ()
+programPrefix = Parsec.choice (map caseInsensitiveStr [
+    "admission to",
+    "enrolment in the",
+    "enrolment in an",
+    "enrolment in a",
+    "enrolment in"
+    ])
+    >> Parsec.spaces
+
+programSuffix :: Parser String
+programSuffix = Parsec.spaces
+    >> Parsec.choice (map caseInsensitiveStr [
+    "major",
+    "specialist"
+    ])
+
 
 fceSeparator :: Parser ()
 fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
@@ -63,6 +84,14 @@ andSeparator = Parsec.choice $ map caseInsensitiveStr [
     "&",
     "+",
     "plus"
+    ]
+
+programOrSeparator :: Parser String
+programOrSeparator = Parsec.choice $ map caseInsensitiveStr [
+    ",",
+    " or in a",
+    " or a", -- frontal space to prevent matching "history"
+    " or "   -- trailing space to prevent matching "organization"
     ]
 
 oneOfSeparator :: Parser String
@@ -256,6 +285,16 @@ courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map 
     rawTextParser
     ]
 
+programParser :: Parser Req
+programParser = do
+    Parsec.spaces
+    program <- Parsec.manyTill Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
+        programSuffix,
+        programOrSeparator,
+        Parsec.eof >> return ""
+        ]
+    return $ PROGRAM program
+
 -- | Parser for reqs related through the "one of the following" condition
 -- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
 oneOfParser :: Parser Req
@@ -286,6 +325,25 @@ andParser = do
         [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
+
+-- | Parser for programs related through an OR
+-- | Parses program names and degree types, then concatenate every combination
+-- | eg. CS or Math major or specialist --> CS maj/Math maj/CS spec/Math spec
+programOrParser :: Parser Req
+programOrParser = do
+    _ <- programPrefix
+    programs <- Parsec.sepBy programParser programOrSeparator
+    degrees <- Parsec.sepBy programSuffix (Parsec.try $ Parsec.spaces >> orSeparator)
+    _ <- Parsec.many $ Parsec.noneOf ".;,"
+
+    case programs of
+        [] -> fail "Empty Req."
+        [PROGRAM x] -> case degrees of
+            [] -> return $ PROGRAM x
+            ds -> return $ OR [PROGRAM (x ++ " " ++ d) | d <- ds]
+        xs -> case degrees of
+            [] -> return $ OR [PROGRAM x | PROGRAM x <- xs]
+            ds -> return $ OR [PROGRAM (x ++ " " ++ d) | PROGRAM x <- xs, d <- ds]
 
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
