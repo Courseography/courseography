@@ -32,20 +32,28 @@ completionPrefix = Parsec.choice (map (Parsec.try . Parsec.string) [
 programPrefix :: Parser ()
 programPrefix = Parsec.choice (map caseInsensitiveStr [
     "admission to",
-    "enrolment in the",
-    "enrolment in an",
-    "enrolment in a",
+    "enrolment in the ",
+    "enrolment in an ",
+    "enrolment in a ", -- trailing space to prevent matching "enrolment in A..."
     "enrolment in"
     ])
     >> Parsec.spaces
 
-programSuffix :: Parser String
-programSuffix = Parsec.spaces
-    >> Parsec.choice (map caseInsensitiveStr [
-    "major",
-    "specialist"
-    ])
+degreeType :: Parser String
+degreeType = do
+    Parsec.spaces
+    degree <- Parsec.choice (map caseInsensitiveStr [
+        "major",
+        "specialist"
+        ])
+    Parsec.spaces
+    return degree
 
+programSuffix :: Parser String
+programSuffix = Parsec.choice $ map caseInsensitiveStr [
+    " program of study",
+    " program"
+    ]
 
 fceSeparator :: Parser ()
 fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
@@ -73,11 +81,13 @@ rParen = Parsec.char ')'
 orSeparator :: Parser String
 orSeparator = Parsec.choice $ map caseInsensitiveStr [
     "/",
-    "or"
+    "or",
+    ", or"
     ]
 
 andSeparator :: Parser String
 andSeparator = Parsec.choice $ map caseInsensitiveStr [
+    ", and",
     ",",
     "and",
     ";",
@@ -86,12 +96,17 @@ andSeparator = Parsec.choice $ map caseInsensitiveStr [
     "plus"
     ]
 
-programOrSeparator :: Parser String
-programOrSeparator = Parsec.choice $ map caseInsensitiveStr [
+progGroupSeparator :: Parser String
+progGroupSeparator = Parsec.choice $ map (Parsec.try . Parsec.string) [
     ",",
-    " or in a",
-    " or a", -- frontal space to prevent matching "history"
-    " or "   -- trailing space to prevent matching "organization"
+    " or a ", -- frontal space to prevent matching "history"
+    " or "    -- trailing space to prevent matching "organization"
+    ]
+
+progOrSeparator :: Parser String
+progOrSeparator = Parsec.choice $ map caseInsensitiveStr [
+    " or in a ", -- trailing space to prevent matching program name starting with "a"
+    ", or "
     ]
 
 oneOfSeparator :: Parser String
@@ -277,11 +292,13 @@ justParser = do
         Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
 
 -- parse for single course with or without cutoff OR a req within parentheses
+-- TODO: might want to rename this now that it includes programOrParser
 courseParser :: Parser Req
 courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,
     cutoffParser,
     justParser,
+    programOrParser,
     rawTextParser
     ]
 
@@ -289,8 +306,11 @@ programParser :: Parser Req
 programParser = do
     Parsec.spaces
     program <- Parsec.manyTill Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
+        degreeType,
         programSuffix,
-        programOrSeparator,
+        progGroupSeparator,
+        progOrSeparator,
+        Parsec.oneOf ".;" >> return "",
         Parsec.eof >> return ""
         ]
     return $ PROGRAM program
@@ -320,30 +340,45 @@ orParser = do
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
 andParser = do
-    reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser) andSeparator
+    reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser <|> programOrParser) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
--- | Parser for programs related through an OR
+-- | Parser for programs grouped together
 -- | Parses program names and degree types, then concatenate every combination
--- | eg. CS or Math major or specialist --> CS maj/Math maj/CS spec/Math spec
-programOrParser :: Parser Req
-programOrParser = do
-    _ <- programPrefix
-    programs <- Parsec.sepBy programParser programOrSeparator
-    degrees <- Parsec.sepBy programSuffix (Parsec.try $ Parsec.spaces >> orSeparator)
-    _ <- Parsec.many $ Parsec.noneOf ".;,"
+-- | eg. (CS or MAT major) implies (CS major) or (MAT major)
+-- | (CS major or specialist) implies (CS major) or (CS specialist)
+-- | (CS or MAT major or specialist) implies (CS maj) or (MAT maj) or (CS spec) or (MAT spec)
+programGroupParser :: Parser Req
+programGroupParser = do
+    progs <- Parsec.sepBy (Parsec.try programParser) progGroupSeparator
+    degrees <- Parsec.sepBy (Parsec.try degreeType) (Parsec.string "or")
+    _ <- Parsec.optional $ Parsec.choice $ map Parsec.try [
+        degreeType,
+        programSuffix
+        ]
 
-    case programs of
+    case progs of
         [] -> fail "Empty Req."
         [PROGRAM x] -> case degrees of
             [] -> return $ PROGRAM x
+            [d] -> return $ PROGRAM (x ++ " " ++ d)
             ds -> return $ OR [PROGRAM (x ++ " " ++ d) | d <- ds]
         xs -> case degrees of
             [] -> return $ OR [PROGRAM x | PROGRAM x <- xs]
             ds -> return $ OR [PROGRAM (x ++ " " ++ d) | PROGRAM x <- xs, d <- ds]
+
+programOrParser :: Parser Req
+programOrParser = do
+    _ <- programPrefix
+    progs <- Parsec.sepBy (Parsec.try programGroupParser) progOrSeparator
+    _ <- Parsec.many $ Parsec.noneOf ".;,"
+    case progs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR (x:xs) -- TODO: x or xs could be an OR, so we need to flatten them
 
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
