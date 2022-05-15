@@ -26,9 +26,6 @@ completionPrefix = Parsec.choice (map (Parsec.try . Parsec.string) [
     ])
     >> Parsec.spaces
 
--- TODO: should only use lowercase admission to not match
--- "Instructor's permission required for admission to course"
--- but the rest should be case insensitive
 programPrefix :: Parser ()
 programPrefix = Parsec.choice (map caseInsensitiveStr [
     "admission to",
@@ -291,10 +288,11 @@ justParser = do
     markInfoParser = do
         Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
 
--- parse for single course with or without cutoff OR a req within parentheses
--- TODO: might want to rename this now that it includes programOrParser
-courseParser :: Parser Req
-courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
+-- Parses for single course or a group of programs with or without cutoff OR a req within parentheses
+-- Programs need to be parsed in groups because of the concatenation issue
+-- explained in he docstring of `programGroupParser`
+courseOrProgParser :: Parser Req
+courseOrProgParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,
     cutoffParser,
     justParser,
@@ -332,7 +330,7 @@ oneOfParser = do
     Parsec.spaces
     _ <- Parsec.try oneOfSeparator
     Parsec.spaces
-    reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
+    reqs <- Parsec.sepBy courseOrProgParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
@@ -341,7 +339,7 @@ oneOfParser = do
 -- | Parser for reqs related through an OR.
 orParser :: Parser Req
 orParser = do
-    reqs <- Parsec.sepBy courseParser orSeparator
+    reqs <- Parsec.sepBy courseOrProgParser orSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
