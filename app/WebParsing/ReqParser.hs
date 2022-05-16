@@ -1,11 +1,11 @@
 {-# LANGUAGE FlexibleContexts #-}
 module WebParsing.ReqParser where
 
-import           Data.Char            (isSpace, toLower, toUpper)
-import           Database.Requirement
-import qualified Text.Parsec          as Parsec
-import           Text.Parsec          ((<|>))
-import           Text.Parsec.String   (Parser)
+import Data.Char (isSpace, toLower, toUpper)
+import Database.Requirement
+import Text.Parsec ((<|>))
+import qualified Text.Parsec as Parsec
+import Text.Parsec.String (Parser)
 
 -- define separators
 fromSeparator :: Parser String
@@ -240,7 +240,7 @@ justParser = do
     Parsec.spaces
     meta <- Parsec.option (Right "") $ Parsec.between lParen rParen markInfoParser
     return $ case meta of
-        Left mark  -> GRADE mark $ J courseID ""
+        Left mark -> GRADE mark $ J courseID ""
         Right info -> J courseID info
     where
     markInfoParser :: Parser (Either String String)
@@ -265,8 +265,8 @@ oneOfParser = do
     Parsec.spaces
     reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
     case reqs of
-        []     -> fail "Empty Req."
-        [x]    -> return x
+        [] -> fail "Empty Req."
+        [x] -> return x
         (x:xs) -> return $ OR (x:xs)
 
 -- | Parser for reqs related through an OR.
@@ -274,8 +274,8 @@ orParser :: Parser Req
 orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
     case reqs of
-        []     -> fail "Empty Req."
-        [x]    -> return x
+        [] -> fail "Empty Req."
+        [x] -> return x
         (x:xs) -> return $ OR (x:xs)
 
 -- | Parser for for reqs related through an AND.
@@ -283,8 +283,8 @@ andParser :: Parser Req
 andParser = do
     reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser) andSeparator
     case reqs of
-        []     -> fail "Empty Req."
-        [x]    -> return x
+        [] -> fail "Empty Req."
+        [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
 -- | Parser for FCE requirements:
@@ -299,26 +299,6 @@ fcesParser = do
     req <- Parsec.try andParser <|> Parsec.try orParser
     return $ FCES fces req
 
--- | Parser for strings of the form: "At least 4.0 credits"/"at least 4.0 credits".
-atLeastParser :: Parser Req
-atLeastParser = do
-    _ <- Parsec.choice $ map caseInsensitiveStr [
-                "at least one additional",
-                "at least one",
-                "at least"
-                ]
-    Parsec.spaces
-    fces <- creditsParser
-    Parsec.spaces
-    _ <- Parsec.choice (map (Parsec.try . Parsec.string) [
-            "additional credits",
-            "additional credit",
-            "credits",
-            "credit"
-            ])
-            >> Parsec.spaces
-    FCES fces <$> rawTextParser
-
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
 categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
@@ -332,4 +312,4 @@ parseReqs reqString = do
             let req = Parsec.parse categoryParser "" reqString
                 in case req of
                     Right x -> x
-                    Left e  -> J (show e) ""
+                    Left e -> J (show e) ""
