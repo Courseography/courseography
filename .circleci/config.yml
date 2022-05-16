@@ -16,6 +16,7 @@ jobs:
           name: Install Package Dependencies
           command: |
             wget -qO - https://packages.confluent.io/deb/5.2/archive.key | sudo apt-key add -
+            sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
             sudo apt-get update
             sudo apt-get install -y imagemagick texlive-latex-base
             stack update
