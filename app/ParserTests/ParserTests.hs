@@ -115,6 +115,18 @@ artSciInputs = [
     , ("MATB23H3/STA220H1 (recommended)/STA257H1 (recommended)", OR [J "MATB23H3" "",J "STA220H1" "recommended",J "STA257H1" "recommended"])
     ]
 
+atLeastInputs :: [(String, Req)]
+atLeastInputs = [
+      ("at least 4.0 credits", FCES "4.0" $ RAW "")
+    , ("at least one additional 0.5 credit from a 300-/400-level course.", FCES "0.5" $ RAW "from a 300-/400-level course.")
+    , ("at least 1.0 additional credit from 300-/400-level CSC/BCB courses", FCES "1.0" $ RAW "from 300-/400-level CSC/BCB courses")
+    , ("at least one 0.5 credit from a 400-level CSC/BCB course", FCES "0.5" $ RAW "from a 400-level CSC/BCB course")
+    , ("At least one 0.5 credit at the 400-level", FCES "0.5" $ RAW "at the 400-level")
+    , ("At least 1.0 credit must be at the 300-/400-level:", FCES "1.0" $ RAW "must be at the 300-/400-level:")
+    , ("At least 1.5 credits at the 400-level", FCES "1.5" $ RAW "at the 400-level")
+    , ("At least 1.5 credits from 400-level CSC or BCB courses.", FCES "1.5" $ RAW "from 400-level CSC or BCB courses.")
+    ]
+
 noPrereqInputs :: [(String, Req)]
 noPrereqInputs = [
       ("", NONE)
@@ -152,9 +164,12 @@ gradeAftTests = createTest categoryParser "Basic grade requirements, where grade
 artSciTests :: Test
 artSciTests = createTest categoryParser "Arts and Science requirements from Christine's output" artSciInputs
 
+atLeastTests :: Test
+atLeastTests = createTest atLeastParser "Minimum FCES Requirement" atLeastInputs
+
 noPrereqTests :: Test
 noPrereqTests = createReqParserTest "No prerequisites required" noPrereqInputs
 
 -- functions for running tests in REPL
 reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fcesTests, gradeBefTests, gradeAftTests, artSciTests, noPrereqTests]
+reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fcesTests, gradeBefTests, gradeAftTests, artSciTests, atLeastTests, noPrereqTests]

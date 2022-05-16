@@ -3,8 +3,8 @@ module WebParsing.ReqParser where
 
 import Data.Char (isSpace, toLower, toUpper)
 import Database.Requirement
-import Text.Parsec ((<|>))
 import qualified Text.Parsec as Parsec
+import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
 
 -- define separators
@@ -286,6 +286,26 @@ andParser = do
         [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
+
+-- | Parser for strings of the form: "At least 4.0 credits"/"at least 4.0 credits".
+atLeastParser :: Parser Req
+atLeastParser = do
+    _ <- Parsec.choice $ map caseInsensitiveStr [
+                "at least one additional",
+                "at least one",
+                "at least"
+                ]
+    Parsec.spaces
+    fces <- creditsParser
+    Parsec.spaces
+    _ <- Parsec.choice (map (Parsec.try . Parsec.string) [
+            "additional credits",
+            "additional credit",
+            "credits",
+            "credit"
+            ])
+            >> Parsec.spaces
+    FCES fces <$> rawTextParser
 
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
