@@ -182,6 +182,11 @@ reqToStmtsTree options parentID (FCES creds req) = do
     prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
     return $ Node [DN fceNode, DE edge] [prereqStmts]
 
+-- A program requirement
+reqToStmtsTree _ parentID (PROGRAM prog) = do
+    progNode <- makeNode (pack $ "Enrolment in the " ++ prog ++ " program") Nothing
+    edge <- makeEdge (nodeID progNode) parentID Nothing
+    return $ Node [DN progNode, DE edge] []
 
 prefixedByOneOf :: Text -> [Text] -> Bool
 prefixedByOneOf name = any (`isPrefixOf` name)
