@@ -30,6 +30,23 @@ steps:
   #
   #     # See `separate_lists` for the `imports` step.
   #     separate_lists: true
+  #
+  #     # When to break the "where".
+  #     # Possible values:
+  #     # - exports: only break when there is an explicit export list.
+  #     # - single: only break when the export list counts more than one export.
+  #     # - inline: only break when the export list is too long. This is
+  #     #   determined by the `columns` setting. Not applicable when the export
+  #     #   list contains comments as newlines will be required.
+  #     # - always: always break before the "where".
+  #     break_where: exports
+  #
+  #     # Where to put open bracket
+  #     # Possible values:
+  #     # - same_line: put open bracket on the same line as the module name, before the
+  #     #              comment of the module
+  #     # - next_line: put open bracket on the next line, after module comment
+  #     open_bracket: next_line
 
   # Format record definitions. This is disabled by default.
   #
@@ -258,21 +275,24 @@ steps:
       # Default: false
       space_surround: false
 
-      # Enabling this argument will use the new GHC lib parse to format imports.
+      # Post qualify option moves any qualifies found in import declarations
+      # to the end of the declaration. This also adjust padding for any
+      # unqualified import declarations.
       #
-      # This currently assumes a few things, it will assume that you want post
-      # qualified imports. It is also not as feature complete as the old
-      # imports formatting.
+      # - true: Qualified as <module name> is moved to the end of the
+      #   declaration.
       #
-      # It does not remove redundant lines or merge lines. As such, the full
-      # feature scope is still pending.
+      #   > import Data.Bar
+      #   > import Data.Foo qualified as F
       #
-      # It _is_ however, a fine alternative if you are using features that are
-      # not parseable by haskell src extensions and you're comfortable with the
-      # presets.
+      # - false: Qualified remains in the default location and unqualified
+      #   imports are padded to align with qualified imports.
+      #
+      #   > import           Data.Bar
+      #   > import qualified Data.Foo as F
       #
       # Default: false
-      ghc_lib_parser: false
+      post_qualify: false
 
   # Language pragmas
   - language_pragmas:
@@ -283,7 +303,9 @@ steps:
       # - compact: A more compact style.
       #
       # - compact_line: Similar to compact, but wrap each line with
-      #   `{-#LANGUAGE #-}'.
+      #   `{-# LANGUAGE #-}'.
+      #
+      # - vertical_compact: Similar to vertical, but use only one language pragma.
       #
       # Default: vertical.
       style: compact
