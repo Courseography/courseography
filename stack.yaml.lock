@@ -61,12 +61,12 @@ packages:
   original:
     hackage: regex-posix-clib-2.7
 - completed:
-    hackage: stylish-haskell-0.12.0.0@sha256:211408633a162da6ebc716ac5cdd17fc29eb437467085651885a9e0541d0d228,6012
+    hackage: stylish-haskell-0.13.0.0@sha256:a8a648042f7f6a5ba2dc5cf3d692e41b4aa33f55c8a64f94436412362632b4c7,6143
     pantry-tree:
-      size: 3724
-      sha256: 39da543c90a73c9ad95e0374abc47b11c71a39e9635afc61fd21b97295b889b0
+      size: 3812
+      sha256: 0f7589ccae900b43967c5ff26ec9d8ba8843b76aafc69b0dcbd6da6d91ab6d96
   original:
-    hackage: stylish-haskell-0.12.0.0
+    hackage: stylish-haskell-0.13.0.0
 - completed:
     hackage: hlint-3.2.7@sha256:9f8450464f6ad362d85f529fe409e03cb356804ef9c7318da1699dbcbc284c47,4163
     pantry-tree:
