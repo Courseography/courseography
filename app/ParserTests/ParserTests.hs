@@ -126,6 +126,7 @@ programOrInputs = [
     , ("(70% in SOC212H1 and enrolment in Sociology program)", AND [GRADE "70" (J "SOC212H1" ""),PROGRAM "Sociology"])
     , ("Admission to International Relations Major or Specialist program", OR [PROGRAM "International Relations Major",PROGRAM "International Relations Specialist"])
     , ("Instructor’s permission required for admission to course", RAW "Instructor\8217s permission required for admission to course")
+    , ("MGT100H1, or enrolment in the Actuarial Science Specialist or Major", OR [J "MGT100H1" "",PROGRAM "Actuarial Science Specialist",PROGRAM "Actuarial Science Major"])
     ]
 
 noPrereqInputs :: [(String, Req)]
