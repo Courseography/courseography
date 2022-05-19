@@ -29,6 +29,8 @@ orInputs = [
       ("CSC120H1/CSC148H1", OR [J "CSC120H1" "", J "CSC148H1" ""])
     , ("CSC108H1/CSC120H1/CSC148H1", OR [J "CSC108H1" "", J "CSC120H1" "", J "CSC148H1" ""])
     , ("FOR300H1/FOR301H1/FOR302H1", OR [J "FOR300H1" "", J "FOR301H1" "", J "FOR302H1" ""])
+    , ("BIO130H1 or BIO206H5 or BIOB10H3", OR [J "BIO130H1" "", J "BIO206H5" "", J "BIOB10H3" ""])
+    , ("CHM220H1 with a minimum grade of B, or CHM222H1", OR [GRADE "B" (J "CHM220H1" ""),J "CHM222H1" ""])
     ]
 
 andInputs :: [(String, Req)]
@@ -36,6 +38,7 @@ andInputs = [
       ("CSC165H1, CSC236H1", AND [J "CSC165H1" "", J "CSC236H1" ""])
     , ("CSC120H1, CSC121H1, CSC148H1", AND [J "CSC120H1" "", J "CSC121H1" "", J "CSC148H1" ""])
     , ("CSC165H1 & CSC236H1", AND [J "CSC165H1" "", J "CSC236H1" ""])
+    , ("BCH377H1; BCH378H1; and permission of Department", AND [J "BCH377H1" "", J "BCH378H1" "", RAW "permission of Department"])
     ]
 
 andorInputs :: [(String, Req)]
@@ -47,6 +50,7 @@ andorInputs = [
     , ("CLA204H1 + 1 OF CLA160H1/CLA260H1", AND [J "CLA204H1" "", OR [J "CLA160H1" "", J "CLA260H1" ""]])
     , ("BIO220H1 and at least one of EEB319H1/EEB321H1", AND [J "BIO220H1" "", OR [J "EEB319H1" "", J "EEB321H1" ""]])
     , ("CLA204H1 plus one of CLA160H1/CLA260H1", AND [J "CLA204H1" "", OR [J "CLA160H1" "", J "CLA260H1" ""]])
+    , ("ARH205H1/ ARH305H1, and one of ANT100Y1/ ANT200Y1/ ANT356H1", AND [OR [J "ARH205H1" "",J "ARH305H1" ""],OR [J "ANT100Y1" "",J "ANT200Y1" "",J "ANT356H1" ""]])
     ]
 
 parInputs :: [(String, Req)]

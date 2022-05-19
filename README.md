@@ -83,6 +83,7 @@ This project would not exist without the contributions of many students in the D
 Alex Baluta,
 Alexander Biggs,
 Kelly Bell,
+Ching Chang,
 Christina Chen,
 Eugene Cheung,
 Kael Deverell,
