@@ -52,13 +52,16 @@ rParen = Parsec.char ')'
 orSeparator :: Parser String
 orSeparator = Parsec.choice $ map caseInsensitiveStr [
     "/",
-    "or"
+    "or",
+    ", or"
     ]
 
 andSeparator :: Parser String
 andSeparator = Parsec.choice $ map caseInsensitiveStr [
+    ", and",
     ",",
     "and",
+    "; and",
     ";",
     "&",
     "+",
