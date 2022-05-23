@@ -184,7 +184,7 @@ reqToStmtsTree options parentID (FCES creds req) = do
 
 -- A program requirement
 reqToStmtsTree _ parentID (PROGRAM prog) = do
-    progNode <- makeNode (pack $ "Enrolment in the " ++ prog ++ " program") Nothing
+    progNode <- makeNode (pack $ "Enrolment in " ++ prog ++ Prelude.replicate (Prelude.length prog) ' ') Nothing
     edge <- makeEdge (nodeID progNode) parentID Nothing
     return $ Node [DN progNode, DE edge] []
 
@@ -203,6 +203,7 @@ makeNode name nodeCol = do
                 node = DotNode nodeId
                                [AC.Label $ toLabelValue name,
                                 ID nodeId,
+                                FixedSize GrowAsNeeded,
                                 FillColor $ toColorList [actualColor]]
                 nodesMap' = Map.insert name node nodesMap
             State.put (GeneratorState (i + 1) nodesMap')
