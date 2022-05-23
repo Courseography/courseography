@@ -203,7 +203,8 @@ makeNode name nodeCol = do
                 node = DotNode nodeId
                                [AC.Label $ toLabelValue name,
                                 ID nodeId,
-                                FixedSize GrowAsNeeded,
+                                AC.FixedSize AC.GrowAsNeeded,
+                                AC.FontSize 13.0,
                                 FillColor $ toColorList [actualColor]]
                 nodesMap' = Map.insert name node nodesMap
             State.put (GeneratorState (i + 1) nodesMap')
