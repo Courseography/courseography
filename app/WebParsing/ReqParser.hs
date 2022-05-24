@@ -41,6 +41,7 @@ degreeType = do
     Parsec.spaces
     degree <- Parsec.choice $ map caseInsensitiveStr [
         "major",
+        "minor",
         "specialist"
         ]
     Parsec.spaces
