@@ -116,11 +116,11 @@ parseCourses tags =
     in
         courses
     where
-        isAccordion = tagOpenAttrNameLit "p" "class" (T.isInfixOf "js-views-accordion-group-header")
+        isAccordion = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "js-views-accordion-group-header")
 
         parseCourse :: [Tag T.Text] -> (Courses, T.Text, T.Text)
         parseCourse courseTags =
-            let courseHeader = T.strip . TS.innerText $ takeWhile (not . TS.isTagCloseName "p") courseTags
+            let courseHeader = T.strip . TS.innerText $ takeWhile (not . TS.isTagCloseName "h3") courseTags
                 (code, title) = either (error . show) id $ parse parseCourseTitle "course title" courseHeader
                 spans = TS.partitions (tagOpen (const True) (anyAttrValue $ T.isInfixOf "views-field")) courseTags
                 courseContents = map (T.strip . TS.innerText) spans
