@@ -87,6 +87,7 @@ andSeparator = Parsec.choice $ map caseInsensitiveStr [
     ", and",
     ",",
     "and",
+    "; and",
     ";",
     "&",
     "+",
