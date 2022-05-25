@@ -39,7 +39,6 @@ fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
             "full-course equivalents",
             "additional credits",
             "additional credit",
-            "credits",
             "credit"
             ])
             >> Parsec.spaces
