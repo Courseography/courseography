@@ -111,7 +111,8 @@ Betty Wang,
 Fullchee Zhang,
 Minfan Zhang,
 Alex Shih,
-Cassandra Stefura
+Cassandra Stefura,
+Zi Kai Xu
 
 ## Privacy Policy and Licensing
 

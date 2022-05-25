@@ -3,8 +3,8 @@ module WebParsing.ReqParser where
 
 import Data.Char (isSpace, toLower, toUpper)
 import Database.Requirement
-import Text.Parsec ((<|>))
 import qualified Text.Parsec as Parsec
+import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
 
 -- define separators
@@ -19,10 +19,13 @@ fromSeparator = Parsec.spaces
     ])
 
 completionPrefix :: Parser ()
-completionPrefix = Parsec.choice (map (Parsec.try . Parsec.string) [
+completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "Completion of at least",
     "Completion of a minimum of",
-    "Completion of"
+    "Completion of",
+    "At least one additional",
+    "At least one",
+    "At least"
     ])
     >> Parsec.spaces
 
@@ -33,7 +36,10 @@ fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
             "FCE.",
             "FCE",
             "credits",
-            "full-course equivalents"
+            "full-course equivalents",
+            "additional credits",
+            "additional credit",
+            "credit"
             ])
             >> Parsec.spaces
 
