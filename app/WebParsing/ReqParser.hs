@@ -51,13 +51,11 @@ degreeType = do
     return degree
 
 programSuffix :: Parser String
-programSuffix = do
-    space <- Parsec.space
-    suffix <- Parsec.choice (map caseInsensitiveStr [
+programSuffix = Parsec.spaces
+    >> Parsec.choice (map caseInsensitiveStr [
         "program of study",
         "program"
         ])
-    return $ space:suffix
 
 fceSeparator :: Parser ()
 fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
@@ -116,10 +114,7 @@ progGroupSeparator = do
 
 progOrSeparator :: Parser String
 progOrSeparator = do
-    separator <- Parsec.choice [
-        Parsec.space >> caseInsensitiveStr "or in a",
-        caseInsensitiveStr ", or"
-        ]
+    separator <- Parsec.space >> caseInsensitiveStr "or in a"
     space <- Parsec.space
     return $ separator ++ [space]
 
@@ -375,7 +370,7 @@ andParser = do
 programGroupParser :: Parser Req
 programGroupParser = do
     progs <- Parsec.sepBy (Parsec.try programParser) progGroupSeparator
-    degrees <- Parsec.sepBy (Parsec.try degreeType) (Parsec.string "or")
+    degrees <- sepByNoConsume (Parsec.try degreeType) orSeparator
     _ <- Parsec.optional $ Parsec.choice $ map Parsec.try [
         degreeType,
         programSuffix
@@ -396,7 +391,6 @@ programOrParser = do
     Parsec.spaces
     _ <- programPrefix
     progs <- Parsec.sepBy (Parsec.try programGroupParser) progOrSeparator
-    _ <- Parsec.many $ Parsec.noneOf ".;,)"
     case progs of
         [] -> fail "Empty Req."
         [x] -> return x
@@ -417,6 +411,16 @@ fcesParser = do
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
 categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
+
+-- Similar to Parsec.sepBy but stops when sep passes but p fails,
+-- and doesn't consume failed characters
+-- Modified from https://hackage.haskell.org/package/parsec-3.1.15.1/docs/src/Text.Parsec.Combinator.html#sepBy
+sepByNoConsume :: Parser String -> Parser String -> Parser [String]
+sepByNoConsume p sep = (do
+    x <- p
+    xs <- Parsec.many $ Parsec.try (sep >> p)
+    return (x:xs))
+    <|> return []
 
 -- Flattens nested ORs into a single OR
 -- eg. OR [OR ["CS major, "Math major"], RAW "permission from instructor"]

@@ -140,6 +140,9 @@ programOrInputs = [
     , ("Instructor’s permission required for admission to course", RAW "Instructor\8217s permission required for admission to course")
     , ("MGT100H1, or enrolment in the Actuarial Science Specialist or Major", OR [J "MGT100H1" "",PROGRAM "Actuarial Science Specialist",PROGRAM "Actuarial Science Major"])
     , ("Enrolment in Psychology Minor", PROGRAM "Psychology Minor")
+    , ("Enrolment in History major or permission of instructor", OR [PROGRAM "History major",RAW "permission of instructor"])
+    , ("enrolment in a science, mathematics, or engineering program", OR [PROGRAM "science",PROGRAM "mathematics",PROGRAM "or engineering"])
+    , ("enrolment in a science, mathematics, or engineering program, or permission from instructor", OR [PROGRAM "science",PROGRAM "mathematics",PROGRAM "or engineering", RAW "permission from instructor"])
     ]
 
 noPrereqInputs :: [(String, Req)]
