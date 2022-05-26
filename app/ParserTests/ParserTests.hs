@@ -75,6 +75,14 @@ fcesInputs = [
     , ("Completion of a minimum of 4.0 FCEs", FCES "4.0" $ RAW "")
     , ("Completion of a minimum of 9 FCEs", FCES "9" $ RAW "")
     , ("Completion of 4.0 credits", FCES "4.0" $ RAW "")
+    , ("at least 4.0 credits", FCES "4.0" $ RAW "")
+    , ("at least one additional 0.5 credit from a 300-/400-level course.", FCES "0.5" $ RAW "a 300-/400-level course.")
+    , ("at least 1.0 additional credit from 300-/400-level CSC/BCB courses", FCES "1.0" $ RAW "300-/400-level CSC/BCB courses")
+    , ("at least one 0.5 credit from a 400-level CSC/BCB course", FCES "0.5" $ RAW "a 400-level CSC/BCB course")
+    , ("At least one 0.5 credit at the 400-level", FCES "0.5" $ RAW "the 400-level")
+    , ("At least 1.0 credit must be at the 300-/400-level:", FCES "1.0" $ RAW "must be at the 300-/400-level:")
+    , ("At least 1.5 credits at the 400-level", FCES "1.5" $ RAW "the 400-level")
+    , ("At least 1.5 credits from 400-level CSC or BCB courses.", FCES "1.5" $ RAW "400-level CSC or BCB courses.")
     ]
 
 gradeBefInputs :: [(String, Req)]
