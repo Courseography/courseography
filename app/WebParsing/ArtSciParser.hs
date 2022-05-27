@@ -106,7 +106,7 @@ parseDepartment (relativeURL, _) = do
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
 parsePrograms programs = mapM_ addPostToDatabase $ TS.partitions isAccordionHeader programs
     where
-        isAccordionHeader = tagOpenAttrNameLit "p" "class" (T.isInfixOf "js-views-accordion-group-header")
+        isAccordionHeader = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "js-views-accordion-group-header")
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
 parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]
