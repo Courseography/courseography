@@ -10,6 +10,7 @@ module DynamicGraphs.GraphGenerator
 
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
+import Css.Constants (nodeFontSize)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Foldable (toList)
 import Data.Graph (Tree (Node))
@@ -182,6 +183,13 @@ reqToStmtsTree options parentID (FCES creds req) = do
     prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
     return $ Node [DN fceNode, DE edge] [prereqStmts]
 
+-- A program requirement
+reqToStmtsTree _ parentID (PROGRAM prog) = do
+    -- FIXME: weird width calculation from the library with the prog
+    -- so we padded the string with prog again to work around it
+    progNode <- makeNode (pack $ "Enrolled in " ++ prog ++ Prelude.replicate (Prelude.length prog) ' ') Nothing
+    edge <- makeEdge (nodeID progNode) parentID Nothing
+    return $ Node [DN progNode, DE edge] []
 
 prefixedByOneOf :: Text -> [Text] -> Bool
 prefixedByOneOf name = any (`isPrefixOf` name)
@@ -198,6 +206,8 @@ makeNode name nodeCol = do
                 node = DotNode nodeId
                                [AC.Label $ toLabelValue name,
                                 ID nodeId,
+                                AC.FixedSize AC.GrowAsNeeded,
+                                AC.FontSize nodeFontSize,
                                 FillColor $ toColorList [actualColor]]
                 nodesMap' = Map.insert name node nodesMap
             State.put (GeneratorState (i + 1) nodesMap')
