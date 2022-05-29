@@ -39,6 +39,7 @@ andInputs = [
     , ("CSC120H1, CSC121H1, CSC148H1", AND [J "CSC120H1" "", J "CSC121H1" "", J "CSC148H1" ""])
     , ("CSC165H1 & CSC236H1", AND [J "CSC165H1" "", J "CSC236H1" ""])
     , ("BCH377H1; BCH378H1; and permission of Department", AND [J "BCH377H1" "", J "BCH378H1" "", RAW "permission of Department"])
+    , ("CSC111H1. Permission of department", AND [J "CSC111H1" "", RAW "Permission of department"])
     ]
 
 andorInputs :: [(String, Req)]
