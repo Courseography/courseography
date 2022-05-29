@@ -15,7 +15,8 @@ fromSeparator = Parsec.spaces
             "from the following: ",
             "from:",
             "from",
-            "at"
+            "at",
+            "in"
     ])
 
 completionPrefix :: Parser ()
@@ -25,7 +26,8 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "Completion of",
     "At least one additional",
     "At least one",
-    "At least"
+    "At least",
+    "an additional"
     ])
     >> Parsec.spaces
 
@@ -96,6 +98,7 @@ andSeparator = Parsec.choice $ map caseInsensitiveStr [
     ",",
     "and",
     "; and",
+    ".",
     ";",
     "&",
     "+",
@@ -381,12 +384,39 @@ fcesParser = do
         orSeparator,
         andSeparator
         ])
-        >> rawTextParser
+        >> fcesRawParser
     case req of
         Nothing -> case raw of
             Nothing -> return $ FCES fces (RAW "")
             Just x -> return $ FCES fces x
         Just r -> return $FCES fces r
+
+-- | Parser for the raw text in fcesParser
+-- | Like rawTextParser but terminates at fcesOrTerminator
+fcesRawParser :: Parser Req
+fcesRawParser = do
+    text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.choice [
+        Parsec.lookAhead fcesOrTerminator,
+        Parsec.eof >> return ""
+        ]
+    return $ RAW text
+
+-- | Parses for places to break within the FCEs parser
+-- | Includes "or" and ". " but not "or higher" and "or CSC courses"
+fcesOrTerminator :: Parser String
+fcesOrTerminator = do
+    Parsec.spaces
+    sep <- Parsec.choice (map caseInsensitiveStr [
+        "or", -- not using or/andSeparator because '/' and '+' are allowed
+        ", or",
+        ". "
+        ])
+    Parsec.spaces
+    Parsec.notFollowedBy $ Parsec.choice [
+        caseInsensitiveStr "higher",
+        Parsec.count 3 Parsec.upper
+        ]
+    return sep
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
