@@ -26,8 +26,7 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "Completion of",
     "At least one additional",
     "At least one",
-    "At least",
-    "an additional"
+    "At least"
     ])
     >> Parsec.spaces
 
@@ -95,6 +94,8 @@ orSeparator = Parsec.choice $ map caseInsensitiveStr [
 andSeparator :: Parser String
 andSeparator = Parsec.choice $ map caseInsensitiveStr [
     ", and",
+    ", an additional",
+    ", additional",
     ",",
     "and",
     "; and",
