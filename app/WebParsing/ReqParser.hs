@@ -406,17 +406,23 @@ fcesRawParser = do
 fcesOrTerminator :: Parser String
 fcesOrTerminator = do
     Parsec.spaces
-    sep <- Parsec.choice (map caseInsensitiveStr [
-        "or", -- not using or/andSeparator because '/' and '+' are allowed
-        ", or",
-        ". "
-        ])
+    sep <- Parsec.choice [
+        caseInsensitiveStr "or", -- not using or/andSeparator because '/' and '+' are allowed
+        caseInsensitiveStr ", or",
+        periodSpace
+        ]
     Parsec.spaces
     Parsec.notFollowedBy $ Parsec.choice [
         caseInsensitiveStr "higher",
         Parsec.count 3 Parsec.upper
         ]
     return sep
+
+    where
+    periodSpace = do
+        period <- Parsec.string "."
+        space <- Parsec.space
+        return $ period ++ [space]
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
