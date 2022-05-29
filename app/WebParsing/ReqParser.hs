@@ -245,7 +245,7 @@ cutoffParser = Parsec.try coAftParser <|> coBefParser
 
 -- | Parser for requirements written within parentheses
 parParser :: Parser Req
-parParser = Parsec.between lParen rParen andParser
+parParser = Parsec.between lParen rParen categoryParser
 
 -- | Parser for raw text in a prerequisite, e.g., "proficiency in C/C++".
 -- Note that even if a course code appears in the middle of such text,
@@ -332,9 +332,6 @@ programParser = do
         ]
     return $ PROGRAM program
 
-andParser :: Parser Req
-andParser = andParserOf courseOrProgParser
-
 -- | Parser for programs grouped together
 -- | Parses program names and degree types, then concatenate every combination
 -- | eg. (CS or MAT major) implies (CS major) or (MAT major)
@@ -393,7 +390,7 @@ fcesParser = do
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
-categoryParser = Parsec.try andParser
+categoryParser = Parsec.try $ andParserOf courseOrProgParser
 
 -- | Returns a parser that parses ANDs of ORs of the given parser
 andParserOf :: Parser Req -> Parser Req
