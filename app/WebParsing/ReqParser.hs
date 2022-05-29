@@ -3,8 +3,8 @@ module WebParsing.ReqParser where
 
 import Data.Char (isSpace, toLower, toUpper)
 import Database.Requirement
-import qualified Text.Parsec as Parsec
 import Text.Parsec ((<|>))
+import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 
 -- define separators
@@ -313,6 +313,7 @@ courseParser = Parsec.choice $ map Parsec.try [
 -- explained in the docstring of `programGroupParser`
 courseOrProgParser :: Parser Req
 courseOrProgParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
+    fcesParser,
     courseParser,
     programOrParser,
     rawTextParser
@@ -330,6 +331,37 @@ programParser = do
         Parsec.eof >> return ""
         ]
     return $ PROGRAM program
+
+-- | Parser for reqs related through the "one of the following" condition
+-- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
+courseOneOfParser :: Parser Req
+courseOneOfParser = do
+    Parsec.spaces
+    _ <- Parsec.try oneOfSeparator
+    Parsec.spaces
+    reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
+
+-- | Parser for reqs related through an OR.
+courseOrParser :: Parser Req
+courseOrParser = do
+    reqs <- Parsec.sepBy courseParser orSeparator
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
+
+-- | Parser for for reqs related through an AND.
+courseAndParser :: Parser Req
+courseAndParser = do
+    reqs <- Parsec.sepBy (Parsec.try courseOneOfParser <|> courseOrParser) andSeparator
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ AND (x:xs)
 
 -- | Parser for reqs related through the "one of the following" condition
 -- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
@@ -405,12 +437,22 @@ fcesParser = do
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-    req <- Parsec.try andParser <|> Parsec.try orParser
-    return $ FCES fces req
+    req <- Parsec.optionMaybe $ Parsec.try courseAndParser
+    Parsec.spaces
+    raw <- Parsec.optionMaybe $ Parsec.try $ Parsec.notFollowedBy (Parsec.choice [
+        orSeparator,
+        andSeparator
+        ])
+        >> rawTextParser
+    case req of
+        Nothing -> case raw of
+            Nothing -> return $ FCES fces (RAW "")
+            Just x -> return $ FCES fces x
+        Just r -> return $FCES fces r
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
-categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
+categoryParser = Parsec.try andParser
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters

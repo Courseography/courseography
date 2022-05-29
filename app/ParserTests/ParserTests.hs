@@ -71,6 +71,7 @@ fcesInputs = [
     , ("Completion of 4.0 FCEs", FCES "4.0" $ RAW "")
     , ("Completion of 4 FCE.", FCES "4" $ RAW "")
     , ("Completion of 9 FCEs", FCES "9" $ RAW "")
+    , ("Completion of 9.0 credits or permission of the instructor", OR [FCES "9.0" (RAW ""), RAW "permission of the instructor"])
     , ("Completion of at least 9.0 FCE", FCES "9.0" $ RAW "")
     , ("Completion of a minimum of 4.0 FCEs", FCES "4.0" $ RAW "")
     , ("Completion of a minimum of 9 FCEs", FCES "9" $ RAW "")
