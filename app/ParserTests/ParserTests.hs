@@ -67,6 +67,7 @@ fcesInputs :: [(String, Req)]
 fcesInputs = [
       ("1.0 FCE from the following: (CSC148H1)", FCES "1.0" $ J "CSC148H1" "")
     , ("2.0 FCEs from CSC165H1/CSC148H1", FCES "2.0" $ OR [J "CSC165H1" "", J "CSC148H1" ""])
+    , ("2.0 FCEs in CSC165H1/CSC148H1", FCES "2.0" $ OR [J "CSC165H1" "", J "CSC148H1" ""])
     , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES "2" $ AND [J "MAT135H1" "",OR [J "MAT136H1" "",J "MAT137Y1" ""]])
     , ("Completion of 4.0 FCEs", FCES "4.0" $ RAW "")
     , ("Completion of 4 FCE.", FCES "4" $ RAW "")
