@@ -332,67 +332,8 @@ programParser = do
         ]
     return $ PROGRAM program
 
--- | Parser for reqs related through the "one of the following" condition
--- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
-courseOneOfParser :: Parser Req
-courseOneOfParser = do
-    Parsec.spaces
-    _ <- Parsec.try oneOfSeparator
-    Parsec.spaces
-    reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
-    case reqs of
-        [] -> fail "Empty Req."
-        [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
-
--- | Parser for reqs related through an OR.
-courseOrParser :: Parser Req
-courseOrParser = do
-    reqs <- Parsec.sepBy courseParser orSeparator
-    case reqs of
-        [] -> fail "Empty Req."
-        [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
-
--- | Parser for for reqs related through an AND.
-courseAndParser :: Parser Req
-courseAndParser = do
-    reqs <- Parsec.sepBy (Parsec.try courseOneOfParser <|> courseOrParser) andSeparator
-    case reqs of
-        [] -> fail "Empty Req."
-        [x] -> return x
-        (x:xs) -> return $ AND (x:xs)
-
--- | Parser for reqs related through the "one of the following" condition
--- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
-oneOfParser :: Parser Req
-oneOfParser = do
-    Parsec.spaces
-    _ <- Parsec.try oneOfSeparator
-    Parsec.spaces
-    reqs <- Parsec.sepBy courseOrProgParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
-    case reqs of
-        [] -> fail "Empty Req."
-        [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
-
--- | Parser for reqs related through an OR.
-orParser :: Parser Req
-orParser = do
-    reqs <- Parsec.sepBy courseOrProgParser orSeparator
-    case reqs of
-        [] -> fail "Empty Req."
-        [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
-
--- | Parser for for reqs related through an AND.
 andParser :: Parser Req
-andParser = do
-    reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser <|> programOrParser) andSeparator
-    case reqs of
-        [] -> fail "Empty Req."
-        [x] -> return x
-        (x:xs) -> return $ AND (x:xs)
+andParser = andParserOf courseOrProgParser
 
 -- | Parser for programs grouped together
 -- | Parses program names and degree types, then concatenate every combination
@@ -437,7 +378,7 @@ fcesParser = do
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-    req <- Parsec.optionMaybe $ Parsec.try courseAndParser
+    req <- Parsec.optionMaybe $ Parsec.try $ andParserOf courseParser
     Parsec.spaces
     raw <- Parsec.optionMaybe $ Parsec.try $ Parsec.notFollowedBy (Parsec.choice [
         orSeparator,
@@ -453,6 +394,38 @@ fcesParser = do
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
 categoryParser = Parsec.try andParser
+
+-- | Returns a parser that parses ANDs of ORs of the given parser
+andParserOf :: Parser Req -> Parser Req
+andParserOf p = do
+    reqs <- Parsec.sepBy (Parsec.try oneOfParserOf <|> Parsec.try orParserOf) andSeparator
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ AND (x:xs)
+
+    where
+    -- | Parser for reqs related through the "one of the following" condition
+    -- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
+    oneOfParserOf :: Parser Req
+    oneOfParserOf = do
+        Parsec.spaces
+        _ <- Parsec.try oneOfSeparator
+        Parsec.spaces
+        reqs <- Parsec.sepBy p (Parsec.try orSeparator <|> Parsec.try andSeparator)
+        case reqs of
+            [] -> fail "Empty Req."
+            [x] -> return x
+            (x:xs) -> return $ OR $ flattenOr (x:xs)
+
+    -- | Parser for reqs related through an OR
+    orParserOf :: Parser Req
+    orParserOf = do
+        reqs <- Parsec.sepBy p orSeparator
+        case reqs of
+            [] -> fail "Empty Req."
+            [x] -> return x
+            (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters
