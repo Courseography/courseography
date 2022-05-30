@@ -65,24 +65,24 @@ parInputs = [
 
 fcesInputs :: [(String, Req)]
 fcesInputs = [
-      ("1.0 FCE from the following: (CSC148H1)", FCES "1.0" $ J "CSC148H1" "")
-    , ("2.0 FCEs from CSC165H1/CSC148H1", FCES "2.0" $ OR [J "CSC165H1" "", J "CSC148H1" ""])
-    , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES "2" $ AND [J "MAT135H1" "",OR [J "MAT136H1" "",J "MAT137Y1" ""]])
-    , ("Completion of 4.0 FCEs", FCES "4.0" $ RAW "")
-    , ("Completion of 4 FCE.", FCES "4" $ RAW "")
-    , ("Completion of 9 FCEs", FCES "9" $ RAW "")
-    , ("Completion of at least 9.0 FCE", FCES "9.0" $ RAW "")
-    , ("Completion of a minimum of 4.0 FCEs", FCES "4.0" $ RAW "")
-    , ("Completion of a minimum of 9 FCEs", FCES "9" $ RAW "")
-    , ("Completion of 4.0 credits", FCES "4.0" $ RAW "")
-    , ("at least 4.0 credits", FCES "4.0" $ RAW "")
-    , ("at least one additional 0.5 credit from a 300-/400-level course.", FCES "0.5" $ RAW "a 300-/400-level course.")
-    , ("at least 1.0 additional credit from 300-/400-level CSC/BCB courses", FCES "1.0" $ RAW "300-/400-level CSC/BCB courses")
-    , ("at least one 0.5 credit from a 400-level CSC/BCB course", FCES "0.5" $ RAW "a 400-level CSC/BCB course")
-    , ("At least one 0.5 credit at the 400-level", FCES "0.5" $ RAW "the 400-level")
-    , ("At least 1.0 credit must be at the 300-/400-level:", FCES "1.0" $ RAW "must be at the 300-/400-level:")
-    , ("At least 1.5 credits at the 400-level", FCES "1.5" $ RAW "the 400-level")
-    , ("At least 1.5 credits from 400-level CSC or BCB courses.", FCES "1.5" $ RAW "400-level CSC or BCB courses.")
+      ("1.0 FCE from the following: (CSC148H1)", FCES 1.0 $ J "CSC148H1" "")
+    , ("2.0 FCEs from CSC165H1/CSC148H1", FCES 2.0 $ OR [J "CSC165H1" "", J "CSC148H1" ""])
+    , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES 2.0 $ AND [J "MAT135H1" "",OR [J "MAT136H1" "",J "MAT137Y1" ""]])
+    , ("Completion of 4.0 FCEs", FCES 4.0 $ RAW "")
+    , ("Completion of 4 FCE.", FCES 4.0 $ RAW "")
+    , ("Completion of 9 FCEs", FCES 9.0 $ RAW "")
+    , ("Completion of at least 9.0 FCE", FCES 9.0 $ RAW "")
+    , ("Completion of a minimum of 4.0 FCEs", FCES 4.0 $ RAW "")
+    , ("Completion of a minimum of 9 FCEs", FCES 9.0 $ RAW "")
+    , ("Completion of 4.0 credits", FCES 4.0 $ RAW "")
+    , ("at least 4.0 credits", FCES 4.0 $ RAW "")
+    , ("at least one additional 0.5 credit from a 300-/400-level course.", FCES 0.5 $ RAW "a 300-/400-level course.")
+    , ("at least 1.0 additional credit from 300-/400-level CSC/BCB courses", FCES 1.0 $ RAW "300-/400-level CSC/BCB courses")
+    , ("at least one 0.5 credit from a 400-level CSC/BCB course", FCES 0.5 $ RAW "a 400-level CSC/BCB course")
+    , ("At least one 0.5 credit at the 400-level", FCES 0.5 $ RAW "the 400-level")
+    , ("At least 1.0 credit must be at the 300-/400-level:", FCES 1.0 $ RAW "must be at the 300-/400-level:")
+    , ("At least 1.5 credits at the 400-level", FCES 1.5 $ RAW "the 400-level")
+    , ("At least 1.5 credits from 400-level CSC or BCB courses.", FCES 1.5 $ RAW "400-level CSC or BCB courses.")
     ]
 
 gradeBefInputs :: [(String, Req)]
@@ -123,7 +123,7 @@ artSciInputs = [
     , ("EEB223H1 (ecology and evo), STA220H1 (recommended)/ STA257H1 (recommended)", AND [J "EEB223H1" "ecology and evo",OR [J "STA220H1" "recommended",J "STA257H1" "recommended"]])
     , ("EEB223H1 (ecology and evo)/ STA220H1 (recommended)/ STA257H1", OR [J "EEB223H1" "ecology and evo",J "STA220H1" "recommended",J "STA257H1" ""])
     , ("EEB223H1 (ecology and evo)/ STA220H1 (B-)/ STA257H1", OR [J "EEB223H1" "ecology and evo", GRADE "B-" $ J "STA220H1" "", J "STA257H1" ""])
-    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", FCES "0.5" $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""])
+    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", FCES 0.5 $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""])
     , ("MATB23H3/STA220H1 (recommended)/STA257H1 (recommended)", OR [J "MATB23H3" "",J "STA220H1" "recommended",J "STA257H1" "recommended"])
     ]
 
