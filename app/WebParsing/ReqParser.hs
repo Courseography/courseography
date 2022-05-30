@@ -29,6 +29,34 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     ])
     >> Parsec.spaces
 
+programPrefix :: Parser ()
+programPrefix = Parsec.choice (map caseInsensitiveStr [
+    "admission to",
+    "enrolment in the",
+    "enrolment in an",
+    "enrolment in a",
+    "enrolment in"
+    ])
+    >> Parsec.skipMany1 Parsec.space
+
+degreeType :: Parser String
+degreeType = do
+    Parsec.spaces
+    degree <- Parsec.choice $ map caseInsensitiveStr [
+        "major",
+        "minor",
+        "specialist"
+        ]
+    Parsec.spaces
+    return degree
+
+programSuffix :: Parser String
+programSuffix = Parsec.spaces
+    >> Parsec.choice (map caseInsensitiveStr [
+        "program of study",
+        "program"
+        ])
+
 fceSeparator :: Parser ()
 fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
             "FCEs.",
@@ -73,6 +101,22 @@ andSeparator = Parsec.choice $ map caseInsensitiveStr [
     "+",
     "plus"
     ]
+
+progGroupSeparator :: Parser String
+progGroupSeparator = do
+    separator <- Parsec.choice (map Parsec.try [
+        Parsec.string ",",
+        Parsec.space >> caseInsensitiveStr "or a",
+        Parsec.space >> caseInsensitiveStr "or"
+        ])
+    space <- Parsec.space
+    return $ separator ++ [space]
+
+progOrSeparator :: Parser String
+progOrSeparator = do
+    separator <- Parsec.space >> caseInsensitiveStr "or in a"
+    space <- Parsec.space
+    return $ separator ++ [space]
 
 oneOfSeparator :: Parser String
 oneOfSeparator = do
@@ -258,12 +302,34 @@ justParser = do
 
 -- parse for single course with or without cutoff OR a req within parentheses
 courseParser :: Parser Req
-courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
+courseParser = Parsec.choice $ map Parsec.try [
     parParser,
     cutoffParser,
-    justParser,
+    justParser
+    ]
+
+-- Parses for a single course or a group of programs
+-- Programs need to be parsed in groups because of the concatenation issue
+-- explained in the docstring of `programGroupParser`
+courseOrProgParser :: Parser Req
+courseOrProgParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
+    courseParser,
+    programOrParser,
     rawTextParser
     ]
+
+programParser :: Parser Req
+programParser = do
+    Parsec.spaces
+    program <- Parsec.manyTill Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
+        degreeType,
+        programSuffix,
+        progGroupSeparator,
+        progOrSeparator,
+        Parsec.oneOf ".;" >> return "",
+        Parsec.eof >> return ""
+        ]
+    return $ PROGRAM program
 
 -- | Parser for reqs related through the "one of the following" condition
 -- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
@@ -272,29 +338,63 @@ oneOfParser = do
     Parsec.spaces
     _ <- Parsec.try oneOfSeparator
     Parsec.spaces
-    reqs <- Parsec.sepBy courseParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
+    reqs <- Parsec.sepBy courseOrProgParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR (x:xs)
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- | Parser for reqs related through an OR.
 orParser :: Parser Req
 orParser = do
-    reqs <- Parsec.sepBy courseParser orSeparator
+    reqs <- Parsec.sepBy courseOrProgParser orSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR (x:xs)
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
 andParser = do
-    reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser) andSeparator
+    reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser <|> programOrParser) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
+
+-- | Parser for programs grouped together
+-- | Parses program names and degree types, then concatenate every combination
+-- | eg. (CS or MAT major) implies (CS major) or (MAT major)
+-- | (CS major or specialist) implies (CS major) or (CS specialist)
+-- | (CS or MAT major or specialist) implies (CS maj) or (MAT maj) or (CS spec) or (MAT spec)
+programGroupParser :: Parser Req
+programGroupParser = do
+    progs <- Parsec.sepBy (Parsec.try programParser) progGroupSeparator
+    degrees <- sepByNoConsume (Parsec.try degreeType) orSeparator
+    _ <- Parsec.optional $ Parsec.choice $ map Parsec.try [
+        degreeType,
+        programSuffix
+        ]
+
+    case progs of
+        [] -> fail "Empty Req."
+        [PROGRAM x] -> case degrees of
+            [] -> return $ PROGRAM x
+            [d] -> return $ PROGRAM (x ++ " " ++ d)
+            ds -> return $ OR [PROGRAM (x ++ " " ++ d) | d <- ds]
+        xs -> case degrees of
+            [] -> return $ OR [PROGRAM x | PROGRAM x <- xs]
+            ds -> return $ OR [PROGRAM (x ++ " " ++ d) | PROGRAM x <- xs, d <- ds]
+
+programOrParser :: Parser Req
+programOrParser = do
+    Parsec.spaces
+    _ <- programPrefix
+    progs <- Parsec.sepBy (Parsec.try programGroupParser) progOrSeparator
+    case progs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
@@ -311,6 +411,26 @@ fcesParser = do
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
 categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
+
+-- Similar to Parsec.sepBy but stops when sep passes but p fails,
+-- and doesn't consume failed characters
+-- Modified from https://hackage.haskell.org/package/parsec-3.1.15.1/docs/src/Text.Parsec.Combinator.html#sepBy
+sepByNoConsume :: Parser String -> Parser String -> Parser [String]
+sepByNoConsume p sep = (do
+    x <- p
+    xs <- Parsec.many $ Parsec.try (sep >> p)
+    return (x:xs))
+    <|> return []
+
+-- Flattens nested ORs into a single OR
+-- eg. OR [OR ["CS major, "Math major"], RAW "permission from instructor"]
+-- Nested ORs occur because the way programs are related through ORs is
+-- different than that of courses. So they each have their orParser, which
+-- may be related throuhg another OR
+flattenOr :: [Req] -> [Req]
+flattenOr [] = []
+flattenOr (OR x:xs) = x ++ flattenOr xs
+flattenOr (x:xs) = x:flattenOr xs
 
 parseReqs :: String -> Req
 parseReqs reqString = do
