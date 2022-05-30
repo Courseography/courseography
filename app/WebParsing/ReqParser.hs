@@ -148,7 +148,7 @@ creditsParser = do
     integral <- Parsec.many1 Parsec.digit
     point <- Parsec.option "" $ Parsec.string "."
     fractional <- if point == "" then return "" else Parsec.many1 Parsec.digit
-    return $ read $ integral ++ point ++ fractional 
+    return $ read $ integral ++ point ++ fractional
 
 -- | Helpers for parsing grades
 percentParser :: Parser String
