@@ -142,13 +142,13 @@ caseInsensitiveChar c = Parsec.char (toLower c) <|> Parsec.char (toUpper c)
 caseInsensitiveStr :: Parsec.Stream s m Char => String -> Parsec.ParsecT s u m String
 caseInsensitiveStr s = Parsec.try (mapM caseInsensitiveChar s)
 
-creditsParser :: Parser String
+creditsParser :: Parser Float
 creditsParser = do
     Parsec.spaces
     integral <- Parsec.many1 Parsec.digit
     point <- Parsec.option "" $ Parsec.string "."
     fractional <- if point == "" then return "" else Parsec.many1 Parsec.digit
-    return $ integral ++ point ++ fractional
+    return $ read $ integral ++ point ++ fractional 
 
 -- | Helpers for parsing grades
 percentParser :: Parser String
