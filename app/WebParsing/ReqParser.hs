@@ -336,6 +336,38 @@ programParser = do
         ]
     return $ PROGRAM program
 
+-- | Given a parser p, returns a parser that parses one or more p related through
+-- | the "one of the following" condition
+-- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
+oneOfParserOf :: Parser Req -> Parser Req
+oneOfParserOf p = do
+    Parsec.spaces
+    _ <- Parsec.try oneOfSeparator
+    Parsec.spaces
+    reqs <- Parsec.sepBy p (Parsec.try orSeparator <|> Parsec.try andSeparator)
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
+
+-- | Returns a parser that parses ORs of the given parser
+orParserOf :: Parser Req -> Parser Req
+orParserOf p = do
+    reqs <- Parsec.sepBy p orSeparator
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR $ flattenOr (x:xs)
+
+-- | Returns a parser that parses ANDs of ORs of the given parser
+andParserOf :: Parser Req -> Parser Req
+andParserOf p = do
+    reqs <- Parsec.sepBy (Parsec.try (oneOfParserOf p) <|> Parsec.try (orParserOf p)) andSeparator
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ AND (x:xs)
+
 -- | Parser for programs grouped together
 -- | Parses program names and degree types, then concatenate every combination
 -- | eg. (CS or MAT major) implies (CS major) or (MAT major)
@@ -428,38 +460,6 @@ fcesOrTerminator = do
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
 categoryParser = Parsec.try $ andParserOf courseOrProgParser
-
--- | Returns a parser that parses ANDs of ORs of the given parser
-andParserOf :: Parser Req -> Parser Req
-andParserOf p = do
-    reqs <- Parsec.sepBy (Parsec.try oneOfParserOf <|> Parsec.try orParserOf) andSeparator
-    case reqs of
-        [] -> fail "Empty Req."
-        [x] -> return x
-        (x:xs) -> return $ AND (x:xs)
-
-    where
-    -- | Parser for reqs related through the "one of the following" condition
-    -- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
-    oneOfParserOf :: Parser Req
-    oneOfParserOf = do
-        Parsec.spaces
-        _ <- Parsec.try oneOfSeparator
-        Parsec.spaces
-        reqs <- Parsec.sepBy p (Parsec.try orSeparator <|> Parsec.try andSeparator)
-        case reqs of
-            [] -> fail "Empty Req."
-            [x] -> return x
-            (x:xs) -> return $ OR $ flattenOr (x:xs)
-
-    -- | Parser for reqs related through an OR
-    orParserOf :: Parser Req
-    orParserOf = do
-        reqs <- Parsec.sepBy p orSeparator
-        case reqs of
-            [] -> fail "Empty Req."
-            [x] -> return x
-            (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters
