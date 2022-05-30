@@ -14,7 +14,7 @@ data Req = NONE
          | J String String
          | AND [Req]
          | OR [Req]
-         | FCES String Req
+         | FCES Float Req
          | GRADE String Req
          | PROGRAM String
          | RAW String deriving (Eq, Show)
