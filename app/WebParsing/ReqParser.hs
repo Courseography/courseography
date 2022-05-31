@@ -411,51 +411,26 @@ fcesParser = do
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-    req <- Parsec.optionMaybe $ Parsec.try $ andParserOf courseParser
-    Parsec.spaces
-    raw <- Parsec.optionMaybe $ Parsec.try $ Parsec.notFollowedBy (Parsec.choice [
-        orSeparator,
-        andSeparator
-        ])
-        >> fcesRawParser
-    case req of
-        Nothing -> case raw of
-            Nothing -> return $ FCES fces (RAW "")
-            Just x -> return $ FCES fces x
-        Just r -> return $FCES fces r
+
+    FCES fces <$> fcesModifiersParser
+
+-- | Parser for FCES modifiers
+fcesModifiersParser :: Parser Req
+fcesModifiersParser = Parsec.try (andParserOf courseParser)
+    -- TODO: more modifier parsers will be added here
+    <|> fcesRawParser
 
 -- | Parser for the raw text in fcesParser
 -- | Like rawTextParser but terminates at fcesOrTerminator
 fcesRawParser :: Parser Req
 fcesRawParser = do
+    Parsec.spaces
     text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.choice [
-        Parsec.lookAhead fcesOrTerminator,
+        Parsec.lookAhead andSeparator,
+        Parsec.lookAhead orSeparator,
         Parsec.eof >> return ""
         ]
     return $ RAW text
-
--- | Parses for places to break within the FCEs parser
--- | Includes "or" and ". " but not "or higher" and "or CSC courses"
-fcesOrTerminator :: Parser String
-fcesOrTerminator = do
-    Parsec.spaces
-    sep <- Parsec.choice [
-        caseInsensitiveStr "or", -- not using or/andSeparator because '/' and '+' are allowed
-        caseInsensitiveStr ", or",
-        periodSpace
-        ]
-    Parsec.spaces
-    Parsec.notFollowedBy $ Parsec.choice [
-        caseInsensitiveStr "higher",
-        Parsec.count 3 Parsec.upper
-        ]
-    return sep
-
-    where
-    periodSpace = do
-        period <- Parsec.string "."
-        space <- Parsec.space
-        return $ period ++ [space]
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
