@@ -418,12 +418,12 @@ fcesParser = do
 fcesModifiersParser :: Parser Req
 fcesModifiersParser = Parsec.try (andParserOf courseParser)
     -- TODO: more modifier parsers will be added here
-    <|> fcesRawParser
+    <|> rawModifierParser
 
 -- | Parser for the raw text in fcesParser
--- | Like rawTextParser but terminates at fcesOrTerminator
-fcesRawParser :: Parser Req
-fcesRawParser = do
+-- | Like rawTextParser but terminates at ands and ors
+rawModifierParser :: Parser Req
+rawModifierParser = do
     Parsec.spaces
     text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.choice [
         Parsec.lookAhead andSeparator,
