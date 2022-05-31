@@ -178,7 +178,7 @@ reqToStmtsTree options parentID (RAW rawText) =
             return $ Node [DN prereq, DE edge] []
 --A prerequisite concerning a given number of earned credits
 reqToStmtsTree options parentID (FCES creds req) = do
-    fceNode <- makeNode (pack $ "at least " ++ creds ++ " FCEs") Nothing
+    fceNode <- makeNode (pack $ "at least " ++ show creds ++ " FCEs") Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
     return $ Node [DN fceNode, DE edge] [prereqStmts]
