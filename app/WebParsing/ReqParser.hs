@@ -3,8 +3,8 @@ module WebParsing.ReqParser where
 
 import Data.Char (isSpace, toLower, toUpper)
 import Database.Requirement
-import qualified Text.Parsec as Parsec
 import Text.Parsec ((<|>))
+import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 
 -- define separators
@@ -15,7 +15,8 @@ fromSeparator = Parsec.spaces
             "from the following: ",
             "from:",
             "from",
-            "at"
+            "at",
+            "in"
     ])
 
 completionPrefix :: Parser ()
@@ -93,9 +94,12 @@ orSeparator = Parsec.choice $ map caseInsensitiveStr [
 andSeparator :: Parser String
 andSeparator = Parsec.choice $ map caseInsensitiveStr [
     ", and",
+    ", an additional",
+    ", additional",
     ",",
     "and",
     "; and",
+    ".",
     ";",
     "&",
     "+",

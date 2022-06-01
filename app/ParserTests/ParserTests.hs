@@ -39,6 +39,9 @@ andInputs = [
     , ("CSC120H1, CSC121H1, CSC148H1", AND [J "CSC120H1" "", J "CSC121H1" "", J "CSC148H1" ""])
     , ("CSC165H1 & CSC236H1", AND [J "CSC165H1" "", J "CSC236H1" ""])
     , ("BCH377H1; BCH378H1; and permission of Department", AND [J "BCH377H1" "", J "BCH378H1" "", RAW "permission of Department"])
+    , ("CSC111H1. Permission of department", AND [J "CSC111H1" "", RAW "Permission of department"])
+    , ("CSC110H1, an additional permission of department", AND [J "CSC110H1" "", RAW "permission of department"])
+    , ("CSC110H1, additional CSC111H1", AND [J "CSC110H1" "", J "CSC111H1" ""]) -- TODO: can change the second part to FCEs to make more sense
     ]
 
 andorInputs :: [(String, Req)]
@@ -67,6 +70,7 @@ fcesInputs :: [(String, Req)]
 fcesInputs = [
       ("1.0 FCE from the following: (CSC148H1)", FCES 1.0 $ J "CSC148H1" "")
     , ("2.0 FCEs from CSC165H1/CSC148H1", FCES 2.0 $ OR [J "CSC165H1" "", J "CSC148H1" ""])
+    , ("2.0 FCEs in CSC165H1/CSC148H1", FCES 2.0 $ OR [J "CSC165H1" "", J "CSC148H1" ""])
     , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES 2.0 $ AND [J "MAT135H1" "",OR [J "MAT136H1" "",J "MAT137Y1" ""]])
     , ("Completion of 4.0 FCEs", FCES 4.0 $ RAW "")
     , ("Completion of 4 FCE.", FCES 4.0 $ RAW "")
