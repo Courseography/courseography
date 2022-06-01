@@ -339,8 +339,8 @@ programParser = do
 -- | Given a parser p, returns a parser that parses one or more p related through
 -- | the "one of the following" condition
 -- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
-oneOfParserOf :: Parser Req -> Parser Req
-oneOfParserOf p = do
+oneOfParser :: Parser Req -> Parser Req
+oneOfParser p = do
     Parsec.spaces
     _ <- Parsec.try oneOfSeparator
     Parsec.spaces
@@ -351,8 +351,8 @@ oneOfParserOf p = do
         (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- | Returns a parser that parses ORs of the given parser
-orParserOf :: Parser Req -> Parser Req
-orParserOf p = do
+orParser :: Parser Req -> Parser Req
+orParser p = do
     reqs <- Parsec.sepBy p orSeparator
     case reqs of
         [] -> fail "Empty Req."
@@ -360,9 +360,9 @@ orParserOf p = do
         (x:xs) -> return $ OR $ flattenOr (x:xs)
 
 -- | Returns a parser that parses ANDs of ORs of the given parser
-andParserOf :: Parser Req -> Parser Req
-andParserOf p = do
-    reqs <- Parsec.sepBy (Parsec.try (oneOfParserOf p) <|> Parsec.try (orParserOf p)) andSeparator
+andParser :: Parser Req -> Parser Req
+andParser p = do
+    reqs <- Parsec.sepBy (Parsec.try (oneOfParser p) <|> Parsec.try (orParser p)) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
@@ -411,12 +411,11 @@ fcesParser = do
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-
     FCES fces <$> fcesModifiersParser
 
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Req
-fcesModifiersParser = Parsec.try (andParserOf courseParser)
+fcesModifiersParser = Parsec.try (andParser courseParser)
     -- TODO: more modifier parsers will be added here
     <|> rawModifierParser
 
@@ -425,7 +424,7 @@ fcesModifiersParser = Parsec.try (andParserOf courseParser)
 rawModifierParser :: Parser Req
 rawModifierParser = do
     Parsec.spaces
-    text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.choice [
+    text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces >> Parsec.choice [
         Parsec.lookAhead andSeparator,
         Parsec.lookAhead orSeparator,
         Parsec.eof >> return ""
@@ -434,7 +433,7 @@ rawModifierParser = do
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
-categoryParser = Parsec.try $ andParserOf courseOrProgParser
+categoryParser = Parsec.try $ andParser courseOrProgParser
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters

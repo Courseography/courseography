@@ -82,18 +82,11 @@ fcesInputs = [
     , ("Completion of a minimum of 9 FCEs", FCES 9.0 $ RAW "")
     , ("Completion of 4.0 credits", FCES 4.0 $ RAW "")
     , ("at least 4.0 credits", FCES 4.0 $ RAW "")
-    --, ("at least one additional 0.5 credit from a 300-/400-level course.", FCES 0.5 $ RAW "a 300-/400-level course.")
-    --, ("at least 1.0 additional credit from 300-/400-level CSC/BCB courses", FCES 1.0 $ RAW "300-/400-level CSC/BCB courses")
-    --, ("at least one 0.5 credit from a 400-level CSC/BCB course", FCES 0.5 $ RAW "a 400-level CSC/BCB course")
     , ("At least one 0.5 credit at the 400-level", FCES 0.5 $ RAW "the 400-level")
-    --, ("At least one 0.5 credit at the 400-level or permission of the instructor", OR [FCES 0.5 (RAW "the 400-level"), RAW "permission of the instructor"])
-    --, ("At least 1.0 credit must be at the 300-/400-level:", FCES 1.0 $ RAW "must be at the 300-/400-level:")
     , ("At least 1.5 credits at the 400-level", FCES 1.5 $ RAW "the 400-level")
-    --, ("At least 1.5 credits from 400-level CSC or BCB courses.", FCES 1.5 $ RAW "400-level CSC or BCB courses.")
-    --, ("1.0 credits at the 300-level or higher", FCES 1.0 (RAW "the 300-level or higher"))
-    --, ("1.0 credit in HPS or HIS", FCES 1.0 (RAW "HPS or HIS"))
     , ("1.0 credits or 1.0 credit in Canadian Studies", OR [FCES 1.0 (RAW ""),FCES 1.0 (RAW "Canadian Studies")])
-    --, ("1.0 credits, CSE240H1/ NEW240Y1, CSE342H1, an additional 0.5 credit at the 300+ level from the Critical Studies", AND [FCES 1.0 (RAW ""),OR [J "CSE240H1" "",J "NEW240Y1" ""],J "CSE342H1" "",FCES 0.5 (RAW "the 300+ level from the Critical Studies")])
+    , ("NEW240Y1, an additional 0.5 credits at the 300 level from the Critical Studies", AND [J "NEW240Y1" "", FCES 0.5 (RAW "the 300 level from the Critical Studies")])
+    , ("At least one 0.5 credit at the 400-level or permission of the instructor", OR [FCES 0.5 (RAW "the 400-level"), RAW "permission of the instructor"])
     ]
 
 gradeBefInputs :: [(String, Req)]
