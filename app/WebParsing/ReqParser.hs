@@ -249,7 +249,7 @@ cutoffParser = Parsec.try coAftParser <|> coBefParser
 
 -- | Parser for requirements written within parentheses
 parParser :: Parser Req
-parParser = Parsec.between lParen rParen andParser
+parParser = Parsec.between lParen rParen categoryParser
 
 -- | Parser for raw text in a prerequisite, e.g., "proficiency in C/C++".
 -- Note that even if a course code appears in the middle of such text,
@@ -317,6 +317,7 @@ courseParser = Parsec.choice $ map Parsec.try [
 -- explained in the docstring of `programGroupParser`
 courseOrProgParser :: Parser Req
 courseOrProgParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
+    fcesParser,
     courseParser,
     programOrParser,
     rawTextParser
@@ -335,32 +336,33 @@ programParser = do
         ]
     return $ PROGRAM program
 
--- | Parser for reqs related through the "one of the following" condition
+-- | Given a parser p, returns a parser that parses one or more p related through
+-- | the "one of the following" condition
 -- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
-oneOfParser :: Parser Req
-oneOfParser = do
+oneOfParser :: Parser Req -> Parser Req
+oneOfParser p = do
     Parsec.spaces
     _ <- Parsec.try oneOfSeparator
     Parsec.spaces
-    reqs <- Parsec.sepBy courseOrProgParser (Parsec.try orSeparator <|> Parsec.try andSeparator)
+    reqs <- Parsec.sepBy p (Parsec.try orSeparator <|> Parsec.try andSeparator)
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ OR $ flattenOr (x:xs)
 
--- | Parser for reqs related through an OR.
-orParser :: Parser Req
-orParser = do
-    reqs <- Parsec.sepBy courseOrProgParser orSeparator
+-- | Returns a parser that parses ORs of the given parser
+orParser :: Parser Req -> Parser Req
+orParser p = do
+    reqs <- Parsec.sepBy p orSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ OR $ flattenOr (x:xs)
 
--- | Parser for for reqs related through an AND.
-andParser :: Parser Req
-andParser = do
-    reqs <- Parsec.sepBy (Parsec.try oneOfParser <|> orParser <|> programOrParser) andSeparator
+-- | Returns a parser that parses ANDs of ORs of the given parser
+andParser :: Parser Req -> Parser Req
+andParser p = do
+    reqs <- Parsec.sepBy (Parsec.try (oneOfParser p) <|> Parsec.try (orParser p)) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
@@ -409,12 +411,29 @@ fcesParser = do
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-    req <- Parsec.try andParser <|> Parsec.try orParser
-    return $ FCES fces req
+    FCES fces <$> fcesModifiersParser
+
+-- | Parser for FCES modifiers
+fcesModifiersParser :: Parser Req
+fcesModifiersParser = Parsec.try (andParser courseParser)
+    -- TODO: more modifier parsers will be added here
+    <|> rawModifierParser
+
+-- | Parser for the raw text in fcesParser
+-- | Like rawTextParser but terminates at ands and ors
+rawModifierParser :: Parser Req
+rawModifierParser = do
+    Parsec.spaces
+    text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces >> Parsec.choice [
+        Parsec.lookAhead andSeparator,
+        Parsec.lookAhead orSeparator,
+        Parsec.eof >> return ""
+        ]
+    return $ RAW text
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
-categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
+categoryParser = Parsec.try $ andParser courseOrProgParser
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters
