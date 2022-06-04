@@ -414,10 +414,15 @@ fcesParser = do
     FCES fces <$> fcesModifiersParser
 
 -- | Parser for FCES modifiers
-fcesModifiersParser :: Parser Req
-fcesModifiersParser = Parsec.try (andParser courseParser)
-    -- TODO: more modifier parsers will be added here
-    <|> rawModifierParser
+fcesModifiersParser :: Parser Modifier
+fcesModifiersParser = do
+    req <- Parsec.try (andParser courseParser)
+        -- TODO: more modifier parsers will be added here
+        <|> rawModifierParser
+
+    case req of
+        -- TODO: more Req matching will be added here
+        r -> return $ REQUIREMENT r
 
 -- | Parser for the raw text in fcesParser
 -- | Like rawTextParser but terminates at ands and ors
