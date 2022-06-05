@@ -412,6 +412,7 @@ fcesParser = do
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
+    _ <- Parsec.optional anyModifierParser
     FCES fces <$> fcesModifiersParser
 
 -- | Parser for FCES modifiers
@@ -431,7 +432,6 @@ courseAsModParser = do
 rawModifierParser :: Parser Modifier
 rawModifierParser = do
     Parsec.spaces
-    _ <- Parsec.optional anyModifierParser
     text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces >> Parsec.choice [
         Parsec.lookAhead andSeparator,
         Parsec.lookAhead orSeparator,
