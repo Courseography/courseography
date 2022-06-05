@@ -26,7 +26,8 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "Completion of",
     "At least one additional",
     "At least one",
-    "At least"
+    "At least",
+    "Any"
     ])
     >> Parsec.spaces
 
@@ -430,12 +431,24 @@ courseAsModParser = do
 rawModifierParser :: Parser Modifier
 rawModifierParser = do
     Parsec.spaces
+    _ <- Parsec.optional anyModifierParser
     text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces >> Parsec.choice [
         Parsec.lookAhead andSeparator,
         Parsec.lookAhead orSeparator,
         Parsec.eof >> return ""
         ]
     return $ REQUIREMENT $ RAW text
+
+-- | Parses "any field" or "any subject" in an fces modifier since they are redundant
+anyModifierParser :: Parser String
+anyModifierParser = do
+    a <- caseInsensitiveStr "any"
+    space <- Parsec.space
+    subject <- Parsec.choice (map caseInsensitiveStr [
+        "field",
+        "subject"
+        ])
+    return $ a ++ space:subject
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
