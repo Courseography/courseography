@@ -183,6 +183,12 @@ reqToStmtsTree options parentID (FCES creds (REQUIREMENT req)) = do
     prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
     return $ Node [DN fceNode, DE edge] [prereqStmts]
 
+--A prerequisite concerning a given number of earned credits in a department
+reqToStmtsTree _ parentID (FCES creds (DEPARTMENT dept)) = do
+    fceNode <- makeNode (pack $ show creds ++ " " ++ dept ++ " FCEs") Nothing
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
+    return $ Node [DN fceNode, DE edge] []
+
 -- A program requirement
 reqToStmtsTree _ parentID (PROGRAM prog) = do
     -- FIXME: weird width calculation from the library with the prog
