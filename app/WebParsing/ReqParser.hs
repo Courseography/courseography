@@ -415,7 +415,7 @@ fcesParser = do
 
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier
-fcesModifiersParser = courseAsModParser
+fcesModifiersParser = Parsec.try courseAsModParser
     -- TODO: more modifier parsers will be added here
     <|> rawModifierParser
 
