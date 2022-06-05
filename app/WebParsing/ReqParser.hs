@@ -425,11 +425,6 @@ plainFcesParser = do
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
     FCES fces <$> fcesModifiersParser
 
--- | Parser for FCE requirements with an optional preceeding dept name
--- | eg. "... 9.0 CSC FCEs ..." or "... 9.0 FCEs ..."
-fcesParser :: Parser Req
-fcesParser = Parsec.try plainFcesParser <|> Parsec.try deptBefFcesParser
-
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier
 fcesModifiersParser = Parsec.try courseAsModParser
@@ -463,6 +458,11 @@ rawModifierParser = do
         Parsec.eof >> return ""
         ]
     return $ REQUIREMENT $ RAW text
+
+-- | Parser for FCE requirements with an optional preceeding dept name
+-- | eg. "... 9.0 CSC FCEs ..." or "... 9.0 FCEs ..."
+fcesParser :: Parser Req
+fcesParser = Parsec.try plainFcesParser <|> Parsec.try deptBefFcesParser
 
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
