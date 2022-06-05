@@ -402,10 +402,22 @@ programOrParser = do
         [x] -> return x
         (x:xs) -> return $ OR $ flattenOr (x:xs)
 
+-- | Parser for FCE requirements following the dept name
+-- | eg. "... 9.0 CSC FCEs ..."
+deptBefFcesParser :: Parser Req
+deptBefFcesParser = do
+    _ <- Parsec.optional completionPrefix
+    fces <- creditsParser
+    dept <- departmentParser
+    _ <- Parsec.spaces
+    _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
+    _ <- fceSeparator
+    return $ FCES fces dept
+
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
-fcesParser :: Parser Req
-fcesParser = do
+plainFcesParser :: Parser Req
+plainFcesParser = do
     _ <- Parsec.optional completionPrefix
     fces <- creditsParser
     _ <- Parsec.spaces
@@ -413,10 +425,15 @@ fcesParser = do
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
     FCES fces <$> fcesModifiersParser
 
+-- | Parser for FCE requirements with an optional preceeding dept name
+-- | eg. "... 9.0 CSC FCEs ..." or "... 9.0 FCEs ..."
+fcesParser :: Parser Req
+fcesParser = Parsec.try plainFcesParser <|> Parsec.try deptBefFcesParser
+
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier
 fcesModifiersParser = Parsec.try courseAsModParser
-    -- TODO: more modifier parsers will be added here
+    <|> Parsec.try departmentParser
     <|> rawModifierParser
 
 -- | An andParser for courses but wraps the returned Req in a Modifier
@@ -424,6 +441,16 @@ courseAsModParser :: Parser Modifier
 courseAsModParser = do
     req <- andParser courseParser
     return $ REQUIREMENT req
+
+-- | Parses a department code in the fces requirement
+-- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
+departmentParser :: Parser Modifier
+departmentParser = do
+    Parsec.spaces
+    dept <- Parsec.count 3 Parsec.upper
+    Parsec.spaces
+    _ <- Parsec.optional $ caseInsensitiveStr "courses"
+    return $ DEPARTMENT dept
 
 -- | Parser for the raw text in fcesParser
 -- | Like rawTextParser but terminates at ands and ors

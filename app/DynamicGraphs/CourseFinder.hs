@@ -50,5 +50,5 @@ lookupReqs options (OR parents) =
         hasTaken _ = False
 lookupReqs options (FCES _ (REQUIREMENT parent)) = lookupReqs options parent
 lookupReqs options (GRADE _ parent) = lookupReqs options parent
--- This will catch both NONE and RAW values.
+-- This will catch NONE, RAW, and FCEs with non-course modifiers
 lookupReqs _ _ = return ()

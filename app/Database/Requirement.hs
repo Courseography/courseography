@@ -21,4 +21,5 @@ data Req = NONE
          | PROGRAM String
          | RAW String deriving (Eq, Show)
 
-newtype Modifier = REQUIREMENT Req deriving (Eq, Show)
+data Modifier = DEPARTMENT String
+              | REQUIREMENT Req deriving (Eq, Show)
