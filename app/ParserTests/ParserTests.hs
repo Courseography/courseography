@@ -149,6 +149,24 @@ programOrInputs = [
     , ("enrolment in a science, mathematics, or engineering program, or permission from instructor", OR [PROGRAM "science",PROGRAM "mathematics",PROGRAM "or engineering", RAW "permission from instructor"])
     ]
 
+cgpaInputs :: [(String, Req)]
+cgpaInputs = [
+      ("cGPA 1.0", GPA 1.0 (RAW ""))
+    , ("with 3.3 CGPA and permission of the Innis College Vice-Principal", GPA 3.3 (RAW "permission of the Innis College Vice-Principal"))
+    , ("a minimum cGPA of 3.0, and an application form that includes a written proposal confirming a faculty member has agreed to supervise.", GPA 3.0 (RAW "an application form that includes a written proposal confirming a faculty member has agreed to supervise."))
+    , ("and a minimum cGPA of 3.0", GPA 3.0 (RAW ""))
+    , ("and minimum cGPA of 3.0", GPA 3.0 (RAW ""))
+    , ("with a minimum cGPA of 3.0 in all CHM credits.", GPA 3.0 (RAW "in all CHM credits."))
+    , ("Minimum cGPA of 1.0 in CHM program courses.", GPA 1.0 (RAW "in CHM program courses."))
+    , ("a CGPA of at least 1.0 and permission of the Undergraduate Coordinator", GPA 1.0 (RAW "permission of the Undergraduate Coordinator"))
+    , ("with a CGPA of at least 2.5", GPA 2.5 (RAW ""))
+    , ("and will normally have a CGPA of at least 3.0", GPA 3.0 (RAW ""))
+    , ("A minimum CGPA of 1.0, completion of 10.0 credits and permission of the College Program Director", GPA 1.0 (AND [FCES 10.0 (RAW ""), RAW "permission of the College Program Director"]))
+    , ("A minimum CGPA of 3.0, completion of 12.0 credits, and permission of the College Program Director", GPA 3.0 (AND [FCES 12.0 (RAW ""), RAW "permission of the College Program Director"]))
+    , ("A minimum CGPA of 2.5, completion of 15.0 credits, and an application are required", GPA 2.5 (AND [FCES 15.0 (RAW ""),RAW "an application are required"]))
+    , ("A minimum CGPA of 2.0 and have completed 10.0 credits and permission of College Program Director", GPA 2.0 (AND [FCES 10.0 (RAW ""),RAW "permission of College Program Director"]))
+    ]
+
 noPrereqInputs :: [(String, Req)]
 noPrereqInputs = [
       ("", NONE)
@@ -173,6 +191,9 @@ parTests = createTest categoryParser "Basic and-or-parenthesized Requirement" pa
 fcesTests:: Test
 fcesTests = createTest categoryParser "Basic fces Requirement" fcesInputs
 
+cgpaTests :: Test
+cgpaTests = createTest cgpaParser "Minimum cGPA Requirement" cgpaInputs
+
 -- Outdated
 -- fromParTests :: Test
 -- fromParTests = createTest categoryParser "Paranthesized From Requirements with integer or float fces" fromParInputs
@@ -194,4 +215,4 @@ noPrereqTests = createReqParserTest "No prerequisites required" noPrereqInputs
 
 -- functions for running tests in REPL
 reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fcesTests, gradeBefTests, gradeAftTests, artSciTests, programOrTests, noPrereqTests]
+reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fcesTests, gradeBefTests, gradeAftTests, artSciTests, programOrTests, cgpaTests, noPrereqTests]

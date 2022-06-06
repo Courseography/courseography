@@ -24,9 +24,25 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "Completion of at least",
     "Completion of a minimum of",
     "Completion of",
+    "have completed",
     "At least one additional",
     "At least one",
     "At least"
+    ])
+    >> Parsec.spaces
+
+cgpaPrefix :: Parser ()
+cgpaPrefix = Parsec.choice (map caseInsensitiveStr [
+    "and will normally have a CGPA of at least",
+    "with a CGPA of at least",
+    "with a minimum cGPA of",
+    "and a minimum cGPA of",
+    "and minimum cGPA of",
+    "a CGPA of at least",
+    "a minimum cGPA of",
+    "minimum cGPA of",
+    "with",
+    "cGPA"
     ])
     >> Parsec.spaces
 
@@ -434,6 +450,19 @@ rawModifierParser = do
 -- | Parser for requirements separated by a semicolon.
 categoryParser :: Parser Req
 categoryParser = Parsec.try $ andParser courseOrProgParser
+
+-- Parser for cGPA requirements: "... 1.0 cGPA ..."
+cgpaParser :: Parser Req
+cgpaParser = do
+    _ <- Parsec.optional cgpaPrefix
+    gpa <- creditsParser
+    Parsec.spaces
+    _ <- Parsec.optional (caseInsensitiveStr "cGPA")
+    Parsec.spaces
+    _ <- Parsec.optional andSeparator
+    Parsec.spaces
+    req <- categoryParser
+    return $ GPA gpa req
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters
