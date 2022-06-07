@@ -12,9 +12,12 @@ fromSeparator :: Parser String
 fromSeparator = Parsec.spaces
                 >> Parsec.choice (map (Parsec.try . Parsec.string) [
             "of any of the following:",
+            "of",
             "from the following: ",
+            "from the",
             "from:",
             "from",
+            "at the",
             "at",
             "in"
     ])
@@ -27,8 +30,10 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "At least one additional",
     "At least one",
     "At least",
-    "Any"
+    "Any",
+    "a"
     ])
+    >> Parsec.space
     >> Parsec.spaces
 
 programPrefix :: Parser ()
@@ -412,7 +417,8 @@ fcesParser = do
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-    _ <- Parsec.optional anyModifierParser
+    _ <- Parsec.spaces
+    _ <- Parsec.optional $ Parsec.try anyModifierParser
     FCES fces <$> fcesModifiersParser
 
 -- | Parser for FCES modifiers
