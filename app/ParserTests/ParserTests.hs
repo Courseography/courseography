@@ -99,8 +99,10 @@ fcesInputs = [
     , ("1.0 credits of 300+ level CSC courses", FCES 1.0 (LEVEL "300+" (DEPARTMENT "CSC")))
     , ("1.0 credits at the 300-level or higher from CSC courses", FCES 1.0 (LEVEL "300+" (DEPARTMENT "CSC")))
     , ("1.0 credit at the 300-level from Group B: Evolutionary", FCES 1.0 (LEVEL "300" (REQUIREMENT $ RAW "Group B: Evolutionary")))
+    , ("ANT203Y1 and a 0.5 credit 300+ level course from Group B: Evolutionary", AND [J "ANT203Y1" "", FCES 0.5 (LEVEL "300+" (REQUIREMENT $ RAW "Group B: Evolutionary"))])
     , ("ANT253H1 and 1.0 credit at the 300-level", AND [J "ANT253H1" "", FCES 1.0 (LEVEL "300" (REQUIREMENT $ RAW ""))])
     , ("1.0 credit in FRE at the 200-level", FCES 1.0 (LEVEL "200" (DEPARTMENT "FRE")))
+    , ("14.0 credits, 3.0 credits in Anthropology", AND [FCES 14.0 (REQUIREMENT $ RAW ""), FCES 3.0 (REQUIREMENT $ RAW "Anthropology")])
     ]
 
 gradeBefInputs :: [(String, Req)]

@@ -29,8 +29,10 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "Completion of",
     "At least one additional",
     "At least one",
-    "At least"
+    "At least",
+    "a"
     ])
+    >> Parsec.space
     >> Parsec.spaces
 
 programPrefix :: Parser ()
@@ -447,6 +449,13 @@ courseAsModParser = do
     req <- andParser courseParser
     return $ REQUIREMENT req
 
+-- | Parses a literal "course" or "courses"
+courseLiteralParser :: Parser String
+courseLiteralParser = Parsec.choice (map caseInsensitiveStr [
+    "courses",
+    "course"
+    ])
+
 -- | Parses a level modifier in the fces requirement
 -- | eg. the "300-level" in "1.0 credit at the 300-level"
 plainLevelParser :: Parser String
@@ -460,6 +469,7 @@ plainLevelParser = do
         ]
     _ <- caseInsensitiveStr "level"
     _ <- Parsec.spaces
+    _ <- Parsec.optional $ Parsec.try courseLiteralParser
     higher <- Parsec.optionMaybe $ caseInsensitiveStr "or higher"
 
     case plus of
@@ -500,7 +510,7 @@ departmentParser = do
     Parsec.spaces
     dept <- Parsec.count 3 Parsec.upper
     Parsec.spaces
-    _ <- Parsec.optional $ caseInsensitiveStr "courses"
+    _ <- Parsec.optional $ Parsec.try courseLiteralParser
     return $ DEPARTMENT dept
 
 -- | Parser for the raw text in fcesParser

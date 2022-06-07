@@ -176,12 +176,53 @@ reqToStmtsTree options parentID (RAW rawText) =
             prereq <- makeNode (pack rawText) Nothing
             edge <- makeEdge (nodeID prereq) parentID Nothing
             return $ Node [DN prereq, DE edge] []
+
+--A prerequisite concerning a given number of earned credits
+reqToStmtsTree _ parentID (FCES creds (REQUIREMENT (RAW ""))) = do
+    fceNode <- makeNode (pack $ show creds ++ " FCEs") Nothing
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
+    return $ Node [DN fceNode, DE edge] []
+
+--A prerequisite concerning a given number of earned credits in some raw string
+reqToStmtsTree _ parentID (FCES creds (REQUIREMENT (RAW text))) = do
+    fceNode <- makeNode (pack $ show creds ++ " FCEs from " ++ text ++ paddingSpaces) Nothing
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
+    return $ Node [DN fceNode, DE edge] []
+
 --A prerequisite concerning a given number of earned credits in some course(s)
 reqToStmtsTree options parentID (FCES creds (REQUIREMENT req)) = do
     fceNode <- makeNode (pack $ show creds ++ " FCEs") Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
     return $ Node [DN fceNode, DE edge] [prereqStmts]
+
+--A prerequisite concerning a given number of earned credits in a department at a given level
+reqToStmtsTree _ parentID (FCES creds (LEVEL level (DEPARTMENT dept))) = do
+    fceNode <- makeNode (pack $ show creds ++ " " ++ dept ++ " FCEs at the " ++ level ++ " level" ++ paddingSpaces) Nothing
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
+    return $ Node [DN fceNode, DE edge] []
+
+--A prerequisite concerning a given number of earned credits at a given level
+reqToStmtsTree _ parentID (FCES creds (LEVEL level (REQUIREMENT (RAW "")))) = do
+    fceNode <- makeNode (pack $ show creds ++ " FCEs at the " ++ level ++ " level" ++ paddingSpaces) Nothing
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
+    return $ Node [DN fceNode, DE edge] []
+
+--A prerequisite concerning a given number of earned credits in some raw string at a given level
+reqToStmtsTree _ parentID (FCES creds (LEVEL level (REQUIREMENT (RAW text)))) = do
+    fceNode <- makeNode (pack $ show creds ++ " FCEs at the " ++ level ++ " level from " ++ text ++ paddingSpaces) Nothing
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
+    return $ Node [DN fceNode, DE edge] []
+
+--A prerequisite concerning a given number of earned credits in some course(s) at a given level
+reqToStmtsTree options parentID (FCES creds (LEVEL level (REQUIREMENT req))) = do
+    fceNode <- makeNode (pack $ show creds ++ " FCEs at the " ++ level ++ " level" ++ paddingSpaces) Nothing
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
+    prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
+    return $ Node [DN fceNode, DE edge] [prereqStmts]
+
+-- A prerequisite the level of level, which should never occur given the way levelParser works
+reqToStmtsTree _ _ (FCES _ (LEVEL _ _)) = return $ Node [] []
 
 --A prerequisite concerning a given number of earned credits in a department
 reqToStmtsTree _ parentID (FCES creds (DEPARTMENT dept)) = do
@@ -291,3 +332,6 @@ edgeAttrs :: GlobalAttributes
 edgeAttrs = EdgeAttrs [
     ArrowHead (AType [(ArrMod FilledArrow BothSides, Normal)])
     ]
+
+paddingSpaces :: [Char]
+paddingSpaces = Prelude.replicate 18 ' '
