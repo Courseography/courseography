@@ -68,25 +68,25 @@ parInputs = [
 
 fcesInputs :: [(String, Req)]
 fcesInputs = [
-      ("1.0 FCE from the following: (CSC148H1)", FCES 1.0 $ J "CSC148H1" "")
-    , ("2.0 FCEs from CSC165H1/CSC148H1", FCES 2.0 $ OR [J "CSC165H1" "", J "CSC148H1" ""])
-    , ("2.0 FCEs in CSC165H1/CSC148H1", FCES 2.0 $ OR [J "CSC165H1" "", J "CSC148H1" ""])
-    , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES 2.0 $ AND [J "MAT135H1" "",OR [J "MAT136H1" "",J "MAT137Y1" ""]])
-    , ("Completion of 4.0 FCEs", FCES 4.0 $ RAW "")
-    , ("Completion of 4 FCE.", FCES 4.0 $ RAW "")
-    , ("Completion of 9 FCEs", FCES 9.0 $ RAW "")
-    , ("Completion of 9.0 credits or permission of the instructor", OR [FCES 9.0 (RAW ""), RAW "permission of the instructor"])
-    , ("Completion of 9.0 credits. Permission of the instructor", AND [FCES 9.0 (RAW ""), RAW "Permission of the instructor"])
-    , ("Completion of at least 9.0 FCE", FCES 9.0 $ RAW "")
-    , ("Completion of a minimum of 4.0 FCEs", FCES 4.0 $ RAW "")
-    , ("Completion of a minimum of 9 FCEs", FCES 9.0 $ RAW "")
-    , ("Completion of 4.0 credits", FCES 4.0 $ RAW "")
-    , ("at least 4.0 credits", FCES 4.0 $ RAW "")
-    , ("At least one 0.5 credit at the 400-level", FCES 0.5 $ RAW "the 400-level")
-    , ("At least 1.5 credits at the 400-level", FCES 1.5 $ RAW "the 400-level")
-    , ("1.0 credits or 1.0 credit in Canadian Studies", OR [FCES 1.0 (RAW ""),FCES 1.0 (RAW "Canadian Studies")])
-    , ("NEW240Y1, an additional 0.5 credits at the 300 level from the Critical Studies", AND [J "NEW240Y1" "", FCES 0.5 (RAW "the 300 level from the Critical Studies")])
-    , ("At least one 0.5 credit at the 400-level or permission of the instructor", OR [FCES 0.5 (RAW "the 400-level"), RAW "permission of the instructor"])
+      ("1.0 FCE from the following: (CSC148H1)", FCES 1.0 $ REQUIREMENT $ J "CSC148H1" "")
+    , ("2.0 FCEs from CSC165H1/CSC148H1", FCES 2.0 $ REQUIREMENT $ OR [J "CSC165H1" "", J "CSC148H1" ""])
+    , ("2.0 FCEs in CSC165H1/CSC148H1", FCES 2.0 $ REQUIREMENT $ OR [J "CSC165H1" "", J "CSC148H1" ""])
+    , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES 2.0 $ REQUIREMENT $ AND [J "MAT135H1" "",OR [J "MAT136H1" "",J "MAT137Y1" ""]])
+    , ("Completion of 4.0 FCEs", FCES 4.0 $ REQUIREMENT $ RAW "")
+    , ("Completion of 4 FCE.", FCES 4.0 $ REQUIREMENT $ RAW "")
+    , ("Completion of 9 FCEs", FCES 9.0 $ REQUIREMENT $ RAW "")
+    , ("Completion of 9.0 credits or permission of the instructor", OR [FCES 9.0 (REQUIREMENT $ RAW ""), RAW "permission of the instructor"])
+    , ("Completion of 9.0 credits. Permission of the instructor", AND [FCES 9.0 (REQUIREMENT $ RAW ""), RAW "Permission of the instructor"])
+    , ("Completion of at least 9.0 FCE", FCES 9.0 $ REQUIREMENT $ RAW "")
+    , ("Completion of a minimum of 4.0 FCEs", FCES 4.0 $ REQUIREMENT $ RAW "")
+    , ("Completion of a minimum of 9 FCEs", FCES 9.0 $ REQUIREMENT $ RAW "")
+    , ("Completion of 4.0 credits", FCES 4.0 $ REQUIREMENT $ RAW "")
+    , ("at least 4.0 credits", FCES 4.0 $ REQUIREMENT $ RAW "")
+    , ("At least one 0.5 credit at the 400-level", FCES 0.5 $ REQUIREMENT $ RAW "the 400-level")
+    , ("At least 1.5 credits at the 400-level", FCES 1.5 $ REQUIREMENT $ RAW "the 400-level")
+    , ("1.0 credits or 1.0 credit in Canadian Studies", OR [FCES 1.0 (REQUIREMENT $ RAW ""),FCES 1.0 (REQUIREMENT $ RAW "Canadian Studies")])
+    , ("NEW240Y1, an additional 0.5 credits at the 300 level from the Critical Studies", AND [J "NEW240Y1" "", FCES 0.5 (REQUIREMENT $ RAW "the 300 level from the Critical Studies")])
+    , ("At least one 0.5 credit at the 400-level or permission of the instructor", OR [FCES 0.5 (REQUIREMENT $ RAW "the 400-level"), RAW "permission of the instructor"])
     ]
 
 gradeBefInputs :: [(String, Req)]
@@ -127,7 +127,7 @@ artSciInputs = [
     , ("EEB223H1 (ecology and evo), STA220H1 (recommended)/ STA257H1 (recommended)", AND [J "EEB223H1" "ecology and evo",OR [J "STA220H1" "recommended",J "STA257H1" "recommended"]])
     , ("EEB223H1 (ecology and evo)/ STA220H1 (recommended)/ STA257H1", OR [J "EEB223H1" "ecology and evo",J "STA220H1" "recommended",J "STA257H1" ""])
     , ("EEB223H1 (ecology and evo)/ STA220H1 (B-)/ STA257H1", OR [J "EEB223H1" "ecology and evo", GRADE "B-" $ J "STA220H1" "", J "STA257H1" ""])
-    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", FCES 0.5 $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""])
+    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", FCES 0.5 $ REQUIREMENT $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""])
     , ("MATB23H3/STA220H1 (recommended)/STA257H1 (recommended)", OR [J "MATB23H3" "",J "STA220H1" "recommended",J "STA257H1" "recommended"])
     ]
 
