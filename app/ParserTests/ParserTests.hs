@@ -175,35 +175,35 @@ noPrereqInputs = [
     ]
 
 orTests :: Test
-orTests = createTest categoryParser "Basic or Requirement" orInputs
+orTests = createTest reqParser "Basic or Requirement" orInputs
 
 andTests :: Test
-andTests = createTest categoryParser "Basic and Requirement" andInputs
+andTests = createTest reqParser "Basic and Requirement" andInputs
 
 andorTests :: Test
-andorTests = createTest categoryParser "Basic and-or-mixed Requirement" andorInputs
+andorTests = createTest reqParser "Basic and-or-mixed Requirement" andorInputs
 
 parTests :: Test
-parTests = createTest categoryParser "Basic and-or-parenthesized Requirement" parInputs
+parTests = createTest reqParser "Basic and-or-parenthesized Requirement" parInputs
 
 fcesTests:: Test
-fcesTests = createTest categoryParser "Basic fces Requirement" fcesInputs
+fcesTests = createTest reqParser "Basic fces Requirement" fcesInputs
 
 -- Outdated
 -- fromParTests :: Test
--- fromParTests = createTest categoryParser "Paranthesized From Requirements with integer or float fces" fromParInputs
+-- fromParTests = createTest reqParser "Paranthesized From Requirements with integer or float fces" fromParInputs
 
 gradeBefTests :: Test
-gradeBefTests = createTest categoryParser "Basic grade requirements which come before." gradeBefInputs
+gradeBefTests = createTest reqParser "Basic grade requirements which come before." gradeBefInputs
 
 gradeAftTests :: Test
-gradeAftTests = createTest categoryParser "Basic grade requirements, where grades come after." gradeAftInputs
+gradeAftTests = createTest reqParser "Basic grade requirements, where grades come after." gradeAftInputs
 
 artSciTests :: Test
-artSciTests = createTest categoryParser "Arts and Science requirements from Christine's output" artSciInputs
+artSciTests = createTest reqParser "Arts and Science requirements from Christine's output" artSciInputs
 
 programOrTests :: Test
-programOrTests = createTest categoryParser "program requirements" programOrInputs
+programOrTests = createTest reqParser "program requirements" programOrInputs
 
 noPrereqTests :: Test
 noPrereqTests = createReqParserTest "No prerequisites required" noPrereqInputs

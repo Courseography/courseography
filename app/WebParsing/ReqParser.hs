@@ -254,7 +254,7 @@ cutoffParser = Parsec.try coAftParser <|> coBefParser
 
 -- | Parser for requirements written within parentheses
 parParser :: Parser Req
-parParser = Parsec.between lParen rParen categoryParser
+parParser = Parsec.between lParen rParen reqParser
 
 -- | Parser for raw text in a prerequisite, e.g., "proficiency in C/C++".
 -- Note that even if a course code appears in the middle of such text,
@@ -320,8 +320,8 @@ courseParser = Parsec.choice $ map Parsec.try [
 -- Parses for a single course or a group of programs
 -- Programs need to be parsed in groups because of the concatenation issue
 -- explained in the docstring of `programGroupParser`
-courseOrProgParser :: Parser Req
-courseOrProgParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
+categoryParser :: Parser Req
+categoryParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     fcesParser,
     courseParser,
     programOrParser,
@@ -531,8 +531,8 @@ fcesParser :: Parser Req
 fcesParser = Parsec.try plainFcesParser <|> Parsec.try deptBefFcesParser
 
 -- | Parser for requirements separated by a semicolon.
-categoryParser :: Parser Req
-categoryParser = Parsec.try $ andParser courseOrProgParser
+reqParser :: Parser Req
+reqParser = Parsec.try $ andParser categoryParser
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters
@@ -560,7 +560,7 @@ parseReqs reqString = do
     if all isSpace reqString || reqStringLower == "none" || reqStringLower == "no"
         then NONE
         else do
-            let req = Parsec.parse categoryParser "" reqString
+            let req = Parsec.parse reqParser "" reqString
                 in case req of
                     Right x -> x
                     Left e -> J (show e) ""
