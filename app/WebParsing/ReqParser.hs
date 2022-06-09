@@ -33,8 +33,7 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "Any",
     "a"
     ])
-    >> Parsec.space
-    >> Parsec.spaces
+    >> Parsec.skipMany1 Parsec.space
 
 programPrefix :: Parser ()
 programPrefix = Parsec.choice (map caseInsensitiveStr [
@@ -446,15 +445,14 @@ rawModifierParser = do
     return $ REQUIREMENT $ RAW text
 
 -- | Parses "any field" or "any subject" in an fces modifier since they are redundant
-anyModifierParser :: Parser String
-anyModifierParser = do
-    a <- caseInsensitiveStr "any"
-    space <- Parsec.space
-    subject <- Parsec.choice (map caseInsensitiveStr [
+anyModifierParser :: Parser ()
+anyModifierParser = caseInsensitiveStr "any"
+    >> Parsec.many1 Parsec.space
+    >> Parsec.choice (map caseInsensitiveStr [
         "field",
         "subject"
         ])
-    return $ a ++ space:subject
+    >> Parsec.spaces
 
 -- | Parser for requirements separated by a semicolon.
 reqParser :: Parser Req

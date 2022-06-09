@@ -91,6 +91,8 @@ fcesInputs = [
     , ("9.0 credits in any field", FCES 9.0 (REQUIREMENT $ RAW ""))
     , ("9.0 credits in any subject", FCES 9.0 (REQUIREMENT $ RAW ""))
     , ("1.0 credits of CSC courses", FCES 1.0 (REQUIREMENT $ RAW "CSC courses"))
+    , ("1.0 credits from the CSC courses", FCES 1.0 (REQUIREMENT $ RAW "CSC courses"))
+    , ("1.0 credits at the 400-level", FCES 1.0 (REQUIREMENT $ RAW "400-level"))
     , ("a 0.5 credit 300 level course", FCES 0.5 (REQUIREMENT $ RAW "300 level course"))
     ]
 
