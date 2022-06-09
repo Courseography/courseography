@@ -407,34 +407,24 @@ programOrParser = do
         [x] -> return x
         (x:xs) -> return $ OR $ flattenOr (x:xs)
 
--- | Parser for FCE requirements following the dept name
--- | eg. "... 9.0 CSC FCEs ..."
-deptBefFcesParser :: Parser Req
-deptBefFcesParser = do
-    _ <- Parsec.optional completionPrefix
-    fces <- creditsParser
-    dept <- departmentParser
-    _ <- Parsec.spaces
-    _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-    _ <- fceSeparator
-    _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-    level <- Parsec.optionMaybe $ Parsec.try levelParser
-
-    case level of
-        Nothing -> return $ FCES fces dept
-        Just (LEVEL x _) -> return $ FCES fces (LEVEL x dept)
-        Just _ -> fail "levelParser returned non-LEVEL data" -- This should never happen
-
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
-plainFcesParser :: Parser Req
-plainFcesParser = do
+fcesParser :: Parser Req
+fcesParser = do
     _ <- Parsec.optional completionPrefix
     fces <- creditsParser
+    dept <- Parsec.optionMaybe $ Parsec.try departmentParser
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-    FCES fces <$> fcesModifiersParser
+    modifiers <- fcesModifiersParser
+
+    case dept of
+        Nothing -> return $ FCES fces modifiers
+        Just d -> case modifiers of
+            REQUIREMENT _ -> return $ FCES fces d
+            LEVEL x _ -> return $ FCES fces (LEVEL x d)
+            DEPARTMENT _ -> fail "two departments"
 
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier
@@ -451,7 +441,8 @@ courseAsModParser = do
 
 -- | Parses a literal "course" or "courses"
 courseLiteralParser :: Parser String
-courseLiteralParser = Parsec.choice (map caseInsensitiveStr [
+courseLiteralParser = Parsec.spaces
+    >> Parsec.choice (map caseInsensitiveStr [
     "courses",
     "course"
     ])
@@ -508,9 +499,15 @@ levelParser = Parsec.try levelBefModParser <|> Parsec.try levelAftModParser
 departmentParser :: Parser Modifier
 departmentParser = do
     Parsec.spaces
-    dept <- Parsec.count 3 Parsec.upper
-    Parsec.spaces
-    _ <- Parsec.optional $ Parsec.try courseLiteralParser
+    Parsec.notFollowedBy fceSeparator
+    dept <- manyTill1 Parsec.anyChar $ Parsec.choice (map Parsec.try [
+        courseLiteralParser,
+        Parsec.spaces >> Parsec.lookAhead fceSeparator >> return "",
+        orSeparator,
+        andSeparator,
+        fromSeparator,
+        Parsec.eof >> return ""
+        ])
     return $ DEPARTMENT dept
 
 -- | Parser for the raw text in fcesParser
@@ -525,11 +522,6 @@ rawModifierParser = do
         ]
     return $ REQUIREMENT $ RAW text
 
--- | Parser for FCE requirements with an optional preceeding dept name
--- | eg. "... 9.0 CSC FCEs ..." or "... 9.0 FCEs ..."
-fcesParser :: Parser Req
-fcesParser = Parsec.try plainFcesParser <|> Parsec.try deptBefFcesParser
-
 -- | Parser for requirements separated by a semicolon.
 reqParser :: Parser Req
 reqParser = Parsec.try $ andParser categoryParser
@@ -543,6 +535,14 @@ sepByNoConsume p sep = (do
     xs <- Parsec.many $ Parsec.try (sep >> p)
     return (x:xs))
     <|> return []
+
+-- | Parses p one or more times until end succeeds
+manyTill1 :: Show a => Parser Char -> Parser a -> Parser [Char]
+manyTill1 p end = do
+    Parsec.notFollowedBy end
+    x <- p
+    xs <- Parsec.manyTill p end
+    return $ x:xs
 
 -- Flattens nested ORs into a single OR
 -- eg. OR [OR ["CS major, "Math major"], RAW "permission from instructor"]
