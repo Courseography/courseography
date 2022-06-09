@@ -444,7 +444,7 @@ departmentParser :: Parser Modifier
 departmentParser = do
     Parsec.spaces
     Parsec.notFollowedBy fceSeparator
-    dept <- manyTill1 Parsec.anyChar $ Parsec.choice (map Parsec.try [
+    dept <- many1Till Parsec.anyChar $ Parsec.choice (map Parsec.try [
         courseLiteralParser,
         Parsec.spaces >> Parsec.lookAhead fceSeparator >> return "",
         orSeparator,
@@ -480,8 +480,8 @@ sepByNoConsume p sep = (do
     <|> return []
 
 -- | Parses p one or more times until end succeeds
-manyTill1 :: Show a => Parser Char -> Parser a -> Parser [Char]
-manyTill1 p end = do
+many1Till :: Show a => Parser Char -> Parser a -> Parser [Char]
+many1Till p end = do
     Parsec.notFollowedBy end
     x <- p
     xs <- Parsec.manyTill p end
