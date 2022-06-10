@@ -89,7 +89,7 @@ fcesInputs = [
     , ("At least one 0.5 credit at the 400-level", FCES 0.5 $ DEPARTMENT "400-level")
     , ("At least 1.5 credits at the 400-level", FCES 1.5 $ DEPARTMENT "400-level")
     , ("NEW240Y1, an additional 0.5 credits at the 300 level from the Critical Studies", AND [J "NEW240Y1" "", FCES 0.5 (DEPARTMENT "300 level")])
-    , ("At least one 0.5 credit at the 400-level or permission of the instructor", FCES 0.5 (DEPARTMENT "400-level "))
+    , ("At least one 0.5 credit at the 400-level or permission of the instructor", OR [FCES 0.5 (DEPARTMENT "400-level"), RAW "permission of the instructor"])
     , ("Any 9.0 credits", FCES 9.0 (REQUIREMENT $ RAW ""))
     , ("9.0 credits in any field", FCES 9.0 (REQUIREMENT $ RAW ""))
     , ("9.0 credits in any subject", FCES 9.0 (REQUIREMENT $ RAW ""))

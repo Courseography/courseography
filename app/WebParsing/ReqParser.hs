@@ -419,10 +419,9 @@ fcesParser = do
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
     _ <- Parsec.spaces
     _ <- Parsec.optional $ Parsec.try anyModifierParser
-    modifiers <- fcesModifiersParser
 
     case dept of
-        Nothing -> return $ FCES fces modifiers
+        Nothing -> FCES fces <$> fcesModifiersParser
         Just x -> return $ FCES fces x
 
 -- | Parser for FCES modifiers
@@ -439,11 +438,10 @@ courseAsModParser = do
 
 -- | Parses a literal "course" or "courses"
 courseLiteralParser :: Parser String
-courseLiteralParser = Parsec.spaces
-    >> Parsec.choice (map caseInsensitiveStr [
-        "courses",
-        "course"
-        ])
+courseLiteralParser = Parsec.choice (map caseInsensitiveStr [
+    "courses",
+    "course"
+    ])
 
 -- | Parses a department code in the fces requirement
 -- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
@@ -451,15 +449,19 @@ departmentParser :: Parser Modifier
 departmentParser = do
     Parsec.spaces
     Parsec.notFollowedBy fceSeparator
-    dept <- many1Till Parsec.anyChar $ Parsec.choice (map Parsec.try [
+    dept <- Parsec.manyTill Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
         courseLiteralParser,
-        Parsec.spaces >> Parsec.lookAhead fceSeparator >> return "",
+        fceSeparator >> return "",
         orSeparator,
         andSeparator,
         fromSeparator,
         Parsec.eof >> return ""
-        ])
-    return $ DEPARTMENT dept
+        ]
+    _ <- Parsec.optional courseLiteralParser
+
+    case trim dept of
+        "" -> fail "empty dept"
+        x -> return $ DEPARTMENT x
 
 -- | Parser for the raw text in fcesParser
 -- | Like rawTextParser but terminates at ands and ors
@@ -497,14 +499,6 @@ sepByNoConsume p sep = (do
     return (x:xs))
     <|> return []
 
--- | Parses p one or more times until end succeeds
-many1Till :: Show a => Parser Char -> Parser a -> Parser [Char]
-many1Till p end = do
-    Parsec.notFollowedBy end
-    x <- p
-    xs <- Parsec.manyTill p end
-    return $ x:xs
-
 -- Flattens nested ORs into a single OR
 -- eg. OR [OR ["CS major, "Math major"], RAW "permission from instructor"]
 -- Nested ORs occur because the way programs are related through ORs is
@@ -514,6 +508,12 @@ flattenOr :: [Req] -> [Req]
 flattenOr [] = []
 flattenOr (OR x:xs) = x ++ flattenOr xs
 flattenOr (x:xs) = x:flattenOr xs
+
+-- | Trims leading and trailing spaces from a string
+-- | Modified from https://stackoverflow.com/a/6270337/10254049
+-- | based on @Carcigenicate's comment
+trim :: String -> String
+trim = let f = reverse . dropWhile isSpace in f . f
 
 parseReqs :: String -> Req
 parseReqs reqString = do
