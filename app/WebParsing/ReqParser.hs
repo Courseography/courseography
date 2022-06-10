@@ -12,9 +12,12 @@ fromSeparator :: Parser String
 fromSeparator = Parsec.spaces
                 >> Parsec.choice (map (Parsec.try . Parsec.string) [
             "of any of the following:",
+            "of",
             "from the following: ",
+            "from the",
             "from:",
             "from",
+            "at the",
             "at",
             "in"
     ])
@@ -26,9 +29,11 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "Completion of",
     "At least one additional",
     "At least one",
-    "At least"
+    "At least",
+    "Any",
+    "a"
     ])
-    >> Parsec.spaces
+    >> Parsec.skipMany1 Parsec.space
 
 programPrefix :: Parser ()
 programPrefix = Parsec.choice (map caseInsensitiveStr [
@@ -412,6 +417,8 @@ fcesParser = do
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
+    _ <- Parsec.spaces
+    _ <- Parsec.optional $ Parsec.try anyModifierParser
     modifiers <- fcesModifiersParser
 
     case dept of
@@ -465,6 +472,16 @@ rawModifierParser = do
         Parsec.eof >> return ""
         ]
     return $ REQUIREMENT $ RAW text
+
+-- | Parses "any field" or "any subject" in an fces modifier since they are redundant
+anyModifierParser :: Parser ()
+anyModifierParser = caseInsensitiveStr "any"
+    >> Parsec.many1 Parsec.space
+    >> Parsec.choice (map caseInsensitiveStr [
+        "field",
+        "subject"
+        ])
+    >> Parsec.spaces
 
 -- | Parser for requirements separated by a semicolon.
 reqParser :: Parser Req

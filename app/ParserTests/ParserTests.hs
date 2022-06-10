@@ -86,6 +86,17 @@ fcesInputs = [
     , ("0.5 credit in HPS", FCES 0.5 (DEPARTMENT "HPS"))
     , ("1.0 credit in MST courses and 0.5 credit in HIS", AND [FCES 1.0 (DEPARTMENT "MST"), FCES 0.5 (DEPARTMENT "HIS")])
     , ("2.0 ENG credits", FCES 2.0 (DEPARTMENT "ENG"))
+    , ("At least one 0.5 credit at the 400-level", FCES 0.5 $ DEPARTMENT "400-level")
+    , ("At least 1.5 credits at the 400-level", FCES 1.5 $ DEPARTMENT "400-level")
+    , ("NEW240Y1, an additional 0.5 credits at the 300 level from the Critical Studies", AND [J "NEW240Y1" "", FCES 0.5 (DEPARTMENT "300 level")])
+    , ("At least one 0.5 credit at the 400-level or permission of the instructor", FCES 0.5 (DEPARTMENT "400-level "))
+    , ("Any 9.0 credits", FCES 9.0 (REQUIREMENT $ RAW ""))
+    , ("9.0 credits in any field", FCES 9.0 (REQUIREMENT $ RAW ""))
+    , ("9.0 credits in any subject", FCES 9.0 (REQUIREMENT $ RAW ""))
+    , ("1.0 credits of CSC courses", FCES 1.0 (DEPARTMENT "CSC"))
+    , ("1.0 credits from the CSC courses", FCES 1.0 (DEPARTMENT "CSC"))
+    , ("1.0 credits at the 400-level", FCES 1.0 (DEPARTMENT "400-level"))
+    , ("a 0.5 credit 300 level course", FCES 0.5 (DEPARTMENT "300 level"))
     ]
 
 gradeBefInputs :: [(String, Req)]
