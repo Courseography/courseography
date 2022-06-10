@@ -449,6 +449,7 @@ departmentParser = do
         Parsec.spaces >> Parsec.lookAhead fceSeparator >> return "",
         orSeparator,
         andSeparator,
+        fromSeparator,
         Parsec.eof >> return ""
         ])
     return $ DEPARTMENT dept
