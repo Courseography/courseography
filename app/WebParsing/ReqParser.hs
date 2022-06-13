@@ -468,7 +468,7 @@ plainLevelParser = do
         Nothing -> case higher of
             Nothing -> return level
             Just _ -> return $ level ++ "+"
-        Just p -> return $ level ++ [p]
+        Just _ -> return $ level ++ "+"
 
 -- | Parses a level modifier in the fces requirement
 -- | and an optional modifier associated with it
