@@ -413,17 +413,21 @@ fcesParser :: Parser Req
 fcesParser = do
     _ <- Parsec.optional completionPrefix
     fces <- creditsParser
+    dept <- Parsec.optionMaybe $ Parsec.try departmentParser
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
     _ <- Parsec.spaces
     _ <- Parsec.optional $ Parsec.try anyModifierParser
-    FCES fces <$> fcesModifiersParser
+
+    case dept of
+        Nothing -> FCES fces <$> fcesModifiersParser
+        Just x -> return $ FCES fces x
 
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier
 fcesModifiersParser = Parsec.try courseAsModParser
-    -- TODO: more modifier parsers will be added here
+    <|> Parsec.try departmentParser
     <|> rawModifierParser
 
 -- | An andParser for courses but wraps the returned Req in a Modifier
@@ -431,6 +435,33 @@ courseAsModParser :: Parser Modifier
 courseAsModParser = do
     req <- andParser courseParser
     return $ REQUIREMENT req
+
+-- | Parses a literal "course" or "courses"
+courseLiteralParser :: Parser String
+courseLiteralParser = Parsec.choice (map caseInsensitiveStr [
+    "courses",
+    "course"
+    ])
+
+-- | Parses a department code in the fces requirement
+-- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
+departmentParser :: Parser Modifier
+departmentParser = do
+    Parsec.spaces
+    Parsec.notFollowedBy fceSeparator
+    dept <- Parsec.manyTill Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
+        courseLiteralParser,
+        fceSeparator >> return "",
+        orSeparator,
+        andSeparator,
+        fromSeparator,
+        Parsec.eof >> return ""
+        ]
+    _ <- Parsec.optional courseLiteralParser
+
+    case trim dept of
+        "" -> fail "empty dept"
+        x -> return $ DEPARTMENT x
 
 -- | Parser for the raw text in fcesParser
 -- | Like rawTextParser but terminates at ands and ors
@@ -477,6 +508,12 @@ flattenOr :: [Req] -> [Req]
 flattenOr [] = []
 flattenOr (OR x:xs) = x ++ flattenOr xs
 flattenOr (x:xs) = x:flattenOr xs
+
+-- | Trims leading and trailing spaces from a string
+-- | Modified from https://stackoverflow.com/a/6270337/10254049
+-- | based on @Carcigenicate's comment
+trim :: String -> String
+trim = let f = reverse . dropWhile isSpace in f . f
 
 parseReqs :: String -> Req
 parseReqs reqString = do
