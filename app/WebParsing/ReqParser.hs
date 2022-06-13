@@ -470,30 +470,24 @@ plainLevelParser = do
             Just _ -> return $ level ++ "+"
         Just p -> return $ level ++ [p]
 
--- | Parses a level modifier optionally followed by another modifier
-levelBefModParser :: Parser Modifier
-levelBefModParser = do
-    level <- plainLevelParser
-    _ <- Parsec.optional $ Parsec.try fromSeparator
-    modifier <- Parsec.try departmentParser <|> rawModifierParser
-
-    return $ LEVEL level modifier
-
--- | Parses a level modifier optionally preceeded by another modifier
-levelAftModParser :: Parser Modifier
-levelAftModParser = do
-    _ <- Parsec.spaces
-    modifier <- Parsec.try departmentParser <|> rawModifierParser
-    _ <- Parsec.optional $ Parsec.try fromSeparator
-    level <- plainLevelParser
-
-    return $ LEVEL level modifier
-
 -- | Parses a level modifier in the fces requirement
 -- | and an optional modifier associated with it
 -- | eg. the "300-level" in "1.0 credit at the 300-level"
 levelParser :: Parser Modifier
-levelParser = Parsec.try levelBefModParser <|> Parsec.try levelAftModParser
+levelParser = do
+    _ <- Parsec.spaces
+    level <- Parsec.optionMaybe $ Parsec.try plainLevelParser
+
+    case level of
+        Nothing -> do
+            modifier <- Parsec.try departmentParser <|> rawModifierParser
+            _ <- Parsec.optional $ Parsec.try fromSeparator
+            levelAfter <- plainLevelParser
+            return $ LEVEL levelAfter modifier
+        Just x -> do
+            _ <- Parsec.optional $ Parsec.try fromSeparator
+            modifier <- Parsec.try departmentParser <|> rawModifierParser
+            return $ LEVEL x modifier
 
 -- | Parses a department code in the fces requirement
 -- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
