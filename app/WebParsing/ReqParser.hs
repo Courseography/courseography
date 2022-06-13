@@ -551,14 +551,6 @@ sepByNoConsume p sep = (do
     return (x:xs))
     <|> return []
 
--- | Parses p one or more times until end succeeds
-many1Till :: Show a => Parser Char -> Parser a -> Parser [Char]
-many1Till p end = do
-    Parsec.notFollowedBy end
-    x <- p
-    xs <- Parsec.manyTill p end
-    return $ x:xs
-
 -- Flattens nested ORs into a single OR
 -- eg. OR [OR ["CS major, "Math major"], RAW "permission from instructor"]
 -- Nested ORs occur because the way programs are related through ORs is
