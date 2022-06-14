@@ -199,8 +199,8 @@ reqToStmtsTree _ parentID (PROGRAM prog) = do
 
 -- a cGPA requirement
 reqToStmtsTree _ parentID (GPA float string) = do
-    gpaNode <- makeNode (pack $ "Minimum cGPA of " ++ float ++ string) Nothing
-    edge <- (nodeID gpaNode) parentID Nothing
+    gpaNode <- makeNode (pack $ "Minimum cGPA of " ++ show float ++ string) Nothing
+    edge <-  makeEdge (nodeID gpaNode) parentID Nothing
     return $ Node [DN gpaNode, DE edge] []
 
 prefixedByOneOf :: Text -> [Text] -> Bool
