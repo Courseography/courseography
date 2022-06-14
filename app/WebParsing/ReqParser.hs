@@ -334,6 +334,7 @@ courseParser = Parsec.choice $ map Parsec.try [
 courseOrProgParser :: Parser Req
 courseOrProgParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     fcesParser,
+    cgpaParser,
     courseParser,
     programOrParser,
     rawTextParser
@@ -382,6 +383,7 @@ andParser p = do
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
+        (x:[RAW ""]) -> return x
         (x:xs) -> return $ AND (x:xs)
 
 -- | Parser for programs grouped together
@@ -459,10 +461,12 @@ cgpaParser = do
     Parsec.spaces
     _ <- Parsec.optional (caseInsensitiveStr "cGPA")
     Parsec.spaces
-    _ <- Parsec.optional andSeparator
-    Parsec.spaces
-    req <- categoryParser
-    return $ GPA gpa req
+    addendum <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces >> Parsec.choice [
+        Parsec.lookAhead andSeparator,
+        Parsec.lookAhead orSeparator,
+        Parsec.eof >> return ""
+        ]
+    return $ GPA gpa addendum
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters

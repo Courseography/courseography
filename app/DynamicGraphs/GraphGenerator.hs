@@ -191,6 +191,12 @@ reqToStmtsTree _ parentID (PROGRAM prog) = do
     edge <- makeEdge (nodeID progNode) parentID Nothing
     return $ Node [DN progNode, DE edge] []
 
+-- a cGPA requirement
+reqToStmtsTree _ parentID (GPA float string) = do
+    gpaNode <- makeNode (pack $ "Minimum cGPA of " ++ float ++ string) Nothing
+    edge <- (nodeID gpaNode) parentID Nothing
+    return $ Node [DN gpaNode, DE edge] []
+
 prefixedByOneOf :: Text -> [Text] -> Bool
 prefixedByOneOf name = any (`isPrefixOf` name)
 
