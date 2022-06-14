@@ -13,7 +13,7 @@ import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import qualified Data.Text.Lazy as T
 import Database.CourseQueries (prereqsForCourse)
-import Database.Requirement (Req (..))
+import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.GraphOptions (GraphOptions (..))
 import WebParsing.ReqParser (parseReqs)
 
@@ -48,7 +48,7 @@ lookupReqs options (OR parents) =
         hasTaken :: Req -> Bool
         hasTaken (J name _) = Set.member name (Set.fromList $ map T.unpack (taken options))
         hasTaken _ = False
-lookupReqs options (FCES _ parent) = lookupReqs options parent
+lookupReqs options (FCES _ (REQUIREMENT parent)) = lookupReqs options parent
 lookupReqs options (GRADE _ parent) = lookupReqs options parent
--- This will catch both NONE and RAW values.
+-- This will catch NONE, RAW, and FCEs with non-course modifiers
 lookupReqs _ _ = return ()

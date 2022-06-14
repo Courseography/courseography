@@ -12,9 +12,12 @@ fromSeparator :: Parser String
 fromSeparator = Parsec.spaces
                 >> Parsec.choice (map (Parsec.try . Parsec.string) [
             "of any of the following:",
+            "of",
             "from the following: ",
+            "from the",
             "from:",
             "from",
+            "at the",
             "at",
             "in"
     ])
@@ -27,9 +30,11 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "have completed",
     "At least one additional",
     "At least one",
-    "At least"
+    "At least",
+    "Any",
+    "a"
     ])
-    >> Parsec.spaces
+    >> Parsec.skipMany1 Parsec.space
 
 cgpaPrefix :: Parser ()
 cgpaPrefix = Parsec.choice (map caseInsensitiveStr [
@@ -265,7 +270,7 @@ cutoffParser = Parsec.try coAftParser <|> coBefParser
 
 -- | Parser for requirements written within parentheses
 parParser :: Parser Req
-parParser = Parsec.between lParen rParen categoryParser
+parParser = Parsec.between lParen rParen reqParser
 
 -- | Parser for raw text in a prerequisite, e.g., "proficiency in C/C++".
 -- Note that even if a course code appears in the middle of such text,
@@ -331,8 +336,8 @@ courseParser = Parsec.choice $ map Parsec.try [
 -- Parses for a single course or a group of programs
 -- Programs need to be parsed in groups because of the concatenation issue
 -- explained in the docstring of `programGroupParser`
-courseOrProgParser :: Parser Req
-courseOrProgParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
+categoryParser :: Parser Req
+categoryParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     fcesParser,
     cgpaParser,
     courseParser,
@@ -426,20 +431,59 @@ fcesParser :: Parser Req
 fcesParser = do
     _ <- Parsec.optional completionPrefix
     fces <- creditsParser
+    dept <- Parsec.optionMaybe $ Parsec.try departmentParser
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
-    FCES fces <$> fcesModifiersParser
+    _ <- Parsec.spaces
+    _ <- Parsec.optional $ Parsec.try anyModifierParser
+
+    case dept of
+        Nothing -> FCES fces <$> fcesModifiersParser
+        Just x -> return $ FCES fces x
 
 -- | Parser for FCES modifiers
-fcesModifiersParser :: Parser Req
-fcesModifiersParser = Parsec.try (andParser courseParser)
-    -- TODO: more modifier parsers will be added here
+fcesModifiersParser :: Parser Modifier
+fcesModifiersParser = Parsec.try courseAsModParser
+    <|> Parsec.try departmentParser
     <|> rawModifierParser
+
+-- | An andParser for courses but wraps the returned Req in a Modifier
+courseAsModParser :: Parser Modifier
+courseAsModParser = do
+    req <- andParser courseParser
+    return $ REQUIREMENT req
+
+-- | Parses a literal "course" or "courses"
+courseLiteralParser :: Parser String
+courseLiteralParser = Parsec.choice (map caseInsensitiveStr [
+    "courses",
+    "course"
+    ])
+
+-- | Parses a department code in the fces requirement
+-- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
+departmentParser :: Parser Modifier
+departmentParser = do
+    Parsec.spaces
+    Parsec.notFollowedBy fceSeparator
+    dept <- Parsec.manyTill Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
+        courseLiteralParser,
+        fceSeparator >> return "",
+        orSeparator,
+        andSeparator,
+        fromSeparator,
+        Parsec.eof >> return ""
+        ]
+    _ <- Parsec.optional courseLiteralParser
+
+    case trim dept of
+        "" -> fail "empty dept"
+        x -> return $ DEPARTMENT x
 
 -- | Parser for the raw text in fcesParser
 -- | Like rawTextParser but terminates at ands and ors
-rawModifierParser :: Parser Req
+rawModifierParser :: Parser Modifier
 rawModifierParser = do
     Parsec.spaces
     text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces >> Parsec.choice [
@@ -447,11 +491,21 @@ rawModifierParser = do
         Parsec.lookAhead orSeparator,
         Parsec.eof >> return ""
         ]
-    return $ RAW text
+    return $ REQUIREMENT $ RAW text
+
+-- | Parses "any field" or "any subject" in an fces modifier since they are redundant
+anyModifierParser :: Parser ()
+anyModifierParser = caseInsensitiveStr "any"
+    >> Parsec.many1 Parsec.space
+    >> Parsec.choice (map caseInsensitiveStr [
+        "field",
+        "subject"
+        ])
+    >> Parsec.spaces
 
 -- | Parser for requirements separated by a semicolon.
-categoryParser :: Parser Req
-categoryParser = Parsec.try $ andParser courseOrProgParser
+reqParser :: Parser Req
+reqParser = Parsec.try $ andParser categoryParser
 
 -- Parser for cGPA requirements: "... 1.0 cGPA ..."
 cgpaParser :: Parser Req
@@ -488,13 +542,19 @@ flattenOr [] = []
 flattenOr (OR x:xs) = x ++ flattenOr xs
 flattenOr (x:xs) = x:flattenOr xs
 
+-- | Trims leading and trailing spaces from a string
+-- | Modified from https://stackoverflow.com/a/6270337/10254049
+-- | based on @Carcigenicate's comment
+trim :: String -> String
+trim = let f = reverse . dropWhile isSpace in f . f
+
 parseReqs :: String -> Req
 parseReqs reqString = do
     let reqStringLower = map toLower reqString
     if all isSpace reqString || reqStringLower == "none" || reqStringLower == "no"
         then NONE
         else do
-            let req = Parsec.parse categoryParser "" reqString
+            let req = Parsec.parse reqParser "" reqString
                 in case req of
                     Right x -> x
                     Left e -> J (show e) ""

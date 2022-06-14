@@ -24,7 +24,7 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Sequence as Seq
 import Data.Text.Lazy (Text, isInfixOf, isPrefixOf, last, pack, take)
-import Database.Requirement (Req (..))
+import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.CourseFinder (lookupCourses)
 import DynamicGraphs.GraphOptions (GraphOptions (..), defaultGraphOptions)
 import Prelude hiding (last)
@@ -176,12 +176,18 @@ reqToStmtsTree options parentID (RAW rawText) =
             prereq <- makeNode (pack rawText) Nothing
             edge <- makeEdge (nodeID prereq) parentID Nothing
             return $ Node [DN prereq, DE edge] []
---A prerequisite concerning a given number of earned credits
-reqToStmtsTree options parentID (FCES creds req) = do
-    fceNode <- makeNode (pack $ "at least " ++ show creds ++ " FCEs") Nothing
+--A prerequisite concerning a given number of earned credits in some course(s)
+reqToStmtsTree options parentID (FCES creds (REQUIREMENT req)) = do
+    fceNode <- makeNode (pack $ show creds ++ " FCEs") Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
     return $ Node [DN fceNode, DE edge] [prereqStmts]
+
+--A prerequisite concerning a given number of earned credits in a department
+reqToStmtsTree _ parentID (FCES creds (DEPARTMENT dept)) = do
+    fceNode <- makeNode (pack $ show creds ++ " " ++ dept ++ " FCEs") Nothing
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
+    return $ Node [DN fceNode, DE edge] []
 
 -- A program requirement
 reqToStmtsTree _ parentID (PROGRAM prog) = do
