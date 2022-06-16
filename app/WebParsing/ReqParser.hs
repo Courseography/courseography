@@ -353,25 +353,26 @@ oneOfParser p = do
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
+        (x:xs) -> return $ REQOR $ flattenOr (x:xs)
 
--- | Returns a parser that parses ORs of the given parser
+-- | Returns a parser that parses REQORs of the given parser
 orParser :: Parser Req -> Parser Req
 orParser p = do
     reqs <- Parsec.sepBy p orSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
+        (x:xs) -> return $ REQOR $ flattenOr (x:xs)
 
--- | Returns a parser that parses ANDs of ORs of the given parser
+-- | Returns a parser that parses REQANDs of REQORs of the given req parser
 andParser :: Parser Req -> Parser Req
 andParser p = do
     reqs <- Parsec.sepBy (Parsec.try (oneOfParser p) <|> Parsec.try (orParser p)) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ AND (x:xs)
+        (x:[RAW ""]) -> return x
+        (x:xs) -> return $ REQAND (x:xs)
 
 -- | Parser for programs grouped together
 -- | Parses program names and degree types, then concatenate every combination
@@ -392,10 +393,10 @@ programGroupParser = do
         [PROGRAM x] -> case degrees of
             [] -> return $ PROGRAM x
             [d] -> return $ PROGRAM (x ++ " " ++ d)
-            ds -> return $ OR [PROGRAM (x ++ " " ++ d) | d <- ds]
+            ds -> return $ REQOR [PROGRAM (x ++ " " ++ d) | d <- ds]
         xs -> case degrees of
-            [] -> return $ OR [PROGRAM x | PROGRAM x <- xs]
-            ds -> return $ OR [PROGRAM (x ++ " " ++ d) | PROGRAM x <- xs, d <- ds]
+            [] -> return $ REQOR [PROGRAM x | PROGRAM x <- xs]
+            ds -> return $ REQOR [PROGRAM (x ++ " " ++ d) | PROGRAM x <- xs, d <- ds]
 
 programOrParser :: Parser Req
 programOrParser = do
@@ -405,7 +406,7 @@ programOrParser = do
     case progs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
+        (x:xs) -> return $ REQOR $ flattenOr (x:xs)
 
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
@@ -413,7 +414,7 @@ fcesParser :: Parser Req
 fcesParser = do
     _ <- Parsec.optional completionPrefix
     fces <- creditsParser
-    dept <- Parsec.optionMaybe $ Parsec.try departmentParser
+    department <- Parsec.optionMaybe $ Parsec.try departmentParser
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
@@ -421,12 +422,11 @@ fcesParser = do
     _ <- Parsec.optional $ Parsec.try anyModifierParser
     modifiers <- fcesModifiersParser
 
-    case dept of
+    case department of
         Nothing -> return $ FCES fces modifiers
-        Just d -> case modifiers of
-            REQUIREMENT _ -> return $ FCES fces d
-            LEVEL x _ -> return $ FCES fces (LEVEL x d)
-            DEPARTMENT _ -> fail "two departments" -- impossible (eg. "3.0 CSC credits in MAT")
+        Just dept -> case modifiers of
+            REQUIREMENT (RAW "") -> return $ FCES fces dept
+            m -> return $ FCES fces $ MODAND [m, dept]
 
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier
@@ -480,14 +480,16 @@ levelParser = do
 
     case level of
         Nothing -> do
-            modifier <- Parsec.try departmentParser <|> rawModifierParser
+            modifier <- Parsec.try departmentParser
             _ <- Parsec.optional $ Parsec.try fromSeparator
             levelAfter <- plainLevelParser
-            return $ LEVEL levelAfter modifier
-        Just x -> do
+            return $ MODAND [LEVEL levelAfter, modifier]
+        Just l -> do
             _ <- Parsec.optional $ Parsec.try fromSeparator
-            modifier <- Parsec.try departmentParser <|> rawModifierParser
-            return $ LEVEL x modifier
+            department <- Parsec.optionMaybe departmentParser
+            case department of
+                Nothing -> return $ LEVEL l
+                Just dept -> return $ MODAND [LEVEL l, dept]
 
 -- | Parses a department code in the fces requirement
 -- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
@@ -545,14 +547,14 @@ sepByNoConsume p sep = (do
     return (x:xs))
     <|> return []
 
--- Flattens nested ORs into a single OR
--- eg. OR [OR ["CS major, "Math major"], RAW "permission from instructor"]
--- Nested ORs occur because the way programs are related through ORs is
+-- Flattens nested REQORs into a single REQOR
+-- eg. REQOR [REQOR ["CS major, "Math major"], RAW "permission from instructor"]
+-- Nested REQORs occur because the way programs are related through REQORs is
 -- different than that of courses. So they each have their orParser, which
--- may be related throuhg another OR
+-- may be related throuhg another REQOR
 flattenOr :: [Req] -> [Req]
 flattenOr [] = []
-flattenOr (OR x:xs) = x ++ flattenOr xs
+flattenOr (REQOR x:xs) = x ++ flattenOr xs
 flattenOr (x:xs) = x:flattenOr xs
 
 -- | Trims leading and trailing spaces from a string

@@ -14,13 +14,14 @@ module Database.Requirement (
 
 data Req = NONE
          | J String String
-         | AND [Req]
-         | OR [Req]
+         | REQAND [Req]
+         | REQOR [Req]
          | FCES Float Modifier
          | GRADE String Req
          | PROGRAM String
          | RAW String deriving (Eq, Show)
 
 data Modifier = DEPARTMENT String
-              | LEVEL String Modifier
+              | LEVEL String
+              | MODAND [Modifier]
               | REQUIREMENT Req deriving (Eq, Show)
