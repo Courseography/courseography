@@ -38,10 +38,10 @@ lookupReqs options (J name _) = do
         -- This course has been taken or is not a department we want to include; we don't need its prerequisites
         then return ()
         else lookupCourse options $ T.pack name
-lookupReqs options (AND parents) = mapM_ (lookupReqs options) parents
-lookupReqs options (OR parents) =
+lookupReqs options (REQAND parents) = mapM_ (lookupReqs options) parents
+lookupReqs options (REQOR parents) =
     if any hasTaken parents
-        -- We've taken at least one of parents, so this entire OR is satisfied
+        -- We've taken at least one of parents, so this entire REQOR is satisfied
         then return ()
         else mapM_ (lookupReqs options) parents
     where
