@@ -309,7 +309,7 @@ justParser = do
     markInfoParser = do
         Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
 
--- parse for single course with or without cutoff OR a req within parentheses
+-- parse for single course with or without cutoff REQOR a req within parentheses
 courseParser :: Parser Req
 courseParser = Parsec.choice $ map Parsec.try [
     parParser,
@@ -353,25 +353,25 @@ oneOfParser p = do
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
+        (x:xs) -> return $ REQOR $ flattenOr (x:xs)
 
--- | Returns a parser that parses ORs of the given parser
+-- | Returns a parser that parses REQORs of the given parser
 orParser :: Parser Req -> Parser Req
 orParser p = do
     reqs <- Parsec.sepBy p orSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
+        (x:xs) -> return $ REQOR $ flattenOr (x:xs)
 
--- | Returns a parser that parses ANDs of ORs of the given parser
+-- | Returns a parser that parses REQANDs of REQORs of the given parser
 andParser :: Parser Req -> Parser Req
 andParser p = do
     reqs <- Parsec.sepBy (Parsec.try (oneOfParser p) <|> Parsec.try (orParser p)) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ AND (x:xs)
+        (x:xs) -> return $ REQAND (x:xs)
 
 -- | Parser for programs grouped together
 -- | Parses program names and degree types, then concatenate every combination
@@ -392,10 +392,10 @@ programGroupParser = do
         [PROGRAM x] -> case degrees of
             [] -> return $ PROGRAM x
             [d] -> return $ PROGRAM (x ++ " " ++ d)
-            ds -> return $ OR [PROGRAM (x ++ " " ++ d) | d <- ds]
+            ds -> return $ REQOR [PROGRAM (x ++ " " ++ d) | d <- ds]
         xs -> case degrees of
-            [] -> return $ OR [PROGRAM x | PROGRAM x <- xs]
-            ds -> return $ OR [PROGRAM (x ++ " " ++ d) | PROGRAM x <- xs, d <- ds]
+            [] -> return $ REQOR [PROGRAM x | PROGRAM x <- xs]
+            ds -> return $ REQOR [PROGRAM (x ++ " " ++ d) | PROGRAM x <- xs, d <- ds]
 
 programOrParser :: Parser Req
 programOrParser = do
@@ -405,7 +405,7 @@ programOrParser = do
     case progs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ OR $ flattenOr (x:xs)
+        (x:xs) -> return $ REQOR $ flattenOr (x:xs)
 
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
@@ -499,14 +499,14 @@ sepByNoConsume p sep = (do
     return (x:xs))
     <|> return []
 
--- Flattens nested ORs into a single OR
--- eg. OR [OR ["CS major, "Math major"], RAW "permission from instructor"]
--- Nested ORs occur because the way programs are related through ORs is
+-- Flattens nested REQORs into a single REQOR
+-- eg. REQOR [REQOR ["CS major, "Math major"], RAW "permission from instructor"]
+-- Nested REQORs occur because the way programs are related through REQORs is
 -- different than that of courses. So they each have their orParser, which
--- may be related throuhg another OR
+-- may be related throuhg another REQOR
 flattenOr :: [Req] -> [Req]
 flattenOr [] = []
-flattenOr (OR x:xs) = x ++ flattenOr xs
+flattenOr (REQOR x:xs) = x ++ flattenOr xs
 flattenOr (x:xs) = x:flattenOr xs
 
 -- | Trims leading and trailing spaces from a string
