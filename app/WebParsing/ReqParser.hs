@@ -309,7 +309,7 @@ justParser = do
     markInfoParser = do
         Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
 
--- parse for single course with or without cutoff OR a req within parentheses
+-- parse for single course with or without cutoff REQOR a req within parentheses
 courseParser :: Parser Req
 courseParser = Parsec.choice $ map Parsec.try [
     parParser,
@@ -364,14 +364,13 @@ orParser p = do
         [x] -> return x
         (x:xs) -> return $ REQOR $ flattenOr (x:xs)
 
--- | Returns a parser that parses REQANDs of REQORs of the given req parser
+-- | Returns a parser that parses REQANDs of REQORs of the given parser
 andParser :: Parser Req -> Parser Req
 andParser p = do
     reqs <- Parsec.sepBy (Parsec.try (oneOfParser p) <|> Parsec.try (orParser p)) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:[RAW ""]) -> return x
         (x:xs) -> return $ REQAND (x:xs)
 
 -- | Parser for programs grouped together

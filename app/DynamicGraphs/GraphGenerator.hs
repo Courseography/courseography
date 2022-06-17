@@ -51,8 +51,8 @@ sampleGraph = fst $ State.runState (reqsToGraph
     defaultGraphOptions
     [("MAT237H1", J "MAT137H1" ""),
     ("MAT133H1", NONE),
-    ("CSC148H1", AND [J "CSC108H1" "", J "CSC104H1" ""]),
-    ("CSC265H1", AND [J "CSC148H1" "", J "CSC236H1" ""])
+    ("CSC148H1", REQAND [J "CSC108H1" "", J "CSC104H1" ""]),
+    ("CSC265H1", REQAND [J "CSC148H1" "", J "CSC236H1" ""])
     ])
     (GeneratorState 0 Map.empty)
 
@@ -127,7 +127,7 @@ reqToStmtsTree options parentID (J name2 _) = do
     else
         return (Node [] [])
 -- Two or more required prerequisites.
-reqToStmtsTree options parentID (AND reqs) = do
+reqToStmtsTree options parentID (REQAND reqs) = do
     andNode <- makeBool "and"
     edge <- makeEdge (nodeID andNode) parentID Nothing
     prereqStmts <- mapM (reqToStmtsTree options (nodeID andNode)) reqs
@@ -140,7 +140,7 @@ reqToStmtsTree options parentID (AND reqs) = do
             return $ Node [DN node, DE newEdge] xs
         _ -> return $ Node [DN andNode, DE edge] filteredStmts
 -- A choice from two or more prerequisites.
-reqToStmtsTree options parentID (OR reqs) = do
+reqToStmtsTree options parentID (REQOR reqs) = do
     orNode <- makeBool "or"
     edge <- makeEdge (nodeID orNode) parentID Nothing
     prereqStmts <- mapM (reqToStmtsTree options (nodeID orNode)) reqs
