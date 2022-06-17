@@ -425,7 +425,8 @@ fcesParser = do
         Nothing -> return $ FCES fces modifiers
         Just x -> case modifiers of
             REQUIREMENT (RAW "") -> return $ FCES fces x
-            m -> return $ FCES fces $ MODAND [m, x]
+            MODAND ms -> return $ FCES fces $ MODAND (x:ms)
+            _ -> return $ FCES fces $ MODAND [modifiers, x]
 
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier

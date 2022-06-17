@@ -73,7 +73,7 @@ fcesInputs = [
     , ("2.0 FCEs in CSC165H1/CSC148H1", FCES 2.0 $ REQUIREMENT $ REQOR [J "CSC165H1" "", J "CSC148H1" ""])
     , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES 2.0 $ REQUIREMENT $ REQAND [J "MAT135H1" "",REQOR [J "MAT136H1" "",J "MAT137Y1" ""]])
     , ("Completion of 4.0 FCEs", FCES 4.0 $ REQUIREMENT $ RAW "")
-    , ("Completion of 4 FCE", FCES 4.0 $ REQUIREMENT $ RAW "")
+    , ("Completion of 4 FCE.", FCES 4.0 $ REQUIREMENT $ RAW "")
     , ("Completion of 9 FCEs", FCES 9.0 $ REQUIREMENT $ RAW "")
     , ("Completion of 9.0 credits or permission of the instructor", REQOR [FCES 9.0 (REQUIREMENT $ RAW ""), RAW "permission of the instructor"])
     , ("Completion of 9.0 credits. Permission of the instructor", REQAND [FCES 9.0 (REQUIREMENT $ RAW ""), RAW "Permission of the instructor"])
