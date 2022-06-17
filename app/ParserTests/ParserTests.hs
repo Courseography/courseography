@@ -92,7 +92,6 @@ fcesInputs = [
     , ("2.0 ENG credits", FCES 2.0 (DEPARTMENT "ENG"))
     , ("Any 9.0 credits", FCES 9.0 (REQUIREMENT $ RAW ""))
     , ("9.0 credits in any field", FCES 9.0 (REQUIREMENT $ RAW ""))
-    , ("9.0 credits in any field.", FCES 9.0 (REQUIREMENT $ RAW ""))
     , ("9.0 credits in any subject", FCES 9.0 (REQUIREMENT $ RAW ""))
     , ("1.0 credits of CSC courses", FCES 1.0 (DEPARTMENT "CSC"))
     , ("1.0 credits from the CSC courses", FCES 1.0 (DEPARTMENT "CSC"))
@@ -107,7 +106,7 @@ fcesInputs = [
     , ("1.0 credit at the 300-level from Group B: Evolutionary", FCES 1.0 (MODAND [LEVEL "300", DEPARTMENT "Group B: Evolutionary"]))
     , ("ANT203Y1 and a 0.5 credit 300+ level course from Group B: Evolutionary", REQAND [J "ANT203Y1" "", FCES 0.5 (MODAND [LEVEL "300+", DEPARTMENT "Group B: Evolutionary"])])
     , ("ANT253H1 and 1.0 credit at the 300-level", REQAND [J "ANT253H1" "", FCES 1.0 (LEVEL "300")])
-    , ("1.0 credit in FRE at the 200-level", FCES 1.0 (MODAND [LEVEL "200", DEPARTMENT "FRE"]))
+    , ("1.0 credit in FRE at the 200-level", FCES 1.0 (MODAND [DEPARTMENT "FRE", LEVEL "200"]))
     , ("14.0 credits, 3.0 credits in Anthropology", REQAND [FCES 14.0 (REQUIREMENT $ RAW ""), FCES 3.0 (DEPARTMENT "Anthropology")])
     , ("1.0 credits, CSE240H1/ NEW240Y1, CSE342H1, an additional 0.5 credit at the 300+ level from the Critical Studies", REQAND [FCES 1.0 (REQUIREMENT $ RAW ""),REQOR [J "CSE240H1" "",J "NEW240Y1" ""],J "CSE342H1" "", FCES 0.5 (MODAND [LEVEL "300+", DEPARTMENT "Critical Studies"])])
     ]

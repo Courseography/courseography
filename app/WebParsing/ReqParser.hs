@@ -413,19 +413,19 @@ fcesParser :: Parser Req
 fcesParser = do
     _ <- Parsec.optional completionPrefix
     fces <- creditsParser
-    department <- Parsec.optionMaybe $ Parsec.try departmentParser
+    dept <- Parsec.optionMaybe $ Parsec.try departmentParser
     _ <- Parsec.spaces
     _ <- fceSeparator
     _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
     _ <- Parsec.spaces
     _ <- Parsec.optional $ Parsec.try anyModifierParser
-    modifiers <- fcesModifiersParser
+    modifiers <- modAndParser
 
-    case department of
+    case dept of
         Nothing -> return $ FCES fces modifiers
-        Just dept -> case modifiers of
-            REQUIREMENT (RAW "") -> return $ FCES fces dept
-            m -> return $ FCES fces $ MODAND [m, dept]
+        Just x -> case modifiers of
+            REQUIREMENT (RAW "") -> return $ FCES fces x
+            m -> return $ FCES fces $ MODAND [m, x]
 
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier
@@ -433,6 +433,22 @@ fcesModifiersParser = Parsec.try courseAsModParser
     <|> Parsec.try levelParser
     <|> Parsec.try departmentParser
     <|> rawModifierParser
+
+-- | Parses fces modifiers related through and clauses
+modAndParser :: Parser Modifier
+modAndParser =  do
+    x <- Parsec.try fcesModifiersParser
+
+    case x of
+        REQUIREMENT (RAW "") -> return x
+        _ -> do
+            xs <- Parsec.many $ Parsec.try $ (fromSeparator <|> Parsec.string "") >> (
+                Parsec.try courseAsModParser
+                <|> Parsec.try levelParser
+                <|> Parsec.try departmentParser)
+            case xs of
+                [] -> return x
+                _ -> return $ MODAND (x:xs)
 
 -- | An andParser for courses but wraps the returned Req in a Modifier
 courseAsModParser :: Parser Modifier
@@ -449,8 +465,8 @@ courseLiteralParser = Parsec.choice (map caseInsensitiveStr [
 
 -- | Parses a level modifier in the fces requirement
 -- | eg. the "300-level" in "1.0 credit at the 300-level"
-plainLevelParser :: Parser String
-plainLevelParser = do
+levelParser :: Parser Modifier
+levelParser = do
     _ <- Parsec.spaces
     level <- Parsec.count 3 Parsec.digit
     plus <- Parsec.optionMaybe $ Parsec.char '+'
@@ -465,30 +481,9 @@ plainLevelParser = do
 
     case plus of
         Nothing -> case higher of
-            Nothing -> return level
-            Just _ -> return $ level ++ "+"
-        Just _ -> return $ level ++ "+"
-
--- | Parses a level modifier in the fces requirement
--- | and an optional modifier associated with it
--- | eg. the "300-level" in "1.0 credit at the 300-level"
-levelParser :: Parser Modifier
-levelParser = do
-    _ <- Parsec.spaces
-    level <- Parsec.optionMaybe $ Parsec.try plainLevelParser
-
-    case level of
-        Nothing -> do
-            modifier <- Parsec.try departmentParser
-            _ <- Parsec.optional $ Parsec.try fromSeparator
-            levelAfter <- plainLevelParser
-            return $ MODAND [LEVEL levelAfter, modifier]
-        Just l -> do
-            _ <- Parsec.optional $ Parsec.try fromSeparator
-            department <- Parsec.optionMaybe departmentParser
-            case department of
-                Nothing -> return $ LEVEL l
-                Just dept -> return $ MODAND [LEVEL l, dept]
+            Nothing -> return $ LEVEL level
+            Just _ -> return $ LEVEL $ level ++ "+"
+        Just _ -> return $ LEVEL $ level ++ "+"
 
 -- | Parses a department code in the fces requirement
 -- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
@@ -539,7 +534,7 @@ reqParser = Parsec.try $ andParser categoryParser
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters
 -- Modified from https://hackage.haskell.org/package/parsec-3.1.15.1/docs/src/Text.Parsec.Combinator.html#sepBy
-sepByNoConsume :: Parser String -> Parser String -> Parser [String]
+sepByNoConsume :: Parser a -> Parser b -> Parser [a]
 sepByNoConsume p sep = (do
     x <- p
     xs <- Parsec.many $ Parsec.try (sep >> p)
