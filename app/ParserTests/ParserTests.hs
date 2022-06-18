@@ -162,19 +162,19 @@ programOrInputs = [
 cgpaInputs :: [(String, Req)]
 cgpaInputs = [
       ("cGPA 1.0", GPA 1.0 "")
-    , ("with 3.3 CGPA and permission of the Innis College Vice-Principal", AND [GPA 3.3 "",RAW "permission of the Innis College Vice-Principal"])
-    , ("a minimum cGPA of 3.0, and an application form that includes a written proposal confirming a faculty member has agreed to supervise.", AND [GPA 3.0 "",RAW "an application form that includes a written proposal confirming a faculty member has agreed to supervise."])
+    , ("with 3.3 CGPA and permission of the Innis College Vice-Principal", REQAND [GPA 3.3 "",RAW "permission of the Innis College Vice-Principal"])
+    , ("a minimum cGPA of 3.0, and an application form that includes a written proposal confirming a faculty member has agreed to supervise.", REQAND [GPA 3.0 "",RAW "an application form that includes a written proposal confirming a faculty member has agreed to supervise."])
     , ("and a minimum cGPA of 3.0", GPA 3.0 "")
     , ("and minimum cGPA of 3.0", GPA 3.0 "")
     , ("with a minimum cGPA of 3.0 in all CHM credits.", GPA 3.0 "in all CHM credits")
     , ("Minimum cGPA of 1.0 in CHM program courses.", GPA 1.0 "in CHM program courses")
-    , ("a CGPA of at least 1.0 and permission of the Undergraduate Coordinator", AND [GPA 1.0 "",RAW "permission of the Undergraduate Coordinator"])
+    , ("a CGPA of at least 1.0 and permission of the Undergraduate Coordinator", REQAND [GPA 1.0 "",RAW "permission of the Undergraduate Coordinator"])
     , ("with a CGPA of at least 2.5", GPA 2.5 "")
     , ("and will normally have a CGPA of at least 3.0", GPA 3.0 "")
-    , ("A minimum CGPA of 1.0, completion of 10.0 credits and permission of the College Program Director", AND [GPA 1.0 "",FCES 10.0 (REQUIREMENT $ RAW ""),RAW "permission of the College Program Director"])
-    , ("A minimum CGPA of 3.0, completion of 12.0 credits, and permission of the College Program Director", AND [GPA 3.0 "",FCES 12.0 (REQUIREMENT $ RAW ""),RAW "permission of the College Program Director"])
-    , ("A minimum CGPA of 2.5, completion of 15.0 credits, and an application are required", AND [GPA 2.5 "",FCES 15.0 (REQUIREMENT $ RAW ""),RAW "an application are required"])
-    , ("A minimum CGPA of 2.0 and have completed 10.0 credits and permission of College Program Director", AND [GPA 2.0 "",FCES 10.0 (REQUIREMENT $ RAW ""),RAW "permission of College Program Director"])
+    , ("A minimum CGPA of 1.0, completion of 10.0 credits and permission of the College Program Director", REQAND [GPA 1.0 "",FCES 10.0 (REQUIREMENT $ RAW ""),RAW "permission of the College Program Director"])
+    , ("A minimum CGPA of 3.0, completion of 12.0 credits, and permission of the College Program Director", REQAND [GPA 3.0 "",FCES 12.0 (REQUIREMENT $ RAW ""),RAW "permission of the College Program Director"])
+    , ("A minimum CGPA of 2.5, completion of 15.0 credits, and an application are required", REQAND [GPA 2.5 "",FCES 15.0 (REQUIREMENT $ RAW ""),RAW "an application are required"])
+    , ("A minimum CGPA of 2.0 and have completed 10.0 credits and permission of College Program Director", REQAND [GPA 2.0 "",FCES 10.0 (REQUIREMENT $ RAW ""),RAW "permission of College Program Director"])
     ]
 
 noPrereqInputs :: [(String, Req)]
