@@ -6,6 +6,8 @@ module WebParsing.UtsgJsonParser
 import Config (databasePath, orgApiUrl, timetableApiUrl)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON (parseJSON), Object, Value (..), decode, (.!=), (.:?))
+import Data.Aeson.Key (toText)
+import Data.Aeson.KeyMap as KM hiding (insert, map)
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (catMaybes)
 import qualified Data.Text as T
@@ -26,7 +28,7 @@ getOrgs :: IO [T.Text]
 getOrgs = do
     resp <- simpleHttp orgApiUrl
     let rawJSON :: Maybe (HM.HashMap T.Text Object) = decode resp
-    return $ maybe [] (concatMap HM.keys . HM.elems) rawJSON
+    return $ maybe [] (concatMap $ map toText . KM.keys) rawJSON
 
 -- | Retrieve and store all timetable data for the given department.
 insertAllMeetings :: T.Text -> SqlPersistM ()

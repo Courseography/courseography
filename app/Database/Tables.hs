@@ -2,6 +2,7 @@
              FlexibleInstances, GADTs, GeneralizedNewtypeDeriving, MultiParamTypeClasses,
              QuasiQuotes, StandaloneDeriving, TemplateHaskell, TypeFamilies,
              UndecidableInstances #-}
+{-# OPTIONS_GHC -fno-warn-name-shadowing #-}
 
 {-|
     Module      : Database.Tables
@@ -21,6 +22,7 @@ module Database.Tables where
 import Control.Applicative ((<|>))
 import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), Value (..), genericToJSON, withObject,
                    (.!=), (.:?))
+import Data.Aeson.KeyMap (elems)
 import Data.Aeson.Types (Options (..), Parser, defaultOptions)
 import Data.Char (toLower)
 import qualified Data.HashMap.Strict as HM
@@ -256,7 +258,7 @@ instance FromJSON Meeting where
     instrMap2 :: Value <- o .:? "instructors" .!= Null
     let instrList =
           case instrMap2 of
-            Object obj -> HM.elems obj
+            Object obj -> elems obj
             _ -> []
 
     instrs <- mapM parseInstr instrList

@@ -23,7 +23,7 @@ import Database.Tables as Tables
 import Export.ImageConversion
 import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
 import Svg.Generator
-import System.Random
+import System.Random (genWord32, newStdGen)
 
 
 -- | If there is an active graph available, an image of that graph is created,
@@ -136,5 +136,5 @@ getTimetableImage courses termSession = do
 randomName :: IO String
 randomName = do
     gen <- newStdGen
-    let (rand, _) = next gen
+    let (rand, _) = genWord32 gen
     return (show rand)

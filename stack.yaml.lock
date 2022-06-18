@@ -5,85 +5,15 @@
 
 packages:
 - completed:
-    hackage: diagrams-lib-1.4.3@sha256:04f77778d4b550d3c8e54440800685f88467bef91075e82e009a8a6f45c51033,8232
-    pantry-tree:
-      size: 11604
-      sha256: bf481bb5bbbd135a778be4cc69cc2f857944dc5d3b856894effaddc9279adf58
-  original:
-    hackage: diagrams-lib-1.4.3
-- completed:
-    hackage: diagrams-svg-1.4.3@sha256:36708b0b4cf35507ccf689f1a25f6f81b8f41c2c4c2900793de820f66d4e241c,3181
-    pantry-tree:
-      size: 475
-      sha256: 2a2f10e8c32a6c181a06494e13a462e00f77e98ad346fd99c123afa3fa89f9e1
-  original:
-    hackage: diagrams-svg-1.4.3
-- completed:
-    hackage: active-0.2.0.14@sha256:e618aba4a7881eb85dc1585e0a01230af6b4fbab6693931e4a5d0d3a5b184406,1823
-    pantry-tree:
-      size: 1017
-      sha256: 9326ee3500f7bb1adea18f581dc51ebdb522677d8cddc847a506ba5d328ee723
-  original:
-    hackage: active-0.2.0.14
-- completed:
-    hackage: diagrams-core-1.4.2@sha256:47de45658e8a805b7cb7f535e7b093daf7e861604fa3c70e25bd4ef481bf1571,2997
-    pantry-tree:
-      size: 2018
-      sha256: 00c9bd036e8552d494c912774f05fb9b5752022b4827d3e815ad016a3cb6e16b
-  original:
-    hackage: diagrams-core-1.4.2
-- completed:
-    hackage: dual-tree-0.2.2.1@sha256:9ff31e461d873ae74ba51d93b454c0c4094726d7cb78a0c454394c965e83539d,2830
-    pantry-tree:
-      size: 387
-      sha256: 70ea91862ac301648d63e9c69d0ff8154b1d3c9c632d224d4002c027861ec33e
-  original:
-    hackage: dual-tree-0.2.2.1
-- completed:
-    hackage: monoid-extras-0.5.1@sha256:438dbfd7b4dce47d8f0ca577f56caf94bd1e21391afa545cad09fe7cf2e5793d,2333
-    pantry-tree:
-      size: 1187
-      sha256: 52bc06f799bd7f19f0a16f89e6cdcfba4db93339fa9a6e4bcfdb4b49245dffdb
-  original:
-    hackage: monoid-extras-0.5.1
-- completed:
-    hackage: svg-builder-0.1.1@sha256:22de54d326a6b6912e461e1302edb9108b02aac0b6a6368fcdc3c4a224d487fd,1440
-    pantry-tree:
-      size: 535
-      sha256: 677ee9598c5dedb3ef8959c26a6c65f29b3e1e3c5e83433921aef17d86a22d50
-  original:
-    hackage: svg-builder-0.1.1
-- completed:
-    hackage: regex-posix-clib-2.7@sha256:998fca06da3d719818f0691ef0b8b9b7375afeea228cb08bd9e2db53f96b0cd7,1232
-    pantry-tree:
-      size: 524
-      sha256: 5bf20952472d930323766d250f5fbbe3fe6f2cd3d931e5cf7b62a238ab2099ff
-  original:
-    hackage: regex-posix-clib-2.7
-- completed:
     hackage: stylish-haskell-0.13.0.0@sha256:a8a648042f7f6a5ba2dc5cf3d692e41b4aa33f55c8a64f94436412362632b4c7,6143
     pantry-tree:
       size: 3812
       sha256: 0f7589ccae900b43967c5ff26ec9d8ba8843b76aafc69b0dcbd6da6d91ab6d96
   original:
     hackage: stylish-haskell-0.13.0.0
-- completed:
-    hackage: hlint-3.2.7@sha256:9f8450464f6ad362d85f529fe409e03cb356804ef9c7318da1699dbcbc284c47,4163
-    pantry-tree:
-      size: 5452
-      sha256: 5949d6919e1dfd31c6d8c1082ca64211ae1d2437d685c106f1616592ea50dbe1
-  original:
-    hackage: hlint-3.2.7
-- completed:
-    hackage: apply-refact-0.9.2.0@sha256:622b6b745b10cc2ca9ebae57e8f4baf58e52d0c4eb094627c70579594c1ab2f5,5173
-    pantry-tree:
-      size: 94850
-      sha256: 08bf4d62879684ea0951b5c4ecf6aa553bb38a6eb93ca4d8cc7416720e260b9c
-  original:
-    hackage: apply-refact-0.9.2.0
 snapshots:
 - completed:
-    size: 567241
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/17/10.yaml
-    sha256: 321b3b9f0c7f76994b39e0dabafdc76478274b4ff74cc5e43d410897a335ad3b
-  original: lts-17.10
+    size: 619152
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/19/11.yaml
+    sha256: 692668712aa3a6638401ce921cd043f5f9a8b018af9ba13ae350871196b047d6
+  original: lts-19.11
