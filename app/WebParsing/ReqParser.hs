@@ -339,8 +339,8 @@ courseParser = Parsec.choice $ map Parsec.try [
 categoryParser :: Parser Req
 categoryParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     fcesParser,
-    cgpaParser,
     courseParser,
+    cgpaParser,
     programOrParser,
     rawTextParser
     ]
