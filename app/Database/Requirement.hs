@@ -14,8 +14,8 @@ module Database.Requirement (
 
 data Req = NONE
          | J String String
-         | AND [Req]
-         | OR [Req]
+         | REQAND [Req]
+         | REQOR [Req]
          | FCES Float Modifier
          | GRADE String Req
          | GPA Float String
