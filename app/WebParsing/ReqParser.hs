@@ -540,7 +540,7 @@ reqParser = Parsec.try $ andParser categoryParser
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters
 -- Modified from https://hackage.haskell.org/package/parsec-3.1.15.1/docs/src/Text.Parsec.Combinator.html#sepBy
-sepByNoConsume :: Parser a -> Parser b -> Parser [a]
+sepByNoConsume :: Parser String -> Parser String -> Parser [String]
 sepByNoConsume p sep = (do
     x <- p
     xs <- Parsec.many $ Parsec.try (sep >> p)
