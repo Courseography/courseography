@@ -441,6 +441,7 @@ fcesModifiersParser = Parsec.try courseAsModParser
     <|> rawModifierParser
 
 -- | Parses fces modifiers related through and clauses
+-- | Not using andParser and sepByNoConsume because empty strings are handled differently
 modAndParser :: Parser Modifier
 modAndParser =  do
     x <- Parsec.try fcesModifiersParser

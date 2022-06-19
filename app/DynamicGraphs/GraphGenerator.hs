@@ -217,8 +217,8 @@ reqToStmtsTree options parentID (FCES creds (MODAND modifiers)) = do
 
     case maybeHead [req | REQUIREMENT req <- modifiers] of
         Nothing -> return $ Node [DN fceNode, DE edge] []
-        Just x -> do
-            prereqStmts <- reqToStmtsTree options (nodeID fceNode) x
+        Just req -> do
+            prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
             return $ Node [DN fceNode, DE edge] [prereqStmts]
 
 -- A program requirement
