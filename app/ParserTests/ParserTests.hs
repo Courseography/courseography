@@ -108,6 +108,7 @@ fcesInputs = [
     , ("ANT253H1 and 1.0 credit at the 300-level", REQAND [J "ANT253H1" "", FCES 1.0 (LEVEL "300")])
     , ("1.0 credit in FRE at the 200-level", FCES 1.0 (MODAND [DEPARTMENT "FRE", LEVEL "200"]))
     , ("14.0 credits, 3.0 credits in Anthropology", REQAND [FCES 14.0 (REQUIREMENT $ RAW ""), FCES 3.0 (DEPARTMENT "Anthropology")])
+    , ("Completion of 14.0 credits including PSL300H1, PSL301H1, and 0.5 HMB credit at the 300-level", REQAND [FCES 14.0 (REQUIREMENT $ RAW ""), J "PSL300H1" "", J "PSL301H1" "", FCES 0.5 $ MODAND [LEVEL "300", DEPARTMENT "HMB"]])
     , ("1.0 credits, CSE240H1/ NEW240Y1, CSE342H1, an additional 0.5 credit at the 300+ level from the Critical Studies", REQAND [FCES 1.0 (REQUIREMENT $ RAW ""),REQOR [J "CSE240H1" "",J "NEW240Y1" ""],J "CSE342H1" "", FCES 0.5 (MODAND [LEVEL "300+", DEPARTMENT "Critical Studies"])])
     ]
 

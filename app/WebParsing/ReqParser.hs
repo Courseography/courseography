@@ -371,7 +371,7 @@ andParser p = do
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ REQAND (x:xs)
+        (x:xs) -> return $ REQAND $ flattenAnd (x:xs)
 
 -- | Parser for programs grouped together
 -- | Parses program names and degree types, then concatenate every combination
@@ -416,17 +416,22 @@ fcesParser = do
     dept <- Parsec.optionMaybe $ Parsec.try departmentParser
     _ <- Parsec.spaces
     _ <- fceSeparator
-    _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
+    req <- Parsec.optionMaybe $ Parsec.try includingSeparator >> andParser categoryParser
+    _ <- Parsec.optional $ Parsec.try fromSeparator
     _ <- Parsec.spaces
     _ <- Parsec.optional $ Parsec.try anyModifierParser
     modifiers <- modAndParser
 
-    case dept of
-        Nothing -> return $ FCES fces modifiers
-        Just x -> case modifiers of
-            REQUIREMENT (RAW "") -> return $ FCES fces x
-            MODAND ms -> return $ FCES fces $ MODAND (x:ms)
-            _ -> return $ FCES fces $ MODAND [modifiers, x]
+    let fcesReq = case dept of
+            Nothing -> FCES fces modifiers
+            Just x -> case modifiers of
+                REQUIREMENT (RAW "") -> FCES fces x
+                MODAND ms -> FCES fces $ MODAND (x:ms)
+                _ -> FCES fces $ MODAND [modifiers, x]
+
+    case req of
+        Nothing -> return fcesReq
+        Just x -> return $ REQAND $ flattenAnd [fcesReq, x]
 
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier
@@ -552,6 +557,12 @@ flattenOr [] = []
 flattenOr (REQOR x:xs) = x ++ flattenOr xs
 flattenOr (x:xs) = x:flattenOr xs
 
+-- Flattens nested REQANDs into a single REQAND
+-- Similar to flattenOr (see above) but for REQAND
+flattenAnd :: [Req] -> [Req]
+flattenAnd [] = []
+flattenAnd (REQAND x:xs) = x ++ flattenAnd xs
+flattenAnd (x:xs) = x:flattenAnd xs
 -- | Trims leading and trailing spaces from a string
 -- | Modified from https://stackoverflow.com/a/6270337/10254049
 -- | based on @Carcigenicate's comment
