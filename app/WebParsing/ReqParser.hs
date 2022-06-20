@@ -564,6 +564,7 @@ flattenAnd :: [Req] -> [Req]
 flattenAnd [] = []
 flattenAnd (REQAND x:xs) = x ++ flattenAnd xs
 flattenAnd (x:xs) = x:flattenAnd xs
+
 -- | Trims leading and trailing spaces from a string
 -- | Modified from https://stackoverflow.com/a/6270337/10254049
 -- | based on @Carcigenicate's comment
