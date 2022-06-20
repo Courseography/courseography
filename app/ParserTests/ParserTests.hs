@@ -41,7 +41,7 @@ andInputs = [
     , ("BCH377H1; BCH378H1; and permission of Department", REQAND [J "BCH377H1" "", J "BCH378H1" "", RAW "permission of Department"])
     , ("CSC111H1. Permission of department", REQAND [J "CSC111H1" "", RAW "Permission of department"])
     , ("CSC110H1, an additional permission of department", REQAND [J "CSC110H1" "", RAW "permission of department"])
-    , ("CSC110H1, additional CSC111H1", REQAND [J "CSC110H1" "", J "CSC111H1" ""]) -- TODO: can change the second part to FCEs to make more sense
+    , ("CSC110H1, additional 2.0 credits from CSC", REQAND [J "CSC110H1" "", FCES 2.0 (DEPARTMENT "CSC")])
     ]
 
 andorInputs :: [(String, Req)]
@@ -104,6 +104,7 @@ fcesInputs = [
     , ("1.0 credit in MST courses and 0.5 credit in HIS", REQAND [FCES 1.0 (DEPARTMENT "MST"), FCES 0.5 (DEPARTMENT "HIS")])
     , ("2.0 ENG credits", FCES 2.0 (DEPARTMENT "ENG"))
     , ("Any 9.0 credits", FCES 9.0 (REQUIREMENT $ RAW ""))
+    , ("2.0 ENG credits and any 4.0 credits", REQAND [FCES 2.0 (DEPARTMENT "ENG"), FCES 4.0 (REQUIREMENT $ RAW "")])
     , ("9.0 credits in any field", FCES 9.0 (REQUIREMENT $ RAW ""))
     , ("9.0 credits in any subject", FCES 9.0 (REQUIREMENT $ RAW ""))
     , ("1.0 credits of CSC courses", FCES 1.0 (DEPARTMENT "CSC"))
