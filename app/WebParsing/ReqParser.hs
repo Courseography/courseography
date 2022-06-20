@@ -433,12 +433,15 @@ fcesParser = do
         Nothing -> return fcesReq
         Just x -> return $ REQAND $ flattenAnd [fcesReq, x]
 
--- | Parser for FCES modifiers
-fcesModifiersParser :: Parser Modifier
-fcesModifiersParser = Parsec.try courseAsModParser
+-- | Parser for FCES modifiers except for rawModifierParser
+fcesModifiersParserNoRaw :: Parser Modifier
+fcesModifiersParserNoRaw = Parsec.try courseAsModParser
     <|> Parsec.try levelParser
     <|> Parsec.try departmentParser
-    <|> rawModifierParser
+
+-- | Parser for FCES modifiers
+fcesModifiersParser :: Parser Modifier
+fcesModifiersParser = fcesModifiersParserNoRaw <|> rawModifierParser
 
 -- | Parses fces modifiers related through and clauses
 -- | Not using andParser and sepByNoConsume because empty strings are handled differently
@@ -449,10 +452,8 @@ modAndParser =  do
     case x of
         REQUIREMENT (RAW "") -> return x
         _ -> do
-            xs <- Parsec.many $ Parsec.try $ (fromSeparator <|> Parsec.string "") >> (
-                Parsec.try courseAsModParser
-                <|> Parsec.try levelParser
-                <|> Parsec.try departmentParser)
+            xs <- Parsec.many $ Parsec.try $
+                (fromSeparator <|> Parsec.string "") >> fcesModifiersParserNoRaw
             case xs of
                 [] -> return x
                 _ -> return $ MODAND (x:xs)
