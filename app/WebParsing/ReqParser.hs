@@ -371,7 +371,7 @@ andParser p = do
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ REQAND (x:xs)
+        (x:xs) -> return $ REQAND $ flattenAnd (x:xs)
 
 -- | Parser for programs grouped together
 -- | Parses program names and degree types, then concatenate every combination
@@ -416,19 +416,47 @@ fcesParser = do
     dept <- Parsec.optionMaybe $ Parsec.try departmentParser
     _ <- Parsec.spaces
     _ <- fceSeparator
-    _ <- Parsec.optional $ Parsec.try includingSeparator <|> Parsec.try fromSeparator
+    req <- Parsec.optionMaybe $ Parsec.try includingSeparator >> andParser categoryParser
+    _ <- Parsec.optional $ Parsec.try fromSeparator
     _ <- Parsec.spaces
     _ <- Parsec.optional $ Parsec.try anyModifierParser
+    modifiers <- modAndParser
 
-    case dept of
-        Nothing -> FCES fces <$> fcesModifiersParser
-        Just x -> return $ FCES fces x
+    let fcesReq = case dept of
+            Nothing -> FCES fces modifiers
+            Just x -> case modifiers of
+                REQUIREMENT (RAW "") -> FCES fces x
+                MODAND ms -> FCES fces $ MODAND (x:ms)
+                _ -> FCES fces $ MODAND [modifiers, x]
+
+    case req of
+        Nothing -> return fcesReq
+        Just x -> return $ REQAND $ flattenAnd [fcesReq, x]
+
+-- | Parser for FCES modifiers except for rawModifierParser
+fcesModifiersParserNoRaw :: Parser Modifier
+fcesModifiersParserNoRaw = Parsec.try courseAsModParser
+    <|> Parsec.try levelParser
+    <|> Parsec.try departmentParser
 
 -- | Parser for FCES modifiers
 fcesModifiersParser :: Parser Modifier
-fcesModifiersParser = Parsec.try courseAsModParser
-    <|> Parsec.try departmentParser
-    <|> rawModifierParser
+fcesModifiersParser = fcesModifiersParserNoRaw <|> rawModifierParser
+
+-- | Parses fces modifiers related through and clauses
+-- | Not using andParser and sepByNoConsume because empty strings are handled differently
+modAndParser :: Parser Modifier
+modAndParser =  do
+    x <- Parsec.try fcesModifiersParser
+
+    case x of
+        REQUIREMENT (RAW "") -> return x
+        _ -> do
+            xs <- Parsec.many $ Parsec.try $
+                (fromSeparator <|> Parsec.string "") >> fcesModifiersParserNoRaw
+            case xs of
+                [] -> return x
+                _ -> return $ MODAND (x:xs)
 
 -- | An andParser for courses but wraps the returned Req in a Modifier
 courseAsModParser :: Parser Modifier
@@ -442,6 +470,28 @@ courseLiteralParser = Parsec.choice (map caseInsensitiveStr [
     "courses",
     "course"
     ])
+
+-- | Parses a level modifier in the fces requirement
+-- | eg. the "300-level" in "1.0 credit at the 300-level"
+levelParser :: Parser Modifier
+levelParser = do
+    _ <- Parsec.spaces
+    level <- Parsec.count 3 Parsec.digit
+    plus <- Parsec.optionMaybe $ Parsec.char '+'
+    _ <- Parsec.choice [
+        Parsec.space,
+        Parsec.char '-'
+        ]
+    _ <- caseInsensitiveStr "level"
+    _ <- Parsec.spaces
+    _ <- Parsec.optional $ Parsec.try courseLiteralParser
+    higher <- Parsec.optionMaybe $ caseInsensitiveStr "or higher"
+
+    case plus of
+        Nothing -> case higher of
+            Nothing -> return $ LEVEL level
+            Just _ -> return $ LEVEL $ level ++ "+"
+        Just _ -> return $ LEVEL $ level ++ "+"
 
 -- | Parses a department code in the fces requirement
 -- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
@@ -508,6 +558,13 @@ flattenOr :: [Req] -> [Req]
 flattenOr [] = []
 flattenOr (REQOR x:xs) = x ++ flattenOr xs
 flattenOr (x:xs) = x:flattenOr xs
+
+-- Flattens nested REQANDs into a single REQAND
+-- Similar to flattenOr (see above) but for REQAND
+flattenAnd :: [Req] -> [Req]
+flattenAnd [] = []
+flattenAnd (REQAND x:xs) = x ++ flattenAnd xs
+flattenAnd (x:xs) = x:flattenAnd xs
 
 -- | Trims leading and trailing spaces from a string
 -- | Modified from https://stackoverflow.com/a/6270337/10254049
