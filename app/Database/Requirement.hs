@@ -18,6 +18,7 @@ data Req = NONE
          | REQOR [Req]
          | FCES Float Modifier
          | GRADE String Req
+         | GPA Float String
          | PROGRAM String
          | RAW String deriving (Eq, Show)
 

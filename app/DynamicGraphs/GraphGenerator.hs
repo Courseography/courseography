@@ -229,6 +229,12 @@ reqToStmtsTree _ parentID (PROGRAM prog) = do
     edge <- makeEdge (nodeID progNode) parentID Nothing
     return $ Node [DN progNode, DE edge] []
 
+-- a cGPA requirement
+reqToStmtsTree _ parentID (GPA float string) = do
+    gpaNode <- makeNode (pack $ "Minimum cGPA of " ++ show float ++ string) Nothing
+    edge <-  makeEdge (nodeID gpaNode) parentID Nothing
+    return $ Node [DN gpaNode, DE edge] []
+
 -- | Converts the given number of credits and list of modifiers into a string
 -- | in readable English
 -- | Assumes each modifier constructor appears in modifiers at most once

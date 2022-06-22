@@ -27,6 +27,7 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "Completion of at least",
     "Completion of a minimum of",
     "Completion of",
+    "have completed",
     "At least one additional",
     "At least one",
     "At least",
@@ -34,6 +35,21 @@ completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
     "a"
     ])
     >> Parsec.skipMany1 Parsec.space
+
+cgpaPrefix :: Parser ()
+cgpaPrefix = Parsec.choice (map caseInsensitiveStr [
+    "and will normally have a CGPA of at least",
+    "with a CGPA of at least",
+    "with a minimum cGPA of",
+    "and a minimum cGPA of",
+    "and minimum cGPA of",
+    "a CGPA of at least",
+    "a minimum cGPA of",
+    "minimum cGPA of",
+    "with",
+    "cGPA"
+    ])
+    >> Parsec.spaces
 
 programPrefix :: Parser ()
 programPrefix = Parsec.choice (map caseInsensitiveStr [
@@ -324,6 +340,7 @@ categoryParser :: Parser Req
 categoryParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     fcesParser,
     courseParser,
+    cgpaParser,
     programOrParser,
     rawTextParser
     ]
@@ -371,6 +388,7 @@ andParser p = do
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
+        (x:[RAW ""]) -> return x
         (x:xs) -> return $ REQAND $ flattenAnd (x:xs)
 
 -- | Parser for programs grouped together
@@ -538,6 +556,21 @@ anyModifierParser = caseInsensitiveStr "any"
 -- | Parser for requirements separated by a semicolon.
 reqParser :: Parser Req
 reqParser = Parsec.try $ andParser categoryParser
+
+-- Parser for cGPA requirements: "... 1.0 cGPA ..."
+cgpaParser :: Parser Req
+cgpaParser = do
+    _ <- Parsec.optional cgpaPrefix
+    gpa <- creditsParser
+    Parsec.spaces
+    _ <- Parsec.optional (caseInsensitiveStr "cGPA")
+    Parsec.spaces
+    addendum <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces >> Parsec.choice [
+        Parsec.lookAhead andSeparator,
+        Parsec.lookAhead orSeparator,
+        Parsec.eof >> return ""
+        ]
+    return $ GPA gpa addendum
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters
