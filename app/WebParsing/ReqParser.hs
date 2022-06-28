@@ -10,7 +10,7 @@ import Text.Parsec.String (Parser)
 -- define separators
 fromSeparator :: Parser String
 fromSeparator = Parsec.spaces
-                >> Parsec.choice (map (Parsec.try . Parsec.string) [
+                >> Parsec.choice (map caseInsensitiveStr [
             "of any of the following:",
             "of",
             "from the following: ",
@@ -23,7 +23,7 @@ fromSeparator = Parsec.spaces
     ])
 
 completionPrefix :: Parser ()
-completionPrefix = Parsec.choice (map (Parsec.try . caseInsensitiveStr) [
+completionPrefix = Parsec.choice (map caseInsensitiveStr [
     "Completion of at least",
     "Completion of a minimum of",
     "Completion of",
@@ -49,7 +49,7 @@ cgpaPrefix = Parsec.choice (map caseInsensitiveStr [
     "with",
     "cGPA"
     ])
-    >> Parsec.spaces
+    >> Parsec.skipMany1 Parsec.space
 
 programPrefix :: Parser ()
 programPrefix = Parsec.choice (map caseInsensitiveStr [
@@ -62,15 +62,11 @@ programPrefix = Parsec.choice (map caseInsensitiveStr [
     >> Parsec.skipMany1 Parsec.space
 
 degreeType :: Parser String
-degreeType = do
-    Parsec.spaces
-    degree <- Parsec.choice $ map caseInsensitiveStr [
-        "major",
-        "minor",
-        "specialist"
-        ]
-    Parsec.spaces
-    return degree
+degreeType = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map caseInsensitiveStr [
+    "major",
+    "minor",
+    "specialist"
+    ]
 
 programSuffix :: Parser String
 programSuffix = Parsec.spaces
@@ -80,23 +76,23 @@ programSuffix = Parsec.spaces
         ])
 
 fceSeparator :: Parser ()
-fceSeparator = Parsec.choice (map (Parsec.try . Parsec.string) [
+fceSeparator = Parsec.choice (map caseInsensitiveStr [
             "FCEs.",
             "FCEs",
             "FCE.",
             "FCE",
             "credits",
+            "credit",
             "full-course equivalents",
             "additional credits",
-            "additional credit",
-            "credit"
+            "additional credit"
             ])
             >> Parsec.spaces
 
 includingSeparator :: Parser String
 includingSeparator = Parsec.optional (Parsec.string ",")
                      >> Parsec.spaces
-                     >> Parsec.string "including"
+                     >> caseInsensitiveStr "including"
 
 
 lParen :: Parser Char
@@ -157,9 +153,6 @@ oneOfSeparator = do
     return (separator ++ colon)
 
 
-semicolon :: Parser Char
-semicolon = Parsec.char ';'
-
 caseInsensitiveChar :: Parsec.Stream s m Char => Char -> Parsec.ParsecT s u m Char
 caseInsensitiveChar c = Parsec.char (toLower c) <|> Parsec.char (toUpper c)
 
@@ -195,21 +188,21 @@ letterParser = do
     return $ letter : plusminus
 
 infoParser :: Parser String
-infoParser= do
-    Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
+infoParser = Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
 
 
 -- | Parser for a grade, which can be in one of the following forms:
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
 gradeParser = do
-    grade <- (Parsec.between lParen rParen percentParser <|> letterParser) <|> percentParser <|> letterParser
-    _ <- Parsec.try $ Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
+    grade <- Parsec.between lParen rParen (percentParser <|> letterParser) <|> percentParser <|> letterParser
+    _ <- Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
         andSeparator,
         orSeparator,
         Parsec.space >> return "",
         Parsec.eof >> return "",
-        Parsec.oneOf "(),/;" >> return ""
+        lParen >> return "",
+        rParen >> return ""
         ]
     return grade
 
@@ -225,7 +218,7 @@ coBefParser = do
 
     where
     cutoffHelper = do
-        _ <- Parsec.choice $ map (Parsec.try . caseInsensitiveStr)
+        _ <- Parsec.choice $ map caseInsensitiveStr
                 ["minimum grade", "minimum mark", "minimum", "grade", "final grade", "at least"]
         Parsec.spaces
         _ <- Parsec.optional $ caseInsensitiveStr "of"
@@ -420,6 +413,7 @@ programOrParser = do
     Parsec.spaces
     _ <- programPrefix
     progs <- Parsec.sepBy (Parsec.try programGroupParser) progOrSeparator
+
     case progs of
         [] -> fail "Empty Req."
         [x] -> return x
@@ -536,11 +530,12 @@ departmentParser = do
 rawModifierParser :: Parser Modifier
 rawModifierParser = do
     Parsec.spaces
-    text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces >> Parsec.choice [
-        Parsec.lookAhead andSeparator,
-        Parsec.lookAhead orSeparator,
-        Parsec.eof >> return ""
-        ]
+    text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces
+        >> Parsec.choice (map (Parsec.try . Parsec.lookAhead) [
+            andSeparator,
+            orSeparator,
+            Parsec.eof >> return ""
+            ])
     return $ REQUIREMENT $ RAW text
 
 -- | Parses "any field" or "any subject" in an fces modifier since they are redundant
@@ -553,10 +548,6 @@ anyModifierParser = caseInsensitiveStr "any"
         ])
     >> Parsec.spaces
 
--- | Parser for requirements separated by a semicolon.
-reqParser :: Parser Req
-reqParser = Parsec.try $ andParser categoryParser
-
 -- Parser for cGPA requirements: "... 1.0 cGPA ..."
 cgpaParser :: Parser Req
 cgpaParser = do
@@ -565,12 +556,17 @@ cgpaParser = do
     Parsec.spaces
     _ <- Parsec.optional (caseInsensitiveStr "cGPA")
     Parsec.spaces
-    addendum <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces >> Parsec.choice [
-        Parsec.lookAhead andSeparator,
-        Parsec.lookAhead orSeparator,
+    addendum <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces
+        >> Parsec.choice (map (Parsec.try . Parsec.lookAhead) [
+        andSeparator,
+        orSeparator,
         Parsec.eof >> return ""
-        ]
+        ])
     return $ GPA gpa addendum
+
+-- | Parser for requirements separated by a semicolon.
+reqParser :: Parser Req
+reqParser = Parsec.try $ andParser categoryParser
 
 -- Similar to Parsec.sepBy but stops when sep passes but p fails,
 -- and doesn't consume failed characters
