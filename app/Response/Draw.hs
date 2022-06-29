@@ -45,8 +45,8 @@ modePanel = H.div ! A.id "side-panel-wrap" $ do
             ! A.class_ "jscolor"
             ! A.value "ff7878" -- pastelRed color as defined in Css.Constants
             ! A.size "15"
-    H.table !A.id "colour-table" $ forM_ (replicate 2 $ replicate 5 "" :: [[H.Html]])
-                                         (H.tr . mapM_ (H.td . H.toHtml))
+    H.table ! A.id "colour-table" $ forM_ (replicate 2 $ replicate 5 "" :: [[H.Html]])
+                                          (H.tr . mapM_ (H.td . H.toHtml))
     H.div ! A.id "save-graph" ! A.class_ "button" $ "SAVE"
     H.input ! A.id "area-of-study"
             ! A.class_ "course-code"
