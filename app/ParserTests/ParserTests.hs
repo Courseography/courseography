@@ -111,6 +111,11 @@ fcesInputs = [
     , ("1.0 credits from the CSC courses", FCES 1.0 (DEPARTMENT "CSC"))
     , ("1.0 credits at the 400-level", FCES 1.0 (LEVEL "400"))
     , ("a 0.5 credit 300 level course", FCES 0.5 (LEVEL "300"))
+    , ("at least one additional 0.5 credit from a 300-/400-level course", FCES 0.5 (MODOR [LEVEL "300", LEVEL "400"]))
+    , ("at least one additional 0.5 credit from a 400-level CSC/BCB course", FCES 0.5 (MODAND [LEVEL "400", MODOR [DEPARTMENT "CSC", DEPARTMENT "BCB"]]))
+    , ("at least one additional 1.0 credit from a 300-/400-level CSC/BCB courses", FCES 1.0 (MODAND [MODOR [LEVEL "300", LEVEL "400"], MODOR [DEPARTMENT "CSC", DEPARTMENT "BCB"]]))
+    , ("At least 1.0 credit must be at the 300-/400-level.", FCES 1.0 (MODOR [LEVEL "300", LEVEL "400"]))
+    , ("At least 1.5 credit must be at the 400-level CSC or BCB courses.", FCES 1.5 (MODAND [LEVEL "400", MODOR [DEPARTMENT "CSC", DEPARTMENT "BCB"]]))
     ]
 
 gradeBefInputs :: [(String, Req)]

@@ -25,4 +25,5 @@ data Req = NONE
 data Modifier = DEPARTMENT String
               | LEVEL String
               | MODAND [Modifier]
+              | MODOR [Modifier]
               | REQUIREMENT Req deriving (Eq, Show)
