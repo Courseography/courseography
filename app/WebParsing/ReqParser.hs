@@ -104,10 +104,10 @@ rParen :: Parser Char
 rParen = Parsec.char ')'
 
 orSeparator :: Parser String
-orSeparator = Parsec.choice $ map caseInsensitiveStr [
-    "/",
-    "or",
-    ", or"
+orSeparator = Parsec.choice [
+    caseInsensitiveStr "/",
+    Parsec.spaces >> caseInsensitiveStr "or",
+    caseInsensitiveStr ", or"
     ]
 
 andSeparator :: Parser String
@@ -496,7 +496,7 @@ plainLevelParser = do
 levelParser :: Parser Modifier
 levelParser = do
     _ <- Parsec.spaces
-    levels <- Parsec.sepBy plainLevelParser orSeparator
+    levels <- sepByNoConsume plainLevelParser orSeparator
     plus <- Parsec.optionMaybe $ Parsec.char '+'
     _ <- Parsec.spaces
     _ <- caseInsensitiveStr "level"
@@ -517,33 +517,27 @@ levelParser = do
 -- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
 departmentParser :: Parser Modifier
 departmentParser = do
+    let end = [
+            courseLiteralParser,
+            fceSeparator >> return "",
+            plainLevelParser,
+            orSeparator,
+            andSeparator,
+            fromSeparator,
+            Parsec.eof >> return ""
+            ]
+
     Parsec.spaces
     Parsec.notFollowedBy fceSeparator
-    deptsMaybe <- Parsec.optionMaybe $ Parsec.try $ Parsec.sepBy1
-        (Parsec.between Parsec.spaces Parsec.spaces $ Parsec.count 3 Parsec.upper)
-        orSeparator
+    Parsec.notFollowedBy $ Parsec.choice end
+    depts <- Parsec.sepBy1
+        (many1Till Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) end)
+        (Parsec.try orSeparator)
+    Parsec.spaces >> Parsec.optional courseLiteralParser
 
-    case deptsMaybe of
-        Nothing -> do
-            dept <- Parsec.manyTill Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
-                courseLiteralParser,
-                fceSeparator >> return "",
-                orSeparator,
-                andSeparator,
-                fromSeparator,
-                Parsec.eof >> return ""
-                ]
-            _ <- Parsec.optional courseLiteralParser
-
-            case trim dept of
-                "" -> fail "no dept"
-                xs -> return $ DEPARTMENT xs
-
-        Just depts -> do
-            Parsec.spaces >> Parsec.optional courseLiteralParser
-            case depts of
-              [dept] ->return $ DEPARTMENT $ trim dept
-              xs -> return $ MODOR $ map (DEPARTMENT . trim) xs
+    case depts of
+        [dept] ->return $ DEPARTMENT $ trim dept
+        xs -> return $ MODOR $ map (DEPARTMENT . trim) xs
 
 -- | Parser for the raw text in fcesParser
 -- | Like rawTextParser but terminates at ands and ors
