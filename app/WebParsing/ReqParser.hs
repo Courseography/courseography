@@ -615,6 +615,13 @@ flattenAnd (x:xs) = x:flattenAnd xs
 trim :: String -> String
 trim = let f = reverse . dropWhile isSpace in f . f
 
+many1Till :: Show b => Parser a -> Parser b -> Parser [a]
+many1Till p end = do
+    Parsec.notFollowedBy end
+    x <- p
+    xs <- Parsec.manyTill p end
+    return $ x:xs
+
 parseReqs :: String -> Req
 parseReqs reqString = do
     let reqStringLower = map toLower reqString
