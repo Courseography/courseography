@@ -615,6 +615,7 @@ flattenAnd (x:xs) = x:flattenAnd xs
 trim :: String -> String
 trim = let f = reverse . dropWhile isSpace in f . f
 
+-- | Like Parsec.manyTill but consumes at least one character
 many1Till :: Show b => Parser a -> Parser b -> Parser [a]
 many1Till p end = do
     Parsec.notFollowedBy end
