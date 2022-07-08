@@ -9,11 +9,8 @@ module ModifierTests.ModifierTests
 ( modifierTestSuite ) where
 
 import Database.Requirement
+import DynamicGraphs.GraphGenerator (concatModor, stringifyModand)
 import Test.HUnit (Test (..), assertEqual)
-import DynamicGraphs.GraphGenerator
-    ( stringifyModand
-    , concatModor
-    )
 
 -- Function to facilitate test case creation given a string, Req tuple
 createTest :: (Eq a, Show a) => (a -> String) -> String -> [(a, String)] -> Test
