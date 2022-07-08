@@ -5,8 +5,6 @@ module DynamicGraphs.GraphGenerator
   , coursesToPrereqGraph
   , coursesToPrereqGraphExcluding
   , graphProfileHash
-  , stringifyModand
-  , concatModor
   )
   where
 
@@ -28,8 +26,7 @@ import Data.Sequence as Seq
 import Data.Text.Lazy (Text, isInfixOf, isPrefixOf, last, pack, take)
 import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.CourseFinder (lookupCourses)
-import DynamicGraphs.GraphNodeUtils (concatModor, formatModor, maybeHead, paddingSpaces,
-                                     stringifyModand)
+import DynamicGraphs.GraphNodeUtils (formatModor, maybeHead, paddingSpaces, stringifyModand)
 import DynamicGraphs.GraphOptions (GraphOptions (..), defaultGraphOptions)
 import Prelude hiding (last)
 
