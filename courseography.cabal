@@ -45,7 +45,7 @@ test-suite ModifierTests
   main-is: ModifierTests/tests.hs
   other-modules:
     Database.Requirement,
-    DynamicGraphs.ModifierTests
+    DynamicGraphs.GraphGenerator
   Type: exitcode-stdio-1.0
   build-depends:
     base >=4.14,
