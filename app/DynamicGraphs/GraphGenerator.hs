@@ -5,6 +5,8 @@ module DynamicGraphs.GraphGenerator
   , coursesToPrereqGraph
   , coursesToPrereqGraphExcluding
   , graphProfileHash
+  , stringifyModand
+  , concatModor
   )
   where
 
