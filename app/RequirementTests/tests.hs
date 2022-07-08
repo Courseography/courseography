@@ -10,12 +10,13 @@ module Main
 
 import Control.Monad
 import ModifierTests.ModifierTests (modifierTestSuite)
+import ParserTests.ParserTests (reqTestSuite)
 import qualified System.Exit as Exit
 import Test.HUnit (Test (..), failures, runTestTT)
 
 -- Single test encompassing all test suites
 tests :: Test
-tests = TestList [modifierTestSuite]
+tests = TestList [reqTestSuite, modifierTestSuite]
 
 main :: IO ()
 main = do
