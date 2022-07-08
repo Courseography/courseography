@@ -5,7 +5,7 @@ Module containing test cases for Modifier string formatters.
 
 -}
 
-module ModifierTests.ModifierTests
+module RequirementTests.ModifierTests
 ( modifierTestSuite ) where
 
 import Database.Requirement

@@ -20,11 +20,12 @@ custom-setup
     process >= 1.2,
     directory
 
-test-suite ParserTests
-  main-is: ParserTests/tests.hs
+test-suite RequirementTests
+  main-is: RequirementTests/tests.hs
   other-modules:
     Database.Requirement,
-    ParserTests.ParserTests,
+    RequirementTests.ParserTests,
+    RequirementTests.ModifierTests,
     WebParsing.ReqParser
   Type: exitcode-stdio-1.0
   build-depends:
