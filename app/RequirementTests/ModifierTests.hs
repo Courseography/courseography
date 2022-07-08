@@ -9,7 +9,7 @@ module RequirementTests.ModifierTests
 ( modifierTestSuite ) where
 
 import Database.Requirement
-import DynamicGraphs.GraphGenerator (concatModor, stringifyModand)
+import DynamicGraphs.GraphNodeUtils (concatModor, stringifyModand)
 import Test.HUnit (Test (..), assertEqual)
 
 -- Function to facilitate test case creation given a string, Req tuple

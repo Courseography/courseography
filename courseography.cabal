@@ -26,7 +26,8 @@ test-suite RequirementTests
     Database.Requirement,
     RequirementTests.ParserTests,
     RequirementTests.ModifierTests,
-    WebParsing.ReqParser
+    WebParsing.ReqParser,
+    DynamicGraphs.GraphNodeUtils
   Type: exitcode-stdio-1.0
   build-depends:
     base >=4.14,
@@ -57,6 +58,7 @@ executable courseography
     DynamicGraphs.CourseFinder,
     DynamicGraphs.WriteRunDot,
     DynamicGraphs.GraphGenerator,
+    DynamicGraphs.GraphNodeUtils,
     DynamicGraphs.GraphOptions,
     Export.GetImages,
     Export.ImageConversion,

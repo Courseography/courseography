@@ -9,7 +9,7 @@ module Main
 (  main  ) where
 
 import Control.Monad
-import ModifierTests.ModifierTests (modifierTestSuite)
+import RequirementTests.ModifierTests (modifierTestSuite)
 import RequirementTests.ParserTests (reqTestSuite)
 import qualified System.Exit as Exit
 import Test.HUnit (Test (..), failures, runTestTT)
