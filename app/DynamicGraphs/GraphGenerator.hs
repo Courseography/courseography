@@ -26,6 +26,7 @@ import Data.Sequence as Seq
 import Data.Text.Lazy (Text, isInfixOf, isPrefixOf, last, pack, take)
 import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.CourseFinder (lookupCourses)
+import DynamicGraphs.GraphNodeUtils (formatModor, maybeHead, paddingSpaces, stringifyModand)
 import DynamicGraphs.GraphOptions (GraphOptions (..), defaultGraphOptions)
 import Prelude hiding (last)
 
@@ -185,7 +186,7 @@ reqToStmtsTree _ parentID (FCES creds (REQUIREMENT (RAW ""))) = do
 
 --A prerequisite concerning a given number of earned credits in some raw string
 reqToStmtsTree _ parentID (FCES creds (REQUIREMENT (RAW text))) = do
-    fceNode <- makeNode (pack $ show creds ++ " FCEs from " ++ text ++ paddingSpaces) Nothing
+    fceNode <- makeNode (pack $ show creds ++ " FCEs from " ++ text ++ paddingSpaces 18) Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     return $ Node [DN fceNode, DE edge] []
 
@@ -204,15 +205,31 @@ reqToStmtsTree _ parentID (FCES creds (DEPARTMENT dept)) = do
 
 --A prerequisite concerning a given number of earned credits at a given level
 reqToStmtsTree _ parentID (FCES creds (LEVEL level)) = do
-    fceNode <- makeNode (pack $ show creds ++ " FCEs at the " ++ level ++ " level" ++ paddingSpaces) Nothing
+    fceNode <- makeNode (pack $ show creds ++ " FCEs at the " ++ level ++ " level" ++ paddingSpaces 18) Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     return $ Node [DN fceNode, DE edge] []
 
 -- | A prerequisite concerning a given number of earned credits with a combination
 -- | of some modifiers related through MODANDs
 -- | Assumes each modifier constructor appears in modifiers at most once
+-- | The MODOR constructor may appear more than once, but each occurrence
+-- | of MODOR contains exactly one constructor for all its elements
+-- | and such constructor does not appear anywhere else in MODAND
 reqToStmtsTree options parentID (FCES creds (MODAND modifiers)) = do
-    fceNode <- makeNode (pack $ stringifyModand creds modifiers ++ paddingSpaces) Nothing
+    fceNode <- makeNode (pack $ stringifyModand creds modifiers ++ paddingSpaces 10) Nothing
+    edge <- makeEdge (nodeID fceNode) parentID Nothing
+
+    case maybeHead [req | REQUIREMENT req <- modifiers] of
+        Nothing -> return $ Node [DN fceNode, DE edge] []
+        Just req -> do
+            prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
+            return $ Node [DN fceNode, DE edge] [prereqStmts]
+
+-- | A prerequisite concerning a given number of earned credits with a combination
+-- | of some modifiers related through a MODOR
+-- | Assumes all modifiers in the list have the same constructor
+reqToStmtsTree options parentID (FCES creds (MODOR modifiers)) = do
+    fceNode <- makeNode (pack $ formatModor creds modifiers) Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
 
     case maybeHead [req | REQUIREMENT req <- modifiers] of
@@ -234,31 +251,6 @@ reqToStmtsTree _ parentID (GPA float string) = do
     gpaNode <- makeNode (pack $ "Minimum cGPA of " ++ show float ++ string) Nothing
     edge <-  makeEdge (nodeID gpaNode) parentID Nothing
     return $ Node [DN gpaNode, DE edge] []
-
--- | Converts the given number of credits and list of modifiers into a string
--- | in readable English
--- | Assumes each modifier constructor appears in modifiers at most once
-stringifyModand :: Float -> [Modifier] -> String
-stringifyModand creds modifiers = let
-    dept = maybeHead [x | DEPARTMENT x <- modifiers]
-    deptFormatted = case dept of
-        Nothing -> ""
-        Just x -> ' ':x
-    level = maybeHead [x | LEVEL x <- modifiers]
-    levelFormatted = case level of
-        Nothing -> ""
-        Just x -> " at the " ++ x ++ " level"
-    raw = maybeHead [x | REQUIREMENT (RAW x) <- modifiers]
-    rawFormatted = case raw of
-        Nothing -> ""
-        Just x -> " from " ++ x
-
-    in show creds ++ deptFormatted ++ " FCEs" ++ levelFormatted ++ rawFormatted
-
--- | Returns Just the first element of the given list, or Nothing if the list is empty
-maybeHead :: [a] -> Maybe a
-maybeHead [] = Nothing
-maybeHead (x:_) = Just x
 
 prefixedByOneOf :: Text -> [Text] -> Bool
 prefixedByOneOf name = any (`isPrefixOf` name)
@@ -354,6 +346,3 @@ edgeAttrs :: GlobalAttributes
 edgeAttrs = EdgeAttrs [
     ArrowHead (AType [(ArrMod FilledArrow BothSides, Normal)])
     ]
-
-paddingSpaces :: [Char]
-paddingSpaces = Prelude.replicate 18 ' '

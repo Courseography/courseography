@@ -15,8 +15,10 @@ fromSeparator = Parsec.spaces
             "of",
             "from the following: ",
             "from the",
+            "from a",
             "from:",
             "from",
+            "must be at the",
             "at the",
             "at",
             "in"
@@ -102,10 +104,10 @@ rParen :: Parser Char
 rParen = Parsec.char ')'
 
 orSeparator :: Parser String
-orSeparator = Parsec.choice $ map caseInsensitiveStr [
-    "/",
-    "or",
-    ", or"
+orSeparator = Parsec.choice [
+    caseInsensitiveStr "/",
+    Parsec.spaces >> caseInsensitiveStr "or",
+    caseInsensitiveStr ", or"
     ]
 
 andSeparator :: Parser String
@@ -458,7 +460,7 @@ fcesModifiersParser = fcesModifiersParserNoRaw <|> rawModifierParser
 -- | Parses fces modifiers related through and clauses
 -- | Not using andParser and sepByNoConsume because empty strings are handled differently
 modAndParser :: Parser Modifier
-modAndParser =  do
+modAndParser = do
     x <- Parsec.try fcesModifiersParser
 
     case x of
@@ -483,47 +485,59 @@ courseLiteralParser = Parsec.choice (map caseInsensitiveStr [
     "course"
     ])
 
+plainLevelParser :: Parser String
+plainLevelParser = do
+    level <- Parsec.count 3 Parsec.digit
+    _ <- Parsec.optional $ Parsec.char '-'
+    return level
+
 -- | Parses a level modifier in the fces requirement
 -- | eg. the "300-level" in "1.0 credit at the 300-level"
 levelParser :: Parser Modifier
 levelParser = do
     _ <- Parsec.spaces
-    level <- Parsec.count 3 Parsec.digit
+    levels <- sepByNoConsume plainLevelParser orSeparator
     plus <- Parsec.optionMaybe $ Parsec.char '+'
-    _ <- Parsec.choice [
-        Parsec.space,
-        Parsec.char '-'
-        ]
+    _ <- Parsec.spaces
     _ <- caseInsensitiveStr "level"
     _ <- Parsec.spaces
     _ <- Parsec.optional $ Parsec.try courseLiteralParser
     higher <- Parsec.optionMaybe $ caseInsensitiveStr "or higher"
 
-    case plus of
-        Nothing -> case higher of
-            Nothing -> return $ LEVEL level
+    case levels of
+        [] -> fail "no level"
+        [level] -> case plus of
+            Nothing -> case higher of
+                Nothing -> return $ LEVEL level
+                Just _ -> return $ LEVEL $ level ++ "+"
             Just _ -> return $ LEVEL $ level ++ "+"
-        Just _ -> return $ LEVEL $ level ++ "+"
+        xs -> return $ MODOR $ map LEVEL xs
 
 -- | Parses a department code in the fces requirement
 -- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
 departmentParser :: Parser Modifier
 departmentParser = do
+    let end = [
+            courseLiteralParser,
+            fceSeparator >> return "",
+            plainLevelParser,
+            orSeparator,
+            andSeparator,
+            fromSeparator,
+            Parsec.eof >> return ""
+            ]
+
     Parsec.spaces
     Parsec.notFollowedBy fceSeparator
-    dept <- Parsec.manyTill Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
-        courseLiteralParser,
-        fceSeparator >> return "",
-        orSeparator,
-        andSeparator,
-        fromSeparator,
-        Parsec.eof >> return ""
-        ]
-    _ <- Parsec.optional courseLiteralParser
+    Parsec.notFollowedBy $ Parsec.choice end
+    depts <- Parsec.sepBy1
+        (many1Till Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) end)
+        (Parsec.try orSeparator)
+    Parsec.spaces >> Parsec.optional courseLiteralParser
 
-    case trim dept of
-        "" -> fail "empty dept"
-        x -> return $ DEPARTMENT x
+    case depts of
+        [dept] ->return $ DEPARTMENT $ trim dept
+        xs -> return $ MODOR $ map (DEPARTMENT . trim) xs
 
 -- | Parser for the raw text in fcesParser
 -- | Like rawTextParser but terminates at ands and ors
@@ -600,6 +614,14 @@ flattenAnd (x:xs) = x:flattenAnd xs
 -- | based on @Carcigenicate's comment
 trim :: String -> String
 trim = let f = reverse . dropWhile isSpace in f . f
+
+-- | Like Parsec.manyTill but consumes at least one character
+many1Till :: Show b => Parser a -> Parser b -> Parser [a]
+many1Till p end = do
+    Parsec.notFollowedBy end
+    x <- p
+    xs <- Parsec.manyTill p end
+    return $ x:xs
 
 parseReqs :: String -> Req
 parseReqs reqString = do

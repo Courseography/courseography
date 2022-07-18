@@ -9,13 +9,14 @@ module Main
 (  main  ) where
 
 import Control.Monad
-import ParserTests.ParserTests (reqTestSuite)
+import RequirementTests.ModifierTests (modifierTestSuite)
+import RequirementTests.ParserTests (reqTestSuite)
 import qualified System.Exit as Exit
 import Test.HUnit (Test (..), failures, runTestTT)
 
 -- Single test encompassing all test suites
 tests :: Test
-tests = TestList [reqTestSuite]
+tests = TestList [reqTestSuite, modifierTestSuite]
 
 main :: IO ()
 main = do
