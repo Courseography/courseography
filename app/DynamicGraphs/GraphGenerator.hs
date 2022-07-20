@@ -246,9 +246,9 @@ reqToStmtsTree _ parentID (Program prog) = do
     edge <- makeEdge (nodeID progNode) parentID Nothing
     return $ Node [DN progNode, DE edge] []
 
--- a cGpa requirement
+-- a cGPA requirement
 reqToStmtsTree _ parentID (Gpa float string) = do
-    gpaNode <- makeNode (pack $ "Minimum cGpa of " ++ show float ++ string) Nothing
+    gpaNode <- makeNode (pack $ "Minimum cGPA of " ++ show float ++ string) Nothing
     edge <-  makeEdge (nodeID gpaNode) parentID Nothing
     return $ Node [DN gpaNode, DE edge] []
 

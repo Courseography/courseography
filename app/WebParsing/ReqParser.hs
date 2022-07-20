@@ -44,7 +44,7 @@ cgpaPrefix = Parsec.choice (map caseInsensitiveStr [
     "with a CGPA of at least",
     "with a minimum cGPA of",
     "and a minimum cGPA of",
-    "and minimum cGpa of",
+    "and minimum cGPA of",
     "a CGPA of at least",
     "a minimum cGPA of",
     "minimum cGPA of",
