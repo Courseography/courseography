@@ -11,32 +11,32 @@ import Database.Requirement (Modifier (..), Req (..))
 -- | Converts the given number of credits and list of modifiers into a string
 -- | in readable English
 -- | Assumes each modifier constructor appears in modifiers at most once
--- | The MODOR constructor may appear more than once, but each occurrence
--- | of MODOR contains exactly one constructor for all its elements
--- | and such constructor does not appear anywhere else in MODAND
+-- | The ModOr constructor may appear more than once, but each occurrence
+-- | of ModOr contains exactly one constructor for all its elements
+-- | and such constructor does not appear anywhere else in ModAnd
 stringifyModand :: Float -> [Modifier] -> String
 stringifyModand creds modifiers = let
-    dept = maybeHead [x | DEPARTMENT x <- modifiers]
+    dept = maybeHead [x | Department x <- modifiers]
     deptFormatted = case dept of
         Nothing -> ""
         Just x -> ' ' : x
-    depts = maybeHead [xs | MODOR xs@((DEPARTMENT _):_) <- modifiers]
+    depts = maybeHead [xs | ModOr xs@((Department _):_) <- modifiers]
     deptsFormatted = case depts of
         Nothing -> ""
         Just xs -> ' ' : concatModor xs
-    level = maybeHead [x | LEVEL x <- modifiers]
+    level = maybeHead [x | Level x <- modifiers]
     levelFormatted = case level of
         Nothing -> ""
         Just x -> " at the " ++ x ++ " level"
-    levels = maybeHead [xs | MODOR xs@((LEVEL _):_) <- modifiers]
+    levels = maybeHead [xs | ModOr xs@((Level _):_) <- modifiers]
     levelsFormatted = case levels of
         Nothing -> ""
         Just xs -> " at the " ++ concatModor xs ++ " level"
-    raw = maybeHead [x | REQUIREMENT (RAW x) <- modifiers]
+    raw = maybeHead [x | Requirement (Raw x) <- modifiers]
     rawFormatted = case raw of
         Nothing -> ""
         Just x -> " from " ++ x
-    raws = maybeHead [xs | MODOR xs@((REQUIREMENT (RAW _)):_) <- modifiers]
+    raws = maybeHead [xs | ModOr xs@((Requirement (Raw _)):_) <- modifiers]
     rawsFormatted = case raws of
         Nothing -> ""
         Just xs -> " from " ++ concatModor xs
@@ -44,23 +44,23 @@ stringifyModand creds modifiers = let
     in show creds ++ deptFormatted ++ deptsFormatted ++ " FCEs"
         ++ levelFormatted ++ levelsFormatted ++ rawFormatted ++ rawsFormatted
 
--- | Formats a MODOR into FCEs string
--- | Assumes all modifiers in the MODOR have the same constructor
+-- | Formats a ModOr into FCEs string
+-- | Assumes all modifiers in the ModOr have the same constructor
 formatModor :: Float -> [Modifier] -> String
-formatModor creds mods@((DEPARTMENT _):_) = show creds ++ " " ++ concatModor mods ++ " FCEs"
-formatModor creds mods@((LEVEL _):_) = show creds ++ " FCEs at the " ++ concatModor mods ++ " level"
-formatModor creds mods@((REQUIREMENT (RAW _)):_) = show creds ++ " FCEs from " ++ concatModor mods
+formatModor creds mods@((Department _):_) = show creds ++ " " ++ concatModor mods ++ " FCEs"
+formatModor creds mods@((Level _):_) = show creds ++ " FCEs at the " ++ concatModor mods ++ " level"
+formatModor creds mods@((Requirement (Raw _)):_) = show creds ++ " FCEs from " ++ concatModor mods
 formatModor _ _ = "" -- we should never get here
 
--- | Joins a list of modifiers in MODOR together with a "/" or "or"
+-- | Joins a list of modifiers in ModOr together with a "/" or "or"
 -- | Assumes all modifiers in the list have the same constructor
 concatModor :: [Modifier] -> String
-concatModor [LEVEL x] = x
-concatModor ((LEVEL x):xs) = x ++ "/" ++ concatModor xs
-concatModor [DEPARTMENT x] = x
-concatModor ((DEPARTMENT x):xs) = x ++ "/" ++ concatModor xs
-concatModor [REQUIREMENT (RAW x)] = x
-concatModor ((REQUIREMENT (RAW x)):xs) = x ++ " or " ++ concatModor xs
+concatModor [Level x] = x
+concatModor ((Level x):xs) = x ++ "/" ++ concatModor xs
+concatModor [Department x] = x
+concatModor ((Department x):xs) = x ++ "/" ++ concatModor xs
+concatModor [Requirement (Raw x)] = x
+concatModor ((Requirement (Raw x)):xs) = x ++ " or " ++ concatModor xs
 concatModor _ = "" -- we should never get here
 
 -- | Returns Just the first element of the given list, or Nothing if the list is empty

@@ -12,18 +12,18 @@ module Database.Requirement (
     Modifier (..)
     ) where
 
-data Req = NONE
+data Req = None
          | J String String
-         | REQAND [Req]
-         | REQOR [Req]
-         | FCES Float Modifier
-         | GRADE String Req
-         | GPA Float String
-         | PROGRAM String
-         | RAW String deriving (Eq, Show)
+         | ReqAnd [Req]
+         | ReqOr [Req]
+         | Fces Float Modifier
+         | Grade String Req
+         | Gpa Float String
+         | Program String
+         | Raw String deriving (Eq, Show)
 
-data Modifier = DEPARTMENT String
-              | LEVEL String
-              | MODAND [Modifier]
-              | MODOR [Modifier]
-              | REQUIREMENT Req deriving (Eq, Show)
+data Modifier = Department String
+              | Level String
+              | ModAnd [Modifier]
+              | ModOr [Modifier]
+              | Requirement Req deriving (Eq, Show)

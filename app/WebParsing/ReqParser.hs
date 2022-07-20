@@ -44,7 +44,7 @@ cgpaPrefix = Parsec.choice (map caseInsensitiveStr [
     "with a CGPA of at least",
     "with a minimum cGPA of",
     "and a minimum cGPA of",
-    "and minimum cGPA of",
+    "and minimum cGpa of",
     "a CGPA of at least",
     "a minimum cGPA of",
     "minimum cGPA of",
@@ -216,7 +216,7 @@ coBefParser = do
     grade <- cutoffHelper <|> gradeParser
     Parsec.spaces
     _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
-    GRADE grade <$> singleParser
+    Grade grade <$> singleParser
 
     where
     cutoffHelper = do
@@ -238,7 +238,7 @@ coAftParser = do
     req <- singleParser
     Parsec.spaces
     grade <- Parsec.between lParen rParen parenCutoffHelper <|> cutoffHelper
-    return $ GRADE grade req
+    return $ Grade grade req
 
     where
     parenCutoffHelper = do
@@ -273,7 +273,7 @@ parParser = Parsec.between lParen rParen reqParser
 rawTextParser :: Parser Req
 rawTextParser = do
     text <- Parsec.many $ Parsec.noneOf ";\r\n"
-    return $ RAW text
+    return $ Raw text
 
 -- | Parser for a single UTSG course.
 -- We expect 3 letters, 3 digits
@@ -313,14 +313,14 @@ justParser = do
     Parsec.spaces
     meta <- Parsec.option (Right "") $ Parsec.between lParen rParen markInfoParser
     return $ case meta of
-        Left mark -> GRADE mark $ J courseID ""
+        Left mark -> Grade mark $ J courseID ""
         Right info -> J courseID info
     where
     markInfoParser :: Parser (Either String String)
     markInfoParser = do
         Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
 
--- parse for single course with or without cutoff REQOR a req within parentheses
+-- parse for single course with or without cutoff ReqOr a req within parentheses
 courseParser :: Parser Req
 courseParser = Parsec.choice $ map Parsec.try [
     parParser,
@@ -351,7 +351,7 @@ programParser = do
         Parsec.oneOf ".;" >> return "",
         Parsec.eof >> return ""
         ]
-    return $ PROGRAM program
+    return $ Program program
 
 -- | Given a parser p, returns a parser that parses one or more p related through
 -- | the "one of the following" condition
@@ -365,26 +365,26 @@ oneOfParser p = do
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ REQOR $ flattenOr (x:xs)
+        (x:xs) -> return $ ReqOr $ flattenOr (x:xs)
 
--- | Returns a parser that parses REQORs of the given parser
+-- | Returns a parser that parses ReqOrs of the given parser
 orParser :: Parser Req -> Parser Req
 orParser p = do
     reqs <- Parsec.sepBy p orSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ REQOR $ flattenOr (x:xs)
+        (x:xs) -> return $ ReqOr $ flattenOr (x:xs)
 
--- | Returns a parser that parses REQANDs of REQORs of the given parser
+-- | Returns a parser that parses ReqAnds of ReqOrs of the given parser
 andParser :: Parser Req -> Parser Req
 andParser p = do
     reqs <- Parsec.sepBy (Parsec.try (oneOfParser p) <|> Parsec.try (orParser p)) andSeparator
     case reqs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:[RAW ""]) -> return x
-        (x:xs) -> return $ REQAND $ flattenAnd (x:xs)
+        (x:[Raw ""]) -> return x
+        (x:xs) -> return $ ReqAnd $ flattenAnd (x:xs)
 
 -- | Parser for programs grouped together
 -- | Parses program names and degree types, then concatenate every combination
@@ -402,13 +402,13 @@ programGroupParser = do
 
     case progs of
         [] -> fail "Empty Req."
-        [PROGRAM x] -> case degrees of
-            [] -> return $ PROGRAM x
-            [d] -> return $ PROGRAM (x ++ " " ++ d)
-            ds -> return $ REQOR [PROGRAM (x ++ " " ++ d) | d <- ds]
+        [Program x] -> case degrees of
+            [] -> return $ Program x
+            [d] -> return $ Program (x ++ " " ++ d)
+            ds -> return $ ReqOr [Program (x ++ " " ++ d) | d <- ds]
         xs -> case degrees of
-            [] -> return $ REQOR [PROGRAM x | PROGRAM x <- xs]
-            ds -> return $ REQOR [PROGRAM (x ++ " " ++ d) | PROGRAM x <- xs, d <- ds]
+            [] -> return $ ReqOr [Program x | Program x <- xs]
+            ds -> return $ ReqOr [Program (x ++ " " ++ d) | Program x <- xs, d <- ds]
 
 programOrParser :: Parser Req
 programOrParser = do
@@ -419,7 +419,7 @@ programOrParser = do
     case progs of
         [] -> fail "Empty Req."
         [x] -> return x
-        (x:xs) -> return $ REQOR $ flattenOr (x:xs)
+        (x:xs) -> return $ ReqOr $ flattenOr (x:xs)
 
 -- | Parser for FCE requirements:
 -- "... 9.0 FCEs ..."
@@ -437,23 +437,23 @@ fcesParser = do
     modifiers <- modAndParser
 
     let fcesReq = case dept of
-            Nothing -> FCES fces modifiers
+            Nothing -> Fces fces modifiers
             Just x -> case modifiers of
-                REQUIREMENT (RAW "") -> FCES fces x
-                MODAND ms -> FCES fces $ MODAND (x:ms)
-                _ -> FCES fces $ MODAND [modifiers, x]
+                Requirement (Raw "") -> Fces fces x
+                ModAnd ms -> Fces fces $ ModAnd (x:ms)
+                _ -> Fces fces $ ModAnd [modifiers, x]
 
     case req of
         Nothing -> return fcesReq
-        Just x -> return $ REQAND $ flattenAnd [fcesReq, x]
+        Just x -> return $ ReqAnd $ flattenAnd [fcesReq, x]
 
--- | Parser for FCES modifiers except for rawModifierParser
+-- | Parser for Fces modifiers except for rawModifierParser
 fcesModifiersParserNoRaw :: Parser Modifier
 fcesModifiersParserNoRaw = Parsec.try courseAsModParser
     <|> Parsec.try levelParser
     <|> Parsec.try departmentParser
 
--- | Parser for FCES modifiers
+-- | Parser for Fces modifiers
 fcesModifiersParser :: Parser Modifier
 fcesModifiersParser = fcesModifiersParserNoRaw <|> rawModifierParser
 
@@ -464,19 +464,19 @@ modAndParser = do
     x <- Parsec.try fcesModifiersParser
 
     case x of
-        REQUIREMENT (RAW "") -> return x
+        Requirement (Raw "") -> return x
         _ -> do
             xs <- Parsec.many $ Parsec.try $
                 (fromSeparator <|> Parsec.string "") >> fcesModifiersParserNoRaw
             case xs of
                 [] -> return x
-                _ -> return $ MODAND (x:xs)
+                _ -> return $ ModAnd (x:xs)
 
 -- | An andParser for courses but wraps the returned Req in a Modifier
 courseAsModParser :: Parser Modifier
 courseAsModParser = do
     req <- andParser courseParser
-    return $ REQUIREMENT req
+    return $ Requirement req
 
 -- | Parses a literal "course" or "courses"
 courseLiteralParser :: Parser String
@@ -508,10 +508,10 @@ levelParser = do
         [] -> fail "no level"
         [level] -> case plus of
             Nothing -> case higher of
-                Nothing -> return $ LEVEL level
-                Just _ -> return $ LEVEL $ level ++ "+"
-            Just _ -> return $ LEVEL $ level ++ "+"
-        xs -> return $ MODOR $ map LEVEL xs
+                Nothing -> return $ Level level
+                Just _ -> return $ Level $ level ++ "+"
+            Just _ -> return $ Level $ level ++ "+"
+        xs -> return $ ModOr $ map Level xs
 
 -- | Parses a department code in the fces requirement
 -- | eg. the "CSC" in "1.0 credit in CSC" or "1.0 credit in CSC courses"
@@ -536,8 +536,8 @@ departmentParser = do
     Parsec.spaces >> Parsec.optional courseLiteralParser
 
     case depts of
-        [dept] ->return $ DEPARTMENT $ trim dept
-        xs -> return $ MODOR $ map (DEPARTMENT . trim) xs
+        [dept] ->return $ Department $ trim dept
+        xs -> return $ ModOr $ map (Department . trim) xs
 
 -- | Parser for the raw text in fcesParser
 -- | Like rawTextParser but terminates at ands and ors
@@ -550,7 +550,7 @@ rawModifierParser = do
             orSeparator,
             Parsec.eof >> return ""
             ])
-    return $ REQUIREMENT $ RAW text
+    return $ Requirement $ Raw text
 
 -- | Parses "any field" or "any subject" in an fces modifier since they are redundant
 anyModifierParser :: Parser ()
@@ -576,7 +576,7 @@ cgpaParser = do
         orSeparator,
         Parsec.eof >> return ""
         ])
-    return $ GPA gpa addendum
+    return $ Gpa gpa addendum
 
 -- | Parser for requirements separated by a semicolon.
 reqParser :: Parser Req
@@ -592,21 +592,21 @@ sepByNoConsume p sep = (do
     return (x:xs))
     <|> return []
 
--- Flattens nested REQORs into a single REQOR
--- eg. REQOR [REQOR ["CS major, "Math major"], RAW "permission from instructor"]
--- Nested REQORs occur because the way programs are related through REQORs is
+-- Flattens nested ReqOrs into a single ReqOr
+-- eg. ReqOr [ReqOr ["CS major, "Math major"], Raw "permission from instructor"]
+-- Nested ReqOrs occur because the way programs are related through ReqOrs is
 -- different than that of courses. So they each have their orParser, which
--- may be related throuhg another REQOR
+-- may be related throuhg another ReqOr
 flattenOr :: [Req] -> [Req]
 flattenOr [] = []
-flattenOr (REQOR x:xs) = x ++ flattenOr xs
+flattenOr (ReqOr x:xs) = x ++ flattenOr xs
 flattenOr (x:xs) = x:flattenOr xs
 
--- Flattens nested REQANDs into a single REQAND
--- Similar to flattenOr (see above) but for REQAND
+-- Flattens nested ReqAnds into a single ReqAnd
+-- Similar to flattenOr (see above) but for ReqAnd
 flattenAnd :: [Req] -> [Req]
 flattenAnd [] = []
-flattenAnd (REQAND x:xs) = x ++ flattenAnd xs
+flattenAnd (ReqAnd x:xs) = x ++ flattenAnd xs
 flattenAnd (x:xs) = x:flattenAnd xs
 
 -- | Trims leading and trailing spaces from a string
@@ -627,7 +627,7 @@ parseReqs :: String -> Req
 parseReqs reqString = do
     let reqStringLower = map toLower reqString
     if all isSpace reqString || reqStringLower == "none" || reqStringLower == "no"
-        then NONE
+        then None
         else do
             let req = Parsec.parse reqParser "" reqString
                 in case req of
