@@ -1,15 +1,23 @@
 {-# LANGUAGE FlexibleContexts #-}
 module WebParsing.ReqParser where
 
+import Control.Monad
 import Data.Char (isSpace, toLower, toUpper)
 import Database.Requirement
 import Text.Parsec ((<|>))
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 
+-- | a space or a zero-width space (unicode: 8203)
+space :: Parser Char
+space = Parsec.space <|> Parsec.char '\8203'
+
+spaces :: Parser ()
+spaces = Control.Monad.void (Parsec.many space)
+
 -- define separators
 fromSeparator :: Parser String
-fromSeparator = Parsec.spaces
+fromSeparator = spaces
                 >> Parsec.choice (map caseInsensitiveStr [
             "of any of the following:",
             "of",
@@ -36,7 +44,7 @@ completionPrefix = Parsec.choice (map caseInsensitiveStr [
     "Any",
     "a"
     ])
-    >> Parsec.skipMany1 Parsec.space
+    >> Parsec.skipMany1 space
 
 cgpaPrefix :: Parser ()
 cgpaPrefix = Parsec.choice (map caseInsensitiveStr [
@@ -51,7 +59,7 @@ cgpaPrefix = Parsec.choice (map caseInsensitiveStr [
     "with",
     "cGPA"
     ])
-    >> Parsec.skipMany1 Parsec.space
+    >> Parsec.skipMany1 space
 
 programPrefix :: Parser ()
 programPrefix = Parsec.choice (map caseInsensitiveStr [
@@ -61,17 +69,17 @@ programPrefix = Parsec.choice (map caseInsensitiveStr [
     "enrolment in a",
     "enrolment in"
     ])
-    >> Parsec.skipMany1 Parsec.space
+    >> Parsec.skipMany1 space
 
 degreeType :: Parser String
-degreeType = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map caseInsensitiveStr [
+degreeType = Parsec.between spaces spaces $ Parsec.choice $ map caseInsensitiveStr [
     "major",
     "minor",
     "specialist"
     ]
 
 programSuffix :: Parser String
-programSuffix = Parsec.spaces
+programSuffix = spaces
     >> Parsec.choice (map caseInsensitiveStr [
         "program of study",
         "program"
@@ -89,11 +97,11 @@ fceSeparator = Parsec.choice (map caseInsensitiveStr [
             "additional credits",
             "additional credit"
             ])
-            >> Parsec.spaces
+            >> spaces
 
 includingSeparator :: Parser String
 includingSeparator = Parsec.optional (Parsec.string ",")
-                     >> Parsec.spaces
+                     >> spaces
                      >> caseInsensitiveStr "including"
 
 
@@ -106,7 +114,7 @@ rParen = Parsec.char ')'
 orSeparator :: Parser String
 orSeparator = Parsec.choice [
     caseInsensitiveStr "/",
-    Parsec.spaces >> caseInsensitiveStr "or",
+    spaces >> caseInsensitiveStr "or",
     caseInsensitiveStr ", or"
     ]
 
@@ -129,17 +137,17 @@ progGroupSeparator :: Parser String
 progGroupSeparator = do
     separator <- Parsec.choice (map Parsec.try [
         Parsec.string ",",
-        Parsec.space >> caseInsensitiveStr "or a",
-        Parsec.space >> caseInsensitiveStr "or"
+        space >> caseInsensitiveStr "or a",
+        space >> caseInsensitiveStr "or"
         ])
-    space <- Parsec.space
-    return $ separator ++ [space]
+    _ <- space
+    return $ separator ++ " "
 
 progOrSeparator :: Parser String
 progOrSeparator = do
-    separator <- Parsec.space >> caseInsensitiveStr "or in a"
-    space <- Parsec.space
-    return $ separator ++ [space]
+    separator <- space >> caseInsensitiveStr "or in a"
+    _ <- space
+    return $ separator ++ " "
 
 oneOfSeparator :: Parser String
 oneOfSeparator = do
@@ -164,7 +172,7 @@ caseInsensitiveStr s = Parsec.try (mapM caseInsensitiveChar s)
 
 creditsParser :: Parser Float
 creditsParser = do
-    Parsec.spaces
+    spaces
     integral <- Parsec.many1 Parsec.digit
     point <- Parsec.option "" $ Parsec.string "."
     fractional <- if point == "" then return "" else Parsec.many1 Parsec.digit
@@ -201,7 +209,7 @@ gradeParser = do
     _ <- Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
         andSeparator,
         orSeparator,
-        Parsec.space >> return "",
+        space >> return "",
         Parsec.eof >> return "",
         lParen >> return "",
         rParen >> return ""
@@ -212,9 +220,9 @@ gradeParser = do
 coBefParser :: Parser Req
 coBefParser = do
     _ <- Parsec.optional (caseInsensitiveStr "an " <|> Parsec.try indefiniteArticleAParser)
-    Parsec.spaces
+    spaces
     grade <- cutoffHelper <|> gradeParser
-    Parsec.spaces
+    spaces
     _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
     Grade grade <$> singleParser
 
@@ -222,9 +230,9 @@ coBefParser = do
     cutoffHelper = do
         _ <- Parsec.choice $ map caseInsensitiveStr
                 ["minimum grade", "minimum mark", "minimum", "grade", "final grade", "at least"]
-        Parsec.spaces
+        spaces
         _ <- Parsec.optional $ caseInsensitiveStr "of"
-        Parsec.spaces
+        spaces
         gradeParser
 
     indefiniteArticleAParser = do
@@ -236,7 +244,7 @@ coBefParser = do
 coAftParser :: Parser Req
 coAftParser = do
     req <- singleParser
-    Parsec.spaces
+    spaces
     grade <- Parsec.between lParen rParen parenCutoffHelper <|> cutoffHelper
     return $ Grade grade req
 
@@ -254,7 +262,7 @@ coAftParser = do
                 Parsec.notFollowedBy Parsec.alphaNum
                 return "")))
         grade <- gradeParser
-        Parsec.spaces
+        spaces
         _ <- Parsec.optional $ caseInsensitiveStr "or higher" <|> caseInsensitiveStr "or more"
         return grade
 
@@ -308,9 +316,9 @@ singleParser = do
 -- | Parser for single courses or "atomic" Reqs represented by a J.
 justParser :: Parser Req
 justParser = do
-    Parsec.spaces
+    spaces
     courseID <- courseIDParser
-    Parsec.spaces
+    spaces
     meta <- Parsec.option (Right "") $ Parsec.between lParen rParen markInfoParser
     return $ case meta of
         Left mark -> Grade mark $ J courseID ""
@@ -332,7 +340,7 @@ courseParser = Parsec.choice $ map Parsec.try [
 -- Programs need to be parsed in groups because of the concatenation issue
 -- explained in the docstring of `programGroupParser`
 categoryParser :: Parser Req
-categoryParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
+categoryParser = Parsec.between spaces spaces $ Parsec.choice $ map Parsec.try [
     fcesParser,
     courseParser,
     cgpaParser,
@@ -342,7 +350,7 @@ categoryParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ ma
 
 programParser :: Parser Req
 programParser = do
-    Parsec.spaces
+    spaces
     program <- Parsec.manyTill Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) [
         degreeType,
         programSuffix,
@@ -358,9 +366,9 @@ programParser = do
 -- | Courses that fall under the one of condition may be separated by orSeparators or andSeparators
 oneOfParser :: Parser Req -> Parser Req
 oneOfParser p = do
-    Parsec.spaces
+    spaces
     _ <- Parsec.try oneOfSeparator
-    Parsec.spaces
+    spaces
     reqs <- Parsec.sepBy p (Parsec.try orSeparator <|> Parsec.try andSeparator)
     case reqs of
         [] -> fail "Empty Req."
@@ -412,7 +420,7 @@ programGroupParser = do
 
 programOrParser :: Parser Req
 programOrParser = do
-    Parsec.spaces
+    spaces
     _ <- programPrefix
     progs <- Parsec.sepBy (Parsec.try programGroupParser) progOrSeparator
 
@@ -428,11 +436,11 @@ fcesParser = do
     _ <- Parsec.optional completionPrefix
     fces <- creditsParser
     dept <- Parsec.optionMaybe $ Parsec.try departmentParser
-    _ <- Parsec.spaces
+    _ <- spaces
     _ <- fceSeparator
     req <- Parsec.optionMaybe $ Parsec.try includingSeparator >> andParser categoryParser
     _ <- Parsec.optional $ Parsec.try fromSeparator
-    _ <- Parsec.spaces
+    _ <- spaces
     _ <- Parsec.optional $ Parsec.try anyModifierParser
     modifiers <- modAndParser
 
@@ -495,12 +503,12 @@ plainLevelParser = do
 -- | eg. the "300-level" in "1.0 credit at the 300-level"
 levelParser :: Parser Modifier
 levelParser = do
-    _ <- Parsec.spaces
+    _ <- spaces
     levels <- sepByNoConsume plainLevelParser orSeparator
     plus <- Parsec.optionMaybe $ Parsec.char '+'
-    _ <- Parsec.spaces
+    _ <- spaces
     _ <- caseInsensitiveStr "level"
-    _ <- Parsec.spaces
+    _ <- spaces
     _ <- Parsec.optional $ Parsec.try courseLiteralParser
     higher <- Parsec.optionMaybe $ caseInsensitiveStr "or higher"
 
@@ -527,13 +535,13 @@ departmentParser = do
             Parsec.eof >> return ""
             ]
 
-    Parsec.spaces
+    spaces
     Parsec.notFollowedBy fceSeparator
     Parsec.notFollowedBy $ Parsec.choice end
     depts <- Parsec.sepBy1
         (many1Till Parsec.anyChar $ Parsec.choice $ map (Parsec.try . Parsec.lookAhead) end)
         (Parsec.try orSeparator)
-    Parsec.spaces >> Parsec.optional courseLiteralParser
+    spaces >> Parsec.optional courseLiteralParser
 
     case depts of
         [dept] ->return $ Department $ trim dept
@@ -543,8 +551,8 @@ departmentParser = do
 -- | Like rawTextParser but terminates at ands and ors
 rawModifierParser :: Parser Modifier
 rawModifierParser = do
-    Parsec.spaces
-    text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces
+    spaces
+    text <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ spaces
         >> Parsec.choice (map (Parsec.try . Parsec.lookAhead) [
             andSeparator,
             orSeparator,
@@ -555,22 +563,22 @@ rawModifierParser = do
 -- | Parses "any field" or "any subject" in an fces modifier since they are redundant
 anyModifierParser :: Parser ()
 anyModifierParser = caseInsensitiveStr "any"
-    >> Parsec.many1 Parsec.space
+    >> Parsec.many1 space
     >> Parsec.choice (map caseInsensitiveStr [
         "field",
         "subject"
         ])
-    >> Parsec.spaces
+    >> spaces
 
 -- Parser for cGPA requirements: "... 1.0 cGPA ..."
 cgpaParser :: Parser Req
 cgpaParser = do
     _ <- Parsec.optional cgpaPrefix
     gpa <- creditsParser
-    Parsec.spaces
+    spaces
     _ <- Parsec.optional (caseInsensitiveStr "cGPA")
-    Parsec.spaces
-    addendum <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ Parsec.spaces
+    spaces
+    addendum <- Parsec.manyTill Parsec.anyChar $ Parsec.try $ spaces
         >> Parsec.choice (map (Parsec.try . Parsec.lookAhead) [
         andSeparator,
         orSeparator,

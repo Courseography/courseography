@@ -1,0 +1,24 @@
+# Test cases for WebParsing.ReqParser for handling zero-width spaces.
+# See more about zero-width spaces here:
+# https://www.fileformat.info/info/unicode/char/200B/index.htm
+#
+# These tests cannot be written in Haskell (app/ParserTests/ParserTests.hs)
+# because the Haskell compiler (ghc) cannot parse zero-width spaces.
+# However, the compiled program should still work because we did define the
+# zero-width spaces pattern in the parser (by passing in their unicode).
+#
+# Each test case must start with a line of input, followed by a line of its
+# expected output. Comments and empty lines are allowed anywhere.
+# Comments must have '#' at the first column (inline comments are not allowed).
+
+CSC413H1/​CSC421H1
+ReqOr [J "CSC413H1" "",J "CSC421H1" ""]
+
+CSC358H1/​​CSC457H1
+ReqOr [J "CSC358H1" "",J "CSC457H1" ""]
+
+CSC311H1/​ CSC411H1
+ReqOr [J "CSC311H1" "",J "CSC411H1" ""]
+
+1.5 credits from the following: CSC309H1, CSC413H1/​ CSC421H1/​ CSC321H1, CSC311H1/​ CSC411H1, CSC428H1, CSC486H1
+Fces 1.5 (Requirement (ReqAnd [J "CSC309H1" "",ReqOr [J "CSC413H1" "",J "CSC421H1" "",J "CSC321H1" ""],ReqOr [J "CSC311H1" "",J "CSC411H1" ""],J "CSC428H1" "",J "CSC486H1" ""]))
