@@ -26,7 +26,7 @@ import Data.Sequence as Seq
 import Data.Text.Lazy (Text, isInfixOf, isPrefixOf, last, pack, take)
 import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.CourseFinder (lookupCourses)
-import DynamicGraphs.GraphNodeUtils (formatModor, maybeHead, paddingSpaces, stringifyModand)
+import DynamicGraphs.GraphNodeUtils (formatModOr, maybeHead, paddingSpaces, stringifyModAnd)
 import DynamicGraphs.GraphOptions (GraphOptions (..), defaultGraphOptions)
 import Prelude hiding (last)
 
@@ -216,7 +216,7 @@ reqToStmtsTree _ parentID (Fces creds (Level level)) = do
 -- | of ModOr contains exactly one constructor for all its elements
 -- | and such constructor does not appear anywhere else in ModAnd
 reqToStmtsTree options parentID (Fces creds (ModAnd modifiers)) = do
-    fceNode <- makeNode (pack $ stringifyModand creds modifiers ++ paddingSpaces 10) Nothing
+    fceNode <- makeNode (pack $ stringifyModAnd creds modifiers ++ paddingSpaces 10) Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
 
     case maybeHead [req | Requirement req <- modifiers] of
@@ -229,7 +229,7 @@ reqToStmtsTree options parentID (Fces creds (ModAnd modifiers)) = do
 -- | of some modifiers related through a ModOr
 -- | Assumes all modifiers in the list have the same constructor
 reqToStmtsTree options parentID (Fces creds (ModOr modifiers)) = do
-    fceNode <- makeNode (pack $ formatModor creds modifiers) Nothing
+    fceNode <- makeNode (pack $ formatModOr creds modifiers) Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
 
     case maybeHead [req | Requirement req <- modifiers] of
