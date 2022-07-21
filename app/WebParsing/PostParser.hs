@@ -109,5 +109,5 @@ parseRequirement requirement = map parseSingleReq $ filter isReq requirement
         -- Strips the optional leading numbering (#.) from a line.
         getLineText :: Parser T.Text
         getLineText = do
-            P.optional (P.digit >> P.char '.' >> P.space)
+            P.optional $ P.try (P.digit >> P.char '.' >> P.space)
             parseUntil P.eof
