@@ -38,17 +38,17 @@ lookupReqs options (J name _) = do
         -- This course has been taken or is not a department we want to include; we don't need its prerequisites
         then return ()
         else lookupCourse options $ T.pack name
-lookupReqs options (REQAND parents) = mapM_ (lookupReqs options) parents
-lookupReqs options (REQOR parents) =
+lookupReqs options (ReqAnd parents) = mapM_ (lookupReqs options) parents
+lookupReqs options (ReqOr parents) =
     if any hasTaken parents
-        -- We've taken at least one of parents, so this entire REQOR is satisfied
+        -- We've taken at least one of parents, so this entire ReqOr is satisfied
         then return ()
         else mapM_ (lookupReqs options) parents
     where
         hasTaken :: Req -> Bool
         hasTaken (J name _) = Set.member name (Set.fromList $ map T.unpack (taken options))
         hasTaken _ = False
-lookupReqs options (FCES _ (REQUIREMENT parent)) = lookupReqs options parent
-lookupReqs options (GRADE _ parent) = lookupReqs options parent
--- This will catch NONE, RAW, and FCEs with non-course modifiers
+lookupReqs options (Fces _ (Requirement parent)) = lookupReqs options parent
+lookupReqs options (Grade _ parent) = lookupReqs options parent
+-- This will catch None, Raw, and Fces with non-course modifiers
 lookupReqs _ _ = return ()

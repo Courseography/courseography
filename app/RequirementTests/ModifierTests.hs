@@ -9,7 +9,7 @@ module RequirementTests.ModifierTests
 ( modifierTestSuite ) where
 
 import Database.Requirement
-import DynamicGraphs.GraphNodeUtils (concatModor, stringifyModand)
+import DynamicGraphs.GraphNodeUtils (concatModOr, stringifyModAnd)
 import Test.HUnit (Test (..), assertEqual)
 
 -- Function to facilitate test case creation given a string, Req tuple
@@ -19,43 +19,43 @@ createTest function label input = TestLabel label $ TestList $ map (\(x, y) ->
                                 y (function x)) input
 
 -- Global FCEs value so the expected output has the same FCEs as the partial function in createTest
-globalFCEs :: Float
-globalFCEs = 1.0
+globalFces :: Float
+globalFces = 1.0
 
-concatModorInputs :: [([Modifier], String)]
-concatModorInputs = [
-      ([DEPARTMENT "CSC", DEPARTMENT "BCB"], "CSC/BCB")
-    , ([DEPARTMENT "CSC", DEPARTMENT "BCB", DEPARTMENT "Statistics"], "CSC/BCB/Statistics")
-    , ([LEVEL "300", LEVEL "400"], "300/400")
-    , ([REQUIREMENT (RAW "lorem"), REQUIREMENT (RAW "ipsum")], "lorem or ipsum")
+concatModOrInputs :: [([Modifier], String)]
+concatModOrInputs = [
+      ([Department "CSC", Department "BCB"], "CSC/BCB")
+    , ([Department "CSC", Department "BCB", Department "Statistics"], "CSC/BCB/Statistics")
+    , ([Level "300", Level "400"], "300/400")
+    , ([Requirement (Raw "lorem"), Requirement (Raw "ipsum")], "lorem or ipsum")
     ]
 
-simpleModandInputs :: [([Modifier], String)]
-simpleModandInputs = [
-      ([DEPARTMENT "CSC", LEVEL "300"], show globalFCEs ++ " CSC FCEs at the 300 level")
-    , ([DEPARTMENT "CSC", REQUIREMENT (RAW "some raw text")], show globalFCEs ++ " CSC FCEs from some raw text")
-    , ([LEVEL "300+", REQUIREMENT (RAW "some raw text")], show globalFCEs ++ " FCEs at the 300+ level from some raw text")
-    , ([DEPARTMENT "CSC", LEVEL "300+", REQUIREMENT (RAW "some raw text")], show globalFCEs ++ " CSC FCEs at the 300+ level from some raw text")
-    , ([MODOR [LEVEL "300", LEVEL "400"], DEPARTMENT "CSC"], show globalFCEs ++ " CSC FCEs at the 300/400 level")
+simpleModAndInputs :: [([Modifier], String)]
+simpleModAndInputs = [
+      ([Department "CSC", Level "300"], show globalFces ++ " CSC FCEs at the 300 level")
+    , ([Department "CSC", Requirement (Raw "some raw text")], show globalFces ++ " CSC FCEs from some raw text")
+    , ([Level "300+", Requirement (Raw "some raw text")], show globalFces ++ " FCEs at the 300+ level from some raw text")
+    , ([Department "CSC", Level "300+", Requirement (Raw "some raw text")], show globalFces ++ " CSC FCEs at the 300+ level from some raw text")
+    , ([ModOr [Level "300", Level "400"], Department "CSC"], show globalFces ++ " CSC FCEs at the 300/400 level")
     ]
 
-modandModorInputs :: [([Modifier], String)]
-modandModorInputs = [
-      ([MODOR [LEVEL "300", LEVEL "400"], DEPARTMENT "CSC"], show globalFCEs ++ " CSC FCEs at the 300/400 level")
-    , ([LEVEL "300+", MODOR [DEPARTMENT "CSC", DEPARTMENT "BCB", DEPARTMENT "Statistics"]], show globalFCEs ++ " CSC/BCB/Statistics FCEs at the 300+ level")
-    , ([MODOR [LEVEL "300", LEVEL "400"], MODOR [DEPARTMENT "CSC", DEPARTMENT "BCB"]], show globalFCEs ++ " CSC/BCB FCEs at the 300/400 level")
-    , ([MODOR [LEVEL "300", LEVEL "400"], MODOR [DEPARTMENT "CSC", DEPARTMENT "BCB"], REQUIREMENT (RAW "some raw text")], show globalFCEs ++ " CSC/BCB FCEs at the 300/400 level from some raw text")
+modandModOrInputs :: [([Modifier], String)]
+modandModOrInputs = [
+      ([ModOr [Level "300", Level "400"], Department "CSC"], show globalFces ++ " CSC FCEs at the 300/400 level")
+    , ([Level "300+", ModOr [Department "CSC", Department "BCB", Department "Statistics"]], show globalFces ++ " CSC/BCB/Statistics FCEs at the 300+ level")
+    , ([ModOr [Level "300", Level "400"], ModOr [Department "CSC", Department "BCB"]], show globalFces ++ " CSC/BCB FCEs at the 300/400 level")
+    , ([ModOr [Level "300", Level "400"], ModOr [Department "CSC", Department "BCB"], Requirement (Raw "some raw text")], show globalFces ++ " CSC/BCB FCEs at the 300/400 level from some raw text")
     ]
 
-concatModorTests :: Test
-concatModorTests = createTest concatModor "joining MODOR with a delimiter" concatModorInputs
+concatModOrTests :: Test
+concatModOrTests = createTest concatModOr "joining ModOr with a delimiter" concatModOrInputs
 
-simpleModandTests :: Test
-simpleModandTests = createTest (stringifyModand globalFCEs) "MODAND not containing MODORs" simpleModandInputs
+simpleModAndTests :: Test
+simpleModAndTests = createTest (stringifyModAnd globalFces) "ModAnd not containing ModOrs" simpleModAndInputs
 
-modandModorTests :: Test
-modandModorTests = createTest (stringifyModand globalFCEs) "MODAND containing MODORs" modandModorInputs
+modandModOrTests :: Test
+modandModOrTests = createTest (stringifyModAnd globalFces) "ModAnd containing ModOrs" modandModOrInputs
 
 -- functions for running tests in REPL
 modifierTestSuite :: Test
-modifierTestSuite = TestLabel "ReqParser tests" $ TestList [concatModorTests, simpleModandTests, modandModorTests]
+modifierTestSuite = TestLabel "ReqParser tests" $ TestList [concatModOrTests, simpleModAndTests, modandModOrTests]
