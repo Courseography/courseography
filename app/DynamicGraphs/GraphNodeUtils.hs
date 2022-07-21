@@ -44,7 +44,7 @@ stringifyModAnd creds modifiers = let
     in show creds ++ deptFormatted ++ deptsFormatted ++ " FCEs"
         ++ levelFormatted ++ levelsFormatted ++ rawFormatted ++ rawsFormatted
 
--- | Formats a ModOr into FCEs string
+-- | Formats a ModOr into Fces string
 -- | Assumes all modifiers in the ModOr have the same constructor
 formatModOr :: Float -> [Modifier] -> String
 formatModOr creds mods@((Department _):_) = show creds ++ " " ++ concatModOr mods ++ " FCEs"
