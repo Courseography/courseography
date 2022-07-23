@@ -4,7 +4,7 @@ module WebParsing.PostParser
 import Control.Monad.Trans (liftIO)
 import Data.Either (fromRight)
 import Data.Functor (void)
-import Data.List (find)
+import Data.List (find, intercalate)
 import Data.List.Split (keepDelimsL, split, splitWhen, whenElt)
 import Data.Text (strip)
 import qualified Data.Text as T
@@ -30,8 +30,8 @@ addPostToDatabase programElements = do
 
     case P.parse postInfoParser "POSt information" fullPostName of
         Left _ -> return ()
-        Right post -> do
-            postExists <- insertUnique post
+        Right (Post postType deptName code _) -> do
+            postExists <- insertUnique $ Post postType deptName code (T.pack $ intercalate "\n" $ map T.unpack $ concat requirementLines)
             case postExists of
                 Just key ->
                     mapM_ (insert_ . PostCategory key) requirements
@@ -39,27 +39,50 @@ addPostToDatabase programElements = do
     where
         isRequirementSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag || tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag
 
-
 -- | Parse a Post value from its title.
 -- Titles are usually of the form "Actuarial Science Major (Science Program)".
 postInfoParser :: Parser Post
 postInfoParser = do
-    deptName <- parseDepartmentName
-    postType <- parsePostType P.<|> return Other
-    return $ Post postType deptName "" ""
+    deptNameBef <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
+        void postTypeParser,
+        void postCodeParser,
+        P.eof
+        ]
+    postType <- P.try postTypeParser P.<|> return Other
+    deptNameAft <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
+        void postCodeParser,
+        P.eof
+        ]
+    code <- postCodeParser P.<|> return ""
+
+    return $ Post postType (T.pack $ deptNameBef ++ deptNameAft) code ""
+
+postTypeParser :: Parser PostType
+postTypeParser = do
+    _ <- P.spaces
+    postTypeName <- postTypeHelper P.<|> P.between (P.char '(') (P.char ')') postTypeHelper
+    _ <- P.optional $ P.try $ P.many1 P.space >> P.string "Program" >> P.lookAhead P.space
+    _ <- P.optional $ P.try $ P.many1 P.space >> P.string "in" >> P.lookAhead P.space
+    return $ read $ T.unpack postTypeName
 
     where
-        parseDepartmentName :: Parser T.Text
-        parseDepartmentName = parseUntil $ P.choice [
-            void (P.lookAhead parsePostType),
-            void (P.char '(')
+        postTypeHelper = P.choice $ map (P.try . text) [
+            "Specialist",
+            "Major",
+            "Minor",
+            "Certificate"
             ]
 
-        parsePostType :: Parser PostType
-        parsePostType = do
-            postTypeName <- P.choice $ map (P.try . text) ["Specialist", "Major", "Minor"]
-            return $ read $ T.unpack postTypeName
+postCodeParser :: Parser T.Text
+postCodeParser = do
+    _ <- P.many1 P.space >> P.char '-' >> P.many1 P.space
+    code <- P.count 5 P.letter
+    num <- P.count 4 P.digit
+    variant <- P.optionMaybe P.letter
 
+    case variant of
+        Nothing -> return $ T.pack $ code ++ num
+        Just v -> return $ T.pack $ code ++ num ++ [v]
 
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]

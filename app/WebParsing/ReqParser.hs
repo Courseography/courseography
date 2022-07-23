@@ -67,7 +67,8 @@ degreeType :: Parser String
 degreeType = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map caseInsensitiveStr [
     "major",
     "minor",
-    "specialist"
+    "specialist",
+    "certificate"
     ]
 
 programSuffix :: Parser String
