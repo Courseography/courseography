@@ -132,7 +132,7 @@ Post
     --UniquePostCode code
     --Primary code
     description T.Text
-    deriving Show
+    deriving Show Eq
 
 PostCategory
     post PostId

@@ -1,5 +1,7 @@
 module WebParsing.PostParser
-    (addPostToDatabase) where
+    ( addPostToDatabase
+    , postInfoParser
+    ) where
 
 import Control.Monad.Trans (liftIO)
 import Data.Either (fromRight)
@@ -17,7 +19,7 @@ import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
 import Text.Parsec.Text (Parser)
 import WebParsing.ParsecCombinators (parseUntil, text)
-import WebParsing.ReqParser (parseReqs)
+import WebParsing.ReqParser (parseReqs, trim)
 
 
 addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
@@ -48,30 +50,35 @@ postInfoParser = do
         void postCodeParser,
         P.eof
         ]
-    postType <- P.try postTypeParser P.<|> return Other
+    postType <- postTypeParser P.<|> return Other
     deptNameAft <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
         void postCodeParser,
         P.eof
         ]
     code <- postCodeParser P.<|> return ""
 
-    return $ Post postType (T.pack $ deptNameBef ++ deptNameAft) code ""
+    case deptNameBef of
+        "" -> return $ Post postType (T.pack $ trim deptNameAft) code ""
+        xs | last xs == '(' -> return $ Post postType (T.pack $ trim $ trim deptNameBef ++ trim deptNameAft) code ""
+           | otherwise -> return $ Post postType (T.pack $ trim $ trim deptNameBef ++ " " ++ trim deptNameAft) code ""
 
 postTypeParser :: Parser PostType
-postTypeParser = do
+postTypeParser = P.try postNameParser P.<|> P.between (P.char '(') (P.char ')') postNameParser
+
+postNameParser :: Parser PostType
+postNameParser = do
     _ <- P.spaces
-    postTypeName <- postTypeHelper P.<|> P.between (P.char '(') (P.char ')') postTypeHelper
+    postTypeName <- P.choice $ map (P.try . text) [
+        "Specialist",
+        "Major",
+        "Minor",
+        "Certificate"
+        ]
     _ <- P.optional $ P.try $ P.many1 P.space >> P.string "Program" >> P.lookAhead P.space
     _ <- P.optional $ P.try $ P.many1 P.space >> P.string "in" >> P.lookAhead P.space
-    return $ read $ T.unpack postTypeName
+    _ <- P.optional $ P.char ':' >> P.spaces
 
-    where
-        postTypeHelper = P.choice $ map (P.try . text) [
-            "Specialist",
-            "Major",
-            "Minor",
-            "Certificate"
-            ]
+    return $ read $ T.unpack postTypeName
 
 postCodeParser :: Parser T.Text
 postCodeParser = do
