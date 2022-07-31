@@ -55,12 +55,12 @@ postInfoParser = do
         void postCodeParser,
         P.eof
         ]
-    code <- postCodeParser P.<|> return ""
+    code <- postCodeParser P.<|> return (T.pack "")
 
     case deptNameBef of
-        "" -> return $ Post postType (T.pack $ trim deptNameAft) code ""
-        xs | last xs == '(' -> return $ Post postType (T.pack $ trim $ trim deptNameBef ++ trim deptNameAft) code ""
-           | otherwise -> return $ Post postType (T.pack $ trim $ trim deptNameBef ++ " " ++ trim deptNameAft) code ""
+        "" -> return $ Post postType (T.pack $ trim deptNameAft) code $ T.pack ""
+        xs | last xs == '(' -> return $ Post postType (T.pack $ trim $ trim deptNameBef ++ trim deptNameAft) code (T.pack "")
+           | otherwise -> return $ Post postType (T.pack $ trim $ trim deptNameBef ++ " " ++ trim deptNameAft) code (T.pack "")
 
 postTypeParser :: Parser PostType
 postTypeParser = P.try postNameParser P.<|> P.between (P.char '(') (P.char ')') postNameParser
