@@ -68,7 +68,7 @@ postTypeParser = P.try postNameParser P.<|> P.between (P.char '(') (P.char ')') 
 postNameParser :: Parser PostType
 postNameParser = do
     _ <- P.spaces
-    postTypeName <- P.choice $ map (P.try . text) [
+    postTypeName <- P.choice $ map (P.try . text . T.pack) [
         "Specialist",
         "Major",
         "Minor",
