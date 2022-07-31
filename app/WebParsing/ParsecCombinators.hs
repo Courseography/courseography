@@ -15,7 +15,7 @@ getCourseFromTag courseTag =
     in
         case course of
             Right courseName -> courseName
-            Left _ -> ""
+            Left _ -> T.pack ""
 
 findCourseFromTag :: Parser T.Text
 findCourseFromTag = do

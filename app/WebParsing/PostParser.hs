@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module WebParsing.PostParser
     (addPostToDatabase) where
 
@@ -11,7 +13,7 @@ import qualified Data.Text as T
 import Database.DataType (PostType (..))
 import Database.Persist (insertUnique)
 import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables
+import Database.Tables (Post (..), PostCategory (..))
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
@@ -22,11 +24,11 @@ import WebParsing.ReqParser (parseReqs)
 
 addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
 addPostToDatabase programElements = do
-    let fullPostName = maybe "" (strip . fromTagText) $ find isTagText programElements
+    let fullPostName :: T.Text = maybe (T.pack "") (strip . fromTagText) $ find isTagText programElements
         postHtml = sections isRequirementSection programElements
         requirementLines = if null postHtml then [] else reqHtmlToLines $ last postHtml
         requirements = concatMap parseRequirement requirementLines
-    liftIO $ print fullPostName
+    liftIO $ print $ T.unpack fullPostName
 
     case P.parse postInfoParser "POSt information" fullPostName of
         Left _ -> return ()
@@ -37,7 +39,8 @@ addPostToDatabase programElements = do
                     mapM_ (insert_ . PostCategory key) requirements
                 Nothing -> return ()
     where
-        isRequirementSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag || tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag
+        isRequirementSection tag = tagOpenAttrNameLit (T.pack "div") (T.pack "class") (T.isInfixOf $ T.pack "views-field-field-enrolment-requirements") tag || tagOpenAttrNameLit (T.pack "div") (T.pack "class") (T.isInfixOf $ T.pack "views-field-field-completion-requirements") tag
+
 
 
 -- | Parse a Post value from its title.
@@ -66,7 +69,7 @@ reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
 reqHtmlToLines tags =
     let sects = split (keepDelimsL $ whenElt isSectionSplit) tags
         sectionsNoNotes = filter (not . isNoteSection) sects
-        paragraphs = concatMap (splitWhen (isTagOpenName "p")) sectionsNoNotes
+        paragraphs = concatMap (splitWhen (isTagOpenName $ T.pack "p")) sectionsNoNotes
         lines' = map (map (T.strip . convertLine) . splitLines) paragraphs
     in
         lines'
@@ -75,20 +78,20 @@ reqHtmlToLines tags =
         isSectionSplit :: Tag T.Text -> Bool
         isSectionSplit tag =
             isTagText tag &&
-            any (flip T.isInfixOf $ fromTagText tag) ["First", "Second", "Third", "Higher", "Notes", "NOTES"]
+            any (flip T.isInfixOf (fromTagText tag) . T.pack) ["First", "Second", "Third", "Higher", "Notes", "NOTES"]
 
         isNoteSection :: [Tag T.Text] -> Bool
         isNoteSection (sectionTitleTag:_) =
-            isTagText sectionTitleTag && any (flip T.isInfixOf $ fromTagText sectionTitleTag) ["Notes", "NOTES"]
+            isTagText sectionTitleTag && any (flip T.isInfixOf (fromTagText sectionTitleTag) . T.pack) ["Notes", "NOTES"]
         isNoteSection [] = False
 
         splitLines :: [Tag T.Text] -> [[Tag T.Text]]
-        splitLines = splitWhen (\tag -> isTagOpenName "br" tag || isTagOpenName "li" tag)
+        splitLines = splitWhen (\tag -> isTagOpenName (T.pack "br") tag || isTagOpenName (T.pack "li") tag)
 
         convertLine :: [Tag T.Text] -> T.Text
-        convertLine [] = ""
+        convertLine [] = T.pack ""
         convertLine (t:ts)
-            | isTagOpenName "li" t = T.append "0." (innerText ts)
+            | isTagOpenName (T.pack "li") t = T.append (T.pack "0.") (innerText ts)
             | otherwise = innerText (t:ts)
 
 
@@ -96,13 +99,13 @@ parseRequirement :: [T.Text] -> [T.Text]
 parseRequirement requirement = map parseSingleReq $ filter isReq requirement
     where
         isReq t = T.length t >= 7 &&
-            not (any (`T.isInfixOf` t) ["First", "Second", "Third", "Higher"])
+            not (any ((`T.isInfixOf` t) . T.pack) ["First", "Second", "Third", "Higher"])
 
         parseSingleReq =
             T.pack . show .
             parseReqs .      -- Using parser for new Req type
             T.unpack .
-            fromRight "" .
+            fromRight (T.pack "") .
             P.parse getLineText "Reading a requirement line" .
             T.strip
 

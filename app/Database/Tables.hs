@@ -1,6 +1,6 @@
 {-# LANGUAGE DataKinds, DeriveGeneric, DerivingStrategies, EmptyDataDecls, FlexibleContexts,
              FlexibleInstances, GADTs, GeneralizedNewtypeDeriving, MultiParamTypeClasses,
-             QuasiQuotes, StandaloneDeriving, TemplateHaskell, TypeFamilies,
+             QuasiQuotes, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TypeFamilies,
              UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-name-shadowing #-}
 
@@ -22,6 +22,7 @@ module Database.Tables where
 import Control.Applicative ((<|>))
 import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), Value (..), genericToJSON, withObject,
                    (.!=), (.:?))
+import Data.Aeson.Key (fromString)
 import Data.Aeson.KeyMap (elems)
 import Data.Aeson.Types (Options (..), Parser, defaultOptions)
 import Data.Char (toLower)
@@ -218,14 +219,14 @@ instance FromJSON SvgJSON
 -- JSON encoding/decoding
 instance FromJSON Courses where
   parseJSON = withObject "Expected Object for Courses" $ \o -> do
-    newCode <- o .:? "code" .!= "CSC???"
-    newTitle  <- o .:? "courseTitle"
-    newDescription  <- o .:? "courseDescription"
-    newPrereqString <- o .:? "prerequisite"
+    newCode <- o .:? fromString "code" .!= "CSC???"
+    newTitle  <- o .:? fromString "courseTitle"
+    newDescription  <- o .:? fromString "courseDescription"
+    newPrereqString <- o .:? fromString "prerequisite"
     let newPrereqs = fmap (T.pack . show . parseReqs . T.unpack) newPrereqString
-    newExclusions <- o .:? "exclusion"
-    newCoreqs <- o .:? "corequisite"
-    return $ Courses newCode
+    newExclusions <- o .:? fromString "exclusion"
+    newCoreqs <- o .:? fromString "corequisite"
+    return $ Courses (T.pack newCode)
                      newTitle
                      newDescription
                      newPrereqs
@@ -245,17 +246,17 @@ instance ToJSON Meeting where
 
 instance FromJSON Meeting where
   parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do
-    teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
-    sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
-    let sectionId = T.concat [teachingMethod, sectionNumber]
+    teachingMethod <- o .:? fromString "teachingMethod" .!= ""
+    sectionNumber <- o .:? fromString "sectionNumber" .!= ""
+    let sectionId = T.concat $ map T.pack [teachingMethod, sectionNumber]
 
-    capStr <- o .:? "enrollmentCapacity" .!= "-1"
-    enrolStr <- o .:? "actualEnrolment" .!= "0"
-    waitStr <- o .:? "actualWaitlist" .!= "0"
+    capStr <- o .:? fromString "enrollmentCapacity" .!= "-1"
+    enrolStr <- o .:? fromString "actualEnrolment" .!= "0"
+    waitStr <- o .:? fromString "actualWaitlist" .!= "0"
     let cap = fromMaybe (-1) $ readMaybe capStr
         enrol = fromMaybe 0 $ readMaybe enrolStr
         wait = fromMaybe 0 $ readMaybe waitStr
-    instrMap2 :: Value <- o .:? "instructors" .!= Null
+    instrMap2 :: Value <- o .:? fromString "instructors" .!= Null
     let instrList =
           case instrMap2 of
             Object obj -> elems obj
@@ -263,37 +264,37 @@ instance FromJSON Meeting where
 
     instrs <- mapM parseInstr instrList
     let extra = 0
-    let instructor = T.intercalate "; " $ filter (not . T.null) instrs
+    let instructor = T.intercalate (T.pack "; ") $ filter (not . T.null) instrs
     if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
     then
-      return $ Meeting "" "" sectionId cap instructor enrol wait extra
+      return $ Meeting (T.pack "") (T.pack "") sectionId cap instructor enrol wait extra
     else
       fail "Not a lecture, Tutorial or Practical"
 
 instance FromJSON Time' where
   parseJSON = withObject "Expected Object for Times" $ \o -> do
-    meetingDayStr <- o .:? "meetingDay"
-    meetingStartTimeStr <- o .:? "meetingStartTime"
-    meetingEndTimeStr <- o .:? "meetingEndTime"
-    meetingRoom1 <- o .:? "assignedRoom1" .!= Nothing
-    meetingRoom2 <- o .:? "assignedRoom2" .!= Nothing
+    meetingDayStr <- o .:? fromString "meetingDay"
+    meetingStartTimeStr <- o .:? fromString "meetingStartTime"
+    meetingEndTimeStr <- o .:? fromString "meetingEndTime"
+    meetingRoom1 <- o .:? fromString "assignedRoom1" .!= Nothing
+    meetingRoom2 <- o .:? fromString "assignedRoom2" .!= Nothing
     let (meetingDay, meetingStartTime, meetingEndTime) = getTimeVals meetingDayStr meetingStartTimeStr meetingEndTimeStr
     return $ Time' meetingDay meetingStartTime meetingEndTime meetingRoom1 meetingRoom2
 
 instance FromJSON MeetTime where
   parseJSON (Object o) = do
     meeting <- parseJSON (Object o)
-    timeMap :: HM.HashMap T.Text Time' <- o .:? "schedule" .!= HM.empty <|> return HM.empty
+    timeMap :: HM.HashMap T.Text Time' <- o .:? fromString "schedule" .!= HM.empty <|> return HM.empty
     return $ MeetTime meeting (HM.elems timeMap)
   parseJSON _ = fail "Invalid meeting"
 
 -- | Helpers for parsing JSON
 parseInstr :: Value -> Parser T.Text
 parseInstr (Object io) = do
-  firstName <- io .:? "firstName" .!= ""
-  lastName <- io .:? "lastName" .!= ""
-  return (T.concat [firstName, ". ", lastName])
-parseInstr _ = return ""
+  firstName <- io .:? fromString "firstName" .!= ""
+  lastName <- io .:? fromString "lastName" .!= ""
+  return (T.concat $ map T.pack [firstName, ". ", lastName])
+parseInstr _ = return $ T.pack ""
 
 -- | Converts 24-hour time into a double
 -- | Assumes times are rounded to the nearest hour
