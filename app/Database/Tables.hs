@@ -132,7 +132,7 @@ Post
     --UniquePostCode code
     --Primary code
     description T.Text
-    deriving Show
+    deriving Show Eq Generic
 
 PostCategory
     post PostId
@@ -206,6 +206,7 @@ data Course =
            } deriving (Show, Generic)
 
 instance ToJSON Course
+instance ToJSON Post
 instance ToJSON Time
 instance ToJSON MeetTime'
 instance ToJSON Building

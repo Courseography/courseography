@@ -6,7 +6,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
 import Database.CourseQueries (allCourses, courseInfo, deptList, getGraphJSON, queryGraphs,
-                               retrieveCourse)
+                               retrieveCourse, retrievePost)
 import DynamicGraphs.WriteRunDot (findAndSavePrereqsResponse)
 import Happstack.Server hiding (host)
 import Response
@@ -27,7 +27,8 @@ strictRoutes aboutContents privacyContents = [
     ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
     ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
     ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse courses),
-    ("post", postResponse),
+    ("post", lookText' "code" >>= retrievePost),
+    ("post-progress", postResponse),
     ("draw", drawResponse),
     ("about", aboutResponse aboutContents),
     ("privacy", privacyResponse privacyContents),
