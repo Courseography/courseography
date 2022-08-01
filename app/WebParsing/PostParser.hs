@@ -42,7 +42,6 @@ addPostToDatabase programElements = do
         isRequirementSection tag = tagOpenAttrNameLit (T.pack "div") (T.pack "class") (T.isInfixOf $ T.pack "views-field-field-enrolment-requirements") tag || tagOpenAttrNameLit (T.pack "div") (T.pack "class") (T.isInfixOf $ T.pack "views-field-field-completion-requirements") tag
 
 
-
 -- | Parse a Post value from its title.
 -- Titles are usually of the form "Actuarial Science Major (Science Program)".
 postInfoParser :: Parser Post
