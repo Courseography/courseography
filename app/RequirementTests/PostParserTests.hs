@@ -1,3 +1,5 @@
+{-# LANGUAGE NamedFieldPuns #-}
+
 {-|
 Description: Test Course Requirement Parsers using HUnit Testing Framework.
 
@@ -17,126 +19,50 @@ import Text.Parsec.Text (Parser)
 import WebParsing.PostParser (postInfoParser)
 
 -- Function to facilitate test case creation given a string, Req tuple
-createTest :: (Eq a, Show a) => Parser a -> String -> [(T.Text, a)] -> Test
+createTest :: Parser Post -> String -> [(T.Text, (T.Text, T.Text, PostType))] -> Test
 createTest parser label input = TestLabel label $ TestList $ map (\(x, y) ->
                                 TestCase $ assertEqual ("for (" ++ T.unpack x ++ "),")
-                                (Right y) (Parsec.parse parser "" x)) input
+                                (Right $ makePost y) (Parsec.parse parser "" x)) input
 
-postInfoInputs :: [(T.Text, Post)]
+-- | Input and output pair of each post
+-- | Output is in the order of (postDepartment, postCode, postName)
+postInfoInputs :: [(T.Text, (T.Text, T.Text, PostType))]
 postInfoInputs = [
       ("Music Major (Arts Program) - ASMAJ2276",
-        Post {
-        postName = Major,
-        postDepartment = "Music Major (Arts Program)",
-        postCode = "ASMAJ2276",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Music Major (Arts Program)", "ASMAJ2276", Major))
     , ("Focus in Artificial Intelligence (Major) - ASFOC1689K",
-        Post {
-        postName = Focus,
-        postDepartment = "Focus in Artificial Intelligence (Major)",
-        postCode = "ASFOC1689K",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Focus in Artificial Intelligence (Major)", "ASFOC1689K", Focus))
     , ("Cell & Molecular Biology Specialist: Focus in Molecular Networks of the Cell - ASSPE1003A",
-        Post {
-        postName = Specialist,
-        postDepartment = "Cell & Molecular Biology Specialist: Focus in Molecular Networks of the Cell",
-        postCode = "ASSPE1003A",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Cell & Molecular Biology Specialist: Focus in Molecular Networks of the Cell", "ASSPE1003A", Specialist))
     , ("Focus in Medical Anthropology (Specialist: Society, Culture and Language) - ASFOC2112B",
-        Post {
-        postName = Focus,
-        postDepartment = "Focus in Medical Anthropology (Specialist: Society, Culture and Language)",
-        postCode = "ASFOC2112B",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Focus in Medical Anthropology (Specialist: Society, Culture and Language)", "ASFOC2112B", Focus))
     , ("Anthropology Specialist (Society, Culture, and Language) (Arts Program) - ASSPE2112",
-        Post {
-        postName = Specialist,
-        postDepartment = "Anthropology Specialist (Society, Culture, and Language) (Arts Program)",
-        postCode = "ASSPE2112",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Anthropology Specialist (Society, Culture, and Language) (Arts Program)", "ASSPE2112", Specialist))
     , ("Christianity and Culture: Major Program in Religious Education (Arts Program) - ASMAJ1021",
-        Post {
-        postName = Major,
-        postDepartment = "Christianity and Culture: Major Program in Religious Education (Arts Program)",
-        postCode = "ASMAJ1021",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Christianity and Culture: Major Program in Religious Education (Arts Program)", "ASMAJ1021", Major))
     , ("Minor in French Language (Arts Program) - ASMIN0120",
-        Post {
-        postName = Minor,
-        postDepartment = "Minor in French Language (Arts Program)",
-        postCode = "ASMIN0120",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Minor in French Language (Arts Program)", "ASMIN0120", Minor))
     , ("Minor Program in Christianity and Education (Arts Program) - ASMIN1014",
-        Post {
-        postName = Minor,
-        postDepartment = "Minor Program in Christianity and Education (Arts Program)",
-        postCode = "ASMIN1014",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Minor Program in Christianity and Education (Arts Program)", "ASMIN1014", Minor))
     , ("Psychology Research Specialist - Thesis (Science Program) - ASSPE1958)",
-        Post {
-        postName = Specialist,
-        postDepartment = "Psychology Research Specialist - Thesis (Science Program)",
-        postCode = "ASSPE1958",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Psychology Research Specialist - Thesis (Science Program)", "ASSPE1958", Specialist))
     , ("Cognitive Science Major - Arts (Language and Cognition Stream) (Arts Program) - ASMAJ1445B",
-        Post {
-        postName = Major,
-        postDepartment = "Cognitive Science Major - Arts (Language and Cognition Stream) (Arts Program)",
-        postCode = "ASMAJ1445B",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Cognitive Science Major - Arts (Language and Cognition Stream) (Arts Program)", "ASMAJ1445B", Major))
     , ("Certificate in Business Fundamentals - ASCER2400",
-        Post {
-        postName = Certificate,
-        postDepartment = "Certificate in Business Fundamentals",
-        postCode = "ASCER2400",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Certificate in Business Fundamentals", "ASCER2400", Certificate))
     , ("Focus in Green Chemistry",
-        Post {
-        postName = Other,
-        postDepartment = "Focus in Green Chemistry",
-        postCode = "",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Focus in Green Chemistry", "", Other))
     , ("Focus in Finance - ASFOC2431B",
-        Post {
-        postName = Focus,
-        postDepartment = "Focus in Finance",
-        postCode = "ASFOC2431B",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Focus in Finance", "ASFOC2431B", Focus))
     , ("Biological Physics Specialist",
-        Post {
-        postName = Other,
-        postDepartment = "Biological Physics Specialist",
-        postCode = "",
-        postDescription = "",
-        postRequirements = ""
-        })
+        ("Biological Physics Specialist", "", Other))
     ]
+
+-- | Takes a tuple of (postDepartment, postCode, postName) and makes a Post data
+-- | by filling postDescription and postRequirements with empty text
+makePost :: (T.Text, T.Text, PostType) -> Post
+makePost (postDepartment, postCode, postName) = Post { postName, postDepartment, postCode, postDescription = T.empty, postRequirements = T.empty }
+
 postInfoTests :: Test
 postInfoTests = createTest postInfoParser "Post requirements" postInfoInputs
 
