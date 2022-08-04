@@ -132,6 +132,7 @@ Post
     --UniquePostCode code
     --Primary code
     description T.Text
+    requirements T.Text
     deriving Show Eq
 
 PostCategory

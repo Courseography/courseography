@@ -6,9 +6,9 @@ module WebParsing.PostParser
 import Control.Monad.Trans (liftIO)
 import Data.Either (fromRight)
 import Data.Functor (void)
-import Data.List (find, intercalate)
+import Data.List (find)
 import Data.List.Split (keepDelimsL, split, splitWhen, whenElt)
-import Data.Text (strip)
+import Data.Text (intercalate, strip)
 import qualified Data.Text as T
 import Database.DataType (PostType (..))
 import Database.Persist (insertUnique)
@@ -18,67 +18,54 @@ import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
 import Text.Parsec.Text (Parser)
-import WebParsing.ParsecCombinators (parseUntil, text)
-import WebParsing.ReqParser (parseReqs, trim)
+import WebParsing.ParsecCombinators (parseUntil)
+import WebParsing.ReqParser (parseReqs)
 
 
 addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
 addPostToDatabase programElements = do
     let fullPostName = maybe "" (strip . fromTagText) $ find isTagText programElements
-        postHtml = sections isRequirementSection programElements
-        requirementLines = if null postHtml then [] else reqHtmlToLines $ last postHtml
+        postDescHtml = partitions isDescriptionSection programElements
+        postReqHtml = sections isRequirementSection programElements
+        requirementLines = if null postReqHtml then [] else reqHtmlToLines $ last postReqHtml
+        description = if null postReqHtml then [] else innerText $ head postDescHtml
         requirements = concatMap parseRequirement requirementLines
     liftIO $ print fullPostName
 
     case P.parse postInfoParser "POSt information" fullPostName of
         Left _ -> return ()
-        Right (Post postType deptName code _) -> do
-            postExists <- insertUnique $ Post postType deptName code (T.pack $ intercalate "\n" $ map T.unpack $ concat requirementLines)
+        Right post -> do
+            postExists <- insertUnique post { postDescription = descriptionLines, postRequirements = intercalate "\n" $ concat requirementLines }
             case postExists of
                 Just key ->
                     mapM_ (insert_ . PostCategory key) requirements
                 Nothing -> return ()
     where
+        isDescriptionSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-body") tag || isRequirementSection tag
         isRequirementSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag || tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag
 
 -- | Parse a Post value from its title.
 -- Titles are usually of the form "Actuarial Science Major (Science Program)".
 postInfoParser :: Parser Post
 postInfoParser = do
-    deptNameBef <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
-        void postTypeParser,
+    deptName <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
         void postCodeParser,
         P.eof
         ]
-    postType <- postTypeParser P.<|> return Other
-    deptNameAft <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
-        void postCodeParser,
-        P.eof
-        ]
-    code <- postCodeParser P.<|> return (T.pack "")
+    code <- postCodeParser P.<|> return T.empty
 
-    case deptNameBef of
-        "" -> return $ Post postType (T.pack $ trim deptNameAft) code $ T.pack ""
-        xs | last xs == '(' -> return $ Post postType (T.pack $ trim $ trim deptNameBef ++ trim deptNameAft) code (T.pack "")
-           | otherwise -> return $ Post postType (T.pack $ trim $ trim deptNameBef ++ " " ++ trim deptNameAft) code (T.pack "")
+    return $ Post (getPostType code) (T.pack deptName) code T.empty T.empty
 
-postTypeParser :: Parser PostType
-postTypeParser = P.try postNameParser P.<|> P.between (P.char '(') (P.char ')') postNameParser
+getPostType :: T.Text -> PostType
+getPostType = abbrevToPost . T.take 3 . T.drop 2
 
-postNameParser :: Parser PostType
-postNameParser = do
-    _ <- P.spaces
-    postTypeName <- P.choice $ map (P.try . text . T.pack) [
-        "Specialist",
-        "Major",
-        "Minor",
-        "Certificate"
-        ]
-    _ <- P.optional $ P.try $ P.many1 P.space >> P.string "Program" >> P.lookAhead P.space
-    _ <- P.optional $ P.try $ P.many1 P.space >> P.string "in" >> P.lookAhead P.space
-    _ <- P.optional $ P.char ':' >> P.spaces
-
-    return $ read $ T.unpack postTypeName
+abbrevToPost :: T.Text -> PostType
+abbrevToPost "SPE" = Specialist
+abbrevToPost "MAJ" = Major
+abbrevToPost "MIN" = Minor
+abbrevToPost "FOC" = Focus
+abbrevToPost "CER" = Certificate
+abbrevToPost _ = Other
 
 postCodeParser :: Parser T.Text
 postCodeParser = do
