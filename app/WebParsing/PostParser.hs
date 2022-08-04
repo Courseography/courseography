@@ -55,11 +55,30 @@ postInfoParser = do
         ]
     code <- postCodeParser P.<|> return T.empty
 
-    return $ Post (getPostType code) (T.pack deptName) code T.empty T.empty
+    let deptNameText = T.pack deptName
+        postType = getPostType code deptNameText
+
+    return $ Post postType deptNameText code T.empty T.empty
+
+-- | Extracts the post type (eg. major) from a post code if it is non-empty,
+-- | or from a dept name otherwise
+getPostType :: T.Text -> T.Text -> PostType
+getPostType "" deptName = getPostTypeFromName deptName
+getPostType code _ = getPostTypeFromCode code
+
+-- | Extracts the post type (eg. major) from a post name (eg. "Biology Specialist")
+getPostTypeFromName :: T.Text -> PostType
+getPostTypeFromName deptName
+    | T.isInfixOf "Specialist" deptName = Specialist
+    | T.isInfixOf "Major" deptName = Major
+    | T.isInfixOf "Minor" deptName = Minor
+    | T.isInfixOf "Focus" deptName = Focus
+    | T.isInfixOf "Certificate" deptName = Certificate
+    | otherwise = Other
 
 -- | Extracts the post type (eg. major) from a post code (eg. ASMAJ1689)
-getPostType :: T.Text -> PostType
-getPostType = abbrevToPost . T.take 3 . T.drop 2
+getPostTypeFromCode :: T.Text -> PostType
+getPostTypeFromCode = abbrevToPost . T.take 3 . T.drop 2
 
 -- | Maps the post type abbreviations to their corresponding PostType
 abbrevToPost :: T.Text -> PostType

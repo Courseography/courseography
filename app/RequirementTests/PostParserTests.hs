@@ -50,12 +50,12 @@ postInfoInputs = [
         ("Cognitive Science Major - Arts (Language and Cognition Stream) (Arts Program)", "ASMAJ1445B", Major))
     , ("Certificate in Business Fundamentals - ASCER2400",
         ("Certificate in Business Fundamentals", "ASCER2400", Certificate))
-    , ("Focus in Green Chemistry",
-        ("Focus in Green Chemistry", "", Other))
     , ("Focus in Finance - ASFOC2431B",
         ("Focus in Finance", "ASFOC2431B", Focus))
+    , ("Focus in Green Chemistry",
+        ("Focus in Green Chemistry", "", Focus))
     , ("Biological Physics Specialist",
-        ("Biological Physics Specialist", "", Other))
+        ("Biological Physics Specialist", "", Specialist))
     ]
 
 -- | Takes a tuple of (postDepartment, postCode, postName) and makes a Post data
