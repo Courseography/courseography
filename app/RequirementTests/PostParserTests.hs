@@ -130,8 +130,8 @@ postInfoInputs = [
         })
     , ("Biological Physics Specialist",
         Post {
-        postName = Specialist,
-        postDepartment = "Biological Physics",
+        postName = Other,
+        postDepartment = "Biological Physics Specialist",
         postCode = "",
         postDescription = "",
         postRequirements = ""

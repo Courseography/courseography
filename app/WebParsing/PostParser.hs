@@ -28,14 +28,14 @@ addPostToDatabase programElements = do
         postDescHtml = partitions isDescriptionSection programElements
         postReqHtml = sections isRequirementSection programElements
         requirementLines = if null postReqHtml then [] else reqHtmlToLines $ last postReqHtml
-        description = if null postReqHtml then [] else innerText $ head postDescHtml
+        descriptionText = if null postReqHtml then T.empty else innerText $ head postDescHtml
         requirements = concatMap parseRequirement requirementLines
     liftIO $ print fullPostName
 
     case P.parse postInfoParser "POSt information" fullPostName of
         Left _ -> return ()
         Right post -> do
-            postExists <- insertUnique post { postDescription = descriptionLines, postRequirements = intercalate "\n" $ concat requirementLines }
+            postExists <- insertUnique post { postDescription = descriptionText, postRequirements = intercalate "\n" $ concat requirementLines }
             case postExists of
                 Just key ->
                     mapM_ (insert_ . PostCategory key) requirements
@@ -43,6 +43,7 @@ addPostToDatabase programElements = do
     where
         isDescriptionSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-body") tag || isRequirementSection tag
         isRequirementSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag || tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag
+
 
 -- | Parse a Post value from its title.
 -- Titles are usually of the form "Actuarial Science Major (Science Program)".
