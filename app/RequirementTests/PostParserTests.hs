@@ -61,7 +61,8 @@ postInfoInputs = [
 -- | Takes a tuple of (postDepartment, postCode, postName) and makes a Post data
 -- | by filling postDescription and postRequirements with empty text
 makePost :: (T.Text, T.Text, PostType) -> Post
-makePost (postDepartment, postCode, postName) = Post { postName, postDepartment, postCode, postDescription = T.empty, postRequirements = T.empty }
+makePost (postDepartment, postCode, postName) =
+    Post { postName, postDepartment, postCode, postDescription = T.empty, postRequirements = T.empty }
 
 postInfoTests :: Test
 postInfoTests = createTest postInfoParser "Post requirements" postInfoInputs
