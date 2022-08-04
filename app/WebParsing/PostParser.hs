@@ -26,9 +26,9 @@ addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
 addPostToDatabase programElements = do
     let fullPostName = maybe "" (strip . fromTagText) $ find isTagText programElements
         postDescHtml = partitions isDescriptionSection programElements
+        descriptionText = if null postReqHtml then T.empty else innerText $ head postDescHtml
         postReqHtml = sections isRequirementSection programElements
         requirementLines = if null postReqHtml then [] else reqHtmlToLines $ last postReqHtml
-        descriptionText = if null postReqHtml then T.empty else innerText $ head postDescHtml
         requirements = concatMap parseRequirement requirementLines
     liftIO $ print fullPostName
 
@@ -57,9 +57,11 @@ postInfoParser = do
 
     return $ Post (getPostType code) (T.pack deptName) code T.empty T.empty
 
+-- | Extracts the post type (eg. major) from a post code (eg. ASMAJ1689)
 getPostType :: T.Text -> PostType
 getPostType = abbrevToPost . T.take 3 . T.drop 2
 
+-- | Maps the post type abbreviations to their corresponding PostType
 abbrevToPost :: T.Text -> PostType
 abbrevToPost "SPE" = Specialist
 abbrevToPost "MAJ" = Major
@@ -68,16 +70,14 @@ abbrevToPost "FOC" = Focus
 abbrevToPost "CER" = Certificate
 abbrevToPost _ = Other
 
+-- | Parser for a post code (eg. ASFOC1689A)
 postCodeParser :: Parser T.Text
 postCodeParser = do
     _ <- P.many1 P.space >> P.char '-' >> P.many1 P.space
     code <- P.count 5 P.letter
     num <- P.count 4 P.digit
-    variant <- P.optionMaybe P.letter
-
-    case variant of
-        Nothing -> return $ T.pack $ code ++ num
-        Just v -> return $ T.pack $ code ++ num ++ [v]
+    variant <- P.many P.letter
+    return $ T.pack $ code ++ num ++ variant
 
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]

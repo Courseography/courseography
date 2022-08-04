@@ -1,9 +1,9 @@
 {-# LANGUAGE NamedFieldPuns #-}
 
 {-|
-Description: Test Course Requirement Parsers using HUnit Testing Framework.
+Description: Test Post Parsers using HUnit Testing Framework.
 
-Module containing test cases for Requirement Parsers.
+Module containing test cases for Post Parsers.
 
 -}
 
