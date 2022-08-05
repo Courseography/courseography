@@ -36,6 +36,7 @@ export default class FocusTab extends React.Component {
           <FocusModal
             showFocusModal={this.state.showFocusModal}
             focusId={this.props.pId}
+            focusCode={this.props.code}
             onClose={() => this.toggleFocusModal(false)}
           />
           {this.props.selected && (

@@ -23,3 +23,42 @@ export function getCourse(courseName) {
       throw error
     })
 }
+
+/**
+ * Retrieves a post from the server.
+ * @param {string} postCode The post code on the art&sci timetable.
+ * @returns {Promise} Promise object representing the JSON object containing post information.
+ */
+export function getPost(postCode) {
+  "use strict"
+
+  return fetch("post?code=" + postCode)
+    .then(async response => {
+      const responseJson = await response.json()
+      let lines = responseJson.postRequirements.split("\n")
+      const info = {
+        description: responseJson.postDescription,
+        requiredCourses: [],
+        relatedCourses: [],
+      }
+
+      let field
+      for (const line of lines) {
+        if (line === "Required Courses:") {
+          field = info.requiredCourses
+        } else if (line === "Suggested Related Courses:") {
+          field = info.relatedCourses
+        } else if (field) {
+          field.push(line)
+        }
+      }
+
+      return {
+        title: responseJson.postDepartment,
+        info: info,
+      }
+    })
+    .catch(error => {
+      throw error
+    })
+}

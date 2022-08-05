@@ -14,8 +14,7 @@ import {
   Tooltip,
 } from "react-leaflet"
 import L from "leaflet"
-import { getCourse } from "../common/utils"
-import { computerScienceFocusData } from "../graph/sidebar/focus_descriptions"
+import { getCourse, getPost } from "../common/utils"
 
 class ModalContent extends React.Component {
   render() {
@@ -123,10 +122,11 @@ class FocusModal extends React.Component {
 
   componentDidMount() {
     if (this.props.focusId !== "") {
-      let focusData = computerScienceFocusData[this.props.focusId]
-      this.setState({
-        focusTitle: focusData[0],
-        focusInfo: focusData[1],
+      getPost(`ASFOC1689${this.props.focusCode}`).then(focusData => {
+        this.setState({
+          focusTitle: focusData.title,
+          focusInfo: focusData.info,
+        })
       })
     }
   }
@@ -154,9 +154,29 @@ class FocusModal extends React.Component {
  */
 class FocusDescription extends React.Component {
   render() {
-    let requiredCoursesList = this.props.focusInfo.requiredCourses.map((courses, i) => (
-      <li key={"required-" + i}>{courses}</li>
-    ))
+    let requiredCoursesList = []
+    let i = 0
+    while (i < this.props.focusInfo.requiredCourses.length - 1) {
+      if (this.props.focusInfo.requiredCourses[i] === "") {
+        let nestedList = []
+        while (i < this.props.focusInfo.requiredCourses.length - 1) {
+          nestedList.push(
+            <li key={"required-" + i++}>{this.props.focusInfo.requiredCourses[i]}</li>
+          )
+        }
+        requiredCoursesList.push(
+          <ol key={"required-" + i + "a"} style={{ listStyleType: "lower-alpha" }}>
+            {nestedList}
+          </ol>
+        )
+      } else {
+        requiredCoursesList.push(
+          <li key={"required-" + i}>{this.props.focusInfo.requiredCourses[i]}</li>
+        )
+      }
+      i++
+    }
+
     let relatedCoursesList = this.props.focusInfo.relatedCourses.map((courses, i) => (
       <li key={"related-" + i}>{courses}</li>
     ))

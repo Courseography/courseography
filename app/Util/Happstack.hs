@@ -12,7 +12,4 @@ import Happstack.Server
 
 -- | Creates a JSON response.
 createJSONResponse :: ToJSON a => a -> Response
-createJSONResponse x = toResponseBS (BS.pack "application/json") (encodeJSON x)
-    where
-        encodeJSON :: ToJSON a => a -> BSL.ByteString
-        encodeJSON = BSL.filter (/= '\\') . encode
+createJSONResponse x = toResponseBS (BS.pack "application/json") (encode x)

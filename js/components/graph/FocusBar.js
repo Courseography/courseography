@@ -4,15 +4,24 @@ import FocusTab from "./FocusTab.js"
 
 // These lists are in reverse order to what ends up appearing on the screen
 const computerScienceFocusLabels = [
-  ["web", "Web Technologies"],
-  ["theory", "Theory of Computation"],
-  ["sci", "Scientific Computing"],
-  ["HCI", "Human\u2011Computer Interaction"],
-  ["game", "Game Design"],
-  ["vision", "Computer Vision"],
-  ["systems", "Computer Systems"],
-  ["NLP", "Computational Linguistics"],
-  ["AI", "Artificial Intelligence"],
+  ["web", "Web Technologies", "J"],
+  ["theory", "Theory of Computation", "I"],
+  ["sci", "Scientific Computing", "A"],
+  ["HCI", "Human\u2011Computer Interaction", "H"],
+  ["game", "Game Design", "G"],
+  ["vision", "Computer Vision", "D"],
+  ["systems", "Computer Systems", "F"],
+  ["NLP", "Computational Linguistics", "C"],
+  ["AI", "Artificial Intelligence", "B"],
+  //  ["A", "Scientific Computing"],
+  //  ["B", "Artificial Intelligence"],
+  //  ["C", "Computational Linguistics"],
+  //  ["D", "Computer Vision"],
+  //  ["F", "Computer Systems"],
+  //  ["G", "Game Design"],
+  //  ["H", "Human\u2011Computer Interaction"],
+  //  ["I", "Theory of Computation"],
+  //  ["J", "Web Technologies"],
 ]
 
 /**
@@ -38,13 +47,14 @@ export default class FocusBar extends React.Component {
    * @returns an array of FocusTab components
    */
   generateFocusTabs = () => {
-    return computerScienceFocusLabels.map(([focusId, focusTitle]) => {
+    return computerScienceFocusLabels.map(([focusId, focusTitle, focusCode]) => {
       const selected = this.props.currFocus === focusId
 
       return (
         <FocusTab
           key={focusId}
           pId={focusId}
+          code={focusCode}
           focusName={focusTitle}
           selected={selected}
           highlightFocus={this.props.highlightFocus}
