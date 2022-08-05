@@ -1,12 +1,14 @@
 module WebParsing.PostParser
-    (addPostToDatabase) where
+    ( addPostToDatabase
+    , postInfoParser
+    ) where
 
 import Control.Monad.Trans (liftIO)
 import Data.Either (fromRight)
 import Data.Functor (void)
 import Data.List (find)
 import Data.List.Split (keepDelimsL, split, splitWhen, whenElt)
-import Data.Text (strip)
+import Data.Text (intercalate, strip)
 import qualified Data.Text as T
 import Database.DataType (PostType (..))
 import Database.Persist (insertUnique)
@@ -16,27 +18,30 @@ import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
 import Text.Parsec.Text (Parser)
-import WebParsing.ParsecCombinators (parseUntil, text)
+import WebParsing.ParsecCombinators (parseUntil)
 import WebParsing.ReqParser (parseReqs)
 
 
 addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
 addPostToDatabase programElements = do
     let fullPostName = maybe "" (strip . fromTagText) $ find isTagText programElements
-        postHtml = sections isRequirementSection programElements
-        requirementLines = if null postHtml then [] else reqHtmlToLines $ last postHtml
+        postDescHtml = partitions isDescriptionSection programElements
+        descriptionText = if null postReqHtml then T.empty else innerText $ head postDescHtml
+        postReqHtml = sections isRequirementSection programElements
+        requirementLines = if null postReqHtml then [] else reqHtmlToLines $ last postReqHtml
         requirements = concatMap parseRequirement requirementLines
     liftIO $ print fullPostName
 
     case P.parse postInfoParser "POSt information" fullPostName of
         Left _ -> return ()
         Right post -> do
-            postExists <- insertUnique post
+            postExists <- insertUnique post { postDescription = descriptionText, postRequirements = intercalate "\n" $ concat requirementLines }
             case postExists of
                 Just key ->
                     mapM_ (insert_ . PostCategory key) requirements
                 Nothing -> return ()
     where
+        isDescriptionSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-body") tag || isRequirementSection tag
         isRequirementSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag || tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag
 
 
@@ -44,22 +49,54 @@ addPostToDatabase programElements = do
 -- Titles are usually of the form "Actuarial Science Major (Science Program)".
 postInfoParser :: Parser Post
 postInfoParser = do
-    deptName <- parseDepartmentName
-    postType <- parsePostType P.<|> return Other
-    return $ Post postType deptName "" ""
+    deptName <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
+        void postCodeParser,
+        P.eof
+        ]
+    code <- postCodeParser P.<|> return T.empty
 
-    where
-        parseDepartmentName :: Parser T.Text
-        parseDepartmentName = parseUntil $ P.choice [
-            void (P.lookAhead parsePostType),
-            void (P.char '(')
-            ]
+    let deptNameText = T.pack deptName
+        postType = getPostType code deptNameText
 
-        parsePostType :: Parser PostType
-        parsePostType = do
-            postTypeName <- P.choice $ map (P.try . text) ["Specialist", "Major", "Minor"]
-            return $ read $ T.unpack postTypeName
+    return $ Post postType deptNameText code T.empty T.empty
 
+-- | Extracts the post type (eg. major) from a post code if it is non-empty,
+-- | or from a dept name otherwise
+getPostType :: T.Text -> T.Text -> PostType
+getPostType "" deptName = getPostTypeFromName deptName
+getPostType code _ = getPostTypeFromCode code
+
+-- | Extracts the post type (eg. major) from a post name (eg. "Biology Specialist")
+getPostTypeFromName :: T.Text -> PostType
+getPostTypeFromName deptName
+    | T.isInfixOf "Specialist" deptName = Specialist
+    | T.isInfixOf "Major" deptName = Major
+    | T.isInfixOf "Minor" deptName = Minor
+    | T.isInfixOf "Focus" deptName = Focus
+    | T.isInfixOf "Certificate" deptName = Certificate
+    | otherwise = Other
+
+-- | Extracts the post type (eg. major) from a post code (eg. ASMAJ1689)
+getPostTypeFromCode :: T.Text -> PostType
+getPostTypeFromCode = abbrevToPost . T.take 3 . T.drop 2
+
+-- | Maps the post type abbreviations to their corresponding PostType
+abbrevToPost :: T.Text -> PostType
+abbrevToPost "SPE" = Specialist
+abbrevToPost "MAJ" = Major
+abbrevToPost "MIN" = Minor
+abbrevToPost "FOC" = Focus
+abbrevToPost "CER" = Certificate
+abbrevToPost _ = Other
+
+-- | Parser for a post code (eg. ASFOC1689A)
+postCodeParser :: Parser T.Text
+postCodeParser = do
+    _ <- P.many1 P.space >> P.char '-' >> P.many1 P.space
+    code <- P.count 5 P.letter
+    num <- P.count 4 P.digit
+    variant <- P.many P.letter
+    return $ T.pack $ code ++ num ++ variant
 
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
