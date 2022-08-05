@@ -5,7 +5,7 @@ Module containing test cases for Requirement Parsers.
 
 -}
 
-module RequirementTests.ParserTests
+module RequirementTests.ReqParserTests
 ( reqTestSuite ) where
 
 import Database.Requirement
