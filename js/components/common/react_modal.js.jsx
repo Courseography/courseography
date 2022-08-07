@@ -161,8 +161,8 @@ class FocusDescription extends React.Component {
       requiredCoursesList.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
       i++
     }
-    // we are either at the end of the list or at a blank line
-    // nested lists follow a blank line on the timetable
+    // we are either at the end of the list or a blank line
+    // nested lists follow a blank line in the timetable
     // so we construct a nested list after the blank line
     // Assume the rest of the items are nested
     if (++i < requiredCourses.length) {

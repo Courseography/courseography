@@ -35,7 +35,6 @@ export function getPost(postCode) {
   return fetch("post?code=" + postCode)
     .then(async response => {
       const responseJson = await response.json()
-      let lines = responseJson.postRequirements.split("\n")
       const info = {
         description: responseJson.postDescription,
         requiredCourses: [],
@@ -43,10 +42,10 @@ export function getPost(postCode) {
       }
 
       let field
-      for (const line of lines) {
-        if (line === "Required Courses:") {
+      for (const line of responseJson.postRequirements.split("\n")) {
+        if (line.toLowerCase().includes("required courses")) {
           field = info.requiredCourses
-        } else if (line === "Suggested Related Courses:") {
+        } else if (line.toLowerCase().includes("related courses")) {
           field = info.relatedCourses
         } else if (field) {
           field.push(line)
