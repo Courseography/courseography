@@ -1,14 +1,20 @@
 export default {
-  postCode: "ASFOC1689A",
-  postDepartment: "Focus in Scientific Computing (Specialist)",
-  postDescription: "(3.5 credits) Scientific computing studies the world around us.",
+  postCode: "ASFOC1689B",
+  postDepartment: "Focus in Artificial Intelligence (Specialist)",
+  postDescription:
+    "(3.5 credits) Artificial Intelligence (AI) is aimed at understanding " +
+    "and replicating the computational processes underlying intelligent behaviour.",
   postName: "Focus",
-  postRequirements:
-    "Completion Requirements:\n" +
-    "Required Courses:\nMAT235Y1/ MAT237Y1/ MAT257Y1,\n" +
-    "1.5 credits from the following:  CSC336H1,  CSC436H1,  CSC446H1,  CSC456H1,  CSC466H1\n" +
-    "1.0 credit from the following:  CSC317H1/  CSC320H1/  CSC417H1/  CSC418H1/  CSC419H1,  CSC311H1/  CSC411H1,  CSC343H1,  CSC384H1,  CSC358H1/  CSC457H1/  CSC458H1\n" +
-    "Suggested Related Courses:\nCSC367H1\nMAT224H1/ MAT240H1/ MAT247H1,  MAT334H1/ MAT354H1,  MAT337H1/ MAT357H1\n" +
-    "It is also recommended that students in this focus consider taking a half-course or two from the basic sciences (such as physics, chemistry, biology), " +
-    "as these sciences are the source of many problems solved by numerical techniques.",
+  postRequirements: `
+Completion Requirements:
+Required Courses:
+1.0 credit from the following:  CSC336H1,  MAT235Y1/ MAT237Y1/ MAT257Y1,  APM236H1,  MAT224H1/ MAT247H1,  STA238H1/  STA248H1/  STA261H1,  STA302H1,  STA347H1
+2.5 credits from the following, so that courses are from at least two of the four areas:
+
+CSC401H1,  CSC485H1
+CSC320H1,  CSC420H1
+CSC413H1/ CSC421H1/ CSC321H1,  CSC311H1/  CSC411H1/  STA314H1,  CSC412H1/ STA414H1
+CSC304H1,  CSC384H1,  CSC486H1
+Suggested Related Courses:
+CSC324H1,  COG250Y1,  PSY270H1,  PHL232H1,  PHL342H1`,
 }

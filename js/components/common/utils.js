@@ -35,6 +35,7 @@ export function getPost(postCode) {
   return fetch("post?code=" + postCode)
     .then(async response => {
       const responseJson = await response.json()
+
       const info = {
         description: responseJson.postDescription,
         requiredCourses: [],
@@ -43,9 +44,11 @@ export function getPost(postCode) {
 
       let field
       for (const line of responseJson.postRequirements.split("\n")) {
-        if (line.toLowerCase().includes("required courses")) {
+        const lineLower = line.toLowerCase()
+
+        if (lineLower.includes("required courses")) {
           field = info.requiredCourses
-        } else if (line.toLowerCase().includes("related courses")) {
+        } else if (lineLower.includes("related courses")) {
           field = info.relatedCourses
         } else if (field) {
           field.push(line)
@@ -73,8 +76,8 @@ export function getPostCourseList(postCode) {
   return fetch("post?code=" + postCode)
     .then(async response => {
       const responseJson = await response.json()
-      const courseList =
-        responseJson.postRequirements.match(/[A-Z]{3}[0-9]{3}(?=[HY][135])/g) || []
+      const courseCodeRegex = /[A-Z]{3}[0-9]{3}(?=[HY][135])/g
+      const courseList = responseJson.postRequirements.match(courseCodeRegex) || []
       return courseList.map(course => course.toLowerCase())
     })
     .catch(error => {
