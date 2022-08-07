@@ -155,10 +155,10 @@ class FocusModal extends React.Component {
 class FocusDescription extends React.Component {
   render() {
     const requiredCourses = this.props.focusInfo.requiredCourses
-    let requiredCoursesJsx = []
+    let requiredCoursesList = []
     let i = 0
     while (requiredCourses[i]) {
-      requiredCoursesJsx.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
+      requiredCoursesList.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
       i++
     }
     // We are either at the end of the list or a blank line.
@@ -171,7 +171,7 @@ class FocusDescription extends React.Component {
         nestedList.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
         i += 1
       }
-      requiredCoursesJsx.push(
+      requiredCoursesList.push(
         <ol key={"required-nested-" + i} style={{ listStyleType: "lower-alpha" }}>
           {nestedList}
         </ol>
@@ -182,17 +182,23 @@ class FocusDescription extends React.Component {
       <li key={"related-" + i}>{courses}</li>
     ))
 
+    const relatedCoursesSection = relatedCoursesList.length ? (
+      <>
+        <p>
+          <strong>Suggested Related Courses:</strong>
+        </p>
+        <ol>{relatedCoursesList}</ol>
+      </>
+    ) : null
+
     return (
       <div>
         <p>{this.props.focusInfo.description}</p>
         <p>
           <strong>Required Courses:</strong>
         </p>
-        <ol>{requiredCoursesJsx}</ol>
-        <p>
-          <strong>Suggested Related Courses:</strong>
-        </p>
-        <ol>{relatedCoursesList}</ol>
+        <ol>{requiredCoursesList}</ol>
+        {relatedCoursesSection}
       </div>
     )
   }
