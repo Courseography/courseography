@@ -62,3 +62,23 @@ export function getPost(postCode) {
       throw error
     })
 }
+
+/**
+ * Retrieves a post from the server, then parses all course codes from the requirements.
+ * @param {string} postCode The post code on the art&sci timetable.
+ * @returns {Promise} Promise object representing an array of required or related courses.
+ */
+export function getPostCourseList(postCode) {
+  "use strict"
+
+  return fetch("post?code=" + postCode)
+    .then(async response => {
+      const responseJson = await response.json()
+      const courseList =
+        responseJson.postRequirements.match(/[A-Z]{3}[0-9]{3}(?=[HY][135])/g) || []
+      return courseList.map(course => course.toLowerCase())
+    })
+    .catch(error => {
+      throw error
+    })
+}

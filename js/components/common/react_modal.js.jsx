@@ -122,7 +122,7 @@ class FocusModal extends React.Component {
 
   componentDidMount() {
     if (this.props.focusId !== "") {
-      getPost(`ASFOC1689${this.props.focusCode}`).then(focusData => {
+      getPost(this.props.focusId).then(focusData => {
         this.setState({
           focusTitle: focusData.title,
           focusInfo: focusData.info,
@@ -154,27 +154,28 @@ class FocusModal extends React.Component {
  */
 class FocusDescription extends React.Component {
   render() {
+    let requiredCourses = this.props.focusInfo.requiredCourses
     let requiredCoursesList = []
     let i = 0
-    while (i < this.props.focusInfo.requiredCourses.length - 1) {
-      if (this.props.focusInfo.requiredCourses[i] === "") {
-        let nestedList = []
-        while (i < this.props.focusInfo.requiredCourses.length - 1) {
-          nestedList.push(
-            <li key={"required-" + i++}>{this.props.focusInfo.requiredCourses[i]}</li>
-          )
-        }
-        requiredCoursesList.push(
-          <ol key={"required-" + i + "a"} style={{ listStyleType: "lower-alpha" }}>
-            {nestedList}
-          </ol>
-        )
-      } else {
-        requiredCoursesList.push(
-          <li key={"required-" + i}>{this.props.focusInfo.requiredCourses[i]}</li>
-        )
-      }
+    while (requiredCourses[i]) {
+      requiredCoursesList.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
       i++
+    }
+    // we are either at the end of the list or at a blank line
+    // nested lists follow a blank line on the timetable
+    // so we construct a nested list after the blank line
+    // Assume the rest of the items are nested
+    if (++i < requiredCourses.length) {
+      let nestedList = []
+      while (i < requiredCourses.length) {
+        nestedList.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
+        i += 1
+      }
+      requiredCoursesList.push(
+        <ol key={"required-nested-" + i} style={{ listStyleType: "lower-alpha" }}>
+          {nestedList}
+        </ol>
+      )
     }
 
     let relatedCoursesList = this.props.focusInfo.relatedCourses.map((courses, i) => (

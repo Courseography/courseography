@@ -7,7 +7,6 @@ module Util.Happstack
 
 import Data.Aeson (ToJSON, encode)
 import qualified Data.ByteString.Char8 as BS
-import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server
 
 -- | Creates a JSON response.
