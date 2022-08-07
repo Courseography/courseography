@@ -4,13 +4,13 @@ import FocusTab from "./FocusTab.js"
 
 // These lists are in reverse order to what ends up appearing on the screen
 const computerScienceFocusLabels = [
-  ["ASFOC1689A", "Scientific Computing"],
   ["ASFOC1689B", "Artificial Intelligence"],
   ["ASFOC1689C", "Computational Linguistics"],
-  ["ASFOC1689D", "Computer Vision"],
   ["ASFOC1689F", "Computer Systems"],
+  ["ASFOC1689D", "Computer Vision"],
   ["ASFOC1689G", "Game Design"],
   ["ASFOC1689H", "Human\u2011Computer Interaction"],
+  ["ASFOC1689A", "Scientific Computing"],
   ["ASFOC1689I", "Theory of Computation"],
   ["ASFOC1689J", "Web Technologies"],
 ]

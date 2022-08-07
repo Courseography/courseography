@@ -1,4 +1,4 @@
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, waitFor } from "@testing-library/react"
 import TestContainer from "./TestContainer"
 
 describe("FocusTab", () => {
@@ -20,9 +20,11 @@ describe("FocusTab", () => {
     ).toBe(false)
     fireEvent.click(container.getByRole("button", { name: /FOCUSES ⪢/i }))
     fireEvent.click(container.getByRole("button", { name: /scientific computing/i }))
-    expect(
-      container.getByTestId("react-graph").classList.contains("highlight-nodes")
-    ).toBe(true)
+    await waitFor(() =>
+      expect(
+        container.getByTestId("react-graph").classList.contains("highlight-nodes")
+      ).toBe(true)
+    )
   })
 
   it("When focuses are clicked, an information button should appear", async () => {
