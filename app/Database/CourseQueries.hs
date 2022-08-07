@@ -84,8 +84,8 @@ queryPost postText = do
 
 -- | Queries the database for information about the post then returns a Post value
 returnPost :: T.Text -> IO (Maybe Post)
-returnPost str = runSqlite databasePath $ do
-    sqlPost :: (Maybe (Entity Post)) <- selectFirst [PostCode <-. [str]] []
+returnPost code = runSqlite databasePath $ do
+    sqlPost :: (Maybe (Entity Post)) <- selectFirst [PostCode <-. [code]] []
     case sqlPost of
       Nothing -> return Nothing
       Just post -> return $ Just $ entityVal post
