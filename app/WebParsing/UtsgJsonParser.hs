@@ -8,7 +8,6 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON (parseJSON), Object, Value (..), decode, decodeFileStrict, (.!=), (.:?))
 import Data.Aeson.Key (toText)
 import Data.Aeson.KeyMap as KM hiding (insert, map)
-import qualified Data.ByteString.Lazy as B
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (catMaybes)
 import qualified Data.Text as T
@@ -20,32 +19,15 @@ import Network.HTTP.Conduit (simpleHttp)
 coursesJson :: FilePath
 coursesJson = "courses.json"
 
-{-
-getCourses :: IO B.ByteString
-getCourses = B.readFile coursesJson
--}
-
 -- | Parse all timetable data.
 getAllCourses :: IO ()
 getAllCourses = do
-    -- orgs <- getOrgs
-    runSqlite databasePath insertAllMeetings -- $ mapM_ insertAllMeetings orgs
-
-{-
--- | Return a list of all the "orgs" in FAS. These are the values which can be
---   passed to the timetable API with the "org" key.
-getOrgs :: IO [T.Text]
-getOrgs = do
-    resp <- simpleHttp orgApiUrl
-    let rawJSON :: Maybe (HM.HashMap T.Text Object) = decode resp
-    return $ maybe [] (concatMap $ map toText . KM.keys) rawJSON
--}
+    runSqlite databasePath insertAllMeetings
 
 -- | Retrieve and store all timetable data for the given department.
 insertAllMeetings :: {- T.Text -> -} SqlPersistM ()
 insertAllMeetings {- org -} = do
     liftIO . print "parsing JSON data"
-    -- resp <- liftIO . simpleHttp $ T.unpack (T.append timetableApiUrl org) -- where we are getting a network connection error
     resp <- liftIO $ decodeFileStrict coursesJson
     let coursesLst :: Maybe (HM.HashMap T.Text (Maybe DB)) = resp
         courseData = maybe [] (map dbData . catMaybes . HM.elems) coursesLst
