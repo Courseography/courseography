@@ -48,7 +48,7 @@ export function getPost(postCode) {
 
         if (lineLower.includes("required courses")) {
           field = info.requiredCourses
-        } else if (lineLower.includes("related courses")) {
+        } else if (lineLower.match(/(related|recommended) courses/)) {
           field = info.relatedCourses
         } else if (field) {
           field.push(line)
