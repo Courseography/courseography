@@ -1,20 +1,17 @@
 module WebParsing.UtsgJsonParser
      (getAllCourses,
-      -- getOrgs,
       insertAllMeetings) where
 
-import Config (databasePath, orgApiUrl, timetableApiUrl)
+import Config (databasePath)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (FromJSON (parseJSON), Object, Value (..), decode, decodeFileStrict, (.!=), (.:?))
-import Data.Aeson.Key (toText)
-import Data.Aeson.KeyMap as KM hiding (insert, map)
+import Data.Aeson (FromJSON (parseJSON), Object, Value (..), decodeFileStrict, (.!=), (.:?))
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (catMaybes)
 import qualified Data.Text as T
+import Database.Persist
 import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, runSqlite, selectFirst, (==.))
 import Database.Tables (Courses (..), EntityField (CoursesCode), MeetTime (..), Meeting (..),
-                        buildTimes)
-import Network.HTTP.Conduit (simpleHttp)
+                        Times (..), buildTimes)
 
 coursesJson :: FilePath
 coursesJson = "courses.json"
@@ -25,9 +22,11 @@ getAllCourses = do
     runSqlite databasePath insertAllMeetings
 
 -- | Retrieve and store all timetable data for the given department.
-insertAllMeetings :: {- T.Text -> -} SqlPersistM ()
-insertAllMeetings {- org -} = do
-    liftIO . print "parsing JSON data"
+insertAllMeetings :: SqlPersistM ()
+insertAllMeetings = do
+    deleteWhere ([] :: [Filter Times])
+    deleteWhere ([] :: [Filter Meeting])
+    liftIO . print $ T.pack "parsing JSON data"
     resp <- liftIO $ decodeFileStrict coursesJson
     let coursesLst :: Maybe (HM.HashMap T.Text (Maybe DB)) = resp
         courseData = maybe [] (map dbData . catMaybes . HM.elems) coursesLst
