@@ -189,6 +189,7 @@ letterParser = do
     plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
     return $ letter : plusminus
 
+-- | Example accepted string: "ecology and evolutionary biology)"
 infoParser :: Parser String
 infoParser = Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
 
@@ -209,6 +210,7 @@ gradeParser = do
     return grade
 
 -- parse for cutoff percentage before a course
+-- eg. ""a minimum grade of 73%, and 75% in CSC236H1"
 coBefParser :: Parser Req
 coBefParser = do
     _ <- Parsec.optional (caseInsensitiveStr "an " <|> Parsec.try indefiniteArticleAParser)
@@ -233,6 +235,7 @@ coBefParser = do
         return indefiniteArticle
 
 -- parse for cutoff percentage after a course
+-- eg. "MAT137Y1 (at least a 73%)"
 coAftParser :: Parser Req
 coAftParser = do
     req <- singleParser
@@ -306,6 +309,7 @@ singleParser = do
     return $ J courseID ""
 
 -- | Parser for single courses or "atomic" Reqs represented by a J.
+-- eg. "CSC207H1 (A-)", "STA220H1 (recommended)"
 justParser :: Parser Req
 justParser = do
     Parsec.spaces
@@ -340,6 +344,7 @@ categoryParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ ma
     rawTextParser
     ]
 
+-- Example accepted strings: "Health and Disease Studies", "International Relations"
 programParser :: Parser Req
 programParser = do
     Parsec.spaces
@@ -410,6 +415,7 @@ programGroupParser = do
             [] -> return $ ReqOr [Program x | Program x <- xs]
             ds -> return $ ReqOr [Program (x ++ " " ++ d) | Program x <- xs, d <- ds]
 
+-- Example accepted string: "Enrolment in the Psychology major program or in a History minor"
 programOrParser :: Parser Req
 programOrParser = do
     Parsec.spaces
@@ -422,7 +428,7 @@ programOrParser = do
         (x:xs) -> return $ ReqOr $ flattenOr (x:xs)
 
 -- | Parser for FCE requirements:
--- "... 9.0 FCEs ..."
+-- eg. "Completion of 1.0 credits at the 400-level", "At least 0.5 ENG credit"
 fcesParser :: Parser Req
 fcesParser = do
     _ <- Parsec.optional completionPrefix
@@ -459,6 +465,7 @@ fcesModifiersParser = fcesModifiersParserNoRaw <|> rawModifierParser
 
 -- | Parses fces modifiers related through and clauses
 -- | Not using andParser and sepByNoConsume because empty strings are handled differently
+-- eg. "CSC courses from the 300-level"
 modAndParser :: Parser Modifier
 modAndParser = do
     x <- Parsec.try fcesModifiersParser
@@ -473,6 +480,7 @@ modAndParser = do
                 _ -> return $ ModAnd (x:xs)
 
 -- | An andParser for courses but wraps the returned Req in a Modifier
+-- | eg. "CSC110Y1 and CSC111H1"
 courseAsModParser :: Parser Modifier
 courseAsModParser = do
     req <- andParser courseParser
@@ -562,7 +570,8 @@ anyModifierParser = caseInsensitiveStr "any"
         ])
     >> Parsec.spaces
 
--- Parser for cGPA requirements: "... 1.0 cGPA ..."
+-- Parser for cGPA requirements:
+-- eg. "A minimum CGPA of 1.0, completion of 10.0 credits and permission of the College Program Director"
 cgpaParser :: Parser Req
 cgpaParser = do
     _ <- Parsec.optional cgpaPrefix
