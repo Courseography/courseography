@@ -112,7 +112,8 @@ reqHtmlToLines tags =
         isSectionSplit :: Tag T.Text -> Bool
         isSectionSplit tag =
             isTagText tag &&
-            any (flip T.isInfixOf $ fromTagText tag) ["First", "Second", "Third", "Higher", "Notes", "NOTES"]
+            any (flip T.isInfixOf $ fromTagText tag)
+                ["First", "Second", "Third", "Higher", "Recommended Courses:", "Notes", "NOTES"]
 
         isNoteSection :: [Tag T.Text] -> Bool
         isNoteSection (sectionTitleTag:_) =
