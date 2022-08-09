@@ -28,6 +28,7 @@ import Data.Char (toLower)
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
+import Data.Time.Clock (UTCTime)
 import Database.DataType
 import Database.Persist.Sqlite (Key, SqlPersistM, entityVal, selectFirst, (==.))
 import Database.Persist.TH
@@ -148,6 +149,10 @@ Building
     lat Double
     lng Double
     deriving Generic Show
+
+LastModified
+    table T.Text
+    time UTCTime
 |]
 
 -- ** TODO: Remove these extra types and class instances

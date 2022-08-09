@@ -9,10 +9,11 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
+import Data.Time.Clock (getCurrentTime)
 import Database.CourseInsertion (insertCourse)
 import Database.Persist (insertUnique)
-import Database.Persist.Sqlite (SqlPersistM, insertMany_, runSqlite)
-import Database.Tables (Building (..), Courses (..), Department (..))
+import Database.Persist.Sqlite (SqlPersistM, insertMany_, insert_, runSqlite)
+import Database.Tables (Building (..), Courses (..), Department (..), LastModified (..))
 import Filesystem.Path.CurrentOS as Path
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
 import System.Directory (getCurrentDirectory)
@@ -64,6 +65,8 @@ parseArtSci = do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
         mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)
+        time <- liftIO getCurrentTime
+        insert_ $ LastModified "post" time
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
