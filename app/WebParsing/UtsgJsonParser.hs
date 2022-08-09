@@ -4,14 +4,19 @@ module WebParsing.UtsgJsonParser
 
 import Config (databasePath)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (FromJSON (parseJSON), Object, Value (..), decodeFileStrict, (.!=), (.:?))
+import Data.Aeson (FromJSON (parseJSON), Value (..), decodeFileStrict, (.!=), (.:?))
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (catMaybes)
 import qualified Data.Text as T
 import Database.Persist
-import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, runSqlite, selectFirst, (==.))
+import Database.Persist.Sqlite (SqlPersistM, runSqlite)
 import Database.Tables (Courses (..), EntityField (CoursesCode), MeetTime (..), Meeting (..),
                         Times (..), buildTimes)
+import System.Process
+
+
+runDownload :: CreateProcess
+runDownload = shell "python scripts\\downloadJson.py"
 
 coursesJson :: FilePath
 coursesJson = "courses.json"
@@ -19,6 +24,7 @@ coursesJson = "courses.json"
 -- | Parse all timetable data.
 getAllCourses :: IO ()
 getAllCourses = do
+    _ <- createProcess runDownload
     runSqlite databasePath insertAllMeetings
 
 -- | Retrieve and store all timetable data for the given department.
