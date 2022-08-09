@@ -29,6 +29,7 @@ import Data.Aeson (object, toJSON, (.=))
 import Data.List
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T
+import Data.Time
 import Database.DataType
 import Database.Persist
 import Database.Persist.Sqlite
@@ -72,15 +73,21 @@ queryCourse str = do
 
 -- | Takes a post code (eg. "ASFOC1689A") and sends a JSON representation
 -- | of the post as a response.
-retrievePost :: T.Text -> ServerPart Response
-retrievePost = liftIO . queryPost
+retrievePost :: ServerPart Response
+retrievePost = do
+    req <- askRq
+    code <- lookText' "code"
+    liftIO $ queryPost req code
 
 -- | Queries the database for information about the post
 -- | then returns a JSON representation of the post
-queryPost :: T.Text -> IO Response
-queryPost postText = do
+queryPost :: Request -> T.Text -> IO Response
+queryPost req postText = do
     postJSON <- returnPost postText
-    return $ createJSONResponse postJSON
+    return $ ifModifiedSince lastModified req (createJSONResponse postJSON)
+
+lastModified :: UTCTime
+lastModified = UTCTime (fromGregorian 2018 10 27) (secondsToDiffTime 0)
 
 -- | Queries the database for information about the post then returns a Post value
 returnPost :: T.Text -> IO (Maybe Post)

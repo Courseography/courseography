@@ -29,11 +29,17 @@ export function getCourse(courseName) {
  * @param {string} postCode The post code on the art&sci timetable.
  * @returns {Promise} Promise object representing the JSON object containing post information.
  */
-export function getPost(postCode) {
+export function getPost(postCode, lastModified) {
   "use strict"
 
-  return fetch("post?code=" + postCode)
+  return fetch("post?code=" + postCode, {
+    headers: {
+      "If-Modified-Since": lastModified,
+    },
+  })
     .then(async response => {
+      if (response.status === 304) return { modified: false }
+
       const responseJson = await response.json()
 
       const info = {
@@ -58,6 +64,8 @@ export function getPost(postCode) {
       return {
         title: responseJson.postDepartment,
         info: info,
+        modified: true,
+        modifiedTime: response.headers.get("Last-modified"),
       }
     })
     .catch(error => {
@@ -70,10 +78,14 @@ export function getPost(postCode) {
  * @param {string} postCode The post code on the art&sci timetable.
  * @returns {Promise} Promise object representing an array of required or related courses.
  */
-export function getPostCourseList(postCode) {
+export function getPostCourseList(postCode, lastModified) {
   "use strict"
 
-  return fetch("post?code=" + postCode)
+  return fetch("post?code=" + postCode, {
+    headers: {
+      "If-Modified-Since": lastModified,
+    },
+  })
     .then(async response => {
       const responseJson = await response.json()
       const courseCodeRegex = /[A-Z]{3}[0-9]{3}(?=[HY][135])/g

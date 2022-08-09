@@ -47,6 +47,7 @@ export class Graph extends React.Component {
       drawNodeID: 0,
       draggingNode: null,
       currFocus: null,
+      courseListModified: new Date().toUTCString(),
       graphName: null,
       connections: null,
       showInfoBox: false,
@@ -105,7 +106,10 @@ export class Graph extends React.Component {
         let focuses =
           this.state.currFocus === null
             ? []
-            : await getPostCourseList(this.state.currFocus)
+            : await getPostCourseList(
+                this.state.currFocus,
+                this.state.courseListModified
+              )
         this.highlightFocuses(focuses)
       })
     }
