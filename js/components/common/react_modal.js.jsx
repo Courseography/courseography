@@ -116,12 +116,16 @@ class FocusModal extends React.Component {
     super(props)
     this.state = {
       focusTitle: "",
-      focusInfo: null,
+      focusInfo: {
+        description: "",
+        requiredCourses: [],
+        relatedCourses: [],
+      },
     }
   }
 
-  componentDidMount() {
-    if (this.props.focusId !== "") {
+  componentDidUpdate(prevProps) {
+    if (this.props.showFocusModal && !prevProps.showFocusModal) {
       getPost(this.props.focusId).then(focusData => {
         this.setState({
           focusTitle: focusData.title,
