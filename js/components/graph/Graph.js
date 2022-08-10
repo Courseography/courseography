@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import { ExportModal } from "../common/export.js.jsx"
-import { getPostCourseList } from "../common/utils.js"
+import { getPost } from "../common/utils.js"
 import BoolGroup from "./BoolGroup"
 import Button from "./Button"
 import EdgeGroup from "./EdgeGroup"
@@ -46,8 +46,7 @@ export class Graph extends React.Component {
       drawMode: this.props.initialDrawMode,
       drawNodeID: 0,
       draggingNode: null,
-      currFocus: null,
-      courseListModified: new Date().toUTCString(),
+      focusCourses: {},
       graphName: null,
       connections: null,
       showInfoBox: false,
@@ -101,18 +100,6 @@ export class Graph extends React.Component {
   }
 
   UNSAFE_componentWillUpdate(prevProps) {
-    if (this.state.currFocus !== prevProps.currFocus) {
-      this.setState({ currFocus: prevProps.currFocus }, async () => {
-        let focuses =
-          this.state.currFocus === null
-            ? []
-            : await getPostCourseList(
-                this.state.currFocus,
-                this.state.courseListModified
-              )
-        this.highlightFocuses(focuses)
-      })
-    }
     if (!!this.state.graphName && this.state.graphName !== prevProps.graphName) {
       this.getGraph()
     }
@@ -254,6 +241,31 @@ export class Graph extends React.Component {
       })
       if (this.props.setFCECount) {
         this.props.setFCECount(totalFCEs)
+      }
+    }
+
+    if (this.props.currFocus !== prevProps.currFocus) {
+      if (this.props.currFocus === null) {
+        this.highlightFocuses([])
+      } else {
+        const currFocusCourses = this.state.focusCourses[this.props.currFocus]
+        getPost(
+          this.props.currFocus,
+          currFocusCourses?.lastModified || new Date(0).toUTCString()
+        ).then(focusData => {
+          if (!focusData.modified) {
+            this.highlightFocuses(currFocusCourses.list)
+          } else {
+            let focusCourses = this.state.focusCourses
+            focusCourses[this.props.currFocus] = {
+              list: focusData.courseList,
+              lastModified: focusData.modifiedTime,
+            }
+            this.setState({ focusCourses }, () =>
+              this.highlightFocuses(this.state.focusCourses[this.props.currFocus].list)
+            )
+          }
+        })
       }
     }
   }

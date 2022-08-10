@@ -71,41 +71,43 @@ queryCourse str = do
     courseJSON <- returnCourse str
     return $ createJSONResponse courseJSON
 
--- | Takes a post code (eg. "ASFOC1689A") and sends a JSON representation
--- | of the post as a response.
+-- | Takes a http request and sends a JSON representation of the post as a response
+-- | if the post data has been modified since the timestamp in the request,
+-- | or a 304 "Not Modified" response otherwise
 retrievePost :: ServerPart Response
 retrievePost = do
     req <- askRq
     code <- lookText' "code"
     liftIO $ queryPost req code
 
--- | Queries the database for information about the post
--- | then returns a JSON representation of the post
+-- | Queries the database for the post data then returns a JSON response of it,
+-- | or a 304 "Not Modified" response otherwise
 queryPost :: Request -> T.Text -> IO Response
 queryPost req code = do
     postJSON <- returnPost code
     lastModified <- postLastModified
     return $ ifModifiedSince lastModified req (createJSONResponse postJSON)
 
-postLastModified :: IO UTCTime
-postLastModified = runSqlite databasePath $ do
-    sqlTable :: (Maybe (Entity LastModified)) <- selectFirst [LastModifiedTable ==. "post"] []
-    case sqlTable of
-        Just time -> return $ lastModifiedTime $ entityVal time
-        Nothing -> do
-            -- no record of the last modified time for the post table
-            -- so we insert the current time into the table and return it
-            time <- liftIO getCurrentTime
-            insert_ $ LastModified "post" time
-            return time
-
 -- | Queries the database for information about the post then returns a Post value
 returnPost :: T.Text -> IO (Maybe Post)
 returnPost code = runSqlite databasePath $ do
-    sqlPost :: (Maybe (Entity Post)) <- selectFirst [PostCode ==. code] []
+    sqlPost <- selectFirst [PostCode ==. code] []
     case sqlPost of
       Nothing -> return Nothing
       Just post -> return $ Just $ entityVal post
+
+-- | Queries the database for the last time the post table was modified
+postLastModified :: IO UTCTime
+postLastModified = runSqlite databasePath $ do
+    sqlTable <- selectFirst [LastModifiedTable ==. "post"] []
+    case sqlTable of
+        Just time -> return $ lastModifiedTime $ entityVal time
+        Nothing -> do
+            -- no record of the last modified time for the Post table
+            -- so we insert the current time into the LastModified table and return it
+            time <- liftIO getCurrentTime
+            insert_ $ LastModified "post" time
+            return time
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.

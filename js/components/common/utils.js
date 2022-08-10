@@ -26,8 +26,10 @@ export function getCourse(courseName) {
 
 /**
  * Retrieves a post from the server.
- * @param {string} postCode The post code on the art&sci timetable.
- * @returns {Promise} Promise object representing the JSON object containing post information.
+ * @param {string} postCode     The post code on the art&sci timetable.
+ * @param {string} lastModified The last time the client called this function in GMT time in UTC format
+ * @returns {Promise} Promise object representing the JSON object containing post information and
+ *                    a boolean of whether the data was modified since last time
  */
 export function getPost(postCode, lastModified) {
   "use strict"
@@ -64,6 +66,7 @@ export function getPost(postCode, lastModified) {
       return {
         title: responseJson.postDepartment,
         info: info,
+        courseList: getCourseList(responseJson.postRequirements),
         modified: true,
         modifiedTime: response.headers.get("Last-modified"),
       }
@@ -74,25 +77,12 @@ export function getPost(postCode, lastModified) {
 }
 
 /**
- * Retrieves a post from the server, then parses all course codes from the requirements.
- * @param {string} postCode The post code on the art&sci timetable.
- * @returns {Promise} Promise object representing an array of required or related courses.
+ * Parses the course codes from a requirement text and converts them to lower case
+ * @param {string} requirements The requirement text containing the course codes
+ * @returns {Array<string>} Promise object representing an array of required or related courses.
  */
-export function getPostCourseList(postCode, lastModified) {
-  "use strict"
-
-  return fetch("post?code=" + postCode, {
-    headers: {
-      "If-Modified-Since": lastModified,
-    },
-  })
-    .then(async response => {
-      const responseJson = await response.json()
-      const courseCodeRegex = /[A-Z]{3}[0-9]{3}(?=[HY][135])/g
-      const courseList = responseJson.postRequirements.match(courseCodeRegex) || []
-      return courseList.map(course => course.toLowerCase())
-    })
-    .catch(error => {
-      throw error
-    })
+function getCourseList(requirements) {
+  const courseCodeRegex = /[A-Z]{3}[0-9]{3}(?=[HY][135])/g
+  const courseList = requirements.match(courseCodeRegex) || []
+  return courseList.map(course => course.toLowerCase())
 }
