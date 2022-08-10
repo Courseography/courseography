@@ -250,7 +250,7 @@ export class Graph extends React.Component {
       const currFocusCourses = this.state.focusCourses[this.props.currFocus]
       getPost(
         this.props.currFocus,
-        currFocusCourses?.lastModified || new Date(0).toUTCString()
+        currFocusCourses?.modifiedTime || new Date(0).toUTCString()
       ).then(focusData => {
         if (!focusData.modified) {
           this.highlightFocuses(currFocusCourses.list)
@@ -258,7 +258,7 @@ export class Graph extends React.Component {
           let focusCourses = this.state.focusCourses
           focusCourses[this.props.currFocus] = {
             list: focusData.courseList,
-            lastModified: focusData.modifiedTime,
+            modifiedTime: focusData.modifiedTime,
           }
           this.setState({ focusCourses }, () =>
             this.highlightFocuses(this.state.focusCourses[this.props.currFocus].list)
