@@ -27,7 +27,7 @@ export function getCourse(courseName) {
 /**
  * Retrieves a post from the server.
  * @param {string} postCode     The post code on the art&sci timetable.
- * @param {string} lastModified The last time the client called this function in GMT time in UTC format
+ * @param {string} lastModified The last time the client called this function in UTC time
  * @returns {Promise} Promise object representing the JSON object containing post information and
  *                    a boolean of whether the data was modified since last time
  */

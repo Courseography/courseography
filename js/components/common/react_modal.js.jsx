@@ -121,19 +121,19 @@ class FocusModal extends React.Component {
         requiredCourses: [],
         relatedCourses: [],
       },
-      focusLastModified: new Date(0).toUTCString(),
+      focusModifiedTime: new Date(0).toUTCString(),
     }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.showFocusModal && !prevProps.showFocusModal) {
-      getPost(this.props.focusId, this.state.focusLastModified).then(focusData => {
+      getPost(this.props.focusId, this.state.focusModifiedTime).then(focusData => {
         if (!focusData.modified) return
 
         this.setState({
           focusTitle: focusData.title,
           focusInfo: focusData.info,
-          focusLastModified: focusData.modifiedTime,
+          focusModifiedTime: focusData.modifiedTime,
         })
       })
     }
@@ -167,8 +167,9 @@ class FocusDescription extends React.Component {
     let i = 0
     while (requiredCourses[i]) {
       requiredCoursesList.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
-      i++
+      i += 1
     }
+
     // We are either at the end of the list or a blank line.
     // Nested lists follow a blank line in the timetable,
     // so we construct a nested list after the blank line.

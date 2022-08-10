@@ -71,7 +71,7 @@ queryCourse str = do
     courseJSON <- returnCourse str
     return $ createJSONResponse courseJSON
 
--- | Takes a http request and sends a JSON representation of the post as a response
+-- | Takes a http request with a post code and sends a JSON response containing the post data
 -- | if the post data has been modified since the timestamp in the request,
 -- | or a 304 "Not Modified" response otherwise
 retrievePost :: ServerPart Response
@@ -80,7 +80,8 @@ retrievePost = do
     code <- lookText' "code"
     liftIO $ queryPost req code
 
--- | Queries the database for the post data then returns a JSON response of it,
+-- | Queries the database for the post data then returns a JSON response of it
+-- | if the post data has been modified since the timestamp in the request,
 -- | or a 304 "Not Modified" response otherwise
 queryPost :: Request -> T.Text -> IO Response
 queryPost req code = do
@@ -88,7 +89,7 @@ queryPost req code = do
     lastModified <- postLastModified
     return $ ifModifiedSince lastModified req (createJSONResponse postJSON)
 
--- | Queries the database for information about the post then returns a Post value
+-- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)
 returnPost code = runSqlite databasePath $ do
     sqlPost <- selectFirst [PostCode ==. code] []
