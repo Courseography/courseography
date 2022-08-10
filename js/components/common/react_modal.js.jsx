@@ -180,6 +180,7 @@ class FocusDescription extends React.Component {
         nestedList.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
         i += 1
       }
+
       requiredCoursesList.push(
         <ol key={"required-nested-" + i} style={{ listStyleType: "lower-alpha" }}>
           {nestedList}
