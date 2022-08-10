@@ -82,19 +82,22 @@ retrievePost = do
 -- | Queries the database for information about the post
 -- | then returns a JSON representation of the post
 queryPost :: Request -> T.Text -> IO Response
-queryPost req postText = do
-    postJSON <- returnPost postText
-    lastModified <- returnModified "post"
+queryPost req code = do
+    postJSON <- returnPost code
+    lastModified <- postLastModified
     return $ ifModifiedSince lastModified req (createJSONResponse postJSON)
 
-returnModified :: T.Text -> IO UTCTime
-returnModified table = runSqlite databasePath $ do
-    sqlTable :: (Maybe (Entity LastModified)) <- selectFirst [LastModifiedTable ==. table] []
+postLastModified :: IO UTCTime
+postLastModified = runSqlite databasePath $ do
+    sqlTable :: (Maybe (Entity LastModified)) <- selectFirst [LastModifiedTable ==. "post"] []
     case sqlTable of
-        Just x -> return $ getLastModified $ entityVal x
-
-getLastModified :: LastModified -> UTCTime
-getLastModified (LastModified _ time) = time
+        Just time -> return $ lastModifiedTime $ entityVal time
+        Nothing -> do
+            -- no record of the last modified time for the post table
+            -- so we insert the current time into the table and return it
+            time <- liftIO getCurrentTime
+            insert_ $ LastModified "post" time
+            return time
 
 -- | Queries the database for information about the post then returns a Post value
 returnPost :: T.Text -> IO (Maybe Post)
