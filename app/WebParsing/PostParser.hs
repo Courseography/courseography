@@ -1,6 +1,7 @@
 module WebParsing.PostParser
     ( addPostToDatabase
     , postInfoParser
+    , getPostType
     ) where
 
 import Control.Monad.Trans (liftIO)
