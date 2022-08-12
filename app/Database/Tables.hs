@@ -134,6 +134,8 @@ Post
     --Primary code
     description T.Text
     requirements T.Text
+    created UTCTime
+    modified UTCTime
     deriving Show Eq Generic
 
 PostCategory
@@ -149,10 +151,6 @@ Building
     lat Double
     lng Double
     deriving Generic Show
-
-LastModified
-    table T.Text
-    time UTCTime
 |]
 
 -- ** TODO: Remove these extra types and class instances

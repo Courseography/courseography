@@ -29,7 +29,6 @@ import Data.Aeson (object, toJSON, (.=))
 import Data.List
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T
-import Data.Time
 import Database.DataType
 import Database.Persist
 import Database.Persist.Sqlite
@@ -85,9 +84,10 @@ retrievePost = do
 -- | or a 304 "Not Modified" response otherwise
 queryPost :: Request -> T.Text -> IO Response
 queryPost req code = do
-    postJSON <- returnPost code
-    lastModified <- postLastModified
-    return $ ifModifiedSince lastModified req (createJSONResponse postJSON)
+    postMaybe <- returnPost code
+    case postMaybe of
+        Nothing -> return $ createJSONResponse (Nothing :: Maybe Post)
+        Just post -> return $ ifModifiedSince (postModified post) req (createJSONResponse post)
 
 -- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)
@@ -96,19 +96,6 @@ returnPost code = runSqlite databasePath $ do
     case sqlPost of
       Nothing -> return Nothing
       Just post -> return $ Just $ entityVal post
-
--- | Queries the database for the last time the post table was modified
-postLastModified :: IO UTCTime
-postLastModified = runSqlite databasePath $ do
-    sqlTable <- selectFirst [LastModifiedTable ==. "post"] []
-    case sqlTable of
-        Just time -> return $ lastModifiedTime $ entityVal time
-        Nothing -> do
-            -- no record of the last modified time for the Post table
-            -- so we insert the current time into the LastModified table and return it
-            time <- liftIO getCurrentTime
-            insert_ $ LastModified "post" time
-            return time
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.

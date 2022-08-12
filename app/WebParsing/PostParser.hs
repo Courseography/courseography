@@ -10,6 +10,7 @@ import Data.List (find)
 import Data.List.Split (keepDelimsL, split, splitWhen, whenElt)
 import Data.Text (intercalate, strip)
 import qualified Data.Text as T
+import Data.Time.Clock (getCurrentTime)
 import Database.DataType (PostType (..))
 import Database.Persist (insertUnique)
 import Database.Persist.Sqlite (SqlPersistM, insert_)
@@ -34,8 +35,17 @@ addPostToDatabase programElements = do
 
     case P.parse postInfoParser "POSt information" fullPostName of
         Left _ -> return ()
-        Right post -> do
-            postExists <- insertUnique post { postDescription = descriptionText, postRequirements = intercalate "\n" $ concat requirementLines }
+        Right (department, code) -> do
+            currTime <- liftIO getCurrentTime
+            postExists <- insertUnique Post {
+                postName = getPostType code department,
+                postDepartment = department,
+                postCode = code,
+                postDescription = descriptionText,
+                postRequirements = intercalate "\n" $ concat requirementLines,
+                postCreated = currTime,
+                postModified = currTime
+                }
             case postExists of
                 Just key ->
                     mapM_ (insert_ . PostCategory key) requirements
@@ -47,7 +57,7 @@ addPostToDatabase programElements = do
 
 -- | Parse a Post value from its title.
 -- Titles are usually of the form "Actuarial Science Major (Science Program)".
-postInfoParser :: Parser Post
+postInfoParser :: Parser (T.Text, T.Text)
 postInfoParser = do
     deptName <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
         void postCodeParser,
@@ -55,10 +65,7 @@ postInfoParser = do
         ]
     code <- postCodeParser P.<|> return T.empty
 
-    let deptNameText = T.pack deptName
-        postType = getPostType code deptNameText
-
-    return $ Post postType deptNameText code T.empty T.empty
+    return (T.pack deptName, code)
 
 -- | Extracts the post type (eg. major) from a post code if it is non-empty,
 -- | or from a dept name otherwise
