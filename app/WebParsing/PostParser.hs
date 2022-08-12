@@ -99,13 +99,13 @@ postCodeParser = do
     variant <- P.many P.letter
     return $ T.pack $ code ++ num ++ variant
 
--- | Prunes all the attributes (eg. "class", "href") in the html except for the style.
+-- | Prunes all the attributes (eg. class, href) in the html except for the style.
 -- | Removes all <a></a> tags
 pruneHtml :: [Tag T.Text] -> [Tag T.Text]
 pruneHtml [] = []
 pruneHtml ((TagOpen "a" _):xs) = pruneHtml xs
 pruneHtml ((TagClose "a"):xs) = pruneHtml xs
-pruneHtml ((TagOpen t attrs):xs) = (TagOpen t [style | style@("style", _) <- attrs]) : pruneHtml xs
+pruneHtml ((TagOpen tag attrs):xs) = (TagOpen tag [style | style@("style", _) <- attrs]) : pruneHtml xs
 pruneHtml (x:xs) = x : pruneHtml xs
 
 -- | Split requirements HTML into individual lines.

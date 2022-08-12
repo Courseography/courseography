@@ -1,5 +1,5 @@
 {-|
-Description: Test some pre-processing functions for requirement parsing and database data.
+Description: Test some pre-processing functions that clean up the text before running the parsers
 
 -}
 
@@ -11,8 +11,7 @@ import Test.HUnit (Test (..), assertEqual)
 import Text.HTML.TagSoup (Tag (..))
 import WebParsing.PostParser (pruneHtml)
 
--- Function to facilitate test case creation given a string, Req tuple
-createTest :: (Eq a, Eq b, Show a, Show b) => (a -> b) -> String -> [(a, b)] -> Test
+createTest :: (Eq a, Show a, Eq b, Show b) => (a -> b) -> String -> [(a, b)] -> Test
 createTest function label input = TestLabel label $ TestList $ map (\(x, y) ->
                                 TestCase $ assertEqual ("for (" ++ show y ++ ")")
                                 y (function x)) input
