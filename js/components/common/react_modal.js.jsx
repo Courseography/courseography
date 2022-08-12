@@ -132,7 +132,8 @@ class FocusModal extends React.Component {
 
         this.setState({
           focusTitle: focusData.title,
-          focusInfo: focusData.info,
+          focusDescription: focusData.description,
+          focusRequirements: focusData.requirements,
           focusModifiedTime: focusData.modifiedTime,
         })
       })
@@ -150,66 +151,10 @@ class FocusModal extends React.Component {
       >
         <div className="modal-header">{this.state.focusTitle}</div>
         <div className="modal-body">
-          <FocusDescription focusInfo={this.state.focusInfo} />
+          <p>{this.state.focusDescription}</p>
+          <p dangerouslySetInnerHTML={{ __html: this.state.focusRequirements }}></p>
         </div>
       </ReactModal>
-    )
-  }
-}
-
-/**
- * React component forming the template for the description of a focus. It is the content of a FocusModal
- */
-class FocusDescription extends React.Component {
-  render() {
-    const requiredCourses = this.props.focusInfo.requiredCourses
-    let requiredCoursesList = []
-    let i = 0
-    while (requiredCourses[i]) {
-      requiredCoursesList.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
-      i += 1
-    }
-
-    // We are either at the end of the list or a blank line.
-    // Nested lists follow a blank line in the timetable,
-    // so we construct a nested list after the blank line.
-    // Assume the rest of the items are nested
-    if (++i < requiredCourses.length) {
-      let nestedList = []
-      while (i < requiredCourses.length) {
-        nestedList.push(<li key={"required-" + i}>{requiredCourses[i]}</li>)
-        i += 1
-      }
-
-      requiredCoursesList.push(
-        <ol key={"required-nested-" + i} style={{ listStyleType: "lower-alpha" }}>
-          {nestedList}
-        </ol>
-      )
-    }
-
-    let relatedCoursesList = this.props.focusInfo.relatedCourses.map((courses, i) => (
-      <li key={"related-" + i}>{courses}</li>
-    ))
-
-    const relatedCoursesSection = relatedCoursesList.length ? (
-      <>
-        <p>
-          <strong>Suggested Related Courses:</strong>
-        </p>
-        <ol>{relatedCoursesList}</ol>
-      </>
-    ) : null
-
-    return (
-      <div>
-        <p>{this.props.focusInfo.description}</p>
-        <p>
-          <strong>Required Courses:</strong>
-        </p>
-        <ol>{requiredCoursesList}</ol>
-        {relatedCoursesSection}
-      </div>
     )
   }
 }

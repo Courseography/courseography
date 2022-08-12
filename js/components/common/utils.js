@@ -44,28 +44,10 @@ export function getPost(postCode, lastModified) {
 
       const responseJson = await response.json()
 
-      const info = {
-        description: responseJson.postDescription,
-        requiredCourses: [],
-        relatedCourses: [],
-      }
-
-      let field
-      for (const line of responseJson.postRequirements.split("\n")) {
-        const lineLower = line.toLowerCase()
-
-        if (lineLower.includes("required courses")) {
-          field = info.requiredCourses
-        } else if (lineLower.match(/(related|recommended) courses/)) {
-          field = info.relatedCourses
-        } else if (field) {
-          field.push(line)
-        }
-      }
-
       return {
         title: responseJson.postDepartment,
-        info: info,
+        description: responseJson.postDescription,
+        requirements: responseJson.postRequirements,
         courseList: getCourseList(responseJson.postRequirements),
         modified: true,
         modifiedTime: response.headers.get("Last-modified"),
