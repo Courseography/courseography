@@ -1,6 +1,7 @@
 module WebParsing.PostParser
     ( addPostToDatabase
     , postInfoParser
+    , pruneHtml
     ) where
 
 import Control.Monad.Trans (liftIO)
