@@ -2,6 +2,7 @@ module WebParsing.PostParser
     ( addPostToDatabase
     , postInfoParser
     , pruneHtml
+    , getPostType
     ) where
 
 import Control.Monad.Trans (liftIO)
@@ -37,6 +38,14 @@ addPostToDatabase programElements = do
         Left _ -> return ()
         Right post -> do
             postExists <- insertUnique post { postDescription = descriptionText, postRequirements = renderTags requirementLines }
+        Right (department, code) -> do
+            postExists <- insertUnique Post {
+                postName = getPostType code department,
+                postDepartment = department,
+                postCode = code,
+                postDescription = descriptionText,
+                postRequirements = renderTags requirementLines
+                }
             case postExists of
                 Just key ->
                     mapM_ (insert_ . PostCategory key) requirements
@@ -48,7 +57,7 @@ addPostToDatabase programElements = do
 
 -- | Parse a Post value from its title.
 -- Titles are usually of the form "Actuarial Science Major (Science Program)".
-postInfoParser :: Parser Post
+postInfoParser :: Parser (T.Text, T.Text)
 postInfoParser = do
     deptName <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
         void postCodeParser,
@@ -56,10 +65,7 @@ postInfoParser = do
         ]
     code <- postCodeParser P.<|> return T.empty
 
-    let deptNameText = T.pack deptName
-        postType = getPostType code deptNameText
-
-    return $ Post postType deptNameText code T.empty T.empty
+    return (T.pack deptName, code)
 
 -- | Extracts the post type (eg. major) from a post code if it is non-empty,
 -- | or from a dept name otherwise
