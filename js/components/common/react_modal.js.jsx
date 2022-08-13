@@ -151,7 +151,7 @@ class FocusModal extends React.Component {
       >
         <div className="modal-header">{this.state.focusTitle}</div>
         <div className="modal-body">
-          <p>{this.state.focusDescription}</p>
+          <p dangerouslySetInnerHTML={{ __html: this.state.focusDescription }}></p>
           <p dangerouslySetInnerHTML={{ __html: this.state.focusRequirements }}></p>
         </div>
       </ReactModal>

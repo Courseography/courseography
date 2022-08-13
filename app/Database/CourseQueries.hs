@@ -94,8 +94,8 @@ returnPost :: T.Text -> IO (Maybe Post)
 returnPost code = runSqlite databasePath $ do
     sqlPost <- selectFirst [PostCode ==. code] []
     case sqlPost of
-      Nothing -> return Nothing
-      Just post -> return $ Just $ entityVal post
+        Nothing -> return Nothing
+        Just post -> return $ Just $ entityVal post
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.
