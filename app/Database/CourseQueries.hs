@@ -73,21 +73,16 @@ queryCourse str = do
 -- | Takes a http request with a post code and sends a JSON response containing the post data
 -- | if the post data has been modified since the timestamp in the request,
 -- | or a 304 "Not Modified" response otherwise
-retrievePost :: ServerPart Response
-retrievePost = do
-    req <- askRq
-    code <- lookText' "code"
-    liftIO $ queryPost req code
+retrievePost :: T.Text -> ServerPart Response
+retrievePost = liftIO . queryPost
 
 -- | Queries the database for the post data then returns a JSON response of it
 -- | if the post data has been modified since the timestamp in the request,
 -- | or a 304 "Not Modified" response otherwise
-queryPost :: Request -> T.Text -> IO Response
-queryPost req code = do
+queryPost :: T.Text -> IO Response
+queryPost code = do
     postMaybe <- returnPost code
-    case postMaybe of
-        Nothing -> return $ createJSONResponse (Nothing :: Maybe Post)
-        Just post -> return $ ifModifiedSince (postModified post) req (createJSONResponse post)
+    return $ createJSONResponse postMaybe
 
 -- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)

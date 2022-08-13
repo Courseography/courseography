@@ -121,20 +121,16 @@ class FocusModal extends React.Component {
         requiredCourses: [],
         relatedCourses: [],
       },
-      focusModifiedTime: new Date(0).toUTCString(),
     }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.showFocusModal && !prevProps.showFocusModal) {
-      getPost(this.props.focusId, this.state.focusModifiedTime).then(focusData => {
-        if (!focusData.modified) return
-
+      getPost(this.props.focusId).then(focusData => {
         this.setState({
           focusTitle: focusData.title,
           focusDescription: focusData.description,
           focusRequirements: focusData.requirements,
-          focusModifiedTime: focusData.modifiedTime,
         })
       })
     }
