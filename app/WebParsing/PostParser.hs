@@ -36,8 +36,6 @@ addPostToDatabase programElements = do
 
     case P.parse postInfoParser "POSt information" fullPostName of
         Left _ -> return ()
-        Right post -> do
-            postExists <- insertUnique post { postDescription = descriptionText, postRequirements = renderTags requirementLines }
         Right (department, code) -> do
             postExists <- insertUnique Post {
                 postName = getPostType code department,
