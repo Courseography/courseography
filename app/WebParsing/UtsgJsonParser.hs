@@ -16,7 +16,6 @@ import Database.Persist.Sqlite (SqlPersistM, runSqlite)
 import Database.Tables (Courses (..), EntityField (CoursesCode), MeetTime (..), Meeting (..),
                         Times (..), buildTimes)
 import Network.HTTP.Conduit (simpleHttp)
--- import System.Process
 
 coursesJson :: FilePath
 coursesJson = "courses.json"
@@ -40,8 +39,8 @@ parseCourses = do
 -- | Parse all timetable data.
 getAllCourses :: IO ()
 getAllCourses = do
-  orgs <- getOrgs
-  runSqlite databasePath $ mapM_ insertAllMeetings orgs
+   orgs <- getOrgs
+   runSqlite databasePath $ mapM_ insertAllMeetings orgs
 
 -- | Return a list of all the "orgs" in FAS. These are the values which can be
 --   passed to the timetable API with the "org" key.
