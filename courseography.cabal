@@ -28,6 +28,7 @@ test-suite RequirementTests
     Database.Tables,
     RequirementTests.PostParserTests,
     RequirementTests.ReqParserTests,
+    RequirementTests.PreProcessingTests,
     RequirementTests.ModifierTests,
     WebParsing.ParsecCombinators,
     WebParsing.PostParser,

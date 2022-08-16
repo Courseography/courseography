@@ -11,13 +11,14 @@ module Main
 import Control.Monad
 import RequirementTests.ModifierTests (modifierTestSuite)
 import RequirementTests.PostParserTests (postTestSuite)
+import RequirementTests.PreProcessingTests (preProcTestSuite)
 import RequirementTests.ReqParserTests (reqTestSuite)
 import qualified System.Exit as Exit
 import Test.HUnit (Test (..), failures, runTestTT)
 
 -- Single test encompassing all test suites
 tests :: Test
-tests = TestList [reqTestSuite, postTestSuite, modifierTestSuite]
+tests = TestList [reqTestSuite, postTestSuite, preProcTestSuite, modifierTestSuite]
 
 main :: IO ()
 main = do

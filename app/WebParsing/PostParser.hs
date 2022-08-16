@@ -1,6 +1,7 @@
 module WebParsing.PostParser
     ( addPostToDatabase
     , postInfoParser
+    , pruneHtml
     , getPostType
     ) where
 
@@ -9,7 +10,7 @@ import Data.Either (fromRight)
 import Data.Functor (void)
 import Data.List (find)
 import Data.List.Split (keepDelimsL, split, splitWhen, whenElt)
-import Data.Text (intercalate, strip)
+import Data.Text (strip)
 import qualified Data.Text as T
 import Database.DataType (PostType (..))
 import Database.Persist (insertUnique)
@@ -27,10 +28,10 @@ addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
 addPostToDatabase programElements = do
     let fullPostName = maybe "" (strip . fromTagText) $ find isTagText programElements
         postDescHtml = partitions isDescriptionSection programElements
-        descriptionText = if null postReqHtml then T.empty else innerText $ head postDescHtml
+        descriptionText = if null postReqHtml then T.empty else renderTags $ head postDescHtml
         postReqHtml = sections isRequirementSection programElements
-        requirementLines = if null postReqHtml then [] else reqHtmlToLines $ last postReqHtml
-        requirements = concatMap parseRequirement requirementLines
+        requirementLines = if null postReqHtml then [] else pruneHtml $ last postReqHtml
+        requirements = concatMap parseRequirement $ reqHtmlToLines requirementLines
     liftIO $ print fullPostName
 
     case P.parse postInfoParser "POSt information" fullPostName of
@@ -41,7 +42,7 @@ addPostToDatabase programElements = do
                 postDepartment = department,
                 postCode = code,
                 postDescription = descriptionText,
-                postRequirements = intercalate "\n" $ concat requirementLines
+                postRequirements = renderTags requirementLines
                 }
             case postExists of
                 Just key ->
@@ -101,6 +102,15 @@ postCodeParser = do
     num <- P.count 4 P.digit
     variant <- P.many P.letter
     return $ T.pack $ code ++ num ++ variant
+
+-- | Prunes all the attributes (eg. class, href) in the html except for the style.
+-- | Removes all <a></a> tags
+pruneHtml :: [Tag T.Text] -> [Tag T.Text]
+pruneHtml [] = []
+pruneHtml ((TagOpen "a" _):xs) = pruneHtml xs
+pruneHtml ((TagClose "a"):xs) = pruneHtml xs
+pruneHtml ((TagOpen tag attrs):xs) = (TagOpen tag [style | style@("style", _) <- attrs]) : pruneHtml xs
+pruneHtml (x:xs) = x : pruneHtml xs
 
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
