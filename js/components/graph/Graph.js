@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import { ExportModal } from "../common/export.js.jsx"
+import { getPost } from "../common/utils.js"
 import BoolGroup from "./BoolGroup"
 import Button from "./Button"
 import EdgeGroup from "./EdgeGroup"
@@ -9,7 +10,6 @@ import InfoBox from "./InfoBox"
 import NodeGroup from "./NodeGroup"
 import RegionGroup from "./RegionGroup"
 import GraphDropdown from "./GraphDropdown"
-import * as focusInfo from "./sidebar/focus_descriptions"
 import Sidebar from "./Sidebar"
 
 const ZOOM_INCREMENT = 0.01
@@ -46,7 +46,6 @@ export class Graph extends React.Component {
       drawMode: this.props.initialDrawMode,
       drawNodeID: 0,
       draggingNode: null,
-      currFocus: null,
       graphName: null,
       connections: null,
       showInfoBox: false,
@@ -100,15 +99,6 @@ export class Graph extends React.Component {
   }
 
   UNSAFE_componentWillUpdate(prevProps) {
-    if (this.state.currFocus !== prevProps.currFocus) {
-      this.setState({ currFocus: prevProps.currFocus }, () => {
-        let focuses =
-          this.state.currFocus === null
-            ? []
-            : focusInfo[this.state.currFocus + "FocusList"]
-        this.highlightFocuses(focuses)
-      })
-    }
     if (!!this.state.graphName && this.state.graphName !== prevProps.graphName) {
       this.getGraph()
     }
@@ -251,6 +241,14 @@ export class Graph extends React.Component {
       if (this.props.setFCECount) {
         this.props.setFCECount(totalFCEs)
       }
+    }
+
+    if (this.props.currFocus !== prevProps.currFocus && this.props.currFocus === null) {
+      this.highlightFocuses([])
+    } else if (this.props.currFocus !== prevProps.currFocus) {
+      getPost(this.props.currFocus).then(focusData =>
+        this.highlightFocuses(focusData.courseList)
+      )
     }
   }
 

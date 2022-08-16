@@ -14,8 +14,7 @@ import {
   Tooltip,
 } from "react-leaflet"
 import L from "leaflet"
-import { getCourse } from "../common/utils"
-import { computerScienceFocusData } from "../graph/sidebar/focus_descriptions"
+import { getCourse, getPost } from "../common/utils"
 
 class ModalContent extends React.Component {
   render() {
@@ -117,16 +116,22 @@ class FocusModal extends React.Component {
     super(props)
     this.state = {
       focusTitle: "",
-      focusInfo: null,
+      focusInfo: {
+        description: "",
+        requiredCourses: [],
+        relatedCourses: [],
+      },
     }
   }
 
-  componentDidMount() {
-    if (this.props.focusId !== "") {
-      let focusData = computerScienceFocusData[this.props.focusId]
-      this.setState({
-        focusTitle: focusData[0],
-        focusInfo: focusData[1],
+  componentDidUpdate(prevProps) {
+    if (this.props.showFocusModal && !prevProps.showFocusModal) {
+      getPost(this.props.focusId).then(focusData => {
+        this.setState({
+          focusTitle: focusData.title,
+          focusDescription: focusData.description,
+          focusRequirements: focusData.requirements,
+        })
       })
     }
   }
@@ -142,37 +147,10 @@ class FocusModal extends React.Component {
       >
         <div className="modal-header">{this.state.focusTitle}</div>
         <div className="modal-body">
-          <FocusDescription focusInfo={this.state.focusInfo} />
+          <p dangerouslySetInnerHTML={{ __html: this.state.focusDescription }}></p>
+          <p dangerouslySetInnerHTML={{ __html: this.state.focusRequirements }}></p>
         </div>
       </ReactModal>
-    )
-  }
-}
-
-/**
- * React component forming the template for the description of a focus. It is the content of a FocusModal
- */
-class FocusDescription extends React.Component {
-  render() {
-    let requiredCoursesList = this.props.focusInfo.requiredCourses.map((courses, i) => (
-      <li key={"required-" + i}>{courses}</li>
-    ))
-    let relatedCoursesList = this.props.focusInfo.relatedCourses.map((courses, i) => (
-      <li key={"related-" + i}>{courses}</li>
-    ))
-
-    return (
-      <div>
-        <p>{this.props.focusInfo.description}</p>
-        <p>
-          <strong>Required Courses:</strong>
-        </p>
-        <ol>{requiredCoursesList}</ol>
-        <p>
-          <strong>Suggested Related Courses:</strong>
-        </p>
-        <ol>{relatedCoursesList}</ol>
-      </div>
     )
   }
 }

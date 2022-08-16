@@ -23,3 +23,38 @@ export function getCourse(courseName) {
       throw error
     })
 }
+
+/**
+ * Retrieves a post from the server.
+ * @param {string} postCode The post code on the art&sci timetable.
+ * @returns {Promise} Promise object representing the JSON object containing post information
+ */
+export function getPost(postCode) {
+  "use strict"
+
+  return fetch("post?code=" + postCode)
+    .then(async response => {
+      const responseJson = await response.json()
+
+      return {
+        title: responseJson.postDepartment,
+        description: responseJson.postDescription,
+        requirements: responseJson.postRequirements,
+        courseList: getCourseList(responseJson.postRequirements),
+      }
+    })
+    .catch(error => {
+      throw error
+    })
+}
+
+/**
+ * Parses the course codes from a requirement text and converts them to lower case
+ * @param {string} requirements The requirement text containing the course codes
+ * @returns {Array<string>} Promise object representing an array of required or related courses.
+ */
+function getCourseList(requirements) {
+  const courseCodeRegex = /[A-Z]{3}[0-9]{3}(?=[HY][135])/g
+  const courseList = requirements.match(courseCodeRegex) || []
+  return courseList.map(course => course.toLowerCase())
+}

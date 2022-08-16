@@ -9,6 +9,7 @@ and serve the information back to the client.
 
 module Database.CourseQueries
     (retrieveCourse,
+     retrievePost,
      returnCourse,
      allCourses,
      prereqsForCourse,
@@ -68,6 +69,24 @@ queryCourse :: T.Text -> IO Response
 queryCourse str = do
     courseJSON <- returnCourse str
     return $ createJSONResponse courseJSON
+
+-- | Takes a http request with a post code and sends a JSON response containing the post data
+retrievePost :: T.Text -> ServerPart Response
+retrievePost = liftIO . queryPost
+
+-- | Queries the database for the post data then returns a JSON response of it
+queryPost :: T.Text -> IO Response
+queryPost code = do
+    postMaybe <- returnPost code
+    return $ createJSONResponse postMaybe
+
+-- | Queries the database for information about the post then returns the post value
+returnPost :: T.Text -> IO (Maybe Post)
+returnPost code = runSqlite databasePath $ do
+    sqlPost <- selectFirst [PostCode ==. code] []
+    case sqlPost of
+        Nothing -> return Nothing
+        Just post -> return $ Just $ entityVal post
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.

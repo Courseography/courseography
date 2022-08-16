@@ -54,7 +54,8 @@ export default class NodeGroup extends React.Component {
           )
         })}
         {this.props.nodesJSON.map(entry => {
-          var highlighted = highlightedNodes.indexOf(entry.id_) >= 0
+          // using `includes` to match "mat235" from "mat235237257calc2" and other math/stats courses
+          const highlighted = highlightedNodes.some(node => entry.id_.includes(node))
           return (
             <Node
               JSON={entry}
