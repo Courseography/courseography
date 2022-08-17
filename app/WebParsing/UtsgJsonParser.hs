@@ -11,7 +11,8 @@ import Data.Aeson.KeyMap as KM hiding (insert, map)
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (catMaybes)
 import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, runSqlite, selectFirst, (==.))
+import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insert, insertMany_, runSqlite,
+                                selectFirst, (==.))
 import Database.Tables (Courses (..), EntityField (CoursesCode), MeetTime (..), Meeting (..),
                         Times (..), buildTimes)
 import Network.HTTP.Conduit (simpleHttp)
