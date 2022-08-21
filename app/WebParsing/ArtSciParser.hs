@@ -11,13 +11,13 @@ import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Database.CourseInsertion (insertCourse)
 import Database.Persist (insertUnique)
-import Database.Persist.Sqlite (SqlPersistM, insertMany_, runSqlite)
+import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insertMany_, runSqlite)
 import Database.Tables (Building (..), Courses (..), Department (..))
 import Filesystem.Path.CurrentOS as Path
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
 import System.Directory (getCurrentDirectory)
-import Text.HTML.TagSoup (Tag)
 import qualified Text.HTML.TagSoup as TS
+import Text.HTML.TagSoup (Tag)
 import Text.HTML.TagSoup.Match (anyAttrValue, tagOpen, tagOpenAttrLit, tagOpenAttrNameLit)
 import Text.Parsec (count, many, parse)
 import qualified Text.Parsec.Char as P
@@ -38,6 +38,7 @@ parseBuildings = do
     buildingInfo <- getBuildingsFromCSV =<< buildingsCSV
     runSqlite databasePath $ do
         liftIO $ putStrLn "Inserting buildings"
+        deleteWhere ([] :: [Filter Building])  :: SqlPersistM ()
         insertMany_ buildingInfo :: SqlPersistM ()
 
 -- | Extract building names, codes, addresses, postal codes, latitude and longitude from csv file
