@@ -80,7 +80,7 @@ class Grid extends React.Component {
     if (this.state.selectedLectures !== prevState.selectedLectures) {
       localStorage.setItem(
         "selectedLectures",
-        JSON.stringify(this.state.selectedLectures)
+        JSON.stringify(this.state.selectedLectures),
       )
     }
   }
@@ -102,7 +102,7 @@ class Grid extends React.Component {
     this.setState({ selectedCourses: updatedCourses })
 
     let updatedLectures = this.state.selectedLectures.filter(
-      lecture => !lecture.courseCode.includes(courseCode)
+      lecture => !lecture.courseCode.includes(courseCode),
     )
     this.setState({ selectedLectures: updatedLectures })
   }

@@ -16,14 +16,14 @@ describe("FocusTab", () => {
   it("When focuses are clicked, the graph should be highlighted", async () => {
     const container = await TestContainer.build()
     expect(
-      container.getByTestId("react-graph").classList.contains("highlight-nodes")
+      container.getByTestId("react-graph").classList.contains("highlight-nodes"),
     ).toBe(false)
     fireEvent.click(container.getByRole("button", { name: /FOCUSES ⪢/i }))
     fireEvent.click(container.getByRole("button", { name: /scientific computing/i }))
     await waitFor(() =>
       expect(
-        container.getByTestId("react-graph").classList.contains("highlight-nodes")
-      ).toBe(true)
+        container.getByTestId("react-graph").classList.contains("highlight-nodes"),
+      ).toBe(true),
     )
   })
 

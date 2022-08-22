@@ -11,14 +11,14 @@ describe("Sidebar", () => {
   it("Pressing on the sidebar button should open it", async () => {
     const sidebar = await TestSidebar.build()
     expect(sidebar.getByTestId("test-toggle").classList.contains("collapsed")).toBe(
-      true
+      true,
     )
     expect(sidebar.getByTestId("test-toggle").classList.contains("expanded")).toBe(
-      false
+      false,
     )
     fireEvent.click(sidebar.getByTestId("test-sidebar-button"))
     expect(sidebar.getByTestId("test-toggle").classList.contains("collapsed")).toBe(
-      false
+      false,
     )
     expect(sidebar.getByTestId("test-toggle").classList.contains("expanded")).toBe(true)
   })
