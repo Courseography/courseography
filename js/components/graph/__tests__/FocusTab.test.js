@@ -52,7 +52,7 @@ describe("FocusTab", () => {
     expect(container.queryByRole("button", { name: /Focus Description/i })).not
       .toBeInTheDocument
   })
-  it("When focuses are clicked twice, the graph should be highlighted and then not highlighted", async () => {
+  it("When focuses are clicked twice, the graph should be highlighted and then unhighlighted", async () => {
     const container = await TestContainer.build()
     expect(
       // test id is found in Graph.js which gives reference to the main graph
