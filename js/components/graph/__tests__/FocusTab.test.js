@@ -13,7 +13,7 @@ describe("FocusTab", () => {
     expect(focusDiv.classList.contains("active-focus")).toBe(true)
   })
 
-  it("When focuses are clicked, the graph should be highlighted", async () => {
+  it("When focuses are clicked, the graph should be highlighted", async() => {
     const container = await TestContainer.build()
     expect(
       container.getByTestId("react-graph").classList.contains("highlight-nodes")
