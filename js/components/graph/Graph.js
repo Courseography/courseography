@@ -11,7 +11,7 @@ import NodeGroup from "./NodeGroup"
 import RegionGroup from "./RegionGroup"
 import GraphDropdown from "./GraphDropdown"
 import Sidebar from "./Sidebar"
-import {parseCourse, parseAnd, parseOr} from ../../util/util.js
+import { parseAnd } from "../../util/util.js"
 
 const ZOOM_INCREMENT = 0.01
 const KEYBOARD_PANNING_INCREMENT = 10
@@ -917,7 +917,7 @@ export class Graph extends React.Component {
   }
 }
 
-export { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT }    
+export { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT }
 
 /** Helper function that adds parents of hybridNode to the parents object, and adds hybrid nodes as children of the Nodes they represent
  *
