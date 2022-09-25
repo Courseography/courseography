@@ -70,7 +70,7 @@ export function parseOr(s) {
       result = parseCourse(tmp, coursePrefix)
       // accumulate the parsed course in orList
       // Error - list has no append but push
-      orList.append(result[0])
+      orList.push(result[0])
       curr = curr.substr(curr.indexOf(")") + 1)
     } else if (curr.charAt(0) === " " || curr.charAt(0) === "/") {
       curr = curr.substr(1)
