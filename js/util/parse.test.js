@@ -47,7 +47,6 @@ describe("parseAnd", () => {
     ]
     recursiveChecker(actual, expected)
   })
-  
 })
 
 describe("parseOr", () => {
@@ -113,7 +112,7 @@ describe("parseCourse", () => {
     const expected = ["CSC207", ""]
     recursiveChecker(actual, expected)
   })
-  
+
   test("parseCourse correctly returns an array with a string containing one course", () => {
     const input = "CSC209"
     const actual = parseCourse(input, "CSC")
