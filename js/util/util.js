@@ -9,7 +9,6 @@
 export function parseAnd(s) {
   // input: CSC301/317/318/384/417/419
   "use strict"
-  console.log(s)
   var curr = s
   var andList = []
   while (curr.length > 0) {
@@ -17,7 +16,6 @@ export function parseAnd(s) {
       curr = curr.substr(1)
     } else {
       var result = parseOr(curr)
-      console.log(result)
       // result == ['CSC301', 'CSC317', 'CSC318', 'CSC384', 'CSC417', 'CSC419', '']
       if (curr === result[1]) {
         console.error("Parsing failed for " + s + "  with curr = " + curr)
