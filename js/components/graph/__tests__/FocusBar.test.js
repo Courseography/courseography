@@ -22,4 +22,15 @@ describe("FocusBar", () => {
     expect(focusBar.getByRole("button", { name: /Scientific Computing/i }))
       .toBeInTheDocument
   })
+
+  it("Pressing the FocusBar button should open it, pressing again should close it", async() => {
+    const focusBar = await TestFocusBar.build()
+    expect(focusBar.queryByRole("button", { name: /Scientific Computing/i })).toBeNull
+    fireEvent.click(focusBar.getByRole("button", { name: /FOCUSES ⪢/i }))
+    expect(focusBar.getByRole("button", { name: /Scientific Computing/i }))
+      .toBeInTheDocument
+    fireEvent.click(focusBar.getByRole("button", { name: /⪡ CLOSE/i }))
+    expect(focusBar.queryByRole("button", { name: /Scientific Computing/i })).toBeNull
+  })
+
 })
