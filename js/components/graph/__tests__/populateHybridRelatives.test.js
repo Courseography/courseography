@@ -29,9 +29,8 @@ describe("populateHybridRelatives", () => {
   afterEach(() => {
     global.console.error.mockRestore()
   })
- 
- describe("The entire text of hybridNode is in nodesJSON", () => 
-{
+
+  describe("The entire text of hybridNode is in nodesJSON", () => {
     beforeEach(() => {
       hybridNode = {
         id_: "h50",
@@ -48,7 +47,7 @@ describe("populateHybridRelatives", () => {
           text: [
             {
               text: "MAT223/240",
-            }
+            },
           ],
           type_: "Node",
         },
@@ -67,10 +66,9 @@ describe("populateHybridRelatives", () => {
       expect(parents[hybridNode.id_]).toContain("mat223240")
       expect(childrenObj[nodesJSON[0].id_]).toContain("h50")
     })
-})
+  })
 
-
- describe("hybridNode only has one prereq node", () => {
+  describe("hybridNode only has one prereq node", () => {
     beforeEach(() => {
       hybridNode = {
         id_: "h50",

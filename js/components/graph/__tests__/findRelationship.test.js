@@ -101,8 +101,7 @@ describe("findRelationship", () => {
       recursiveChecker(actual, expected)
     })
   })
-describe("nodesJSON contains two elements that contain the same type and same text, so the first object should be returned", () => 
-{
+  describe("nodesJSON contains two elements that contain the same type and same text, so the first object should be returned", () => {
     const nodesJSON = [
       {
         id_: "MAT137",
@@ -127,5 +126,5 @@ describe("nodesJSON contains two elements that contain the same type and same te
       const expected = nodesJSON[0]
       recursiveChecker(actual, expected)
     })
-})
+  })
 })
