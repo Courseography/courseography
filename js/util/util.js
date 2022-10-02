@@ -1,5 +1,5 @@
 /** Helper function for parsing hybrid node's text.
- * 
+ *
  * @param {string} s a combination of course codes
  * @returns {Array} an array containing parsed course codes
  */
@@ -33,7 +33,7 @@ export function parseAnd(s) {
  * itself as the first element as the return array.
  * If there is a course separated by ',', stop and return the remaining
  * courses as the second element in the return array.
- * 
+ *
  * @param {string} s a combination of course codes
  * @returns {Array} an array containing parsed course codes
  */
@@ -50,14 +50,13 @@ export function parseOr(s) {
       if (coursePrefix === undefined && tmp.length >= 6) {
         coursePrefix = tmp.substr(0, 3).toUpperCase()
       }
-      
+
       result = parseCourse(tmp, coursePrefix)
       orList.push(result[0])
       curr = curr.substr(curr.indexOf(")") + 1)
     } else if (curr.charAt(0) === " " || curr.charAt(0) === "/") {
       curr = curr.substr(1)
     } else {
-      
       if (coursePrefix === undefined && curr.length >= 6) {
         coursePrefix = curr.substr(0, 3).toUpperCase()
       }
