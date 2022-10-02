@@ -6,7 +6,6 @@ describe("populateHybridRelatives", () => {
   let parents
   let childrenObj
   beforeEach(() => {
-    // mock console.error to test errors caught
     jest.spyOn(global.console, "error").mockImplementation(() => {})
   })
   afterEach(() => {
@@ -42,9 +41,9 @@ describe("populateHybridRelatives", () => {
         mat223240: [],
       }
     })
-    test("Test populateHybridRelatives should add the hybridNode as a\
-         child to the parent in parents, and add parent node as \
-         a parent of the child node to the childrenObj", () => {
+    test("Test populateHybridRelatives should add the id of the hybridNode as a\
+         value to its parent in childrenObj, and add the id of the parent node as \
+         a value to hybridNode in parents", () => {
       populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj)
       expect(parents[hybridNode.id_]).toContain("mat223240")
       expect(childrenObj[nodesJSON[0].id_]).toContain("h50")
@@ -83,9 +82,9 @@ describe("populateHybridRelatives", () => {
         mat221223240alg1: [],
       }
     })
-    test("Test populateHybridRelatives should add the hybridNode as a\
-         child to the parent in parents, and add parent node as \
-         a parent of the child node to the childrenObj", () => {
+    test("Test populateHybridRelatives should add the id of the hybridNode as a\
+      value to its parent in childrenObj, and add the id of the parent node as \
+      a value to hybridNode in parents", () => {
       populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj)
       expect(parents[hybridNode.id_]).toContain("mat221223240alg1")
       expect(childrenObj[nodesJSON[0].id_]).toContain("h50")
@@ -170,7 +169,7 @@ describe("populateHybridRelatives", () => {
       }
     })
     test("Test populateHybridRelatives should mutate parents and childrenObj \
-        to create relationship between parents and children", () => {
+        to create a relationship between parents and children", () => {
       populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj)
       const expectedParents = {
         csc111: [],
@@ -187,7 +186,8 @@ describe("populateHybridRelatives", () => {
       expect(childrenObj).toEqual(expectedChildren)
     })
     test("Test populateHybridRelatives should log an error when it cannot find a\
-        prereq node with multiple other nodes. The nodes before should still be mutated", () => {
+        prereq node with multiple other nodes. The nodes before should still\
+        be mutated", () => {
       nodesJSON.splice(nodesJSON.indexOf(-1), 1)
       const expectedParents = {
         csc111: [],
