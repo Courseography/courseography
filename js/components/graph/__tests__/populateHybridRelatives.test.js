@@ -1,22 +1,5 @@
 import { populateHybridRelatives } from "../Graph.js"
 
-const recursiveChecker = (actual, expected) => {
-  if (typeof actual === "string") {
-    expect(actual).toMatch(expected)
-  } else if (typeof actual === "object") {
-    if (Array.isArray(actual)) {
-      actual.forEach((arr, i) => {
-        recursiveChecker(arr, expected[i])
-      })
-    } else {
-      // not an array, an object, we go through each value
-      Object.keys(actual).forEach(key => {
-        recursiveChecker(actual[key], expected[key])
-      })
-    }
-  }
-}
-
 describe("populateHybridRelatives", () => {
   let hybridNode
   let nodesJSON
@@ -108,7 +91,8 @@ describe("populateHybridRelatives", () => {
       expect(childrenObj[nodesJSON[0].id_]).toContain("h50")
     })
     test("Test populateHybridRelatives should log an error when the prereq node\
-        for hybridNode cannot be found. parents should have h0 as a key and childrenObj should not change", () => {
+        for hybridNode cannot be found. parents should have h0 as a key and\
+        childrenObj should not change", () => {
       hybridNode = {
         id_: "h0",
         text: [
@@ -129,6 +113,7 @@ describe("populateHybridRelatives", () => {
       expect(childrenObj).toEqual(childrenOriginal)
     })
   })
+
   describe('hybridNode has multiple "or" prereq nodes', () => {
     beforeEach(() => {
       hybridNode = {
