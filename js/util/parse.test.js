@@ -56,7 +56,7 @@ describe("parseOr", () => {
     const expected = [["CSC111", "CSC207", "CSC209", "CSC258"], ""]
     recursiveChecker(actual, expected)
   })
-  test("parseOr correctly returns parsed course when a string of a single course is wrapped in paranthesis", () => {
+  test("parseOr correctly returns parsed course when a string of a single course is wrapped in parentheses", () => {
     const input = "(CSC207) Calc1"
     const actual = parseOr(input)
     const expected = [["CSC207", "Calc1"], ""]
