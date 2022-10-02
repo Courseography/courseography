@@ -45,7 +45,7 @@ describe("findRelationship", () => {
       expect(actual).toBeUndefined()
     })
   })
-  describe("nodesJSON contains two elements that contain the same id but different text, only the object with the correct text is returned", () => {
+  describe("nodesJSON contains two elements that contain the same type but different text, only the object with the correct text is returned", () => {
     const nodesJSON = [
       {
         id_: "csc207",
@@ -101,4 +101,31 @@ describe("findRelationship", () => {
       recursiveChecker(actual, expected)
     })
   })
+describe("nodesJSON contains two elements that contain the same type and same text, so the first object should be returned", () => 
+{
+    const nodesJSON = [
+      {
+        id_: "MAT137",
+        text: [
+          {
+            text: "MAT137",
+          },
+        ],
+        type_: "Node",
+      },
+      {
+        id: "MAT137",
+        text: [
+          {
+            text: "MAT137",
+          },
+        ],
+      },
+    ]
+    test("Test findRelationship returns the first course node when there are more than one valid course nodes", () => {
+      const actual = findRelationship("MAT137", nodesJSON)
+      const expected = nodesJSON[0]
+      recursiveChecker(actual, expected)
+    })
+})
 })
