@@ -5,7 +5,6 @@
  */
 export function parseAnd(s) {
   "use strict"
-  console.log(s)
   var curr = s
   var andList = []
   while (curr.length > 0) {
@@ -13,7 +12,6 @@ export function parseAnd(s) {
       curr = curr.substr(1)
     } else {
       var result = parseOr(curr)
-      console.log(result)
       if (curr === result[1]) {
         console.error("Parsing failed for " + s + "  with curr = " + curr)
         break
