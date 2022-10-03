@@ -186,14 +186,14 @@ class Timetable extends React.Component {
         return (
           course.name.indexOf(state.codeSearch) > -1 &&
           course.allMeetingTimes.some(meetingData =>
-            filterCourse(state.instSearch, state.timeSearch, meetingData)
+            filterCourse(state.instSearch, state.timeSearch, meetingData),
           )
         )
       })
       .map(course => {
         let lectures = course.allMeetingTimes
           .filter(meetingData =>
-            filterCourse(state.instSearch, state.timeSearch, meetingData)
+            filterCourse(state.instSearch, state.timeSearch, meetingData),
           )
           .sort((lec1, lec2) => {
             if (lec1.meetData.section > lec2.meetData.section) {
@@ -222,7 +222,7 @@ class Timetable extends React.Component {
                 {lecture.meetData.enrol} / {lecture.meetData.cap}
               </td>
               <td className="timetableWait">{lecture.meetData.wait}</td>
-            </tr>
+            </tr>,
           )
         }
 
