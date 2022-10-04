@@ -93,7 +93,7 @@ Ryan Fan,
 Ailsa Fang,
 Christian Garcia,
 Ross Gatih,
-Nazanin Ghazitabatabai
+Nazanin Ghazitabatabai,
 Sidharth Gupta,
 Parker Hutcheson,
 Philip Kukulak,
