@@ -974,7 +974,7 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
  * @param {Array} nodesJSON
  * @return {Node}
  */
-var findRelationship = (course, nodesJSON) => {
+export var findRelationship = (course, nodesJSON) => {
   var nodes = nodesJSON
   var node = nodes.find(
     n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course))
