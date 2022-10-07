@@ -36,30 +36,17 @@ export default class BoolGroup extends React.Component {
 
   // Generate data for a Bool node
   generateBool = boolJSON => {
-    var parents = []
-    var childs = []
-    var outEdges = []
-    var inEdges = []
-    this.props.edgesJSON.map(edge => {
-      if (boolJSON.id_ === edge.target) {
-        parents.push(edge.source)
-        inEdges.push(edge.id_)
-      } else if (boolJSON.id_ === edge.source) {
-        childs.push(edge.target)
-        outEdges.push(edge.id_)
-      }
-    })
-
+    const relationships = this.props.boolToInfo[boolJSON.id_]
     return (
       <Bool
         JSON={boolJSON}
         className="bool"
         key={boolJSON.id_}
         ref={this.setRefEntry(boolJSON)}
-        parents={parents}
-        childs={childs}
-        inEdges={inEdges}
-        outEdges={outEdges}
+        parents={relationships.parents}
+        childs={relationships.childs}
+        inEdges={relationships.inEdges}
+        outEdges={relationships.outEdges}
         logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || "and"}
         svg={this.props.svg}
       />
@@ -74,5 +61,6 @@ export default class BoolGroup extends React.Component {
 BoolGroup.propTypes = {
   boolsJSON: PropTypes.array,
   edgesJSON: PropTypes.array,
+  boolToInfo: PropTypes.object,
   svg: PropTypes.object,
 }
