@@ -59,6 +59,7 @@ export class Graph extends React.Component {
       showCourseModal: false,
       showGraphDropdown: false,
       selectedNodes: new Set(),
+      boolNodeToRelationship: {},
     }
 
     this.nodes = React.createRef()
@@ -143,6 +144,7 @@ export class Graph extends React.Component {
         var childrenObj = {}
         var outEdgesObj = {}
         var storedNodes = new Set()
+        const boolNodeToRelationship = {}
 
         var labelsList = data.texts.filter(function (entry) {
           return entry.rId.startsWith("tspan")
@@ -202,6 +204,27 @@ export class Graph extends React.Component {
           }
         })
 
+        const generateBoolRelationships = boolJSON => {
+          var parents = []
+          var childs = []
+          var outEdges = []
+          var inEdges = []
+          edgesList.forEach(edge => {
+            if (boolJSON.id_ === edge.target) {
+              parents.push(edge.source)
+              inEdges.push(edge.id_)
+            } else if (boolJSON.id_ === edge.source) {
+              childs.push(edge.target)
+              outEdges.push(edge.id_)
+            }
+          })
+          return { parents, childs, outEdges, inEdges }
+        }
+
+        boolsList.forEach(boolJSON => {
+          boolNodeToRelationship[boolJSON.id_] = generateBoolRelationships(boolJSON)
+        })
+
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -221,6 +244,7 @@ export class Graph extends React.Component {
             children: childrenObj,
             outEdges: outEdgesObj,
           },
+          boolNodeToRelationship: boolNodeToRelationship,
           selectedNodes: storedNodes,
         })
       })
@@ -709,29 +733,7 @@ export class Graph extends React.Component {
     }
   }
 
-  generateBoolRelationships = boolJSON => {
-    var parents = []
-    var childs = []
-    var outEdges = []
-    var inEdges = []
-    this.state.edgesJSON.map(edge => {
-      if (boolJSON.id_ === edge.target) {
-        parents.push(edge.source)
-        inEdges.push(edge.id_)
-      } else if (boolJSON.id_ === edge.source) {
-        childs.push(edge.target)
-        outEdges.push(edge.id_)
-      }
-    })
-    return { parents, childs, outEdges, inEdges }
-  }
-
   render() {
-    const boolToInfo = {}
-    this.state.boolsJSON.forEach(boolJSON => {
-      boolToInfo[boolJSON.id_] = this.generateBoolRelationships(boolJSON)
-    })
-
     let containerWidth = 0
     let containerHeight = 0
 
@@ -921,7 +923,7 @@ export class Graph extends React.Component {
             ref={this.bools}
             boolsJSON={this.state.boolsJSON}
             edgesJSON={this.state.edgesJSON}
-            boolToInfo={boolToInfo}
+            boolToInfo={this.state.boolNodeToRelationship}
             svg={this}
           />
           <EdgeGroup svg={this} ref={this.edges} edgesJSON={this.state.edgesJSON} />
