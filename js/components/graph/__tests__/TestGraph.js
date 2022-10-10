@@ -6,7 +6,7 @@ export default class TestGraph {
   constructor(graph) {
     if (typeof graph === "undefined") {
       throw new Error(
-        "Cannot call constructor directly. Please call `await TestGraph.build()`"
+        "Cannot call constructor directly. Please call `await TestGraph.build()`",
       )
     }
     this.rtlGraph = graph
