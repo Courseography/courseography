@@ -59,7 +59,6 @@ export class Graph extends React.Component {
       showCourseModal: false,
       showGraphDropdown: false,
       selectedNodes: new Set(),
-      boolNodeToRelationship: {},
     }
 
     this.nodes = React.createRef()
@@ -144,7 +143,6 @@ export class Graph extends React.Component {
         var childrenObj = {}
         var outEdgesObj = {}
         var storedNodes = new Set()
-        const boolNodeToRelationship = {}
 
         var labelsList = data.texts.filter(function (entry) {
           return entry.rId.startsWith("tspan")
@@ -204,7 +202,7 @@ export class Graph extends React.Component {
           }
         })
 
-        const generateBoolRelationships = boolJSON => {
+        boolsList.forEach(boolJSON => {
           var parents = []
           var childs = []
           var outEdges = []
@@ -218,11 +216,10 @@ export class Graph extends React.Component {
               outEdges.push(edge.id_)
             }
           })
-          return { parents, childs, outEdges, inEdges }
-        }
-
-        boolsList.forEach(boolJSON => {
-          boolNodeToRelationship[boolJSON.id_] = generateBoolRelationships(boolJSON)
+          parentsObj[boolJSON.id_] = parents
+          childrenObj[boolJSON.id_] = childs
+          outEdgesObj[boolJSON.id_] = outEdges
+          inEdgesObj[boolJSON.id_] = inEdges
         })
 
         this.setState({
@@ -244,7 +241,6 @@ export class Graph extends React.Component {
             children: childrenObj,
             outEdges: outEdgesObj,
           },
-          boolNodeToRelationship: boolNodeToRelationship,
           selectedNodes: storedNodes,
         })
       })
@@ -923,7 +919,7 @@ export class Graph extends React.Component {
             ref={this.bools}
             boolsJSON={this.state.boolsJSON}
             edgesJSON={this.state.edgesJSON}
-            boolToInfo={this.state.boolNodeToRelationship}
+            connections={this.state.connections}
             svg={this}
           />
           <EdgeGroup svg={this} ref={this.edges} edgesJSON={this.state.edgesJSON} />
