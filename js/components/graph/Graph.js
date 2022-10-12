@@ -34,6 +34,7 @@ export class Graph extends React.Component {
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
+      edgeGroupStatus: {},
       highlightedNodes: [],
       infoboxTimeouts: [],
       dropdownTimeouts: [],
@@ -264,6 +265,13 @@ export class Graph extends React.Component {
         this.setState({ dropdownTimeouts: [] })
         break
     }
+  }
+
+  updateEdgeGroupStatus = (edgeID, state) => {
+    this.setState({
+      ...this.state.edgeGroupStatus,
+      [edgeID]: state,
+    })
   }
 
   nodeClick = event => {
@@ -901,7 +909,13 @@ export class Graph extends React.Component {
             edgesJSON={this.state.edgesJSON}
             svg={this}
           />
-          <EdgeGroup svg={this} ref={this.edges} edgesJSON={this.state.edgesJSON} />
+          <EdgeGroup
+            svg={this}
+            ref={this.edges}
+            edgesJSON={this.state.edgesJSON}
+            edgeGroupStatus={this.state.edgeGroupStatus}
+            updateEdgeGroupStatus={this.updateEdgeGroupStatus}
+          />
           <InfoBox
             onClick={this.infoBoxMouseClick}
             onMouseEnter={this.infoBoxMouseEnter}
