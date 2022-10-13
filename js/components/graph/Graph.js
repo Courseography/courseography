@@ -202,6 +202,26 @@ export class Graph extends React.Component {
           }
         })
 
+        boolsList.forEach(boolJSON => {
+          var parents = []
+          var childs = []
+          var outEdges = []
+          var inEdges = []
+          edgesList.forEach(edge => {
+            if (boolJSON.id_ === edge.target) {
+              parents.push(edge.source)
+              inEdges.push(edge.id_)
+            } else if (boolJSON.id_ === edge.source) {
+              childs.push(edge.target)
+              outEdges.push(edge.id_)
+            }
+          })
+          parentsObj[boolJSON.id_] = parents
+          childrenObj[boolJSON.id_] = childs
+          outEdgesObj[boolJSON.id_] = outEdges
+          inEdgesObj[boolJSON.id_] = inEdges
+        })
+
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -899,6 +919,7 @@ export class Graph extends React.Component {
             ref={this.bools}
             boolsJSON={this.state.boolsJSON}
             edgesJSON={this.state.edgesJSON}
+            connections={this.state.connections}
             svg={this}
           />
           <EdgeGroup svg={this} ref={this.edges} edgesJSON={this.state.edgesJSON} />
