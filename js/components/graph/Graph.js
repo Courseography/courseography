@@ -8,7 +8,6 @@ import Button from "./Button"
 import EdgeGroup from "./EdgeGroup"
 import InfoBox from "./InfoBox"
 import NodeGroup from "./NodeGroup"
-import RegionGroup from "./RegionGroup"
 import GraphDropdown from "./GraphDropdown"
 import Sidebar from "./Sidebar"
 import { parseAnd } from "../../util/util.js"
@@ -729,6 +728,42 @@ export class Graph extends React.Component {
     }
   }
 
+  renderRegions = () => {
+    this.state.regionsJSON.map(function (entry, value) {
+      var pathAttrs = { d: "M" }
+      entry.points.forEach(function (x) {
+        pathAttrs["d"] += x[0] + "," + x[1] + " "
+      })
+
+      var pathStyle = { fill: entry.fill }
+      return <path {...pathAttrs} key={value} className="region" style={pathStyle} />
+    })
+  }
+
+  renderLabels = () => {
+    this.state.labelsJSON.map(function (entry, value) {
+      var textAttrs = {
+        x: entry.pos[0],
+        y: entry.pos[1],
+      }
+
+      var textStyle = { fill: entry.fill }
+
+      return (
+        <text
+          {...textAttrs}
+          key={value}
+          style={textStyle}
+          className="region-label"
+          textAnchor={entry["text-anchor"]}
+        >
+          {entry["text"]}
+        </text>
+      )
+    })
+
+  }
+
   render() {
     let containerWidth = 0
     let containerHeight = 0
@@ -896,10 +931,10 @@ export class Graph extends React.Component {
             </feMerge>
           </filter>
           {this.renderArrowHead()}
-          <RegionGroup
-            regionsJSON={this.state.regionsJSON}
-            labelsJSON={this.state.labelsJSON}
-          />
+          <g id="regions">
+            {this.renderRegions()}
+            {this.renderLabels()}
+          </g>
           <NodeGroup
             ref={this.nodes}
             nodeClick={this.nodeClick}
