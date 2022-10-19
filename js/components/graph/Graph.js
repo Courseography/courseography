@@ -728,21 +728,20 @@ export class Graph extends React.Component {
     }
   }
 
-  renderRegions = (regionsJSON) => {
-    let new_regionsJSON = regionsJSON.map(function (entry, value) {
+  renderRegions = regionsJSON => {
+    return regionsJSON.map(function (entry, value) {
       var pathAttrs = { d: "M" }
       entry.points.forEach(function (x) {
         pathAttrs["d"] += x[0] + "," + x[1] + " "
       })
 
       var pathStyle = { fill: entry.fill }
-      return (<path {...pathAttrs} key={value} className="region" style={pathStyle} />)
+      return <path {...pathAttrs} key={value} className="region" style={pathStyle} />
     })
-    return new_regionsJSON;
   }
 
-  renderLabels = (labelsJSON) => {
-    let new_labelsJSON = labelsJSON.map(function (entry, value) {
+  renderLabels = labelsJSON => {
+    return labelsJSON.map(function (entry, value) {
       var textAttrs = {
         x: entry.pos[0],
         y: entry.pos[1],
@@ -762,11 +761,9 @@ export class Graph extends React.Component {
         </text>
       )
     })
-    return new_labelsJSON;
-
   }
-  renderRegionsLabels(regionsJSON, labelsJSON){
-    return(
+  renderRegionsLabels(regionsJSON, labelsJSON) {
+    return (
       <g id="regions">
         {this.renderRegions(regionsJSON)}
         {this.renderLabels(labelsJSON)}

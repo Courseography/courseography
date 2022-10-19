@@ -1,8 +1,7 @@
 import TestGraph from "./TestGraph"
 import { fireEvent } from "@testing-library/react"
 import { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT } from "../Graph"
-import {Graph} from "../Graph"
-
+import { Graph } from "../Graph"
 
 describe("Graph Navigation", () => {
   it("Should pan right when the right arrow key is pressed", async () => {
@@ -145,40 +144,35 @@ describe("Graph Navigation", () => {
 
 describe("Graph rendering RegionGroup", () => {
   it("should match shallow snapshot", () => {
-    
-    const props = {
-      regionsJSON: [
-        {
-          graph: 1,
-          points: [
-            [17.386348, 281.07376883],
-            [17.386348, 14.41568908],
-            [316.385978, 14.41576883],
-            [316.386348, 281.07376883],
-          ],
-          isRegion: true,
-          stroke: "",
-          fill: "#6276b9",
-          id_: "p83",
-          source: "",
-          target: "",
-        },
-      ],
-      labelsJSON: [
-        {
-          graph: 1,
-          rId: "tspan4346-9",
-          text: "Systems",
-          pos: [1088.1677413999998, 201.36453113000002],
-          fill: "#000000",
-          align: "begin",
-        },
-      ],
-    }
-  
+    const regionsJSON = [
+      {
+        graph: 1,
+        points: [
+          [17.386348, 281.07376883],
+          [17.386348, 14.41568908],
+          [316.385978, 14.41576883],
+          [316.386348, 281.07376883],
+        ],
+        isRegion: true,
+        stroke: "",
+        fill: "#6276b9",
+        id_: "p83",
+        source: "",
+        target: "",
+      },
+    ]
+    const labelsJSON = [
+      {
+        graph: 1,
+        rId: "tspan4346-9",
+        text: "Systems",
+        pos: [1088.1677413999998, 201.36453113000002],
+        fill: "#000000",
+        align: "begin",
+      },
+    ]
+
     const wrapper = new Graph({})
-    
-    expect(wrapper.renderRegionsLabels(props["regionsJSON"], props["labelsJSON"])).toMatchSnapshot()
-    
+    expect(wrapper.renderRegionsLabels(regionsJSON, labelsJSON)).toMatchSnapshot()
   })
 })
