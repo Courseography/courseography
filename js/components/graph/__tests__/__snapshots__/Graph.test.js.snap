@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RegionGroup should match shallow snapshot 1`] = `
+exports[`Graph rendering RegionGroup should match shallow snapshot 1`] = `
 <g
   id="regions"
 >

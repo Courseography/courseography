@@ -1,9 +1,8 @@
-import React from "react"
 import TestGraph from "./TestGraph"
 import { fireEvent } from "@testing-library/react"
 import { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT } from "../Graph"
-import Graph from "../Graph"
-import { shallow } from "enzyme"
+import {Graph} from "../Graph"
+
 
 describe("Graph Navigation", () => {
   it("Should pan right when the right arrow key is pressed", async () => {
@@ -145,7 +144,7 @@ describe("Graph Navigation", () => {
 })
 
 describe("Graph rendering RegionGroup", () => {
-  it("should match shallow snapshot", async() => {
+  it("should match shallow snapshot", () => {
     
     const props = {
       regionsJSON: [
@@ -176,9 +175,10 @@ describe("Graph rendering RegionGroup", () => {
         },
       ],
     }
-    // const graph = await TestGraph.build()
-    // let wrapper = graph.getByTestId("regions")
-   
-    // expect(wrapper).toMatchSnapshot()
+  
+    const wrapper = new Graph({})
+    
+    expect(wrapper.renderRegionsLabels(props["regionsJSON"], props["labelsJSON"])).toMatchSnapshot()
+    
   })
 })

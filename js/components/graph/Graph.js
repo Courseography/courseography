@@ -728,8 +728,8 @@ export class Graph extends React.Component {
     }
   }
 
-  renderRegions = () => {
-    this.state.regionsJSON.map(function (entry, value) {
+  renderRegions = (regionsJSON) => {
+    let new_regionsJSON = regionsJSON.map(function (entry, value) {
       var pathAttrs = { d: "M" }
       entry.points.forEach(function (x) {
         pathAttrs["d"] += x[0] + "," + x[1] + " "
@@ -738,10 +738,11 @@ export class Graph extends React.Component {
       var pathStyle = { fill: entry.fill }
       return <path {...pathAttrs} key={value} className="region" style={pathStyle} />
     })
+    return new_regionsJSON;
   }
 
-  renderLabels = () => {
-    this.state.labelsJSON.map(function (entry, value) {
+  renderLabels = (labelsJSON) => {
+    let new_labelsJSON = labelsJSON.map(function (entry, value) {
       var textAttrs = {
         x: entry.pos[0],
         y: entry.pos[1],
@@ -761,7 +762,17 @@ export class Graph extends React.Component {
         </text>
       )
     })
+    return new_labelsJSON;
 
+  }
+  renderRegionsLabels(regionsJSON, labelsJSON){
+    console.log(regionsJSON)
+    return(
+      <g id="regions">
+        {this.renderRegions(regionsJSON)}
+        {this.renderLabels(labelsJSON)}
+      </g>
+    )
   }
 
   render() {
@@ -931,10 +942,7 @@ export class Graph extends React.Component {
             </feMerge>
           </filter>
           {this.renderArrowHead()}
-          <g id="regions">
-            {this.renderRegions()}
-            {this.renderLabels()}
-          </g>
+          {this.renderRegionsLabels(this.state.regionsJSON, this.state.labelsJSON)}
           <NodeGroup
             ref={this.nodes}
             nodeClick={this.nodeClick}
