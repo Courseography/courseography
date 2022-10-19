@@ -736,7 +736,7 @@ export class Graph extends React.Component {
       })
 
       var pathStyle = { fill: entry.fill }
-      return <path {...pathAttrs} key={value} className="region" style={pathStyle} />
+      return (<path {...pathAttrs} key={value} className="region" style={pathStyle} />)
     })
     return new_regionsJSON;
   }
@@ -766,7 +766,6 @@ export class Graph extends React.Component {
 
   }
   renderRegionsLabels(regionsJSON, labelsJSON){
-    console.log(regionsJSON)
     return(
       <g id="regions">
         {this.renderRegions(regionsJSON)}
