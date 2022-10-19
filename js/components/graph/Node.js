@@ -158,7 +158,7 @@ export default class Node extends React.Component {
           }
           var sourceNode = refLookUp(currentEdge.props.source, svg)
           if (!sourceNode.isSelected()) {
-            currentEdge.setState({ status: "missing" })
+            currentEdge.updateStatus("missing")
           }
         })
         this.props.parents.forEach(node => {
@@ -200,7 +200,7 @@ export default class Node extends React.Component {
     })
     this.props.inEdges.forEach(function (edge) {
       var currentEdge = svg.edges.current[edge]
-      if (currentEdge.state.status === "missing") {
+      if (currentEdge.props.status === "missing") {
         currentEdge.updateStatus()
       }
     })

@@ -12,6 +12,7 @@ import RegionGroup from "./RegionGroup"
 import GraphDropdown from "./GraphDropdown"
 import Sidebar from "./Sidebar"
 import { parseAnd } from "../../util/util.js"
+import { refLookUp } from "../common/utils"
 
 const ZOOM_INCREMENT = 0.01
 const KEYBOARD_PANNING_INCREMENT = 10
@@ -34,6 +35,7 @@ export class Graph extends React.Component {
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
+      edgeMissingStatus: {},
       edgeStatus: {},
       highlightedNodes: [],
       infoboxTimeouts: [],
@@ -222,6 +224,10 @@ export class Graph extends React.Component {
           outEdgesObj[boolJSON.id_] = outEdges
           inEdgesObj[boolJSON.id_] = inEdges
         })
+        const edgeStatus = edgesList.reduce(
+          (acc, curr) => ((acc[curr.id_] = "inactive"), acc),
+          {}
+        )
 
         this.setState({
           labelsJSON: labelsList,
@@ -236,6 +242,7 @@ export class Graph extends React.Component {
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
           graphName: graphName,
+          edgeStatus: edgeStatus,
           connections: {
             parents: parentsObj,
             inEdges: inEdgesObj,
@@ -287,12 +294,40 @@ export class Graph extends React.Component {
     }
   }
 
-  updateEdgeStatus = (edgeID, status) => {
+  updateEdgeMissingStatus = (edgeID, status) => {
     this.setState(state => {
-      const temp = { ...state.edgeStatus }
+      const temp = { ...state.edgeMissingStatus }
       temp[edgeID] = status
-      return { edgeStatus: temp }
+      return { edgeMissingStatus: temp }
     })
+  }
+
+  /**
+   * Update the status of the Edge, this will take in a source, a target so it can be looked up
+   * We will loop through the edgesJSON and find use the source, target directly from edgeJSON
+   * the state will be stored and updated in edgeGroup object.
+   */
+  updateEdgeStatus = (edgeID, source, target) => {
+    console.log("called")
+    var source = refLookUp(source, this)
+    var target = refLookUp(target, this)
+    let status
+    if (source === undefined || target === undefined) {
+      return
+    }
+    // console.log(source.state.status)
+    if (!source.isSelected() && target.state.status === "missing") {
+      status = "missing"
+    } else if (!source.isSelected()) {
+      status = "inactive"
+    } else if (!target.isSelected()) {
+      status = "takeable"
+    } else {
+      status = "active"
+    }
+    const temp = { ...this.state.edgeStatus }
+    temp[edgeID] = status
+    this.setState({ edgeStatus: temp })
   }
 
   nodeClick = event => {
@@ -935,7 +970,9 @@ export class Graph extends React.Component {
             svg={this}
             ref={this.edges}
             edgesJSON={this.state.edgesJSON}
+            edgeMissingStatus={this.state.edgeMissingStatus}
             edgeStatus={this.state.edgeStatus}
+            updateEdgeMissingStatus={this.updateEdgeMissingStatus}
             updateEdgeStatus={this.updateEdgeStatus}
           />
           <InfoBox

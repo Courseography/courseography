@@ -19,18 +19,18 @@ export default class EdgeGroup extends React.Component {
    * @param {string} edgeID
    * @param {string} state
    */
-  updateEdgeStatus = (edgeID, state) => {
+  updateEdgeMissingStatus = (edgeID, state) => {
     var isMissing = state === "missing"
-    this.props.updateEdgeStatus(edgeID, isMissing)
+    this.props.updateEdgeMissingStatus(edgeID, isMissing)
   }
 
   /**
    * After each render after the initial, update the status of each Edge
    */
   componentDidUpdate() {
-    this.props.edgesJSON.forEach(edgeJSON => {
-      this[edgeJSON.id_].updateStatus()
-    })
+    // this.props.edgesJSON.forEach(edgeJSON => {
+    //   this[edgeJSON.id_].updateStatus()
+    // })
   }
 
   /**
@@ -67,7 +67,10 @@ export default class EdgeGroup extends React.Component {
         points={edgeJSON.points}
         svg={this.props.svg}
         edgeID={edgeJSON.id_}
-        updateEdgeStatus={this.updateEdgeStatus}
+        edgeStatus={this.props.edgeStatus[edgeJSON.id_]}
+        updateEdgeMissingStatus={this.updateEdgeMissingStatus}
+        updateEdgeStatus={this.props.updateEdgeStatus}
+        // edgeStatus={this.props.edgeStatus[edgeJSON.id_]}
       />
     )
   }
@@ -108,6 +111,8 @@ EdgeGroup.propTypes = {
   edgesJSON: PropTypes.array,
   /**The overarching graph object */
   svg: PropTypes.object,
+  edgeMissingStatus: PropTypes.object,
   edgeStatus: PropTypes.object,
+  updateEdgeMissingStatus: PropTypes.func,
   updateEdgeStatus: PropTypes.func,
 }
