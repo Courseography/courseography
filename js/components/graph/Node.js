@@ -122,7 +122,10 @@ export default class Node extends React.Component {
           var currentNode = refLookUp(node, svg)
           if (currentNode !== undefined && currentNode.props.className !== "bool") {
             currentNode.updateNode()
-          }else if(currentNode !== undefined && currentNode.props.className === "bool"){
+          } else if (
+            currentNode !== undefined &&
+            currentNode.props.className === "bool"
+          ) {
             currentNode.props.updateNode(currentNode)
           }
         })
@@ -168,7 +171,10 @@ export default class Node extends React.Component {
             var currentNode = refLookUp(node, svg)
             if (currentNode !== undefined && currentNode.props.className !== "bool") {
               currentNode.focusPrereqs()
-            }else if(currentNode !== undefined && currentNode.props.className === "bool"){
+            } else if (
+              currentNode !== undefined &&
+              currentNode.props.className === "bool"
+            ) {
               currentNode.props.focusPrereqs(currentNode)
             }
           } else {

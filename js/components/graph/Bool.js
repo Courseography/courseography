@@ -91,5 +91,5 @@ Bool.propTypes = {
   outEdges: PropTypes.array,
   parents: PropTypes.array,
   svg: PropTypes.object,
-  status: PropTypes.string
+  status: PropTypes.string,
 }

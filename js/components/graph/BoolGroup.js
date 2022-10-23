@@ -3,7 +3,7 @@ import React from "react"
 import PropTypes from "prop-types"
 
 /** Class representing the group of Bools */
-export default class BoolGroup extends React.Component {  
+export default class BoolGroup extends React.Component {
   /**
    * For each entry in boolsJSON update the id with the svg
    */

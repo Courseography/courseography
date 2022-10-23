@@ -730,22 +730,22 @@ export class Graph extends React.Component {
     }
   }
 
-    /**
-  * Update the Bool's state at any moment given the prereqs and current state.
-  */
-     updateNode = (boolNode) => {
-  
-      var svg = boolNode.props.svg
-      var newState = boolNode.arePrereqsSatisfied() ? "active" : "inactive"
-      var boolId = boolNode.props.JSON.id_
-      
-      this.setState(prevState => {
+  /**
+   * Update the Bool's state at any moment given the prereqs and current state.
+   */
+  updateNode = boolNode => {
+    var svg = boolNode.props.svg
+    var newState = boolNode.arePrereqsSatisfied() ? "active" : "inactive"
+    var boolId = boolNode.props.JSON.id_
+
+    this.setState(
+      prevState => {
         let new_boolsJSON = prevState.boolsJSON
         let node = new_boolsJSON.find(element => element.id_ === boolId)
         new_boolsJSON[new_boolsJSON.indexOf(node)].status = newState
-        return {new_boolsJSON}
-      }, function(){
-        
+        return { new_boolsJSON }
+      },
+      function () {
         localStorage.setItem(boolId, newState)
         boolNode.props.childs.forEach(function (node) {
           var currentNode = refLookUp(node, svg)
@@ -753,40 +753,42 @@ export class Graph extends React.Component {
         })
         var allEdges = boolNode.props.outEdges.concat(boolNode.props.inEdges)
         allEdges.forEach(function (edge) {
-        var currentEdge = svg.edges.current[edge]
-        currentEdge.updateStatus()
+          var currentEdge = svg.edges.current[edge]
+          currentEdge.updateStatus()
         })
-      })
-    }
-
-
+      }
+    )
+  }
 
   /**
    * Cross check with the selected focus prerequisites.
    */
-  focusPrereqs = (boolNode) => {
+  focusPrereqs = boolNode => {
     var svg = boolNode.props.svg
     var boolId = boolNode.props.JSON.id_
     // Check if there are any missing prerequisites.
     if (boolNode.props.JSON.status !== "active") {
-      this.setState(prevState => {
-        let new_boolsJSON = prevState.boolsJSON
-        let node = new_boolsJSON.find(element => element.id_ === boolId)
-        new_boolsJSON[new_boolsJSON.indexOf(node)].status = "missing"
-        return {new_boolsJSON}
-      }, () => {
-        boolNode.props.inEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge]
-          var sourceNode = refLookUp(currentEdge.props.source, svg)
-          if (!sourceNode.isSelected()) {
-            currentEdge.setState({ status: "missing" })
-          }
-        })
-        boolNode.props.parents.forEach(node => {
-          var currentNode = refLookUp(node, svg)
-          currentNode.focusPrereqs()
-        })
-      })
+      this.setState(
+        prevState => {
+          let new_boolsJSON = prevState.boolsJSON
+          let node = new_boolsJSON.find(element => element.id_ === boolId)
+          new_boolsJSON[new_boolsJSON.indexOf(node)].status = "missing"
+          return { new_boolsJSON }
+        },
+        () => {
+          boolNode.props.inEdges.forEach(edge => {
+            var currentEdge = svg.edges.current[edge]
+            var sourceNode = refLookUp(currentEdge.props.source, svg)
+            if (!sourceNode.isSelected()) {
+              currentEdge.setState({ status: "missing" })
+            }
+          })
+          boolNode.props.parents.forEach(node => {
+            var currentNode = refLookUp(node, svg)
+            currentNode.focusPrereqs()
+          })
+        }
+      )
     }
   }
   renderRegions = regionsJSON => {
@@ -910,7 +912,7 @@ export class Graph extends React.Component {
     if (this.state.highlightedNodes.length > 0) {
       reactGraphClass += " highlight-nodes"
     }
- 
+
     return (
       <div
         id="react-graph"
