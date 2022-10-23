@@ -3,13 +3,13 @@ import React from "react"
 import PropTypes from "prop-types"
 
 /** Class representing the group of Bools */
-export default class BoolGroup extends React.Component {
+export default class BoolGroup extends React.Component {  
   /**
    * For each entry in boolsJSON update the id with the svg
    */
   componentDidMount() {
     this.props.boolsJSON.forEach(boolJSON => {
-      this[boolJSON.id_].updateNode(this.props.svg)
+      this.props.updateNode(this[boolJSON.id_])
     })
   }
 
@@ -18,8 +18,7 @@ export default class BoolGroup extends React.Component {
    */
   reset = () => {
     this.props.boolsJSON.forEach(boolJSON => {
-      var bool = this[boolJSON.id_]
-      bool.setState({ status: "inactive" })
+      this[boolJSON.status] = "inactive"
     })
   }
 
@@ -49,6 +48,8 @@ export default class BoolGroup extends React.Component {
         outEdges={outEdges[boolJSON.id_]}
         logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || "and"}
         svg={this.props.svg}
+        updateNode={this.props.updateNode}
+        focusPrereqs={this.props.focusPrereqs}
       />
     )
   }

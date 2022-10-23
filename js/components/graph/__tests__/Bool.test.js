@@ -39,6 +39,7 @@ describe("AND Bool", () => {
         ],
         type_: "BoolNode",
         width: 19.7600002,
+        status: "inactive"
       },
       childs: ["csc369", "csc358", "csc458", "csc385", "csc367"],
       className: "bool",
@@ -117,6 +118,7 @@ describe("OR Bool", () => {
         ],
         type_: "BoolNode",
         width: 19.7600002,
+        status: "inactive"
       },
       childs: ["csc369", "csc358", "csc458", "csc385", "csc367"],
       className: "bool",
