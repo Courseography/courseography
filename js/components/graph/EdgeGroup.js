@@ -25,22 +25,14 @@ export default class EdgeGroup extends React.Component {
   }
 
   /**
-   * After each render after the initial, update the status of each Edge
-   */
-  componentDidUpdate() {
-    // this.props.edgesJSON.forEach(edgeJSON => {
-    //   this[edgeJSON.id_].updateStatus()
-    // })
-  }
-
-  /**
    * Set all Edges to the inactive status
    */
   reset = () => {
     this.props.edgesJSON.forEach(edgeJSON => {
-      this[edgeJSON.id_].setState({ status: "inactive" })
+      this[edgeJSON.id_].updateStatus("inactive")
     })
   }
+
   /**
    * This function is used as a callback ref. See {@link:https://reactjs.org/docs/refs-and-the-dom.html#callback-refs}
    * @param {JSON} edgeJSON Represents a single edge
@@ -67,10 +59,8 @@ export default class EdgeGroup extends React.Component {
         points={edgeJSON.points}
         svg={this.props.svg}
         edgeID={edgeJSON.id_}
-        edgeStatus={this.props.edgeStatus[edgeJSON.id_]}
-        updateEdgeMissingStatus={this.updateEdgeMissingStatus}
+        edgeStatus={this.props.edgesStatus[edgeJSON.id_]}
         updateEdgeStatus={this.props.updateEdgeStatus}
-        // edgeStatus={this.props.edgeStatus[edgeJSON.id_]}
       />
     )
   }
@@ -112,7 +102,7 @@ EdgeGroup.propTypes = {
   /**The overarching graph object */
   svg: PropTypes.object,
   edgeMissingStatus: PropTypes.object,
-  edgeStatus: PropTypes.object,
   updateEdgeMissingStatus: PropTypes.func,
+  edgesStatus: PropTypes.object,
   updateEdgeStatus: PropTypes.func,
 }
