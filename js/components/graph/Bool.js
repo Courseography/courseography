@@ -92,5 +92,5 @@ Bool.propTypes = {
   parents: PropTypes.array,
   svg: PropTypes.object,
   updateNode: PropTypes.func,
-  focusPrereqs: PropTypes.func
+  focusPrereqs: PropTypes.func,
 }

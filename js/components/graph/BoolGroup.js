@@ -65,5 +65,5 @@ BoolGroup.propTypes = {
   connections: PropTypes.object,
   svg: PropTypes.object,
   updateNode: PropTypes.func,
-  focusPrereqs: PropTypes.func
+  focusPrereqs: PropTypes.func,
 }
