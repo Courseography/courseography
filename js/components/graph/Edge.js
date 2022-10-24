@@ -1,6 +1,5 @@
 import PropTypes from "prop-types"
 import React from "react"
-import { refLookUp } from "../common/utils"
 
 /**
  * Class representing an edge from a Node/Bool to a Node/Bool
@@ -8,51 +7,15 @@ import { refLookUp } from "../common/utils"
 export default class Edge extends React.Component {
   constructor(props) {
     super(props)
-    // move this into graph
-    // this.state = { status: "inactive" }
   }
 
-  /**
-   * Update the status of the Edge, based on the status of the Node/Bool it points from/to
-   *
-   */
-  // updateStatus = () => {
-  //   var source = refLookUp(this.props.source, this.props.svg)
-  //   var target = refLookUp(this.props.target, this.props.svg)
-  //   console.log(source.state.status)
-  //   if (source === undefined || target === undefined) {
-  //     return
-  //   }
-  //   if (!source.isSelected() && target.state.status === "missing") {
-  //     this.setState({ status: "missing" })
-  //   } else if (!source.isSelected()) {
-  //     this.setState({ status: "inactive" })
-  //   } else if (!target.isSelected()) {
-  //     this.setState({ status: "takeable" })
-  //   } else {
-  //     this.setState({ status: "active" })
-  //   }
-  // }
-
-  updateStatus({ status }) {
+  updateStatus(status) {
     this.props.updateEdgeStatus(
-      this.props.edgeID,
       this.props.source,
       this.props.target,
-      status
+      status,
+      this.props.edgeID
     )
-  }
-  /**
-   *
-    After each render beyond the initial, check if the edge's state has changed. If so,
-    notify the state of EdgeGroup with updateEdgeMissingStatus.
-   * @param {*} prevProps
-   * @param {Object} prevState The state of this object from the previous render
-   */
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.status !== prevProps.status) {
-      this.props.updateEdgeMissingStatus(this.props.edgeID, this.props.edgeStatus)
-    }
   }
 
   render() {
@@ -84,7 +47,6 @@ Edge.propTypes = {
   /** Node that the edge is pointing to */
   target: PropTypes.string,
   /** function called when the edge's state has changed */
-  updateEdgeMissingStatus: PropTypes.func,
-  updateEdgeStatus: PropTypes.func,
   edgeStatus: PropTypes.string,
+  updateEdgeStatus: PropTypes.func,
 }
