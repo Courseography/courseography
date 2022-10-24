@@ -11,7 +11,7 @@ import fetchMock from "fetch-mock"
 fetchMock.get("http://localhost/get-json-data?graphName=Computer+Science", testData)
 fetchMock.get(
   "http://localhost/get-json-data?graphName=%28unofficial%29+Statistics",
-  statisticsTestData
+  statisticsTestData,
 )
 fetchMock.get("http://localhost/course?name=aaa100H1", aaa100CourseInfo)
 fetchMock.get("/course?name=aaa100H1", aaa100CourseInfo)

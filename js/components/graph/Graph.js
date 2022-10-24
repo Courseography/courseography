@@ -125,7 +125,7 @@ export class Graph extends React.Component {
             url: headers.url,
           }
           throw new Error(
-            "When fetching from the url with info " + JSON.stringify(headerInfo)
+            "When fetching from the url with info " + JSON.stringify(headerInfo),
           )
         }
         return headers.json() // only received headers, waiting for data
@@ -267,7 +267,7 @@ export class Graph extends React.Component {
       this.highlightFocuses([])
     } else if (this.props.currFocus !== prevProps.currFocus) {
       getPost(this.props.currFocus).then(focusData =>
-        this.highlightFocuses(focusData.courseList)
+        this.highlightFocuses(focusData.courseList),
       )
     }
   }
@@ -1037,7 +1037,7 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
 export var findRelationship = (course, nodesJSON) => {
   var nodes = nodesJSON
   var node = nodes.find(
-    n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course))
+    n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course)),
   )
   return node
 }
