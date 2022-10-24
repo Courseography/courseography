@@ -64,4 +64,6 @@ BoolGroup.propTypes = {
   edgesJSON: PropTypes.array,
   connections: PropTypes.object,
   svg: PropTypes.object,
+  updateNode: PropTypes.func,
+  focusPrereqs: PropTypes.func
 }
