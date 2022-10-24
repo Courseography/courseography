@@ -74,7 +74,7 @@ export default class Bool extends React.Component {
           var currentEdge = svg.edges.current[edge]
           var sourceNode = refLookUp(currentEdge.props.source, svg)
           if (!sourceNode.isSelected()) {
-            currentEdge.setState({ status: "missing" })
+            currentEdge.updateStatus("missing")
           }
         })
         this.props.parents.forEach(node => {

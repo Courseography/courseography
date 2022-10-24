@@ -104,18 +104,26 @@ export default class Node extends React.Component {
 
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
+    const svg = this.props.svg
+    const allEdges = this.props.outEdges.concat(this.props.inEdges)
     if (
       ["active", "overridden"].indexOf(newState) >= 0 ===
         ["active", "overridden"].indexOf(this.state.status) >= 0 &&
       this.state.status !== "missing"
     ) {
       localStorage.setItem(nodeId, newState)
-      this.setState({ status: newState })
+      this.setState({ status: newState }, () => {
+        allEdges.forEach(edge => {
+          var currentEdge = svg.edges.current[edge]
+          if (currentEdge !== undefined) {
+            currentEdge.updateStatus()
+          }
+        })
+      })
       return
     }
 
     if (recursive === undefined || recursive) {
-      var svg = this.props.svg
       this.setState({ status: newState }, function () {
         localStorage.setItem(nodeId, newState)
         this.props.childs.forEach(function (node) {
@@ -124,7 +132,6 @@ export default class Node extends React.Component {
             currentNode.updateNode()
           }
         })
-        var allEdges = this.props.outEdges.concat(this.props.inEdges)
         allEdges.forEach(edge => {
           var currentEdge = svg.edges.current[edge]
           if (currentEdge !== undefined) {
@@ -133,7 +140,14 @@ export default class Node extends React.Component {
         })
       })
     } else {
-      this.setState({ status: newState })
+      this.setState({ status: newState }, () => {
+        allEdges.forEach(edge => {
+          var currentEdge = svg.edges.current[edge]
+          if (currentEdge !== undefined) {
+            currentEdge.updateStatus()
+          }
+        })
+      })
       localStorage.setItem(nodeId, newState)
     }
   }
