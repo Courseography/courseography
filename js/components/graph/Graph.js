@@ -30,6 +30,7 @@ export class Graph extends React.Component {
       labelsJSON: [],
       regionsJSON: [],
       nodesJSON: [],
+      nodesStates: {},
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
@@ -406,6 +407,100 @@ export class Graph extends React.Component {
         newNodesJSON.push(currentNode)
         this.setState({ nodesJSON: newNodesJSON })
       }
+    }
+  }
+
+  isSelected = node => {
+    if (node.props.hybrid) {
+      return node.props.status === "active"
+    } else {
+      return node.props.selected
+    }
+  }
+
+  isAllTrue = element => {
+    if (typeof element === "string") {
+      if (this.nodes.current[element] !== undefined) {
+        return this.nodes.current[element].isSelected()
+      } else if (this.bools.current[element] !== undefined) {
+        return this.bools.current[element].isSelected()
+      } else {
+        return false
+      }
+    } else {
+      return element.some(isAllTrue)
+    }
+  }
+
+  arePrereqSatisfied = node => {
+    return node.props.parents.every(this.isAllTrue)
+  }
+
+  updateNode = (recursive, node) => {
+    let newState
+    if (this.arePrereqsSatisfied(node)) {
+      if (this.isSelected(node) || node.props.hybrid) {
+        newState = "active"
+      } else {
+        newState = "takeable"
+      }
+    } else {
+      if (this.isSelected(node) && !node.props.hybrid) {
+        newState = "overridden"
+      } else {
+        newState = "inactive"
+      }
+    }
+    const nodeId = node.JSON.id_
+
+    // Updating the children will be unnecessary if the selected state of the current node has not
+    // changed, and the original state was not 'missing'
+    if (
+      ["active", "overridden"].indexOf(newState) >= 0 ===
+        ["active", "overridden"].indexOf(this.state.status) >= 0 &&
+      this.state.nodesStates[node.JSON.id_].status !== "missing"
+    ) {
+      localStorage.setItem(nodeId, newState)
+      this.setState(state => {
+        const nodesStates = { ...state.nodesStates }
+        nodesStates[node.JSON.id_].status = newState
+        return { nodesStates: nodesStates }
+      })
+      return
+    }
+
+    if (recursive === undefined || recursive) {
+      this.setState(
+        state => {
+          const nodesStates = { ...state.nodesStates }
+          nodesStates[node.JSON.id_].status = newState
+          return { nodesStates: nodesStates }
+        },
+        () => {
+          localStorage.setItem(nodeId, newState)
+          node.props.childs.forEach(function (node) {
+            var currentNode = refLookUp(node, this)
+            if (currentNode !== undefined) {
+              currentNode.updateNode()
+            }
+          })
+          var allEdges = node.props.outEdges.concat(node.props.inEdges)
+          allEdges.forEach(edge => {
+            var currentEdge = node.edges.current[edge]
+            if (currentEdge !== undefined) {
+              currentEdge.updateStatus()
+            }
+          })
+        }
+      )
+    } else {
+      this.setState(state => {
+        const nodesStates = { ...state.nodesStates }
+        nodesStates[node.JSON.id_].status = newState
+        return { nodesStates: nodesStates }
+      })
+
+      localStorage.setItem(nodeId, newState)
     }
   }
 
