@@ -7,10 +7,6 @@ import Edge from "./Edge"
 export default class EdgeGroup extends React.Component {
   constructor(props) {
     super(props)
-    // EdgeGroup's state is used to keep track of the edgeIDs of
-    // edges that are missing. Void is just a placeholder state so
-    // we can declare an initial state; it does nothing.
-    this.state = {}
   }
 
   /**
@@ -71,7 +67,7 @@ export default class EdgeGroup extends React.Component {
     // are last in the list. Then render based on that list.
     var edges = this.props.edgesJSON
     var edgesCopy = [...edges]
-    var state = this.state
+    var state = this.props.edgesStatus
     edgesCopy.sort((a, b) => {
       // If an edge is missing, its edgeID should be in EdgeGroup's
       // state and its value should be true.
