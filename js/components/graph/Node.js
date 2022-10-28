@@ -1,4 +1,4 @@
-import PropTypes from "prop-types"
+import PropTypes, { node } from "prop-types"
 import React from "react"
 import { refLookUp } from "../common/utils"
 
@@ -45,11 +45,13 @@ export default class Node extends React.Component {
    * @return {boolean}
    */
   isSelected = () => {
-    if (this.props.hybrid) {
-      return this.state.status === "active"
-    } else {
-      return this.state.selected
-    }
+    const { isSelected } = this.props.nodeMethods
+    return isSelected(this)
+    // if (this.props.hybrid) {
+    //   return this.state.status === "active"
+    // } else {
+    //   return this.state.selected
+    // }
   }
 
   /**
@@ -57,27 +59,8 @@ export default class Node extends React.Component {
    * @return {boolean}
    */
   arePrereqsSatisfied = () => {
-    var svg = this.props.svg
-    /**
-     * Recursively checks that preceding nodes are selected
-     * @param  {string|Array} element Node(s)/other on the graph
-     * @return {boolean}
-     */
-    function isAllTrue(element) {
-      if (typeof element === "string") {
-        if (svg.nodes.current[element] !== undefined) {
-          return svg.nodes.current[element].isSelected()
-        } else if (svg.bools.current[element] !== undefined) {
-          return svg.bools.current[element].isSelected()
-        } else {
-          return false
-        }
-      } else {
-        return element.some(isAllTrue)
-      }
-    }
-
-    return this.props.parents.every(isAllTrue)
+    const { arePrereqSatisfied } = this.props.nodeMethods
+    return arePrereqSatisfied(this)
   }
 
   /**
@@ -85,57 +68,59 @@ export default class Node extends React.Component {
    * @param  {boolean} recursive whether we should recurse on its children
    */
   updateNode = recursive => {
-    var newState
-    if (this.arePrereqsSatisfied()) {
-      if (this.isSelected() || this.props.hybrid) {
-        newState = "active"
-      } else {
-        newState = "takeable"
-      }
-    } else {
-      if (this.isSelected() && !this.props.hybrid) {
-        newState = "overridden"
-      } else {
-        newState = "inactive"
-      }
-    }
+    // var newState
+    // if (this.arePrereqsSatisfied()) {
+    //   if (this.isSelected() || this.props.hybrid) {
+    //     newState = "active"
+    //   } else {
+    //     newState = "takeable"
+    //   }
+    // } else {
+    //   if (this.isSelected() && !this.props.hybrid) {
+    //     newState = "overridden"
+    //   } else {
+    //     newState = "inactive"
+    //   }
+    // }
 
-    var nodeId = this.props.JSON.id_
+    // var nodeId = this.props.JSON.id_
 
-    // Updating the children will be unnecessary if the selected state of the current node has not
-    // changed, and the original state was not 'missing'
-    if (
-      ["active", "overridden"].indexOf(newState) >= 0 ===
-        ["active", "overridden"].indexOf(this.state.status) >= 0 &&
-      this.state.status !== "missing"
-    ) {
-      localStorage.setItem(nodeId, newState)
-      this.setState({ status: newState })
-      return
-    }
+    // // Updating the children will be unnecessary if the selected state of the current node has not
+    // // changed, and the original state was not 'missing'
+    // if (
+    //   ["active", "overridden"].indexOf(newState) >= 0 ===
+    //     ["active", "overridden"].indexOf(this.state.status) >= 0 &&
+    //   this.state.status !== "missing"
+    // ) {
+    //   localStorage.setItem(nodeId, newState)
+    //   this.setState({ status: newState })
+    //   return
+    // }
 
-    if (recursive === undefined || recursive) {
-      var svg = this.props.svg
-      this.setState({ status: newState }, function () {
-        localStorage.setItem(nodeId, newState)
-        this.props.childs.forEach(function (node) {
-          var currentNode = refLookUp(node, svg)
-          if (currentNode !== undefined) {
-            currentNode.updateNode()
-          }
-        })
-        var allEdges = this.props.outEdges.concat(this.props.inEdges)
-        allEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge]
-          if (currentEdge !== undefined) {
-            currentEdge.updateStatus()
-          }
-        })
-      })
-    } else {
-      this.setState({ status: newState })
-      localStorage.setItem(nodeId, newState)
-    }
+    // if (recursive === undefined || recursive) {
+    //   var svg = this.props.svg
+    //   this.setState({ status: newState }, function () {
+    //     localStorage.setItem(nodeId, newState)
+    //     this.props.childs.forEach(function (node) {
+    //       var currentNode = refLookUp(node, svg)
+    //       if (currentNode !== undefined) {
+    //         currentNode.updateNode()
+    //       }
+    //     })
+    //     var allEdges = this.props.outEdges.concat(this.props.inEdges)
+    //     allEdges.forEach(edge => {
+    //       var currentEdge = svg.edges.current[edge]
+    //       if (currentEdge !== undefined) {
+    //         currentEdge.updateStatus()
+    //       }
+    //     })
+    //   })
+    // } else {
+    //   this.setState({ status: newState })
+    //   localStorage.setItem(nodeId, newState)
+    // }
+    const { updateNode } = this.props.nodeMethods
+    updateNode(recursive, this)
   }
 
   /** Controls the selection and deselection of a node by switching states and updating the graph */
@@ -305,6 +290,7 @@ Node.propTypes = {
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
+  nodeMethods: PropTypes.object,
   parents: PropTypes.array,
   svg: PropTypes.object,
   nodeDropshadowFilter: PropTypes.string,

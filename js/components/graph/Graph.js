@@ -222,6 +222,8 @@ export class Graph extends React.Component {
           inEdgesObj[boolJSON.id_] = inEdges
         })
 
+        // populate the state
+
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -412,9 +414,9 @@ export class Graph extends React.Component {
 
   isSelected = node => {
     if (node.props.hybrid) {
-      return node.props.status === "active"
+      return node.state.status === "active"
     } else {
-      return node.props.selected
+      return node.state.selected
     }
   }
 
@@ -438,7 +440,7 @@ export class Graph extends React.Component {
 
   updateNode = (recursive, node) => {
     let newState
-    if (this.arePrereqsSatisfied(node)) {
+    if (this.arePrereqSatisfied(node)) {
       if (this.isSelected(node) || node.props.hybrid) {
         newState = "active"
       } else {
@@ -451,19 +453,19 @@ export class Graph extends React.Component {
         newState = "inactive"
       }
     }
-    const nodeId = node.JSON.id_
+    const nodeId = node.props.JSON.id_
 
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
     if (
       ["active", "overridden"].indexOf(newState) >= 0 ===
         ["active", "overridden"].indexOf(this.state.status) >= 0 &&
-      this.state.nodesStates[node.JSON.id_].status !== "missing"
+      node.state.status !== "missing"
     ) {
       localStorage.setItem(nodeId, newState)
       this.setState(state => {
         const nodesStates = { ...state.nodesStates }
-        nodesStates[node.JSON.id_].status = newState
+        nodesStates[nodeId].status = newState
         return { nodesStates: nodesStates }
       })
       return
@@ -473,7 +475,7 @@ export class Graph extends React.Component {
       this.setState(
         state => {
           const nodesStates = { ...state.nodesStates }
-          nodesStates[node.JSON.id_].status = newState
+          nodesStates[nodeId].status = newState
           return { nodesStates: nodesStates }
         },
         () => {
@@ -496,7 +498,7 @@ export class Graph extends React.Component {
     } else {
       this.setState(state => {
         const nodesStates = { ...state.nodesStates }
-        nodesStates[node.JSON.id_].status = newState
+        nodesStates[nodeId].status = newState
         return { nodesStates: nodesStates }
       })
 
@@ -867,6 +869,11 @@ export class Graph extends React.Component {
   }
 
   render() {
+    const nodeMethods = {
+      isSelected: this.isSelected,
+      arePrereqSatisfied: this.arePrereqSatisfied,
+      updateNode: this.updateNode,
+    }
     let containerWidth = 0
     let containerHeight = 0
 
@@ -1041,6 +1048,7 @@ export class Graph extends React.Component {
             nodeMouseLeave={this.nodeMouseLeave}
             nodeMouseDown={this.nodeMouseDown}
             svg={this}
+            nodeMethods={nodeMethods}
             nodesJSON={this.state.nodesJSON}
             hybridsJSON={this.state.hybridsJSON}
             edgesJSON={this.state.edgesJSON}

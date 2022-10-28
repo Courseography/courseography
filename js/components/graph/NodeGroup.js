@@ -46,6 +46,7 @@ export default class NodeGroup extends React.Component {
               parents={this.props.connections.parents[entry.id_]}
               childs={this.props.connections.children[entry.id_]}
               inEdges={[]}
+              nodeMethods={this.props.nodeMethods}
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
               logicalType={"AND"}
@@ -68,6 +69,7 @@ export default class NodeGroup extends React.Component {
               inEdges={this.props.connections.inEdges[entry.id_]}
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
+              nodeMethods={this.props.nodeMethods}
               highlighted={highlighted}
               onClick={this.props.nodeClick}
               onMouseEnter={this.props.nodeMouseEnter}
@@ -93,6 +95,7 @@ NodeGroup.propTypes = {
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
   nodesJSON: PropTypes.array,
+  nodeMethods: PropTypes.object,
   connections: PropTypes.object,
   svg: PropTypes.object,
   nodeDropshadowFilter: PropTypes.string,
