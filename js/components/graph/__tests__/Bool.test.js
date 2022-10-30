@@ -94,7 +94,40 @@ describe("AND Bool", () => {
     fireEvent.mouseOver(aaa303)
     expect(andBool.classList.contains("missing")).toBe(true)
   })
+
+  it("AND should not have the missing class when it's already active and the mouse is hovering over a child class.", async () => {
+    const graph = await TestGraph.build()
+    const andBool = graph.getNodeByText("and")
+    const aaa102 = graph.getByTestId("aaa102")
+    const aaa201 = graph.getByTestId("aaa201")
+    const aaa303 = graph.getByTestId("aaa303")
+
+    // AAA201 and AAA102 => AAA303
+    fireEvent.click(aaa102)
+    fireEvent.click(aaa201)
+    expect(andBool.classList.contains("active")).toBe(true)
+    fireEvent.mouseOver(aaa303)
+    fireEvent.mouseOut(aaa303)
+    fireEvent.mouseOver(aaa303)
+    expect(andBool.classList.contains("active")).toBe(true)
+  })
+
+  it("Clicking the reset selections clears the Selected bools", async () => {
+  
+    const graph = await TestGraph.build()
+    const andBool = graph.getNodeByText("and")
+  
+    fireEvent.click(graph.getByTestId("aaa102"))
+    fireEvent.click(graph.getByTestId("aaa201"))
+    expect(andBool.classList.contains("active")).toBe(true)
+  
+    fireEvent.click(graph.getByTestId("test-reset"))
+    expect(andBool.classList.contains("inactive")).toBe(true)
+    
+  })
+
 })
+
 
 describe("OR Bool", () => {
   it("should match shallow snapshot", () => {
@@ -174,4 +207,33 @@ describe("OR Bool", () => {
     fireEvent.mouseOver(aaa202)
     expect(orBool.classList.contains("missing")).toBe(true)
   })
+
+  it("or should not have the missing class when it's already active and the mouse is hovering over a child class.", async () => {
+    const graph = await TestGraph.build()
+    const orBool = graph.getNodeByText("or")
+    const aaa102 = graph.getByTestId("aaa102")
+    const aaa202 = graph.getByTestId("aaa202")
+
+    // AAA201 or AAA102 => AAA202
+    fireEvent.click(aaa102)
+    expect(orBool.classList.contains("active")).toBe(true)
+    fireEvent.mouseOver(aaa202)
+    fireEvent.mouseOut(aaa202)
+    fireEvent.mouseOver(aaa202)
+    expect(orBool.classList.contains("active")).toBe(true)
+  })
+
+  it("Clicking the reset selections clears the Selected or bool", async () => {
+  
+    const graph = await TestGraph.build()
+    const orBool = graph.getNodeByText("or")
+  
+    fireEvent.click(graph.getByTestId("aaa102"))
+    expect(orBool.classList.contains("active")).toBe(true)
+  
+    fireEvent.click(graph.getByTestId("test-reset"))
+    expect(orBool.classList.contains("inactive")).toBe(true)
+    
+  })
+  
 })

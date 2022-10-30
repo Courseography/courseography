@@ -8,6 +8,7 @@ describe("BoolGroup", () => {
     const boolGroupProps = {
       boolsJSON: [],
       edgesJSON: [],
+      boolsStatus: {'bool1': 'inactive', 'bool2': 'inactive'},
       svg: null,
     }
     const component = shallow(<BoolGroup {...boolGroupProps} />)
