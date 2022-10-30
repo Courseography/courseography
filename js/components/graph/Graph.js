@@ -11,7 +11,6 @@ import NodeGroup from "./NodeGroup"
 import GraphDropdown from "./GraphDropdown"
 import Sidebar from "./Sidebar"
 import { parseAnd } from "../../util/util.js"
-import { refLookUp } from "../common/utils"
 
 const ZOOM_INCREMENT = 0.01
 const KEYBOARD_PANNING_INCREMENT = 10
@@ -34,7 +33,6 @@ export class Graph extends React.Component {
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
-      edgeMissingStatus: {},
       edgesStatus: {},
       highlightedNodes: [],
       infoboxTimeouts: [],
@@ -293,36 +291,12 @@ export class Graph extends React.Component {
     }
   }
 
-  updateEdgeMissingStatus = (edgeID, status) => {
-    this.setState(state => {
-      const temp = { ...state.edgeMissingStatus }
-      temp[edgeID] = status
-      return { edgeMissingStatus: temp }
-    })
-  }
-
   /**
    * Update the status of the Edge, this will take in a source, a target so it can be looked up
    * We will loop through the edgesJSON and find use the source, target directly from edgeJSON
    * the state will be stored and updated in edgeGroup object.
    */
-  updateEdgeStatus = (source, target, status, edgeID) => {
-    const sourceNode = refLookUp(source, this)
-    const targetNode = refLookUp(target, this)
-    if (sourceNode === undefined || targetNode === undefined) {
-      return
-    }
-    if (!status) {
-      if (!sourceNode.isSelected() && targetNode.state.status === "missing") {
-        status = "missing"
-      } else if (!sourceNode.isSelected()) {
-        status = "inactive"
-      } else if (!targetNode.isSelected()) {
-        status = "takeable"
-      } else {
-        status = "active"
-      }
-    }
+  updateEdgeStatus = (status, edgeID) => {
     this.setState(state => {
       const edgesStatus = { ...state.edgesStatus }
       edgesStatus[edgeID] = status
@@ -584,7 +558,9 @@ export class Graph extends React.Component {
     this.props.setFCECount(0)
     this.nodes.current.reset()
     this.bools.current.reset()
-    this.edges.current.reset()
+    this.state.edgesJSON.forEach(edgeJSON => {
+      this.updateEdgeStatus("inactive", edgeJSON.id_)
+    })
     this.setState({ selectedNodes: new Set() })
     if (this.state.currFocus !== null) {
       this.highlightFocuses([])
@@ -1012,8 +988,6 @@ export class Graph extends React.Component {
             svg={this}
             ref={this.edges}
             edgesJSON={this.state.edgesJSON}
-            edgeMissingStatus={this.state.edgeMissingStatus}
-            updateEdgeMissingStatus={this.updateEdgeMissingStatus}
             edgesStatus={this.state.edgesStatus}
             updateEdgeStatus={this.updateEdgeStatus}
           />
