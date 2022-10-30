@@ -14,7 +14,6 @@ exports[`AND Bool should match shallow snapshot 1`] = `
       243.51310800000002,
     ]
   }
-  status="inactive"
   stroke=""
   text={
     Array [
@@ -64,7 +63,6 @@ exports[`OR Bool should match shallow snapshot 1`] = `
       243.51310800000002,
     ]
   }
-  status="inactive"
   stroke=""
   text={
     Array [

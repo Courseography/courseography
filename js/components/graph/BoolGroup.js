@@ -13,14 +13,6 @@ export default class BoolGroup extends React.Component {
     })
   }
 
-  /**
-   * Reset the Bool JSON to have all states be inactive
-   */
-  reset = () => {
-    this.props.boolsJSON.forEach(boolJSON => {
-      this[boolJSON.status] = "inactive"
-    })
-  }
 
   /**
    * Set the reference entry for a Bool JSON entry
@@ -50,6 +42,7 @@ export default class BoolGroup extends React.Component {
         svg={this.props.svg}
         updateNode={this.props.updateNode}
         focusPrereqs={this.props.focusPrereqs}
+        status={this.props.boolsStatus[boolJSON.id_]}
       />
     )
   }
@@ -62,6 +55,7 @@ export default class BoolGroup extends React.Component {
 BoolGroup.propTypes = {
   boolsJSON: PropTypes.array,
   edgesJSON: PropTypes.array,
+  boolsStatus: PropTypes.object,
   connections: PropTypes.object,
   svg: PropTypes.object,
   updateNode: PropTypes.func,

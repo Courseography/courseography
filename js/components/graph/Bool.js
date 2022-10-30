@@ -4,19 +4,13 @@ import PropTypes from "prop-types"
 
 /** Class representing a boolean node (and/or) */
 export default class Bool extends React.Component {
-  /**
-   * Create a boolean node.
-   */
-  constructor(props) {
-    super(props)
-  }
-
+  
   /**
    * Check whether the Bool is selected.
    * @returns {boolean} Whether status is active or not.
    */
   isSelected = () => {
-    return this.props.JSON.status == "active"
+    return this.props.status == "active"
   }
 
   /**
@@ -37,6 +31,9 @@ export default class Bool extends React.Component {
       return this.props.parents.some(isAllTrue)
     }
   }
+
+  updateNode = () => this.props.updateNode(this)
+  focusPrereqs = () => this.props.focusPrereqs(this)
 
   /**
    * Remove the focus preqrequisites if the focus is unselected.
@@ -60,7 +57,7 @@ export default class Bool extends React.Component {
     return (
       <g
         {...this.props.JSON}
-        className={this.props.className + " " + this.props.JSON.status}
+        className={this.props.className + " " + this.props.status}
         data-testid={`and(${this.props.parents.join()})`}
       >
         <ellipse {...ellipseAttrs} />
@@ -93,4 +90,5 @@ Bool.propTypes = {
   svg: PropTypes.object,
   updateNode: PropTypes.func,
   focusPrereqs: PropTypes.func,
+  status: PropTypes.string,
 }

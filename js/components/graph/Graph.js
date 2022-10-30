@@ -34,6 +34,7 @@ export class Graph extends React.Component {
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
+      boolsStatus: {},
       highlightedNodes: [],
       infoboxTimeouts: [],
       dropdownTimeouts: [],
@@ -137,6 +138,7 @@ export class Graph extends React.Component {
         var nodesList = []
         var hybridsList = []
         var boolsList = []
+        var boolsStatusObj = {}
         var edgesList = []
         var parentsObj = {}
         var inEdgesObj = {}
@@ -154,7 +156,7 @@ export class Graph extends React.Component {
           } else if (entry.type_ === "Hybrid") {
             hybridsList.push(entry)
           } else if (entry.type_ === "BoolNode") {
-            entry["status"] = "inactive"
+            boolsStatusObj[entry.id_] = "inactive"
             boolsList.push(entry)
           }
         })
@@ -229,6 +231,7 @@ export class Graph extends React.Component {
           nodesJSON: noDuplicatesNodesList,
           hybridsJSON: hybridsList,
           boolsJSON: boolsList,
+          boolsStatus: boolsStatusObj,
           edgesJSON: edgesList,
           width: data.width,
           height: data.height,
@@ -538,7 +541,10 @@ export class Graph extends React.Component {
   reset = () => {
     this.props.setFCECount(0)
     this.nodes.current.reset()
-    this.bools.current.reset()
+    
+    Object.keys(this.state.boolsStatus).forEach(boolStatus => {
+      this.state.boolsStatus[boolStatus] = "inactive"
+    })
     this.edges.current.reset()
     this.setState({ selectedNodes: new Set() })
     if (this.state.currFocus !== null) {
@@ -740,12 +746,13 @@ export class Graph extends React.Component {
 
     this.setState(
       prevState => {
-        let new_boolsJSON = prevState.boolsJSON
-        let node = new_boolsJSON.find(element => element.id_ === boolId)
-        new_boolsJSON[new_boolsJSON.indexOf(node)].status = newState
-        return { new_boolsJSON }
+        const boolsStatus = { ...prevState.boolsStatus }
+        boolsStatus[boolId] = newState
+        return {
+          boolsStatus: boolsStatus,
+        }
       },
-      function () {
+      () => {
         localStorage.setItem(boolId, newState)
         boolNode.props.childs.forEach(function (node) {
           var currentNode = refLookUp(node, svg)
@@ -767,13 +774,14 @@ export class Graph extends React.Component {
     var svg = boolNode.props.svg
     var boolId = boolNode.props.JSON.id_
     // Check if there are any missing prerequisites.
-    if (boolNode.props.JSON.status !== "active") {
+    if (boolNode.props.status !== "active") {
       this.setState(
         prevState => {
-          let new_boolsJSON = prevState.boolsJSON
-          let node = new_boolsJSON.find(element => element.id_ === boolId)
-          new_boolsJSON[new_boolsJSON.indexOf(node)].status = "missing"
-          return { new_boolsJSON }
+          const boolsStatus = { ...prevState.boolsStatus }
+          boolsStatus[boolId] = "missing"
+          return {
+            boolsStatus: boolsStatus,
+          }
         },
         () => {
           boolNode.props.inEdges.forEach(edge => {
@@ -1020,6 +1028,7 @@ export class Graph extends React.Component {
           <BoolGroup
             ref={this.bools}
             boolsJSON={this.state.boolsJSON}
+            boolsStatus={this.state.boolsStatus}
             edgesJSON={this.state.edgesJSON}
             connections={this.state.connections}
             svg={this}

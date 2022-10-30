@@ -120,13 +120,8 @@ export default class Node extends React.Component {
         localStorage.setItem(nodeId, newState)
         this.props.childs.forEach(function (node) {
           var currentNode = refLookUp(node, svg)
-          if (currentNode !== undefined && currentNode.props.className !== "bool") {
+          if (currentNode !== undefined) {
             currentNode.updateNode()
-          } else if (
-            currentNode !== undefined &&
-            currentNode.props.className === "bool"
-          ) {
-            currentNode.props.updateNode(currentNode)
           }
         })
         var allEdges = this.props.outEdges.concat(this.props.inEdges)
@@ -169,14 +164,9 @@ export default class Node extends React.Component {
         this.props.parents.forEach(node => {
           if (typeof node === "string") {
             var currentNode = refLookUp(node, svg)
-            if (currentNode !== undefined && currentNode.props.className !== "bool") {
+            if (currentNode !== undefined) {
               currentNode.focusPrereqs()
-            } else if (
-              currentNode !== undefined &&
-              currentNode.props.className === "bool"
-            ) {
-              currentNode.props.focusPrereqs(currentNode)
-            }
+            } 
           } else {
             node.forEach(n => {
               var currentNode = refLookUp(n, svg)
