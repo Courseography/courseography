@@ -17,7 +17,7 @@ describe("Edge", () => {
       source: "csc165240",
       target: "csc236240",
       updateEdgeStatus: null,
-      edgeStatus: "inactive",
+      status: "inactive",
       svg: {},
     }
     const component = shallow(<Edge {...edgeProps} />)
