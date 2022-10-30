@@ -5,30 +5,6 @@ import Edge from "./Edge"
  * Class representing a group of all Edges from the graph
  */
 export default class EdgeGroup extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  /**
-   * Updates EdgeGroup's state with the state of an Edge when the Edge's state changes.
-   * This function is passed as a property to Edge.
-   * @param {string} edgeID
-   * @param {string} state
-   */
-  updateEdgeMissingStatus = (edgeID, state) => {
-    var isMissing = state === "missing"
-    this.props.updateEdgeMissingStatus(edgeID, isMissing)
-  }
-
-  /**
-   * Set all Edges to the inactive status
-   */
-  reset = () => {
-    this.props.edgesJSON.forEach(edgeJSON => {
-      this[edgeJSON.id_].updateStatus("inactive")
-    })
-  }
-
   /**
    * This function is used as a callback ref. See {@link:https://reactjs.org/docs/refs-and-the-dom.html#callback-refs}
    * @param {JSON} edgeJSON Represents a single edge
@@ -55,7 +31,7 @@ export default class EdgeGroup extends React.Component {
         points={edgeJSON.points}
         svg={this.props.svg}
         edgeID={edgeJSON.id_}
-        edgeStatus={this.props.edgesStatus[edgeJSON.id_]}
+        status={this.props.edgesStatus[edgeJSON.id_]}
         updateEdgeStatus={this.props.updateEdgeStatus}
       />
     )
@@ -97,8 +73,6 @@ EdgeGroup.propTypes = {
   edgesJSON: PropTypes.array,
   /**The overarching graph object */
   svg: PropTypes.object,
-  edgeMissingStatus: PropTypes.object,
-  updateEdgeMissingStatus: PropTypes.func,
   edgesStatus: PropTypes.object,
   updateEdgeStatus: PropTypes.func,
 }
