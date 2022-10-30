@@ -1,5 +1,6 @@
 import PropTypes from "prop-types"
 import React from "react"
+import { refLookUp } from "../common/utils"
 
 /**
  * Class representing an edge from a Node/Bool to a Node/Bool
@@ -10,12 +11,23 @@ export default class Edge extends React.Component {
   }
 
   updateStatus(status) {
-    this.props.updateEdgeStatus(
-      this.props.source,
-      this.props.target,
-      status,
-      this.props.edgeID
-    )
+    const sourceNode = refLookUp(this.props.source, this.props.svg)
+    const targetNode = refLookUp(this.props.target, this.props.svg)
+    if (sourceNode === undefined || targetNode === undefined) {
+      return
+    }
+    if (!status) {
+      if (!sourceNode.isSelected() && targetNode.state.status === "missing") {
+        status = "missing"
+      } else if (!sourceNode.isSelected()) {
+        status = "inactive"
+      } else if (!targetNode.isSelected()) {
+        status = "takeable"
+      } else {
+        status = "active"
+      }
+    }
+    this.props.updateEdgeStatus(status, this.props.edgeID)
   }
 
   render() {
@@ -27,7 +39,7 @@ export default class Edge extends React.Component {
     return (
       <path
         {...pathAttrs}
-        className={this.props.className + " " + this.props.edgeStatus}
+        className={this.props.className + " " + this.props.status}
         data-testid={`${this.props.source}->${this.props.target}`}
         markerEnd="url(#arrowHead)"
       />
@@ -47,6 +59,6 @@ Edge.propTypes = {
   /** Node that the edge is pointing to */
   target: PropTypes.string,
   /** function called when the edge's state has changed */
-  edgeStatus: PropTypes.string,
+  status: PropTypes.string,
   updateEdgeStatus: PropTypes.func,
 }
