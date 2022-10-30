@@ -542,9 +542,12 @@ export class Graph extends React.Component {
     this.props.setFCECount(0)
     this.nodes.current.reset()
 
-    Object.keys(this.state.boolsStatus).forEach(boolStatus => {
-      this.state.boolsStatus[boolStatus] = "inactive"
+    var boolsStatusCopy = this.state.boolsStatus
+    Object.keys(boolsStatusCopy).forEach(boolStatus => {
+      boolsStatusCopy[boolStatus] = "inactive"
     })
+    this.setState({ boolsStatus: boolsStatusCopy })
+
     this.edges.current.reset()
     this.setState({ selectedNodes: new Set() })
     if (this.state.currFocus !== null) {
