@@ -166,7 +166,7 @@ export default class Node extends React.Component {
             var currentNode = refLookUp(node, svg)
             if (currentNode !== undefined) {
               currentNode.focusPrereqs()
-            } 
+            }
           } else {
             node.forEach(n => {
               var currentNode = refLookUp(n, svg)

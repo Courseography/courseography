@@ -13,7 +13,6 @@ export default class BoolGroup extends React.Component {
     })
   }
 
-
   /**
    * Set the reference entry for a Bool JSON entry
    * @param {array} boolJSON Bool JSON

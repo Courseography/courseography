@@ -4,7 +4,6 @@ import PropTypes from "prop-types"
 
 /** Class representing a boolean node (and/or) */
 export default class Bool extends React.Component {
-  
   /**
    * Check whether the Bool is selected.
    * @returns {boolean} Whether status is active or not.

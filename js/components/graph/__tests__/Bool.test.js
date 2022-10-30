@@ -113,21 +113,17 @@ describe("AND Bool", () => {
   })
 
   it("Clicking the reset selections clears the Selected bools", async () => {
-  
     const graph = await TestGraph.build()
     const andBool = graph.getNodeByText("and")
-  
+
     fireEvent.click(graph.getByTestId("aaa102"))
     fireEvent.click(graph.getByTestId("aaa201"))
     expect(andBool.classList.contains("active")).toBe(true)
-  
+
     fireEvent.click(graph.getByTestId("test-reset"))
     expect(andBool.classList.contains("inactive")).toBe(true)
-    
   })
-
 })
-
 
 describe("OR Bool", () => {
   it("should match shallow snapshot", () => {
@@ -224,16 +220,13 @@ describe("OR Bool", () => {
   })
 
   it("Clicking the reset selections clears the Selected or bool", async () => {
-  
     const graph = await TestGraph.build()
     const orBool = graph.getNodeByText("or")
-  
+
     fireEvent.click(graph.getByTestId("aaa102"))
     expect(orBool.classList.contains("active")).toBe(true)
-  
+
     fireEvent.click(graph.getByTestId("test-reset"))
     expect(orBool.classList.contains("inactive")).toBe(true)
-    
   })
-  
 })

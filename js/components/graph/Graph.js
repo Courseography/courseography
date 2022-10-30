@@ -541,7 +541,7 @@ export class Graph extends React.Component {
   reset = () => {
     this.props.setFCECount(0)
     this.nodes.current.reset()
-    
+
     Object.keys(this.state.boolsStatus).forEach(boolStatus => {
       this.state.boolsStatus[boolStatus] = "inactive"
     })
