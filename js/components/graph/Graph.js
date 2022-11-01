@@ -135,6 +135,7 @@ export class Graph extends React.Component {
         localStorage.setItem("active-graph", graphName)
         var regionsList = []
         var nodesList = []
+        var nodesState = {}
         var hybridsList = []
         var boolsList = []
         var edgesList = []
@@ -176,8 +177,16 @@ export class Graph extends React.Component {
             childrenObj[node.id_] = []
             outEdgesObj[node.id_] = []
             // Quickly adding any active nodes from local storage into the selected nodes
-            if (localStorage.getItem(node.id_) === "active") {
+            const state = localStorage.getItem(node.id_)
+            if (state === "active") {
               storedNodes.add(node.text[node.text.length - 1].text)
+            }else if (state === null) {
+              state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
+            }
+
+            nodesState[node.id_] = {
+              status: state,
+              selected: ["active", "overridden"].indexOf(state) >= 0,
             }
             noDuplicatesNodesList.push(node)
           }
@@ -187,6 +196,14 @@ export class Graph extends React.Component {
           childrenObj[hybrid.id_] = []
           outEdgesObj[hybrid.id_] = []
           populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
+          const state = localStorage.getItem(hybrid.id_)
+          if (state === null) {
+            state = parentsObj[hybrid.id_].length === 0 ? "takeable" : "inactive"
+          }
+          nodesState[hybrid.id_] = {
+            status: state,
+            selected: ["active", "overridden"].indexOf(state) >= 0,
+          }
         })
 
         edgesList.forEach(edge => {
@@ -221,41 +238,6 @@ export class Graph extends React.Component {
           inEdgesObj[boolJSON.id_] = inEdges
         })
 
-        // initialize nodeState
-        // ignoring editMode
-        // can make this more efficient
-        const nodesState = {}
-        noDuplicatesNodesList.forEach(n => {
-          const state = localStorage.getItem(n.id_)
-          if (state === null) {
-            state = parentsObj[n.id_].length === 0 ? "takeable" : "inactive"
-          }
-          nodesState[n.id_] = {
-            status: state,
-            selected: ["active", "overridden"].indexOf(state) >= 0,
-          }
-        })
-        boolsList.forEach(n => {
-          const state = localStorage.getItem(n.id_)
-          if (state === null) {
-            state = parentsObj[n.id_].length === 0 ? "takeable" : "inactive"
-          }
-          nodesState[n.id_] = {
-            status: state,
-            selected: ["active", "overridden"].indexOf(state) >= 0,
-          }
-        })
-
-        hybridsList.forEach(n => {
-          const state = localStorage.getItem(n.id_)
-          if (state === null) {
-            state = parentsObj[n.id_].length === 0 ? "takeable" : "inactive"
-          }
-          nodesState[n.id_] = {
-            status: state,
-            selected: ["active", "overridden"].indexOf(state) >= 0,
-          }
-        })
         console.log(nodesState)
 
         this.setState({
