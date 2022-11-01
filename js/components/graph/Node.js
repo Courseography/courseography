@@ -28,16 +28,6 @@ export default class Node extends React.Component {
   /** Create a node */
   constructor(props) {
     super(props)
-    var state = localStorage.getItem(this.props.JSON.id_)
-    if (this.props.editMode) {
-      state = "" // TODO: define what editMode is
-    } else if (state === null) {
-      state = this.props.parents.length === 0 ? "takeable" : "inactive"
-    }
-    this.state = {
-      status: state,
-      selected: ["active", "overridden"].indexOf(state) >= 0,
-    }
   }
 
   /**
@@ -45,13 +35,11 @@ export default class Node extends React.Component {
    * @return {boolean}
    */
   isSelected = () => {
-    const { isSelected } = this.props.nodeMethods
-    return isSelected(this)
-    // if (this.props.hybrid) {
-    //   return this.state.status === "active"
-    // } else {
-    //   return this.state.selected
-    // }
+    if (this.props.hybrid) {
+      return this.props.status === "active"
+    } else {
+      return this.props.selected
+    }
   }
 
   /**
@@ -59,8 +47,27 @@ export default class Node extends React.Component {
    * @return {boolean}
    */
   arePrereqsSatisfied = () => {
-    const { arePrereqSatisfied } = this.props.nodeMethods
-    return arePrereqSatisfied(this)
+    var svg = this.props.svg
+    /**
+     * Recursively checks that preceding nodes are selected
+     * @param  {string|Array} element Node(s)/other on the graph
+     * @return {boolean}
+     */
+    function isAllTrue(element) {
+      if (typeof element === "string") {
+        if (svg.nodes.current[element] !== undefined) {
+          return svg.nodes.current[element].isSelected()
+        } else if (svg.bools.current[element] !== undefined) {
+          return svg.bools.current[element].isSelected()
+        } else {
+          return false
+        }
+      } else {
+        return element.some(isAllTrue)
+      }
+    }
+
+    return this.props.parents.every(isAllTrue)
   }
 
   /**
@@ -68,74 +75,78 @@ export default class Node extends React.Component {
    * @param  {boolean} recursive whether we should recurse on its children
    */
   updateNode = recursive => {
-    // var newState
-    // if (this.arePrereqsSatisfied()) {
-    //   if (this.isSelected() || this.props.hybrid) {
-    //     newState = "active"
-    //   } else {
-    //     newState = "takeable"
-    //   }
-    // } else {
-    //   if (this.isSelected() && !this.props.hybrid) {
-    //     newState = "overridden"
-    //   } else {
-    //     newState = "inactive"
-    //   }
-    // }
+    var newState
+    if (this.arePrereqsSatisfied()) {
+      if (this.isSelected() || this.props.hybrid) {
+        newState = "active"
+      } else {
+        newState = "takeable"
+      }
+    } else {
+      if (this.isSelected() && !this.props.hybrid) {
+        newState = "overridden"
+      } else {
+        newState = "inactive"
+      }
+    }
 
-    // var nodeId = this.props.JSON.id_
+    var nodeId = this.props.JSON.id_
 
-    // // Updating the children will be unnecessary if the selected state of the current node has not
-    // // changed, and the original state was not 'missing'
-    // if (
-    //   ["active", "overridden"].indexOf(newState) >= 0 ===
-    //     ["active", "overridden"].indexOf(this.state.status) >= 0 &&
-    //   this.state.status !== "missing"
-    // ) {
-    //   localStorage.setItem(nodeId, newState)
-    //   this.setState({ status: newState })
-    //   return
-    // }
+    // Updating the children will be unnecessary if the selected state of the current node has not
+    // changed, and the original state was not 'missing'
+    if (
+      ["active", "overridden"].indexOf(newState) >= 0 ===
+        ["active", "overridden"].indexOf(this.props.status) >= 0 &&
+      this.props.status !== "missing"
+    ) {
+      localStorage.setItem(nodeId, newState)
+      // replace with callbacks here
+      this.props.updateNodeStatus(nodeId, newState)
+      // this.setState({ status: newState })
+      return
+    }
 
-    // if (recursive === undefined || recursive) {
-    //   var svg = this.props.svg
-    //   this.setState({ status: newState }, function () {
-    //     localStorage.setItem(nodeId, newState)
-    //     this.props.childs.forEach(function (node) {
-    //       var currentNode = refLookUp(node, svg)
-    //       if (currentNode !== undefined) {
-    //         currentNode.updateNode()
-    //       }
-    //     })
-    //     var allEdges = this.props.outEdges.concat(this.props.inEdges)
-    //     allEdges.forEach(edge => {
-    //       var currentEdge = svg.edges.current[edge]
-    //       if (currentEdge !== undefined) {
-    //         currentEdge.updateStatus()
-    //       }
-    //     })
-    //   })
-    // } else {
-    //   this.setState({ status: newState })
-    //   localStorage.setItem(nodeId, newState)
-    // }
-    const { updateNode } = this.props.nodeMethods
-    updateNode(recursive, this)
+    if (recursive === undefined || recursive) {
+      var svg = this.props.svg
+      this.props.updateNodeStatus(nodeId, newState, () => {
+        console.log(this.props.childs)
+        localStorage.setItem(nodeId, newState)
+        this.props.childs.forEach(node => {
+          var currentNode = refLookUp(node, svg)
+          if (currentNode !== undefined) {
+            currentNode.updateNode()
+          }
+        })
+        var allEdges = this.props.outEdges.concat(this.props.inEdges)
+        allEdges.forEach(edge => {
+          var currentEdge = svg.edges.current[edge]
+          if (currentEdge !== undefined) {
+            currentEdge.updateStatus()
+          }
+        })
+      })
+    } else {
+      // this.setState({ status: newState })
+      this.props.updateNodeStatus(nodeId, newState)
+      localStorage.setItem(nodeId, newState)
+    }
   }
 
   /** Controls the selection and deselection of a node by switching states and updating the graph */
   toggleSelection = () => {
-    this.setState({ selected: !this.state.selected }, function () {
-      this.updateNode()
-    })
+    this.props.updateNodeSelected(
+      this.props.JSON.id_,
+      !this.props.selected,
+      this.updateNode
+    )
   }
 
   /** Sets the status of all missing prerequisites to 'missing' */
   focusPrereqs = () => {
     var svg = this.props.svg
     // Missing prerequisites need to have their status updated to 'missing'
-    if (["inactive", "overridden", "takeable"].indexOf(this.state.status) >= 0) {
-      this.setState({ status: "missing" }, () => {
+    if (["inactive", "overridden", "takeable"].indexOf(this.props.status) >= 0) {
+      this.props.updateNodeStatus(this.props.JSON.id_, "missing", () => {
         this.props.inEdges.forEach(edge => {
           var currentEdge = svg.edges.current[edge]
           if (currentEdge === null || currentEdge === undefined) {
@@ -172,7 +183,7 @@ export default class Node extends React.Component {
   unfocusPrereqs = () => {
     var svg = this.props.svg
     this.updateNode(false)
-    this.props.parents.forEach(function (node) {
+    this.props.parents.forEach(node => {
       if (typeof node === "string") {
         var currentNode = refLookUp(node, svg)
         currentNode.unfocusPrereqs()
@@ -183,7 +194,7 @@ export default class Node extends React.Component {
         })
       }
     })
-    this.props.inEdges.forEach(function (edge) {
+    this.props.inEdges.forEach(edge => {
       var currentEdge = svg.edges.current[edge]
       if (currentEdge.state.status === "missing") {
         currentEdge.updateStatus()
@@ -200,7 +211,7 @@ export default class Node extends React.Component {
 
   render() {
     let ellipse = null
-    var newClassName = this.props.className + " " + this.state.status
+    var newClassName = this.props.className + " " + this.props.status
     if (this.props.highlighted) {
       var attrs = this.props.JSON
       var width = parseFloat(attrs.width) / 2
@@ -291,6 +302,10 @@ Node.propTypes = {
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
   nodeMethods: PropTypes.object,
+  updateNodeStatus: PropTypes.func,
+  updateNodeSelected: PropTypes.func,
+  status: PropTypes.string,
+  selected: PropTypes.bool,
   parents: PropTypes.array,
   svg: PropTypes.object,
   nodeDropshadowFilter: PropTypes.string,
