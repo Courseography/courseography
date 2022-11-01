@@ -25,7 +25,6 @@ import { refLookUp } from "../common/utils"
  *    farther away. They can only be either 'active' or 'inactive'
  */
 export default class Node extends React.Component {
-  
   /**
    * Checks whether this Node is selected
    * @return {boolean}

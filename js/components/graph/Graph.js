@@ -30,7 +30,7 @@ export class Graph extends React.Component {
       labelsJSON: [],
       regionsJSON: [],
       nodesJSON: [],
-      nodesState: {},
+      // nodesState: {},
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
@@ -114,7 +114,6 @@ export class Graph extends React.Component {
     let url = new URL("/get-json-data", document.location)
     const params = { graphName: graphName }
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-
     fetch(url)
       .then(headers => {
         if (!headers.ok) {
@@ -180,13 +179,6 @@ export class Graph extends React.Component {
             const state = localStorage.getItem(node.id_)
             if (state === "active") {
               storedNodes.add(node.text[node.text.length - 1].text)
-            }else if (state === null) {
-              state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
-            }
-
-            nodesState[node.id_] = {
-              status: state,
-              selected: ["active", "overridden"].indexOf(state) >= 0,
             }
             noDuplicatesNodesList.push(node)
           }
@@ -196,7 +188,7 @@ export class Graph extends React.Component {
           childrenObj[hybrid.id_] = []
           outEdgesObj[hybrid.id_] = []
           populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
-          const state = localStorage.getItem(hybrid.id_)
+          var state = localStorage.getItem(hybrid.id_)
           if (state === null) {
             state = parentsObj[hybrid.id_].length === 0 ? "takeable" : "inactive"
           }
@@ -238,7 +230,16 @@ export class Graph extends React.Component {
           inEdgesObj[boolJSON.id_] = inEdges
         })
 
-        console.log(nodesState)
+        noDuplicatesNodesList.forEach(node => {
+          var state = localStorage.getItem(node.id_)
+          if (state === null) {
+            state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
+          }
+          nodesState[node.id_] = {
+            status: state,
+            selected: ["active", "overridden"].indexOf(state) >= 0,
+          }
+        })
 
         this.setState({
           labelsJSON: labelsList,
