@@ -109,7 +109,6 @@ export default class Node extends React.Component {
     if (recursive === undefined || recursive) {
       var svg = this.props.svg
       this.props.updateNodeStatus(nodeId, newState, () => {
-        console.log(this.props.childs)
         localStorage.setItem(nodeId, newState)
         this.props.childs.forEach(node => {
           var currentNode = refLookUp(node, svg)
