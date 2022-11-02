@@ -30,7 +30,7 @@ export class Graph extends React.Component {
       labelsJSON: [],
       regionsJSON: [],
       nodesJSON: [],
-      // nodesState: {},
+      nodesState: {},
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
