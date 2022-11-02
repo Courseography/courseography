@@ -10,16 +10,16 @@ export default class NodeGroup extends React.Component {
     this.props.nodesJSON.forEach(nodeJSON => {
       var node = this[nodeJSON.id_]
       var state = node.props.parents.length === 0 ? "takeable" : "inactive"
-      this.updateNodeStatus(nodeJSON.id_, state)
-      this.updateNodeSelected(nodeJSON.id_, false)
+      this.props.updateNodeStatus(nodeJSON.id_, state)
+      this.props.updateNodeSelected(nodeJSON.id_, false)
       localStorage.setItem(node.props.JSON.id_, state)
     })
 
     this.props.hybridsJSON.forEach(hybridJSON => {
       var hybrid = this[hybridJSON.id_]
       var state = hybrid.props.parents.length === 0 ? "takeable" : "inactive"
-      this.updateNodeStatus(nodeJSON.id_, state)
-      this.updateNodeSelected(nodeJSON.id_, false)
+      this.props.updateNodeStatus(hybridJSON.id_, state)
+      this.props.updateNodeSelected(hybridJSON.id_, false)
       localStorage.setItem(hybrid.props.JSON.id_, state)
     })
   }

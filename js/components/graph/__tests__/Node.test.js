@@ -50,6 +50,8 @@ describe("Hybrid Node", () => {
       svg: {
         onKeyDown: jest.fn(),
       },
+      status: "inactive",
+      selected: false,
     }
     const wrapper = shallow(<Node {...hybridNodeProps} />)
     expect(wrapper).toMatchSnapshot()
@@ -134,6 +136,8 @@ describe("Course Node", () => {
       outEdges: ["p6"],
       parents: [],
       svg: {},
+      status: "takeable",
+      selected: false,
     }
 
     const wrapper = shallow(<Node {...courseProps} />)

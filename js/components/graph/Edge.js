@@ -20,7 +20,11 @@ export default class Edge extends React.Component {
     if (source === undefined || target === undefined) {
       return
     }
-    if (!source.isSelected() && target.props.status === "missing") {
+    if (
+      !source.isSelected() &&
+      ((target.props.className === "bool" && target.state.status === "missing") ||
+        (target.props.className !== "bool" && target.props.status === "missing"))
+    ) {
       this.setState({ status: "missing" })
     } else if (!source.isSelected()) {
       this.setState({ status: "inactive" })
