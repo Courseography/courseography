@@ -36,7 +36,6 @@ export default class NodeGroup extends React.Component {
               updateNodeStatus={this.props.updateNodeStatus}
               updateNodeSelected={this.props.updateNodeSelected}
               inEdges={[]}
-              nodeMethods={this.props.nodeMethods}
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
               logicalType={"AND"}
