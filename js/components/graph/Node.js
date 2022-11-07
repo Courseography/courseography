@@ -295,7 +295,6 @@ Node.propTypes = {
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
-  nodeMethods: PropTypes.object,
   updateNodeStatus: PropTypes.func,
   updateNodeSelected: PropTypes.func,
   status: PropTypes.string,
