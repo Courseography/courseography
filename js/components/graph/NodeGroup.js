@@ -6,23 +6,6 @@ import Node from "./Node"
 export default class NodeGroup extends React.Component {
   /** Returns nodes to their original unselected state, with a status of "takeable" or "inactive" */
   // all of these breaks, need to update
-  reset = () => {
-    this.props.nodesJSON.forEach(nodeJSON => {
-      var node = this[nodeJSON.id_]
-      var state = node.props.parents.length === 0 ? "takeable" : "inactive"
-      this.props.updateNodeStatus(nodeJSON.id_, state)
-      this.props.updateNodeSelected(nodeJSON.id_, false)
-      localStorage.setItem(node.props.JSON.id_, state)
-    })
-
-    this.props.hybridsJSON.forEach(hybridJSON => {
-      var hybrid = this[hybridJSON.id_]
-      var state = hybrid.props.parents.length === 0 ? "takeable" : "inactive"
-      this.props.updateNodeStatus(hybridJSON.id_, state)
-      this.props.updateNodeSelected(hybridJSON.id_, false)
-      localStorage.setItem(hybrid.props.JSON.id_, state)
-    })
-  }
 
   /**
    *

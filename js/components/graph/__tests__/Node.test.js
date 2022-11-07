@@ -100,6 +100,18 @@ describe("Hybrid Node", () => {
     fireEvent.mouseOver(aaa303)
     expect(hybrid101.classList.contains("missing")).toBe(true)
   })
+
+  it("Clicking the reset selections clears the Selected hybrid node", async () => {
+    const graph = await TestGraph.build()
+    const hybrid101 = graph.getByTestId("h(aaa101)")
+    fireEvent.click(hybrid101)
+    const aaa101 = graph.getByTestId("aaa101")
+    fireEvent.click(aaa101)
+    expect(hybrid101.classList.contains("active")).toBe(true)
+
+    fireEvent.click(graph.getByTestId("test-reset"))
+    expect(hybrid101.classList.contains("inactive")).toBe(true)
+  })
 })
 
 describe("Course Node", () => {
@@ -253,6 +265,27 @@ describe("Course Node", () => {
 
         fireEvent.mouseOver(aaa303)
         expect(aaa303.classList.contains("missing")).toBe(true)
+      })
+      it("Clicking the reset selections clears the Selected course node with parents", async () => {
+        const graph = await TestGraph.build()
+        const aaa101 = graph.getByTestId("aaa101")
+        const aaa201 = graph.getByTestId("aaa201")
+        fireEvent.click(aaa101)
+        expect(aaa201.classList.contains("takeable")).toBe(true)
+
+        fireEvent.click(graph.getByTestId("test-reset"))
+        expect(aaa201.classList.contains("inactive")).toBe(true)
+      })
+
+      it("Clicking the reset selections clears the Selected course node with no parents", async () => {
+        const graph = await TestGraph.build()
+        const aaa101 = graph.getByTestId("aaa101")
+        fireEvent.click(aaa101)
+
+        expect(aaa101.classList.contains("active")).toBe(true)
+
+        fireEvent.click(graph.getByTestId("test-reset"))
+        expect(aaa101.classList.contains("takeable")).toBe(true)
       })
     })
   })

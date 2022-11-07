@@ -577,7 +577,16 @@ export class Graph extends React.Component {
   // Reset graph
   reset = () => {
     this.props.setFCECount(0)
-    this.nodes.current.reset()
+
+    var nodesStateCopy = this.state.nodesState
+    Object.keys(nodesStateCopy).forEach(nodeState => {
+      var state =
+        this.state.connections.parents[nodeState].length === 0 ? "takeable" : "inactive"
+      nodesStateCopy[nodeState].status = state
+      nodesStateCopy[nodeState].selected = false
+      localStorage.setItem(nodeState, state)
+    })
+    this.setState({ nodesState: nodesStateCopy })
 
     var boolsStatusCopy = this.state.boolsStatus
     Object.keys(boolsStatusCopy).forEach(boolStatus => {
