@@ -17,7 +17,13 @@ export default class Edge extends React.Component {
       return
     }
     if (!status) {
-      if (!sourceNode.isSelected() && targetNode.state.status === "missing") {
+      if (
+        !sourceNode.isSelected() &&
+        ((targetNode.props.className === "bool" &&
+          targetNode.props.status === "missing") ||
+          (targetNode.props.className !== "bool" &&
+            targetNode.state.status === "missing"))
+      ) {
         status = "missing"
       } else if (!sourceNode.isSelected()) {
         status = "inactive"
@@ -29,7 +35,6 @@ export default class Edge extends React.Component {
     }
     this.props.updateEdgeStatus(status, this.props.edgeID)
   }
-
   render() {
     var pathAttrs = { d: "M" }
     this.props.points.forEach(p => {
