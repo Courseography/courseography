@@ -73,6 +73,8 @@ EdgeGroup.propTypes = {
   edgesJSON: PropTypes.array,
   /**The overarching graph object */
   svg: PropTypes.object,
+  /** An object containing all edge to status pairs */
   edgesStatus: PropTypes.object,
+  /** A function for updating the edge status */
   updateEdgeStatus: PropTypes.func,
 }

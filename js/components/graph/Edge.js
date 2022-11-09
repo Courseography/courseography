@@ -63,7 +63,8 @@ Edge.propTypes = {
   svg: PropTypes.object,
   /** Node that the edge is pointing to */
   target: PropTypes.string,
-  /** function called when the edge's state has changed */
+  /** Status of this edge */
   status: PropTypes.string,
+  /** Function for updating the edge status */
   updateEdgeStatus: PropTypes.func,
 }
