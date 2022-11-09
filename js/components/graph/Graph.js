@@ -562,15 +562,19 @@ export class Graph extends React.Component {
   reset = () => {
     this.props.setFCECount(0)
     this.nodes.current.reset()
-    this.state.edgesJSON.forEach(edgeJSON => {
-      this.updateEdgeStatus("inactive", edgeJSON.id_)
-    })
+    const edgesStatusCopy = Object.keys(this.state.edgesStatus).reduce(
+      (acc, curr) => ((acc[curr.id_] = "inactive"), acc),
+      {}
+    )
 
     var boolsStatusCopy = this.state.boolsStatus
     Object.keys(boolsStatusCopy).forEach(boolStatus => {
       boolsStatusCopy[boolStatus] = "inactive"
     })
-    this.setState({ boolsStatus: boolsStatusCopy })
+    this.setState({
+      boolsStatus: boolsStatusCopy,
+      edgesStatus: edgesStatusCopy,
+    })
     this.setState({ selectedNodes: new Set() })
     if (this.state.currFocus !== null) {
       this.highlightFocuses([])
