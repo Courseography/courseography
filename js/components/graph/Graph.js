@@ -180,11 +180,17 @@ export class Graph extends React.Component {
             childrenObj[node.id_] = []
             outEdgesObj[node.id_] = []
             // Quickly adding any active nodes from local storage into the selected nodes
-            const state = localStorage.getItem(node.id_)
+            var state = localStorage.getItem(node.id_)
             if (state === "active") {
               storedNodes.add(node.text[node.text.length - 1].text)
+            } else if (state === null) {
+              state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
             }
             noDuplicatesNodesList.push(node)
+            nodesState[node.id_] = {
+              status: state,
+              selected: ["active", "overridden"].indexOf(state) >= 0,
+            }
           }
         })
 
