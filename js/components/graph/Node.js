@@ -4,7 +4,7 @@ import { refLookUp } from "../common/utils"
 
 /** React component class representing a Node on the graph
  *
- * States:
+ * Status and Selected Props:
  *  - status: holds the current status message (see below)
  *  - selected: whether the node is selected, based on the status message
  *
@@ -95,9 +95,7 @@ export default class Node extends React.Component {
       this.props.status !== "missing"
     ) {
       localStorage.setItem(nodeId, newState)
-      // replace with callbacks here
       this.props.updateNodeStatus(nodeId, newState)
-      // this.setState({ status: newState })
       return
     }
 
@@ -120,7 +118,6 @@ export default class Node extends React.Component {
         })
       })
     } else {
-      // this.setState({ status: newState })
       this.props.updateNodeStatus(nodeId, newState)
       localStorage.setItem(nodeId, newState)
     }
@@ -141,7 +138,7 @@ export default class Node extends React.Component {
     // Missing prerequisites need to have their status updated to 'missing'
     if (["inactive", "overridden", "takeable"].indexOf(this.props.status) >= 0) {
       this.props.updateNodeStatus(this.props.JSON.id_, "missing", () => {
-        this.props.inEdges.forEach(edge => {
+        this.props.inEdges.forEach(function (edge) {
           var currentEdge = svg.edges.current[edge]
           if (currentEdge === null || currentEdge === undefined) {
             return
@@ -151,7 +148,7 @@ export default class Node extends React.Component {
             currentEdge.setState({ status: "missing" })
           }
         })
-        this.props.parents.forEach(node => {
+        this.props.parents.forEach(function (node) {
           if (typeof node === "string") {
             var currentNode = refLookUp(node, svg)
             if (currentNode !== undefined) {
@@ -177,7 +174,7 @@ export default class Node extends React.Component {
   unfocusPrereqs = () => {
     var svg = this.props.svg
     this.updateNode(false)
-    this.props.parents.forEach(node => {
+    this.props.parents.forEach(function (node) {
       if (typeof node === "string") {
         var currentNode = refLookUp(node, svg)
         currentNode.unfocusPrereqs()
@@ -188,7 +185,7 @@ export default class Node extends React.Component {
         })
       }
     })
-    this.props.inEdges.forEach(edge => {
+    this.props.inEdges.forEach(function (edge) {
       var currentEdge = svg.edges.current[edge]
       if (currentEdge.state.status === "missing") {
         currentEdge.updateStatus()
