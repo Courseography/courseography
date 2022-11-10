@@ -6,10 +6,6 @@ import { refLookUp } from "../common/utils"
  * Class representing an edge from a Node/Bool to a Node/Bool
  */
 export default class Edge extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   updateStatus(status) {
     const sourceNode = refLookUp(this.props.source, this.props.svg)
     const targetNode = refLookUp(this.props.target, this.props.svg)
