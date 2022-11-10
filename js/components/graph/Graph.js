@@ -817,7 +817,7 @@ export class Graph extends React.Component {
             var currentEdge = svg.edges.current[edge]
             var sourceNode = refLookUp(currentEdge.props.source, svg)
             if (!sourceNode.isSelected()) {
-              currentEdge.updateStatus("missing")
+              this.updateEdgeStatus("missing", edge)
             }
           })
           boolNode.props.parents.forEach(node => {
