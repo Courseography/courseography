@@ -34,6 +34,7 @@ export class Graph extends React.Component {
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
+      edgesStatus: {},
       boolsStatus: {},
       highlightedNodes: [],
       infoboxTimeouts: [],
@@ -224,6 +225,10 @@ export class Graph extends React.Component {
           outEdgesObj[boolJSON.id_] = outEdges
           inEdgesObj[boolJSON.id_] = inEdges
         })
+        const edgesStatus = edgesList.reduce(
+          (acc, curr) => ((acc[curr.id_] = "inactive"), acc),
+          {}
+        )
 
         this.setState({
           labelsJSON: labelsList,
@@ -239,6 +244,7 @@ export class Graph extends React.Component {
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
           graphName: graphName,
+          edgesStatus: edgesStatus,
           connections: {
             parents: parentsObj,
             inEdges: inEdgesObj,
@@ -288,6 +294,21 @@ export class Graph extends React.Component {
         this.setState({ dropdownTimeouts: [] })
         break
     }
+  }
+
+  /**
+   * Update the status of the Edge, this will take in a source, a target so it can be looked up
+   * We will loop through the edgesJSON and find use the source, target directly from edgeJSON
+   * the state will be stored and updated in edgeGroup object.
+   */
+  updateEdgeStatus = (status, edgeID) => {
+    this.setState(state => {
+      const edgesStatus = { ...state.edgesStatus }
+      edgesStatus[edgeID] = status
+      return {
+        edgesStatus: edgesStatus,
+      }
+    })
   }
 
   nodeClick = event => {
@@ -541,14 +562,19 @@ export class Graph extends React.Component {
   reset = () => {
     this.props.setFCECount(0)
     this.nodes.current.reset()
+    const edgesStatusCopy = Object.keys(this.state.edgesStatus).reduce(
+      (acc, curr) => ((acc[curr.id_] = "inactive"), acc),
+      {}
+    )
 
     var boolsStatusCopy = this.state.boolsStatus
     Object.keys(boolsStatusCopy).forEach(boolStatus => {
       boolsStatusCopy[boolStatus] = "inactive"
     })
-    this.setState({ boolsStatus: boolsStatusCopy })
-
-    this.edges.current.reset()
+    this.setState({
+      boolsStatus: boolsStatusCopy,
+      edgesStatus: edgesStatusCopy,
+    })
     this.setState({ selectedNodes: new Set() })
     if (this.state.currFocus !== null) {
       this.highlightFocuses([])
@@ -791,7 +817,7 @@ export class Graph extends React.Component {
             var currentEdge = svg.edges.current[edge]
             var sourceNode = refLookUp(currentEdge.props.source, svg)
             if (!sourceNode.isSelected()) {
-              currentEdge.setState({ status: "missing" })
+              this.updateEdgeStatus("missing", edge)
             }
           })
           boolNode.props.parents.forEach(node => {
@@ -1038,7 +1064,13 @@ export class Graph extends React.Component {
             updateNode={this.updateNode}
             focusPrereqs={this.focusPrereqs}
           />
-          <EdgeGroup svg={this} ref={this.edges} edgesJSON={this.state.edgesJSON} />
+          <EdgeGroup
+            svg={this}
+            ref={this.edges}
+            edgesJSON={this.state.edgesJSON}
+            edgesStatus={this.state.edgesStatus}
+            updateEdgeStatus={this.updateEdgeStatus}
+          />
           <InfoBox
             onClick={this.infoBoxMouseClick}
             onMouseEnter={this.infoBoxMouseEnter}
