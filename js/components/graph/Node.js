@@ -97,7 +97,14 @@ export default class Node extends React.Component {
       this.props.status !== "missing"
     ) {
       localStorage.setItem(nodeId, newState)
-      this.props.updateNodeStatus(nodeId, newState)
+      this.props.updateNodeStatus(nodeId, newState, () => {
+        allEdges.forEach(edge => {
+          var currentEdge = svg.edges.current[edge]
+          if (currentEdge !== undefined) {
+            currentEdge.updateStatus()
+          }
+        })
+      })
       return
     }
 
