@@ -100,6 +100,32 @@ describe("Edge", () => {
       fireEvent.click(aaa202)
       expect(path_bool2_aaa202.classList.contains("active")).toBe(true)
     })
+    
+    it("clicking reset, sets the selected edge with status takeable, inactive", async () => {
+      const graph = await TestGraph.build()
+      const aaa101 = graph.getByTestId("aaa101")
+      const path_101_201 = graph.getByTestId("h101->aaa201")
+      fireEvent.click(aaa101)
+      expect(path_101_201.classList.contains("takeable")).toBe(true)
+
+      fireEvent.click(graph.getByTestId("test-reset"))
+      expect(path_101_201.classList.contains("inactive")).toBe(true)
+
+    })
+
+    it("clicking reset, sets the selected edge with status active, inactive", async () => {
+      const graph = await TestGraph.build()
+      const aaa101 = graph.getByTestId("aaa101")
+      const aaa201 = graph.getByTestId("aaa201")
+      const path_101_201 = graph.getByTestId("h101->aaa201")
+      fireEvent.click(aaa101)
+      fireEvent.click(aaa201)
+      expect(path_101_201.classList.contains("active")).toBe(true)
+
+      fireEvent.click(graph.getByTestId("test-reset"))
+      expect(path_101_201.classList.contains("inactive")).toBe(true)
+
+    })
   })
 
   describe("hovering behaviour", () => {

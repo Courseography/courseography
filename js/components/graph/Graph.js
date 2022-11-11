@@ -607,10 +607,10 @@ export class Graph extends React.Component {
       localStorage.setItem(nodeState, state)
     })
 
-    const edgesStatusCopy = Object.keys(this.state.edgesStatus).reduce(
-      (acc, curr) => ((acc[curr.id_] = "inactive"), acc),
-      {}
-    )
+    var edgesStatusCopy = this.state.edgesStatus
+    Object.keys(edgesStatusCopy).forEach(edgeStatus => {
+      edgesStatusCopy[edgeStatus] = "inactive"
+    })
 
     var boolsStatusCopy = this.state.boolsStatus
     Object.keys(boolsStatusCopy).forEach(boolStatus => {
