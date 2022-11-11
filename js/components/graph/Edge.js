@@ -6,44 +6,28 @@ import { refLookUp } from "../common/utils"
  * Class representing an edge from a Node/Bool to a Node/Bool
  */
 export default class Edge extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { status: "inactive" }
-  }
-
   /**
    * Update the status of the Edge, based on the status of the Node/Bool it points from/to
    */
-  updateStatus = () => {
-    var source = refLookUp(this.props.source, this.props.svg)
-    var target = refLookUp(this.props.target, this.props.svg)
-    if (source === undefined || target === undefined) {
+  updateStatus(status) {
+    const sourceNode = refLookUp(this.props.source, this.props.svg)
+    const targetNode = refLookUp(this.props.target, this.props.svg)
+    if (sourceNode === undefined || targetNode === undefined) {
       return
     }
-
-    if (!source.isSelected() && target.props.status === "missing") {
-      this.setState({ status: "missing" })
-    } else if (!source.isSelected()) {
-      this.setState({ status: "inactive" })
-    } else if (!target.isSelected()) {
-      this.setState({ status: "takeable" })
-    } else {
-      this.setState({ status: "active" })
+    if (!status) {
+      if (!sourceNode.isSelected() && targetNode.props.status === "missing") {
+        status = "missing"
+      } else if (!sourceNode.isSelected()) {
+        status = "inactive"
+      } else if (!targetNode.isSelected()) {
+        status = "takeable"
+      } else {
+        status = "active"
+      }
     }
+    this.props.updateEdgeStatus(status, this.props.edgeID)
   }
-  /**
-   *
-    After each render beyond the initial, check if the edge's state has changed. If so,
-    notify the state of EdgeGroup with updateEdgeStatus.
-   * @param {*} prevProps
-   * @param {Object} prevState The state of this object from the previous render
-   */
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.status !== prevState.status) {
-      this.props.updateEdgeStatus(this.props.edgeID, this.state.status)
-    }
-  }
-
   render() {
     var pathAttrs = { d: "M" }
     this.props.points.forEach(p => {
@@ -53,7 +37,7 @@ export default class Edge extends React.Component {
     return (
       <path
         {...pathAttrs}
-        className={this.props.className + " " + this.state.status}
+        className={this.props.className + " " + this.props.status}
         data-testid={`${this.props.source}->${this.props.target}`}
         markerEnd="url(#arrowHead)"
       />
@@ -72,6 +56,8 @@ Edge.propTypes = {
   svg: PropTypes.object,
   /** Node that the edge is pointing to */
   target: PropTypes.string,
-  /** function called when the edge's state has changed */
+  /** Status of this edge */
+  status: PropTypes.string,
+  /** Function for updating the edge status */
   updateEdgeStatus: PropTypes.func,
 }

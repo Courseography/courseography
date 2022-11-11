@@ -16,6 +16,7 @@ describe("Edge", () => {
       ],
       source: "csc165240",
       target: "csc236240",
+      status: "inactive",
       updateEdgeStatus: null,
       svg: {},
     }
@@ -57,6 +58,47 @@ describe("Edge", () => {
       fireEvent.click(aaa201)
 
       expect(path_101_201.classList.contains("active")).toBe(true)
+    })
+
+    it("clicking a node changes the status of all out edges", async () => {
+      const graph = await TestGraph.build()
+      const aaa102 = graph.getByTestId("aaa102")
+      const path_102_bool1 = graph.getByTestId("aaa102->bool1")
+      const path_102_bool2 = graph.getByTestId("aaa102->bool2")
+      const path_bool2_aaa202 = graph.getByTestId("bool2->aaa202")
+      fireEvent.click(aaa102)
+      expect(path_102_bool1.classList.contains("takeable")).toBe(true)
+      expect(path_102_bool2.classList.contains("active")).toBe(true)
+      expect(path_bool2_aaa202.classList.contains("takeable")).toBe(true)
+    })
+
+    it("clicking a node and clicking it again resets the status of all edges", async () => {
+      const graph = await TestGraph.build()
+      const aaa102 = graph.getByTestId("aaa102")
+      const path_102_bool1 = graph.getByTestId("aaa102->bool1")
+      const path_102_bool2 = graph.getByTestId("aaa102->bool2")
+      const path_bool2_aaa202 = graph.getByTestId("bool2->aaa202")
+      fireEvent.click(aaa102)
+      expect(path_102_bool1.classList.contains("takeable")).toBe(true)
+      expect(path_102_bool2.classList.contains("active")).toBe(true)
+      expect(path_bool2_aaa202.classList.contains("takeable")).toBe(true)
+      fireEvent.click(aaa102)
+      expect(path_102_bool1.classList.contains("inactive")).toBe(true)
+      expect(path_102_bool2.classList.contains("inactive")).toBe(true)
+      expect(path_bool2_aaa202.classList.contains("inactive")).toBe(true)
+    })
+
+    it("clicking a node with a takeable edge makes that edge active", async () => {
+      const graph = await TestGraph.build()
+      const aaa102 = graph.getByTestId("aaa102")
+      const aaa202 = graph.getByTestId("aaa202")
+      const path_bool2_aaa202 = graph.getByTestId("bool2->aaa202")
+      fireEvent.click(aaa102)
+      expect(path_bool2_aaa202.classList.contains("takeable")).toBe(true)
+      fireEvent.mouseEnter(aaa202)
+      expect(path_bool2_aaa202.classList.contains("takeable")).toBe(true)
+      fireEvent.click(aaa202)
+      expect(path_bool2_aaa202.classList.contains("active")).toBe(true)
     })
   })
 
@@ -103,6 +145,43 @@ describe("Edge", () => {
         expect(path_101_201.classList.contains("active")).toBe(true)
         fireEvent.mouseOver(aaa101)
         expect(path_101_201.classList.contains("active")).toBe(true)
+      })
+
+      it("hover on and hover off should change edge state to missing", async () => {
+        const graph = await TestGraph.build()
+        const aaa201 = graph.getByTestId("aaa201")
+        const path_101_201 = graph.getByTestId("h101->aaa201")
+        fireEvent.mouseEnter(aaa201)
+        expect(path_101_201.classList.contains("missing")).toBe(true)
+        fireEvent.mouseLeave(aaa201)
+        expect(path_101_201.classList.contains("inactive")).toBe(true)
+      })
+
+      it("hovering over a node should highlight all the missing nodes and not change the active nodes", async () => {
+        const graph = await TestGraph.build()
+        const aaa202 = graph.getByTestId("aaa202")
+        const aaa101 = graph.getByTestId("aaa101")
+        const path_bool2_aaa202 = graph.getByTestId("bool2->aaa202")
+        const path_aaa102_bool2 = graph.getByTestId("aaa102->bool2")
+        const path_aaa201_bool2 = graph.getByTestId("aaa201->bool2")
+        const path_101_201 = graph.getByTestId("h101->aaa201")
+        fireEvent.click(aaa101)
+        expect(path_101_201.classList.contains("takeable")).toBe(true)
+        fireEvent.mouseEnter(aaa202)
+        expect(path_101_201.classList.contains("takeable")).toBe(true)
+        expect(path_bool2_aaa202.classList.contains("missing")).toBe(true)
+        expect(path_aaa102_bool2.classList.contains("missing")).toBe(true)
+        expect(path_aaa201_bool2.classList.contains("missing")).toBe(true)
+      })
+
+      it("hovering over a node with missing edges then clicking it change the edge status to inactive", async () => {
+        const graph = await TestGraph.build()
+        const aaa202 = graph.getByTestId("aaa202")
+        const path_bool2_aaa202 = graph.getByTestId("bool2->aaa202")
+        fireEvent.mouseEnter(aaa202)
+        expect(path_bool2_aaa202.classList.contains("missing")).toBe(true)
+        fireEvent.click(aaa202)
+        expect(path_bool2_aaa202.classList.contains("inactive")).toBe(true)
       })
     })
 
