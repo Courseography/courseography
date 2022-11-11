@@ -66,7 +66,6 @@ export class Graph extends React.Component {
 
     this.nodes = React.createRef()
     this.bools = React.createRef()
-    this.edges = React.createRef()
     this.exportModal = React.createRef()
     this.nodeDropshadowFilter = "dropshadow"
   }
@@ -869,9 +868,9 @@ export class Graph extends React.Component {
         },
         () => {
           boolNode.props.inEdges.forEach(edge => {
-            var currentEdge = svg.edges.current[edge]
-            var sourceNode = refLookUp(currentEdge.props.source, svg)
-            if (!sourceNode.isSelected()) {
+            const source = this.state.edgesJSON.find(e => e.id_ === edge).source
+            const [type, node] = this.findNode(source)
+            if (!this.isSelected(type, node.id_)) {
               this.updateEdgeStatus("missing", edge)
             }
           })
@@ -1022,9 +1021,9 @@ export class Graph extends React.Component {
         },
         () => {
           targetNode.props.inEdges.forEach(edge => {
-            const currentEdge = this.edges.current[edge]
-            const sourceNode = currentEdge && refLookUp(currentEdge.props.source, this)
-            if (!sourceNode.isSelected()) {
+            const source = this.state.edgesJSON.find(e => e.id_ === edge).source
+            const [type, node] = this.findNode(source)
+            if (!this.isSelected(type, node.id_)) {
               this.updateEdgeStatus("missing", edge)
             }
           })
@@ -1310,8 +1309,6 @@ export class Graph extends React.Component {
             focusPrereqs={this.focusPrereqsBool}
           />
           <EdgeGroup
-            svg={this}
-            ref={this.edges}
             edgesJSON={this.state.edgesJSON}
             edgesStatus={this.state.edgesStatus}
           />
