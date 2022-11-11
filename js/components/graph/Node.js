@@ -81,27 +81,7 @@ export default class Node extends React.Component {
    * Resets 'missing' nodes and edges to the previous statuses:
    *  active, inactive, overridden, takeable
    */
-  unfocusPrereqs = () => {
-    var svg = this.props.svg
-    this.updateNode(false)
-    this.props.parents.forEach(function (node) {
-      if (typeof node === "string") {
-        var currentNode = refLookUp(node, svg)
-        currentNode.unfocusPrereqs()
-      } else {
-        node.forEach(n => {
-          var currentNode = refLookUp(n, svg)
-          currentNode.unfocusPrereqs()
-        })
-      }
-    })
-    this.props.inEdges.forEach(function (edge) {
-      var currentEdge = svg.edges.current[edge]
-      if (currentEdge.props.status === "missing") {
-        currentEdge.updateStatus()
-      }
-    })
-  }
+  unfocusPrereqs = () => this.props.unfocusPrereqs(this)
 
   getDataTestId = () => {
     if (this.props.hybrid) {
@@ -203,6 +183,7 @@ Node.propTypes = {
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
   focusPrereqs: PropTypes.func,
+  unfocusPrereqs: PropTypes.func,
   updateNode: PropTypes.func,
   toggleSelection: PropTypes.func,
   status: PropTypes.string,

@@ -358,7 +358,8 @@ export class Graph extends React.Component {
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id
     var currentNode = this.nodes.current[courseId]
-    currentNode.focusPrereqs(this)
+    console.log("mouse entered")
+    this.focusPrereqs(currentNode)
 
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
 
@@ -388,7 +389,7 @@ export class Graph extends React.Component {
   nodeMouseLeave = event => {
     var courseId = event.currentTarget.id
     var currentNode = this.nodes.current[courseId]
-    currentNode.unfocusPrereqs(this)
+    currentNode.unfocusPrereqs()
 
     var timeout = setTimeout(() => {
       this.setState({ showInfoBox: false })
@@ -965,7 +966,62 @@ export class Graph extends React.Component {
   }
 
   focusPrereqs = targetNode => {
-    // to be completed
+    // Missing prerequisites need to have their status updated to 'missing'
+    const nodeId = targetNode.props.JSON.id_
+    if (["inactive", "overridden", "takeable"].includes(targetNode.props.status)) {
+      this.setState(
+        prevState => {
+          const nodesState = { ...prevState.nodesState }
+          nodesState[nodeId].status = "missing"
+          return { nodesState: nodesState }
+        },
+        () => {
+          targetNode.props.inEdges.forEach(edge => {
+            const currentEdge = this.edges.current[edge]
+            const sourceNode = currentEdge && refLookUp(currentEdge.props.source, this)
+            if (!sourceNode.isSelected()) {
+              this.updateEdgeStatus("missing", edge)
+            }
+          })
+          targetNode.props.parents.forEach(node => {
+            if (typeof node === "string") {
+              const currentNode = refLookUp(node, this)
+              currentNode.focusPrereqs()
+            } else {
+              node.forEach(n => {
+                const currentNode = refLookUp(n, this)
+                currentNode.focusPrereqs()
+              })
+            }
+          })
+        }
+      )
+    }
+  }
+
+  /**
+   * Resets 'missing' nodes and edges to the previous statuses:
+   *  active, inactive, overridden, takeable
+   */
+  unfocusPrereqs = targetNode => {
+    targetNode.updateNode(false)
+    targetNode.props.parents.forEach(node => {
+      if (typeof node === "string") {
+        var currentNode = refLookUp(node, this)
+        currentNode.unfocusPrereqs()
+      } else {
+        node.forEach(n => {
+          var currentNode = refLookUp(n, this)
+          currentNode.unfocusPrereqs()
+        })
+      }
+    })
+    targetNode.props.inEdges.forEach(edge => {
+      var currentEdge = this.edges.current[edge]
+      if (currentEdge.props.status === "missing") {
+        currentEdge.updateStatus()
+      }
+    })
   }
 
   renderRegions = regionsJSON => {
@@ -1187,6 +1243,7 @@ export class Graph extends React.Component {
             nodeMouseDown={this.nodeMouseDown}
             svg={this}
             focusPrereqs={this.focusPrereqs}
+            unfocusPrereqs={this.unfocusPrereqs}
             updateNode={this.updateNode}
             toggleSelection={this.toggleSelection}
             nodesState={this.state.nodesState}
