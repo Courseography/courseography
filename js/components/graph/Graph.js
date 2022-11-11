@@ -456,22 +456,6 @@ export class Graph extends React.Component {
     }
   }
 
-  updateNodeStatus = (nodeId, status, callback) => {
-    this.setState(state => {
-      const nodesState = { ...state.nodesState }
-      nodesState[nodeId].status = status
-      return { nodesState: nodesState }
-    }, callback)
-  }
-
-  updateNodeSelected = (nodeId, selected, callback) => {
-    this.setState(state => {
-      const nodesState = { ...state.nodesState }
-      nodesState[nodeId].selected = selected
-      return { nodesState: nodesState }
-    }, callback)
-  }
-
   /**
    * Drawing mode not implemented, so this function may not work.
    */
@@ -816,7 +800,7 @@ export class Graph extends React.Component {
   /**
    * Update the Bool's state at any moment given the prereqs and current state.
    */
-  updateNode = boolNode => {
+  updateNodeBool = boolNode => {
     var svg = boolNode.props.svg
     var newState = boolNode.arePrereqsSatisfied() ? "active" : "inactive"
     var boolId = boolNode.props.JSON.id_
@@ -847,7 +831,7 @@ export class Graph extends React.Component {
   /**
    * Cross check with the selected focus prerequisites.
    */
-  focusPrereqs = boolNode => {
+  focusPrereqsBool = boolNode => {
     var svg = boolNode.props.svg
     var boolId = boolNode.props.JSON.id_
     // Check if there are any missing prerequisites.
@@ -876,6 +860,114 @@ export class Graph extends React.Component {
       )
     }
   }
+
+  updateNode = (targetNode, recursive) => {
+    var newState
+    if (targetNode.arePrereqsSatisfied()) {
+      if (targetNode.isSelected() || targetNode.props.hybrid) {
+        newState = "active"
+      } else {
+        newState = "takeable"
+      }
+    } else {
+      if (targetNode.isSelected() && !targetNode.props.hybrid) {
+        newState = "overridden"
+      } else {
+        newState = "inactive"
+      }
+    }
+
+    var nodeId = targetNode.props.JSON.id_
+
+    // Updating the children will be unnecessary if the selected state of the current node has not
+    // changed, and the original state was not 'missing'
+    var svg = targetNode.props.svg
+    const allEdges = targetNode.props.outEdges.concat(targetNode.props.inEdges)
+    if (
+      ["active", "overridden"].indexOf(newState) >= 0 ===
+        ["active", "overridden"].indexOf(targetNode.props.status) >= 0 &&
+      targetNode.props.status !== "missing"
+    ) {
+      localStorage.setItem(nodeId, newState)
+
+      this.setState(
+        prevState => {
+          const nodesState = { ...prevState.nodesState }
+          nodesState[nodeId].status = newState
+          return { nodesState: nodesState }
+        },
+        () => {
+          allEdges.forEach(edge => {
+            var currentEdge = svg.edges.current[edge]
+            if (currentEdge !== undefined) {
+              currentEdge.updateStatus()
+            }
+          })
+        }
+      )
+
+      return
+    }
+
+    if (recursive === undefined || recursive) {
+      this.setState(
+        prevState => {
+          const nodesState = { ...prevState.nodesState }
+          nodesState[nodeId].status = newState
+          return { nodesState: nodesState }
+        },
+        () => {
+          localStorage.setItem(nodeId, newState)
+          targetNode.props.childs.forEach(n => {
+            var currentNode = refLookUp(n, svg)
+            if (currentNode !== undefined) {
+              currentNode.updateNode()
+            }
+          })
+          allEdges.forEach(edge => {
+            var currentEdge = svg.edges.current[edge]
+            if (currentEdge !== undefined) {
+              currentEdge.updateStatus()
+            }
+          })
+        }
+      )
+    } else {
+      this.setState(
+        prevState => {
+          const nodesState = { ...prevState.nodesState }
+          nodesState[nodeId].status = newState
+          return { nodesState: nodesState }
+        },
+        () => {
+          allEdges.forEach(edge => {
+            var currentEdge = svg.edges.current[edge]
+            if (currentEdge !== undefined) {
+              currentEdge.updateStatus()
+            }
+          })
+        }
+      )
+      localStorage.setItem(nodeId, newState)
+    }
+  }
+
+  toggleSelection = targetNode => {
+    var nodeId = targetNode.props.JSON.id_
+    this.setState(
+      prevState => {
+        const nodesState = { ...prevState.nodesState }
+        nodesState[nodeId].selected = !nodesState[nodeId].selected
+        return { nodesState: nodesState }
+      },
+      () => targetNode.updateNode()
+    )
+  }
+
+  focusPrereqs = targetNode => {
+    // to be completed
+  }
+
   renderRegions = regionsJSON => {
     return regionsJSON.map(function (entry, value) {
       var pathAttrs = { d: "M" }
@@ -1094,8 +1186,9 @@ export class Graph extends React.Component {
             nodeMouseLeave={this.nodeMouseLeave}
             nodeMouseDown={this.nodeMouseDown}
             svg={this}
-            updateNodeStatus={this.updateNodeStatus}
-            updateNodeSelected={this.updateNodeSelected}
+            focusPrereqs={this.focusPrereqs}
+            updateNode={this.updateNode}
+            toggleSelection={this.toggleSelection}
             nodesState={this.state.nodesState}
             nodesJSON={this.state.nodesJSON}
             hybridsJSON={this.state.hybridsJSON}
@@ -1112,8 +1205,8 @@ export class Graph extends React.Component {
             edgesJSON={this.state.edgesJSON}
             connections={this.state.connections}
             svg={this}
-            updateNode={this.updateNode}
-            focusPrereqs={this.focusPrereqs}
+            updateNode={this.updateNodeBool}
+            focusPrereqs={this.focusPrereqsBool}
           />
           <EdgeGroup
             svg={this}

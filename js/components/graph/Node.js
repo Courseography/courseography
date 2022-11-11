@@ -69,117 +69,13 @@ export default class Node extends React.Component {
    * Update the state/status of a node (and its children/edges)
    * @param  {boolean} recursive whether we should recurse on its children
    */
-  updateNode = recursive => {
-    var newState
-    if (this.arePrereqsSatisfied()) {
-      if (this.isSelected() || this.props.hybrid) {
-        newState = "active"
-      } else {
-        newState = "takeable"
-      }
-    } else {
-      if (this.isSelected() && !this.props.hybrid) {
-        newState = "overridden"
-      } else {
-        newState = "inactive"
-      }
-    }
-
-    var nodeId = this.props.JSON.id_
-
-    // Updating the children will be unnecessary if the selected state of the current node has not
-    // changed, and the original state was not 'missing'
-    var svg = this.props.svg
-    const allEdges = this.props.outEdges.concat(this.props.inEdges)
-    if (
-      ["active", "overridden"].indexOf(newState) >= 0 ===
-        ["active", "overridden"].indexOf(this.props.status) >= 0 &&
-      this.props.status !== "missing"
-    ) {
-      localStorage.setItem(nodeId, newState)
-      this.props.updateNodeStatus(nodeId, newState, () => {
-        allEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge]
-          if (currentEdge !== undefined) {
-            currentEdge.updateStatus()
-          }
-        })
-      })
-      return
-    }
-
-    if (recursive === undefined || recursive) {
-      this.props.updateNodeStatus(nodeId, newState, () => {
-        localStorage.setItem(nodeId, newState)
-        this.props.childs.forEach(node => {
-          var currentNode = refLookUp(node, svg)
-          if (currentNode !== undefined) {
-            currentNode.updateNode()
-          }
-        })
-        allEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge]
-          if (currentEdge !== undefined) {
-            currentEdge.updateStatus()
-          }
-        })
-      })
-    } else {
-      this.props.updateNodeStatus(nodeId, newState, () => {
-        allEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge]
-          if (currentEdge !== undefined) {
-            currentEdge.updateStatus()
-          }
-        })
-      })
-      localStorage.setItem(nodeId, newState)
-    }
-  }
+  updateNode = recursive => this.props.updateNode(this, recursive)
 
   /** Controls the selection and deselection of a node by switching states and updating the graph */
-  toggleSelection = () => {
-    this.props.updateNodeSelected(
-      this.props.JSON.id_,
-      !this.props.selected,
-      this.updateNode
-    )
-  }
+  toggleSelection = () => this.props.toggleSelection(this)
 
   /** Sets the status of all missing prerequisites to 'missing' */
-  focusPrereqs = () => {
-    var svg = this.props.svg
-    // Missing prerequisites need to have their status updated to 'missing'
-    if (["inactive", "overridden", "takeable"].indexOf(this.props.status) >= 0) {
-      this.props.updateNodeStatus(this.props.JSON.id_, "missing", () => {
-        this.props.inEdges.forEach(function (edge) {
-          var currentEdge = svg.edges.current[edge]
-          if (currentEdge === null || currentEdge === undefined) {
-            return
-          }
-          var sourceNode = refLookUp(currentEdge.props.source, svg)
-          if (!sourceNode.isSelected()) {
-            currentEdge.updateStatus("missing")
-          }
-        })
-        this.props.parents.forEach(function (node) {
-          if (typeof node === "string") {
-            var currentNode = refLookUp(node, svg)
-            if (currentNode !== undefined) {
-              currentNode.focusPrereqs()
-            }
-          } else {
-            node.forEach(n => {
-              var currentNode = refLookUp(n, svg)
-              if (currentNode !== undefined) {
-                currentNode.focusPrereqs()
-              }
-            })
-          }
-        })
-      })
-    }
-  }
+  focusPrereqs = () => this.props.focusPrereqs(this)
 
   /**
    * Resets 'missing' nodes and edges to the previous statuses:
@@ -306,8 +202,9 @@ Node.propTypes = {
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
-  updateNodeStatus: PropTypes.func,
-  updateNodeSelected: PropTypes.func,
+  focusPrereqs: PropTypes.func,
+  updateNode: PropTypes.func,
+  toggleSelection: PropTypes.func,
   status: PropTypes.string,
   selected: PropTypes.bool,
   parents: PropTypes.array,

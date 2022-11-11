@@ -39,7 +39,7 @@ export default class Bool extends React.Component {
    */
   unfocusPrereqs = () => {
     var svg = this.props.svg
-    this.props.updateNode(this)
+    this.updateNode()
     this.props.parents.forEach(function (node) {
       var currentNode = refLookUp(node, svg)
       currentNode.unfocusPrereqs(svg)

@@ -30,8 +30,9 @@ export default class NodeGroup extends React.Component {
               childs={this.props.connections.children[entry.id_]}
               status={this.props.nodesState[entry.id_].status}
               selected={this.props.nodesState[entry.id_].selected}
-              updateNodeStatus={this.props.updateNodeStatus}
-              updateNodeSelected={this.props.updateNodeSelected}
+              focusPrereqs={this.props.focusPrereqs}
+              updateNode={this.props.updateNode}
+              toggleSelection={this.props.toggleSelection}
               inEdges={[]}
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
@@ -57,8 +58,9 @@ export default class NodeGroup extends React.Component {
               svg={svg}
               status={this.props.nodesState[entry.id_].status}
               selected={this.props.nodesState[entry.id_].selected}
-              updateNodeStatus={this.props.updateNodeStatus}
-              updateNodeSelected={this.props.updateNodeSelected}
+              focusPrereqs={this.props.focusPrereqs}
+              updateNode={this.props.updateNode}
+              toggleSelection={this.props.toggleSelection}
               highlighted={highlighted}
               onClick={this.props.nodeClick}
               onMouseEnter={this.props.nodeMouseEnter}
@@ -83,8 +85,9 @@ NodeGroup.propTypes = {
   nodeMouseDown: PropTypes.func,
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
-  updateNodeStatus: PropTypes.func,
-  updateNodeSelected: PropTypes.func,
+  focusPrereqs: PropTypes.func,
+  updateNode: PropTypes.func,
+  toggleSelection: PropTypes.func,
   nodesState: PropTypes.object,
   nodesJSON: PropTypes.array,
   connections: PropTypes.object,
