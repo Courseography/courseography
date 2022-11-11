@@ -1,6 +1,5 @@
 import PropTypes from "prop-types"
 import React from "react"
-import { refLookUp } from "../common/utils"
 
 /** React component class representing a Node on the graph
  *
@@ -73,9 +72,6 @@ export default class Node extends React.Component {
 
   /** Controls the selection and deselection of a node by switching states and updating the graph */
   toggleSelection = () => this.props.toggleSelection(this)
-
-  /** Sets the status of all missing prerequisites to 'missing' */
-  focusPrereqs = () => this.props.focusPrereqs(this)
 
   /**
    * Resets 'missing' nodes and edges to the previous statuses:
@@ -182,7 +178,6 @@ Node.propTypes = {
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
-  focusPrereqs: PropTypes.func,
   unfocusPrereqs: PropTypes.func,
   updateNode: PropTypes.func,
   toggleSelection: PropTypes.func,

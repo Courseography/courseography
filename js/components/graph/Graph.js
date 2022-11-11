@@ -381,7 +381,8 @@ export class Graph extends React.Component {
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id
     var currentNode = this.nodes.current[courseId]
-    this.focusPrereqs(currentNode)
+    console.log(courseId)
+    this.focusPrereqs(courseId)
 
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
 
@@ -851,39 +852,6 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Cross check with the selected focus prerequisites.
-   */
-  focusPrereqsBool = boolNode => {
-    var svg = boolNode.props.svg
-    var boolId = boolNode.props.JSON.id_
-    // Check if there are any missing prerequisites.
-    if (boolNode.props.status !== "active") {
-      this.setState(
-        prevState => {
-          const boolsStatus = { ...prevState.boolsStatus }
-          boolsStatus[boolId] = "missing"
-          return {
-            boolsStatus: boolsStatus,
-          }
-        },
-        () => {
-          boolNode.props.inEdges.forEach(edge => {
-            const source = this.state.edgesJSON.find(e => e.id_ === edge).source
-            const [type, node] = this.findNode(source)
-            if (!this.isSelected(type, node.id_)) {
-              this.updateEdgeStatus("missing", edge)
-            }
-          })
-          boolNode.props.parents.forEach(node => {
-            var currentNode = refLookUp(node, svg)
-            currentNode.focusPrereqs()
-          })
-        }
-      )
-    }
-  }
-
-  /**
    * find and return the node object
    * @param {string} nodeId
    */
@@ -1009,10 +977,56 @@ export class Graph extends React.Component {
     )
   }
 
-  focusPrereqs = targetNode => {
-    // Missing prerequisites need to have their status updated to 'missing'
-    const nodeId = targetNode.props.JSON.id_
-    if (["inactive", "overridden", "takeable"].includes(targetNode.props.status)) {
+  /** Sets the status of all missing prerequisites to 'missing' */
+  focusPrereqs = nodeId => {
+    // we need to differentiate between bool and normal nodes
+    const [type, _] = this.findNode(nodeId)
+    if (type === "bool") {
+      this.focusPrereqsBool(nodeId)
+    } else {
+      this.focusPrereqsNode(nodeId)
+    }
+  }
+
+  /**
+   * Cross check with the selected focus prerequisites.
+   */
+  focusPrereqsBool = boolId => {
+    const status = this.state.boolsStatus[boolId]
+    const inEdges = this.state.connections.inEdges[boolId]
+    const parents = this.state.connections.parents[boolId]
+    // Check if there are any missing prerequisites.
+    if (status !== "active") {
+      this.setState(
+        prevState => {
+          const boolsStatus = { ...prevState.boolsStatus }
+          boolsStatus[boolId] = "missing"
+          return {
+            boolsStatus: boolsStatus,
+          }
+        },
+        () => {
+          inEdges?.forEach(edge => {
+            const source = this.state.edgesJSON.find(e => e.id_ === edge).source
+            const [type, node] = this.findNode(source)
+            if (!this.isSelected(type, node.id_)) {
+              this.updateEdgeStatus("missing", edge)
+            }
+          })
+          parents?.forEach(node => {
+            this.focusPrereqs(node)
+          })
+        }
+      )
+    }
+  }
+
+  focusPrereqsNode = nodeId => {
+    const status = this.state.nodesState[nodeId]?.status
+    const inEdges = this.state.connections.inEdges[nodeId]
+    const parents = this.state.connections.parents[nodeId]
+
+    if (["inactive", "overridden", "takeable"].includes(status)) {
       this.setState(
         prevState => {
           const nodesState = { ...prevState.nodesState }
@@ -1020,21 +1034,19 @@ export class Graph extends React.Component {
           return { nodesState: nodesState }
         },
         () => {
-          targetNode.props.inEdges.forEach(edge => {
+          inEdges?.forEach(edge => {
             const source = this.state.edgesJSON.find(e => e.id_ === edge).source
             const [type, node] = this.findNode(source)
             if (!this.isSelected(type, node.id_)) {
               this.updateEdgeStatus("missing", edge)
             }
           })
-          targetNode.props.parents.forEach(node => {
+          parents?.forEach(node => {
             if (typeof node === "string") {
-              const currentNode = refLookUp(node, this)
-              currentNode.focusPrereqs()
+              this.focusPrereqs(node)
             } else {
               node.forEach(n => {
-                const currentNode = refLookUp(n, this)
-                currentNode.focusPrereqs()
+                this.focusPrereqs(n)
               })
             }
           })
@@ -1049,7 +1061,10 @@ export class Graph extends React.Component {
    */
   unfocusPrereqs = targetNode => {
     targetNode.updateNode(false)
-    targetNode.props.parents.forEach(node => {
+    const nodeId = targetNode.props.JSON.id_
+    const parents = this.state.connections.parents[nodeId]
+    const inEdges = this.state.connections.inEdges[nodeId]
+    parents?.forEach(node => {
       if (typeof node === "string") {
         var currentNode = refLookUp(node, this)
         currentNode.unfocusPrereqs()
@@ -1060,7 +1075,7 @@ export class Graph extends React.Component {
         })
       }
     })
-    targetNode.props.inEdges.forEach(edge => {
+    inEdges?.forEach(edge => {
       if (this.state.edgesStatus[edge] === "missing") {
         this.updateEdgeStatus(undefined, edge)
       }
@@ -1285,7 +1300,6 @@ export class Graph extends React.Component {
             nodeMouseLeave={this.nodeMouseLeave}
             nodeMouseDown={this.nodeMouseDown}
             svg={this}
-            focusPrereqs={this.focusPrereqs}
             unfocusPrereqs={this.unfocusPrereqs}
             updateNode={this.updateNode}
             toggleSelection={this.toggleSelection}
