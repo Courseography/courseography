@@ -135,7 +135,6 @@ export class Graph extends React.Component {
       })
       .then(data => {
         localStorage.setItem("active-graph", graphName)
-
         var regionsList = []
         var nodesList = []
         var nodesState = {}
@@ -318,14 +317,39 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Update the status of the Edge, this will take in a source, a target so it can be looked up
-   * We will loop through the edgesJSON and find use the source, target directly from edgeJSON
-   * the state will be stored and updated in edgeGroup object.
+   * Update the status of the Edge, based on the status of the Node/Bool it points from/to
    */
-  updateEdgeStatus = (status, edgeID) => {
+  updateEdgeStatus = (status, edgeId) => {
+    const edge = this.state.edgesJSON.find(edge => edge.id_ === edgeId)
+
+    const [targetType, targetNode] = this.findNode(edge.target)
+    const [sourceType, sourceNode] = this.findNode(edge.source)
+
+    const isSourceSelected = this.isSelected(sourceType, sourceNode.id_)
+    const isTargetSelected = this.isSelected(targetType, targetNode.id_)
+
+    let targetStatus
+
+    if (targetType === "bool") {
+      targetStatus = this.state.boolsStatus[targetNode.id_]
+    } else {
+      targetStatus = this.state.nodesState[targetNode.id_]
+    }
+
+    if (!status) {
+      if (!isSourceSelected && targetStatus === "missing") {
+        status = "missing"
+      } else if (!isSourceSelected) {
+        status = "inactive"
+      } else if (!isTargetSelected) {
+        status = "takeable"
+      } else {
+        status = "active"
+      }
+    }
     this.setState(state => {
       const edgesStatus = { ...state.edgesStatus }
-      edgesStatus[edgeID] = status
+      edgesStatus[edgeId] = status
       return {
         edgesStatus: edgesStatus,
       }
@@ -358,7 +382,6 @@ export class Graph extends React.Component {
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id
     var currentNode = this.nodes.current[courseId]
-    console.log("mouse entered")
     this.focusPrereqs(currentNode)
 
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
@@ -821,9 +844,8 @@ export class Graph extends React.Component {
           currentNode.updateNode(svg)
         })
         var allEdges = boolNode.props.outEdges.concat(boolNode.props.inEdges)
-        allEdges.forEach(function (edge) {
-          var currentEdge = svg.edges.current[edge]
-          currentEdge.updateStatus()
+        allEdges.forEach(edge => {
+          this.updateEdgeStatus(undefined, edge)
         })
       }
     )
@@ -859,6 +881,38 @@ export class Graph extends React.Component {
           })
         }
       )
+    }
+  }
+
+  /**
+   * find and return the node object
+   * @param {string} nodeId
+   */
+  findNode = nodeId => {
+    // if not a bool node
+    if (nodeId in this.state.nodesState) {
+      // a node or hybridNode, check if it's a hybrid node
+      const node = this.state.hybridsJSON.find(node => node.id_ === nodeId)
+      if (node) return ["hybrid", node]
+      else {
+        return ["node", this.state.nodesJSON.find(node => node.id_ === nodeId)]
+      }
+    } else {
+      return ["bool", this.state.boolsJSON.find(node => node.id_ === nodeId)]
+    }
+  }
+
+  /**
+   * Checks whether this Node is selected
+   * @return {boolean}
+   */
+  isSelected = (type, nodeId) => {
+    if (type === "node") {
+      return this.state.nodesState[nodeId].selected
+    } else if (type === "hybrid") {
+      return this.state.nodesState[nodeId].status === "active"
+    } else {
+      return this.state.boolsStatus[nodeId] === "active"
     }
   }
 
@@ -899,10 +953,7 @@ export class Graph extends React.Component {
         },
         () => {
           allEdges.forEach(edge => {
-            var currentEdge = svg.edges.current[edge]
-            if (currentEdge !== undefined) {
-              currentEdge.updateStatus()
-            }
+            this.updateEdgeStatus(undefined, edge)
           })
         }
       )
@@ -926,10 +977,7 @@ export class Graph extends React.Component {
             }
           })
           allEdges.forEach(edge => {
-            var currentEdge = svg.edges.current[edge]
-            if (currentEdge !== undefined) {
-              currentEdge.updateStatus()
-            }
+            this.updateEdgeStatus(undefined, edge)
           })
         }
       )
@@ -942,10 +990,7 @@ export class Graph extends React.Component {
         },
         () => {
           allEdges.forEach(edge => {
-            var currentEdge = svg.edges.current[edge]
-            if (currentEdge !== undefined) {
-              currentEdge.updateStatus()
-            }
+            this.updateEdgeStatus(undefined, edge)
           })
         }
       )
@@ -1017,9 +1062,8 @@ export class Graph extends React.Component {
       }
     })
     targetNode.props.inEdges.forEach(edge => {
-      var currentEdge = this.edges.current[edge]
-      if (currentEdge.props.status === "missing") {
-        currentEdge.updateStatus()
+      if (this.state.edgesStatus[edge] === "missing") {
+        this.updateEdgeStatus(undefined, edge)
       }
     })
   }
@@ -1270,7 +1314,6 @@ export class Graph extends React.Component {
             ref={this.edges}
             edgesJSON={this.state.edgesJSON}
             edgesStatus={this.state.edgesStatus}
-            updateEdgeStatus={this.updateEdgeStatus}
           />
           <InfoBox
             onClick={this.infoBoxMouseClick}
