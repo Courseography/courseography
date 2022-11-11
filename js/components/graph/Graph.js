@@ -135,6 +135,7 @@ export class Graph extends React.Component {
       })
       .then(data => {
         localStorage.setItem("active-graph", graphName)
+
         var regionsList = []
         var nodesList = []
         var nodesState = {}
@@ -597,33 +598,32 @@ export class Graph extends React.Component {
   // Reset graph
   reset = () => {
     this.props.setFCECount(0)
+    const nodesState = Object.keys(this.state.nodesState).reduce((acc, curr) => {
+      const state =
+        this.state.connections.parents[curr].length === 0 ? "takeable" : "inactive"
+      localStorage.setItem(curr, state)
+      acc[curr] = {
+        status: state,
+        selected: false,
+      }
+      return acc
+    }, {})
 
-    var nodesStateCopy = this.state.nodesState
-    Object.keys(nodesStateCopy).forEach(nodeState => {
-      var state =
-        this.state.connections.parents[nodeState].length === 0 ? "takeable" : "inactive"
-      nodesStateCopy[nodeState].status = state
-      nodesStateCopy[nodeState].selected = false
-      localStorage.setItem(nodeState, state)
-    })
+    const edgesStatus = Object.keys(this.state.edgesStatus).reduce(
+      (acc, curr) => ((acc[curr] = "inactive"), acc),
+      {}
+    )
 
-    var edgesStatusCopy = this.state.edgesStatus
-    Object.keys(edgesStatusCopy).forEach(edgeStatus => {
-      edgesStatusCopy[edgeStatus] = "inactive"
-    })
-
-    var boolsStatusCopy = this.state.boolsStatus
-    Object.keys(boolsStatusCopy).forEach(boolStatus => {
-      boolsStatusCopy[boolStatus] = "inactive"
-    })
-
+    const boolStatus = Object.keys(this.state.boolsStatus).reduce(
+      (acc, curr) => ((acc[curr] = "inactive"), acc),
+      {}
+    )
     this.setState({
-      boolsStatus: boolsStatusCopy,
-      edgesStatus: edgesStatusCopy,
-      nodesState: nodesStateCopy,  
-      selectedNodes: new Set() 
+      boolsStatus: boolStatus,
+      edgesStatus: edgesStatus,
+      nodesState: nodesState,
+      selectedNodes: new Set(),
     })
-    
     if (this.state.currFocus !== null) {
       this.highlightFocuses([])
     }

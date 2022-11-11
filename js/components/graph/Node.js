@@ -97,7 +97,6 @@ export default class Node extends React.Component {
       this.props.status !== "missing"
     ) {
       localStorage.setItem(nodeId, newState)
-
       this.props.updateNodeStatus(nodeId, newState, () => {
         allEdges.forEach(edge => {
           var currentEdge = svg.edges.current[edge]
@@ -106,15 +105,11 @@ export default class Node extends React.Component {
           }
         })
       })
-
       return
     }
 
     if (recursive === undefined || recursive) {
-
-      var svg = this.props.svg
       this.props.updateNodeStatus(nodeId, newState, () => {
-
         localStorage.setItem(nodeId, newState)
         this.props.childs.forEach(node => {
           var currentNode = refLookUp(node, svg)
@@ -138,7 +133,6 @@ export default class Node extends React.Component {
           }
         })
       })
-
       localStorage.setItem(nodeId, newState)
     }
   }
