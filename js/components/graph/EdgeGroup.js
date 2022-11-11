@@ -5,42 +5,6 @@ import Edge from "./Edge"
  * Class representing a group of all Edges from the graph
  */
 export default class EdgeGroup extends React.Component {
-  constructor(props) {
-    super(props)
-    // EdgeGroup's state is used to keep track of the edgeIDs of
-    // edges that are missing. Void is just a placeholder state so
-    // we can declare an initial state; it does nothing.
-    this.state = {}
-  }
-
-  /**
-   * Updates EdgeGroup's state with the state of an Edge when the Edge's state changes.
-   * This function is passed as a property to Edge.
-   * @param {string} edgeID
-   * @param {string} state
-   */
-  updateEdgeStatus = (edgeID, state) => {
-    var isMissing = state === "missing"
-    this.setState({ [edgeID]: isMissing })
-  }
-
-  /**
-   * After each render after the initial, update the status of each Edge
-   */
-  componentDidUpdate() {
-    this.props.edgesJSON.forEach(edgeJSON => {
-      this[edgeJSON.id_].updateStatus()
-    })
-  }
-
-  /**
-   * Set all Edges to the inactive status
-   */
-  reset = () => {
-    this.props.edgesJSON.forEach(edgeJSON => {
-      this[edgeJSON.id_].setState({ status: "inactive" })
-    })
-  }
   /**
    * This function is used as a callback ref. See {@link:https://reactjs.org/docs/refs-and-the-dom.html#callback-refs}
    * @param {JSON} edgeJSON Represents a single edge
@@ -67,7 +31,8 @@ export default class EdgeGroup extends React.Component {
         points={edgeJSON.points}
         svg={this.props.svg}
         edgeID={edgeJSON.id_}
-        updateEdgeStatus={this.updateEdgeStatus}
+        status={this.props.edgesStatus[edgeJSON.id_]}
+        updateEdgeStatus={this.props.updateEdgeStatus}
       />
     )
   }
@@ -78,7 +43,7 @@ export default class EdgeGroup extends React.Component {
     // are last in the list. Then render based on that list.
     var edges = this.props.edgesJSON
     var edgesCopy = [...edges]
-    var state = this.state
+    var state = this.props.edgesStatus
     edgesCopy.sort((a, b) => {
       // If an edge is missing, its edgeID should be in EdgeGroup's
       // state and its value should be true.
@@ -108,4 +73,8 @@ EdgeGroup.propTypes = {
   edgesJSON: PropTypes.array,
   /**The overarching graph object */
   svg: PropTypes.object,
+  /** An object containing all edge to status pairs */
+  edgesStatus: PropTypes.object,
+  /** A function for updating the edge status */
+  updateEdgeStatus: PropTypes.func,
 }

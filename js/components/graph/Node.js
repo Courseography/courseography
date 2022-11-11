@@ -89,6 +89,8 @@ export default class Node extends React.Component {
 
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
+    const svg = this.props.svg
+    const allEdges = this.props.outEdges.concat(this.props.inEdges)
     if (
       ["active", "overridden"].indexOf(newState) >= 0 ===
         ["active", "overridden"].indexOf(this.props.status) >= 0 &&
@@ -100,7 +102,6 @@ export default class Node extends React.Component {
     }
 
     if (recursive === undefined || recursive) {
-      var svg = this.props.svg
       this.props.updateNodeStatus(nodeId, newState, () => {
         localStorage.setItem(nodeId, newState)
         this.props.childs.forEach(node => {
@@ -109,7 +110,6 @@ export default class Node extends React.Component {
             currentNode.updateNode()
           }
         })
-        var allEdges = this.props.outEdges.concat(this.props.inEdges)
         allEdges.forEach(edge => {
           var currentEdge = svg.edges.current[edge]
           if (currentEdge !== undefined) {
@@ -118,7 +118,14 @@ export default class Node extends React.Component {
         })
       })
     } else {
-      this.props.updateNodeStatus(nodeId, newState)
+      this.props.updateNodeStatus(nodeId, newState, () => {
+        allEdges.forEach(edge => {
+          var currentEdge = svg.edges.current[edge]
+          if (currentEdge !== undefined) {
+            currentEdge.updateStatus()
+          }
+        })
+      })
       localStorage.setItem(nodeId, newState)
     }
   }
@@ -145,7 +152,7 @@ export default class Node extends React.Component {
           }
           var sourceNode = refLookUp(currentEdge.props.source, svg)
           if (!sourceNode.isSelected()) {
-            currentEdge.setState({ status: "missing" })
+            currentEdge.updateStatus("missing")
           }
         })
         this.props.parents.forEach(function (node) {
@@ -187,7 +194,7 @@ export default class Node extends React.Component {
     })
     this.props.inEdges.forEach(function (edge) {
       var currentEdge = svg.edges.current[edge]
-      if (currentEdge.state.status === "missing") {
+      if (currentEdge.props.status === "missing") {
         currentEdge.updateStatus()
       }
     })

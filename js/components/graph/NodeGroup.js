@@ -4,8 +4,6 @@ import Node from "./Node"
 
 /** A React component class representing a group of Nodes on the graph */
 export default class NodeGroup extends React.Component {
-  /** Returns nodes to their original unselected state, with a status of "takeable" or "inactive" */
-
   /**
    *
    * @param {*} entry

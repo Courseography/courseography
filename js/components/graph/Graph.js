@@ -35,6 +35,7 @@ export class Graph extends React.Component {
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
+      edgesStatus: {},
       boolsStatus: {},
       highlightedNodes: [],
       infoboxTimeouts: [],
@@ -134,6 +135,7 @@ export class Graph extends React.Component {
       })
       .then(data => {
         localStorage.setItem("active-graph", graphName)
+
         var regionsList = []
         var nodesList = []
         var nodesState = {}
@@ -232,6 +234,10 @@ export class Graph extends React.Component {
           outEdgesObj[boolJSON.id_] = outEdges
           inEdgesObj[boolJSON.id_] = inEdges
         })
+        const edgesStatus = edgesList.reduce(
+          (acc, curr) => ((acc[curr.id_] = "inactive"), acc),
+          {}
+        )
 
         noDuplicatesNodesList.forEach(node => {
           var state = localStorage.getItem(node.id_)
@@ -258,6 +264,7 @@ export class Graph extends React.Component {
           horizontalPanFactor: 0,
           verticalPanFactor: 0,
           graphName: graphName,
+          edgesStatus: edgesStatus,
           connections: {
             parents: parentsObj,
             inEdges: inEdgesObj,
@@ -308,6 +315,21 @@ export class Graph extends React.Component {
         this.setState({ dropdownTimeouts: [] })
         break
     }
+  }
+
+  /**
+   * Update the status of the Edge, this will take in a source, a target so it can be looked up
+   * We will loop through the edgesJSON and find use the source, target directly from edgeJSON
+   * the state will be stored and updated in edgeGroup object.
+   */
+  updateEdgeStatus = (status, edgeID) => {
+    this.setState(state => {
+      const edgesStatus = { ...state.edgesStatus }
+      edgesStatus[edgeID] = status
+      return {
+        edgesStatus: edgesStatus,
+      }
+    })
   }
 
   nodeClick = event => {
@@ -576,25 +598,32 @@ export class Graph extends React.Component {
   // Reset graph
   reset = () => {
     this.props.setFCECount(0)
+    const nodesState = Object.keys(this.state.nodesState).reduce((acc, curr) => {
+      const state =
+        this.state.connections.parents[curr].length === 0 ? "takeable" : "inactive"
+      localStorage.setItem(curr, state)
+      acc[curr] = {
+        status: state,
+        selected: false,
+      }
+      return acc
+    }, {})
 
-    var nodesStateCopy = this.state.nodesState
-    Object.keys(nodesStateCopy).forEach(nodeState => {
-      var state =
-        this.state.connections.parents[nodeState].length === 0 ? "takeable" : "inactive"
-      nodesStateCopy[nodeState].status = state
-      nodesStateCopy[nodeState].selected = false
-      localStorage.setItem(nodeState, state)
+    const edgesStatus = Object.keys(this.state.edgesStatus).reduce(
+      (acc, curr) => ((acc[curr] = "inactive"), acc),
+      {}
+    )
+
+    const boolStatus = Object.keys(this.state.boolsStatus).reduce(
+      (acc, curr) => ((acc[curr] = "inactive"), acc),
+      {}
+    )
+    this.setState({
+      boolsStatus: boolStatus,
+      edgesStatus: edgesStatus,
+      nodesState: nodesState,
+      selectedNodes: new Set(),
     })
-    this.setState({ nodesState: nodesStateCopy })
-
-    var boolsStatusCopy = this.state.boolsStatus
-    Object.keys(boolsStatusCopy).forEach(boolStatus => {
-      boolsStatusCopy[boolStatus] = "inactive"
-    })
-    this.setState({ boolsStatus: boolsStatusCopy })
-
-    this.edges.current.reset()
-    this.setState({ selectedNodes: new Set() })
     if (this.state.currFocus !== null) {
       this.highlightFocuses([])
     }
@@ -836,7 +865,7 @@ export class Graph extends React.Component {
             var currentEdge = svg.edges.current[edge]
             var sourceNode = refLookUp(currentEdge.props.source, svg)
             if (!sourceNode.isSelected()) {
-              currentEdge.setState({ status: "missing" })
+              this.updateEdgeStatus("missing", edge)
             }
           })
           boolNode.props.parents.forEach(node => {
@@ -1086,7 +1115,13 @@ export class Graph extends React.Component {
             updateNode={this.updateNode}
             focusPrereqs={this.focusPrereqs}
           />
-          <EdgeGroup svg={this} ref={this.edges} edgesJSON={this.state.edgesJSON} />
+          <EdgeGroup
+            svg={this}
+            ref={this.edges}
+            edgesJSON={this.state.edgesJSON}
+            edgesStatus={this.state.edgesStatus}
+            updateEdgeStatus={this.updateEdgeStatus}
+          />
           <InfoBox
             onClick={this.infoBoxMouseClick}
             onMouseEnter={this.infoBoxMouseEnter}
