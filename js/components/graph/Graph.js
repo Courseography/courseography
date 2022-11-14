@@ -1,5 +1,5 @@
 import React from "react"
-import PropTypes from "prop-types"
+import PropTypes, { node } from "prop-types"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import { ExportModal } from "../common/export.js.jsx"
 import { getPost } from "../common/utils.js"
@@ -381,7 +381,6 @@ export class Graph extends React.Component {
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id
     var currentNode = this.nodes.current[courseId]
-    console.log(courseId)
     this.focusPrereqs(courseId)
 
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
@@ -828,6 +827,9 @@ export class Graph extends React.Component {
     var svg = boolNode.props.svg
     var newState = boolNode.arePrereqsSatisfied() ? "active" : "inactive"
     var boolId = boolNode.props.JSON.id_
+    const childs = this.state.connections.children[boolId]
+    const inEdges = this.state.connections.inEdges[boolId]
+    const outEdges = this.state.connections.outEdges[boolId]
 
     this.setState(
       prevState => {
@@ -839,11 +841,11 @@ export class Graph extends React.Component {
       },
       () => {
         localStorage.setItem(boolId, newState)
-        boolNode.props.childs.forEach(function (node) {
+        childs.forEach(function (node) {
           var currentNode = refLookUp(node, svg)
           currentNode.updateNode(svg)
         })
-        var allEdges = boolNode.props.outEdges.concat(boolNode.props.inEdges)
+        var allEdges = outEdges.concat(inEdges)
         allEdges.forEach(edge => {
           this.updateEdgeStatus(undefined, edge)
         })
@@ -900,15 +902,16 @@ export class Graph extends React.Component {
     }
 
     var nodeId = targetNode.props.JSON.id_
-
+    const childs = this.state.connections.children[nodeId]
+    const status = this.state.nodesState[nodeId]?.status
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
     var svg = targetNode.props.svg
     const allEdges = targetNode.props.outEdges.concat(targetNode.props.inEdges)
     if (
       ["active", "overridden"].indexOf(newState) >= 0 ===
-        ["active", "overridden"].indexOf(targetNode.props.status) >= 0 &&
-      targetNode.props.status !== "missing"
+        ["active", "overridden"].indexOf(status) >= 0 &&
+      status !== "missing"
     ) {
       localStorage.setItem(nodeId, newState)
 
@@ -937,7 +940,7 @@ export class Graph extends React.Component {
         },
         () => {
           localStorage.setItem(nodeId, newState)
-          targetNode.props.childs.forEach(n => {
+          childs?.forEach(n => {
             var currentNode = refLookUp(n, svg)
             if (currentNode !== undefined) {
               currentNode.updateNode()
