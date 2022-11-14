@@ -5,7 +5,7 @@ describe("FocusTab", () => {
   it("When focuses are clicked, focuses should be active", async () => {
     const container = await TestContainer.build()
     fireEvent.click(container.getByRole("button", { name: /FOCUSES ⪢/i }))
-    let focusDiv = container
+    const focusDiv = container
       .getByRole("button", { name: /scientific computing/i })
       .closest("div")
     expect(focusDiv.classList.contains("active-focus")).toBe(false)

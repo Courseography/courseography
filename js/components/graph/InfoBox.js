@@ -3,11 +3,11 @@ import PropTypes from "prop-types"
 
 export default class InfoBox extends React.Component {
   render() {
-    var className = this.props.showInfoBox
+    const className = this.props.showInfoBox
       ? "tooltip-group-display"
       : "tooltip-group-hidden"
 
-    var rectAttrs = {
+    const rectAttrs = {
       id: this.props.nodeId + "-tooltip" + "-rect",
       x: this.props.xPos,
       y: this.props.yPos,
@@ -20,7 +20,7 @@ export default class InfoBox extends React.Component {
       height: "30",
     }
 
-    var textAttrs = {
+    const textAttrs = {
       id: this.props.nodeId + "-tooltip" + "-text",
       x: this.props.xPos + 60 / 2 - 18,
       y: this.props.yPos + 30 / 2 + 6,

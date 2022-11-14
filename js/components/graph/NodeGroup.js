@@ -14,8 +14,8 @@ export default class NodeGroup extends React.Component {
   }
 
   render() {
-    var svg = this.props.svg
-    var highlightedNodes = this.props.highlightedNodes
+    const svg = this.props.svg
+    const highlightedNodes = this.props.highlightedNodes
     return (
       <g id="nodes">
         {this.props.hybridsJSON.map(entry => {

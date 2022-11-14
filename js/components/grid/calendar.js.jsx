@@ -14,11 +14,11 @@ export class Row extends React.Component {
     )
     lectures = [].concat.apply([], lectures)
 
-    let fallLectures = lectures.filter(lecture => {
+    const fallLectures = lectures.filter(lecture => {
       return lecture.session === "F" || lecture.session === "Y"
     })
 
-    let springLectures = lectures.filter(lecture => {
+    const springLectures = lectures.filter(lecture => {
       return lecture.session === "S" || lecture.session === "Y"
     })
 
@@ -32,8 +32,8 @@ export class Row extends React.Component {
     setWidths(springSession)
 
     // Fill session colSpans dictionaries
-    let fallColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
-    let springColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
+    const fallColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
+    const springColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
     storeColSpans(fallSession, fallColSpans)
     storeColSpans(springSession, springColSpans)
     // Generate a container for each of the Fall and Spring timetables individually
@@ -116,11 +116,11 @@ class Timetable extends React.Component {
 class TimetableHeader extends React.Component {
   render() {
     const dayStrings = ["Mon", "Tue", "Wed", "Thu", "Fri"]
-    let colSpans = this.props.headColSpans
+    const colSpans = this.props.headColSpans
 
-    let dayCells = []
+    const dayCells = []
     for (let i = 0; i < 5; i++) {
-      let dayString = dayStrings[i]
+      const dayString = dayStrings[i]
       // Store the React element for this day-cell
       dayCells.push(
         <th scope="col" colSpan={colSpans[i]} key={"day-header-" + i}>
@@ -172,7 +172,7 @@ class TimetableHeader extends React.Component {
  */
 class TimetableBody extends React.Component {
   render() {
-    let rows = []
+    const rows = []
     // For each row from 8 o'clock to 22 o'clock, there is an 'Hour' and 'Half hour' row
     for (let i = 8; i < 22; i += 0.5) {
       rows.push(
@@ -195,7 +195,7 @@ class TimetableBody extends React.Component {
  */
 class TimetableRow extends React.Component {
   render() {
-    let tableData = []
+    const tableData = []
     const dummyCell = (
       <td key="timetable-dummy-cell" className="timetable-dummy-cell"></td>
     )
@@ -303,8 +303,8 @@ class TimetableRow extends React.Component {
  * @param {list} lectures : List of 'Lecture' objects
  */
 function initializeSessions(lectures) {
-  let fallSession = {}
-  let springSession = {}
+  const fallSession = {}
+  const springSession = {}
   for (let i = 7; i < 22; i += 0.5) {
     fallSession[i] = { 0: [], 1: [], 2: [], 3: [], 4: [] }
     springSession[i] = { 0: [], 1: [], 2: [], 3: [], 4: [] }
@@ -367,7 +367,7 @@ function setWidths(session) {
  */
 function storeColSpans(session, colSpans) {
   // For each day, stores all possible 'width' values every lecture at that day could have
-  let widths = storeWidths(session)
+  const widths = storeWidths(session)
   for (let day = 0; day < 5; day++) {
     // The 'colSpan' attribute of a header day cell is defined as the product of all
     // possible widths that could occur at that day
@@ -380,7 +380,7 @@ function storeColSpans(session, colSpans) {
  * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
  */
 function storeWidths(session) {
-  let widths = {}
+  const widths = {}
   // Iterate through every time-day slot in the session
   for (let day = 0; day < 5; day++) {
     widths[day] = []

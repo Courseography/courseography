@@ -101,7 +101,7 @@ class Course extends React.Component {
 
   componentDidMount() {
     getCourse(this.props.courseCode).then(data => {
-      let course = {
+      const course = {
         courseCode: "",
         F: [],
         S: [],
@@ -109,7 +109,7 @@ class Course extends React.Component {
       }
       course.courseCode = data.name
 
-      let parsedLectures = this.parseLectures(data.allMeetingTimes)
+      const parsedLectures = this.parseLectures(data.allMeetingTimes)
       // Split the lecture sections into Fall, Spring and Years
       course.F = this.filterLectureList(parsedLectures, "F")
       course.S = this.filterLectureList(parsedLectures, "S")
@@ -127,7 +127,7 @@ class Course extends React.Component {
   }
 
   parseLectures(lectures) {
-    let parsedLectures = []
+    const parsedLectures = []
 
     // Loop through the lecture sections to get each section's session code and lecture times
     lectures.forEach(lectureInfo => {
@@ -138,7 +138,7 @@ class Course extends React.Component {
         lectureInfo.meetData.section.charAt(3) !== "2" &&
         lectureInfo.meetData.section.charAt(3) !== "9"
       ) {
-        let lecture = {
+        const lecture = {
           courseCode:
             lectureInfo.meetData.code +
             " (" +
@@ -315,7 +315,7 @@ class CourseList extends React.Component {
         // searches through all of the courses in "data",
         // and stores each individual course code name
         // into 'courses' list
-        let courses = data.split("\n").map(course => course.substring(0, 8))
+        const courses = data.split("\n").map(course => course.substring(0, 8))
         this.setState({ courses: courses })
       })
   }

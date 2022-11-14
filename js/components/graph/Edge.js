@@ -6,7 +6,7 @@ import React from "react"
  */
 export default class Edge extends React.Component {
   render() {
-    var pathAttrs = { d: "M" }
+    const pathAttrs = { d: "M" }
     this.props.points.forEach(p => {
       pathAttrs.d += p[0] + "," + p[1] + " "
     })

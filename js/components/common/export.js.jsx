@@ -30,7 +30,7 @@ export class ExportModal extends React.Component {
   }
 
   getGraphImage() {
-    var necessaryLS = new Object()
+    const necessaryLS = new Object()
     for (const elem in localStorage) {
       if (!localStorage.hasOwnProperty(elem)) {
         continue
@@ -48,7 +48,7 @@ export class ExportModal extends React.Component {
       }
     }
 
-    var JsonLocalStorageObj = JSON.stringify(necessaryLS)
+    const JsonLocalStorageObj = JSON.stringify(necessaryLS)
     $.ajax({
       url: "/image",
       data: { JsonLocalStorageObj: JsonLocalStorageObj },
@@ -62,9 +62,9 @@ export class ExportModal extends React.Component {
   }
 
   getGridImage(session) {
-    var formattedSession = session.charAt(0).toUpperCase() + session.slice(1)
-    let allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
-    let courseData = allCourses.map(
+    const formattedSession = session.charAt(0).toUpperCase() + session.slice(1)
+    const allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
+    const courseData = allCourses.map(
       data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`
     )
     $.ajax({
@@ -122,8 +122,8 @@ export class ExportModal extends React.Component {
 }
 
 function getCalendar() {
-  let allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
-  let courseData = allCourses.map(
+  const allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
+  const courseData = allCourses.map(
     data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`
   )
   $.ajax({
@@ -131,8 +131,8 @@ function getCalendar() {
     url: "/calendar",
     data: { courses: courseData.join("_") },
     success: function (data) {
-      var dataURI = "data:text/calendar;charset=utf8," + escape(data)
-      var downloadLink = document.createElement("a")
+      const dataURI = "data:text/calendar;charset=utf8," + escape(data)
+      const downloadLink = document.createElement("a")
       downloadLink.href = dataURI
       downloadLink.download = "timetable.ics"
       document.body.appendChild(downloadLink)
@@ -146,7 +146,7 @@ function getCalendar() {
 }
 
 function getPDF() {
-  var necessaryLS = new Object()
+  const necessaryLS = new Object()
   for (const elem in localStorage) {
     if (!localStorage.hasOwnProperty(elem)) {
       continue
@@ -164,8 +164,8 @@ function getPDF() {
     }
   }
 
-  let allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
-  let courseData = allCourses.map(
+  const allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
+  const courseData = allCourses.map(
     data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`
   )
 
@@ -176,8 +176,8 @@ function getPDF() {
       JsonLocalStorageObj: JSON.stringify(necessaryLS),
     },
     success: function (data) {
-      var dataURI = "data:application/pdf;base64," + data
-      var downloadLink = document.createElement("a")
+      const dataURI = "data:application/pdf;base64," + data
+      const downloadLink = document.createElement("a")
       downloadLink.href = dataURI
       downloadLink.download = "timetable.pdf"
       document.body.appendChild(downloadLink)

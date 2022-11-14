@@ -45,11 +45,11 @@ export default class Node extends React.Component {
 
   render() {
     let ellipse = null
-    var newClassName = this.props.className + " " + this.props.status
+    const newClassName = this.props.className + " " + this.props.status
     if (this.props.highlighted) {
-      var attrs = this.props.JSON
-      var width = parseFloat(attrs.width) / 2
-      var height = parseFloat(attrs.height) / 2
+      const attrs = this.props.JSON
+      const width = parseFloat(attrs.width) / 2
+      const height = parseFloat(attrs.height) / 2
       ellipse = (
         <ellipse
           className="spotlight"
@@ -61,7 +61,7 @@ export default class Node extends React.Component {
       )
     }
 
-    var gAttrs = {
+    const gAttrs = {
       textRendering: "geometricPrecision",
       shapeRendering: "geometricPrecision",
       onKeyDown: this.props.svg.onKeyDown,
@@ -71,7 +71,7 @@ export default class Node extends React.Component {
       onClick: this.props.onClick,
     }
 
-    var rectAttrs = {
+    const rectAttrs = {
       height: this.props.JSON.height,
       width: this.props.JSON.width,
       x: this.props.JSON.pos[0],
@@ -83,11 +83,11 @@ export default class Node extends React.Component {
       rectAttrs["ry"] = "8"
     }
 
-    var rectStyle = {
+    const rectStyle = {
       fill: this.props.JSON.fill,
     }
 
-    var textXOffset = this.props.JSON.pos[0] + this.props.JSON.width / 2
+    const textXOffset = this.props.JSON.pos[0] + this.props.JSON.width / 2
 
     // TODO: Look at this.props to see what we need to give the g
     return (
@@ -108,7 +108,7 @@ export default class Node extends React.Component {
           }
         />
         {this.props.JSON.text.map(function (textTag, i) {
-          var textAttrs = {
+          const textAttrs = {
             x: textXOffset,
             y: textTag.pos[1],
           }
