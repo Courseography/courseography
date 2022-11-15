@@ -6,6 +6,16 @@ import Edge from "./Edge"
  */
 export default class EdgeGroup extends React.Component {
   /**
+   * This function is used as a callback ref. See {@link:https://reactjs.org/docs/refs-and-the-dom.html#callback-refs}
+   * @param {JSON} edgeJSON Represents a single edge
+   * @returns {function} A function that adds/updates a key value pair to EdgeGroup of an Edge's ID
+   *  and the Edge object as long as the Edge exists
+   */
+  setRefEntry = edgeJSON => {
+    return elem => elem && (this[edgeJSON.id_] = elem)
+  }
+
+  /**
    * Generate React Component representation of edge
    * @param {JSON} edgeJSON Represents a single edge
    * @returns {Edge} The React Component representing the edge
@@ -15,6 +25,9 @@ export default class EdgeGroup extends React.Component {
       <Edge
         className="path"
         key={edgeJSON.id_}
+        ref={this.setRefEntry(edgeJSON)}
+        updateEdgeStatus={this.props.updateEdgeStatus}
+        edgeId={edgeJSON.id_}
         source={edgeJSON.source}
         target={edgeJSON.target}
         points={edgeJSON.points}
@@ -59,4 +72,6 @@ EdgeGroup.propTypes = {
   edgesJSON: PropTypes.array,
   /** An object containing all edge to status pairs */
   edgesStatus: PropTypes.object,
+  /** A function for updating edge statuts */
+  updateEdgeStatus: PropTypes.func,
 }

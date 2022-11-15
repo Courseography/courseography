@@ -5,6 +5,14 @@ import React from "react"
  * Class representing an edge from a Node/Bool to a Node/Bool
  */
 export default class Edge extends React.Component {
+  updateStatus(status) {
+    this.props.updateEdgeStatus(
+      status,
+      this.props.edgeId,
+      this.props.source,
+      this.props.target
+    )
+  }
   render() {
     var pathAttrs = { d: "M" }
     this.props.points.forEach(p => {
@@ -24,6 +32,7 @@ export default class Edge extends React.Component {
 
 Edge.propTypes = {
   className: PropTypes.string,
+  edgeId: PropTypes.string,
   /** Array of points for the edge. A straight edge will have 2. Each turn in the edge means another point*/
   points: PropTypes.array,
   /** Node from which the edge is drawn*/
@@ -32,4 +41,6 @@ Edge.propTypes = {
   target: PropTypes.string,
   /** Status of this edge */
   status: PropTypes.string,
+  /** Update the status of this edge */
+  updateEdgeStatus: PropTypes.func,
 }
