@@ -28,41 +28,13 @@ export default class Node extends React.Component {
    * Checks whether this Node is selected
    * @return {boolean}
    */
-  isSelected = () => {
-    if (this.props.hybrid) {
-      return this.props.status === "active"
-    } else {
-      return this.props.selected
-    }
-  }
+  isSelected = () => this.props.isSelected(this)
 
   /**
    * Checks whether all prerequisite/preceding nodes for the current one are satisfied
    * @return {boolean}
    */
-  arePrereqsSatisfied = () => {
-    var svg = this.props.svg
-    /**
-     * Recursively checks that preceding nodes are selected
-     * @param  {string|Array} element Node(s)/other on the graph
-     * @return {boolean}
-     */
-    function isAllTrue(element) {
-      if (typeof element === "string") {
-        if (svg.nodes.current[element] !== undefined) {
-          return svg.nodes.current[element].isSelected()
-        } else if (svg.bools.current[element] !== undefined) {
-          return svg.bools.current[element].isSelected()
-        } else {
-          return false
-        }
-      } else {
-        return element.some(isAllTrue)
-      }
-    }
-
-    return this.props.parents.every(isAllTrue)
-  }
+  arePrereqsSatisfied = () => this.props.arePrereqsSatisfied(this)
 
   /**
    * Update the state/status of a node (and its children/edges)
@@ -182,6 +154,8 @@ Node.propTypes = {
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
   unfocusPrereqs: PropTypes.func,
+  arePrereqsSatisfied: PropTypes.func,
+  isSelected: PropTypes.func,
   focusPrereqs: PropTypes.func,
   updateNode: PropTypes.func,
   toggleSelection: PropTypes.func,

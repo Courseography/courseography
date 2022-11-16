@@ -812,7 +812,6 @@ export class Graph extends React.Component {
    * Update the Bool's state at any moment given the prereqs and current state.
    */
   updateNodeBool = boolNode => {
-    var svg = boolNode.props.svg
     var newState = boolNode.arePrereqsSatisfied() ? "active" : "inactive"
     var boolId = boolNode.props.JSON.id_
     const childs = this.state.connections.children[boolId]
@@ -829,9 +828,9 @@ export class Graph extends React.Component {
       },
       () => {
         localStorage.setItem(boolId, newState)
-        childs.forEach(function (node) {
-          var currentNode = refLookUp(node, svg)
-          currentNode.updateNode(svg)
+        childs.forEach(node => {
+          var currentNode = refLookUp(node, this)
+          currentNode.updateNode(this)
         })
         var allEdges = outEdges.concat(inEdges)
         allEdges.forEach(edge => {
@@ -843,7 +842,7 @@ export class Graph extends React.Component {
   }
 
   updateNode = (targetNode, recursive) => {
-    var newState
+    let newState
     if (targetNode.arePrereqsSatisfied()) {
       if (targetNode.isSelected() || targetNode.props.hybrid) {
         newState = "active"
@@ -858,16 +857,15 @@ export class Graph extends React.Component {
       }
     }
 
-    var nodeId = targetNode.props.JSON.id_
+    const nodeId = targetNode.props.JSON.id_
     const childs = this.state.connections.children[nodeId]
     const status = this.state.nodesState[nodeId]?.status
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
-    var svg = targetNode.props.svg
     const allEdges = targetNode.props.outEdges.concat(targetNode.props.inEdges)
     if (
-      ["active", "overridden"].indexOf(newState) >= 0 ===
-        ["active", "overridden"].indexOf(status) >= 0 &&
+      ["active", "overridden"].includes(newState) &&
+      ["active", "overridden"].includes(status) &&
       status !== "missing"
     ) {
       localStorage.setItem(nodeId, newState)
@@ -885,7 +883,6 @@ export class Graph extends React.Component {
           })
         }
       )
-
       return
     }
 
@@ -899,7 +896,7 @@ export class Graph extends React.Component {
         () => {
           localStorage.setItem(nodeId, newState)
           childs?.forEach(n => {
-            var currentNode = refLookUp(n, svg)
+            const currentNode = refLookUp(n, this)
             if (currentNode !== undefined) {
               currentNode.updateNode()
             }
@@ -1038,6 +1035,39 @@ export class Graph extends React.Component {
         currentEdge.updateStatus()
       }
     })
+  }
+
+  arePrereqsSatisfied = targetNode => {
+    const nodeId = targetNode.props.JSON.id_
+    const parents = this.state.connections.parents[nodeId]
+    /**
+     * Recursively checks that preceding nodes are selected
+     * @param  {string|Array} element Node(s)/other on the graph
+     * @return {boolean}
+     */
+    const isAllTrue = element => {
+      if (typeof element === "string") {
+        if (this.nodes.current[element] !== undefined) {
+          return this.nodes.current[element].isSelected()
+        } else if (this.bools.current[element] !== undefined) {
+          return this.bools.current[element].isSelected()
+        } else {
+          return false
+        }
+      } else {
+        return element.some(isAllTrue)
+      }
+    }
+
+    return parents.every(isAllTrue)
+  }
+
+  isSelected = targetNode => {
+    if (targetNode.props.hybrid) {
+      return targetNode.props.status === "active"
+    } else {
+      return targetNode.props.selected
+    }
   }
 
   renderRegions = regionsJSON => {
@@ -1267,6 +1297,8 @@ export class Graph extends React.Component {
             hybridsJSON={this.state.hybridsJSON}
             edgesJSON={this.state.edgesJSON}
             highlightedNodes={this.state.highlightedNodes}
+            arePrereqsSatisfied={this.arePrereqsSatisfied}
+            isSelected={this.isSelected}
             onDraw={this.state.onDraw}
             connections={this.state.connections}
             nodeDropshadowFilter={this.nodeDropshadowFilter}
