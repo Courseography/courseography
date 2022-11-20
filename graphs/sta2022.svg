@@ -1,0 +1,3078 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1129"
+   height="845"
+   viewBox="0 0 1129 845.00001"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
+   sodipodi:docname="sta2022.svg">
+  <defs
+     id="defs2">
+    <clipPath
+       id="clipPath1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path4566"
+         d="M 0,0 H 1129 V 845 H 0 Z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath2"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path4569"
+         d="M -26,-66 H 1103 V 779 H -26 Z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="310.50353"
+     inkscape:cy="448.96977"
+     inkscape:document-units="px"
+     inkscape:current-layer="g5407"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1368"
+     inkscape:window-height="842"
+     inkscape:window-x="-6"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     units="px" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto"
+       id="g5849">
+      <g
+         id="g5409">
+        <defs
+           id="defs1">
+          <clipPath
+             id="clipPath5423"
+             clipPathUnits="userSpaceOnUse">
+            <path
+               id="path5421"
+               d="M 0,0 H 1129 V 845 H 0 Z"
+               inkscape:connector-curvature="0" />
+          </clipPath>
+          <clipPath
+             id="clipPath5427"
+             clipPathUnits="userSpaceOnUse">
+            <path
+               id="path5425"
+               d="M -26,-66 H 1103 V 779 H -26 Z"
+               inkscape:connector-curvature="0" />
+          </clipPath>
+        </defs>
+        <g
+           id="g4575"
+           transform="translate(41.152288,69.030458)"
+           style="fill:#ffffff;stroke:#ffffff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4573"
+             clip-path="url(#clipPath2)"
+             y="-66"
+             height="845"
+             width="1129"
+             x="-26"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4579"
+           transform="translate(26,66)"
+           style="fill:#ffec7a;stroke:#ffec7a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4577"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="133.43961"
+             x="511.01001"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4585"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4581"
+             clip-path="url(#clipPath2)"
+             y="157.2247"
+             xml:space="preserve"
+             x="514.60382"
+             style="stroke:none">STA248</text>
+          <rect
+             id="rect4583"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="133.43961"
+             x="511.01001"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4589"
+           transform="translate(26,66)"
+           style="fill:#ffec7a;stroke:#ffec7a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4587"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="222.6833"
+             x="177.6803"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4595"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4591"
+             clip-path="url(#clipPath2)"
+             y="246.4684"
+             xml:space="preserve"
+             x="181.27409"
+             style="stroke:none">STA221</text>
+          <rect
+             id="rect4593"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="222.6833"
+             x="177.6803"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4599"
+           transform="translate(26,66)"
+           style="fill:#ff6600;stroke:#ff6600;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4597"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="123.4396"
+             x="239.21651"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4605"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4601"
+             clip-path="url(#clipPath2)"
+             y="147.2247"
+             xml:space="preserve"
+             x="242.8102"
+             style="stroke:none">STA255</text>
+          <rect
+             id="rect4603"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="123.4396"
+             x="239.21651"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4609"
+           transform="translate(26,66)"
+           style="fill:#ff9900;stroke:#ff9900;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4607"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="113.5"
+             x="699.5"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4615"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4611"
+             clip-path="url(#clipPath2)"
+             y="137.2852"
+             xml:space="preserve"
+             x="703.09381"
+             style="stroke:none">STA257</text>
+          <rect
+             id="rect4613"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="113.5"
+             x="699.5"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4619"
+           transform="translate(26,66)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4617"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="113.5"
+             x="801.5"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4625"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4621"
+             clip-path="url(#clipPath2)"
+             y="137.2852"
+             xml:space="preserve"
+             x="805.09381"
+             style="stroke:none">STA261</text>
+          <rect
+             id="rect4623"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="113.5"
+             x="801.5"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4629"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4627"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="322.79309"
+             x="563.51001"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4635"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4631"
+             clip-path="url(#clipPath2)"
+             y="346.57819"
+             xml:space="preserve"
+             x="567.10382"
+             style="stroke:none">STA302</text>
+          <rect
+             id="rect4633"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="322.79309"
+             x="563.51001"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4639"
+           transform="translate(26,66)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4637"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="414.2865"
+             x="801.5"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4645"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4641"
+             clip-path="url(#clipPath2)"
+             y="438.07169"
+             xml:space="preserve"
+             x="805.09381"
+             style="stroke:none">STA355</text>
+          <rect
+             id="rect4643"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="414.2865"
+             x="801.5"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4649"
+           transform="translate(26,66)"
+           style="fill:#ff9900;stroke:#ff9900;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4647"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="414.2865"
+             x="1017.5"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4655"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4651"
+             clip-path="url(#clipPath2)"
+             y="438.07169"
+             xml:space="preserve"
+             x="1021.0938"
+             style="stroke:none">STA347</text>
+          <rect
+             id="rect4653"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="414.2865"
+             x="1017.5"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4659"
+           transform="translate(26,66)"
+           style="fill:#ff9900;stroke:#ff9900;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4657"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="584.25171"
+             x="1017.5"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4665"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4661"
+             clip-path="url(#clipPath2)"
+             y="608.03693"
+             xml:space="preserve"
+             x="1021.0938"
+             style="stroke:none">STA447</text>
+          <rect
+             id="rect4663"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="584.25171"
+             x="1017.5"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4669"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4667"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="422.793"
+             x="664.20148"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4675"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4671"
+             clip-path="url(#clipPath2)"
+             y="446.57819"
+             xml:space="preserve"
+             x="667.79523"
+             style="stroke:none">STA303</text>
+          <rect
+             id="rect4673"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="422.793"
+             x="664.20148"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4679"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4677"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="532.37128"
+             x="611.70148"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4685"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4681"
+             clip-path="url(#clipPath2)"
+             y="556.15637"
+             xml:space="preserve"
+             x="615.29523"
+             style="stroke:none">STA305</text>
+          <rect
+             id="rect4683"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="532.37128"
+             x="611.70148"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4689"
+           transform="translate(26,66)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4687"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="728.62982"
+             x="497.0155"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4695"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4691"
+             clip-path="url(#clipPath2)"
+             y="752.41492"
+             xml:space="preserve"
+             x="500.60931"
+             style="stroke:none">STA490</text>
+          <rect
+             id="rect4693"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="728.62982"
+             x="497.0155"
+             style="fill:none;stroke-dasharray:6, 2" />
+        </g>
+        <g
+           id="g4699"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4697"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="632.14648"
+             x="611.70148"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4705"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4701"
+             clip-path="url(#clipPath2)"
+             y="655.9317"
+             xml:space="preserve"
+             x="615.29523"
+             style="stroke:none">STA480</text>
+          <rect
+             id="rect4703"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="632.14648"
+             x="611.70148"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4709"
+           transform="translate(26,66)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4707"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="512.14648"
+             x="909.5"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4715"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4711"
+             clip-path="url(#clipPath2)"
+             y="535.9317"
+             xml:space="preserve"
+             x="913.09381"
+             style="stroke:none">STA452</text>
+          <rect
+             id="rect4713"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="512.14648"
+             x="909.5"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4719"
+           transform="translate(26,66)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4717"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="584.25171"
+             x="909.5"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4725"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4721"
+             clip-path="url(#clipPath2)"
+             y="608.03693"
+             xml:space="preserve"
+             x="913.09381"
+             style="stroke:none">STA453</text>
+          <rect
+             id="rect4723"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="584.25171"
+             x="909.5"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4729"
+           transform="translate(26,66)"
+           style="fill:#e68080;stroke:#e68080;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4727"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="584.25171"
+             x="801.5"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4735"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4731"
+             clip-path="url(#clipPath2)"
+             y="608.03693"
+             xml:space="preserve"
+             x="805.09381"
+             style="stroke:none">STA422</text>
+          <rect
+             id="rect4733"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="584.25171"
+             x="801.5"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4739"
+           transform="translate(26,66)"
+           style="fill:#91f27a;stroke:#91f27a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4737"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="532.37128"
+             x="43.640598"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4745"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4741"
+             clip-path="url(#clipPath2)"
+             y="556.15637"
+             xml:space="preserve"
+             x="47.234402"
+             style="stroke:none">STA410</text>
+          <rect
+             id="rect4743"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="532.37128"
+             x="43.640598"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4749"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4747"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="532.37128"
+             x="269.48141"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4755"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4751"
+             clip-path="url(#clipPath2)"
+             y="556.15637"
+             xml:space="preserve"
+             x="273.0752"
+             style="stroke:none">STA414</text>
+          <rect
+             id="rect4753"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="532.37128"
+             x="269.48141"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4759"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4757"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="469.01111"
+             x="725.3728"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4765"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4761"
+             clip-path="url(#clipPath2)"
+             y="492.7963"
+             xml:space="preserve"
+             x="728.96661"
+             style="stroke:none">STA437</text>
+          <rect
+             id="rect4763"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="469.01111"
+             x="725.3728"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4769"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4767"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="654.36823"
+             x="732.33337"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4775"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4771"
+             clip-path="url(#clipPath2)"
+             y="678.15338"
+             xml:space="preserve"
+             x="735.92719"
+             style="stroke:none">STA442</text>
+          <rect
+             id="rect4773"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="654.36823"
+             x="732.33337"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4779"
+           transform="translate(26,66)"
+           style="fill:#ff00ff;stroke:#ff00ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4777"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="157.6833"
+             x="-10.6809"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4785"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4781"
+             clip-path="url(#clipPath2)"
+             y="181.4684"
+             xml:space="preserve"
+             x="-7.0872002"
+             style="stroke:none">STA201</text>
+          <rect
+             id="rect4783"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="157.6833"
+             x="-10.6809"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4789"
+           transform="translate(26,66)"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4787"
+             height="38.414101"
+             ry="4"
+             rx="4"
+             width="101.9072"
+             clip-path="url(#clipPath2)"
+             y="-6.4408998"
+             x="280.09799"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4795"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="15px"
+           style="font-size:15px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4791"
+             clip-path="url(#clipPath2)"
+             y="18.6584"
+             xml:space="preserve"
+             x="288.10971"
+             style="stroke:none">MAT135,136</text>
+          <rect
+             id="rect4793"
+             height="38.414101"
+             ry="4"
+             rx="4"
+             width="101.9072"
+             clip-path="url(#clipPath2)"
+             y="-6.4408998"
+             x="280.09799"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4799"
+           transform="translate(26,66)"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4797"
+             height="39.262299"
+             ry="4"
+             rx="4"
+             width="97.5"
+             clip-path="url(#clipPath2)"
+             y="-7.2891002"
+             x="519.2663"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4809"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="15px"
+           style="font-size:15px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4801"
+             clip-path="url(#clipPath2)"
+             y="18.234301"
+             xml:space="preserve"
+             x="525.07068"
+             style="stroke:none">CSC111/148</text>
+          <rect
+             id="rect4803"
+             height="39.262299"
+             ry="4"
+             rx="4"
+             width="97.5"
+             clip-path="url(#clipPath2)"
+             y="-7.2891002"
+             x="519.2663"
+             style="fill:none" />
+          <text
+             id="text4805"
+             clip-path="url(#clipPath2)"
+             y="220.9527"
+             font-size="10px"
+             xml:space="preserve"
+             x="532.63593"
+             style="font-size:10px;stroke:none">or</text>
+          <ellipse
+             id="ellipse4807"
+             cy="217.02451"
+             cx="537.08173"
+             clip-path="url(#clipPath2)"
+             ry="15.3586"
+             rx="26.428301"
+             style="fill:none"
+             transform="matrix(0.39290481,0,0,0.50445816,326.91179,108.97064)" />
+        </g>
+        <g
+           id="g4813"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4811"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="654.36823"
+             x="416.81311"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4819"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4815"
+             clip-path="url(#clipPath2)"
+             y="678.15338"
+             xml:space="preserve"
+             x="420.40689"
+             style="stroke:none">STA457</text>
+          <rect
+             id="rect4817"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="654.36823"
+             x="416.81311"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4823"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4821"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="681.86823"
+             x="563.51001"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4833"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4825"
+             clip-path="url(#clipPath2)"
+             y="705.65338"
+             xml:space="preserve"
+             x="567.10382"
+             style="stroke:none">STA465</text>
+          <rect
+             id="rect4827"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="681.86823"
+             x="563.51001"
+             style="fill:none" />
+          <text
+             id="text4829"
+             clip-path="url(#clipPath2)"
+             y="469.92911"
+             font-size="8px"
+             xml:space="preserve"
+             x="938.44342"
+             style="font-size:8px;stroke:none">or</text>
+          <ellipse
+             id="ellipse4831"
+             cy="466.7865"
+             cx="942"
+             clip-path="url(#clipPath2)"
+             ry="7.5"
+             rx="10"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4837"
+           transform="translate(26,66)"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4835"
+             height="38.414101"
+             ry="4"
+             rx="4"
+             width="70"
+             clip-path="url(#clipPath2)"
+             y="-6.4408998"
+             x="191.507"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4849"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="15px"
+           style="font-size:15px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4839"
+             clip-path="url(#clipPath2)"
+             y="9.4701996"
+             xml:space="preserve"
+             x="198.16229"
+             style="stroke:none">MAT133</text>
+          <text
+             id="text4841"
+             clip-path="url(#clipPath2)"
+             y="27.846701"
+             xml:space="preserve"
+             x="207.1162"
+             style="stroke:none">(70%)</text>
+          <rect
+             id="rect4843"
+             height="38.414101"
+             ry="4"
+             rx="4"
+             width="70"
+             clip-path="url(#clipPath2)"
+             y="-6.4408998"
+             x="191.507"
+             style="fill:none" />
+          <text
+             id="text4845"
+             clip-path="url(#clipPath2)"
+             y="81.902603"
+             font-size="8px"
+             xml:space="preserve"
+             x="268.15991"
+             style="font-size:8px;stroke:none">or</text>
+          <ellipse
+             id="ellipse4847"
+             cy="78.760002"
+             cx="271.71649"
+             clip-path="url(#clipPath2)"
+             ry="7.5"
+             rx="10"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4853"
+           transform="translate(26,66)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4851"
+             clip-path="url(#clipPath2)"
+             y="119.4661"
+             height="87.331703"
+             width="111.7492"
+             x="975.50061"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4867"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           style="font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4855"
+             clip-path="url(#clipPath2)"
+             y="137.53059"
+             xml:space="preserve"
+             x="983.16748"
+             style="stroke:none">STA247H1(70%)/ </text>
+          <text
+             id="text4857"
+             clip-path="url(#clipPath2)"
+             y="152.2317"
+             xml:space="preserve"
+             x="984.83447"
+             style="stroke:none">STA255H1(70%)/</text>
+          <text
+             id="text4859"
+             clip-path="url(#clipPath2)"
+             y="166.93291"
+             xml:space="preserve"
+             x="981.50049"
+             style="stroke:none"> STA237H1(70%)/ </text>
+          <text
+             id="text4861"
+             clip-path="url(#clipPath2)"
+             y="181.63409"
+             xml:space="preserve"
+             x="1000.8394"
+             style="stroke:none">STA257H1/</text>
+          <text
+             id="text4863"
+             clip-path="url(#clipPath2)"
+             y="196.3353"
+             xml:space="preserve"
+             x="1003.8394"
+             style="stroke:none">ECO227Y1</text>
+        </g>
+        <g
+           id="g4871"
+           transform="translate(26,66)"
+           style="fill:#ffec7a;stroke:#ffec7a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4869"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-4.7339001"
+             x="79.613998"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4881"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4873"
+             clip-path="url(#clipPath2)"
+             y="19.0513"
+             xml:space="preserve"
+             x="83.207802"
+             style="stroke:none">STA130</text>
+          <rect
+             id="rect4875"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="-4.7339001"
+             x="79.613998"
+             style="fill:none" />
+          <text
+             id="text4877"
+             clip-path="url(#clipPath2)"
+             y="72.6157"
+             font-size="8px"
+             xml:space="preserve"
+             x="765.23248"
+             style="font-size:8px;stroke:none">and</text>
+          <ellipse
+             id="ellipse4879"
+             cy="69.473099"
+             cx="771.90631"
+             clip-path="url(#clipPath2)"
+             ry="7.5"
+             rx="10"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4885"
+           transform="translate(26,66)"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4883"
+             height="39.262299"
+             ry="4"
+             rx="4"
+             width="101.9072"
+             clip-path="url(#clipPath2)"
+             y="-7.2891002"
+             x="662.59277"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4891"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="15px"
+           style="font-size:15px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4887"
+             clip-path="url(#clipPath2)"
+             y="18.234301"
+             xml:space="preserve"
+             x="670.60449"
+             style="stroke:none">MAT223/240</text>
+          <rect
+             id="rect4889"
+             height="39.262299"
+             ry="4"
+             rx="4"
+             width="101.9072"
+             clip-path="url(#clipPath2)"
+             y="-7.2891002"
+             x="662.59277"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4895"
+           transform="translate(26,66)"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4893"
+             height="39.262299"
+             ry="4"
+             rx="4"
+             width="121.5325"
+             clip-path="url(#clipPath2)"
+             y="-7.2891002"
+             x="779.31268"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4901"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="15px"
+           style="font-size:15px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4897"
+             clip-path="url(#clipPath2)"
+             y="18.234301"
+             xml:space="preserve"
+             x="797.13702"
+             style="stroke:none">MAT237/257</text>
+          <rect
+             id="rect4899"
+             height="39.262299"
+             ry="4"
+             rx="4"
+             width="121.5325"
+             clip-path="url(#clipPath2)"
+             y="-7.2891002"
+             x="779.31268"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4905"
+           transform="translate(26,66)"
+           style="fill:#ffec7a;stroke:#ffec7a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4903"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="222.6833"
+             x="31.5632"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4915"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4907"
+             clip-path="url(#clipPath2)"
+             y="246.4684"
+             xml:space="preserve"
+             x="35.157001"
+             style="stroke:none">STA288</text>
+          <rect
+             id="rect4909"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="222.6833"
+             x="31.5632"
+             style="fill:none" />
+          <text
+             id="text4911"
+             clip-path="url(#clipPath2)"
+             y="243.3259"
+             font-size="8px"
+             xml:space="preserve"
+             x="134.1237"
+             style="font-size:8px;stroke:none">or</text>
+          <ellipse
+             id="ellipse4913"
+             cy="240.1833"
+             cx="137.6803"
+             clip-path="url(#clipPath2)"
+             ry="7.5"
+             rx="10"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4919"
+           transform="translate(26,66)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4917"
+             clip-path="url(#clipPath2)"
+             y="232.3831"
+             height="35"
+             width="85.652702"
+             x="578.39899"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4925"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           style="font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4921"
+             clip-path="url(#clipPath2)"
+             y="254.597"
+             xml:space="preserve"
+             x="586.87183"
+             style="stroke:none">MAT223/240</text>
+          <rect
+             id="rect4923"
+             height="35"
+             width="85.652702"
+             clip-path="url(#clipPath2)"
+             y="232.3831"
+             x="578.39899"
+             style="fill:none;stroke:#000000" />
+        </g>
+        <g
+           id="g4929"
+           transform="translate(26,66)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4927"
+             clip-path="url(#clipPath2)"
+             y="232.3831"
+             height="35"
+             width="144.0627"
+             x="676.74438"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4941"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           style="font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4931"
+             clip-path="url(#clipPath2)"
+             y="247.2464"
+             xml:space="preserve"
+             x="682.74432"
+             style="stroke:none">CSC108H1/ CSC110Y1/ </text>
+          <text
+             id="text4933"
+             clip-path="url(#clipPath2)"
+             y="261.94751"
+             xml:space="preserve"
+             x="685.74731"
+             style="stroke:none">CSC120H1/ CSC148H1</text>
+          <text
+             id="text4937"
+             xml:space="preserve"
+             clip-path="url(#clipPath2)"
+             y="144.0822"
+             font-size="8px"
+             x="206.6237"
+             style="font-size:8px;fill:#000000;stroke:none">or</text>
+          <ellipse
+             id="ellipse4939"
+             cy="140.93961"
+             ry="7.5"
+             cx="210.1803"
+             rx="10"
+             clip-path="url(#clipPath2)"
+             style="fill:none;stroke:#000000" />
+        </g>
+        <g
+           id="g4945"
+           transform="translate(26,66)"
+           style="fill:#ffec7a;stroke:#ffec7a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4943"
+             height="35"
+             ry="4"
+             rx="4"
+             width="85.652702"
+             clip-path="url(#clipPath2)"
+             y="42.8666"
+             x="125.2342"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4951"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4947"
+             clip-path="url(#clipPath2)"
+             y="66.651703"
+             xml:space="preserve"
+             x="127.5918"
+             style="stroke:none">ECO220Y1</text>
+          <rect
+             id="rect4949"
+             height="35"
+             ry="4"
+             rx="4"
+             width="85.652702"
+             clip-path="url(#clipPath2)"
+             y="42.8666"
+             x="125.2342"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4955"
+           transform="translate(26,66)"
+           style="fill:#ffec7a;stroke:#ffec7a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4953"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="123.4396"
+             x="105.1803"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4961"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4957"
+             clip-path="url(#clipPath2)"
+             y="147.2247"
+             xml:space="preserve"
+             x="108.7741"
+             style="stroke:none">STA220</text>
+          <rect
+             id="rect4959"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="123.4396"
+             x="105.1803"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4965"
+           transform="translate(26,66)"
+           style="fill:#ff9900;stroke:#ff9900;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4963"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="78.760002"
+             x="511.01001"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4971"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4967"
+             clip-path="url(#clipPath2)"
+             y="102.5452"
+             xml:space="preserve"
+             x="514.60382"
+             style="stroke:none">STA247</text>
+          <rect
+             id="rect4969"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="78.760002"
+             x="511.01001"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4975"
+           transform="translate(26,66)"
+           style="fill:#ff9900;stroke:#ff9900;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4973"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="78.072998"
+             x="404.96899"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4981"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4977"
+             clip-path="url(#clipPath2)"
+             y="101.8581"
+             xml:space="preserve"
+             x="408.56271"
+             style="stroke:none">STA237</text>
+          <rect
+             id="rect4979"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="78.072998"
+             x="404.96899"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4985"
+           transform="translate(26,66)"
+           style="fill:#ffec7a;stroke:#ffec7a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4983"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="133.43961"
+             x="404.96899"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g4995"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text4987"
+             clip-path="url(#clipPath2)"
+             y="157.2247"
+             xml:space="preserve"
+             x="408.56271"
+             style="stroke:none">STA238</text>
+          <rect
+             id="rect4989"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="133.43961"
+             x="404.96899"
+             style="fill:none" />
+          <text
+             id="text4991"
+             clip-path="url(#clipPath2)"
+             y="57.953602"
+             font-size="8px"
+             xml:space="preserve"
+             x="536.83618"
+             style="font-size:8px;stroke:none">and</text>
+          <ellipse
+             id="ellipse4993"
+             cy="54.811001"
+             cx="543.51001"
+             clip-path="url(#clipPath2)"
+             ry="7.5"
+             rx="10"
+             style="fill:none" />
+        </g>
+        <g
+           id="g4999"
+           transform="translate(26,66)"
+           style="fill:#8a67be;stroke:#8a67be;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect4997"
+             height="38.414101"
+             ry="4"
+             rx="4"
+             width="101.9072"
+             clip-path="url(#clipPath2)"
+             y="-6.8649998"
+             x="400.5961"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5009"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="15px"
+           style="font-size:15px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5001"
+             clip-path="url(#clipPath2)"
+             y="18.234301"
+             xml:space="preserve"
+             x="408.60779"
+             style="stroke:none">MAT137/157</text>
+          <rect
+             id="rect5003"
+             height="38.414101"
+             ry="4"
+             rx="4"
+             width="101.9072"
+             clip-path="url(#clipPath2)"
+             y="-6.8649998"
+             x="400.5961"
+             style="fill:none" />
+          <text
+             id="text5005"
+             clip-path="url(#clipPath2)"
+             y="57.953602"
+             font-size="8px"
+             xml:space="preserve"
+             x="382.63171"
+             style="font-size:8px;stroke:none">or</text>
+          <ellipse
+             id="ellipse5007"
+             cy="54.811001"
+             cx="386.18839"
+             clip-path="url(#clipPath2)"
+             ry="7.5"
+             rx="10"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5013"
+           transform="translate(26,66)"
+           style="fill:#ffec7a;stroke:#ffec7a;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5011"
+             height="35"
+             ry="4"
+             rx="4"
+             width="85.652702"
+             clip-path="url(#clipPath2)"
+             y="182.3302"
+             x="311.76639"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5019"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5015"
+             clip-path="url(#clipPath2)"
+             y="206.1154"
+             xml:space="preserve"
+             x="314.12399"
+             style="stroke:none">ECO227Y1</text>
+          <rect
+             id="rect5017"
+             height="35"
+             ry="4"
+             rx="4"
+             width="85.652702"
+             clip-path="url(#clipPath2)"
+             y="182.3302"
+             x="311.76639"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5023"
+           transform="translate(26,66)"
+           style="fill:#ff00ff;stroke:#ff00ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5021"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="37.703602"
+             x="-10.6809"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5029"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5025"
+             clip-path="url(#clipPath2)"
+             y="61.488701"
+             xml:space="preserve"
+             x="-7.0872002"
+             style="stroke:none">STA197</text>
+          <rect
+             id="rect5027"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="37.703602"
+             x="-10.6809"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5033"
+           transform="translate(26,66)"
+           style="fill:#ff00ff;stroke:#ff00ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5031"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="77.6968"
+             x="-10.6809"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5039"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5035"
+             clip-path="url(#clipPath2)"
+             y="101.482"
+             xml:space="preserve"
+             x="-7.0872002"
+             style="stroke:none">STA198</text>
+          <rect
+             id="rect5037"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="77.6968"
+             x="-10.6809"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5043"
+           transform="translate(26,66)"
+           style="fill:#ff00ff;stroke:#ff00ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5041"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="117.6901"
+             x="-10.6809"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5049"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5045"
+             clip-path="url(#clipPath2)"
+             y="141.4752"
+             xml:space="preserve"
+             x="-7.0872002"
+             style="stroke:none">STA199</text>
+          <rect
+             id="rect5047"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="117.6901"
+             x="-10.6809"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5053"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5051"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="431.0347"
+             x="466.2897"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5059"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5055"
+             clip-path="url(#clipPath2)"
+             y="454.81979"
+             xml:space="preserve"
+             x="469.88339"
+             style="stroke:none">STA304</text>
+          <rect
+             id="rect5057"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="431.0347"
+             x="466.2897"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5063"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5061"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="431.51111"
+             x="210.9879"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5069"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5065"
+             clip-path="url(#clipPath2)"
+             y="455.2963"
+             xml:space="preserve"
+             x="214.5817"
+             style="stroke:none">	STA313</text>
+          <rect
+             id="rect5067"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="431.51111"
+             x="210.9879"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5073"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5071"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="431.0347"
+             x="294.57611"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5079"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5075"
+             clip-path="url(#clipPath2)"
+             y="454.81979"
+             xml:space="preserve"
+             x="298.1698"
+             style="stroke:none">STA365</text>
+          <rect
+             id="rect5077"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="431.0347"
+             x="294.57611"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5083"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5081"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="431.0347"
+             x="378.33521"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5093"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5085"
+             clip-path="url(#clipPath2)"
+             y="454.81979"
+             xml:space="preserve"
+             x="381.92899"
+             style="stroke:none">STA314</text>
+          <rect
+             id="rect5087"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="431.0347"
+             x="378.33521"
+             style="fill:none" />
+          <text
+             id="text5089"
+             clip-path="url(#clipPath2)"
+             y="587.78912"
+             font-size="8px"
+             xml:space="preserve"
+             x="525.95892"
+             style="font-size:8px;stroke:none">or</text>
+          <ellipse
+             id="ellipse5091"
+             cy="584.64648"
+             cx="529.5155"
+             clip-path="url(#clipPath2)"
+             ry="7.5"
+             rx="10"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5097"
+           transform="translate(26,66)"
+           style="fill:#888888;stroke:#888888;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5095"
+             clip-path="url(#clipPath2)"
+             y="261.98969"
+             height="87.331703"
+             width="111.7492"
+             x="878.30188"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5111"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           style="font-family:sans-serif;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5099"
+             clip-path="url(#clipPath2)"
+             y="280.05411"
+             xml:space="preserve"
+             x="884.30188"
+             style="stroke:none">STA255H1 (73%)/ </text>
+          <text
+             id="text5101"
+             clip-path="url(#clipPath2)"
+             y="294.75531"
+             xml:space="preserve"
+             x="884.30188"
+             style="stroke:none">STA248H1 (73%)/ </text>
+          <text
+             id="text5103"
+             clip-path="url(#clipPath2)"
+             y="309.45651"
+             xml:space="preserve"
+             x="884.30188"
+             style="stroke:none">STA238H1 (73%)/ </text>
+          <text
+             id="text5105"
+             clip-path="url(#clipPath2)"
+             y="324.15771"
+             xml:space="preserve"
+             x="884.30188"
+             style="stroke:none">STA261H1 (60%)/ </text>
+          <text
+             id="text5107"
+             clip-path="url(#clipPath2)"
+             y="338.8588"
+             xml:space="preserve"
+             x="884.30188"
+             style="stroke:none">ECO227Y1 (60%)</text>
+        </g>
+        <g
+           id="g5115"
+           transform="translate(26,66)"
+           style="fill:#80b2ff;stroke:#80b2ff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5113"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="728.62982"
+             x="732.33337"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5121"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5117"
+             clip-path="url(#clipPath2)"
+             y="752.41492"
+             xml:space="preserve"
+             x="735.92719"
+             style="stroke:none">STA475</text>
+          <rect
+             id="rect5119"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="728.62982"
+             x="732.33337"
+             style="fill:none" />
+        </g>
+        <g
+           id="g5125"
+           transform="translate(26,66)"
+           style="fill:#5dd5b8;stroke:#5dd5b8;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <rect
+             id="rect5123"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="524.2865"
+             x="716.70148"
+             style="stroke:none" />
+        </g>
+        <g
+           id="g5407"
+           stroke-miterlimit="1.45"
+           transform="translate(26,66)"
+           font-size="16px"
+           style="font-size:16px;font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+          <text
+             id="text5127"
+             clip-path="url(#clipPath2)"
+             y="548.07172"
+             xml:space="preserve"
+             x="720.29523"
+             style="stroke:none">STA492</text>
+          <rect
+             id="rect5129"
+             height="35"
+             ry="4"
+             rx="4"
+             width="65"
+             clip-path="url(#clipPath2)"
+             y="524.2865"
+             x="716.70148"
+             style="fill:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5131"
+             clip-path="url(#clipPath2)"
+             d="m 177.6859,240.1833 h -15.3823 v 0 h 7.3823"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5133"
+             clip-path="url(#clipPath2)"
+             d="m 177.6859,240.1833 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5135"
+             clip-path="url(#clipPath2)"
+             d="m 764.5225,131 h 28.9438"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5137"
+             clip-path="url(#clipPath2)"
+             d="m 801.4663,131 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5139"
+             clip-path="url(#clipPath2)"
+             d="M 1050,449.2561 V 576.2162"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5141"
+             clip-path="url(#clipPath2)"
+             d="m 1050,584.2162 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5143"
+             clip-path="url(#clipPath2)"
+             d="m 628.5085,340.2931 h 68.193 v 74.4706"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5145"
+             clip-path="url(#clipPath2)"
+             d="m 696.7015,422.7637 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5147"
+             clip-path="url(#clipPath2)"
+             d="m 628.5382,340.2931 h 15.6633 v 184.0484"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5149"
+             clip-path="url(#clipPath2)"
+             d="m 644.2015,532.3415 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5151"
+             clip-path="url(#clipPath2)"
+             d="M 696.7015,457.8025 V 746.1298 H 570.0466"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5153"
+             clip-path="url(#clipPath2)"
+             d="m 562.0466,746.1298 12,5 -3,-5 3,-5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5155"
+             clip-path="url(#clipPath2)"
+             d="M 644.2015,567.3503 V 624.132"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5157"
+             clip-path="url(#clipPath2)"
+             d="m 644.2015,632.132 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5159"
+             clip-path="url(#clipPath2)"
+             d="m 942,547.1447 v 29.0891"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5161"
+             clip-path="url(#clipPath2)"
+             d="m 942,584.2338 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5163"
+             clip-path="url(#clipPath2)"
+             d="M 834,449.2561 V 576.2162"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5165"
+             clip-path="url(#clipPath2)"
+             d="m 834,584.2162 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5167"
+             clip-path="url(#clipPath2)"
+             d="M 584.4349,357.8009 V 486.0347 H 76.1406 v 38.3501"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5169"
+             clip-path="url(#clipPath2)"
+             d="m 76.1406,532.3848 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5171"
+             clip-path="url(#clipPath2)"
+             d="M 584.5581,357.7986 V 486.4781 H 301.9814 v 37.9043"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5173"
+             clip-path="url(#clipPath2)"
+             d="m 301.9814,532.3824 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5175"
+             clip-path="url(#clipPath2)"
+             d="m 584.01,357.8165 v 128.6946 0 h 133.3909"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5177"
+             clip-path="url(#clipPath2)"
+             d="m 725.4009,486.5111 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5179"
+             clip-path="url(#clipPath2)"
+             d="m 1050,449.2888 v 37.2223 H 798.3591"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5181"
+             clip-path="url(#clipPath2)"
+             d="m 790.3591,486.5111 12,5 -3,-5 3,-5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5183"
+             clip-path="url(#clipPath2)"
+             d="m 696.7015,457.7912 v 214.077 h 27.6296"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5185"
+             clip-path="url(#clipPath2)"
+             d="m 732.3311,671.8682 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5187"
+             clip-path="url(#clipPath2)"
+             d="M 834,148.4841 V 212 H 554.30173"
+             inkscape:connector-curvature="0"
+             style="fill:none"
+             sodipodi:nodetypes="ccc" />
+          <path
+             id="path5189"
+             clip-path="url(#clipPath2)"
+             d="m 559.2303,208.6732 12,5 -3,-5 3,-5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none"
+             transform="translate(-13.928571,3.2142857)" />
+          <path
+             id="path5191"
+             clip-path="url(#clipPath2)"
+             d="m 541.8056,168.4611 -1.611,33.73589"
+             inkscape:connector-curvature="0"
+             style="fill:none"
+             sodipodi:nodetypes="cc" />
+          <path
+             id="path5193"
+             clip-path="url(#clipPath2)"
+             d="m 538.5733,201.6904 6.1383,-11.4595 -5.267,2.5018 -4.686,-3.47 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none"
+             sodipodi:nodetypes="ccccc"
+             transform="translate(0.75,9.4642857)" />
+          <path
+             id="path5195"
+             clip-path="url(#clipPath2)"
+             d="M 278.2475,158.4182 V 264.3139 H 435.2134 V 222.755 h 84.3292"
+             inkscape:connector-curvature="0"
+             style="fill:none"
+             sodipodi:nodetypes="ccccc" />
+          <path
+             id="path5197"
+             clip-path="url(#clipPath2)"
+             d="m 512.5426,222.7546 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none"
+             transform="translate(17.107143,0.53571429)" />
+          <path
+             id="path5199"
+             clip-path="url(#clipPath2)"
+             d="M 541.83447,225.92974 584.1915,315.5708"
+             inkscape:connector-curvature="0"
+             style="fill:none"
+             sodipodi:nodetypes="cc" />
+          <path
+             id="path5201"
+             clip-path="url(#clipPath2)"
+             d="m 587.642,322.7884 -0.6646,-12.983 -3.2171,4.8632 -5.805,-0.5501 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5203"
+             clip-path="url(#clipPath2)"
+             d="M 547.54876,222.716 H 834 v 183.5844"
+             inkscape:connector-curvature="0"
+             style="fill:none"
+             sodipodi:nodetypes="ccc" />
+          <path
+             id="path5205"
+             clip-path="url(#clipPath2)"
+             d="m 834,414.3004 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5207"
+             clip-path="url(#clipPath2)"
+             d="M 584.2795,357.7864 V 486.0347 H 449.3131 v 160.3662"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5209"
+             clip-path="url(#clipPath2)"
+             d="m 449.3131,654.4009 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5211"
+             clip-path="url(#clipPath2)"
+             d="m 696.7015,457.7819 v 241.5863 h -60.193"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5213"
+             clip-path="url(#clipPath2)"
+             d="m 628.5085,699.3682 12,5 -3,-5 3,-5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5215"
+             clip-path="url(#clipPath2)"
+             d="M 596.01,357.7822 V 673.897"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5217"
+             clip-path="url(#clipPath2)"
+             d="m 596.01,681.897 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5219"
+             clip-path="url(#clipPath2)"
+             d="m 866.4634,445.846 58.4476,16.2031"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5221"
+             clip-path="url(#clipPath2)"
+             d="m 932.6202,464.1862 -10.2281,-8.024 1.5552,5.6197 -4.2267,4.0169 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5223"
+             clip-path="url(#clipPath2)"
+             d="m 1019.6539,448.856 -60.3017,13.9238"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5225"
+             clip-path="url(#clipPath2)"
+             d="m 951.5573,464.5797 12.8173,2.172 -4.048,-4.1968 1.7982,-5.5468 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5227"
+             clip-path="url(#clipPath2)"
+             d="m 942,474.2865 v 29.8708"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5229"
+             clip-path="url(#clipPath2)"
+             d="m 942,512.1573 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5231"
+             clip-path="url(#clipPath2)"
+             d="M 313.7552,32.0036 282.6561,66.5927"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5233"
+             clip-path="url(#clipPath2)"
+             d="m 277.3074,72.5417 11.7412,-5.5806 -5.7239,-1.1121 -1.7123,-5.5738 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5235"
+             clip-path="url(#clipPath2)"
+             d="m 237.0653,32.0036 20.998,38.2593"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5237"
+             clip-path="url(#clipPath2)"
+             d="m 261.9124,77.276 -1.3904,-12.9254 -2.9398,5.0356 -5.8266,-0.2242 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5239"
+             clip-path="url(#clipPath2)"
+             d="m 271.7165,86.26 v 29.1917"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5241"
+             clip-path="url(#clipPath2)"
+             d="m 271.7165,123.4517 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5243"
+             clip-path="url(#clipPath2)"
+             d="M 1050,206.7964 V 406.2916"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5245"
+             clip-path="url(#clipPath2)"
+             d="m 1050,414.2916 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5247"
+             clip-path="url(#clipPath2)"
+             d="M 766.2858,75.6764 737.405,107.5517"
+             inkscape:connector-curvature="0"
+             style="fill:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5249"
+             clip-path="url(#clipPath2)"
+             d="m 732.0335,113.4801 11.7626,-5.5355 -5.7196,-1.134 -1.691,-5.5804 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5251"
+             clip-path="url(#clipPath2)"
+             d="m 779.1717,74.6266 48.2764,34.2431"
+             inkscape:connector-curvature="0"
+             style="fill:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5253"
+             clip-path="url(#clipPath2)"
+             d="m 833.9732,113.4981 -6.895,-11.0208 -0.4458,5.8138 -5.3397,2.3426 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5255"
+             clip-path="url(#clipPath2)"
+             d="M 781.9063,69.4731 H 882.9285 V 226.57 h -24.6266 v 179.7012"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5257"
+             clip-path="url(#clipPath2)"
+             d="m 858.3019,414.2712 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5259"
+             clip-path="url(#clipPath2)"
+             d="m 781.9063,69.4731 h 100.6375 v 157.3247 h 135.471 v 181.5376"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5261"
+             clip-path="url(#clipPath2)"
+             d="m 1018.0148,416.3354 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5263"
+             clip-path="url(#clipPath2)"
+             d="M 733.5791,31.9529 760.108,57.9232"
+             inkscape:connector-curvature="0"
+             style="fill:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5265"
+             clip-path="url(#clipPath2)"
+             d="m 765.8247,63.5196 -5.0774,-11.9675 -1.3539,5.6716 -5.6415,1.4743 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5267"
+             clip-path="url(#clipPath2)"
+             d="m 816.6779,31.9529 -31.9712,26.793"
+             inkscape:connector-curvature="0"
+             style="fill:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5269"
+             clip-path="url(#clipPath2)"
+             d="m 778.5751,63.8844 12.4089,-3.8755 -5.5109,-1.9053 -0.9121,-5.7591 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5271"
+             clip-path="url(#clipPath2)"
+             d="m 96.5942,240.1833 h 23.0861"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5273"
+             clip-path="url(#clipPath2)"
+             d="m 127.6803,240.1833 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5275"
+             clip-path="url(#clipPath2)"
+             d="m 147.6803,240.1833 h 21.9988"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5277"
+             clip-path="url(#clipPath2)"
+             d="m 177.6791,240.1833 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5279"
+             clip-path="url(#clipPath2)"
+             d="m 616.3446,267.3831 -13.3103,47.7242"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5281"
+             clip-path="url(#clipPath2)"
+             d="m 600.8851,322.8132 8.04,-10.2157 -5.6221,1.5465 -4.0103,-4.2329 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5283"
+             clip-path="url(#clipPath2)"
+             d="M 719.206,267.3831 632.28,318.8277"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5285"
+             clip-path="url(#clipPath2)"
+             d="m 625.3954,322.9022 12.8735,-1.8088 -5.1283,-2.775 0.0352,-5.8309 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5287"
+             clip-path="url(#clipPath2)"
+             d="m 210.1803,222.6896 v -66.25"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5289"
+             clip-path="url(#clipPath2)"
+             d="m 210.1803,148.4396 -5,12 5,-3 5,3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5291"
+             clip-path="url(#clipPath2)"
+             d="m 220.1803,140.9396 h 11.0493"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5293"
+             clip-path="url(#clipPath2)"
+             d="m 239.2296,140.9396 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5295"
+             clip-path="url(#clipPath2)"
+             d="m 177.2125,77.8739 25.6115,48.9934"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5297"
+             clip-path="url(#clipPath2)"
+             d="m 206.5302,133.9571 -1.1282,-12.951 -3.0413,4.975 -5.8209,-0.3423 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5299"
+             clip-path="url(#clipPath2)"
+             d="m 137.6803,158.4624 v 66.2209"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5301"
+             clip-path="url(#clipPath2)"
+             d="m 137.6803,232.6833 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5303"
+             clip-path="url(#clipPath2)"
+             d="m 170.1815,140.9396 h 21.9988"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5305"
+             clip-path="url(#clipPath2)"
+             d="m 200.1803,140.9396 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5307"
+             clip-path="url(#clipPath2)"
+             d="m 543.51,113.7478 v 11.7218"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5309"
+             clip-path="url(#clipPath2)"
+             d="m 543.51,133.4696 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5311"
+             clip-path="url(#clipPath2)"
+             d="m 437.469,113.0643 v 12.3801"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5313"
+             clip-path="url(#clipPath2)"
+             d="m 437.469,133.4444 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5315"
+             clip-path="url(#clipPath2)"
+             d="m 463.8557,168.445 59.38353,39.19406"
+             inkscape:connector-curvature="0"
+             style="fill:none"
+             sodipodi:nodetypes="cc" />
+          <path
+             id="path5317"
+             clip-path="url(#clipPath2)"
+             d="m 519.6675,205.4716 -7.2354,-10.8004 -0.2643,5.825 -5.264,2.508 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none"
+             transform="translate(11.071429,7.1428572)" />
+          <path
+             id="path5319"
+             clip-path="url(#clipPath2)"
+             d="m 544.0079,32.0051 -0.1596,7.3088"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5321"
+             clip-path="url(#clipPath2)"
+             d="m 543.6737,47.312 5.2607,-11.888 -5.0642,2.8902 -4.9334,-3.1085 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5323"
+             clip-path="url(#clipPath2)"
+             d="m 543.51,62.311 v 8.4772"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5325"
+             clip-path="url(#clipPath2)"
+             d="m 543.51,78.7882 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5327"
+             clip-path="url(#clipPath2)"
+             d="M 451.5497,-6.8967 V -50.9523 H 648.2328 V 131 h 43.2502"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5329"
+             clip-path="url(#clipPath2)"
+             d="m 699.483,131 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5331"
+             clip-path="url(#clipPath2)"
+             d="M 429.0917,-6.8763 V -50.0135 H 271.7165 V 63.26"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5333"
+             clip-path="url(#clipPath2)"
+             d="m 271.7165,71.26 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5335"
+             clip-path="url(#clipPath2)"
+             d="m 351.6584,31.9614 18.6762,17.3968"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5337"
+             clip-path="url(#clipPath2)"
+             d="m 376.1884,54.811 -5.3728,-11.8378 -1.2128,5.7034 -5.6031,1.6138 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5339"
+             clip-path="url(#clipPath2)"
+             d="m 421.9648,31.565 -21.51,13.9763"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5341"
+             clip-path="url(#clipPath2)"
+             d="m 393.7465,49.9001 12.7866,-2.3455 -5.2398,-2.5581 -0.2086,-5.8273 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5343"
+             clip-path="url(#clipPath2)"
+             d="M 386.1884,47.311 V -25.6058 H 112.114 v 12.8722"
+             inkscape:connector-curvature="0"
+             style="fill:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5345"
+             clip-path="url(#clipPath2)"
+             d="m 112.114,-4.7336 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none;stroke-dasharray:6, 2" />
+          <path
+             id="path5347"
+             clip-path="url(#clipPath2)"
+             d="M 396.1884,54.811 H 525.51"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5349"
+             clip-path="url(#clipPath2)"
+             d="m 533.51,54.811 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5351"
+             clip-path="url(#clipPath2)"
+             d="m 393.0511,60.2661 16.1416,12.8306"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5353"
+             clip-path="url(#clipPath2)"
+             d="m 415.4552,78.0747 -6.2826,-11.3811 -0.7627,5.7808 -5.4597,2.0474 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5355"
+             clip-path="url(#clipPath2)"
+             d="m 281.7165,78.76 h 72.8762 v 95.5422"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5357"
+             clip-path="url(#clipPath2)"
+             d="m 354.5927,182.3022 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5359"
+             clip-path="url(#clipPath2)"
+             d="m 397.4561,204.5528 121.21579,12.37896"
+             inkscape:connector-curvature="0"
+             style="fill:none"
+             sodipodi:nodetypes="cc" />
+          <path
+             id="path5361"
+             clip-path="url(#clipPath2)"
+             d="m 510.6534,217.0245 -11.3802,-6.2841 2.4344,5.2985 -3.5296,4.6414 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none"
+             transform="translate(16.964286,0.89285714)" />
+          <path
+             id="path5363"
+             clip-path="url(#clipPath2)"
+             d="m 537.0817,232.3831 v 163.1027 h -38.292 v 27.5312"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5365"
+             clip-path="url(#clipPath2)"
+             d="m 498.7897,431.017 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5369"
+             clip-path="url(#clipPath2)"
+             d="m 243.402,431.5265 4.941,-12.0244 -4.9852,3.0245 -5.0147,-2.9754 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5371"
+             clip-path="url(#clipPath2)"
+             d="M 537.0817,226.31167 V 395.4858 h -51.911 -158.0946 v 27.5645"
+             inkscape:connector-curvature="0"
+             style="fill:none"
+             sodipodi:nodetypes="ccccc" />
+          <path
+             id="path5373"
+             clip-path="url(#clipPath2)"
+             d="m 327.0761,431.0503 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5375"
+             clip-path="url(#clipPath2)"
+             d="m 563.4752,340.2931 h -152.64 v 82.721"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5377"
+             clip-path="url(#clipPath2)"
+             d="m 410.8352,431.0141 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5379"
+             clip-path="url(#clipPath2)"
+             d="m 410.8352,466.0014 v 83.8699 H 394.8887 342.508"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5381"
+             clip-path="url(#clipPath2)"
+             d="m 334.508,549.8713 12,5 -3,-5 3,-5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5383"
+             clip-path="url(#clipPath2)"
+             d="m 498.7897,466.0471 v 118.5994 h 12.7258"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5385"
+             clip-path="url(#clipPath2)"
+             d="m 519.5155,584.6465 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5387"
+             clip-path="url(#clipPath2)"
+             d="m 644.2015,567.3608 v 17.2857 h -96.686"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5389"
+             clip-path="url(#clipPath2)"
+             d="m 539.5155,584.6465 12,5 -3,-5 3,-5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5391"
+             clip-path="url(#clipPath2)"
+             d="M 529.5155,592.1465 V 720.6487"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5393"
+             clip-path="url(#clipPath2)"
+             d="m 529.5155,728.6487 5,-12 -5,3 -5,-3 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5395"
+             clip-path="url(#clipPath2)"
+             d="m 934.1765,349.3214 v 82.4651 H 874.528"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5397"
+             clip-path="url(#clipPath2)"
+             d="m 866.528,431.7865 12,5 -3,-5 3,-5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5399"
+             clip-path="url(#clipPath2)"
+             d="m 696.7015,457.8025 v 288.3273 h 27.6296"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5401"
+             clip-path="url(#clipPath2)"
+             d="m 732.3311,746.1298 -12,-5 3,5 -3,5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             id="path5403"
+             clip-path="url(#clipPath2)"
+             d="m 834,449.2694 v 92.5172 h -44.2952"
+             inkscape:connector-curvature="0"
+             style="fill:none" />
+          <path
+             id="path5405"
+             clip-path="url(#clipPath2)"
+             d="m 781.7048,541.7866 12,5 -3,-5 3,-5 z"
+             inkscape:connector-curvature="0"
+             style="stroke:none" />
+          <path
+             style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="M 537.0817,226.31167 V 395.4858 H 243.402 v 29.44834"
+             id="path4824"
+             sodipodi:nodetypes="cccc" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
