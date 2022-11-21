@@ -28,7 +28,13 @@ export default class Node extends React.Component {
    * Checks whether this Node is selected
    * @return {boolean}
    */
-  isSelected = () => this.props.isSelected(this)
+  isSelected = () => {
+    if (this.props.hybrid) {
+      return this.props.status === "active"
+    } else {
+      return this.props.selected
+    }
+  }
 
   /**
    * Checks whether all prerequisite/preceding nodes for the current one are satisfied
@@ -155,7 +161,6 @@ Node.propTypes = {
   outEdges: PropTypes.array,
   unfocusPrereqs: PropTypes.func,
   arePrereqsSatisfied: PropTypes.func,
-  isSelected: PropTypes.func,
   focusPrereqs: PropTypes.func,
   updateNode: PropTypes.func,
   toggleSelection: PropTypes.func,

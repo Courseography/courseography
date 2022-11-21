@@ -31,7 +31,7 @@ export class Graph extends React.Component {
       labelsJSON: [],
       regionsJSON: [],
       nodesJSON: [],
-      nodesState: {},
+      nodesStatus: {},
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
@@ -65,8 +65,8 @@ export class Graph extends React.Component {
     }
 
     this.nodes = React.createRef()
-    this.edges = React.createRef()
     this.bools = React.createRef()
+    this.edges = React.createRef()
     this.exportModal = React.createRef()
     this.nodeDropshadowFilter = "dropshadow"
   }
@@ -117,6 +117,7 @@ export class Graph extends React.Component {
     let url = new URL("/get-json-data", document.location)
     const params = { graphName: graphName }
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+    
     fetch(url)
       .then(headers => {
         if (!headers.ok) {
@@ -137,7 +138,7 @@ export class Graph extends React.Component {
         localStorage.setItem("active-graph", graphName)
         var regionsList = []
         var nodesList = []
-        var nodesState = {}
+        var nodesStatus = {}
         var hybridsList = []
         var boolsList = []
         var boolsStatusObj = {}
@@ -184,6 +185,7 @@ export class Graph extends React.Component {
             if (localStorage.getItem(node.id_) === "active") {
               storedNodes.add(node.text[node.text.length - 1].text)
             }
+
             noDuplicatesNodesList.push(node)
           }
         })
@@ -196,7 +198,7 @@ export class Graph extends React.Component {
           if (state === null) {
             state = parentsObj[hybrid.id_].length === 0 ? "takeable" : "inactive"
           }
-          nodesState[hybrid.id_] = {
+          nodesStatus[hybrid.id_] = {
             status: state,
             selected: ["active", "overridden"].indexOf(state) >= 0,
           }
@@ -243,7 +245,7 @@ export class Graph extends React.Component {
           if (state === null) {
             state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
           }
-          nodesState[node.id_] = {
+          nodesStatus[node.id_] = {
             status: state,
             selected: ["active", "overridden"].indexOf(state) >= 0,
           }
@@ -270,7 +272,7 @@ export class Graph extends React.Component {
             children: childrenObj,
             outEdges: outEdgesObj,
           },
-          nodesState: nodesState,
+          nodesStatus: nodesStatus,
           selectedNodes: storedNodes,
         })
       })
@@ -284,8 +286,8 @@ export class Graph extends React.Component {
     if (prevState.nodesJSON !== this.state.nodesJSON) {
       var totalFCEs = 0
       this.state.nodesJSON.forEach(nodeJSON => {
-        let node = this.nodes.current[nodeJSON.id_]
-        if (!node.props.hybrid && node.props.selected) {
+        let node = this.nodes.current[nodeJSON.id_]  
+        if (!node.props.hybrid && this.state.nodesStatus[nodeJSON.id_].selected) {
           totalFCEs += 0.5
         }
       })
@@ -317,7 +319,7 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Update the status of the Edge, based on the status of the Node/Bool it points from/to
+   * Update the status of the Edge, based on the status of the Node/Bool it points from/to.
    */
   updateEdgeStatus = (status, edgeId, source, target) => {
     const sourceNode = refLookUp(source, this)
@@ -348,7 +350,7 @@ export class Graph extends React.Component {
     var currentNode = this.nodes.current[courseId]
     var courseLabelArray = currentNode.props.JSON.text
     var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
-    var wasSelected = currentNode.props.selected
+    var wasSelected = this.state.nodesStatus[courseId].selected
     var temp = this.state.selectedNodes
     currentNode.toggleSelection(this)
     if (typeof this.props.incrementFCECount === "function") {
@@ -593,7 +595,7 @@ export class Graph extends React.Component {
   // Reset graph
   reset = () => {
     this.props.setFCECount(0)
-    const nodesState = Object.keys(this.state.nodesState).reduce((acc, curr) => {
+    const nodesStatus = Object.keys(this.state.nodesStatus).reduce((acc, curr) => {
       const state =
         this.state.connections.parents[curr].length === 0 ? "takeable" : "inactive"
       localStorage.setItem(curr, state)
@@ -616,7 +618,7 @@ export class Graph extends React.Component {
     this.setState({
       boolsStatus: boolStatus,
       edgesStatus: edgesStatus,
-      nodesState: nodesState,
+      nodesStatus: nodesStatus,
       selectedNodes: new Set(),
     })
     if (this.state.currFocus !== null) {
@@ -859,7 +861,7 @@ export class Graph extends React.Component {
 
     const nodeId = targetNode.props.JSON.id_
     const childs = this.state.connections.children[nodeId]
-    const status = this.state.nodesState[nodeId]?.status
+    const status = this.state.nodesStatus[nodeId]?.status
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
     const allEdges = targetNode.props.outEdges.concat(targetNode.props.inEdges)
@@ -872,9 +874,9 @@ export class Graph extends React.Component {
 
       this.setState(
         prevState => {
-          const nodesState = { ...prevState.nodesState }
-          nodesState[nodeId].status = newState
-          return { nodesState: nodesState }
+          const nodesStatus = { ...prevState.nodesStatus }
+          nodesStatus[nodeId].status = newState
+          return { nodesStatus: nodesStatus }
         },
         () => {
           allEdges.forEach(edge => {
@@ -889,9 +891,9 @@ export class Graph extends React.Component {
     if (recursive === undefined || recursive) {
       this.setState(
         prevState => {
-          const nodesState = { ...prevState.nodesState }
-          nodesState[nodeId].status = newState
-          return { nodesState: nodesState }
+          const nodesStatus = { ...prevState.nodesStatus }
+          nodesStatus[nodeId].status = newState
+          return { nodesStatus: nodesStatus }
         },
         () => {
           localStorage.setItem(nodeId, newState)
@@ -910,9 +912,9 @@ export class Graph extends React.Component {
     } else {
       this.setState(
         prevState => {
-          const nodesState = { ...prevState.nodesState }
-          nodesState[nodeId].status = newState
-          return { nodesState: nodesState }
+          const nodesStatus = { ...prevState.nodesStatus }
+          nodesStatus[nodeId].status = newState
+          return { nodesStatus: nodesStatus }
         },
         () => {
           allEdges.forEach(edge => {
@@ -929,9 +931,9 @@ export class Graph extends React.Component {
     var nodeId = targetNode.props.JSON.id_
     this.setState(
       prevState => {
-        const nodesState = { ...prevState.nodesState }
-        nodesState[nodeId].selected = !nodesState[nodeId].selected
-        return { nodesState: nodesState }
+        const nodesStatus = { ...prevState.nodesStatus }
+        nodesStatus[nodeId].selected = !nodesStatus[nodeId].selected
+        return { nodesStatus: nodesStatus }
       },
       () => targetNode.updateNode()
     )
@@ -974,16 +976,16 @@ export class Graph extends React.Component {
 
   focusPrereqs = targetNode => {
     const nodeId = targetNode.props.JSON.id_
-    const status = this.state.nodesState[nodeId]?.status
+    const status = this.state.nodesStatus[nodeId]?.status
     const inEdges = this.state.connections.inEdges[nodeId]
     const parents = this.state.connections.parents[nodeId]
 
     if (["inactive", "overridden", "takeable"].includes(status)) {
       this.setState(
         prevState => {
-          const nodesState = { ...prevState.nodesState }
-          nodesState[nodeId].status = "missing"
-          return { nodesState: nodesState }
+          const nodesStatus = { ...prevState.nodesStatus }
+          nodesStatus[nodeId].status = "missing"
+          return { nodesStatus: nodesStatus }
         },
         () => {
           inEdges?.forEach(edge => {
@@ -1062,13 +1064,6 @@ export class Graph extends React.Component {
     return parents.every(isAllTrue)
   }
 
-  isSelected = targetNode => {
-    if (targetNode.props.hybrid) {
-      return targetNode.props.status === "active"
-    } else {
-      return targetNode.props.selected
-    }
-  }
 
   renderRegions = regionsJSON => {
     return regionsJSON.map(function (entry, value) {
@@ -1292,13 +1287,12 @@ export class Graph extends React.Component {
             focusPrereqs={this.focusPrereqs}
             updateNode={this.updateNode}
             toggleSelection={this.toggleSelection}
-            nodesState={this.state.nodesState}
+            nodesStatus={this.state.nodesStatus}
             nodesJSON={this.state.nodesJSON}
             hybridsJSON={this.state.hybridsJSON}
             edgesJSON={this.state.edgesJSON}
             highlightedNodes={this.state.highlightedNodes}
             arePrereqsSatisfied={this.arePrereqsSatisfied}
-            isSelected={this.isSelected}
             onDraw={this.state.onDraw}
             connections={this.state.connections}
             nodeDropshadowFilter={this.nodeDropshadowFilter}

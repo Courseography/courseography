@@ -27,7 +27,7 @@ export default class EdgeGroup extends React.Component {
         key={edgeJSON.id_}
         ref={this.setRefEntry(edgeJSON)}
         updateEdgeStatus={this.props.updateEdgeStatus}
-        edgeId={edgeJSON.id_}
+        edgeID={edgeJSON.id_}
         source={edgeJSON.source}
         target={edgeJSON.target}
         points={edgeJSON.points}
