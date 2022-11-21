@@ -26,12 +26,12 @@ export default class EdgeGroup extends React.Component {
         className="path"
         key={edgeJSON.id_}
         ref={this.setRefEntry(edgeJSON)}
-        updateEdgeStatus={this.props.updateEdgeStatus}
-        edgeID={edgeJSON.id_}
         source={edgeJSON.source}
         target={edgeJSON.target}
         points={edgeJSON.points}
+        edgeID={edgeJSON.id_}
         status={this.props.edgesStatus[edgeJSON.id_]}
+        updateEdgeStatus={this.props.updateEdgeStatus}
       />
     )
   }
@@ -72,6 +72,6 @@ EdgeGroup.propTypes = {
   edgesJSON: PropTypes.array,
   /** An object containing all edge to status pairs */
   edgesStatus: PropTypes.object,
-  /** A function for updating edge statuts */
+  /** A function for updating the edge status */
   updateEdgeStatus: PropTypes.func,
 }
