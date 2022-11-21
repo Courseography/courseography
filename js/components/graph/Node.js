@@ -48,9 +48,6 @@ export default class Node extends React.Component {
    */
   updateNode = recursive => this.props.updateNode(this, recursive)
 
-  /** Controls the selection and deselection of a node by switching states and updating the graph */
-  toggleSelection = () => this.props.toggleSelection(this)
-
   /** Sets the status of all missing prerequisites to 'missing' */
   focusPrereqs = () => this.props.focusPrereqs(this)
 
@@ -163,7 +160,6 @@ Node.propTypes = {
   arePrereqsSatisfied: PropTypes.func,
   focusPrereqs: PropTypes.func,
   updateNode: PropTypes.func,
-  toggleSelection: PropTypes.func,
   status: PropTypes.string,
   selected: PropTypes.bool,
   parents: PropTypes.array,

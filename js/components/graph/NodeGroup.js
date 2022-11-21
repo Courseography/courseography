@@ -34,7 +34,6 @@ export default class NodeGroup extends React.Component {
               arePrereqsSatisfied={this.props.arePrereqsSatisfied}
               updateNode={this.props.updateNode}
               focusPrereqs={this.props.focusPrereqs}
-              toggleSelection={this.props.toggleSelection}
               inEdges={[]}
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
@@ -64,7 +63,6 @@ export default class NodeGroup extends React.Component {
               focusPrereqs={this.props.focusPrereqs}
               updateNode={this.props.updateNode}
               arePrereqsSatisfied={this.props.arePrereqsSatisfied}
-              toggleSelection={this.props.toggleSelection}
               highlighted={highlighted}
               onClick={this.props.nodeClick}
               onMouseEnter={this.props.nodeMouseEnter}
@@ -92,7 +90,6 @@ NodeGroup.propTypes = {
   focusPrereqs: PropTypes.func,
   unfocusPrereqs: PropTypes.func,
   updateNode: PropTypes.func,
-  toggleSelection: PropTypes.func,
   arePrereqsSatisfied: PropTypes.func,
   nodesStatus: PropTypes.object,
   nodesJSON: PropTypes.array,

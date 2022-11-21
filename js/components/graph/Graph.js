@@ -117,7 +117,7 @@ export class Graph extends React.Component {
     let url = new URL("/get-json-data", document.location)
     const params = { graphName: graphName }
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-    
+
     fetch(url)
       .then(headers => {
         if (!headers.ok) {
@@ -286,7 +286,7 @@ export class Graph extends React.Component {
     if (prevState.nodesJSON !== this.state.nodesJSON) {
       var totalFCEs = 0
       this.state.nodesJSON.forEach(nodeJSON => {
-        let node = this.nodes.current[nodeJSON.id_]  
+        let node = this.nodes.current[nodeJSON.id_]
         if (!node.props.hybrid && this.state.nodesStatus[nodeJSON.id_].selected) {
           totalFCEs += 0.5
         }
@@ -352,7 +352,7 @@ export class Graph extends React.Component {
     var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     var wasSelected = this.state.nodesStatus[courseId].selected
     var temp = this.state.selectedNodes
-    currentNode.toggleSelection(this)
+    this.toggleSelection(courseId)
     if (typeof this.props.incrementFCECount === "function") {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
@@ -420,7 +420,7 @@ export class Graph extends React.Component {
   handleCourseClick = id => {
     id = id.toLowerCase()
     var currentNode = this.nodes.current[id]
-    currentNode.toggleSelection(this)
+    this.toggleSelection(id)
     var courseLabelArray = currentNode.props.JSON.text
     var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     var temp = [...this.state.selectedNodes]
@@ -832,7 +832,7 @@ export class Graph extends React.Component {
         localStorage.setItem(boolId, newState)
         childs.forEach(node => {
           var currentNode = refLookUp(node, this)
-          currentNode.updateNode(this)
+          this.updateNode(currentNode)
         })
         var allEdges = outEdges.concat(inEdges)
         allEdges.forEach(edge => {
@@ -927,15 +927,18 @@ export class Graph extends React.Component {
     }
   }
 
-  toggleSelection = targetNode => {
-    var nodeId = targetNode.props.JSON.id_
+  /** Controls the selection and deselection of a node by switching states and updating the graph */
+  toggleSelection = nodeId => {
     this.setState(
       prevState => {
         const nodesStatus = { ...prevState.nodesStatus }
         nodesStatus[nodeId].selected = !nodesStatus[nodeId].selected
         return { nodesStatus: nodesStatus }
       },
-      () => targetNode.updateNode()
+      () => {
+        const node = refLookUp(nodeId, this)
+        node.updateNode()
+      }
     )
   }
 
@@ -1063,7 +1066,6 @@ export class Graph extends React.Component {
 
     return parents.every(isAllTrue)
   }
-
 
   renderRegions = regionsJSON => {
     return regionsJSON.map(function (entry, value) {
@@ -1286,7 +1288,6 @@ export class Graph extends React.Component {
             unfocusPrereqs={this.unfocusPrereqs}
             focusPrereqs={this.focusPrereqs}
             updateNode={this.updateNode}
-            toggleSelection={this.toggleSelection}
             nodesStatus={this.state.nodesStatus}
             nodesJSON={this.state.nodesJSON}
             hybridsJSON={this.state.hybridsJSON}
