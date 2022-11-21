@@ -321,7 +321,7 @@ export class Graph extends React.Component {
   /**
    * Update the status of the Edge, based on the status of the Node/Bool it points from/to.
    */
-  updateEdgeStatus = (status, edgeId, source, target) => {
+  updateEdgeStatus = (status, edgeID, source, target) => {
     const sourceNode = refLookUp(source, this)
     const targetNode = refLookUp(target, this)
 
@@ -338,7 +338,7 @@ export class Graph extends React.Component {
     }
     this.setState(state => {
       const edgesStatus = { ...state.edgesStatus }
-      edgesStatus[edgeId] = status
+      edgesStatus[edgeID] = status
       return {
         edgesStatus: edgesStatus,
       }
@@ -424,7 +424,7 @@ export class Graph extends React.Component {
     var courseLabelArray = currentNode.props.JSON.text
     var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     var temp = [...this.state.selectedNodes]
-    if (currentNode.props.selected) {
+    if (this.state.nodesStatus[id].isSelected) {
       this.setState({
         selectedNodes: new Set(temp.filter(course => course !== courseLabel)),
       })
@@ -845,7 +845,7 @@ export class Graph extends React.Component {
 
   updateNode = (targetNode, recursive) => {
     let newState
-    if (targetNode.arePrereqsSatisfied()) {
+    if (this.arePrereqsSatisfied(targetNode.props.JSON.id_)) {
       if (targetNode.isSelected() || targetNode.props.hybrid) {
         newState = "active"
       } else {
@@ -899,9 +899,8 @@ export class Graph extends React.Component {
           localStorage.setItem(nodeId, newState)
           childs?.forEach(n => {
             const currentNode = refLookUp(n, this)
-            if (currentNode !== undefined) {
-              currentNode.updateNode()
-            }
+            // this.updateNode(currentNode, currentNode)
+            currentNode.updateNode(currentNode)
           })
           allEdges.forEach(edge => {
             const currentEdge = this.edges.current[edge]
@@ -1042,8 +1041,11 @@ export class Graph extends React.Component {
     })
   }
 
-  arePrereqsSatisfied = targetNode => {
-    const nodeId = targetNode.props.JSON.id_
+  /**
+   * Checks whether all prerequisite/preceding nodes for the current one are satisfied
+   * @return {boolean}
+   */
+  arePrereqsSatisfied = nodeId => {
     const parents = this.state.connections.parents[nodeId]
     /**
      * Recursively checks that preceding nodes are selected
@@ -1293,7 +1295,6 @@ export class Graph extends React.Component {
             hybridsJSON={this.state.hybridsJSON}
             edgesJSON={this.state.edgesJSON}
             highlightedNodes={this.state.highlightedNodes}
-            arePrereqsSatisfied={this.arePrereqsSatisfied}
             onDraw={this.state.onDraw}
             connections={this.state.connections}
             nodeDropshadowFilter={this.nodeDropshadowFilter}

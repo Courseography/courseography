@@ -37,12 +37,6 @@ export default class Node extends React.Component {
   }
 
   /**
-   * Checks whether all prerequisite/preceding nodes for the current one are satisfied
-   * @return {boolean}
-   */
-  arePrereqsSatisfied = () => this.props.arePrereqsSatisfied(this)
-
-  /**
    * Update the state/status of a node (and its children/edges)
    * @param  {boolean} recursive whether we should recurse on its children
    */
@@ -157,7 +151,6 @@ Node.propTypes = {
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
   unfocusPrereqs: PropTypes.func,
-  arePrereqsSatisfied: PropTypes.func,
   focusPrereqs: PropTypes.func,
   updateNode: PropTypes.func,
   status: PropTypes.string,
