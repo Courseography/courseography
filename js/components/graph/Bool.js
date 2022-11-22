@@ -63,12 +63,9 @@ export default class Bool extends React.Component {
 }
 
 Bool.propTypes = {
-  childs: PropTypes.array,
   className: PropTypes.string,
   JSON: PropTypes.object,
-  inEdges: PropTypes.array,
   logicalType: PropTypes.string,
-  outEdges: PropTypes.array,
   parents: PropTypes.array,
   svg: PropTypes.object,
   status: PropTypes.string,

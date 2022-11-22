@@ -5,14 +5,6 @@ import React from "react"
  * Class representing an edge from a Node/Bool to a Node/Bool
  */
 export default class Edge extends React.Component {
-  updateStatus(status) {
-    this.props.updateEdgeStatus(
-      status,
-      this.props.edgeID,
-      this.props.source,
-      this.props.target
-    )
-  }
   render() {
     var pathAttrs = { d: "M" }
     this.props.points.forEach(p => {
@@ -41,6 +33,4 @@ Edge.propTypes = {
   target: PropTypes.string,
   /** Status of this edge */
   status: PropTypes.string,
-  /** Update the status of this edge */
-  updateEdgeStatus: PropTypes.func,
 }

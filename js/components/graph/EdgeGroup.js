@@ -31,7 +31,6 @@ export default class EdgeGroup extends React.Component {
         points={edgeJSON.points}
         edgeID={edgeJSON.id_}
         status={this.props.edgesStatus[edgeJSON.id_]}
-        updateEdgeStatus={this.props.updateEdgeStatus}
       />
     )
   }
@@ -72,6 +71,4 @@ EdgeGroup.propTypes = {
   edgesJSON: PropTypes.array,
   /** An object containing all edge to status pairs */
   edgesStatus: PropTypes.object,
-  /** A function for updating the edge status */
-  updateEdgeStatus: PropTypes.func,
 }
