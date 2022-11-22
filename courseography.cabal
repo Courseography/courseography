@@ -51,6 +51,7 @@ test-suite RequirementTests
     test-framework-hunit,
     test-framework-quickcheck2,
     text,
+    time,
     unordered-containers
   default-extensions:
     OverloadedStrings,

@@ -28,6 +28,7 @@ import Data.Char (toLower)
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
+import Data.Time.Clock (UTCTime)
 import Database.DataType
 import Database.Persist.Sqlite (Key, SqlPersistM, entityVal, selectFirst, (==.))
 import Database.Persist.TH
@@ -133,6 +134,8 @@ Post
     --Primary code
     description T.Text
     requirements T.Text
+    created UTCTime
+    modified UTCTime
     deriving Show Eq Generic
 
 PostCategory

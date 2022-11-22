@@ -49,6 +49,7 @@ export class Graph extends React.Component {
       drawMode: this.props.initialDrawMode,
       drawNodeID: 0,
       draggingNode: null,
+      focusCourses: {},
       graphName: null,
       connections: null,
       showInfoBox: false,
@@ -277,9 +278,24 @@ export class Graph extends React.Component {
     if (this.props.currFocus !== prevProps.currFocus && this.props.currFocus === null) {
       this.highlightFocuses([])
     } else if (this.props.currFocus !== prevProps.currFocus) {
-      getPost(this.props.currFocus).then(focusData =>
-        this.highlightFocuses(focusData.courseList)
-      )
+      const currFocusCourses = this.state.focusCourses[this.props.currFocus]
+      getPost(
+        this.props.currFocus,
+        currFocusCourses?.modifiedTime || new Date(0).toUTCString()
+      ).then(focusData => {
+        if (!focusData.modified) {
+          this.highlightFocuses(currFocusCourses.list)
+        } else {
+          let focusCourses = this.state.focusCourses
+          focusCourses[this.props.currFocus] = {
+            list: focusData.courseList,
+            modifiedTime: focusData.modifiedTime,
+          }
+          this.setState({ focusCourses }, () =>
+            this.highlightFocuses(this.state.focusCourses[this.props.currFocus].list)
+          )
+        }
+      })
     }
   }
 

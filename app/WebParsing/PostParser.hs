@@ -12,6 +12,7 @@ import Data.List (find)
 import Data.List.Split (keepDelimsL, split, splitWhen, whenElt)
 import Data.Text (strip)
 import qualified Data.Text as T
+import Data.Time.Clock (getCurrentTime)
 import Database.DataType (PostType (..))
 import Database.Persist (insertUnique)
 import Database.Persist.Sqlite (SqlPersistM, insert_)
@@ -37,12 +38,15 @@ addPostToDatabase programElements = do
     case P.parse postInfoParser "POSt information" fullPostName of
         Left _ -> return ()
         Right (department, code) -> do
+            currTime <- liftIO getCurrentTime
             postExists <- insertUnique Post {
                 postName = getPostType code department,
                 postDepartment = department,
                 postCode = code,
                 postDescription = descriptionText,
-                postRequirements = renderTags requirementLines
+                postRequirements = renderTags requirementLines,
+                postCreated = currTime,
+                postModified = currTime
                 }
             case postExists of
                 Just key ->
