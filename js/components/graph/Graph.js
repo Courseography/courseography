@@ -400,8 +400,7 @@ export class Graph extends React.Component {
 
   nodeMouseLeave = event => {
     var courseId = event.currentTarget.id
-    var currentNode = this.nodes.current[courseId]
-    currentNode.unfocusPrereqs()
+    this.unfocusPrereqs(courseId)
 
     var timeout = setTimeout(() => {
       this.setState({ showInfoBox: false })
@@ -813,9 +812,9 @@ export class Graph extends React.Component {
   /**
    * Update the Bool's state at any moment given the prereqs and current state.
    */
-  updateNodeBool = boolNode => {
+  updateNodeBool = boolId => {
+    const boolNode = refLookUp(boolId, this)
     var newState = boolNode.arePrereqsSatisfied() ? "active" : "inactive"
-    var boolId = boolNode.props.JSON.id_
     const childs = this.state.connections.children[boolId]
     const inEdges = this.state.connections.inEdges[boolId]
     const outEdges = this.state.connections.outEdges[boolId]
@@ -831,8 +830,7 @@ export class Graph extends React.Component {
       () => {
         localStorage.setItem(boolId, newState)
         childs.forEach(node => {
-          var currentNode = refLookUp(node, this)
-          this.updateNode(currentNode)
+          this.updateNode(node)
         })
         var allEdges = outEdges.concat(inEdges)
         allEdges.forEach(edge => {
@@ -843,9 +841,14 @@ export class Graph extends React.Component {
     )
   }
 
-  updateNode = (targetNode, recursive) => {
+  /**
+   * Update the state/status of a node (and its children/edges).
+   * @param  {boolean} recursive whether we should recurse on its children
+   */
+  updateNode = (nodeId, recursive) => {
+    const targetNode = refLookUp(nodeId, this)
     let newState
-    if (this.arePrereqsSatisfied(targetNode.props.JSON.id_)) {
+    if (this.arePrereqsSatisfied(nodeId)) {
       if (targetNode.isSelected() || targetNode.props.hybrid) {
         newState = "active"
       } else {
@@ -859,7 +862,6 @@ export class Graph extends React.Component {
       }
     }
 
-    const nodeId = targetNode.props.JSON.id_
     const childs = this.state.connections.children[nodeId]
     const status = this.state.nodesStatus[nodeId]?.status
     // Updating the children will be unnecessary if the selected state of the current node has not
@@ -898,9 +900,11 @@ export class Graph extends React.Component {
         () => {
           localStorage.setItem(nodeId, newState)
           childs?.forEach(n => {
-            const currentNode = refLookUp(n, this)
-            // this.updateNode(currentNode, currentNode)
-            currentNode.updateNode(currentNode)
+            if (this.nodes.current[n] !== undefined) {
+              this.updateNode(n)
+            } else if (this.bools.current[n] !== undefined) {
+              this.updateNodeBool(n)
+            }
           })
           allEdges.forEach(edge => {
             const currentEdge = this.edges.current[edge]
@@ -935,8 +939,7 @@ export class Graph extends React.Component {
         return { nodesStatus: nodesStatus }
       },
       () => {
-        const node = refLookUp(nodeId, this)
-        node.updateNode()
+        this.updateNode(nodeId)
       }
     )
   }
@@ -975,6 +978,18 @@ export class Graph extends React.Component {
       )
     }
   }
+  /**
+   * Remove the focus preqrequisites if the focus is unselected.
+   */
+  unfocusPrereqsBool = boolId => {
+    this.updateNodeBool(boolId)
+    const parents = this.state.connections.parents[boolId]
+    parents.forEach(node => {
+      this.nodes.current[node] !== undefined
+        ? this.unfocusPrereqs(node)
+        : this.unfocusPrereqsBool(node)
+    })
+  }
 
   /** Sets the status of all missing prerequisites to 'missing' */
   focusPrereqs = nodeId => {
@@ -1002,8 +1017,6 @@ export class Graph extends React.Component {
               this.nodes.current[node]
                 ? this.focusPrereqs(node)
                 : this.focusPrereqsBool(node)
-              // const currentNode = refLookUp(node, this)
-              // currentNode.focusPrereqs()
             } else {
               node.forEach(n => {
                 this.nodes.current[n] ? this.focusPrereqs(n) : this.focusPrereqsBool(n)
@@ -1019,19 +1032,20 @@ export class Graph extends React.Component {
    * Resets 'missing' nodes and edges to the previous statuses:
    *  active, inactive, overridden, takeable
    */
-  unfocusPrereqs = targetNode => {
-    targetNode.updateNode(false)
-    const nodeId = targetNode.props.JSON.id_
+  unfocusPrereqs = nodeId => {
+    this.updateNode(nodeId, false)
     const parents = this.state.connections.parents[nodeId]
     const inEdges = this.state.connections.inEdges[nodeId]
     parents?.forEach(node => {
       if (typeof node === "string") {
-        var currentNode = refLookUp(node, this)
-        currentNode.unfocusPrereqs()
+        this.nodes.current[node]
+                ? this.unfocusPrereqs(node)
+                : this.unfocusPrereqsBool(node)
       } else {
         node.forEach(n => {
-          var currentNode = refLookUp(n, this)
-          currentNode.unfocusPrereqs()
+          this.nodes.current[n]
+                ? this.unfocusPrereqs(n)
+                : this.unfocusPrereqsBool(n)
         })
       }
     })
@@ -1289,7 +1303,6 @@ export class Graph extends React.Component {
             nodeMouseLeave={this.nodeMouseLeave}
             nodeMouseDown={this.nodeMouseDown}
             svg={this}
-            unfocusPrereqs={this.unfocusPrereqs}
             updateNode={this.updateNode}
             nodesStatus={this.state.nodesStatus}
             nodesJSON={this.state.nodesJSON}

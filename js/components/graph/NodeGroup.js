@@ -30,8 +30,6 @@ export default class NodeGroup extends React.Component {
               childs={this.props.connections.children[entry.id_]}
               status={this.props.nodesStatus[entry.id_].status}
               selected={this.props.nodesStatus[entry.id_].selected}
-              unfocusPrereqs={this.props.unfocusPrereqs}
-              updateNode={this.props.updateNode}
               inEdges={[]}
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
@@ -57,8 +55,6 @@ export default class NodeGroup extends React.Component {
               svg={svg}
               status={this.props.nodesStatus[entry.id_].status}
               selected={this.props.nodesStatus[entry.id_].selected}
-              unfocusPrereqs={this.props.unfocusPrereqs}
-              updateNode={this.props.updateNode}
               highlighted={highlighted}
               onClick={this.props.nodeClick}
               onMouseEnter={this.props.nodeMouseEnter}
@@ -83,7 +79,6 @@ NodeGroup.propTypes = {
   nodeMouseDown: PropTypes.func,
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
-  unfocusPrereqs: PropTypes.func,
   updateNode: PropTypes.func,
   nodesStatus: PropTypes.object,
   nodesJSON: PropTypes.array,

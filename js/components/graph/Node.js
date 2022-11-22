@@ -36,18 +36,7 @@ export default class Node extends React.Component {
     }
   }
 
-  /**
-   * Update the state/status of a node (and its children/edges)
-   * @param  {boolean} recursive whether we should recurse on its children
-   */
-  updateNode = recursive => this.props.updateNode(this, recursive)
-
-  /**
-   * Resets 'missing' nodes and edges to the previous statuses:
-   *  active, inactive, overridden, takeable
-   */
-  unfocusPrereqs = () => this.props.unfocusPrereqs(this)
-
+  
   getDataTestId = () => {
     if (this.props.hybrid) {
       return `h(${this.props.parents.join(",")})`
@@ -147,9 +136,6 @@ Node.propTypes = {
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
-  unfocusPrereqs: PropTypes.func,
-  focusPrereqs: PropTypes.func,
-  updateNode: PropTypes.func,
   status: PropTypes.string,
   selected: PropTypes.bool,
   parents: PropTypes.array,

@@ -9,7 +9,7 @@ export default class BoolGroup extends React.Component {
    */
   componentDidMount() {
     this.props.boolsJSON.forEach(boolJSON => {
-      this.props.updateNode(this[boolJSON.id_])
+      this.props.updateNode(boolJSON.id_)
     })
   }
 
@@ -39,7 +39,6 @@ export default class BoolGroup extends React.Component {
         outEdges={outEdges[boolJSON.id_]}
         logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || "and"}
         svg={this.props.svg}
-        updateNode={this.props.updateNode}
         status={this.props.boolsStatus[boolJSON.id_]}
       />
     )

@@ -1,5 +1,4 @@
 import React from "react"
-import { refLookUp } from "../common/utils"
 import PropTypes from "prop-types"
 
 /** Class representing a boolean node (and/or) */
@@ -29,20 +28,6 @@ export default class Bool extends React.Component {
     } else if (this.props.logicalType === "or") {
       return this.props.parents.some(isAllTrue)
     }
-  }
-
-  updateNode = () => this.props.updateNode(this)
-
-  /**
-   * Remove the focus preqrequisites if the focus is unselected.
-   */
-  unfocusPrereqs = () => {
-    var svg = this.props.svg
-    this.updateNode()
-    this.props.parents.forEach(function (node) {
-      var currentNode = refLookUp(node, svg)
-      currentNode.unfocusPrereqs(svg)
-    })
   }
 
   render() {
@@ -86,6 +71,5 @@ Bool.propTypes = {
   outEdges: PropTypes.array,
   parents: PropTypes.array,
   svg: PropTypes.object,
-  updateNode: PropTypes.func,
   status: PropTypes.string,
 }
