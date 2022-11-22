@@ -324,9 +324,12 @@ export class Graph extends React.Component {
   updateEdgeStatus = (status, edgeID, source, target) => {
     const sourceNode = refLookUp(source, this)
     const targetNode = refLookUp(target, this)
+    const targetStatus = this.nodes.current[target]
+      ? this.state.nodesStatus[target].status
+      : this.state.boolsStatus[target]
 
     if (!status) {
-      if (!sourceNode.isSelected() && targetNode.props.status === "missing") {
+      if (!sourceNode.isSelected() && targetStatus === "missing") {
         status = "missing"
       } else if (!sourceNode.isSelected()) {
         status = "inactive"
@@ -910,9 +913,9 @@ export class Graph extends React.Component {
         () => {
           localStorage.setItem(nodeId, newState)
           childs?.forEach(n => {
-            if (this.nodes.current[n] !== undefined) {
+            if (this.nodes.current[n]) {
               this.updateNode(n)
-            } else if (this.bools.current[n] !== undefined) {
+            } else if (this.bools.current[n]) {
               this.updateNodeBool(n)
             }
           })
@@ -1010,7 +1013,7 @@ export class Graph extends React.Component {
     this.updateNodeBool(boolId)
     const parents = this.state.connections.parents[boolId]
     parents.forEach(node => {
-      this.nodes.current[node] !== undefined
+      this.nodes.current[node]
         ? this.unfocusPrereqs(node)
         : this.unfocusPrereqsBool(node)
     })
@@ -1336,11 +1339,9 @@ export class Graph extends React.Component {
             nodeMouseLeave={this.nodeMouseLeave}
             nodeMouseDown={this.nodeMouseDown}
             svg={this}
-            updateNode={this.updateNode}
             nodesStatus={this.state.nodesStatus}
             nodesJSON={this.state.nodesJSON}
             hybridsJSON={this.state.hybridsJSON}
-            edgesJSON={this.state.edgesJSON}
             highlightedNodes={this.state.highlightedNodes}
             onDraw={this.state.onDraw}
             connections={this.state.connections}
@@ -1350,14 +1351,11 @@ export class Graph extends React.Component {
             ref={this.bools}
             boolsJSON={this.state.boolsJSON}
             boolsStatus={this.state.boolsStatus}
-            edgesJSON={this.state.edgesJSON}
             connections={this.state.connections}
             svg={this}
-            updateNode={this.updateNodeBool}
           />
           <EdgeGroup
             ref={this.edges}
-            updateEdgeStatus={this.updateEdgeStatus}
             edgesJSON={this.state.edgesJSON}
             edgesStatus={this.state.edgesStatus}
           />
