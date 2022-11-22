@@ -1039,13 +1039,11 @@ export class Graph extends React.Component {
     parents?.forEach(node => {
       if (typeof node === "string") {
         this.nodes.current[node]
-                ? this.unfocusPrereqs(node)
-                : this.unfocusPrereqsBool(node)
+          ? this.unfocusPrereqs(node)
+          : this.unfocusPrereqsBool(node)
       } else {
         node.forEach(n => {
-          this.nodes.current[n]
-                ? this.unfocusPrereqs(n)
-                : this.unfocusPrereqsBool(n)
+          this.nodes.current[n] ? this.unfocusPrereqs(n) : this.unfocusPrereqsBool(n)
         })
       }
     })

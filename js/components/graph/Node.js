@@ -36,7 +36,6 @@ export default class Node extends React.Component {
     }
   }
 
-  
   getDataTestId = () => {
     if (this.props.hybrid) {
       return `h(${this.props.parents.join(",")})`
