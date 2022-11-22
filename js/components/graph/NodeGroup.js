@@ -71,7 +71,6 @@ export default class NodeGroup extends React.Component {
 }
 
 NodeGroup.propTypes = {
-  edgesJSON: PropTypes.array,
   editMode: PropTypes.bool,
   highlightedNodes: PropTypes.array,
   hybridsJSON: PropTypes.array,
@@ -79,7 +78,6 @@ NodeGroup.propTypes = {
   nodeMouseDown: PropTypes.func,
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
-  updateNode: PropTypes.func,
   nodesStatus: PropTypes.object,
   nodesJSON: PropTypes.array,
   connections: PropTypes.object,
