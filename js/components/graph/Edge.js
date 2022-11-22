@@ -1,39 +1,10 @@
 import PropTypes from "prop-types"
 import React from "react"
-import { refLookUp } from "../common/utils"
 
 /**
  * Class representing an edge from a Node/Bool to a Node/Bool
  */
 export default class Edge extends React.Component {
-  /**
-   * Update the status of the Edge, based on the status of the Node/Bool it points from/to
-   */
-  updateStatus(status) {
-    const sourceNode = refLookUp(this.props.source, this.props.svg)
-    const targetNode = refLookUp(this.props.target, this.props.svg)
-    if (sourceNode === undefined || targetNode === undefined) {
-      return
-    }
-    if (!status) {
-      if (
-        !sourceNode.isSelected() &&
-        ((targetNode.props.className === "bool" &&
-          targetNode.props.status === "missing") ||
-          (targetNode.props.className !== "bool" &&
-            targetNode.state.status === "missing"))
-      ) {
-        status = "missing"
-      } else if (!sourceNode.isSelected()) {
-        status = "inactive"
-      } else if (!targetNode.isSelected()) {
-        status = "takeable"
-      } else {
-        status = "active"
-      }
-    }
-    this.props.updateEdgeStatus(status, this.props.edgeID)
-  }
   render() {
     var pathAttrs = { d: "M" }
     this.props.points.forEach(p => {
@@ -58,12 +29,8 @@ Edge.propTypes = {
   points: PropTypes.array,
   /** Node from which the edge is drawn*/
   source: PropTypes.string,
-  /** The overarching graph object */
-  svg: PropTypes.object,
   /** Node that the edge is pointing to */
   target: PropTypes.string,
   /** Status of this edge */
   status: PropTypes.string,
-  /** Function for updating the edge status */
-  updateEdgeStatus: PropTypes.func,
 }

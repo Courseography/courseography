@@ -4,23 +4,6 @@ import Node from "./Node"
 
 /** A React component class representing a group of Nodes on the graph */
 export default class NodeGroup extends React.Component {
-  /** Returns nodes to their original unselected state, with a status of "takeable" or "inactive" */
-  reset = () => {
-    this.props.nodesJSON.forEach(nodeJSON => {
-      var node = this[nodeJSON.id_]
-      var state = node.props.parents.length === 0 ? "takeable" : "inactive"
-      node.setState({ status: state, selected: false })
-      localStorage.setItem(node.props.JSON.id_, state)
-    })
-
-    this.props.hybridsJSON.forEach(hybridJSON => {
-      var hybrid = this[hybridJSON.id_]
-      var state = hybrid.props.parents.length === 0 ? "takeable" : "inactive"
-      hybrid.setState({ status: state, selected: false })
-      localStorage.setItem(hybrid.props.JSON.id_, state)
-    })
-  }
-
   /**
    *
    * @param {*} entry
@@ -45,6 +28,8 @@ export default class NodeGroup extends React.Component {
               ref={this.setRefEntry(entry)}
               parents={this.props.connections.parents[entry.id_]}
               childs={this.props.connections.children[entry.id_]}
+              status={this.props.nodesStatus[entry.id_].status}
+              selected={this.props.nodesStatus[entry.id_].selected}
               inEdges={[]}
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
@@ -68,6 +53,8 @@ export default class NodeGroup extends React.Component {
               inEdges={this.props.connections.inEdges[entry.id_]}
               outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
+              status={this.props.nodesStatus[entry.id_].status}
+              selected={this.props.nodesStatus[entry.id_].selected}
               highlighted={highlighted}
               onClick={this.props.nodeClick}
               onMouseEnter={this.props.nodeMouseEnter}
@@ -84,7 +71,6 @@ export default class NodeGroup extends React.Component {
 }
 
 NodeGroup.propTypes = {
-  edgesJSON: PropTypes.array,
   editMode: PropTypes.bool,
   highlightedNodes: PropTypes.array,
   hybridsJSON: PropTypes.array,
@@ -92,6 +78,7 @@ NodeGroup.propTypes = {
   nodeMouseDown: PropTypes.func,
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
+  nodesStatus: PropTypes.object,
   nodesJSON: PropTypes.array,
   connections: PropTypes.object,
   svg: PropTypes.object,

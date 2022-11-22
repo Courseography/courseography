@@ -31,6 +31,7 @@ export class Graph extends React.Component {
       labelsJSON: [],
       regionsJSON: [],
       nodesJSON: [],
+      nodesStatus: {},
       hybridsJSON: [],
       boolsJSON: [],
       edgesJSON: [],
@@ -138,6 +139,7 @@ export class Graph extends React.Component {
         localStorage.setItem("active-graph", graphName)
         var regionsList = []
         var nodesList = []
+        var nodesStatus = {}
         var hybridsList = []
         var boolsList = []
         var boolsStatusObj = {}
@@ -193,6 +195,14 @@ export class Graph extends React.Component {
           childrenObj[hybrid.id_] = []
           outEdgesObj[hybrid.id_] = []
           populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
+          var state = localStorage.getItem(hybrid.id_)
+          if (state === null) {
+            state = parentsObj[hybrid.id_].length === 0 ? "takeable" : "inactive"
+          }
+          nodesStatus[hybrid.id_] = {
+            status: state,
+            selected: ["active", "overridden"].indexOf(state) >= 0,
+          }
         })
 
         edgesList.forEach(edge => {
@@ -231,6 +241,17 @@ export class Graph extends React.Component {
           {}
         )
 
+        noDuplicatesNodesList.forEach(node => {
+          var state = localStorage.getItem(node.id_)
+          if (state === null) {
+            state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
+          }
+          nodesStatus[node.id_] = {
+            status: state,
+            selected: ["active", "overridden"].indexOf(state) >= 0,
+          }
+        })
+
         this.setState({
           labelsJSON: labelsList,
           regionsJSON: regionsList,
@@ -252,6 +273,7 @@ export class Graph extends React.Component {
             children: childrenObj,
             outEdges: outEdgesObj,
           },
+          nodesStatus: nodesStatus,
           selectedNodes: storedNodes,
         })
       })
@@ -266,7 +288,7 @@ export class Graph extends React.Component {
       var totalFCEs = 0
       this.state.nodesJSON.forEach(nodeJSON => {
         let node = this.nodes.current[nodeJSON.id_]
-        if (!node.props.hybrid && node.state.selected) {
+        if (!node.props.hybrid && this.state.nodesStatus[nodeJSON.id_].selected) {
           totalFCEs += 0.5
         }
       })
@@ -313,11 +335,26 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Update the status of the Edge, this will take in a source, a target so it can be looked up
-   * We will loop through the edgesJSON and find use the source, target directly from edgeJSON
-   * the state will be stored and updated in edgeGroup object.
+   * Update the status of the Edge, based on the status of the Node/Bool it points from/to.
    */
-  updateEdgeStatus = (status, edgeID) => {
+  updateEdgeStatus = (status, edgeID, source, target) => {
+    const sourceNode = refLookUp(source, this)
+    const targetNode = refLookUp(target, this)
+    const targetStatus = this.nodes.current[target]
+      ? this.state.nodesStatus[target].status
+      : this.state.boolsStatus[target]
+
+    if (!status) {
+      if (!sourceNode.isSelected() && targetStatus === "missing") {
+        status = "missing"
+      } else if (!sourceNode.isSelected()) {
+        status = "inactive"
+      } else if (!targetNode.isSelected()) {
+        status = "takeable"
+      } else {
+        status = "active"
+      }
+    }
     this.setState(state => {
       const edgesStatus = { ...state.edgesStatus }
       edgesStatus[edgeID] = status
@@ -332,9 +369,9 @@ export class Graph extends React.Component {
     var currentNode = this.nodes.current[courseId]
     var courseLabelArray = currentNode.props.JSON.text
     var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
-    var wasSelected = currentNode.state.selected
+    var wasSelected = this.state.nodesStatus[courseId].selected
     var temp = this.state.selectedNodes
-    currentNode.toggleSelection(this)
+    this.toggleSelection(courseId)
     if (typeof this.props.incrementFCECount === "function") {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
@@ -353,7 +390,7 @@ export class Graph extends React.Component {
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id
     var currentNode = this.nodes.current[courseId]
-    currentNode.focusPrereqs(this)
+    this.focusPrereqs(courseId)
 
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
 
@@ -382,8 +419,7 @@ export class Graph extends React.Component {
 
   nodeMouseLeave = event => {
     var courseId = event.currentTarget.id
-    var currentNode = this.nodes.current[courseId]
-    currentNode.unfocusPrereqs(this)
+    this.unfocusPrereqs(courseId)
 
     var timeout = setTimeout(() => {
       this.setState({ showInfoBox: false })
@@ -402,11 +438,11 @@ export class Graph extends React.Component {
   handleCourseClick = id => {
     id = id.toLowerCase()
     var currentNode = this.nodes.current[id]
-    currentNode.toggleSelection(this)
+    this.toggleSelection(id)
     var courseLabelArray = currentNode.props.JSON.text
     var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     var temp = [...this.state.selectedNodes]
-    if (currentNode.state.selected) {
+    if (this.state.nodesStatus[id].isSelected) {
       this.setState({
         selectedNodes: new Set(temp.filter(course => course !== courseLabel)),
       })
@@ -577,21 +613,32 @@ export class Graph extends React.Component {
   // Reset graph
   reset = () => {
     this.props.setFCECount(0)
-    this.nodes.current.reset()
-    const edgesStatusCopy = Object.keys(this.state.edgesStatus).reduce(
-      (acc, curr) => ((acc[curr.id_] = "inactive"), acc),
+    const nodesStatus = Object.keys(this.state.nodesStatus).reduce((acc, curr) => {
+      const state =
+        this.state.connections.parents[curr].length === 0 ? "takeable" : "inactive"
+      localStorage.setItem(curr, state)
+      acc[curr] = {
+        status: state,
+        selected: false,
+      }
+      return acc
+    }, {})
+
+    const edgesStatus = Object.keys(this.state.edgesStatus).reduce(
+      (acc, curr) => ((acc[curr] = "inactive"), acc),
       {}
     )
 
-    var boolsStatusCopy = this.state.boolsStatus
-    Object.keys(boolsStatusCopy).forEach(boolStatus => {
-      boolsStatusCopy[boolStatus] = "inactive"
-    })
+    const boolStatus = Object.keys(this.state.boolsStatus).reduce(
+      (acc, curr) => ((acc[curr] = "inactive"), acc),
+      {}
+    )
     this.setState({
-      boolsStatus: boolsStatusCopy,
-      edgesStatus: edgesStatusCopy,
+      boolsStatus: boolStatus,
+      edgesStatus: edgesStatus,
+      nodesStatus: nodesStatus,
+      selectedNodes: new Set(),
     })
-    this.setState({ selectedNodes: new Set() })
     if (this.state.currFocus !== null) {
       this.highlightFocuses([])
     }
@@ -784,10 +831,12 @@ export class Graph extends React.Component {
   /**
    * Update the Bool's state at any moment given the prereqs and current state.
    */
-  updateNode = boolNode => {
-    var svg = boolNode.props.svg
+  updateNodeBool = boolId => {
+    const boolNode = refLookUp(boolId, this)
     var newState = boolNode.arePrereqsSatisfied() ? "active" : "inactive"
-    var boolId = boolNode.props.JSON.id_
+    const childs = this.state.connections.children[boolId]
+    const inEdges = this.state.connections.inEdges[boolId]
+    const outEdges = this.state.connections.outEdges[boolId]
 
     this.setState(
       prevState => {
@@ -799,15 +848,137 @@ export class Graph extends React.Component {
       },
       () => {
         localStorage.setItem(boolId, newState)
-        boolNode.props.childs.forEach(function (node) {
-          var currentNode = refLookUp(node, svg)
-          currentNode.updateNode(svg)
+        childs.forEach(node => {
+          this.updateNode(node)
         })
-        var allEdges = boolNode.props.outEdges.concat(boolNode.props.inEdges)
-        allEdges.forEach(function (edge) {
-          var currentEdge = svg.edges.current[edge]
-          currentEdge.updateStatus()
+        var allEdges = outEdges.concat(inEdges)
+        allEdges.forEach(edge => {
+          const currentEdge = this.edges.current[edge]
+          this.updateEdgeStatus(
+            undefined,
+            currentEdge.props.edgeID,
+            currentEdge.props.source,
+            currentEdge.props.target
+          )
         })
+      }
+    )
+  }
+
+  /**
+   * Update the state/status of a node (and its children/edges).
+   * @param  {boolean} recursive whether we should recurse on its children
+   */
+  updateNode = (nodeId, recursive) => {
+    const targetNode = refLookUp(nodeId, this)
+    let newState
+    if (this.arePrereqsSatisfied(nodeId)) {
+      if (targetNode.isSelected() || targetNode.props.hybrid) {
+        newState = "active"
+      } else {
+        newState = "takeable"
+      }
+    } else {
+      if (targetNode.isSelected() && !targetNode.props.hybrid) {
+        newState = "overridden"
+      } else {
+        newState = "inactive"
+      }
+    }
+
+    const childs = this.state.connections.children[nodeId]
+    const status = this.state.nodesStatus[nodeId]?.status
+    // Updating the children will be unnecessary if the selected state of the current node has not
+    // changed, and the original state was not 'missing'
+    const allEdges = targetNode.props.outEdges.concat(targetNode.props.inEdges)
+    if (
+      ["active", "overridden"].includes(newState) &&
+      ["active", "overridden"].includes(status) &&
+      status !== "missing"
+    ) {
+      localStorage.setItem(nodeId, newState)
+
+      this.setState(
+        prevState => {
+          const nodesStatus = { ...prevState.nodesStatus }
+          nodesStatus[nodeId].status = newState
+          return { nodesStatus: nodesStatus }
+        },
+        () => {
+          allEdges.forEach(edge => {
+            const currentEdge = this.edges.current[edge]
+            this.updateEdgeStatus(
+              undefined,
+              currentEdge.props.edgeID,
+              currentEdge.props.source,
+              currentEdge.props.target
+            )
+          })
+        }
+      )
+      return
+    }
+
+    if (recursive === undefined || recursive) {
+      this.setState(
+        prevState => {
+          const nodesStatus = { ...prevState.nodesStatus }
+          nodesStatus[nodeId].status = newState
+          return { nodesStatus: nodesStatus }
+        },
+        () => {
+          localStorage.setItem(nodeId, newState)
+          childs?.forEach(n => {
+            if (this.nodes.current[n]) {
+              this.updateNode(n)
+            } else if (this.bools.current[n]) {
+              this.updateNodeBool(n)
+            }
+          })
+          allEdges.forEach(edge => {
+            const currentEdge = this.edges.current[edge]
+            this.updateEdgeStatus(
+              undefined,
+              currentEdge.props.edgeID,
+              currentEdge.props.source,
+              currentEdge.props.target
+            )
+          })
+        }
+      )
+    } else {
+      this.setState(
+        prevState => {
+          const nodesStatus = { ...prevState.nodesStatus }
+          nodesStatus[nodeId].status = newState
+          return { nodesStatus: nodesStatus }
+        },
+        () => {
+          allEdges.forEach(edge => {
+            const currentEdge = this.edges.current[edge]
+            this.updateEdgeStatus(
+              undefined,
+              currentEdge.props.edgeID,
+              currentEdge.props.source,
+              currentEdge.props.target
+            )
+          })
+        }
+      )
+      localStorage.setItem(nodeId, newState)
+    }
+  }
+
+  /** Controls the selection and deselection of a node by switching states and updating the graph */
+  toggleSelection = nodeId => {
+    this.setState(
+      prevState => {
+        const nodesStatus = { ...prevState.nodesStatus }
+        nodesStatus[nodeId].selected = !nodesStatus[nodeId].selected
+        return { nodesStatus: nodesStatus }
+      },
+      () => {
+        this.updateNode(nodeId)
       }
     )
   }
@@ -815,11 +986,12 @@ export class Graph extends React.Component {
   /**
    * Cross check with the selected focus prerequisites.
    */
-  focusPrereqs = boolNode => {
-    var svg = boolNode.props.svg
-    var boolId = boolNode.props.JSON.id_
+  focusPrereqsBool = boolId => {
+    const status = this.state.boolsStatus[boolId]
+    const inEdges = this.state.connections.inEdges[boolId]
+    const parents = this.state.connections.parents[boolId]
     // Check if there are any missing prerequisites.
-    if (boolNode.props.status !== "active") {
+    if (status !== "active") {
       this.setState(
         prevState => {
           const boolsStatus = { ...prevState.boolsStatus }
@@ -829,21 +1001,142 @@ export class Graph extends React.Component {
           }
         },
         () => {
-          boolNode.props.inEdges.forEach(edge => {
-            var currentEdge = svg.edges.current[edge]
-            var sourceNode = refLookUp(currentEdge.props.source, svg)
+          inEdges?.forEach(edge => {
+            const currentEdge = this.edges.current[edge]
+            const sourceNode = refLookUp(currentEdge.props.source, this)
             if (!sourceNode.isSelected()) {
-              this.updateEdgeStatus("missing", edge)
+              this.updateEdgeStatus(
+                "missing",
+                currentEdge.props.edgeID,
+                currentEdge.props.source,
+                currentEdge.props.target
+              )
             }
           })
-          boolNode.props.parents.forEach(node => {
-            var currentNode = refLookUp(node, svg)
-            currentNode.focusPrereqs()
+          parents?.forEach(node => {
+            this.nodes.current[node]
+              ? this.focusPrereqs(node)
+              : this.focusPrereqsBool(node)
           })
         }
       )
     }
   }
+  /**
+   * Remove the focus preqrequisites if the focus is unselected.
+   */
+  unfocusPrereqsBool = boolId => {
+    this.updateNodeBool(boolId)
+    const parents = this.state.connections.parents[boolId]
+    parents.forEach(node => {
+      this.nodes.current[node]
+        ? this.unfocusPrereqs(node)
+        : this.unfocusPrereqsBool(node)
+    })
+  }
+
+  /** Sets the status of all missing prerequisites to 'missing' */
+  focusPrereqs = nodeId => {
+    const status = this.state.nodesStatus[nodeId]?.status
+    const inEdges = this.state.connections.inEdges[nodeId]
+    const parents = this.state.connections.parents[nodeId]
+
+    if (["inactive", "overridden", "takeable"].includes(status)) {
+      this.setState(
+        prevState => {
+          const nodesStatus = { ...prevState.nodesStatus }
+          nodesStatus[nodeId].status = "missing"
+          return { nodesStatus: nodesStatus }
+        },
+        () => {
+          inEdges?.forEach(edge => {
+            const currentEdge = this.edges.current[edge]
+            const sourceNode = currentEdge && refLookUp(currentEdge.props.source, this)
+            if (!sourceNode.isSelected()) {
+              this.updateEdgeStatus(
+                "missing",
+                currentEdge.props.edgeID,
+                currentEdge.props.source,
+                currentEdge.props.target
+              )
+            }
+          })
+          parents?.forEach(node => {
+            if (typeof node === "string") {
+              this.nodes.current[node]
+                ? this.focusPrereqs(node)
+                : this.focusPrereqsBool(node)
+            } else {
+              node.forEach(n => {
+                this.nodes.current[n] ? this.focusPrereqs(n) : this.focusPrereqsBool(n)
+              })
+            }
+          })
+        }
+      )
+    }
+  }
+
+  /**
+   * Resets 'missing' nodes and edges to the previous statuses:
+   *  active, inactive, overridden, takeable
+   */
+  unfocusPrereqs = nodeId => {
+    this.updateNode(nodeId, false)
+    const parents = this.state.connections.parents[nodeId]
+    const inEdges = this.state.connections.inEdges[nodeId]
+    parents?.forEach(node => {
+      if (typeof node === "string") {
+        this.nodes.current[node]
+          ? this.unfocusPrereqs(node)
+          : this.unfocusPrereqsBool(node)
+      } else {
+        node.forEach(n => {
+          this.nodes.current[n] ? this.unfocusPrereqs(n) : this.unfocusPrereqsBool(n)
+        })
+      }
+    })
+    inEdges?.forEach(edge => {
+      if (this.state.edgesStatus[edge] === "missing") {
+        const currentEdge = this.edges.current[edge]
+        this.updateEdgeStatus(
+          undefined,
+          currentEdge.props.edgeID,
+          currentEdge.props.source,
+          currentEdge.props.target
+        )
+      }
+    })
+  }
+
+  /**
+   * Checks whether all prerequisite/preceding nodes for the current one are satisfied
+   * @return {boolean}
+   */
+  arePrereqsSatisfied = nodeId => {
+    const parents = this.state.connections.parents[nodeId]
+    /**
+     * Recursively checks that preceding nodes are selected
+     * @param  {string|Array} element Node(s)/other on the graph
+     * @return {boolean}
+     */
+    const isAllTrue = element => {
+      if (typeof element === "string") {
+        if (this.nodes.current[element] !== undefined) {
+          return this.nodes.current[element].isSelected()
+        } else if (this.bools.current[element] !== undefined) {
+          return this.bools.current[element].isSelected()
+        } else {
+          return false
+        }
+      } else {
+        return element.some(isAllTrue)
+      }
+    }
+
+    return parents.every(isAllTrue)
+  }
+
   renderRegions = regionsJSON => {
     return regionsJSON.map(function (entry, value) {
       var pathAttrs = { d: "M" }
@@ -1062,9 +1355,9 @@ export class Graph extends React.Component {
             nodeMouseLeave={this.nodeMouseLeave}
             nodeMouseDown={this.nodeMouseDown}
             svg={this}
+            nodesStatus={this.state.nodesStatus}
             nodesJSON={this.state.nodesJSON}
             hybridsJSON={this.state.hybridsJSON}
-            edgesJSON={this.state.edgesJSON}
             highlightedNodes={this.state.highlightedNodes}
             onDraw={this.state.onDraw}
             connections={this.state.connections}
@@ -1074,18 +1367,13 @@ export class Graph extends React.Component {
             ref={this.bools}
             boolsJSON={this.state.boolsJSON}
             boolsStatus={this.state.boolsStatus}
-            edgesJSON={this.state.edgesJSON}
             connections={this.state.connections}
             svg={this}
-            updateNode={this.updateNode}
-            focusPrereqs={this.focusPrereqs}
           />
           <EdgeGroup
-            svg={this}
             ref={this.edges}
             edgesJSON={this.state.edgesJSON}
             edgesStatus={this.state.edgesStatus}
-            updateEdgeStatus={this.updateEdgeStatus}
           />
           <InfoBox
             onClick={this.infoBoxMouseClick}

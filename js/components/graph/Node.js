@@ -1,10 +1,9 @@
 import PropTypes from "prop-types"
 import React from "react"
-import { refLookUp } from "../common/utils"
 
 /** React component class representing a Node on the graph
  *
- * States:
+ * Status and Selected Props:
  *  - status: holds the current status message (see below)
  *  - selected: whether the node is selected, based on the status message
  *
@@ -25,199 +24,16 @@ import { refLookUp } from "../common/utils"
  *    farther away. They can only be either 'active' or 'inactive'
  */
 export default class Node extends React.Component {
-  /** Create a node */
-  constructor(props) {
-    super(props)
-    var state = localStorage.getItem(this.props.JSON.id_)
-    if (this.props.editMode) {
-      state = "" // TODO: define what editMode is
-    } else if (state === null) {
-      state = this.props.parents.length === 0 ? "takeable" : "inactive"
-    }
-    this.state = {
-      status: state,
-      selected: ["active", "overridden"].indexOf(state) >= 0,
-    }
-  }
-
   /**
    * Checks whether this Node is selected
    * @return {boolean}
    */
   isSelected = () => {
     if (this.props.hybrid) {
-      return this.state.status === "active"
+      return this.props.status === "active"
     } else {
-      return this.state.selected
+      return this.props.selected
     }
-  }
-
-  /**
-   * Checks whether all prerequisite/preceding nodes for the current one are satisfied
-   * @return {boolean}
-   */
-  arePrereqsSatisfied = () => {
-    var svg = this.props.svg
-    /**
-     * Recursively checks that preceding nodes are selected
-     * @param  {string|Array} element Node(s)/other on the graph
-     * @return {boolean}
-     */
-    function isAllTrue(element) {
-      if (typeof element === "string") {
-        if (svg.nodes.current[element] !== undefined) {
-          return svg.nodes.current[element].isSelected()
-        } else if (svg.bools.current[element] !== undefined) {
-          return svg.bools.current[element].isSelected()
-        } else {
-          return false
-        }
-      } else {
-        return element.some(isAllTrue)
-      }
-    }
-
-    return this.props.parents.every(isAllTrue)
-  }
-
-  /**
-   * Update the state/status of a node (and its children/edges)
-   * @param  {boolean} recursive whether we should recurse on its children
-   */
-  updateNode = recursive => {
-    var newState
-    if (this.arePrereqsSatisfied()) {
-      if (this.isSelected() || this.props.hybrid) {
-        newState = "active"
-      } else {
-        newState = "takeable"
-      }
-    } else {
-      if (this.isSelected() && !this.props.hybrid) {
-        newState = "overridden"
-      } else {
-        newState = "inactive"
-      }
-    }
-
-    var nodeId = this.props.JSON.id_
-
-    // Updating the children will be unnecessary if the selected state of the current node has not
-    // changed, and the original state was not 'missing'
-    const svg = this.props.svg
-    const allEdges = this.props.outEdges.concat(this.props.inEdges)
-    if (
-      ["active", "overridden"].indexOf(newState) >= 0 ===
-        ["active", "overridden"].indexOf(this.state.status) >= 0 &&
-      this.state.status !== "missing"
-    ) {
-      localStorage.setItem(nodeId, newState)
-      this.setState({ status: newState }, () => {
-        allEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge]
-          if (currentEdge !== undefined) {
-            currentEdge.updateStatus()
-          }
-        })
-      })
-      return
-    }
-
-    if (recursive === undefined || recursive) {
-      this.setState({ status: newState }, function () {
-        localStorage.setItem(nodeId, newState)
-        this.props.childs.forEach(function (node) {
-          var currentNode = refLookUp(node, svg)
-          if (currentNode !== undefined) {
-            currentNode.updateNode()
-          }
-        })
-        allEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge]
-          if (currentEdge !== undefined) {
-            currentEdge.updateStatus()
-          }
-        })
-      })
-    } else {
-      this.setState({ status: newState }, () => {
-        allEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge]
-          if (currentEdge !== undefined) {
-            currentEdge.updateStatus()
-          }
-        })
-      })
-      localStorage.setItem(nodeId, newState)
-    }
-  }
-
-  /** Controls the selection and deselection of a node by switching states and updating the graph */
-  toggleSelection = () => {
-    this.setState({ selected: !this.state.selected }, function () {
-      this.updateNode()
-    })
-  }
-
-  /** Sets the status of all missing prerequisites to 'missing' */
-  focusPrereqs = () => {
-    var svg = this.props.svg
-    // Missing prerequisites need to have their status updated to 'missing'
-    if (["inactive", "overridden", "takeable"].indexOf(this.state.status) >= 0) {
-      this.setState({ status: "missing" }, () => {
-        this.props.inEdges.forEach(edge => {
-          var currentEdge = svg.edges.current[edge]
-          if (currentEdge === null || currentEdge === undefined) {
-            return
-          }
-          var sourceNode = refLookUp(currentEdge.props.source, svg)
-          if (!sourceNode.isSelected()) {
-            currentEdge.updateStatus("missing")
-          }
-        })
-        this.props.parents.forEach(node => {
-          if (typeof node === "string") {
-            var currentNode = refLookUp(node, svg)
-            if (currentNode !== undefined) {
-              currentNode.focusPrereqs()
-            }
-          } else {
-            node.forEach(n => {
-              var currentNode = refLookUp(n, svg)
-              if (currentNode !== undefined) {
-                currentNode.focusPrereqs()
-              }
-            })
-          }
-        })
-      })
-    }
-  }
-
-  /**
-   * Resets 'missing' nodes and edges to the previous statuses:
-   *  active, inactive, overridden, takeable
-   */
-  unfocusPrereqs = () => {
-    var svg = this.props.svg
-    this.updateNode(false)
-    this.props.parents.forEach(function (node) {
-      if (typeof node === "string") {
-        var currentNode = refLookUp(node, svg)
-        currentNode.unfocusPrereqs()
-      } else {
-        node.forEach(n => {
-          var currentNode = refLookUp(n, svg)
-          currentNode.unfocusPrereqs()
-        })
-      }
-    })
-    this.props.inEdges.forEach(function (edge) {
-      var currentEdge = svg.edges.current[edge]
-      if (currentEdge.props.status === "missing") {
-        currentEdge.updateStatus()
-      }
-    })
   }
 
   getDataTestId = () => {
@@ -229,7 +45,7 @@ export default class Node extends React.Component {
 
   render() {
     let ellipse = null
-    var newClassName = this.props.className + " " + this.state.status
+    var newClassName = this.props.className + " " + this.props.status
     if (this.props.highlighted) {
       var attrs = this.props.JSON
       var width = parseFloat(attrs.width) / 2
@@ -319,6 +135,8 @@ Node.propTypes = {
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   outEdges: PropTypes.array,
+  status: PropTypes.string,
+  selected: PropTypes.bool,
   parents: PropTypes.array,
   svg: PropTypes.object,
   nodeDropshadowFilter: PropTypes.string,

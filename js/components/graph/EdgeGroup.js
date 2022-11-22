@@ -29,10 +29,8 @@ export default class EdgeGroup extends React.Component {
         source={edgeJSON.source}
         target={edgeJSON.target}
         points={edgeJSON.points}
-        svg={this.props.svg}
         edgeID={edgeJSON.id_}
         status={this.props.edgesStatus[edgeJSON.id_]}
-        updateEdgeStatus={this.props.updateEdgeStatus}
       />
     )
   }
@@ -71,10 +69,6 @@ export default class EdgeGroup extends React.Component {
 EdgeGroup.propTypes = {
   /**Array of all edges in the graph */
   edgesJSON: PropTypes.array,
-  /**The overarching graph object */
-  svg: PropTypes.object,
   /** An object containing all edge to status pairs */
   edgesStatus: PropTypes.object,
-  /** A function for updating the edge status */
-  updateEdgeStatus: PropTypes.func,
 }
