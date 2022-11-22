@@ -40,7 +40,6 @@ export default class BoolGroup extends React.Component {
         logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || "and"}
         svg={this.props.svg}
         updateNode={this.props.updateNode}
-        focusPrereqs={this.props.focusPrereqs}
         status={this.props.boolsStatus[boolJSON.id_]}
       />
     )
@@ -58,5 +57,4 @@ BoolGroup.propTypes = {
   connections: PropTypes.object,
   svg: PropTypes.object,
   updateNode: PropTypes.func,
-  focusPrereqs: PropTypes.func,
 }

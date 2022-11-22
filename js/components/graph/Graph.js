@@ -371,7 +371,7 @@ export class Graph extends React.Component {
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id
     var currentNode = this.nodes.current[courseId]
-    currentNode.focusPrereqs()
+    this.focusPrereqs(courseId)
 
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
 
@@ -944,8 +944,7 @@ export class Graph extends React.Component {
   /**
    * Cross check with the selected focus prerequisites.
    */
-  focusPrereqsBool = boolNode => {
-    const boolId = boolNode.props.JSON.id_
+  focusPrereqsBool = boolId => {
     const status = this.state.boolsStatus[boolId]
     const inEdges = this.state.connections.inEdges[boolId]
     const parents = this.state.connections.parents[boolId]
@@ -968,16 +967,17 @@ export class Graph extends React.Component {
             }
           })
           parents?.forEach(node => {
-            const currentNode = refLookUp(node, this)
-            currentNode.focusPrereqs(currentNode)
+            this.nodes.current[node]
+              ? this.focusPrereqs(node)
+              : this.focusPrereqsBool(node)
           })
         }
       )
     }
   }
 
-  focusPrereqs = targetNode => {
-    const nodeId = targetNode.props.JSON.id_
+  /** Sets the status of all missing prerequisites to 'missing' */
+  focusPrereqs = nodeId => {
     const status = this.state.nodesStatus[nodeId]?.status
     const inEdges = this.state.connections.inEdges[nodeId]
     const parents = this.state.connections.parents[nodeId]
@@ -999,12 +999,14 @@ export class Graph extends React.Component {
           })
           parents?.forEach(node => {
             if (typeof node === "string") {
-              const currentNode = refLookUp(node, this)
-              currentNode.focusPrereqs()
+              this.nodes.current[node]
+                ? this.focusPrereqs(node)
+                : this.focusPrereqsBool(node)
+              // const currentNode = refLookUp(node, this)
+              // currentNode.focusPrereqs()
             } else {
               node.forEach(n => {
-                const currentNode = refLookUp(n, this)
-                currentNode.focusPrereqs()
+                this.nodes.current[n] ? this.focusPrereqs(n) : this.focusPrereqsBool(n)
               })
             }
           })
@@ -1288,7 +1290,6 @@ export class Graph extends React.Component {
             nodeMouseDown={this.nodeMouseDown}
             svg={this}
             unfocusPrereqs={this.unfocusPrereqs}
-            focusPrereqs={this.focusPrereqs}
             updateNode={this.updateNode}
             nodesStatus={this.state.nodesStatus}
             nodesJSON={this.state.nodesJSON}
@@ -1307,7 +1308,6 @@ export class Graph extends React.Component {
             connections={this.state.connections}
             svg={this}
             updateNode={this.updateNodeBool}
-            focusPrereqs={this.focusPrereqsBool}
           />
           <EdgeGroup
             ref={this.edges}

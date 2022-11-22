@@ -32,7 +32,6 @@ export default class Bool extends React.Component {
   }
 
   updateNode = () => this.props.updateNode(this)
-  focusPrereqs = () => this.props.focusPrereqs(this)
 
   /**
    * Remove the focus preqrequisites if the focus is unselected.
@@ -88,6 +87,5 @@ Bool.propTypes = {
   parents: PropTypes.array,
   svg: PropTypes.object,
   updateNode: PropTypes.func,
-  focusPrereqs: PropTypes.func,
   status: PropTypes.string,
 }

@@ -42,9 +42,6 @@ export default class Node extends React.Component {
    */
   updateNode = recursive => this.props.updateNode(this, recursive)
 
-  /** Sets the status of all missing prerequisites to 'missing' */
-  focusPrereqs = () => this.props.focusPrereqs(this)
-
   /**
    * Resets 'missing' nodes and edges to the previous statuses:
    *  active, inactive, overridden, takeable
