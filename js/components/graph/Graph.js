@@ -104,7 +104,6 @@ export class Graph extends React.Component {
     }
   }
 
-  componentDidUpdate() {}
   UNSAFE_componentWillUpdate(prevProps) {
     if (!!this.state.graphName && this.state.graphName !== prevProps.graphName) {
       this.getGraph()
