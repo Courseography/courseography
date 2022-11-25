@@ -75,6 +75,7 @@ export class Graph extends React.Component {
   componentDidMount() {
     if (!this.props.start_blank) {
       this.getGraph()
+      console.log(this.nodes.current, this.nodes.current["csc104"])
     }
 
     // can't detect keydown event when adding event listener to react-graph
@@ -103,6 +104,7 @@ export class Graph extends React.Component {
     }
   }
 
+  componentDidUpdate() {}
   UNSAFE_componentWillUpdate(prevProps) {
     if (!!this.state.graphName && this.state.graphName !== prevProps.graphName) {
       this.getGraph()
