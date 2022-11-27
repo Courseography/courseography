@@ -6,7 +6,7 @@ import EdgeGroup from "../EdgeGroup"
 describe("EdgeGroup", () => {
   it("should match shallow snapshot", () => {
     const edgeGroupProps = {
-      edgesJSON: [],
+      edgesJSON: {},
       svg: {},
     }
     const component = shallow(<EdgeGroup {...edgeGroupProps} />)
