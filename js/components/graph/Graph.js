@@ -346,9 +346,10 @@ export class Graph extends React.Component {
   updateEdgeStatus = (status, edgeID, source, target) => {
     const sourceNode = refLookUp(source, this)
     const targetNode = refLookUp(target, this)
-    const targetStatus = this.state.nodesJSON[target] || this.state.hybridsJSON[target]
-      ? this.state.nodesStatus[target].status
-      : this.state.boolsStatus[target]
+    const targetStatus =
+      this.state.nodesJSON[target] || this.state.hybridsJSON[target]
+        ? this.state.nodesStatus[target].status
+        : this.state.boolsStatus[target]
 
     if (!status) {
       if (!sourceNode.isSelected() && targetStatus === "missing") {
