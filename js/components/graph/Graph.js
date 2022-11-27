@@ -160,7 +160,7 @@ export class Graph extends React.Component {
           } else if (entry.type_ === "Hybrid") {
             hybridsList.push(entry)
           } else if (entry.type_ === "BoolNode") {
-            boolsStatusObj[entry.id_] = "inactive"
+            boolsStatusObj[entry.id_] = localStorage.getItem(entry.id_) || "inactive"
             boolsList.push(entry)
           }
         })
@@ -236,10 +236,6 @@ export class Graph extends React.Component {
           outEdgesObj[boolJSON.id_] = outEdges
           inEdgesObj[boolJSON.id_] = inEdges
         })
-        const edgesStatus = edgesList.reduce(
-          (acc, curr) => ((acc[curr.id_] = "inactive"), acc),
-          {}
-        )
 
         noDuplicatesNodesList.forEach(node => {
           var state = localStorage.getItem(node.id_)
@@ -251,6 +247,31 @@ export class Graph extends React.Component {
             selected: ["active", "overridden"].indexOf(state) >= 0,
           }
         })
+
+        const edgesStatus = edgesList.reduce((acc, curr) => {
+          const source = curr.source
+          const target = curr.target
+          let status
+          const isSourceSelected =
+            nodesStatus[source]?.selected || boolsStatusObj[source] === "active"
+
+          const isTargetSelected =
+            nodesStatus[target]?.selected || boolsStatusObj[target] === "active"
+
+          const targetStatus = nodesStatus[target]?.status || boolsStatusObj[target]
+
+          if (!isSourceSelected && targetStatus === "missing") {
+            status = "missing"
+          } else if (!isSourceSelected) {
+            status = "inactive"
+          } else if (!isTargetSelected) {
+            status = "takeable"
+          } else {
+            status = "active"
+          }
+          acc[curr.id_] = status
+          return acc
+        }, {})
 
         this.setState({
           labelsJSON: labelsList,
