@@ -160,9 +160,7 @@ export class Graph extends React.Component {
           } else if (entry.type_ === "Hybrid") {
             hybridsList.push(entry)
           } else if (entry.type_ === "BoolNode") {
-            boolsStatusObj[entry.id_] = localStorage.getItem(entry.id_)
-              ? localStorage.getItem(entry.id_)
-              : "inactive"
+            boolsStatusObj[entry.id_] = localStorage.getItem(entry.id_) || "inactive"
             boolsList.push(entry)
           }
         })
@@ -254,17 +252,13 @@ export class Graph extends React.Component {
           const source = curr.source
           const target = curr.target
           let status
-          const isSourceSelected = nodesStatus[source]
-            ? nodesStatus[source].selected
-            : boolsStatusObj[source] === "active"
+          const isSourceSelected =
+            nodesStatus[source]?.selected || boolsStatusObj[source] === "active"
 
-          const isTargetSelected = nodesStatus[target]
-            ? nodesStatus[target].selected
-            : boolsStatusObj[target] === "active"
+          const isTargetSelected =
+            nodesStatus[target]?.selected || boolsStatusObj[target] === "active"
 
-          const targetStatus = nodesStatus[target]
-            ? nodesStatus[target].status
-            : boolsStatusObj[target]
+          const targetStatus = nodesStatus[target]?.status || boolsStatusObj[target]
 
           if (!isSourceSelected && targetStatus === "missing") {
             status = "missing"
