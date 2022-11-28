@@ -163,7 +163,8 @@ export class Graph extends React.Component {
           } else if (entry.type_ === "Hybrid") {
             hybridsJSON[entry.id_] = entry
           } else if (entry.type_ === "BoolNode") {
-            boolsStatusObj[entry.id_] = "inactive"
+
+            boolsStatusObj[entry.id_] = localStorage.getItem(entry.id_) || "inactive"
             boolsJSON[entry.id_] = entry
           }
         })
@@ -240,10 +241,6 @@ export class Graph extends React.Component {
           outEdgesObj[boolJSON.id_] = outEdges
           inEdgesObj[boolJSON.id_] = inEdges
         })
-        const edgesStatus = Object.values(edgesJSON).reduce(
-          (acc, curr) => ((acc[curr.id_] = "inactive"), acc),
-          {}
-        )
 
         Object.values(noDuplicatesNodesJSON).forEach(node => {
           var state = localStorage.getItem(node.id_)
@@ -255,6 +252,31 @@ export class Graph extends React.Component {
             selected: ["active", "overridden"].indexOf(state) >= 0,
           }
         })
+
+        const edgesStatus = edgesList.reduce((acc, curr) => {
+          const source = curr.source
+          const target = curr.target
+          let status
+          const isSourceSelected =
+            nodesStatus[source]?.selected || boolsStatusObj[source] === "active"
+
+          const isTargetSelected =
+            nodesStatus[target]?.selected || boolsStatusObj[target] === "active"
+
+          const targetStatus = nodesStatus[target]?.status || boolsStatusObj[target]
+
+          if (!isSourceSelected && targetStatus === "missing") {
+            status = "missing"
+          } else if (!isSourceSelected) {
+            status = "inactive"
+          } else if (!isTargetSelected) {
+            status = "takeable"
+          } else {
+            status = "active"
+          }
+          acc[curr.id_] = status
+          return acc
+        }, {})
 
         this.setState({
           labelsJSON: labelsJSON,
@@ -294,7 +316,8 @@ export class Graph extends React.Component {
     ) {
       var totalFCEs = 0
       Object.values(this.state.nodesJSON).forEach(nodeJSON => {
-        if (this.state.nodesStatus[nodeJSON.id_].selected) {
+        let node = this.nodes.current[nodeJSON.id_]
+        if (!node.props.hybrid && this.state.nodesStatus[nodeJSON.id_].selected) {
           totalFCEs += 0.5
         }
       })
@@ -346,10 +369,9 @@ export class Graph extends React.Component {
   updateEdgeStatus = (status, edgeID, source, target) => {
     const sourceNode = refLookUp(source, this)
     const targetNode = refLookUp(target, this)
-    const targetStatus =
-      this.state.nodesJSON[target] || this.state.hybridsJSON[target]
-        ? this.state.nodesStatus[target].status
-        : this.state.boolsStatus[target]
+    const targetStatus = this.nodes.current[target]
+       ? this.state.nodesStatus[target].status
+       : this.state.boolsStatus[target]
 
     if (!status) {
       if (!sourceNode.isSelected() && targetStatus === "missing") {
@@ -373,8 +395,8 @@ export class Graph extends React.Component {
 
   nodeClick = event => {
     var courseId = event.currentTarget.id
-    var currentNode = this.state.nodesJSON[courseId]
-    var courseLabelArray = currentNode.text
+    var currentNode = this.nodes.current[courseId]
+    var courseLabelArray = currentNode.props.JSON.text
     var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     var wasSelected = this.state.nodesStatus[courseId].selected
     var temp = this.state.selectedNodes
@@ -396,19 +418,19 @@ export class Graph extends React.Component {
    */
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id
-    var currentNode = this.state.nodesJSON[courseId]
+    var currentNode = this.nodes.current[courseId]
     this.focusPrereqs(courseId)
 
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
 
-    var xPos = currentNode.pos[0]
-    var yPos = currentNode.pos[1]
+    var xPos = currentNode.props.JSON.pos[0]
+    var yPos = currentNode.props.JSON.pos[1]
     var rightSide = xPos > 222
     // The tooltip is offset with a 'padding' of 5.
     if (rightSide) {
       xPos = parseFloat(xPos) - 65
     } else {
-      xPos = parseFloat(xPos) + parseFloat(currentNode.width) + 5
+      xPos = parseFloat(xPos) + parseFloat(currentNode.props.JSON.width) + 5
     }
 
     yPos = parseFloat(yPos)
@@ -444,9 +466,9 @@ export class Graph extends React.Component {
    */
   handleCourseClick = id => {
     id = id.toLowerCase()
-    var currentNode = this.state.nodesJSON[id]
+    var currentNode = this.nodes.current[id]
     this.toggleSelection(id)
-    var courseLabelArray = currentNode.text
+    var courseLabelArray = currentNode.props.JSON.text
     var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     var temp = [...this.state.selectedNodes]
     if (this.state.nodesStatus[id].isSelected) {
@@ -860,12 +882,12 @@ export class Graph extends React.Component {
         })
         var allEdges = outEdges.concat(inEdges)
         allEdges.forEach(edge => {
-          const currentEdge = this.state.edgesJSON[edge]
+          const currentEdge = this.edges.current[edge]
           this.updateEdgeStatus(
             undefined,
-            currentEdge.id_,
-            currentEdge.source,
-            currentEdge.target
+            currentEdge.props.edgeID,
+             currentEdge.props.source,
+             currentEdge.props.target
           )
         })
       }
@@ -880,13 +902,13 @@ export class Graph extends React.Component {
     const targetNode = refLookUp(nodeId, this)
     let newState
     if (this.arePrereqsSatisfied(nodeId)) {
-      if (targetNode.isSelected() || this.state.hybridsJSON[nodeId]) {
+      if (targetNode.isSelected() || targetNode.props.hybrid) {
         newState = "active"
       } else {
         newState = "takeable"
       }
     } else {
-      if (targetNode.isSelected() && this.state.nodesJSON[nodeId]) {
+      if (targetNode.isSelected() && !targetNode.props.hybrid) {
         newState = "overridden"
       } else {
         newState = "inactive"
@@ -919,12 +941,12 @@ export class Graph extends React.Component {
         },
         () => {
           allEdges.forEach(edge => {
-            const currentEdge = this.state.edgesJSON[edge]
+            const currentEdge = this.edges.current[edge]
             this.updateEdgeStatus(
               undefined,
-              currentEdge.id_,
-              currentEdge.source,
-              currentEdge.target
+              currentEdge.props.edgeID,
+               currentEdge.props.source,
+               currentEdge.props.target
             )
           })
         }
@@ -942,19 +964,19 @@ export class Graph extends React.Component {
         () => {
           localStorage.setItem(nodeId, newState)
           childs?.forEach(n => {
-            if (this.state.nodesJSON[n] || this.state.hybridsJSON[n]) {
+            if (this.nodes.current[n]) {
               this.updateNode(n)
-            } else if (this.state.boolsJSON[n]) {
+            } else if (this.bools.current[n]) {
               this.updateNodeBool(n)
             }
           })
           allEdges.forEach(edge => {
-            const currentEdge = this.state.edgesJSON[edge]
+            const currentEdge = this.edges.current[edge]
             this.updateEdgeStatus(
               undefined,
               currentEdge.id_,
-              currentEdge.source,
-              currentEdge.target
+               currentEdge.source,
+               currentEdge.target
             )
           })
         }
@@ -968,12 +990,12 @@ export class Graph extends React.Component {
         },
         () => {
           allEdges.forEach(edge => {
-            const currentEdge = this.state.edgesJSON[edge]
+            const currentEdge = this.edges.current[edge]
             this.updateEdgeStatus(
               undefined,
-              currentEdge.id_,
-              currentEdge.source,
-              currentEdge.target
+              currentEdge.props.edgeID,
+              currentEdge.props.source,
+              currentEdge.props.target
             )
           })
         }
@@ -1015,19 +1037,19 @@ export class Graph extends React.Component {
         },
         () => {
           inEdges?.forEach(edge => {
-            const currentEdge = this.state.edgesJSON[edge]
-            const sourceNode = refLookUp(currentEdge.source, this)
+            const currentEdge = this.edges.current[edge]
+             const sourceNode = refLookUp(currentEdge.props.source, this)
             if (!sourceNode.isSelected()) {
               this.updateEdgeStatus(
                 "missing",
-                currentEdge.id_,
-                currentEdge.source,
-                currentEdge.target
+                currentEdge.props.edgeID,
+                 currentEdge.props.source,
+                 currentEdge.props.target
               )
             }
           })
           parents?.forEach(node => {
-            this.state.nodesJSON[node] || this.state.hybridsJSON[node]
+            this.nodes.current[node]
               ? this.focusPrereqs(node)
               : this.focusPrereqsBool(node)
           })
@@ -1042,7 +1064,7 @@ export class Graph extends React.Component {
     this.updateNodeBool(boolId)
     const parents = this.state.connections.parents[boolId]
     parents.forEach(node => {
-      this.state.nodesJSON[node] || this.state.hybridsJSON[node]
+      this.nodes.current[node]
         ? this.unfocusPrereqs(node)
         : this.unfocusPrereqsBool(node)
     })
@@ -1063,27 +1085,25 @@ export class Graph extends React.Component {
         },
         () => {
           inEdges?.forEach(edge => {
-            const currentEdge = this.state.edgesJSON[edge]
-            const sourceNode = currentEdge && refLookUp(currentEdge.source, this)
+            const currentEdge = this.edges.current[edge]
+             const sourceNode = currentEdge && refLookUp(currentEdge.props.source, this)
             if (!sourceNode.isSelected()) {
               this.updateEdgeStatus(
                 "missing",
-                currentEdge.id_,
-                currentEdge.source,
-                currentEdge.target
+                currentEdge.props.edgeID,
+                 currentEdge.props.source,
+                 currentEdge.props.target
               )
             }
           })
           parents?.forEach(node => {
             if (typeof node === "string") {
-              this.state.nodesJSON[node] || this.state.hybridsJSON[node]
+              this.nodes.current[node]
                 ? this.focusPrereqs(node)
                 : this.focusPrereqsBool(node)
             } else {
               node.forEach(n => {
-                this.state.nodesJSON[n] || this.state.hybridsJSON[n]
-                  ? this.focusPrereqs(n)
-                  : this.focusPrereqsBool(n)
+                this.nodes.current[n] ? this.focusPrereqs(n) : this.focusPrereqsBool(n)
               })
             }
           })
@@ -1102,25 +1122,23 @@ export class Graph extends React.Component {
     const inEdges = this.state.connections.inEdges[nodeId]
     parents?.forEach(node => {
       if (typeof node === "string") {
-        this.state.nodesJSON[node] || this.state.hybridsJSON[node]
+        this.nodes.current[node]
           ? this.unfocusPrereqs(node)
           : this.unfocusPrereqsBool(node)
       } else {
         node.forEach(n => {
-          this.state.nodesJSON[n] || this.state.hybridsJSON[n]
-            ? this.unfocusPrereqs(n)
-            : this.unfocusPrereqsBool(n)
+          this.nodes.current[n] ? this.unfocusPrereqs(n) : this.unfocusPrereqsBool(n)
         })
       }
     })
     inEdges?.forEach(edge => {
       if (this.state.edgesStatus[edge] === "missing") {
-        const currentEdge = this.state.edgesJSON[edge]
+        const currentEdge = this.edges.current[edge]
         this.updateEdgeStatus(
           undefined,
-          currentEdge.id_,
-          currentEdge.source,
-          currentEdge.target
+          currentEdge.props.edgeID,
+           currentEdge.props.source,
+           currentEdge.props.target
         )
       }
     })
@@ -1139,12 +1157,9 @@ export class Graph extends React.Component {
      */
     const isAllTrue = element => {
       if (typeof element === "string") {
-        if (
-          this.state.nodesJSON[element] !== undefined ||
-          this.state.hybridsJSON[element] !== undefined
-        ) {
+        if (this.nodes.current[element] !== undefined) {
           return this.nodes.current[element].isSelected()
-        } else if (this.state.boolsJSON[element] !== undefined) {
+        } else if (this.bools.current[element] !== undefined) {
           return this.bools.current[element].isSelected()
         } else {
           return false

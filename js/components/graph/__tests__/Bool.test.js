@@ -229,4 +229,27 @@ describe("OR Bool", () => {
     fireEvent.click(graph.getByTestId("test-reset"))
     expect(orBool.classList.contains("inactive")).toBe(true)
   })
+  describe("Bool status", () => {
+    beforeAll(() => {
+      Object.defineProperty(window, "location", {
+        writable: true,
+        value: { reload: jest.fn() },
+      })
+    })
+    it("should store status on page reload", async () => {
+      const graph = await TestGraph.build()
+      const bool1 = graph.getByTestId("and(aaa201,aaa102)")
+      const bool2 = graph.getByTestId("and(aaa102,aaa201)")
+      const aaa102 = graph.getByTestId("aaa102")
+      const aaa201 = graph.getByTestId("aaa201")
+      fireEvent.click(aaa102)
+      fireEvent.click(aaa201)
+      expect(bool1.classList.contains("active")).toBe(true)
+      expect(bool2.classList.contains("active")).toBe(true)
+      window.location.reload()
+      expect(window.location.reload).toHaveBeenCalledTimes(1)
+      expect(bool1.classList.contains("active")).toBe(true)
+      expect(bool2.classList.contains("active")).toBe(true)
+    })
+  })
 })
