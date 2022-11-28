@@ -163,7 +163,6 @@ export class Graph extends React.Component {
           } else if (entry.type_ === "Hybrid") {
             hybridsJSON[entry.id_] = entry
           } else if (entry.type_ === "BoolNode") {
-
             boolsStatusObj[entry.id_] = localStorage.getItem(entry.id_) || "inactive"
             boolsJSON[entry.id_] = entry
           }
@@ -253,7 +252,7 @@ export class Graph extends React.Component {
           }
         })
 
-        const edgesStatus = edgesList.reduce((acc, curr) => {
+        const edgesStatus = Object.values(edgesJSON).reduce((acc, curr) => {
           const source = curr.source
           const target = curr.target
           let status
@@ -370,8 +369,8 @@ export class Graph extends React.Component {
     const sourceNode = refLookUp(source, this)
     const targetNode = refLookUp(target, this)
     const targetStatus = this.nodes.current[target]
-       ? this.state.nodesStatus[target].status
-       : this.state.boolsStatus[target]
+      ? this.state.nodesStatus[target].status
+      : this.state.boolsStatus[target]
 
     if (!status) {
       if (!sourceNode.isSelected() && targetStatus === "missing") {
@@ -886,8 +885,8 @@ export class Graph extends React.Component {
           this.updateEdgeStatus(
             undefined,
             currentEdge.props.edgeID,
-             currentEdge.props.source,
-             currentEdge.props.target
+            currentEdge.props.source,
+            currentEdge.props.target
           )
         })
       }
@@ -917,14 +916,10 @@ export class Graph extends React.Component {
 
     const childs = this.state.connections.children[nodeId]
     const status = this.state.nodesStatus[nodeId]?.status
-    const inEdges = this.state.connections.inEdges[nodeId]
-    const outEdges = this.state.connections.outEdges[nodeId]
 
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
-    var allEdges = []
-    allEdges = allEdges.concat(inEdges, outEdges)
-    allEdges = allEdges.filter(edge => edge !== undefined)
+    const allEdges = targetNode.props.outEdges.concat(targetNode.props.inEdges)
 
     if (
       ["active", "overridden"].includes(newState) &&
@@ -945,8 +940,8 @@ export class Graph extends React.Component {
             this.updateEdgeStatus(
               undefined,
               currentEdge.props.edgeID,
-               currentEdge.props.source,
-               currentEdge.props.target
+              currentEdge.props.source,
+              currentEdge.props.target
             )
           })
         }
@@ -974,9 +969,9 @@ export class Graph extends React.Component {
             const currentEdge = this.edges.current[edge]
             this.updateEdgeStatus(
               undefined,
-              currentEdge.id_,
-               currentEdge.source,
-               currentEdge.target
+              currentEdge.props.edgeID,
+              currentEdge.props.source,
+              currentEdge.props.target
             )
           })
         }
@@ -1038,13 +1033,13 @@ export class Graph extends React.Component {
         () => {
           inEdges?.forEach(edge => {
             const currentEdge = this.edges.current[edge]
-             const sourceNode = refLookUp(currentEdge.props.source, this)
+            const sourceNode = refLookUp(currentEdge.props.source, this)
             if (!sourceNode.isSelected()) {
               this.updateEdgeStatus(
                 "missing",
                 currentEdge.props.edgeID,
-                 currentEdge.props.source,
-                 currentEdge.props.target
+                currentEdge.props.source,
+                currentEdge.props.target
               )
             }
           })
@@ -1086,13 +1081,13 @@ export class Graph extends React.Component {
         () => {
           inEdges?.forEach(edge => {
             const currentEdge = this.edges.current[edge]
-             const sourceNode = currentEdge && refLookUp(currentEdge.props.source, this)
+            const sourceNode = currentEdge && refLookUp(currentEdge.props.source, this)
             if (!sourceNode.isSelected()) {
               this.updateEdgeStatus(
                 "missing",
                 currentEdge.props.edgeID,
-                 currentEdge.props.source,
-                 currentEdge.props.target
+                currentEdge.props.source,
+                currentEdge.props.target
               )
             }
           })
@@ -1137,8 +1132,8 @@ export class Graph extends React.Component {
         this.updateEdgeStatus(
           undefined,
           currentEdge.props.edgeID,
-           currentEdge.props.source,
-           currentEdge.props.target
+          currentEdge.props.source,
+          currentEdge.props.target
         )
       }
     })
