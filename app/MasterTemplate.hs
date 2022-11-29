@@ -12,7 +12,7 @@ import Util.Blaze
 
 masterTemplate :: T.Text -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
-    H.html $ do
+    H.docTypeHtml $ do
         H.head $ do
             H.meta ! A.httpEquiv "Content-Type"
                    ! A.content "text/html;charset=utf-8"
