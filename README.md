@@ -57,6 +57,8 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 1. Run `$ stack run` to start the server
 2. Navigate to `http://localhost:8000/graph` in your browser
 
+When running in development you should run `$ stack run dev-server` instead of `$ stack run` to start the server. This will automatically recompile the client when you make changes to the source code.
+
 #### Developers
 
 If you are contributing to Courseography, you should install our pre-commit hooks:

@@ -7,7 +7,7 @@ It also defines all of the allowed server routes, and the corresponding
 responses.
 -}
 module Server
-    (runServer) where
+    (runServer, webpackProcess, webpackProductionProcess) where
 
 import Config (markdownPath, serverConf)
 import Control.Concurrent (forkIO, killThread)
@@ -24,9 +24,12 @@ import System.Process (CreateProcess, createProcess, shell)
 webpackProcess :: CreateProcess
 webpackProcess = shell "yarn run watch"
 
-runServer :: IO ()
-runServer = do
-    _ <- createProcess webpackProcess
+webpackProductionProcess :: CreateProcess
+webpackProductionProcess = shell "yarn run build"
+
+runServer :: CreateProcess -> IO ()
+runServer buildProcess = do
+    _ <- createProcess buildProcess
     configureLogger
     staticDir <- getStaticDir
     aboutContents <- LazyIO.readFile $ markdownPath ++ "README.md"
