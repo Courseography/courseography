@@ -38,10 +38,10 @@ export default class EdgeGroup extends React.Component {
   render() {
     // Missing edges must be rendered last. The sort
     // method custom sorts a copy of edgesJSON so that all missing edges
-    // are last in the list. Then render based on that list.
-    var edges = Object.values(this.props.edgesJSON)
-    var edgesCopy = [...edges]
-    var state = this.props.edgesStatus
+    // are last in the list. Then render based on tha
+    const edges = Object.values(this.props.edgesJSON)
+    const edgesCopy = [...edges]
+    const state = this.props.edgesStatus
     edgesCopy.sort((a, b) => {
       // If an edge is missing, its edgeID should be in EdgeGroup's
       // state and its value should be true.
