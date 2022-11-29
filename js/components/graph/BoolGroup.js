@@ -8,8 +8,8 @@ export default class BoolGroup extends React.Component {
    * For each entry in boolsJSON update the id with the svg
    */
   componentDidMount() {
-    Object.values(this.props.boolsJSON).forEach(boolJSON => {
-      this.props.updateNode(boolJSON.id_)
+    Object.keys(this.props.boolsJSON).forEach(boolId => {
+      this.props.updateNode(boolId)
     })
   }
 
