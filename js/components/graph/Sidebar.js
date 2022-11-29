@@ -53,8 +53,8 @@ export default class Sidebar extends React.Component {
    */
   renderDropdown = () => {
     if (this.props.courses) {
-      let showDropdown = this.state.results ? "" : "hidden"
-      let masterDropdown = `${showDropdown} search-dropdown`
+      const showDropdown = this.state.results ? "" : "hidden"
+      const masterDropdown = `${showDropdown} search-dropdown`
       return (
         <ul className={masterDropdown} data-testid="test-searchDropdown">
           {this.state.results?.map(([resultId, resultLabel]) => (
@@ -77,7 +77,7 @@ export default class Sidebar extends React.Component {
    * @return {HTMLBodyElement} list of div's for each course that is active
    */
   renderActiveCourses = () => {
-    let temp = this.props.activeCourses ? [...this.props.activeCourses] : []
+    const temp = this.props.activeCourses ? [...this.props.activeCourses] : []
     // sort the list of rendered courses, alphabetically
     temp.sort((a, b) => a.localeCompare(b))
     return (

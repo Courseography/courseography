@@ -5,13 +5,13 @@
  */
 export function parseAnd(s) {
   "use strict"
-  var curr = s
-  var andList = []
+  let curr = s
+  const andList = []
   while (curr.length > 0) {
     if (curr.charAt(0) === "," || curr.charAt(0) === ";" || curr.charAt(0) === " ") {
       curr = curr.substr(1)
     } else {
-      var result = parseOr(curr)
+      const result = parseOr(curr)
       if (curr === result[1]) {
         console.error("Parsing failed for " + s + "  with curr = " + curr)
         break
@@ -37,11 +37,11 @@ export function parseAnd(s) {
  */
 export function parseOr(s) {
   "use strict"
-  var curr = s
-  var orList = []
-  var tmp
-  var result
-  var coursePrefix
+  let curr = s
+  let orList = []
+  let tmp
+  let result
+  let coursePrefix
   while (curr.length > 0 && curr.charAt(0) !== "," && curr.charAt(0) !== ";") {
     if (curr.charAt(0) === "(") {
       tmp = curr.substr(1, curr.indexOf(")"))
@@ -85,7 +85,7 @@ export function parseOr(s) {
 export function parseCourse(s, prefix) {
   "use strict"
 
-  var start = s.search(/[,/]/)
+  const start = s.search(/[,/]/)
   if (start === 3) {
     return [prefix + s.substr(0, start), s.substr(start)]
   } else if (start > 0) {

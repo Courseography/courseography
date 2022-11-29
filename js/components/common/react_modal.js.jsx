@@ -266,7 +266,7 @@ class MapModal extends React.Component {
   // Add lecture to selectedLecTimeframes if lecture does not already exist in selectedLecTimeframes.
   // Otherwise, remove it from selectedLecTimeframes
   selectLecTimeframe(lecture) {
-    let updatedLecTimeframes = this.state.selectedLecTimeframes.slice()
+    const updatedLecTimeframes = this.state.selectedLecTimeframes.slice()
 
     const lecTimeframeInd = this.findSelectedLecTimeframe(lecture, updatedLecTimeframes)
 
@@ -281,9 +281,9 @@ class MapModal extends React.Component {
 
   // Add each element of lectures that does not already exist in selectedLecTimeframes to selectedLecTimeframes
   addDayTimeframes(lectures) {
-    let updatedLecTimeframes = this.state.selectedLecTimeframes.slice()
+    const updatedLecTimeframes = this.state.selectedLecTimeframes.slice()
 
-    for (let lec of lectures) {
+    for (const lec of lectures) {
       if (this.findSelectedLecTimeframe(lec, updatedLecTimeframes) == -1) {
         updatedLecTimeframes.push(lec)
       }
@@ -294,9 +294,9 @@ class MapModal extends React.Component {
 
   // Remove each element of lectures from selectedLecTimeframes
   removeDayTimeframes(lectures) {
-    let updatedLecTimeframes = this.state.selectedLecTimeframes.slice()
+    const updatedLecTimeframes = this.state.selectedLecTimeframes.slice()
 
-    for (let lec of lectures) {
+    for (const lec of lectures) {
       const lecTimeframeInd = this.findSelectedLecTimeframe(lec, updatedLecTimeframes)
 
       if (lecTimeframeInd != -1) {
@@ -338,9 +338,9 @@ class MapModal extends React.Component {
   }
 
   render() {
-    let lecturesByBuilding = []
+    const lecturesByBuilding = []
 
-    let lecturesByDay = {}
+    const lecturesByDay = {}
 
     this.props.lectures.forEach(lecture => {
       if (lecture.fstRoom) {
@@ -393,11 +393,11 @@ class MapSidebar extends React.Component {
   }
 
   render() {
-    let dayLectures = []
+    const dayLectures = []
 
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
-    for (let day of days) {
+    for (const day of days) {
       if (this.props.lecturesByDay[day]) {
         dayLectures.push(
           <DayBox
@@ -638,7 +638,7 @@ class CampusMap extends React.Component {
       )
     })
 
-    let mapBounds = L.latLngBounds()
+    const mapBounds = L.latLngBounds()
 
     // If there are selected lectures, center the map based on the locations of those lectures, otherwise, center the map
     // on Bahen
@@ -684,7 +684,7 @@ class CampusMap extends React.Component {
  * TODO: Change function name
  */
 function formatCourseName(id) {
-  var names
+  let names
 
   if (id === "CSC200") {
     names = id + "Y1"

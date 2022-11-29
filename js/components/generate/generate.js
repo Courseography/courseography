@@ -58,9 +58,9 @@ class GenerateForm extends React.Component {
       alert("Cannot generate graph -- no courses entered!")
       return
     }
-    let data = {}
+    const data = {}
 
-    for (let key in this.state) {
+    for (const key in this.state) {
       if (["courses", "taken", "departments"].includes(key)) {
         data[key] = this.state[key].split(",").map(s => s.trim())
       } else {
@@ -79,18 +79,18 @@ class GenerateForm extends React.Component {
     fetch("/graph-generate", putData)
       .then(res => res.json())
       .then(data => {
-        var regionsList = []
-        var nodesList = []
-        var hybridsList = []
-        var boolsList = []
-        var edgesList = []
-        var parentsObj = {}
-        var inEdgesObj = {}
-        var childrenObj = {}
-        var outEdgesObj = {}
-        var storedNodes = new Set()
+        const regionsList = []
+        const nodesList = []
+        const hybridsList = []
+        const boolsList = []
+        const edgesList = []
+        const parentsObj = {}
+        const inEdgesObj = {}
+        const childrenObj = {}
+        const outEdgesObj = {}
+        const storedNodes = new Set()
 
-        var labelsList = data.texts.filter(function (entry) {
+        const labelsList = data.texts.filter(function (entry) {
           // filter for mark percentages, allow preceding characters for potential geq
           return entry.text.match(/.*[0-9]*%/g)
         })

@@ -16,14 +16,14 @@ export default class CheckMyPost extends React.Component {
   }
 
   componentDidMount() {
-    var activeTab = this.refs.postNav.state.activeTab + "Post"
+    const activeTab = this.refs.postNav.state.activeTab + "Post"
     this.changeActiveTab(activeTab)
     this.updateNavCreditCounts()
   }
 
   changeActiveTab(newTab) {
-    var activeTab = newTab
-    var tabs = ["spePost", "majPost", "minPost"]
+    const activeTab = newTab
+    const tabs = ["spePost", "majPost", "minPost"]
 
     tabs.forEach(tab => {
       if (tab === activeTab) {
@@ -35,7 +35,7 @@ export default class CheckMyPost extends React.Component {
   }
 
   updateNavCreditCounts() {
-    var newCounts = [
+    const newCounts = [
       this.refs.spePost.getCreditCount(),
       this.refs.majPost.getCreditCount(),
       this.refs.minPost.getCreditCount(),
@@ -44,7 +44,7 @@ export default class CheckMyPost extends React.Component {
   }
 
   updatePostStatus() {
-    var newStatuses = [
+    const newStatuses = [
       this.refs.spePost.setIfCompleted(),
       this.refs.majPost.setIfCompleted(),
       this.refs.minPost.setIfCompleted(),
@@ -92,7 +92,7 @@ class PostNav extends React.Component {
   }
 
   changeActiveTab(e) {
-    var newVisible = e.target.id.substring(0, 3)
+    const newVisible = e.target.id.substring(0, 3)
     this.setState({ visible: newVisible }, () => {
       this.props.updateTab(newVisible + "Post")
       localStorage.setItem("activePost", newVisible)

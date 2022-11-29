@@ -6,7 +6,7 @@ export default class GraphDropdown extends React.Component {
     let className = "hidden"
     let graphTabLeft = 0
     if (this.props.graphs.length !== 0 && document.querySelector("#nav-graph")) {
-      let navGraph = document.querySelector("#nav-graph")
+      const navGraph = document.querySelector("#nav-graph")
       if (this.props.graphs.length === 0) {
         navGraph.classList.remove("show-dropdown-arrow")
       } else {
