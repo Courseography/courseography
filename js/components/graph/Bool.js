@@ -16,7 +16,7 @@ export default class Bool extends React.Component {
    * @returns {boolean} Whether any of the prereqs are satisfied.
    */
   arePrereqsSatisfied = () => {
-    var svg = this.props.svg
+    const svg = this.props.svg
     function isAllTrue(element) {
       return svg.nodes.current[element]
         ? svg.nodes.current[element].isSelected()
@@ -31,7 +31,7 @@ export default class Bool extends React.Component {
   }
 
   render() {
-    var ellipseAttrs = {
+    const ellipseAttrs = {
       cx: this.props.JSON.pos[0],
       cy: this.props.JSON.pos[1],
       rx: "9.8800001",
@@ -46,7 +46,7 @@ export default class Bool extends React.Component {
         <ellipse {...ellipseAttrs} />
         {this.props.JSON.text.map(
           function (textTag, i) {
-            var textAttrs = {
+            const textAttrs = {
               x: ellipseAttrs.cx,
               y: textTag.pos[1],
             }

@@ -56,7 +56,7 @@ class Grid extends React.Component {
       selectedCoursesLocalStorage = []
     } else {
       selectedCoursesLocalStorage = selectedCoursesLocalStorage.split("_")
-      let selectedCourses = []
+      const selectedCourses = []
       selectedCoursesLocalStorage.forEach(courseCode => {
         // Not using this.addSelectedCourse(courseCode) because each time addSelectedCourse is
         // called, this.setState is used.
@@ -89,19 +89,19 @@ class Grid extends React.Component {
   addSelectedCourse(courseCode) {
     // updatedCourses is a copy of this.state.selectedCourses so that prevState can be distinguished from
     // the current state in lifecycle methods like componentDidUpdate
-    let updatedCourses = this.state.selectedCourses.slice()
+    const updatedCourses = this.state.selectedCourses.slice()
     updatedCourses.push(courseCode)
     this.setState({ selectedCourses: updatedCourses })
   }
 
   // Method passed to child components, SearchPanel and CoursePanel to remove a course from selectedCourses.
   removeSelectedCourse(courseCode) {
-    let updatedCourses = this.state.selectedCourses.slice()
+    const updatedCourses = this.state.selectedCourses.slice()
     const index = updatedCourses.indexOf(courseCode)
     updatedCourses.splice(index, 1)
     this.setState({ selectedCourses: updatedCourses })
 
-    let updatedLectures = this.state.selectedLectures.filter(
+    const updatedLectures = this.state.selectedLectures.filter(
       lecture => !lecture.courseCode.includes(courseCode)
     )
     this.setState({ selectedLectures: updatedLectures })
@@ -118,7 +118,7 @@ class Grid extends React.Component {
   // Method passed to child component CoursePanel to add a lecture to selectedLectures
   addSelectedLecture(newLecture) {
     // The maximum number of courses in the lecture list with the same code is 3, one for each session (F, S, Y)
-    let updatedLectures = this.state.selectedLectures.filter(lecture => {
+    const updatedLectures = this.state.selectedLectures.filter(lecture => {
       return (
         lecture.courseCode !== newLecture.courseCode ||
         lecture.session !== newLecture.session
@@ -130,7 +130,7 @@ class Grid extends React.Component {
 
   // Method passed to child component CoursePanel to remove a lecture from selectedLectures
   removeSelectedLecture(courseCode, session) {
-    let updatedLectures = this.state.selectedLectures.filter(lecture => {
+    const updatedLectures = this.state.selectedLectures.filter(lecture => {
       return lecture.courseCode !== courseCode || lecture.session !== session
     })
     this.setState({ selectedLectures: updatedLectures })

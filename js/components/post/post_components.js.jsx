@@ -42,7 +42,7 @@ function isLevelExtra(course, levelExtraArray) {
 
 function updateActiveCourses() {
   return Data.allCourses.concat(Data.math).filter(course => {
-    var status = localStorage.getItem(course.toLowerCase())
+    const status = localStorage.getItem(course.toLowerCase())
     return status === "active" || status === "overridden"
   })
 }
@@ -75,16 +75,16 @@ class Post extends React.Component {
   }
 
   getCourses() {
-    var courseChecks = this.props.courseChecks
-    var courseArrays = []
+    const courseChecks = this.props.courseChecks
+    const courseArrays = []
 
     // initialize inner arrays
-    for (var i = 0; i < courseChecks.length; i++) {
+    for (let i = 0; i < courseChecks.length; i++) {
       courseArrays.push([])
     }
 
     this.state.activeCourses.forEach(function (course) {
-      for (var i = 0; i < courseChecks.length; i++) {
+      for (let i = 0; i < courseChecks.length; i++) {
         if (courseChecks[i](course, courseArrays[i])) {
           courseArrays[i].push(course)
           break
@@ -96,7 +96,7 @@ class Post extends React.Component {
   }
 
   getInquiryCourse() {
-    var inquiryCourses = this.state.activeCourses.filter(isInquiryCourse)
+    const inquiryCourses = this.state.activeCourses.filter(isInquiryCourse)
     return inquiryCourses.length === 0 ? "" : inquiryCourses[0]
   }
 
@@ -105,10 +105,10 @@ class Post extends React.Component {
   }
 
   calculateCreditCount() {
-    var count = 0
+    let count = 0
 
     this.state.activeCourses.forEach(course => {
-      var courseID = course.toLowerCase()
+      const courseID = course.toLowerCase()
       if (
         localStorage.getItem(courseID) === "active" ||
         localStorage.getItem(courseID) === "overridden"
@@ -125,8 +125,8 @@ class Post extends React.Component {
   }
 
   openModal(nodeId) {
-    var modal = this.refs.modal
-    var newCourse = nodeId.substring(0, 6)
+    const modal = this.refs.modal
+    const newCourse = nodeId.substring(0, 6)
     modal.openModal(newCourse)
   }
 
@@ -137,7 +137,7 @@ class Post extends React.Component {
       var classes = "post_not_selected"
     }
 
-    var courseCategoryArrays = this.getCourses()
+    const courseCategoryArrays = this.getCourses()
 
     return (
       <div id={"post_" + this.props.postType} className={classes}>
@@ -206,7 +206,7 @@ export class SpecialistPost extends React.Component {
   }
 
   setIfCompleted() {
-    var isCompleted = this.refs.post.state.creditCount >= 12.0
+    const isCompleted = this.refs.post.state.creditCount >= 12.0
     this.setState({ completed: isCompleted })
     return isCompleted
   }
@@ -218,25 +218,25 @@ export class SpecialistPost extends React.Component {
   }
 
   render() {
-    var categoryTitles = [
+    const categoryTitles = [
       "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)",
       "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)",
       "Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
                                except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
                                BCB: 410H/420H/430Y (2.0 FCEs)",
     ]
-    var notes = [
+    const notes = [
       "No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used \
                      to fulfill program requirements",
     ]
 
-    var firstYearCourses = [
+    const firstYearCourses = [
       ["csc108"],
       ["csc148"],
       ["csc165", "csc240"],
       ["mat135", "mat136", "mat137", "mat157"],
     ]
-    var secondYearCourses = [
+    const secondYearCourses = [
       ["csc207"],
       ["csc209"],
       ["csc236", "csc240"],
@@ -245,7 +245,7 @@ export class SpecialistPost extends React.Component {
       ["mat221", "mat223", "mat240"],
       ["sta247", "sta255", "sta257"],
     ]
-    var laterYearCourses = [["csc369"], ["csc373"]]
+    const laterYearCourses = [["csc369"], ["csc373"]]
 
     return (
       <Post
@@ -286,7 +286,7 @@ export class MajorPost extends React.Component {
   }
 
   setIfCompleted() {
-    var isCompleted = this.refs.post.state.creditCount >= 8.0
+    const isCompleted = this.refs.post.state.creditCount >= 8.0
     this.setState({ completed: isCompleted })
     return isCompleted
   }
@@ -310,32 +310,32 @@ export class MajorPost extends React.Component {
   }
 
   render() {
-    var categoryTitles = [
+    const categoryTitles = [
       "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)",
       "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.0 FCEs)",
       "Any of the following: 200+ level CSC course; MAT: 221/223/240, 235/237/257, any 300+ \
                                except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; BCB: 410H/420H/430Y \
                               (1.5 FCEs, with at least 0.5 FCEs in the 300+ level)",
     ]
-    var notes = [
+    const notes = [
       "No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used \
                      to fulfill program requirements",
     ]
 
-    var firstYearCourses = [
+    const firstYearCourses = [
       ["csc108"],
       ["csc148"],
       ["csc165", "csc240"],
       ["mat135", "mat136", "mat137", "mat157"],
     ]
-    var secondYearCourses = [
+    const secondYearCourses = [
       ["csc207"],
       ["csc236", "csc240"],
       ["csc258"],
       ["csc263", "csc265"],
       ["sta247", "sta255", "sta257"],
     ]
-    var laterYearCourses = []
+    const laterYearCourses = []
 
     return (
       <Post
@@ -376,7 +376,7 @@ export class MinorPost extends React.Component {
   }
 
   setIfCompleted() {
-    var isCompleted = this.refs.post.state.creditCount >= 4.0
+    const isCompleted = this.refs.post.state.creditCount >= 4.0
     this.setState({ completed: isCompleted })
     return isCompleted
   }
@@ -388,7 +388,7 @@ export class MinorPost extends React.Component {
   }
 
   isLevelExtra(course, levelExtraArray) {
-    var nonValidCourses = ["CSC207", "CSC236240"]
+    const nonValidCourses = ["CSC207", "CSC236240"]
     return (
       course.substring(3, 4) >= "2" &&
       nonValidCourses.indexOf(course) < 0 &&
@@ -397,14 +397,14 @@ export class MinorPost extends React.Component {
   }
 
   render() {
-    var categoryTitles = [
+    const categoryTitles = [
       "200+ CSC courses (1.5 FCEs, with at least 1.0 FCE in the 300+ levels)",
     ]
-    var notes = ["You may take no more than three 300+ CSC/ECE courses"]
+    const notes = ["You may take no more than three 300+ CSC/ECE courses"]
 
-    var firstYearCourses = [["csc108"], ["csc148"], ["csc165", "csc240"]]
-    var secondYearCourses = [["csc207"], ["csc236", "csc240"]]
-    var laterYearCourses = []
+    const firstYearCourses = [["csc108"], ["csc148"], ["csc165", "csc240"]]
+    const secondYearCourses = [["csc207"], ["csc236", "csc240"]]
+    const laterYearCourses = []
 
     return (
       <Post

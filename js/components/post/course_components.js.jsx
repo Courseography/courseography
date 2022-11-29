@@ -25,9 +25,9 @@ class CourseCode extends React.Component {
   }
 
   getCategory() {
-    var categoryName = ""
+    const categoryName = ""
 
-    var editedCourseNames = []
+    const editedCourseNames = []
 
     // since you can render an array with a combination of jsx elements and strings, this combines all span elements and
     // "or" strings in between to be easily rendered later
@@ -75,7 +75,7 @@ class CourseCode extends React.Component {
   }
 
   getIdName() {
-    var idName = this.props.courseIDs[0].substring(0, 3)
+    let idName = this.props.courseIDs[0].substring(0, 3)
 
     this.props.courseIDs.forEach(course => {
       idName += course.substring(3, 6)
@@ -97,7 +97,7 @@ class CourseCode extends React.Component {
   }
 
   render() {
-    var classes = ""
+    let classes = ""
 
     if (this.state.selected) {
       classes += " selected"
@@ -152,25 +152,25 @@ export class MultipleCourseCode extends React.Component {
   }
 
   createInitialValueArray() {
-    var array = this.props.courses.slice()
-    for (var i = this.props.courses.length; i < this.props.textBoxNumber; i++) {
+    const array = this.props.courses.slice()
+    for (let i = this.props.courses.length; i < this.props.textBoxNumber; i++) {
       array.push("")
     }
     return array
   }
 
   isValidExtraCourse(course) {
-    var validCourseCodes = ["CSC", "MAT", "STA", "ECE", "BCB"]
+    const validCourseCodes = ["CSC", "MAT", "STA", "ECE", "BCB"]
     return validCourseCodes.indexOf(course.substring(0, 3)) > -1 && course.length === 6
   }
 
   handleOnChange(e) {
-    var newValues = this.state.textboxValues.slice()
-    var oldCourse = newValues[e.target.id]
-    var newCourse = e.target.value.substring(0, 6)
+    const newValues = this.state.textboxValues.slice()
+    const oldCourse = newValues[e.target.id]
+    const newCourse = e.target.value.substring(0, 6)
     newValues[e.target.id] = newCourse
 
-    var numCompleted = this.countCompletedTextBoxes()
+    const numCompleted = this.countCompletedTextBoxes()
 
     this.setState({ textboxValues: newValues }, function () {
       this.setState({
@@ -196,7 +196,7 @@ export class MultipleCourseCode extends React.Component {
   }
 
   render() {
-    var classes = ""
+    let classes = ""
 
     if (this.state.completed) {
       classes += " selected"
@@ -206,7 +206,7 @@ export class MultipleCourseCode extends React.Component {
       classes += " info_opened"
     }
 
-    var courseID = this.props.courseID
+    const courseID = this.props.courseID
 
     return (
       <div id={courseID} className={classes}>
@@ -263,13 +263,13 @@ export function CourseCategory(props) {
 }
 
 export function CourseCategory2(props) {
-  var yearName = props.yearName
-  var postType = props.otherInfo.postType
-  var textBoxes = props.otherInfo.textBoxes
-  var courseCategoryArrays = props.courseCategoryArrays
-  var changeCreditCount = props.changeCreditCount
-  var getInquiryCourse = props.getInquiryCourse
-  var hasInquiryCategory = props.otherInfo.hasInquiryCategory
+  const yearName = props.yearName
+  const postType = props.otherInfo.postType
+  const textBoxes = props.otherInfo.textBoxes
+  const courseCategoryArrays = props.courseCategoryArrays
+  const changeCreditCount = props.changeCreditCount
+  const getInquiryCourse = props.getInquiryCourse
+  const hasInquiryCategory = props.otherInfo.hasInquiryCategory
 
   return (
     <div className="col-md-4 col-sm-6">
@@ -345,7 +345,7 @@ export class InquiryCategory extends React.Component {
   }
 
   handleOnChange(e) {
-    var newValue = e.target.value
+    const newValue = e.target.value
     this.setState({ value: newValue }, function () {
       if (this.state.value === "PEY" || CSCinq.indexOf(this.state.value) >= 0) {
         this.setState({ completed: true })
@@ -356,7 +356,7 @@ export class InquiryCategory extends React.Component {
   }
 
   render() {
-    var classes = ""
+    let classes = ""
 
     if (this.state.completed) {
       classes += " selected"
