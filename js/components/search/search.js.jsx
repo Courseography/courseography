@@ -11,8 +11,8 @@ function hasTime(timeStr, times) {
   if (timeStr === "") {
     return true // Blank value means the time input has been left empty
   }
-  let day = "MTWRF".indexOf(timeStr[0])
-  let hour = parseInt(timeStr.substr(1))
+  const day = "MTWRF".indexOf(timeStr[0])
+  const hour = parseInt(timeStr.substr(1))
   if (day < 0 || isNaN(hour)) {
     return false // Invalid weekday or hour being searched for
   }
@@ -23,7 +23,7 @@ function hasTime(timeStr, times) {
 }
 
 function timeToString(timeData) {
-  let times = timeData
+  const times = timeData
     .sort((t1, t2) => {
       if (
         t1.weekDay > t2.weekDay ||
@@ -48,8 +48,8 @@ function timeToString(timeData) {
         console.log(time)
         return ""
       }
-      let startHour = time.startHour <= 12 ? time.startHour : time.startHour % 12
-      let endHour = time.endHour <= 12 ? time.endHour : time.endHour % 12
+      const startHour = time.startHour <= 12 ? time.startHour : time.startHour % 12
+      const endHour = time.endHour <= 12 ? time.endHour : time.endHour % 12
       s += `${startHour}-${endHour}`
       return s
     })
@@ -82,13 +82,13 @@ class Search extends React.Component {
   }
 
   updateDept() {
-    var selectedDept = ReactDOM.findDOMNode(this.refs.deptSelect).value
+    const selectedDept = ReactDOM.findDOMNode(this.refs.deptSelect).value
     this.setState({ curDept: selectedDept })
     this.refs.timetable.populateTable(selectedDept)
   }
 
   render() {
-    var options = this.state.depts.map(dept => {
+    const options = this.state.depts.map(dept => {
       return (
         <option key={dept} value={dept}>
           {dept}
@@ -180,8 +180,8 @@ class Timetable extends React.Component {
   }
 
   render() {
-    var state = this.state
-    var courseRows = this.state.courses
+    const state = this.state
+    const courseRows = this.state.courses
       .filter(course => {
         return (
           course.name.indexOf(state.codeSearch) > -1 &&
@@ -191,7 +191,7 @@ class Timetable extends React.Component {
         )
       })
       .map(course => {
-        let lectures = course.allMeetingTimes
+        const lectures = course.allMeetingTimes
           .filter(meetingData =>
             filterCourse(state.instSearch, state.timeSearch, meetingData)
           )
@@ -205,12 +205,12 @@ class Timetable extends React.Component {
             }
           })
 
-        let lectureRows = {
+        const lectureRows = {
           F: [],
           S: [],
           Y: [],
         }
-        for (let lecture of lectures) {
+        for (const lecture of lectures) {
           lectureRows[lecture.meetData.session].push(
             <tr
               key={`${course.name}-${lecture.meetData.session}-${lecture.meetData.section}`}

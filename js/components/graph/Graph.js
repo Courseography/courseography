@@ -114,8 +114,8 @@ export class Graph extends React.Component {
   }
 
   getGraph = () => {
-    let graphName = this.props.graphName.replace("-", " ")
-    let url = new URL("/get-json-data", document.location)
+    const graphName = this.props.graphName.replace("-", " ")
+    const url = new URL("/get-json-data", document.location)
     const params = { graphName: graphName }
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -199,7 +199,7 @@ export class Graph extends React.Component {
           outEdgesObj[hybrid.id_] = []
           var nodesList = Object.values(nodesJSON)
           populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
-          var state = localStorage.getItem(hybrid.id_)
+          let state = localStorage.getItem(hybrid.id_)
           if (state === null) {
             state = parentsObj[hybrid.id_].length === 0 ? "takeable" : "inactive"
           }
@@ -336,7 +336,7 @@ export class Graph extends React.Component {
         if (!focusData.modified) {
           this.highlightFocuses(currFocusCourses.list)
         } else {
-          let focusCourses = this.state.focusCourses
+          const focusCourses = this.state.focusCourses
           focusCourses[this.props.currFocus] = {
             list: focusData.courseList,
             modifiedTime: focusData.modifiedTime,
@@ -393,12 +393,12 @@ export class Graph extends React.Component {
   }
 
   nodeClick = event => {
-    var courseId = event.currentTarget.id
-    var currentNode = this.nodes.current[courseId]
-    var courseLabelArray = currentNode.props.JSON.text
-    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
-    var wasSelected = this.state.nodesStatus[courseId].selected
-    var temp = this.state.selectedNodes
+    const courseId = event.currentTarget.id
+    const currentNode = this.nodes.current[courseId]
+    const courseLabelArray = currentNode.props.JSON.text
+    const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
+    const wasSelected = this.state.nodesStatus[courseId].selected
+    const temp = this.state.selectedNodes
     this.toggleSelection(courseId)
     if (typeof this.props.incrementFCECount === "function") {
       if (wasSelected) {
@@ -416,15 +416,15 @@ export class Graph extends React.Component {
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
   nodeMouseEnter = event => {
-    var courseId = event.currentTarget.id
-    var currentNode = this.nodes.current[courseId]
+    const courseId = event.currentTarget.id
+    const currentNode = this.nodes.current[courseId]
     this.focusPrereqs(courseId)
 
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
 
-    var xPos = currentNode.props.JSON.pos[0]
-    var yPos = currentNode.props.JSON.pos[1]
-    var rightSide = xPos > 222
+    let xPos = currentNode.props.JSON.pos[0]
+    let yPos = currentNode.props.JSON.pos[1]
+    const rightSide = xPos > 222
     // The tooltip is offset with a 'padding' of 5.
     if (rightSide) {
       xPos = parseFloat(xPos) - 65
@@ -446,10 +446,10 @@ export class Graph extends React.Component {
   }
 
   nodeMouseLeave = event => {
-    var courseId = event.currentTarget.id
+    const courseId = event.currentTarget.id
     this.unfocusPrereqs(courseId)
 
-    var timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       this.setState({ showInfoBox: false })
     }, 400)
 
@@ -465,11 +465,11 @@ export class Graph extends React.Component {
    */
   handleCourseClick = id => {
     id = id.toLowerCase()
-    var currentNode = this.nodes.current[id]
+    const currentNode = this.nodes.current[id]
     this.toggleSelection(id)
-    var courseLabelArray = currentNode.props.JSON.text
-    var courseLabel = courseLabelArray[courseLabelArray.length - 1].text
-    var temp = [...this.state.selectedNodes]
+    const courseLabelArray = currentNode.props.JSON.text
+    const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
+    const temp = [...this.state.selectedNodes]
     if (this.state.nodesStatus[id].isSelected) {
       this.setState({
         selectedNodes: new Set(temp.filter(course => course !== courseLabel)),
@@ -569,11 +569,11 @@ export class Graph extends React.Component {
    */
   panGraph = event => {
     if (this.state.panning) {
-      var currentX = event.clientX
-      var currentY = event.clientY
+      const currentX = event.clientX
+      const currentY = event.clientY
 
-      var deltaX = currentX - this.state.panStartX
-      var deltaY = currentY - this.state.panStartY
+      const deltaX = currentX - this.state.panStartX
+      const deltaY = currentY - this.state.panStartY
 
       this.setState({
         horizontalPanFactor: -deltaX,
@@ -599,7 +599,7 @@ export class Graph extends React.Component {
   }
 
   infoBoxMouseLeave = () => {
-    var timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       this.setState({ showInfoBox: false })
     }, 400)
 
@@ -609,7 +609,7 @@ export class Graph extends React.Component {
   }
 
   infoBoxMouseClick = () => {
-    var newCourse = this.state.infoBoxNodeId.substring(0, 6)
+    const newCourse = this.state.infoBoxNodeId.substring(0, 6)
     this.setState({
       courseId: newCourse,
       showCourseModal: true,
@@ -622,7 +622,7 @@ export class Graph extends React.Component {
   }
 
   hideGraphDropdown = () => {
-    var timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       this.setState({ showGraphDropdown: false })
     }, 500)
     this.setState({
@@ -673,7 +673,7 @@ export class Graph extends React.Component {
   }
 
   renderArrowHead = () => {
-    var polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" }
+    const polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" }
     return (
       <defs>
         <marker
@@ -697,7 +697,7 @@ export class Graph extends React.Component {
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
    */
   zoomViewbox = zoomMode => {
-    var newZoomFactor = this.state.zoomFactor
+    let newZoomFactor = this.state.zoomFactor
     if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
       newZoomFactor -= ZOOM_INCREMENT
     } else if (zoomMode === ZOOM_ENUM.ZOOM_OUT) {
@@ -709,10 +709,10 @@ export class Graph extends React.Component {
   }
 
   calculateRatioGraphSizeToContainerSize = () => {
-    var containerWidth = document.getElementById("react-graph").clientWidth
-    var containerHeight = document.getElementById("react-graph").clientHeight
-    var heightToContainerRatio = this.state.height / containerHeight
-    var widthToContainerRatio = this.state.width / containerWidth
+    const containerWidth = document.getElementById("react-graph").clientWidth
+    const containerHeight = document.getElementById("react-graph").clientHeight
+    const heightToContainerRatio = this.state.height / containerHeight
+    const widthToContainerRatio = this.state.width / containerWidth
     return Math.max(heightToContainerRatio, widthToContainerRatio)
   }
 
@@ -725,7 +725,7 @@ export class Graph extends React.Component {
   }
 
   onWheel = event => {
-    let zoomIn = event.deltaY < 0
+    const zoomIn = event.deltaY < 0
     if (zoomIn) {
       this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)
     } else {
@@ -742,15 +742,15 @@ export class Graph extends React.Component {
   }
 
   getRelativeCoords = event => {
-    var x = event.nativeEvent.offsetX
-    var y = event.nativeEvent.offsetY
+    let x = event.nativeEvent.offsetX
+    let y = event.nativeEvent.offsetY
     x = x * this.state.zoomFactor + this.state.horizontalPanFactor
     y = y * this.state.zoomFactor + this.state.verticalPanFactor
     return { x: x, y: y }
   }
 
   drawNode = (x, y) => {
-    var xPos, yPos
+    let xPos, yPos
 
     // if node would extend offscreen, instead place it at the
     // edge. Give 2 pixels extra for node border width.
@@ -772,7 +772,7 @@ export class Graph extends React.Component {
 
     // text is an empty string for now until implementation,
     // text position uses node position for now
-    var textJSON = {
+    const textJSON = {
       align: "begin",
       fill: "",
       graph: 0,
@@ -781,7 +781,7 @@ export class Graph extends React.Component {
       text: "la",
     }
 
-    var nodeJSON = {
+    const nodeJSON = {
       fill: "#" + document.getElementById("select-colour").value,
       graph: 0,
       // default dimensions for a node
@@ -812,7 +812,7 @@ export class Graph extends React.Component {
     * @param {object} e The mousedown event.
     */
   drawGraphObject = e => {
-    var pos = this.getRelativeCoords(e)
+    const pos = this.getRelativeCoords(e)
     // check if the user is trying to draw a node. Also check
     // if the user is trying to press a button instead (ie zoom buttons)
     if (this.state.drawMode === "draw-node" && !this.state.buttonHover) {
@@ -861,7 +861,7 @@ export class Graph extends React.Component {
    */
   updateNodeBool = boolId => {
     const boolNode = refLookUp(boolId, this)
-    var newState = boolNode.arePrereqsSatisfied() ? "active" : "inactive"
+    const newState = boolNode.arePrereqsSatisfied() ? "active" : "inactive"
     const childs = this.state.connections.children[boolId]
     const inEdges = this.state.connections.inEdges[boolId]
     const outEdges = this.state.connections.outEdges[boolId]
@@ -879,7 +879,7 @@ export class Graph extends React.Component {
         childs.forEach(node => {
           this.updateNode(node)
         })
-        var allEdges = outEdges.concat(inEdges)
+        const allEdges = outEdges.concat(inEdges)
         allEdges.forEach(edge => {
           const currentEdge = this.edges.current[edge]
           this.updateEdgeStatus(
@@ -1174,7 +1174,7 @@ export class Graph extends React.Component {
         pathAttrs["d"] += x[0] + "," + x[1] + " "
       })
 
-      var pathStyle = { fill: entry.fill }
+      const pathStyle = { fill: entry.fill }
       return <path {...pathAttrs} key={value} className="region" style={pathStyle} />
     })
   }
@@ -1186,7 +1186,7 @@ export class Graph extends React.Component {
         y: entry.pos[1],
       }
 
-      var textStyle = { fill: entry.fill }
+      const textStyle = { fill: entry.fill }
 
       return (
         <text
@@ -1215,7 +1215,7 @@ export class Graph extends React.Component {
     let containerHeight = 0
 
     if (document.getElementById("react-graph") !== null) {
-      let reactGraph = document.getElementById("react-graph")
+      const reactGraph = document.getElementById("react-graph")
       containerWidth = reactGraph.clientWidth
       containerHeight = reactGraph.clientHeight
     }
@@ -1242,7 +1242,7 @@ export class Graph extends React.Component {
       this.state.verticalPanFactor * viewBoxContainerRatio
 
     // not all of these properties are supported in React
-    var svgAttrs = {
+    const svgAttrs = {
       height: "100%",
       width: "100%",
       viewBox: `${viewboxX} ${viewboxY} ${newViewboxWidth} ${newViewboxHeight}`,
@@ -1253,13 +1253,13 @@ export class Graph extends React.Component {
       "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
     }
 
-    var resetDisabled =
+    const resetDisabled =
       this.state.zoomFactor === 1 &&
       this.state.horizontalPanFactor === 0 &&
       this.state.verticalPanFactor === 0
 
     // Mouse events for draw tool
-    var svgMouseEvents = {}
+    let svgMouseEvents = {}
     if (this.state.onDraw) {
       svgMouseEvents = {
         onMouseDown: this.drawGraphObject,
@@ -1273,7 +1273,7 @@ export class Graph extends React.Component {
       }
     }
 
-    var reactGraphPointerEvents = {
+    const reactGraphPointerEvents = {
       onMouseMove: this.panGraph,
       onMouseUp: this.stopPanning,
       onTouchMove: this.panGraph,
@@ -1431,17 +1431,17 @@ export { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT }
  */
 export function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj) {
   // parse prereqs based on text
-  var hybridText = ""
+  let hybridText = ""
   hybridNode.text.forEach(textTag => (hybridText += textTag.text))
-  var nodeParents = []
+  const nodeParents = []
   // First search for entire string (see Stats graph)
-  var prereqNode = findRelationship(hybridText, nodesJSON)
+  let prereqNode = findRelationship(hybridText, nodesJSON)
   if (prereqNode !== undefined) {
     nodeParents.push(prereqNode.id_)
     childrenObj[prereqNode.id_].push(hybridNode.id_)
   } else {
     // Parse text first
-    var prereqs = parseAnd(hybridText)[0]
+    const prereqs = parseAnd(hybridText)[0]
     prereqs.forEach(course => {
       if (typeof course === "string") {
         prereqNode = findRelationship(course, nodesJSON)
@@ -1452,9 +1452,9 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
           console.error("Could not find prereq for ", hybridText)
         }
       } else if (typeof course === "object") {
-        var orPrereq = []
+        const orPrereq = []
         course.forEach(c => {
-          var prereqNode = findRelationship(c, nodesJSON)
+          const prereqNode = findRelationship(c, nodesJSON)
           if (prereqNode !== undefined) {
             orPrereq.push(prereqNode.id_)
             childrenObj[prereqNode.id_].push(hybridNode.id_)
@@ -1478,8 +1478,8 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
  * @return {Node}
  */
 export var findRelationship = (course, nodesJSON) => {
-  var nodes = nodesJSON
-  var node = nodes.find(
+  const nodes = nodesJSON
+  const node = nodes.find(
     n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course))
   )
   return node

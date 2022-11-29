@@ -45,10 +45,10 @@ export default class EdgeGroup extends React.Component {
     edgesCopy.sort((a, b) => {
       // If an edge is missing, its edgeID should be in EdgeGroup's
       // state and its value should be true.
-      var aID = a.id_
-      var bID = b.id_
-      var aMiss = false
-      var bMiss = false
+      const aID = a.id_
+      const bID = b.id_
+      let aMiss = false
+      let bMiss = false
       aMiss = aID in state && state[aID]
       bMiss = bID in state && state[bID]
       if ((aMiss && bMiss) || (!aMiss && !bMiss)) {
