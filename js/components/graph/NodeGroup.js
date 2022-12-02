@@ -18,7 +18,7 @@ export default class NodeGroup extends React.Component {
     const highlightedNodes = this.props.highlightedNodes
     return (
       <g id="nodes">
-        {this.props.hybridsJSON.map(entry => {
+        {Object.values(this.props.hybridsJSON).map(entry => {
           return (
             <Node
               JSON={entry}
@@ -38,7 +38,7 @@ export default class NodeGroup extends React.Component {
             />
           )
         })}
-        {this.props.nodesJSON.map(entry => {
+        {Object.values(this.props.nodesJSON).map(entry => {
           // using `includes` to match "mat235" from "mat235237257calc2" and other math/stats courses
           const highlighted = highlightedNodes.some(node => entry.id_.includes(node))
           return (
@@ -73,13 +73,13 @@ export default class NodeGroup extends React.Component {
 NodeGroup.propTypes = {
   editMode: PropTypes.bool,
   highlightedNodes: PropTypes.array,
-  hybridsJSON: PropTypes.array,
+  hybridsJSON: PropTypes.object,
   nodeClick: PropTypes.func,
   nodeMouseDown: PropTypes.func,
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
   nodesStatus: PropTypes.object,
-  nodesJSON: PropTypes.array,
+  nodesJSON: PropTypes.object,
   connections: PropTypes.object,
   svg: PropTypes.object,
   nodeDropshadowFilter: PropTypes.string,

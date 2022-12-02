@@ -8,12 +8,12 @@ describe("NodeGroup", () => {
     const props = {
       edgesJSON: [],
       highlightedNodes: [],
-      hybridsJSON: [],
+      hybridsJSON: {},
       nodeClick: jest.fn(),
       nodeMouseDown: jest.fn(),
       nodeMouseEnter: jest.fn(),
       nodeMouseLeave: jest.fn(),
-      nodesJSON: [],
+      nodesJSON: {},
       onDraw: false,
       svg: null,
     }

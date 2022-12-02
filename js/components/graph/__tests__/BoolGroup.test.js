@@ -6,8 +6,8 @@ import BoolGroup from "../BoolGroup"
 describe("BoolGroup", () => {
   it("BoolGroup should match shallow snapshot", () => {
     const boolGroupProps = {
-      boolsJSON: [],
-      edgesJSON: [],
+      boolsJSON: {},
+      edgesJSON: {},
       boolsStatus: { bool1: "inactive", bool2: "inactive" },
       svg: null,
     }

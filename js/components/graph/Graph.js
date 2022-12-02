@@ -28,13 +28,13 @@ export class Graph extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      labelsJSON: [],
-      regionsJSON: [],
-      nodesJSON: [],
+      labelsJSON: {},
+      regionsJSON: {},
+      nodesJSON: {},
       nodesStatus: {},
-      hybridsJSON: [],
-      boolsJSON: [],
-      edgesJSON: [],
+      hybridsJSON: {},
+      boolsJSON: {},
+      edgesJSON: {},
       edgesStatus: {},
       boolsStatus: {},
       highlightedNodes: [],
@@ -137,46 +137,49 @@ export class Graph extends React.Component {
       })
       .then(data => {
         localStorage.setItem("active-graph", graphName)
-        const regionsList = []
-        const nodesList = []
+        const labelsJSON = {}
+        const regionsJSON = {}
+        const nodesJSON = {}
         const nodesStatus = {}
-        const hybridsList = []
-        const boolsList = []
+        const hybridsJSON = {}
+        const boolsJSON = {}
         const boolsStatusObj = {}
-        const edgesList = []
+        const edgesJSON = {}
         const parentsObj = {}
         const inEdgesObj = {}
         const childrenObj = {}
         const outEdgesObj = {}
         const storedNodes = new Set()
 
-        const labelsList = data.texts.filter(function (entry) {
-          return entry.rId.startsWith("tspan")
+        data.texts.forEach(entry => {
+          if (entry.rId.startsWith("tspan")) {
+            labelsJSON[entry.id_] = entry
+          }
         })
 
         data.shapes.forEach(function (entry) {
           if (entry.type_ === "Node") {
-            nodesList.push(entry)
+            nodesJSON[entry.id_] = entry
           } else if (entry.type_ === "Hybrid") {
-            hybridsList.push(entry)
+            hybridsJSON[entry.id_] = entry
           } else if (entry.type_ === "BoolNode") {
             boolsStatusObj[entry.id_] = localStorage.getItem(entry.id_) || "inactive"
-            boolsList.push(entry)
+            boolsJSON[entry.id_] = entry
           }
         })
 
         data.paths.forEach(function (entry) {
           if (entry.isRegion) {
-            regionsList.push(entry)
+            regionsJSON[entry.id_] = entry
           } else {
-            edgesList.push(entry)
+            edgesJSON[entry.id_] = entry
           }
         })
 
         // The duplicate filter is a temporary fix, as previously there were two nodes, Hybrid and Node,
         // that were placed in the same spot on some graphs where there should be only a Hybrid node.
-        const noDuplicatesNodesList = []
-        nodesList.forEach(node => {
+        const noDuplicatesNodesJSON = {}
+        Object.values(nodesJSON).forEach(node => {
           if (!(node.id_ in parentsObj)) {
             parentsObj[node.id_] = []
             inEdgesObj[node.id_] = []
@@ -187,13 +190,14 @@ export class Graph extends React.Component {
               storedNodes.add(node.text[node.text.length - 1].text)
             }
 
-            noDuplicatesNodesList.push(node)
+            noDuplicatesNodesJSON[node.id_] = node
           }
         })
 
-        hybridsList.forEach(hybrid => {
+        Object.values(hybridsJSON).forEach(hybrid => {
           childrenObj[hybrid.id_] = []
           outEdgesObj[hybrid.id_] = []
+          const nodesList = Object.values(nodesJSON)
           populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
           let state = localStorage.getItem(hybrid.id_)
           if (state === null) {
@@ -205,7 +209,7 @@ export class Graph extends React.Component {
           }
         })
 
-        edgesList.forEach(edge => {
+        Object.values(edgesJSON).forEach(edge => {
           if (edge.target in parentsObj) {
             parentsObj[edge.target].push(edge.source)
             inEdgesObj[edge.target].push(edge.id_)
@@ -217,38 +221,38 @@ export class Graph extends React.Component {
           }
         })
 
-        boolsList.forEach(boolJSON => {
+        Object.keys(boolsJSON).forEach(boolId => {
           const parents = []
           const childs = []
           const outEdges = []
           const inEdges = []
-          edgesList.forEach(edge => {
-            if (boolJSON.id_ === edge.target) {
+          Object.values(edgesJSON).forEach(edge => {
+            if (boolId === edge.target) {
               parents.push(edge.source)
               inEdges.push(edge.id_)
-            } else if (boolJSON.id_ === edge.source) {
+            } else if (boolId === edge.source) {
               childs.push(edge.target)
               outEdges.push(edge.id_)
             }
           })
-          parentsObj[boolJSON.id_] = parents
-          childrenObj[boolJSON.id_] = childs
-          outEdgesObj[boolJSON.id_] = outEdges
-          inEdgesObj[boolJSON.id_] = inEdges
+          parentsObj[boolId] = parents
+          childrenObj[boolId] = childs
+          outEdgesObj[boolId] = outEdges
+          inEdgesObj[boolId] = inEdges
         })
 
-        noDuplicatesNodesList.forEach(node => {
-          let state = localStorage.getItem(node.id_)
+        Object.keys(noDuplicatesNodesJSON).forEach(nodeId => {
+          let state = localStorage.getItem(nodeId)
           if (state === null) {
-            state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
+            state = parentsObj[nodeId].length === 0 ? "takeable" : "inactive"
           }
-          nodesStatus[node.id_] = {
+          nodesStatus[nodeId] = {
             status: state,
             selected: ["active", "overridden"].indexOf(state) >= 0,
           }
         })
 
-        const edgesStatus = edgesList.reduce((acc, curr) => {
+        const edgesStatus = Object.values(edgesJSON).reduce((acc, curr) => {
           const source = curr.source
           const target = curr.target
           let status
@@ -274,13 +278,13 @@ export class Graph extends React.Component {
         }, {})
 
         this.setState({
-          labelsJSON: labelsList,
-          regionsJSON: regionsList,
-          nodesJSON: noDuplicatesNodesList,
-          hybridsJSON: hybridsList,
-          boolsJSON: boolsList,
+          labelsJSON: labelsJSON,
+          regionsJSON: regionsJSON,
+          nodesJSON: noDuplicatesNodesJSON,
+          hybridsJSON: hybridsJSON,
+          boolsJSON: boolsJSON,
           boolsStatus: boolsStatusObj,
-          edgesJSON: edgesList,
+          edgesJSON: edgesJSON,
           width: data.width,
           height: data.height,
           zoomFactor: 1,
@@ -307,7 +311,7 @@ export class Graph extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.nodesJSON !== this.state.nodesJSON) {
       let totalFCEs = 0
-      this.state.nodesJSON.forEach(nodeJSON => {
+      Object.values(this.state.nodesJSON).forEach(nodeJSON => {
         const node = this.nodes.current[nodeJSON.id_]
         if (!node.props.hybrid && this.state.nodesStatus[nodeJSON.id_].selected) {
           totalFCEs += 0.5
@@ -494,15 +498,15 @@ export class Graph extends React.Component {
       if (this.state.draggingNode !== null) {
         const newPos = this.getRelativeCoords(event)
         let currentNode
-        for (const node of this.state.nodesJSON) {
+        for (const node of Object.values(this.state.nodesJSON)) {
           if (node.id_ === this.state.draggingNode) {
             currentNode = node
           }
         }
         currentNode.pos = [newPos.x - 20, newPos.y - 15]
         currentNode.text[0].pos = [newPos.x, newPos.y + 5]
-        const newNodesJSON = [...this.state.nodesJSON]
-        newNodesJSON.push(currentNode)
+        const newNodesJSON = { ...this.state.nodesJSON }
+        newNodesJSON[currentNode.id_] = currentNode
         this.setState({ nodesJSON: newNodesJSON })
       }
     }
@@ -517,15 +521,15 @@ export class Graph extends React.Component {
       if (this.state.draggingNode !== null) {
         const newPos = this.getRelativeCoords(event)
         let currentNode
-        for (const node of this.state.nodesJSON) {
+        for (const node of Object.values(this.state.nodesJSON)) {
           if (node.id_ === this.state.draggingNode) {
             currentNode = node
           }
         }
         currentNode.pos = [newPos.x - 20, newPos.y - 15]
         currentNode.text[0].pos = [newPos.x, newPos.y + 5]
-        const newNodesJSON = [...this.state.nodesJSON]
-        newNodesJSON.push(currentNode)
+        const newNodesJSON = { ...this.state.nodesJSON }
+        newNodesJSON[currentNode.id_] = currentNode
         this.setState({
           nodesJSON: newNodesJSON,
           draggingNode: null,
@@ -788,8 +792,8 @@ export class Graph extends React.Component {
       type_: "Node",
     }
 
-    const newNodesJSON = [...this.state.nodesJSON]
-    newNodesJSON.push(nodeJSON)
+    const newNodesJSON = { ...this.state.nodesJSON }
+    newNodesJSON[nodeJSON.id_] = nodeJSON
     this.setState({
       nodesJSON: newNodesJSON,
       drawNodeID: this.state.drawNodeID + 1,
@@ -909,9 +913,11 @@ export class Graph extends React.Component {
 
     const childs = this.state.connections.children[nodeId]
     const status = this.state.nodesStatus[nodeId]?.status
+
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
     const allEdges = targetNode.props.outEdges.concat(targetNode.props.inEdges)
+
     if (
       ["active", "overridden"].includes(newState) &&
       ["active", "overridden"].includes(status) &&
@@ -1159,7 +1165,7 @@ export class Graph extends React.Component {
   }
 
   renderRegions = regionsJSON => {
-    return regionsJSON.map(function (entry, value) {
+    return Object.values(regionsJSON).map(function (entry, value) {
       const pathAttrs = { d: "M" }
       entry.points.forEach(function (x) {
         pathAttrs["d"] += x[0] + "," + x[1] + " "
@@ -1171,7 +1177,7 @@ export class Graph extends React.Component {
   }
 
   renderLabels = labelsJSON => {
-    return labelsJSON.map(function (entry, value) {
+    return Object.values(labelsJSON).map(function (entry, value) {
       const textAttrs = {
         x: entry.pos[0],
         y: entry.pos[1],
@@ -1289,12 +1295,12 @@ export class Graph extends React.Component {
       >
         {
           // Filtering by node.text.length is a temporary fix for a bug on Generate where the first node is empty
-          this.state.nodesJSON.length > 1 && (
+          Object.keys(this.state.nodesJSON).length > 1 && (
             <Sidebar
               fceCount={this.props.fceCount}
               reset={this.reset}
               activeCourses={this.state.selectedNodes}
-              courses={this.state.nodesJSON.map(node => [
+              courses={Object.values(this.state.nodesJSON).map(node => [
                 node.id_,
                 node.text.length > 0 ? node.text[node.text.length - 1].text : "",
               ])}
@@ -1315,7 +1321,7 @@ export class Graph extends React.Component {
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
-        {this.state.nodesJSON.length > 1 && (
+        {Object.keys(this.state.nodesJSON).length > 1 && (
           <div className="graph-button-group">
             <div className="button-group">
               <Button
