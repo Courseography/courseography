@@ -24,7 +24,6 @@ export default class Edge extends React.Component {
 
 Edge.propTypes = {
   className: PropTypes.string,
-  edgeID: PropTypes.string,
   /** Array of points for the edge. A straight edge will have 2. Each turn in the edge means another point*/
   points: PropTypes.array,
   /** Node from which the edge is drawn*/
