@@ -57,6 +57,8 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 1. Run `$ stack run` to start the server
 2. Navigate to `http://localhost:8000/graph` in your browser
 
+When running in production you should run `$ stack run prod-server` instead of `$ stack run` to start the server. This will build the client in production mode which should be faster for users but slower to compile.
+
 #### Developers
 
 If you are contributing to Courseography, you should install our pre-commit hooks:
