@@ -4,15 +4,6 @@ import Node from "./Node"
 
 /** A React component class representing a group of Nodes on the graph */
 export default class NodeGroup extends React.Component {
-  /**
-   *
-   * @param {*} entry
-   * @return
-   */
-  setRefEntry = entry => {
-    return elem => elem && (this[entry.id_] = elem)
-  }
-
   render() {
     const svg = this.props.svg
     const highlightedNodes = this.props.highlightedNodes
@@ -25,15 +16,11 @@ export default class NodeGroup extends React.Component {
               className={"hybrid"}
               key={entry.id_}
               hybrid={true}
-              ref={this.setRefEntry(entry)}
               parents={this.props.connections.parents[entry.id_]}
               childs={this.props.connections.children[entry.id_]}
               status={this.props.nodesStatus[entry.id_].status}
               selected={this.props.nodesStatus[entry.id_].selected}
-              inEdges={[]}
-              outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
-              logicalType={"AND"}
               nodeDropshadowFilter={this.props.nodeDropshadowFilter}
             />
           )
@@ -46,12 +33,9 @@ export default class NodeGroup extends React.Component {
               JSON={entry}
               className="node"
               key={entry.id_}
-              ref={this.setRefEntry(entry)}
               hybrid={false}
               parents={this.props.connections.parents[entry.id_]}
               childs={this.props.connections.children[entry.id_]}
-              inEdges={this.props.connections.inEdges[entry.id_]}
-              outEdges={this.props.connections.outEdges[entry.id_]}
               svg={svg}
               status={this.props.nodesStatus[entry.id_].status}
               selected={this.props.nodesStatus[entry.id_].selected}
