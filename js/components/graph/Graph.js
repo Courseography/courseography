@@ -153,7 +153,7 @@ export class Graph extends React.Component {
 
         data.texts.forEach(entry => {
           if (entry.rId.startsWith("tspan")) {
-            labelsJSON[entry.id_] = entry
+            labelsJSON[entry.rId] = entry
           }
         })
 
