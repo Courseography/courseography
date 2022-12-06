@@ -912,7 +912,8 @@ export class Graph extends React.Component {
     }
 
     const childs = this.state.connections.children[nodeId]
-    const status = this.state.nodesStatus[nodeId]?.status
+    const status =
+      this.state.nodesStatus[nodeId]?.status || this.state.boolsStatus[nodeId]
 
     // Updating the children will be unnecessary if the selected state of the current node has not
     // changed, and the original state was not 'missing'
@@ -927,9 +928,15 @@ export class Graph extends React.Component {
 
       this.setState(
         prevState => {
-          const nodesStatus = { ...prevState.nodesStatus }
-          nodesStatus[nodeId].status = newState
-          return { nodesStatus: nodesStatus }
+          if (nodeId in prevState.nodesStatus) {
+            const nodesStatus = { ...prevState.nodesStatus }
+            nodesStatus[nodeId].status = newState
+            return { nodesStatus: nodesStatus }
+          } else if (nodeId in prevState.boolsStatus) {
+            const boolsStatus = { ...prevState.boolsStatus }
+            boolsStatus[nodeId] = newState
+            return { boolsStatus: boolsStatus }
+          }
         },
         () => {
           allEdges.forEach(edge => {
@@ -949,9 +956,15 @@ export class Graph extends React.Component {
     if (recursive === undefined || recursive) {
       this.setState(
         prevState => {
-          const nodesStatus = { ...prevState.nodesStatus }
-          nodesStatus[nodeId].status = newState
-          return { nodesStatus: nodesStatus }
+          if (nodeId in prevState.nodesStatus) {
+            const nodesStatus = { ...prevState.nodesStatus }
+            nodesStatus[nodeId].status = newState
+            return { nodesStatus: nodesStatus }
+          } else if (nodeId in prevState.boolsStatus) {
+            const boolsStatus = { ...prevState.boolsStatus }
+            boolsStatus[nodeId] = newState
+            return { boolsStatus: boolsStatus }
+          }
         },
         () => {
           localStorage.setItem(nodeId, newState)
