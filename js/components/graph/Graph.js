@@ -1421,13 +1421,11 @@ export class Graph extends React.Component {
             nodeClick={this.nodeClick}
             nodeMouseEnter={this.nodeMouseEnter}
             nodeMouseLeave={this.nodeMouseLeave}
-            nodeMouseDown={this.nodeMouseDown}
             svg={this}
             nodesStatus={this.state.nodesStatus}
             nodesJSON={this.state.nodesJSON}
             hybridsJSON={this.state.hybridsJSON}
             highlightedNodes={this.state.highlightedNodes}
-            onDraw={this.state.onDraw}
             connections={this.state.connections}
             nodeDropshadowFilter={this.nodeDropshadowFilter}
           />
@@ -1435,7 +1433,6 @@ export class Graph extends React.Component {
             boolsJSON={this.state.boolsJSON}
             boolsStatus={this.state.boolsStatus}
             connections={this.state.connections}
-            svg={this}
           />
           <EdgeGroup
             edgesJSON={this.state.edgesJSON}

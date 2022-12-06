@@ -113,7 +113,6 @@ export default class Node extends React.Component {
 
 Node.propTypes = {
   className: PropTypes.string,
-  editMode: PropTypes.bool,
   highlighted: PropTypes.bool,
   hybrid: PropTypes.bool,
   JSON: PropTypes.object,
@@ -121,7 +120,6 @@ Node.propTypes = {
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   status: PropTypes.string,
-  selected: PropTypes.bool,
   parents: PropTypes.array,
   svg: PropTypes.object,
   nodeDropshadowFilter: PropTypes.string,

@@ -35,16 +35,12 @@ export default class NodeGroup extends React.Component {
               key={entry.id_}
               hybrid={false}
               parents={this.props.connections.parents[entry.id_]}
-              childs={this.props.connections.children[entry.id_]}
               svg={svg}
               status={this.props.nodesStatus[entry.id_].status}
-              selected={this.props.nodesStatus[entry.id_].selected}
               highlighted={highlighted}
               onClick={this.props.nodeClick}
               onMouseEnter={this.props.nodeMouseEnter}
               onMouseLeave={this.props.nodeMouseLeave}
-              onMouseDown={this.props.nodeMouseDown}
-              editMode={this.props.editMode}
               nodeDropshadowFilter={this.props.nodeDropshadowFilter}
             />
           )
@@ -55,11 +51,9 @@ export default class NodeGroup extends React.Component {
 }
 
 NodeGroup.propTypes = {
-  editMode: PropTypes.bool,
   highlightedNodes: PropTypes.array,
   hybridsJSON: PropTypes.object,
   nodeClick: PropTypes.func,
-  nodeMouseDown: PropTypes.func,
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
   nodesStatus: PropTypes.object,
