@@ -36,6 +36,8 @@ export default class BoolGroup extends React.Component {
         parents={parents[boolJSON.id_]}
         childs={children[boolJSON.id_]}
         logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || "and"}
+        inEdges={this.props.connections.inEdges[boolJSON.id_]}
+        outEdges={this.props.connections.outEdges[boolJSON.id_]}
         svg={this.props.svg}
         status={this.props.boolsStatus[boolJSON.id_]}
       />
