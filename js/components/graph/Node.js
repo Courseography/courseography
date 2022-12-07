@@ -113,6 +113,7 @@ export default class Node extends React.Component {
 
 Node.propTypes = {
   className: PropTypes.string,
+  editMode: PropTypes.bool,
   highlighted: PropTypes.bool,
   hybrid: PropTypes.bool,
   JSON: PropTypes.object,

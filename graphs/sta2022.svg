@@ -1447,14 +1447,6 @@
              xml:space="preserve"
              x="586.87183"
              style="stroke:none">MAT223/240</text>
-          <rect
-             id="rect4923"
-             height="35"
-             width="85.652702"
-             clip-path="url(#clipPath2)"
-             y="232.3831"
-             x="578.39899"
-             style="fill:none;stroke:#000000" />
         </g>
         <g
            id="g4929"
@@ -1480,14 +1472,14 @@
              y="247.2464"
              xml:space="preserve"
              x="682.74432"
-             style="stroke:none">CSC108H1/ CSC110Y1/ </text>
+             style="stroke:none">CSC108H1/CSC110Y1/</text>
           <text
              id="text4933"
              clip-path="url(#clipPath2)"
              y="261.94751"
              xml:space="preserve"
              x="685.74731"
-             style="stroke:none">CSC120H1/ CSC148H1</text>
+             style="stroke:none">CSC120H1/CSC148H1</text>
           <text
              id="text4937"
              xml:space="preserve"

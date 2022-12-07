@@ -41,6 +41,8 @@ export default class NodeGroup extends React.Component {
               onClick={this.props.nodeClick}
               onMouseEnter={this.props.nodeMouseEnter}
               onMouseLeave={this.props.nodeMouseLeave}
+              onMouseDown={this.props.nodeMouseDown}
+              editMode={this.props.editMode}
               nodeDropshadowFilter={this.props.nodeDropshadowFilter}
             />
           )
@@ -51,9 +53,11 @@ export default class NodeGroup extends React.Component {
 }
 
 NodeGroup.propTypes = {
+  editMode: PropTypes.bool,
   highlightedNodes: PropTypes.array,
   hybridsJSON: PropTypes.object,
   nodeClick: PropTypes.func,
+  nodeMouseDown: PropTypes.func,
   nodeMouseEnter: PropTypes.func,
   nodeMouseLeave: PropTypes.func,
   nodesStatus: PropTypes.object,
