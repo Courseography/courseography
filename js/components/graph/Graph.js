@@ -459,7 +459,7 @@ export class Graph extends React.Component {
   handleCourseClick = id => {
     id = id.toLowerCase()
     this.toggleSelection(id)
-    const courseLabelArray = this.state.nodesJSON[courseId].text
+    const courseLabelArray = this.state.nodesJSON[id].text
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const temp = [...this.state.selectedNodes]
     if (this.state.nodesStatus[id].isSelected) {
