@@ -39,7 +39,6 @@ exports[`Hybrid Node should match snapshot 1`] = `
   className="hybrid inactive"
   data-testid="h(csc301,csc318,csc384,csc418)"
   id="h46"
-  onKeyDown={[MockFunction]}
   shapeRendering="geometricPrecision"
   textRendering="geometricPrecision"
 >

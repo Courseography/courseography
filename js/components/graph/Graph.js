@@ -1435,7 +1435,8 @@ export class Graph extends React.Component {
             nodeMouseEnter={this.nodeMouseEnter}
             nodeMouseLeave={this.nodeMouseLeave}
             nodeMouseDown={this.nodeMouseDown}
-            svg={this}
+            onKeyDown={this.onKeyDown}
+            onWheel={this.onWheel}
             nodesStatus={this.state.nodesStatus}
             nodesJSON={this.state.nodesJSON}
             hybridsJSON={this.state.hybridsJSON}

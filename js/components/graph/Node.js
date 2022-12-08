@@ -52,8 +52,8 @@ export default class Node extends React.Component {
     const gAttrs = {
       textRendering: "geometricPrecision",
       shapeRendering: "geometricPrecision",
-      onKeyDown: this.props.svg.onKeyDown,
-      onWheel: this.props.svg.onWheel,
+      onKeyDown: this.props.onKeyDown,
+      onWheel: this.props.onWheel,
       onMouseEnter: this.props.onMouseEnter,
       onMouseLeave: this.props.onMouseLeave,
       onClick: this.props.onClick,
@@ -120,8 +120,9 @@ Node.propTypes = {
   onClick: PropTypes.func,
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
+  onWheel: PropTypes.func,
+  onKeyDown: PropTypes.func,
   status: PropTypes.string,
   parents: PropTypes.array,
-  svg: PropTypes.object,
   nodeDropshadowFilter: PropTypes.string,
 }
