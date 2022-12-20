@@ -48,7 +48,7 @@ header page =
                 else H.li ! A.id "nav-graph" $ toLink "/graph" "Graph"
                 if page == "grid"
                     then H.li ! A.class_ "selected-page" $ toLink "/grid"  "Grid"
-                else H.li $toLink "/grid" "Grid"
+                else H.li $ toLink "/grid" "Grid"
                 if page == "generate-prerequisites"
                     then H.li ! A.class_ "selected-page" $ toLink "/generate" "Generate (beta)"
                 else H.li ! A.id "nav-generate" $ toLink "/generate" "Generate (beta)"

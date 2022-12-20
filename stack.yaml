@@ -10,6 +10,8 @@ allow-newer: true
 extra-deps:
   - stylish-haskell-0.13.0.0
 compiler-check: newer-minor
-resolver: lts-19.13
+resolver: lts-20.4
 dump-logs: all
 require-stack-version: ! ">= 1.6"
+ghc-options:
+  "$locals": -Wall -fwarn-tabs -Wno-incomplete-uni-patterns
