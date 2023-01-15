@@ -24,18 +24,6 @@ import React from "react"
  *    farther away. They can only be either 'active' or 'inactive'
  */
 export default class Node extends React.Component {
-  /**
-   * Checks whether this Node is selected
-   * @return {boolean}
-   */
-  isSelected = () => {
-    if (this.props.hybrid) {
-      return this.props.status === "active"
-    } else {
-      return this.props.selected
-    }
-  }
-
   getDataTestId = () => {
     if (this.props.hybrid) {
       return `h(${this.props.parents.join(",")})`
@@ -64,8 +52,8 @@ export default class Node extends React.Component {
     const gAttrs = {
       textRendering: "geometricPrecision",
       shapeRendering: "geometricPrecision",
-      onKeyDown: this.props.svg.onKeyDown,
-      onWheel: this.props.svg.onWheel,
+      onKeyDown: this.props.onKeyDown,
+      onWheel: this.props.onWheel,
       onMouseEnter: this.props.onMouseEnter,
       onMouseLeave: this.props.onMouseLeave,
       onClick: this.props.onClick,
@@ -124,20 +112,17 @@ export default class Node extends React.Component {
 }
 
 Node.propTypes = {
-  childs: PropTypes.array,
   className: PropTypes.string,
   editMode: PropTypes.bool,
   highlighted: PropTypes.bool,
   hybrid: PropTypes.bool,
-  inEdges: PropTypes.array,
   JSON: PropTypes.object,
   onClick: PropTypes.func,
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
-  outEdges: PropTypes.array,
+  onWheel: PropTypes.func,
+  onKeyDown: PropTypes.func,
   status: PropTypes.string,
-  selected: PropTypes.bool,
   parents: PropTypes.array,
-  svg: PropTypes.object,
   nodeDropshadowFilter: PropTypes.string,
 }
