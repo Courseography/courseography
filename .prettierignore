@@ -13,4 +13,5 @@ vendor/
 
 .stack-work/
 .yarn/
-.pnp.js/
+.pnp.cjs
+.pnp.loader.mjs
