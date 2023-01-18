@@ -22,10 +22,11 @@ jobs:
             sudo apt-get install -y imagemagick texlive-latex-base
             stack update
 
-            curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+            curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - &&\
             sudo apt-get install -y nodejs
 
-            npm install -g yarn
+            corepack enable
+            corepack prepare yarn@stable --activate
       - run:
           name: Resolve/Update Dependencies
           command: |
