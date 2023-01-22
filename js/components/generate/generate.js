@@ -92,15 +92,15 @@ class GenerateForm extends React.Component {
         const childrenObj = {}
         const outEdgesObj = {}
         const storedNodes = new Set()
-       
+
         data.texts.forEach(entry => {
           if (entry.text.match(/.*[0-9]*%/g)) {
             labelsJSON[entry.rId] = entry
           }
         })
-        
+
         data.shapes.forEach(function (entry) {
-          if (entry.type_ === "Node" && entry.id_.indexOf('|') == -1) {
+          if (entry.type_ === "Node" && entry.id_.indexOf("|") == -1) {
             nodesJSON[entry.id_] = entry
           } else if (entry.type_ === "Hybrid") {
             hybridsJSON[entry.id_] = entry
@@ -109,7 +109,7 @@ class GenerateForm extends React.Component {
             boolsJSON[entry.id_] = entry
           }
         })
-        
+
         data.paths.forEach(function (entry) {
           if (entry.isRegion) {
             regionsJSON[entry.id_] = entry
