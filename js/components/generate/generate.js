@@ -137,6 +137,7 @@ class GenerateForm extends React.Component {
         Object.values(hybridsJSON).forEach(hybrid => {
           childrenObj[hybrid.id_] = []
           outEdgesObj[hybrid.id_] = []
+          const nodesList = Object.values(nodesJSON)
           populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
           let state = localStorage.getItem(hybrid.id_)
           nodesStatus[hybrid.id_] = {
