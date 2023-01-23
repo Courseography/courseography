@@ -43,7 +43,7 @@ describe("InfoBox", () => {
       expect(infoBox.classList.contains("tooltip-group-hidden")).toBe(true)
       done()
     }, 1000)
-  })
+  }, 5000)
   it("Pressing on the info box should create a new pop up", async done => {
     const graph = await TestGraph.build()
     const aaa100 = graph.getByTestId("aaa100")
