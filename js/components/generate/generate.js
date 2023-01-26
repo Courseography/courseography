@@ -96,16 +96,17 @@ class GenerateForm extends React.Component {
         data.texts.forEach(entry => {
           if (entry.text.match(/.*[0-9]*%/g)) {
             labelsJSON[entry.rId] = entry
+            // filter for mark percentages, allow preceding characters for potential geq
           }
         })
 
         data.shapes.forEach(function (entry) {
-          if (entry.type_ === "Node" && entry.id_.indexOf("|") == -1) {
+          if (entry.type_ === "Node") {
             nodesJSON[entry.id_] = entry
           } else if (entry.type_ === "Hybrid") {
             hybridsJSON[entry.id_] = entry
           } else if (entry.type_ === "BoolNode") {
-            boolsStatus[entry.id_] = localStorage.getItem(entry.id_) || "inactive"
+            boolsStatus[entry.id_] = "inactive"
             boolsJSON[entry.id_] = entry
           }
         })
@@ -124,10 +125,13 @@ class GenerateForm extends React.Component {
           childrenObj[node.id_] = []
           outEdgesObj[node.id_] = []
           // Quickly adding any active nodes from local storage into the selected nodes
-          if (localStorage.getItem(node.id_) === "active") {
+          let state = localStorage.getItem(node.id_)
+          if (state === null) {
+            state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
+          } else if (state === "active") {
             storedNodes.add(node.text[node.text.length - 1].text)
           }
-          let state = localStorage.getItem(node.id_)
+
           nodesStatus[node.id_] = {
             status: state,
             selected: ["active", "overridden"].indexOf(state) >= 0,
@@ -140,6 +144,9 @@ class GenerateForm extends React.Component {
           const nodesList = Object.values(nodesJSON)
           populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
           let state = localStorage.getItem(hybrid.id_)
+          if (state === null) {
+            state = parentsObj[hybrid.id_].length === 0 ? "takeable" : "inactive"
+          }
           nodesStatus[hybrid.id_] = {
             status: state,
             selected: ["active", "overridden"].indexOf(state) >= 0,
