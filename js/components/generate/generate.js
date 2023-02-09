@@ -94,9 +94,9 @@ class GenerateForm extends React.Component {
         const storedNodes = new Set()
 
         data.texts.forEach(entry => {
+          // filter for mark percentages, allow preceding characters for potential geq
           if (entry.text.match(/.*[0-9]*%/g)) {
             labelsJSON[entry.rId] = entry
-            // filter for mark percentages, allow preceding characters for potential geq
           }
         })
 
