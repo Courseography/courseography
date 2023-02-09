@@ -38,9 +38,9 @@ import Svg.Builder
 import Util.Happstack (createJSONResponse)
 
 -- | Queries the database for all matching lectures, tutorials,
-meetingQuery :: T.Text -> SqlPersistM [MeetTime']
-meetingQuery meetingCode_ = do
-    allMeetings <- selectList [MeetingCode ==. meetingCode_] []
+meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
+meetingQuery meetingCodes = do
+    allMeetings <- selectList [MeetingCode <-. meetingCodes] []
     mapM buildMeetTimes allMeetings
 
 -- | Queries the database for all information about @course@,
@@ -54,7 +54,7 @@ returnCourse lowerStr = runSqlite databasePath $ do
     case sqlCourse of
       Nothing -> return Nothing
       Just course -> do
-        meetings <- meetingQuery courseStr
+        meetings <- meetingQuery fullCodes
         Just <$> buildCourse meetings
                                 (entityVal course)
 
