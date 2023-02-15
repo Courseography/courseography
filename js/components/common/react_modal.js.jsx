@@ -1,3 +1,5 @@
+import "ag-grid-community/styles/ag-grid.css"
+import "ag-grid-community/styles/ag-theme-alpine.css"
 import React, { createRef } from "react"
 import ReactModal from "react-modal"
 import Leaflet from "leaflet"
@@ -15,6 +17,7 @@ import {
 } from "react-leaflet"
 import L from "leaflet"
 import { getCourse, getPost } from "../common/utils"
+import { AgGridReact } from "ag-grid-react"
 
 class ModalContent extends React.Component {
   render() {
@@ -34,19 +37,92 @@ class CourseModal extends React.Component {
       course: [],
       sessions: [],
       courseTitle: "",
+      allData: [],
     }
   }
 
+  convertToDay(day) {
+    switch (day) {
+      case 0:
+        return "Monday"
+      case 1:
+        return "Tuesday"
+      case 2:
+        return "Wednesday"
+
+      case 3:
+        return "Thursday"
+
+      case 4:
+        return "Friday"
+
+      case 5:
+        return "Friday"
+    }
+  }
+
+  getTable(sessions) {
+    let allData = []
+    sessions.map(lecture => {
+      const occurrences = { times: [], firstRooms: [], secondRooms: [] }
+
+      lecture.timeData.map((occurrence, j) => {
+        let firstRoom = ""
+        lecture.timeData[j].firstRoom === null
+          ? (firstRoom = " ")
+          : (firstRoom = lecture.timeData[j].firstRoom.room)
+        let secondRoom = ""
+        lecture.timeData[j].secondRoom === null
+          ? (secondRoom = " ")
+          : (secondRoom = lecture.timeData[j].secondRoom.room)
+
+        occurrences.times.push(
+          this.convertToDay(occurrence.weekDay) +
+            "  " +
+            occurrence.startHour +
+            " - " +
+            occurrence.endHour
+        )
+        occurrences.firstRooms.push(firstRoom)
+        occurrences.secondRooms.push(secondRoom)
+      })
+      const rowData = {
+        Activity: lecture.meetData.section,
+        Session: lecture.meetData.session,
+        Instructor: lecture.meetData.instructor,
+        Availability:
+          lecture.meetData.cap -
+          lecture.meetData.enrol +
+          " of " +
+          lecture.meetData.cap +
+          " available",
+        WaitList: lecture.meetData.extra + " Student",
+        Time: occurrences.times,
+        FirstRoom: occurrences.firstRooms,
+        SecondRoom: occurrences.secondRooms,
+      }
+
+      allData.push(rowData)
+    })
+
+    return allData
+  }
   componentDidUpdate(prevProps) {
     if (prevProps.courseId !== this.props.courseId && this.props.courseId !== "") {
       getCourse(this.props.courseId).then(course => {
         // Tutorials don't have a timeStr to print, so I've currently omitted them
+
+        const sessions = course.allMeetingTimes.sort((firstLec, secondLec) =>
+          firstLec.meetData.session > secondLec.meetData.session ? 1 : -1
+        )
+
+        const allData = this.getTable(sessions)
+
         this.setState({
           course: course,
-          sessions: course.allMeetingTimes.sort((firstLec, secondLec) =>
-            firstLec.meetData.session > secondLec.meetData.session ? 1 : -1
-          ),
+          sessions: sessions,
           courseTitle: `${this.props.courseId.toUpperCase()} ${course.title}`,
+          allData: allData,
         })
       })
     }
@@ -63,7 +139,11 @@ class CourseModal extends React.Component {
       >
         <div className="modal-header">{this.state.courseTitle}</div>
         <div className="modal-body">
-          <Description course={this.state.course} sessions={this.state.sessions} />
+          <Description
+            course={this.state.course}
+            sessions={this.state.sessions}
+            allData={this.state.allData}
+          />
         </div>
       </ReactModal>
     )
@@ -72,6 +152,16 @@ class CourseModal extends React.Component {
 
 //Use React component from search.js
 class Description extends React.Component {
+  cellRendererBreak(col) {
+    let i = 0
+    let result = ""
+    while (col[i] !== undefined) {
+      result += col[i] + "\n"
+      i += 1
+    }
+    return result
+  }
+
   render() {
     //We want to use the Timetable component, but that component needs to be independent before using it here
     return (
@@ -92,17 +182,41 @@ class Description extends React.Component {
         <p>
           <strong>Timetable: </strong>
         </p>
-        {this.props.sessions.map(function (lecture, i) {
-          return (
-            <p key={i}>
-              {lecture.meetData.code +
-                lecture.meetData.session +
-                "-" +
-                lecture.meetData.section}
-            </p>
-          )
-        })}
-        {/*<Video urls={this.props.course.videoUrls} />*/}
+
+        <div className="ag-theme-alpine" style={{ height: 500, width: 1160 }}>
+          <AgGridReact
+            rowData={this.props.allData}
+            columnDefs={[
+              { field: "Activity", width: 130 },
+              { field: "Session", width: 100 },
+              { field: "Instructor", width: 130 },
+              { field: "Availability" },
+              { field: "WaitList", width: 120 },
+              {
+                field: "Time",
+                cellStyle: { whiteSpace: "pre" },
+                cellRenderer: param => this.cellRendererBreak(param.data.Time),
+              },
+              {
+                field: "FirstRoom",
+                cellStyle: { whiteSpace: "pre" },
+                cellRenderer: param => this.cellRendererBreak(param.data.FirstRoom),
+                width: 140,
+              },
+              {
+                field: "SecondRoom",
+                cellStyle: { whiteSpace: "pre" },
+                width: 140,
+                cellRenderer: param => this.cellRendererBreak(param.data.SecondRoom),
+              },
+            ]}
+            animateRows={true} // Optional - set to 'true' to have rows animate when sorted
+            rowSelection="multiple" // Options - allows click selection of rows
+            rowHeight="100"
+          ></AgGridReact>
+        </div>
+
+        {/* <Video urls={this.props.course.videoUrls} /> */}
       </div>
     )
   }

@@ -1,5 +1,8 @@
 $graph-overlay-top-margin: 15px;
 $graph-overlay-side-margin: 15px;
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";
+
 @keyframes spin {
   0.0% {
     transform: rotate(0deg);
@@ -364,11 +367,13 @@ ol {
   box-shadow: 0 0 30px;
   box-shadow: 0 0 30px;
   box-shadow: 0 0 30px;
-  left: 300px;
+  height: 550px;
+  left: 100px;
   overflow-y: auto;
   position: absolute;
   right: 300px;
-  top: 100px;
+  top: 150px;
+  width: 1200px;
 }
 
 .overlay {

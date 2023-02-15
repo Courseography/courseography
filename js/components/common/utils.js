@@ -6,7 +6,8 @@
 export function getCourse(courseName) {
   "use strict"
 
-  return fetch("course?name=" + courseName)
+  // look for courseName in database to whether add H1 or Y1 to the end
+  return fetch("course?name=" + courseName + "H1")
     .then(response => response.json())
     .catch(error => {
       throw error
