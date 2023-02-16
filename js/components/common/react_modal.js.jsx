@@ -66,15 +66,15 @@ class CourseModal extends React.Component {
     sessions.map(lecture => {
       const occurrences = { times: [], firstRooms: [], secondRooms: [] }
 
-      lecture.timeData.map((occurrence, j) => {
+      lecture.timeData.map(occurrence => {
         let firstRoom = ""
-        lecture.timeData[j].firstRoom === null
+        occurrence.firstRoom === null
           ? (firstRoom = " ")
-          : (firstRoom = lecture.timeData[j].firstRoom.room)
+          : (firstRoom = occurrence.firstRoom.room)
         let secondRoom = ""
-        lecture.timeData[j].secondRoom === null
+        occurrence.secondRoom === null
           ? (secondRoom = " ")
-          : (secondRoom = lecture.timeData[j].secondRoom.room)
+          : (secondRoom = occurrence.secondRoom.room)
 
         occurrences.times.push(
           this.convertToDay(occurrence.weekDay) +
