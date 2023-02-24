@@ -115,10 +115,10 @@ class CourseModal extends React.Component {
         // Tutorials don't have a timeStr to print, so I've currently omitted them
 
         const sessionsF = course.allMeetingTimes.filter(
-          lec => lec.meetData.session == "F"
+          lec => lec.meetData.session === "F"
         )
         const sessionsS = course.allMeetingTimes.filter(
-          lec => lec.meetData.session == "S"
+          lec => lec.meetData.session === "S"
         )
         const sortedSessionsF = sessionsF.sort((firstLec, secondLec) =>
           firstLec.meetData.section > secondLec.meetData.section ? 1 : -1
