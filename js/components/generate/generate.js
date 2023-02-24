@@ -79,81 +79,58 @@ class GenerateForm extends React.Component {
     fetch("/graph-generate", putData)
       .then(res => res.json())
       .then(data => {
-        const labelsJSON = {}
-        const regionsJSON = {}
-        const nodesJSON = {}
-        const hybridsJSON = {}
-        const boolsJSON = {}
-        const edgesJSON = {}
-        const boolsStatus = {}
-        const nodesStatus = {}
+        const regionsList = []
+        const nodesList = []
+        const hybridsList = []
+        const boolsList = []
+        const edgesList = []
         const parentsObj = {}
         const inEdgesObj = {}
         const childrenObj = {}
         const outEdgesObj = {}
         const storedNodes = new Set()
 
-        data.texts.forEach(entry => {
+        const labelsList = data.texts.filter(function (entry) {
           // filter for mark percentages, allow preceding characters for potential geq
-          if (entry.text.match(/.*[0-9]*%/g)) {
-            labelsJSON[entry.rId] = entry
-          }
+          return entry.text.match(/.*[0-9]*%/g)
         })
 
         data.shapes.forEach(function (entry) {
           if (entry.type_ === "Node") {
-            nodesJSON[entry.id_] = entry
+            nodesList.push(entry)
           } else if (entry.type_ === "Hybrid") {
-            hybridsJSON[entry.id_] = entry
+            hybridsList.push(entry)
           } else if (entry.type_ === "BoolNode") {
-            boolsStatus[entry.id_] = "inactive"
-            boolsJSON[entry.id_] = entry
+            boolsList.push(entry)
           }
         })
 
         data.paths.forEach(function (entry) {
           if (entry.isRegion) {
-            regionsJSON[entry.id_] = entry
+            regionsList.push(entry)
           } else {
-            edgesJSON[entry.id_] = entry
+            edgesList.push(entry)
           }
         })
 
-        Object.values(nodesJSON).forEach(node => {
+        nodesList.forEach(node => {
           parentsObj[node.id_] = []
           inEdgesObj[node.id_] = []
           childrenObj[node.id_] = []
           outEdgesObj[node.id_] = []
           // Quickly adding any active nodes from local storage into the selected nodes
-          let state = localStorage.getItem(node.id_)
-          if (state === null) {
-            state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
-          } else if (state === "active") {
+          if (localStorage.getItem(node.id_) === "active") {
             storedNodes.add(node.text[node.text.length - 1].text)
           }
-
-          nodesStatus[node.id_] = {
-            status: state,
-            selected: ["active", "overridden"].indexOf(state) >= 0,
-          }
         })
 
-        Object.values(hybridsJSON).forEach(hybrid => {
+        hybridsList.forEach(hybrid => {
           childrenObj[hybrid.id_] = []
           outEdgesObj[hybrid.id_] = []
-          const nodesList = Object.values(nodesJSON)
           populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
-          let state = localStorage.getItem(hybrid.id_)
-          if (state === null) {
-            state = parentsObj[hybrid.id_].length === 0 ? "takeable" : "inactive"
-          }
-          nodesStatus[hybrid.id_] = {
-            status: state,
-            selected: ["active", "overridden"].indexOf(state) >= 0,
-          }
         })
 
-        Object.values(edgesJSON).forEach(edge => {
+        edgesList.forEach(edge => {
           if (edge.target in parentsObj) {
             parentsObj[edge.target].push(edge.source)
             inEdgesObj[edge.target].push(edge.id_)
@@ -165,61 +142,13 @@ class GenerateForm extends React.Component {
           }
         })
 
-        Object.keys(boolsJSON).forEach(boolId => {
-          const parents = []
-          const childs = []
-          const outEdges = []
-          const inEdges = []
-          Object.values(edgesJSON).forEach(edge => {
-            if (boolId === edge.target) {
-              parents.push(edge.source)
-              inEdges.push(edge.id_)
-            } else if (boolId === edge.source) {
-              childs.push(edge.target)
-              outEdges.push(edge.id_)
-            }
-          })
-          parentsObj[boolId] = parents
-          childrenObj[boolId] = childs
-          outEdgesObj[boolId] = outEdges
-          inEdgesObj[boolId] = inEdges
-        })
-
-        const edgesStatus = Object.values(edgesJSON).reduce((acc, curr) => {
-          const source = curr.source
-          const target = curr.target
-          let status
-          const isSourceSelected =
-            nodesStatus[source]?.selected || boolsStatus[source] === "active"
-
-          const isTargetSelected =
-            nodesStatus[target]?.selected || boolsStatus[target] === "active"
-
-          const targetStatus = nodesStatus[target]?.status || boolsStatus[target]
-
-          if (!isSourceSelected && targetStatus === "missing") {
-            status = "missing"
-          } else if (!isSourceSelected) {
-            status = "inactive"
-          } else if (!isTargetSelected) {
-            status = "takeable"
-          } else {
-            status = "active"
-          }
-          acc[curr.id_] = status
-          return acc
-        }, {})
-
         this.graph.current.setState({
-          labelsJSON: labelsJSON,
-          regionsJSON: regionsJSON,
-          nodesJSON: nodesJSON,
-          hybridsJSON: hybridsJSON,
-          boolsJSON: boolsJSON,
-          edgesJSON: edgesJSON,
-          nodesStatus: nodesStatus,
-          edgesStatus: edgesStatus,
-          boolsStatus: boolsStatus,
+          labelsJSON: labelsList,
+          regionsJSON: regionsList,
+          nodesJSON: nodesList,
+          hybridsJSON: hybridsList,
+          boolsJSON: boolsList,
+          edgesJSON: edgesList,
           width: data.width,
           height: data.height,
           zoomFactor: 1,

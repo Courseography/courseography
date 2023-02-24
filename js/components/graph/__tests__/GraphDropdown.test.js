@@ -39,6 +39,7 @@ describe("GraphDropdown", () => {
       bubbles: false,
       cancelable: false,
     })
+
     const container = await TestContainer.build()
     const graphNav = container.getByText("Graph")
     const graphDropdown = container.getByTestId("test-graph-dropdown")
@@ -49,7 +50,7 @@ describe("GraphDropdown", () => {
     fireEvent.mouseOut(graphDropdown)
     await sleep(600)
     expect(graphDropdown.classList.contains("hidden")).toBe(true)
-  }, 5000)
+  })
 
   it("should disappear a second after the cursor isn't hovered on the graph tab", async () => {
     const mouseEnter = new MouseEvent("mouseenter", {
@@ -71,5 +72,5 @@ describe("GraphDropdown", () => {
     fireEvent(graphNav, mouseLeave)
     await sleep(600)
     expect(graphDropdown.classList.contains("hidden")).toBe(true)
-  }, 5000)
+  })
 })
