@@ -35,7 +35,10 @@
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js"
-    ]
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|sass|scss)$": "<rootDir>/js/components/graph/__mocks__/styleMock.js"
+    }
   },
   "lint-staged": {
     "*": "prettier --ignore-unknown --write"

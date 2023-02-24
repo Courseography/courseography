@@ -69,11 +69,11 @@ class CourseModal extends React.Component {
 
       lecture.timeData.map(occurrence => {
         let firstRoom = ""
-        occurrence.firstRoom === null
+        occurrence.firstRoom === null || occurrence.firstRoom === undefined
           ? (firstRoom = " ")
           : (firstRoom = occurrence.firstRoom.room)
         let secondRoom = ""
-        occurrence.secondRoom === null
+        occurrence.secondRoom === null || occurrence.firstRoom === undefined
           ? (secondRoom = " ")
           : (secondRoom = occurrence.secondRoom.room)
 
