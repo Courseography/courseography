@@ -3258,6 +3258,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ag-grid-community@npm:^29.0.0":
+  version: 29.0.0
+  resolution: "ag-grid-community@npm:29.0.0"
+  checksum: d9b222e75a9b79c36247c75812607cf2cd19b7b63eb233dc7308b6b0301e795a28482ac4309165d2b305779489cdc1e427bb90456b8812a97b25e863c7c6859e
+  languageName: node
+  linkType: hard
+
+"ag-grid-react@npm:^29.0.0":
+  version: 29.0.0
+  resolution: "ag-grid-react@npm:29.0.0"
+  dependencies:
+    prop-types: ^15.8.1
+  peerDependencies:
+    ag-grid-community: ~29.0.0
+    react: ^16.3.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
+  checksum: c1e044af015fd3c44f67f7fd1eff617fad2f5c964327565ad38241e4a029971bd026634480003c973817fd463903c6942c614077255c21f05e43885c163ef7a1
+  languageName: node
+  linkType: hard
+
 "agent-base@npm:6":
   version: 6.0.2
   resolution: "agent-base@npm:6.0.2"
@@ -4791,6 +4811,8 @@ __metadata:
     "@babel/preset-env": ^7.20.2
     "@babel/preset-react": ^7.18.6
     "@testing-library/react": ^12.0.0
+    ag-grid-community: ^29.0.0
+    ag-grid-react: ^29.0.0
     babel-jest: 26.6.3
     babel-loader: ^9.1.2
     core-js: ^3.11.0
@@ -10642,6 +10664,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prop-types@npm:^15.8.1":
+  version: 15.8.1
+  resolution: "prop-types@npm:15.8.1"
+  dependencies:
+    loose-envify: ^1.4.0
+    object-assign: ^4.1.1
+    react-is: ^16.13.1
+  checksum: c056d3f1c057cb7ff8344c645450e14f088a915d078dcda795041765047fa080d38e5d626560ccaac94a4e16e3aa15f3557c1a9a8d1174530955e992c675e459
+  languageName: node
+  linkType: hard
+
 "proxy-addr@npm:~2.0.7":
   version: 2.0.7
   resolution: "proxy-addr@npm:2.0.7"
@@ -10813,6 +10846,13 @@ __metadata:
   peerDependencies:
     react: ^16.0.0
   checksum: c678fcf48a653b8c67f8519248747bcf596876b912a52d8f7626247efe3bdf52d45c06bce1368735f79e036fc3d68638e185eccc8f4113bf77a3a62360a20580
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^16.13.1":
+  version: 16.13.1
+  resolution: "react-is@npm:16.13.1"
+  checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
   languageName: node
   linkType: hard
 
