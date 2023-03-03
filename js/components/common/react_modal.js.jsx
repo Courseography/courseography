@@ -66,10 +66,10 @@ class CourseModal extends React.Component {
     let allData = []
     sessions.map(lecture => {
       const occurrences = { times: [], Rooms: [] }
-      // const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
-      //   occ1.weekDay > occ2.weekDay ? 1 : -1
-      // )
-      lecture.timeData.map(occurrence => {
+      const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
+        occ1.weekDay > occ2.weekDay ? 1 : -1
+      )
+      sortedTimeData.map(occurrence => {
         let firstRoom = ""
         occurrence.firstRoom === null || occurrence.firstRoom === undefined
           ? (firstRoom = " ")
