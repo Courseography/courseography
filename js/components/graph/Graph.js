@@ -1,3 +1,5 @@
+import "ag-grid-community/styles/ag-grid.css"
+import "ag-grid-community/styles/ag-theme-alpine.css"
 import React from "react"
 import PropTypes from "prop-types"
 import { CourseModal } from "../common/react_modal.js.jsx"

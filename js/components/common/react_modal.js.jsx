@@ -1,5 +1,3 @@
-import "ag-grid-community/styles/ag-grid.css"
-import "ag-grid-community/styles/ag-theme-alpine.css"
 import React, { createRef } from "react"
 import ReactModal from "react-modal"
 import Leaflet from "leaflet"
@@ -19,6 +17,8 @@ import L from "leaflet"
 import { getCourse, getPost } from "../common/utils"
 import { AgGridReact } from "ag-grid-react"
 
+const convertToDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+
 class ModalContent extends React.Component {
   render() {
     return (
@@ -35,56 +35,48 @@ class CourseModal extends React.Component {
     this.state = {
       courseId: "",
       course: [],
-      sessions: [],
+      sessions: {},
       courseTitle: "",
-      allDataF: [],
-      allDataS: [],
     }
   }
 
-  convertToDay(day) {
-    switch (day) {
-      case 0:
-        return "Monday"
-      case 1:
-        return "Tuesday"
-      case 2:
-        return "Wednesday"
+  /**
+   * Generate the data needed for each row of the timetable based on course meeting times for
+   * each session F, S, Y.
+   */
+  getTable(allMeetingTimes, session) {
+    const sessions = allMeetingTimes.filter(lec => lec.meetData.session === session)
+    const sortedSessions = sessions.sort((firstLec, secondLec) =>
+      firstLec.meetData.section > secondLec.meetData.section ? 1 : -1
+    )
 
-      case 3:
-        return "Thursday"
-
-      case 4:
-        return "Friday"
-
-      case 5:
-        return "Friday"
-    }
-  }
-
-  getTable(sessions) {
     let allData = []
-    sessions.map(lecture => {
-      const occurrences = { times: [], Rooms: [] }
+    sortedSessions.forEach(lecture => {
+      const occurrences = { times: [], rooms: [] }
       const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
         occ1.weekDay > occ2.weekDay ? 1 : -1
       )
       sortedTimeData.map(occurrence => {
         let firstRoom = ""
-        occurrence.firstRoom === null || occurrence.firstRoom === undefined
-          ? (firstRoom = " ")
-          : (firstRoom = occurrence.firstRoom.room)
+        if (occurrence.firstRoom === null || occurrence.firstRoom === undefined) {
+          firstRoom = " "
+        } else {
+          firstRoom = occurrence.firstRoom.room
+        }
+
         let secondRoom = ""
-        occurrence.secondRoom === null || occurrence.firstRoom === undefined
-          ? (secondRoom = " ")
-          : (secondRoom = occurrence.secondRoom.room)
+        if (occurrence.secondRoom === null || occurrence.secondRoom === undefined) {
+          secondRoom = " "
+        } else {
+          secondRoom = occurrence.secondRoom.room
+        }
 
         if ((firstRoom != " ") & (secondRoom != " ")) {
           firstRoom += ", "
         }
-        occurrences.Rooms.push(firstRoom + secondRoom)
+        occurrences.rooms.push(firstRoom + secondRoom)
         occurrences.times.push(
-          this.convertToDay(occurrence.weekDay) +
+          convertToDay[occurrence.weekDay] +
             "  " +
             occurrence.startHour +
             " - " +
@@ -100,9 +92,9 @@ class CourseModal extends React.Component {
           " of " +
           lecture.meetData.cap +
           " available",
-        WaitList: lecture.meetData.wait + " Student",
+        WaitList: lecture.meetData.wait + " students",
         Time: occurrences.times,
-        Room: occurrences.Rooms,
+        Room: occurrences.rooms,
       }
 
       allData.push(rowData)
@@ -116,28 +108,16 @@ class CourseModal extends React.Component {
       getCourse(this.props.courseId).then(course => {
         // Tutorials don't have a timeStr to print, so I've currently omitted them
 
-        const sessionsF = course.allMeetingTimes.filter(
-          lec => lec.meetData.session === "F"
-        )
-        const sessionsS = course.allMeetingTimes.filter(
-          lec => lec.meetData.session === "S"
-        )
-        const sortedSessionsF = sessionsF.sort((firstLec, secondLec) =>
-          firstLec.meetData.section > secondLec.meetData.section ? 1 : -1
-        )
-        const sortedSessionsS = sessionsS.sort((firstLec, secondLec) =>
-          firstLec.meetData.section > secondLec.meetData.section ? 1 : -1
-        )
-
-        const allDataF = this.getTable(sortedSessionsF)
-        const allDataS = this.getTable(sortedSessionsS)
+        const sessions = {
+          F: this.getTable(course.allMeetingTimes, "F"),
+          S: this.getTable(course.allMeetingTimes, "S"),
+          Y: this.getTable(course.allMeetingTimes, "Y"),
+        }
 
         this.setState({
           course: course,
-          sessions: sessionsF.concat(sessionsS),
+          sessions: sessions,
           courseTitle: `${this.props.courseId.toUpperCase()} ${course.title}`,
-          allDataF: allDataF,
-          allDataS: allDataS,
         })
       })
     }
@@ -199,70 +179,39 @@ class Description extends React.Component {
           <strong>Timetable: </strong>
         </p>
 
-        {this.props.allDataF.length !== 0 ? (
-          <>
-            <h2>{this.props.course.name + "-F"}</h2>
-            <div className="ag-theme-alpine" style={{ height: 500, width: 940 }}>
-              <AgGridReact
-                rowData={this.props.allDataF}
-                columnDefs={[
-                  { field: "Activity", width: 130 },
-                  { field: "Instructor", width: 170 },
-                  { field: "Availability" },
-                  { field: "WaitList", width: 120 },
-                  {
-                    field: "Time",
-                    cellStyle: { whiteSpace: "pre" },
-                    cellRenderer: param => this.cellRendererBreak(param.data.Time),
-                  },
-                  {
-                    field: "Room",
-                    cellStyle: { whiteSpace: "pre" },
-                    cellRenderer: param => this.cellRendererBreak(param.data.Room),
-                    width: 140,
-                  },
-                ]}
-                animateRows={true}
-                rowSelection="multiple"
-                rowHeight="100"
-              ></AgGridReact>
+        {Object.keys(this.props.sessions).map(session =>
+          this.props.sessions[session].length !== 0 ? (
+            <div key={session}>
+              <h2>{this.props.course.name + "-" + session}</h2>
+              <div className="ag-theme-alpine" style={{ height: 500, width: 940 }}>
+                <AgGridReact
+                  rowData={this.props.sessions[session]}
+                  columnDefs={[
+                    { field: "Activity", width: 130 },
+                    { field: "Instructor", width: 170 },
+                    { field: "Availability" },
+                    { field: "WaitList", width: 120 },
+                    {
+                      field: "Time",
+                      cellStyle: { whiteSpace: "pre" },
+                      cellRenderer: param => this.cellRendererBreak(param.data.Time),
+                    },
+                    {
+                      field: "Room",
+                      cellStyle: { whiteSpace: "pre" },
+                      cellRenderer: param => this.cellRendererBreak(param.data.Room),
+                      width: 140,
+                    },
+                  ]}
+                  animateRows={true}
+                  rowSelection="multiple"
+                  rowHeight="100"
+                ></AgGridReact>
+              </div>
             </div>
-          </>
-        ) : (
-          <div></div>
-        )}
-
-        {this.props.allDataS.length !== 0 ? (
-          <>
-            <h2>{this.props.course.name + "-S"}</h2>
-            <div className="ag-theme-alpine" style={{ height: 500, width: 940 }}>
-              <AgGridReact
-                rowData={this.props.allDataS}
-                columnDefs={[
-                  { field: "Activity", width: 130 },
-                  { field: "Instructor", width: 170 },
-                  { field: "Availability" },
-                  { field: "WaitList", width: 120 },
-                  {
-                    field: "Time",
-                    cellStyle: { whiteSpace: "pre" },
-                    cellRenderer: param => this.cellRendererBreak(param.data.Time),
-                  },
-                  {
-                    field: "Room",
-                    cellStyle: { whiteSpace: "pre" },
-                    cellRenderer: param => this.cellRendererBreak(param.data.Room),
-                    width: 140,
-                  },
-                ]}
-                animateRows={true}
-                rowSelection="multiple"
-                rowHeight="100"
-              ></AgGridReact>
-            </div>
-          </>
-        ) : (
-          <div></div>
+          ) : (
+            <div></div>
+          )
         )}
 
         {/* <Video urls={this.props.course.videoUrls} /> */}
