@@ -33,20 +33,63 @@ class CourseModal extends React.Component {
       courseId: "",
       course: [],
       sessions: [],
+      siblingCourses: [],
       courseTitle: "",
+      clicked: 0,
     }
   }
 
+  // clickSibling = s => {
+  //   let copyState = this.state
+  //   copyState.courseId = s
+  //   copyState.clicked = 1
+  //   this.setState(copyState)
+  // }
+  clickSibling = () => {
+    console.log("clicked")
+    let copyState = this.state
+    copyState.courseId = "CSC207"
+    copyState.clicked = 1
+    this.setState(copyState)
+  }
+
+  getRelatedCourses = content => {
+    if (content !== null) {
+      return content.replaceAll(
+        /[A-Z]{3,4}[0-9]{3}[H|Y]1/gi,
+        //  match => "<a style=cursor:pointer onClick=  this.clickSibling>" + match + "</a>"
+        match => "<a style=cursor:pointer onClick= alert('hi')" + ">" + match + "</a>"
+      )
+    }
+    return ""
+  }
+
   componentDidUpdate(prevProps) {
+    let changed = 0
     if (prevProps.courseId !== this.props.courseId && this.props.courseId !== "") {
-      getCourse(this.props.courseId).then(course => {
+      changed = 1
+    } else if (this.state.clicked === 1) {
+      changed = 2
+    }
+    if (changed !== 0) {
+      let newCourse = ""
+      changed === 1
+        ? (newCourse = this.props.courseId)
+        : (newCourse = this.state.courseId)
+
+      getCourse(newCourse).then(course => {
         // Tutorials don't have a timeStr to print, so I've currently omitted them
+        let courseCopy = course
+        courseCopy.description = this.getRelatedCourses(course.description)
+        courseCopy.prereqString = this.getRelatedCourses(course.prereqString)
+
         this.setState({
-          course: course,
+          course: courseCopy,
           sessions: course.allMeetingTimes.sort((firstLec, secondLec) =>
             firstLec.meetData.session > secondLec.meetData.session ? 1 : -1
           ),
-          courseTitle: `${this.props.courseId.toUpperCase()} ${course.title}`,
+          courseTitle: `${newCourse.toUpperCase()} ${course.title}`,
+          clicked: 0,
         })
       })
     }
@@ -63,7 +106,11 @@ class CourseModal extends React.Component {
       >
         <div className="modal-header">{this.state.courseTitle}</div>
         <div className="modal-body">
-          <Description course={this.state.course} sessions={this.state.sessions} />
+          <Description
+            course={this.state.course}
+            sessions={this.state.sessions}
+            clickSibling={this.clickSibling}
+          />
         </div>
       </ReactModal>
     )
@@ -72,14 +119,26 @@ class CourseModal extends React.Component {
 
 //Use React component from search.js
 class Description extends React.Component {
+  clickSibling = () => {
+    console.log("cliked2")
+    this.props.clickSibling()
+  }
   render() {
     //We want to use the Timetable component, but that component needs to be independent before using it here
     return (
       <div>
-        <p>{this.props.course.description}</p>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: this.props.course.description,
+          }}
+        ></p>
         <p>
           <strong>Prerequisite: </strong>
-          {this.props.course.prereqString}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: this.props.course.prereqString,
+            }}
+          ></div>
         </p>
         <p>
           <strong>Distribution Requirement Status: </strong>
