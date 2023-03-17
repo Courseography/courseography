@@ -33,22 +33,14 @@ class CourseModal extends React.Component {
       courseId: "",
       course: [],
       sessions: [],
-      siblingCourses: [],
       courseTitle: "",
       clicked: 0,
     }
   }
 
-  // clickSibling = s => {
-  //   let copyState = this.state
-  //   copyState.courseId = s
-  //   copyState.clicked = 1
-  //   this.setState(copyState)
-  // }
-  clickSibling = () => {
-    console.log("clicked")
+  clickRelated = s => {
     let copyState = this.state
-    copyState.courseId = "CSC207"
+    copyState.courseId = s
     copyState.clicked = 1
     this.setState(copyState)
   }
@@ -57,8 +49,7 @@ class CourseModal extends React.Component {
     if (content !== null) {
       return content.replaceAll(
         /[A-Z]{3,4}[0-9]{3}[H|Y]1/gi,
-        //  match => "<a style=cursor:pointer onClick=  this.clickSibling>" + match + "</a>"
-        match => "<a style=cursor:pointer onClick= alert('hi')" + ">" + match + "</a>"
+        match => "<a style=cursor:pointer value=" + match + ">" + match + "</a>"
       )
     }
     return ""
@@ -109,7 +100,7 @@ class CourseModal extends React.Component {
           <Description
             course={this.state.course}
             sessions={this.state.sessions}
-            clickSibling={this.clickSibling}
+            clickRelated={this.clickRelated}
           />
         </div>
       </ReactModal>
@@ -119,26 +110,29 @@ class CourseModal extends React.Component {
 
 //Use React component from search.js
 class Description extends React.Component {
-  clickSibling = () => {
-    console.log("cliked2")
-    this.props.clickSibling()
+  clickRelated = e => {
+    if (e.target.tagName === "A") {
+      this.props.clickRelated(e.target.getAttribute("value"))
+    }
   }
   render() {
     //We want to use the Timetable component, but that component needs to be independent before using it here
     return (
       <div>
         <p
+          onClick={this.clickRelated}
           dangerouslySetInnerHTML={{
             __html: this.props.course.description,
           }}
         ></p>
         <p>
           <strong>Prerequisite: </strong>
-          <div
+          <p
+            onClick={this.clickRelated}
             dangerouslySetInnerHTML={{
               __html: this.props.course.prereqString,
             }}
-          ></div>
+          ></p>
         </p>
         <p>
           <strong>Distribution Requirement Status: </strong>
