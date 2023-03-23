@@ -37,7 +37,9 @@ class CourseModal extends React.Component {
       clicked: 0,
     }
   }
-
+  /**
+   * Change the clicked and courseId state, whenever a course link is clicked.
+   */
   clickRelated = s => {
     let copyState = this.state
     copyState.courseId = s
@@ -45,19 +47,43 @@ class CourseModal extends React.Component {
     this.setState(copyState)
   }
 
+  /**
+   * Convert the course names to <a> tags and return a list of strings and <a> tags.
+   */
   getRelatedCourses = content => {
+    result = []
     if (content !== null) {
-      return content.replaceAll(
-        /[A-Z]{3,4}[0-9]{3}[H|Y]1/gi,
-        match => "<a style=cursor:pointer value=" + match + ">" + match + "</a>"
-      )
+      content.split(" ").forEach(word => {
+        if (word.match(/[A-Z]{3,4}[0-9]{3}[H|Y]1/gi)) {
+          symbol = ""
+          // check if the last character is not 1 (is a symbol). If so, remove it from word and
+          // add it as a separate string to the list.
+          if (word.charAt(word.length - 1) !== 1) {
+            symbol = word.charAt(word.length - 1)
+            word = word.substring(0, word.length - 1)
+          }
+          result.push(
+            <a
+              key={word}
+              style={{ cursor: "pointer" }}
+              onClick={() => this.clickRelated(word)}
+            >
+              {word}
+            </a>
+          )
+          result.push(symbol)
+        } else {
+          result.push(word)
+        }
+        result.push(" ")
+      })
     }
-    return ""
+    return result
   }
 
   componentDidUpdate(prevProps) {
     let changed = 0
-    if (prevProps.courseId !== this.props.courseId && this.props.courseId !== "") {
+    if (this.props.showCourseModal !== prevProps.showCourseModal) {
       changed = 1
     } else if (this.state.clicked === 1) {
       changed = 2
@@ -110,29 +136,14 @@ class CourseModal extends React.Component {
 
 //Use React component from search.js
 class Description extends React.Component {
-  clickRelated = e => {
-    if (e.target.tagName === "A") {
-      this.props.clickRelated(e.target.getAttribute("value"))
-    }
-  }
   render() {
     //We want to use the Timetable component, but that component needs to be independent before using it here
     return (
       <div>
-        <p
-          onClick={this.clickRelated}
-          dangerouslySetInnerHTML={{
-            __html: this.props.course.description,
-          }}
-        ></p>
+        <p>{this.props.course.description}</p>
         <p>
           <strong>Prerequisite: </strong>
-          <p
-            onClick={this.clickRelated}
-            dangerouslySetInnerHTML={{
-              __html: this.props.course.prereqString,
-            }}
-          ></p>
+          {this.props.course.prereqString}
         </p>
         <p>
           <strong>Distribution Requirement Status: </strong>
