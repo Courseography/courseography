@@ -72,7 +72,7 @@ class CourseModal extends React.Component {
           result.push(
             <a
               key={i}
-              className="courseSelection"
+              className="course-selection"
               onClick={() => this.clickRelated(word)}
             >
               {word}
