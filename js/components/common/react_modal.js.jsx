@@ -15,6 +15,8 @@ import {
 } from "react-leaflet"
 import L from "leaflet"
 import { getCourse, getPost } from "../common/utils"
+import { result } from "lodash"
+import { symbol } from "prop-types"
 
 class ModalContent extends React.Component {
   render() {
@@ -53,18 +55,25 @@ class CourseModal extends React.Component {
   getRelatedCourses = content => {
     result = []
     if (content !== null) {
-      content.split(" ").forEach(word => {
+      content.split(" ").forEach((word, i) => {
         if (word.match(/[A-Z]{3,4}[0-9]{3}[H|Y]1/gi)) {
           symbol = ""
           // check if the last character is not 1 (is a symbol). If so, remove it from word and
           // add it as a separate string to the list.
-          if (word.charAt(word.length - 1) !== 1) {
-            symbol = word.charAt(word.length - 1)
-            word = word.substring(0, word.length - 1)
-          }
+          const sessions = ["H1", "Y1"]
+          sessions.forEach(session => {
+            if (
+              word.indexOf(session) !== word.length - 1 &&
+              word.indexOf(session) !== -1
+            ) {
+              symbol = word.substring(word.indexOf(session) + 2)
+              word = word.substring(0, word.indexOf(session) + 2)
+            }
+          })
+
           result.push(
             <a
-              key={word}
+              key={i}
               style={{ cursor: "pointer" }}
               onClick={() => this.clickRelated(word)}
             >
@@ -126,6 +135,7 @@ class CourseModal extends React.Component {
           <Description
             course={this.state.course}
             sessions={this.state.sessions}
+            clickRelated={this.clickRelated}
           />
         </div>
       </ReactModal>
