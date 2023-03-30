@@ -15,8 +15,6 @@ import {
 } from "react-leaflet"
 import L from "leaflet"
 import { getCourse, getPost } from "../common/utils"
-import { result } from "lodash"
-import { symbol } from "prop-types"
 
 class ModalContent extends React.Component {
   render() {
