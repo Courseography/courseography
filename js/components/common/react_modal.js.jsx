@@ -51,11 +51,11 @@ class CourseModal extends React.Component {
    * Convert the course names to <a> tags and return a list of strings and <a> tags.
    */
   getRelatedCourses = content => {
-    result = []
+    const result = []
     if (content !== null) {
       content.split(" ").forEach((word, i) => {
         if (word.match(/[A-Z]{3,4}[0-9]{3}[H|Y]1/gi)) {
-          symbol = ""
+          let symbol = ""
           // check if the last character is not 1 (is a symbol). If so, remove it from word and
           // add it as a separate string to the list.
           const sessions = ["H1", "Y1"]
