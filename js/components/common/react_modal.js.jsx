@@ -74,7 +74,7 @@ class CourseModal extends React.Component {
           result.push(
             <a
               key={i}
-              style={{ cursor: "pointer" }}
+              className="courseSelection"
               onClick={() => this.clickRelated(word)}
             >
               {word}
