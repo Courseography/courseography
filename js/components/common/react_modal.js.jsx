@@ -133,7 +133,6 @@ class CourseModal extends React.Component {
           <Description
             course={this.state.course}
             sessions={this.state.sessions}
-            clickRelated={this.clickRelated}
           />
         </div>
       </ReactModal>
