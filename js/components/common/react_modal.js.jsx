@@ -34,27 +34,25 @@ class CourseModal extends React.Component {
       course: [],
       sessions: [],
       courseTitle: "",
-      clicked: 0,
     }
   }
+
   /**
-   * Change the clicked and courseId state, whenever a course link is clicked.
+   * Change the courseId state, whenever a course link is clicked.
    */
-  clickRelated = s => {
-    let copyState = this.state
-    copyState.courseId = s
-    copyState.clicked = 1
-    this.setState(copyState)
+  linkStateChange = courseLink => {
+    this.setState({ courseId: courseLink })
   }
 
   /**
    * Convert the course names to <a> tags and return a list of strings and <a> tags.
    */
-  getRelatedCourses = content => {
+  convertToLink = content => {
     const result = []
+    const pattern = /^[A-Z]{3}[0-9]{3}[H|Y]1.?$/
     if (content !== null) {
       content.split(" ").forEach((word, i) => {
-        if (word.match(/[A-Z]{3,4}[0-9]{3}[H|Y]1/gi)) {
+        if (word.match(pattern)) {
           let symbol = ""
           // check if the last character is not 1 (is a symbol). If so, remove it from word and
           // add it as a separate string to the list.
@@ -73,7 +71,7 @@ class CourseModal extends React.Component {
             <a
               key={i}
               className="course-selection"
-              onClick={() => this.clickRelated(word)}
+              onClick={() => this.linkStateChange(word)}
             >
               {word}
             </a>
@@ -88,32 +86,22 @@ class CourseModal extends React.Component {
     return result
   }
 
-  componentDidUpdate(prevProps) {
-    let changed = 0
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.showCourseModal !== prevProps.showCourseModal) {
-      changed = 1
-    } else if (this.state.clicked === 1) {
-      changed = 2
-    }
-    if (changed !== 0) {
-      let newCourse = ""
-      changed === 1
-        ? (newCourse = this.props.courseId)
-        : (newCourse = this.state.courseId)
-
-      getCourse(newCourse).then(course => {
+      this.setState({ courseId: this.props.courseId })
+    } else if (prevState.courseId !== this.state.courseId) {
+      getCourse(this.state.courseId).then(course => {
         // Tutorials don't have a timeStr to print, so I've currently omitted them
         let courseCopy = course
-        courseCopy.description = this.getRelatedCourses(course.description)
-        courseCopy.prereqString = this.getRelatedCourses(course.prereqString)
+        courseCopy.description = this.convertToLink(course.description)
+        courseCopy.prereqString = this.convertToLink(course.prereqString)
 
         this.setState({
           course: courseCopy,
           sessions: course.allMeetingTimes.sort((firstLec, secondLec) =>
             firstLec.meetData.session > secondLec.meetData.session ? 1 : -1
           ),
-          courseTitle: `${newCourse.toUpperCase()} ${course.title}`,
-          clicked: 0,
+          courseTitle: `${this.state.courseId.toUpperCase()} ${course.title}`,
         })
       })
     }
@@ -130,10 +118,7 @@ class CourseModal extends React.Component {
       >
         <div className="modal-header">{this.state.courseTitle}</div>
         <div className="modal-body">
-          <Description
-            course={this.state.course}
-            sessions={this.state.sessions}
-          />
+          <Description course={this.state.course} sessions={this.state.sessions} />
         </div>
       </ReactModal>
     )
