@@ -180,7 +180,7 @@ class CourseModal extends React.Component {
     }
   }
 
-   /* Generate the data needed for each row of the timetable based on course meeting times for
+  /* Generate the data needed for each row of the timetable based on course meeting times for
    * each session F, S, Y.
    */
   getTable(allMeetingTimes, session) {
@@ -238,8 +238,6 @@ class CourseModal extends React.Component {
       return rowData
     })
   }
-
-  
 
   render() {
     return (
