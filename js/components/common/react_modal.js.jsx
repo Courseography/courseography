@@ -25,6 +25,8 @@ const DAY_TO_INT = {
   4: "Friday",
 }
 
+const COURSE_CODE_REGEX = /([A-Z]{3}[0-9]{3}[H|Y]1)/
+
 class ModalContent extends React.Component {
   render() {
     return (
@@ -106,10 +108,51 @@ class CourseModal extends React.Component {
     })
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.courseId !== this.props.courseId && this.props.courseId !== "") {
-      getCourse(this.props.courseId).then(course => {
-        // Tutorials don't have a timeStr to print, so I've currently omitted them
+  /**
+   * Change the courseId state, whenever a course link is clicked.
+   */
+  linkStateChange = courseLink => {
+    this.setState({ courseId: courseLink })
+  }
+
+  /**
+   * Convert the course names to <a> tags and return a list of strings and <a> tags.
+   */
+  convertToLink = content => {
+    if (!content) {
+      return []
+    }
+
+    const result = content.split(COURSE_CODE_REGEX)
+    for (let i = 0; i < result.length; i++) {
+      let word = result[i]
+      if (word.match(COURSE_CODE_REGEX)) {
+        result[i] = (
+          <a
+            key={i}
+            className="course-selection"
+            onClick={() => this.linkStateChange(word)}
+          >
+            {word}
+          </a>
+        )
+      }
+    }
+    return result
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.showCourseModal !== prevProps.showCourseModal) {
+      this.setState({ courseId: this.props.courseId })
+    } else if (prevState.courseId !== this.state.courseId) {
+      getCourse(this.state.courseId).then(course => {
+        const newCourse = {
+          ...course,
+          description: this.convertToLink(course.description),
+          prereqString: this.convertToLink(course.prereqString),
+          coreqs: this.convertToLink(course.coreq),
+          exclusions: this.convertToLink(course.exclusions),
+        }
 
         const sessions = {
           F: this.getTable(course.allMeetingTimes, "F"),
@@ -118,12 +161,71 @@ class CourseModal extends React.Component {
         }
 
         this.setState({
-          course: course,
+          course: newCourse,
           sessions: sessions,
-          courseTitle: `${this.props.courseId.toUpperCase()} ${course.title}`,
+          courseTitle: `${this.state.courseId.toUpperCase()} ${course.title}`,
         })
       })
     }
+  }
+
+  /* Generate the data needed for each row of the timetable based on course meeting times for
+   * each session F, S, Y.
+   */
+  getTable(allMeetingTimes, session) {
+    const sessions = allMeetingTimes.filter(lec => lec.meetData.session === session)
+    const sortedSessions = sessions.sort((firstLec, secondLec) =>
+      firstLec.meetData.section > secondLec.meetData.section ? 1 : -1
+    )
+
+    return sortedSessions.map(lecture => {
+      const occurrences = { times: [], rooms: [] }
+      const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
+        occ1.weekDay > occ2.weekDay ? 1 : -1
+      )
+      sortedTimeData.map(occurrence => {
+        let firstRoom = ""
+        if (occurrence.firstRoom === null || occurrence.firstRoom === undefined) {
+          firstRoom = " "
+        } else {
+          firstRoom = occurrence.firstRoom.room
+        }
+
+        let secondRoom = ""
+        if (occurrence.secondRoom === null || occurrence.secondRoom === undefined) {
+          secondRoom = " "
+        } else {
+          secondRoom = occurrence.secondRoom.room
+        }
+
+        if ((firstRoom != " ") & (secondRoom != " ")) {
+          firstRoom += ", "
+        }
+        occurrences.rooms.push(firstRoom + secondRoom)
+        occurrences.times.push(
+          DAY_TO_INT[occurrence.weekDay] +
+            "  " +
+            occurrence.startHour +
+            " - " +
+            occurrence.endHour
+        )
+      })
+      const rowData = {
+        activity: lecture.meetData.section,
+        instructor: lecture.meetData.instructor,
+        availability:
+          lecture.meetData.cap -
+          lecture.meetData.enrol +
+          " of " +
+          lecture.meetData.cap +
+          " available",
+        waitList: lecture.meetData.wait + " students",
+        time: occurrences.times,
+        room: occurrences.rooms,
+      }
+
+      return rowData
+    })
   }
 
   render() {
