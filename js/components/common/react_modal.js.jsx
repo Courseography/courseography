@@ -25,6 +25,8 @@ const DAY_TO_INT = {
   4: "Friday",
 }
 
+const COURSE_CODE_REGEX = /([A-Z]{3}[0-9]{3}[H|Y]1)/
+
 class ModalContent extends React.Component {
   render() {
     return (
@@ -117,40 +119,24 @@ class CourseModal extends React.Component {
    * Convert the course names to <a> tags and return a list of strings and <a> tags.
    */
   convertToLink = content => {
-    const result = []
-    const pattern = /^[A-Z]{3}[0-9]{3}[H|Y]1.?$/
-    if (content !== null) {
-      content.split(" ").forEach((word, i) => {
-        if (word.match(pattern)) {
-          let symbol = ""
-          // check if the last character is not 1 (is a symbol). If so, remove it from word and
-          // add it as a separate string to the list.
-          const sessions = ["H1", "Y1"]
-          sessions.forEach(session => {
-            if (
-              word.indexOf(session) !== word.length - 1 &&
-              word.indexOf(session) !== -1
-            ) {
-              symbol = word.substring(word.indexOf(session) + 2)
-              word = word.substring(0, word.indexOf(session) + 2)
-            }
-          })
+    if (!content) {
+      return []
+    }
 
-          result.push(
-            <a
-              key={i}
-              className="course-selection"
-              onClick={() => this.linkStateChange(word)}
-            >
-              {word}
-            </a>
-          )
-          result.push(symbol)
-        } else {
-          result.push(word)
-        }
-        result.push(" ")
-      })
+    const result = content.split(COURSE_CODE_REGEX)
+    for (let i = 0; i < result.length; i++) {
+      let word = result[i]
+      if (word.match(COURSE_CODE_REGEX)) {
+        result[i] = (
+          <a
+            key={i}
+            className="course-selection"
+            onClick={() => this.linkStateChange(word)}
+          >
+            {word}
+          </a>
+        )
+      }
     }
     return result
   }
@@ -160,10 +146,13 @@ class CourseModal extends React.Component {
       this.setState({ courseId: this.props.courseId })
     } else if (prevState.courseId !== this.state.courseId) {
       getCourse(this.state.courseId).then(course => {
-        // Tutorials don't have a timeStr to print, so I've currently omitted them
-        let courseCopy = course
-        courseCopy.description = this.convertToLink(course.description)
-        courseCopy.prereqString = this.convertToLink(course.prereqString)
+        const newCourse = {
+          ...course,
+          description: this.convertToLink(course.description),
+          prereqString: this.convertToLink(course.prereqString),
+          coreqs: this.convertToLink(course.coreq),
+          exclusions: this.convertToLink(course.exclusions),
+        }
 
         const sessions = {
           F: this.getTable(course.allMeetingTimes, "F"),
@@ -172,7 +161,7 @@ class CourseModal extends React.Component {
         }
 
         this.setState({
-          course: courseCopy,
+          course: newCourse,
           sessions: sessions,
           courseTitle: `${this.state.courseId.toUpperCase()} ${course.title}`,
         })

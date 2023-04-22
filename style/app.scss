@@ -590,15 +590,12 @@ div.sidebar.collapsed {
   overflow: auto;
 }
 
-.course-selection {
-  font-size: 14px;
-  margin-right: auto;
-  text-align: center;
-  width: 100%;
-}
-
+.course-selection,
 .course-selection:hover {
   cursor: pointer;
+  font-weight: normal;
+  text-decoration: underline;
+  text-decoration-color: #4c004c;
 }
 
 .sidebar-button:hover {

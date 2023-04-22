@@ -16,22 +16,7 @@ describe("ConvertToLink", () => {
     })
     test("The content is returned as all strings", () => {
       actual = wrapper.convertToLink(content)
-      expected = [
-        "The",
-        " ",
-        "application",
-        " ",
-        "of",
-        " ",
-        "logic",
-        " ",
-        "and",
-        " ",
-        "proof",
-        " ",
-        "techniques.",
-        " ",
-      ]
+      expected = [content]
       expect(actual).toEqual(expected)
     })
   })
@@ -43,31 +28,15 @@ describe("ConvertToLink", () => {
     test("The content is returned as one link tag and several strings", () => {
       actual = wrapper.convertToLink(content)
       expected = [
-        "Certain",
-        " ",
-        "topics",
-        " ",
-        "briefly",
-        " ",
-        "mentioned",
-        " ",
-        "in",
-        " ",
+        "Certain topics briefly mentioned in ",
         <a
-          key="5"
+          key="1"
           className="course-selection"
           onClick={() => this.clickCourseLink("CSC165H1")}
         >
           CSC165H1
         </a>,
-        "",
-        " ",
-        "may",
-        " ",
-        "be",
-        " ",
-        "covered.",
-        " ",
+        " may be covered.",
       ]
       expect(JSON.stringify(actual)).toEqual(JSON.stringify(expected))
     })
@@ -81,23 +50,15 @@ describe("ConvertToLink", () => {
          (including the symbol after the course name", () => {
       actual = wrapper.convertToLink(content)
       expected = [
-        "(60%",
-        " ",
-        "or",
-        " ",
-        "higher",
-        " ",
-        "in",
-        " ",
+        "(60% or higher in ",
         <a
-          key="4"
+          key="1"
           className="course-selection"
           onClick={() => this.clickCourseLink("CSC111H1")}
         >
           CSC111H1
         </a>,
         ")",
-        " ",
       ]
       expect(JSON.stringify(actual)).toEqual(JSON.stringify(expected))
     })
