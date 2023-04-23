@@ -35,7 +35,7 @@ insertElements (paths, shapes, texts) = do
 deleteGraphs :: SqlPersistM ()
 deleteGraphs = do
     runMigration migrateAll
-    deleteWhere ([] :: [Filter Graph])
     deleteWhere ([] :: [Filter Text])
     deleteWhere ([] :: [Filter Shape])
     deleteWhere ([] :: [Filter Path])
+    deleteWhere ([] :: [Filter Graph])

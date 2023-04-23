@@ -83,6 +83,7 @@ If you are contributing to Courseography, you should install our pre-commit hook
 This project would not exist without the contributions of many students in the Department of Computer Science. In alphabetical order, our contributors are:
 
 Alex Baluta,
+Mehdi Benallegue,
 Alexander Biggs,
 Kelly Bell,
 Ching Chang,
