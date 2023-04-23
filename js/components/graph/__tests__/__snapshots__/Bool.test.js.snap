@@ -9,19 +9,19 @@ exports[`AND Bool should match shallow snapshot 1`] = `
   height={14.7368002}
   id="bool1"
   pos={
-    Array [
+    [
       1020.015148,
       243.51310800000002,
     ]
   }
   stroke=""
   text={
-    Array [
-      Object {
+    [
+      {
         "align": "begin",
         "fill": "",
         "graph": 1,
-        "pos": Array [
+        "pos": [
           1012.903868,
           246.655709,
         ],
@@ -58,19 +58,19 @@ exports[`OR Bool should match shallow snapshot 1`] = `
   height={14.7368002}
   id="bool1"
   pos={
-    Array [
+    [
       1020.015148,
       243.51310800000002,
     ]
   }
   stroke=""
   text={
-    Array [
-      Object {
+    [
+      {
         "align": "begin",
         "fill": "",
         "graph": 1,
-        "pos": Array [
+        "pos": [
           1012.903868,
           246.655709,
         ],

@@ -29,7 +29,7 @@ describe("InfoBox", () => {
     expect(infoBox.classList.contains("tooltip-group-display")).toBe(true)
   })
 
-  it("should disappear a second after the the cursor isn't hovered over the course", async done => {
+  it("should disappear a second after the the cursor isn't hovered over the course", async () => {
     const graph = await TestGraph.build()
     const aaa100 = graph.getByTestId("aaa100")
 
@@ -41,10 +41,10 @@ describe("InfoBox", () => {
 
     setTimeout(() => {
       expect(infoBox.classList.contains("tooltip-group-hidden")).toBe(true)
-      done()
     }, 1000)
   }, 5000)
-  it("Pressing on the info box should create a new pop up", async done => {
+
+  it("Pressing on the info box should create a new pop up", async () => {
     const graph = await TestGraph.build()
     const aaa100 = graph.getByTestId("aaa100")
     fireEvent.mouseOver(aaa100)
@@ -55,7 +55,6 @@ describe("InfoBox", () => {
     setTimeout(() => {
       // expect description in the modal box to appear
       expect(graph.textExists(/AAA Thinking/)).toBe(true)
-      done()
     }, 1000)
   })
 })

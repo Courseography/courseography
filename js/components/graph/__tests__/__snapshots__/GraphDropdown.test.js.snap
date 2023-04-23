@@ -7,7 +7,7 @@ exports[`GraphDropdown should match shallow snapshot 1`] = `
   onMouseLeave={[MockFunction]}
   onMouseMove={[MockFunction]}
   style={
-    Object {
+    {
       "left": 0,
     }
   }

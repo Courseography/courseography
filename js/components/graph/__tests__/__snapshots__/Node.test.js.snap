@@ -17,7 +17,7 @@ exports[`Course Node should match shallow snapshot 1`] = `
     rx="8"
     ry="8"
     style={
-      Object {
+      {
         "fill": "#5dd5b8",
       }
     }
@@ -46,7 +46,7 @@ exports[`Hybrid Node should match snapshot 1`] = `
     filter=""
     height={24}
     style={
-      Object {
+      {
         "fill": "#888888",
       }
     }
