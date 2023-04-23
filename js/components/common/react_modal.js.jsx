@@ -1,18 +1,6 @@
 import React, { createRef } from "react"
 import ReactModal from "react-modal"
-import Leaflet from "leaflet"
-import {
-  Circle,
-  CircleMarker,
-  FeatureGroup,
-  Map,
-  Marker,
-  Polygon,
-  Polyline,
-  Popup,
-  TileLayer,
-  Tooltip,
-} from "react-leaflet"
+import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
 import L from "leaflet"
 import { getCourse, getPost } from "../common/utils"
 import { AgGridReact } from "ag-grid-react"
@@ -855,7 +843,7 @@ class CampusMap extends React.Component {
 
     return (
       <div ref="map" id="campus-map" className="col-md-8 col-xs-6">
-        <Map
+        <MapContainer
           center={center}
           zoom={16}
           maxZoom={40}
@@ -869,7 +857,7 @@ class CampusMap extends React.Component {
         >
           <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
           <FeatureGroup ref={this.groupRef}>{locationMarkers}</FeatureGroup>
-        </Map>
+        </MapContainer>
         <button id="zoom-button" onClick={this.zoomToFit}>
           Zoom to Fit
         </button>

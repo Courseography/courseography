@@ -7,7 +7,10 @@ const presets = [
   ["@babel/preset-react"],
 ]
 
+const isDevelopment = process.env.NODE_ENV !== "production"
+
 module.exports = {
+  mode: isDevelopment ? "development" : "production",
   entry: {
     "js/search/app": "./js/components/search/search.js.jsx",
     "js/grid/app": "./js/components/grid/grid.js.jsx",
@@ -62,5 +65,4 @@ module.exports = {
       jQuery: "jquery",
     }),
   ],
-  mode: "development",
 }

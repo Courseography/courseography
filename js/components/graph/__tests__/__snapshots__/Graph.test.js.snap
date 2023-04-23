@@ -8,7 +8,7 @@ exports[`Graph rendering RegionGroup should match shallow snapshot 1`] = `
     className="region"
     d="M17.386348,281.07376883 17.386348,14.41568908 316.385978,14.41576883 316.386348,281.07376883 "
     style={
-      Object {
+      {
         "fill": "#6276b9",
       }
     }
@@ -16,7 +16,7 @@ exports[`Graph rendering RegionGroup should match shallow snapshot 1`] = `
   <text
     className="region-label"
     style={
-      Object {
+      {
         "fill": "#000000",
       }
     }
