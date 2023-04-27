@@ -62,8 +62,8 @@
     "style-loader": "^3.3.2",
     "stylelint": "^15.3.0",
     "stylelint-config-sass-guidelines": "^10.0.0",
-    "webpack": "^5.76.3",
-    "webpack-cli": "^5.0.1",
+    "webpack": "^5.81.0",
+    "webpack-cli": "^5.0.2",
     "webpack-merge": "^5.8.0"
   },
   "packageManager": "yarn@3.3.1"
