@@ -2,6 +2,8 @@ $graph-overlay-top-margin: 15px;
 $graph-overlay-side-margin: 15px;
 @import "ag-grid-community/styles/ag-grid.css";
 @import "ag-grid-community/styles/ag-theme-alpine.css";
+@import "leaflet/dist/leaflet.css";
+@import "bootstrap/dist/css/bootstrap.min.css";
 
 @keyframes spin {
   0.0% {
