@@ -54,10 +54,12 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 
 #### Running
 
-1. Run `$ stack run` to start the server
-2. Navigate to `http://localhost:8000/graph` in your browser
+1. Run `$ yarn watch` to build the web static assets (Javascript and CSS files)
+2. In a new terminal window Run `$ stack run` to start the server
+3. Navigate to `http://localhost:8000/graph` in your browser
 
-When running in production you should run `$ stack run prod-server` instead of `$ stack run` to start the server. This will build the client in production mode which should be faster for users but slower to compile.
+When running in production you should run `$ yarn build` instead of `$ yarn watch` to build the web assets.
+This will take longer but results in smaller asset files.
 
 #### Developers
 

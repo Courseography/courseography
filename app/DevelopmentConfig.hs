@@ -22,8 +22,7 @@ module Config (
     winterStartDate,
     winterEndDate,
     outDay,
-    holidays,
-    enableCdn
+    holidays
     ) where
 
 import Data.Text (Text)
@@ -122,9 +121,3 @@ holidays = ["20221010T", "20221107T", "20221108T",
             "20221109T", "20221110T", "20221111T",
             "20230220T", "20230221T", "20230222T",
             "20200223T", "20230224T"]
-
--- SCRIPT DEPENDENCIES CONFIGURATION
-
--- | Enable CDN downloads for js and css dependencies. Should be true on the production server.
-enableCdn :: Bool
-enableCdn = True

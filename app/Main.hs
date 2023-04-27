@@ -17,7 +17,7 @@ import System.IO (hPutStrLn, stderr)
 
 -- internal dependencies
 import Database.Database (setupDatabase)
-import Server (runServer, webpackProcess, webpackProductionProcess)
+import Server (runServer)
 import Svg.Parser (parsePrebuiltSvgs)
 import Util.Documentation (generateDocs)
 
@@ -27,8 +27,7 @@ import DynamicGraphs.WriteRunDot (generatePrereqsForCourses)
 -- | A map of command-line arguments to their corresponding IO actions.
 taskMap :: Map.Map String ([String] -> IO ())
 taskMap = Map.fromList [
-    ("server", const $ runServer webpackProcess),
-    ("prod-server", const $ runServer webpackProductionProcess),
+    ("server", const runServer),
     ("database", const setupDatabase),
     ("graphs", const parsePrebuiltSvgs),
     ("docs", const generateDocs),

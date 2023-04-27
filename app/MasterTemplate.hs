@@ -1,7 +1,6 @@
 module MasterTemplate
     (masterTemplate, header) where
 
-import Config (enableCdn)
 import qualified Data.Text as T
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -19,13 +18,8 @@ masterTemplate title headers body scripts =
             H.title (H.toHtml title)
             H.link ! A.rel "icon" ! A.type_ "image/png"
                    ! A.href "/static/res/ico/favicon.png"
-            H.link ! A.rel "stylesheet" ! A.href "https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
             sequence_ headers
-            mapM_ toStylesheet [
-                if enableCdn
-                then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-                else "/static/style/bootstrap.min.3.1.1.css",
-                "/static/style/app.css"]
+            toStylesheet "/static/style/app.css"
         H.body $ do
             body
             scripts

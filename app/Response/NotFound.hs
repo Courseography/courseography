@@ -15,9 +15,7 @@ notFoundResponse =
             H.title "Courseography - 404!"
             H.meta ! A.httpEquiv "Content-Type"
                    ! A.content "text/html;charset=utf-8"
-            mapM_ toStylesheet [
-                "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                "/static/style/app.css"]
+            toStylesheet "/static/style/app.css"
 
         H.body notFoundContent
 

@@ -52,6 +52,13 @@ cabal.sandbox.config
 /public/js/generate/app.js
 /public/js/graph/app.js
 /public/js/draw/app.js
+/public/*.svg
+/public/*.png
+/public/*.ttf
+/public/*.eot
+/public/*.woff
+/public/*.png
+/public/*.woff2
 
 # coverage directory used by tools like istanbul and jest --coverage
 coverage
