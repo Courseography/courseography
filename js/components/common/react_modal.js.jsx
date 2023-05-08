@@ -43,13 +43,13 @@ class CourseModal extends React.Component {
   getTable(allMeetingTimes, session) {
     const sessions = allMeetingTimes.filter(lec => lec.meetData.session === session)
     const sortedSessions = sessions.sort((firstLec, secondLec) =>
-      firstLec.meetData.section > secondLec.meetData.section ? 1 : -1
+      firstLec.meetData.section > secondLec.meetData.section ? 1 : -1,
     )
 
     return sortedSessions.map(lecture => {
       const occurrences = { times: [], rooms: [] }
       const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
-        occ1.weekDay > occ2.weekDay ? 1 : -1
+        occ1.weekDay > occ2.weekDay ? 1 : -1,
       )
       sortedTimeData.map(occurrence => {
         let firstRoom = ""
@@ -75,7 +75,7 @@ class CourseModal extends React.Component {
             "  " +
             occurrence.startHour +
             " - " +
-            occurrence.endHour
+            occurrence.endHour,
         )
       })
       const rowData = {
@@ -163,13 +163,13 @@ class CourseModal extends React.Component {
   getTable(allMeetingTimes, session) {
     const sessions = allMeetingTimes.filter(lec => lec.meetData.session === session)
     const sortedSessions = sessions.sort((firstLec, secondLec) =>
-      firstLec.meetData.section > secondLec.meetData.section ? 1 : -1
+      firstLec.meetData.section > secondLec.meetData.section ? 1 : -1,
     )
 
     return sortedSessions.map(lecture => {
       const occurrences = { times: [], rooms: [] }
       const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
-        occ1.weekDay > occ2.weekDay ? 1 : -1
+        occ1.weekDay > occ2.weekDay ? 1 : -1,
       )
       sortedTimeData.map(occurrence => {
         let firstRoom = ""
@@ -195,7 +195,7 @@ class CourseModal extends React.Component {
             "  " +
             occurrence.startHour +
             " - " +
-            occurrence.endHour
+            occurrence.endHour,
         )
       })
       const rowData = {
@@ -288,7 +288,7 @@ class Description extends React.Component {
             </div>
           ) : (
             <div key={session}></div>
-          )
+          ),
         )}
 
         {/* <Video urls={this.props.course.videoUrls} /> */}
@@ -410,7 +410,7 @@ class MapModal extends React.Component {
   // their course codes
   groupLecturesByBuilding(lecsByBuilding, lecture, roomNum) {
     const foundBuilding = lecsByBuilding.find(
-      b => b.buildingName === lecture[roomNum].bName
+      b => b.buildingName === lecture[roomNum].bName,
     )
 
     const timeframeData = {
@@ -510,7 +510,7 @@ class MapModal extends React.Component {
   isDaySelected(lectures) {
     const updatedLecTimeframes = this.state.selectedLecTimeframes.slice()
     return lectures.every(
-      lec => this.findSelectedLecTimeframe(lec, updatedLecTimeframes) != -1
+      lec => this.findSelectedLecTimeframe(lec, updatedLecTimeframes) != -1,
     )
   }
 
@@ -522,7 +522,7 @@ class MapModal extends React.Component {
         lec.session === lecture.session &&
         lec.day == lecture.day &&
         lec.startTime == lecture.startTime &&
-        lec.endTime == lecture.endTime
+        lec.endTime == lecture.endTime,
     )
   }
 
@@ -598,7 +598,7 @@ class MapSidebar extends React.Component {
             isDaySelected={this.props.isDaySelected}
             findSelectedLecTimeframe={this.props.findSelectedLecTimeframe}
             selectedLecTimeframes={this.props.selectedLecTimeframes}
-          />
+          />,
         )
       }
     }
@@ -697,7 +697,7 @@ class DayBox extends React.Component {
                     "map-day-lec " +
                     (this.props.findSelectedLecTimeframe(
                       lec,
-                      this.props.selectedLecTimeframes
+                      this.props.selectedLecTimeframes,
                     ) === -1
                       ? "unselected-day-lec"
                       : "selected-day-lec")
@@ -803,7 +803,7 @@ class CampusMap extends React.Component {
       const buildingInd = this.props.selectedLecTimeframes.findIndex(
         lec =>
           (lec.fstRoom && lec.fstRoom.bCode === building.buildingCode) ||
-          (lec.secRoom && lec.secRoom.bCode === building.buildingCode)
+          (lec.secRoom && lec.secRoom.bCode === building.buildingCode),
       )
 
       colouredMarker = buildingInd == -1 ? blueMarker : redMarker
@@ -835,7 +835,7 @@ class CampusMap extends React.Component {
 
     if (this.props.lecturesByBuilding.length) {
       this.props.lecturesByBuilding.forEach(building =>
-        mapBounds.extend(L.latLng(building.lat, building.lng))
+        mapBounds.extend(L.latLng(building.lat, building.lng)),
       )
 
       center = mapBounds.getCenter()

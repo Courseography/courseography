@@ -6,6 +6,6 @@ import Container from "./Container"
 document.addEventListener("DOMContentLoaded", () => {
   ReactDOM.render(
     <Container start_blank={false} edit={false} />,
-    document.getElementById("container")
+    document.getElementById("container"),
   )
 })

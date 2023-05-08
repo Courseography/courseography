@@ -65,7 +65,7 @@ export class ExportModal extends React.Component {
     const formattedSession = session.charAt(0).toUpperCase() + session.slice(1)
     const allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
     const courseData = allCourses.map(
-      data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`
+      data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`,
     )
     $.ajax({
       url: "/timetable-image",
@@ -124,7 +124,7 @@ export class ExportModal extends React.Component {
 function getCalendar() {
   const allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
   const courseData = allCourses.map(
-    data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`
+    data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`,
   )
   $.ajax({
     type: "post",
@@ -166,7 +166,7 @@ function getPDF() {
 
   const allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
   const courseData = allCourses.map(
-    data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`
+    data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`,
   )
 
   $.ajax({

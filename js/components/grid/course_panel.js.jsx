@@ -122,7 +122,7 @@ class Course extends React.Component {
     return lectures
       .filter(lec => lec.session === session)
       .sort((firstLec, secondLec) =>
-        firstLec.lectureCode > secondLec.lectureCode ? 1 : -1
+        firstLec.lectureCode > secondLec.lectureCode ? 1 : -1,
       )
   }
 
@@ -173,7 +173,7 @@ class Course extends React.Component {
     // if the this.state.courseInfo.courseCode exists (ie the course information has already been fetched)
     if (this.state.courseInfo.courseCode) {
       const lectures = this.props.selectedLectures.map(lecture =>
-        lecture.courseCode.substring(0, 6)
+        lecture.courseCode.substring(0, 6),
       )
       const courseCode = this.state.courseInfo.courseCode
       return lectures.indexOf(courseCode.substring(0, 6)) >= 0
@@ -308,7 +308,7 @@ class CourseList extends React.Component {
 
     // This makes an AJAX call to retrieve courses from the database
     fetch(
-      "/all-courses" // url to which the AJAX request is sent to
+      "/all-courses", // url to which the AJAX request is sent to
     )
       .then(response => response.text())
       .then(data => {

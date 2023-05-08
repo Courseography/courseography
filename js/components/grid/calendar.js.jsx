@@ -10,7 +10,7 @@ export class Row extends React.Component {
     // Create a list of lecture objects
     let lectures = this.props.lectureSections.map(
       (lectureSection, index, lectureSections) =>
-        createNewLectures(lectureSection, index, lectureSections)
+        createNewLectures(lectureSection, index, lectureSections),
     )
     lectures = [].concat.apply([], lectures)
 
@@ -125,7 +125,7 @@ class TimetableHeader extends React.Component {
       dayCells.push(
         <th scope="col" colSpan={colSpans[i]} key={"day-header-" + i}>
           {dayString}
-        </th>
+        </th>,
       )
     }
 
@@ -182,7 +182,7 @@ class TimetableBody extends React.Component {
           key={"timetable-row-" + i + this.props.session}
           currentLectures={this.props.lecturesByTime[i]}
           headColSpans={this.props.headColSpans}
-        />
+        />,
       )
     }
     return <tbody>{rows}</tbody>
@@ -239,7 +239,7 @@ class TimetableRow extends React.Component {
                 data-currentlecturelist={currentLectureList}
               >
                 {lecture.courseCode}
-              </td>
+              </td>,
             )
           }
           // Record the total width taken up by this time-day slot so far,
@@ -264,7 +264,7 @@ class TimetableRow extends React.Component {
                 ? "timetable-cell-tophalf"
                 : "timetable-cell-bottomhalf"
             }
-          ></td>
+          ></td>,
         )
       }
     }
