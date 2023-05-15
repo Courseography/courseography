@@ -40,9 +40,9 @@ import Text.Read (readMaybe)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
-    performParse "Computer Science" "csc2021.svg"
+    performParse "Computer Science" "csc2023.svg"
     performParse "Statistics" "sta2022.svg"
-    performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
+    -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
     -- performParse "(unofficial) Biochemistry" "bch2015.svg"
     -- performParse "(unofficial) Cell & Systems Biology" "csb2015.svg"
     -- performParse "(unofficial) Estonian" "est2015.svg"
