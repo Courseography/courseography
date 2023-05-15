@@ -1,38 +1,34 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-/** Class representing a boolean node (and/or) */
-export default class Bool extends React.Component {
-  render() {
-    const ellipseAttrs = {
-      cx: this.props.JSON.pos[0],
-      cy: this.props.JSON.pos[1],
-      rx: "9.8800001",
-      ry: "7.3684001",
-    }
-    return (
-      <g
-        {...this.props.JSON}
-        className={this.props.className + " " + this.props.status}
-        data-testid={`and(${this.props.parents.join()})`}
-      >
-        <ellipse {...ellipseAttrs} />
-        {this.props.JSON.text.map(
-          function (textTag, i) {
-            const textAttrs = {
-              x: ellipseAttrs.cx,
-              y: textTag.pos[1],
-            }
-            return (
-              <text {...textAttrs} key={i}>
-                {this.props.logicalType}
-              </text>
-            )
-          }.bind(this)
-        )}
-      </g>
-    )
+/** Function representing a boolean node (and/or) */
+export default function Bool(props) {
+  const ellipseAttrs = {
+    cx: props.JSON.pos[0],
+    cy: props.JSON.pos[1],
+    rx: "9.8800001",
+    ry: "7.3684001",
   }
+  return (
+    <g
+      {...props.JSON}
+      className={props.className + " " + props.status}
+      data-testid={`and(${props.parents.join()})`}
+    >
+      <ellipse {...ellipseAttrs} />
+      {props.JSON.text.map(function (textTag, i) {
+        const textAttrs = {
+          x: ellipseAttrs.cx,
+          y: textTag.pos[1],
+        }
+        return (
+          <text {...textAttrs} key={i}>
+            {props.logicalType}
+          </text>
+        )
+      })}
+    </g>
+  )
 }
 
 Bool.propTypes = {
