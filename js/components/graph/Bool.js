@@ -28,7 +28,7 @@ export default class Bool extends React.Component {
                 {this.props.logicalType}
               </text>
             )
-          }.bind(this),
+          }.bind(this)
         )}
       </g>
     )

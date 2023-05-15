@@ -40,7 +40,7 @@ class CourseCode extends React.Component {
           onClick={e => this.props.openModal(e.target.id)}
         >
           {course.toUpperCase() + "H"}
-        </span>,
+        </span>
       )
       editedCourseNames.push(" or ")
     })
@@ -137,7 +137,7 @@ export class MultipleCourseCode extends React.Component {
       {
         completedTextBoxes: this.state.completedTextBoxes + this.props.courses.length,
       },
-      this.checkIfCompleted,
+      this.checkIfCompleted
     )
   }
 

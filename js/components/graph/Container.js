@@ -31,7 +31,7 @@ export default class Container extends React.Component {
         },
         () => {
           throw "No graphs in database"
-        },
+        }
       )
 
     // Enable "Export" link

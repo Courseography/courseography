@@ -125,7 +125,7 @@ export class Graph extends React.Component {
             url: headers.url,
           }
           throw new Error(
-            "When fetching from the url with info " + JSON.stringify(headerInfo),
+            "When fetching from the url with info " + JSON.stringify(headerInfo)
           )
         }
         return headers.json() // only received headers, waiting for data
@@ -325,7 +325,7 @@ export class Graph extends React.Component {
       const currFocusCourses = this.state.focusCourses[this.props.currFocus]
       getPost(
         this.props.currFocus,
-        currFocusCourses?.modifiedTime || new Date(0).toUTCString(),
+        currFocusCourses?.modifiedTime || new Date(0).toUTCString()
       ).then(focusData => {
         if (!focusData.modified) {
           this.highlightFocuses(currFocusCourses.list)
@@ -336,7 +336,7 @@ export class Graph extends React.Component {
             modifiedTime: focusData.modifiedTime,
           }
           this.setState({ focusCourses }, () =>
-            this.highlightFocuses(this.state.focusCourses[this.props.currFocus].list),
+            this.highlightFocuses(this.state.focusCourses[this.props.currFocus].list)
           )
         }
       })
@@ -646,12 +646,12 @@ export class Graph extends React.Component {
 
     const edgesStatus = Object.keys(this.state.edgesStatus).reduce(
       (acc, curr) => ((acc[curr] = "inactive"), acc),
-      {},
+      {}
     )
 
     const boolStatus = Object.keys(this.state.boolsStatus).reduce(
       (acc, curr) => ((acc[curr] = "inactive"), acc),
-      {},
+      {}
     )
     this.setState({
       boolsStatus: boolStatus,
@@ -877,10 +877,10 @@ export class Graph extends React.Component {
             undefined,
             currentEdge.id_,
             currentEdge.source,
-            currentEdge.target,
+            currentEdge.target
           )
         })
-      },
+      }
     )
   }
 
@@ -912,7 +912,7 @@ export class Graph extends React.Component {
     // changed, and the original state was not 'missing'
     const allEdges =
       this.state.connections.inEdges[nodeId]?.concat(
-        this.state.connections.outEdges[nodeId],
+        this.state.connections.outEdges[nodeId]
       ) || []
 
     if (
@@ -941,10 +941,10 @@ export class Graph extends React.Component {
               undefined,
               currentEdge.id_,
               currentEdge.source,
-              currentEdge.target,
+              currentEdge.target
             )
           })
-        },
+        }
       )
       return
     }
@@ -977,10 +977,10 @@ export class Graph extends React.Component {
               undefined,
               currentEdge.id_,
               currentEdge.source,
-              currentEdge.target,
+              currentEdge.target
             )
           })
-        },
+        }
       )
     } else {
       this.setState(
@@ -996,10 +996,10 @@ export class Graph extends React.Component {
               undefined,
               currentEdge.id_,
               currentEdge.source,
-              currentEdge.target,
+              currentEdge.target
             )
           })
-        },
+        }
       )
       localStorage.setItem(nodeId, newState)
     }
@@ -1015,7 +1015,7 @@ export class Graph extends React.Component {
       },
       () => {
         this.updateNode(nodeId)
-      },
+      }
     )
   }
 
@@ -1044,7 +1044,7 @@ export class Graph extends React.Component {
                 "missing",
                 currentEdge.id_,
                 currentEdge.source,
-                currentEdge.target,
+                currentEdge.target
               )
             }
           })
@@ -1053,7 +1053,7 @@ export class Graph extends React.Component {
               ? this.focusPrereqs(node)
               : this.focusPrereqsBool(node)
           })
-        },
+        }
       )
     }
   }
@@ -1091,7 +1091,7 @@ export class Graph extends React.Component {
                 "missing",
                 currentEdge.id_,
                 currentEdge.source,
-                currentEdge.target,
+                currentEdge.target
               )
             }
           })
@@ -1108,7 +1108,7 @@ export class Graph extends React.Component {
               })
             }
           })
-        },
+        }
       )
     }
   }
@@ -1141,7 +1141,7 @@ export class Graph extends React.Component {
           undefined,
           currentEdge.id_,
           currentEdge.source,
-          currentEdge.target,
+          currentEdge.target
         )
       }
     })
@@ -1529,7 +1529,7 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
 export var findRelationship = (course, nodesJSON) => {
   const nodes = nodesJSON
   const node = nodes.find(
-    n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course)),
+    n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course))
   )
   return node
 }
