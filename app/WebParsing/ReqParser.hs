@@ -3,8 +3,8 @@ module WebParsing.ReqParser where
 
 import Data.Char (isSpace, toLower, toUpper)
 import Database.Requirement
-import qualified Text.Parsec as Parsec
 import Text.Parsec ((<|>))
+import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 
 -- define separators
