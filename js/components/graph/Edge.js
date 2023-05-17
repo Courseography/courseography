@@ -5,14 +5,14 @@ import React from "react"
  * Function-based component representing an edge from a Node/Bool to a Node/Bool
  */
 export default function Edge(props) {
-  const pathAttrs = { d: "M" }
+  let pathDescription = "M"
   props.points.forEach(p => {
-    pathAttrs.d += p[0] + "," + p[1] + " "
+    pathDescription += p[0] + "," + p[1] + " " + " "
   })
 
   return (
     <path
-      {...pathAttrs}
+      d={pathDescription}
       className={props.className + " " + props.status}
       data-testid={`${props.source}->${props.target}`}
       markerEnd="url(#arrowHead)"
