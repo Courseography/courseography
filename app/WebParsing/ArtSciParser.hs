@@ -16,8 +16,8 @@ import Database.Tables (Building (..), Courses (..), Department (..))
 import Filesystem.Path.CurrentOS as Path
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
 import System.Directory (getCurrentDirectory)
-import qualified Text.HTML.TagSoup as TS
 import Text.HTML.TagSoup (Tag)
+import qualified Text.HTML.TagSoup as TS
 import Text.HTML.TagSoup.Match (anyAttrValue, tagOpen, tagOpenAttrLit, tagOpenAttrNameLit)
 import Text.Parsec (count, many, parse)
 import qualified Text.Parsec.Char as P
