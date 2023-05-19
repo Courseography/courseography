@@ -3,9 +3,9 @@ import PropTypes from "prop-types"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import { ExportModal } from "../common/export.js.jsx"
 import { getPost } from "../common/utils.js"
-import BoolGroup from "./BoolGroup"
+import Bool from "./Bool"
+import Edge from "./Edge"
 import Button from "./Button"
-import EdgeGroup from "./EdgeGroup"
 import InfoBox from "./InfoBox"
 import NodeGroup from "./NodeGroup"
 import GraphDropdown from "./GraphDropdown"
@@ -1219,6 +1219,62 @@ export class Graph extends React.Component {
     return parents.every(isAllTrue)
   }
 
+  /**
+   * Renders Bool components
+   * @param {object} boolsJSON
+   * @param {object} boolsStatus
+   * @param {object} connections
+   * @return {JSX.Element}
+   */
+  renderBoolGroup = (boolsJSON, boolsStatus, connections) => {
+    return (
+      <g id="bools">
+        {Object.values(boolsJSON).map(boolJSON =>
+          generateBool(boolJSON, boolsStatus, connections)
+        )}
+      </g>
+    )
+  }
+
+  /**
+   * Renders Edge components
+   * @param {object} edgesJSON
+   * @param {object} edgesStatus
+   * @return {JSX.Element}
+   */
+  renderEdgeGroup = (edgesJSON, edgesStatus) => {
+    // Missing edges must be rendered last. The sort
+    // method custom sorts a copy of edgesJSON so that all missing edges
+    // are last in the list. Then render based on that list.
+    const edges = Object.values(edgesJSON)
+    const edgesCopy = [...edges]
+    const state = edgesStatus
+    edgesCopy.sort((a, b) => {
+      // If an edge is missing, its edgeID should be in EdgeGroup's
+      // state and its value should be true.
+      const aID = a.id_
+      const bID = b.id_
+      let aMiss = false
+      let bMiss = false
+      aMiss = aID in state && state[aID]
+      bMiss = bID in state && state[bID]
+      if ((aMiss && bMiss) || (!aMiss && !bMiss)) {
+        // a and b are equal
+        return 0
+      } else if (aMiss && !bMiss) {
+        // sort a after b
+        return 1
+      } else if (!aMiss && bMiss) {
+        // sort b after a
+        return -1
+      }
+    })
+
+    return (
+      <g id="edges">{edgesCopy.map(edgeJSON => generateEdge(edgeJSON, edgesStatus))}</g>
+    )
+  }
+
   renderRegions = regionsJSON => {
     return Object.values(regionsJSON).map(function (entry, value) {
       const pathAttrs = { d: "M" }
@@ -1430,6 +1486,14 @@ export class Graph extends React.Component {
           </filter>
           {this.renderArrowHead()}
           {this.renderRegionsLabels(this.state.regionsJSON, this.state.labelsJSON)}
+
+          {this.renderBoolGroup(
+            this.state.boolsJSON,
+            this.state.boolsStatus,
+            this.state.connections
+          )}
+          {this.renderEdgeGroup(this.state.edgesJSON, this.state.edgesStatus)}
+
           <NodeGroup
             nodeClick={this.nodeClick}
             nodeMouseEnter={this.nodeMouseEnter}
@@ -1445,15 +1509,7 @@ export class Graph extends React.Component {
             connections={this.state.connections}
             nodeDropshadowFilter={this.nodeDropshadowFilter}
           />
-          <BoolGroup
-            boolsJSON={this.state.boolsJSON}
-            boolsStatus={this.state.boolsStatus}
-            connections={this.state.connections}
-          />
-          <EdgeGroup
-            edgesJSON={this.state.edgesJSON}
-            edgesStatus={this.state.edgesStatus}
-          />
+
           <InfoBox
             onClick={this.infoBoxMouseClick}
             onMouseEnter={this.infoBoxMouseEnter}
@@ -1532,6 +1588,47 @@ export var findRelationship = (course, nodesJSON) => {
     n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course))
   )
   return node
+}
+
+/**
+ * Helper for rendering BoolGroups. Generates React Component representation of a Bool node.
+ * @param {Object} boolJSON
+ * @param {Object} boolsStatus
+ * @param {Object} connections
+ * @return {Edge} The React Component representing a Bool node
+ */
+function generateBool(boolJSON, boolsStatus, connections) {
+  const { parents } = connections
+  return (
+    <Bool
+      JSON={boolJSON}
+      className="bool"
+      key={boolJSON.id_}
+      parents={parents[boolJSON.id_]}
+      logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || "and"}
+      inEdges={connections.inEdges[boolJSON.id_]}
+      outEdges={connections.outEdges[boolJSON.id_]}
+      status={boolsStatus[boolJSON.id_]}
+    />
+  )
+}
+
+/**
+ * Helper for rendering EdgeGroups. Generates React Component representation of an edge
+ * @param {JSON} edgeJSON Represents a single edge
+ * @return {Edge} The React Component representing an edge in the graph
+ */
+function generateEdge(edgeJSON, edgesStatus) {
+  return (
+    <Edge
+      className="path"
+      key={edgeJSON.id_}
+      source={edgeJSON.source}
+      target={edgeJSON.target}
+      points={edgeJSON.points}
+      status={edgesStatus[edgeJSON.id_]}
+    />
+  )
 }
 
 Graph.propTypes = {
