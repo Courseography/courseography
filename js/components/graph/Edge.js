@@ -7,7 +7,7 @@ import React from "react"
 export default function Edge(props) {
   let pathDescription = "M"
   props.points.forEach(p => {
-    pathDescription += p[0] + "," + p[1] + " " + " "
+    pathDescription += p[0] + "," + p[1] + " "
   })
 
   return (
