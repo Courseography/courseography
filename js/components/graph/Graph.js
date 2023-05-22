@@ -5,9 +5,9 @@ import { ExportModal } from "../common/export.js.jsx"
 import { getPost } from "../common/utils.js"
 import Bool from "./Bool"
 import Edge from "./Edge"
+import Node from "./Node"
 import Button from "./Button"
 import InfoBox from "./InfoBox"
-import NodeGroup from "./NodeGroup"
 import GraphDropdown from "./GraphDropdown"
 import Sidebar from "./Sidebar"
 import { parseAnd } from "../../util/util.js"
@@ -1220,8 +1220,8 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Renders Bool components
-   * @param {object} boolsJSON
+   * Renders a group of Bools
+   * @param {JSON} boolsJSON
    * @param {object} boolsStatus
    * @param {object} connections
    * @return {JSX.Element}
@@ -1237,8 +1237,8 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Renders Edge components
-   * @param {object} edgesJSON
+   * Renders a group of Edges
+   * @param {JSON} edgesJSON
    * @param {object} edgesStatus
    * @return {JSX.Element}
    */
@@ -1272,6 +1272,71 @@ export class Graph extends React.Component {
 
     return (
       <g id="edges">{edgesCopy.map(edgeJSON => generateEdge(edgeJSON, edgesStatus))}</g>
+    )
+  }
+
+  /**
+   * Renders a group of Nodes
+   * @param {JSON} edgesJSON
+   * @param {object} edgesStatus
+   * @return {JSX.Element}
+   */
+  renderNodeGroup = (
+    nodeClick,
+    nodeMouseEnter,
+    nodeMouseLeave,
+    nodeMouseDown,
+    onKeyDown,
+    onWheel,
+    nodesStatus,
+    nodesJSON,
+    hybridsJSON,
+    highlightedNodes,
+    connections,
+    nodeDropshadowFilter
+  ) => {
+    return (
+      <g id="nodes">
+        {Object.values(hybridsJSON).map(entry => {
+          return (
+            <Node
+              JSON={entry}
+              className={"hybrid"}
+              key={entry.id_}
+              hybrid={true}
+              parents={connections.parents[entry.id_]}
+              childs={connections.children[entry.id_]}
+              status={nodesStatus[entry.id_].status}
+              onWheel={onWheel}
+              onKeydown={onKeyDown}
+              nodeDropshadowFilter={nodeDropshadowFilter}
+            />
+          )
+        })}
+        {Object.values(nodesJSON).map(entry => {
+          // using `includes` to match "mat235" from "mat235237257calc2" and other math/stats courses
+          const highlighted = highlightedNodes.some(node => entry.id_.includes(node))
+          return (
+            <Node
+              JSON={entry}
+              className="node"
+              key={entry.id_}
+              hybrid={false}
+              parents={connections.parents[entry.id_]}
+              status={nodesStatus[entry.id_].status}
+              highlighted={highlighted}
+              onClick={nodeClick}
+              onMouseEnter={nodeMouseEnter}
+              onMouseLeave={nodeMouseLeave}
+              onMouseDown={nodeMouseDown}
+              onWheel={onWheel}
+              onKeydown={onKeyDown}
+              // editMode={editMode}
+              nodeDropshadowFilter={nodeDropshadowFilter}
+            />
+          )
+        })}
+      </g>
     )
   }
 
@@ -1492,23 +1557,23 @@ export class Graph extends React.Component {
             this.state.boolsStatus,
             this.state.connections
           )}
+
           {this.renderEdgeGroup(this.state.edgesJSON, this.state.edgesStatus)}
 
-          <NodeGroup
-            nodeClick={this.nodeClick}
-            nodeMouseEnter={this.nodeMouseEnter}
-            nodeMouseLeave={this.nodeMouseLeave}
-            nodeMouseDown={this.nodeMouseDown}
-            onKeyDown={this.onKeyDown}
-            onWheel={this.onWheel}
-            nodesStatus={this.state.nodesStatus}
-            nodesJSON={this.state.nodesJSON}
-            hybridsJSON={this.state.hybridsJSON}
-            highlightedNodes={this.state.highlightedNodes}
-            onDraw={this.state.onDraw}
-            connections={this.state.connections}
-            nodeDropshadowFilter={this.nodeDropshadowFilter}
-          />
+          {this.renderNodeGroup(
+            this.nodeClick,
+            this.nodeMouseEnter,
+            this.nodeMouseLeave,
+            this.nodeMouseDown,
+            this.onKeyDown,
+            this.onWheel,
+            this.state.nodesStatus,
+            this.state.nodesJSON,
+            this.state.hybridsJSON,
+            this.state.highlightedNodes,
+            this.state.connections,
+            this.nodeDropshadowFilter
+          )}
 
           <InfoBox
             onClick={this.infoBoxMouseClick}
