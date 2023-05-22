@@ -1592,10 +1592,10 @@ export var findRelationship = (course, nodesJSON) => {
 
 /**
  * Helper for rendering BoolGroups. Generates React Component representation of a Bool node.
- * @param {Object} boolJSON
+ * @param {JSON} boolJSON
  * @param {Object} boolsStatus
  * @param {Object} connections
- * @return {Edge} The React Component representing a Bool node
+ * @return {Bool} The React Component representing a Bool node
  */
 function generateBool(boolJSON, boolsStatus, connections) {
   const { parents } = connections
