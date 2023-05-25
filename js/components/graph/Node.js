@@ -76,7 +76,6 @@ export default function Node(props) {
 
   const textXOffset = props.JSON.pos[0] + props.JSON.width / 2
 
-  // TODO: Look at this.props to see what we need to give the g
   return (
     <g
       {...gAttrs}
