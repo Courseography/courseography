@@ -63,8 +63,8 @@ This will take longer but results in smaller asset files.
 
 ### Running front-end tests
 
-To run all tests, run 'yarn run test'. However, if you need to run a specific file or folder of tests,
-run 'yarn run test -- <path>'.
+To run all tests, run `$yarn run test`. However, if you need to run a specific file or folder of tests,
+run `$yarn run test -- <path>`.
 
 #### Developers
 
