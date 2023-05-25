@@ -2,24 +2,22 @@ import PropTypes from "prop-types"
 import React from "react"
 
 /**
- * Class representing an edge from a Node/Bool to a Node/Bool
+ * Function-based component representing an edge from a Node/Bool to a Node/Bool
  */
-export default class Edge extends React.Component {
-  render() {
-    const pathAttrs = { d: "M" }
-    this.props.points.forEach(p => {
-      pathAttrs.d += p[0] + "," + p[1] + " "
-    })
+export default function Edge(props) {
+  let pathDescription = "M"
+  props.points.forEach(p => {
+    pathDescription += p[0] + "," + p[1] + " "
+  })
 
-    return (
-      <path
-        {...pathAttrs}
-        className={this.props.className + " " + this.props.status}
-        data-testid={`${this.props.source}->${this.props.target}`}
-        markerEnd="url(#arrowHead)"
-      />
-    )
-  }
+  return (
+    <path
+      d={pathDescription}
+      className={props.className + " " + props.status}
+      data-testid={`${props.source}->${props.target}`}
+      markerEnd="url(#arrowHead)"
+    />
+  )
 }
 
 Edge.propTypes = {
