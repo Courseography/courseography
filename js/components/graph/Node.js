@@ -23,92 +23,87 @@ import React from "react"
  *  - Hybrid nodes are the smaller, grey nodes on the graph that represent another course node
  *    farther away. They can only be either 'active' or 'inactive'
  */
-export default class Node extends React.Component {
-  getDataTestId = () => {
-    if (this.props.hybrid) {
-      return `h(${this.props.parents.join(",")})`
+export default function Node(props) {
+  const getDataTestId = () => {
+    if (props.hybrid) {
+      return `h(${props.parents.join(",")})`
     }
-    return this.props.JSON.id_
+    return props.JSON.id_
   }
 
-  render() {
-    let ellipse = null
-    const newClassName = this.props.className + " " + this.props.status
-    if (this.props.highlighted) {
-      const attrs = this.props.JSON
-      const width = parseFloat(attrs.width) / 2
-      const height = parseFloat(attrs.height) / 2
-      ellipse = (
-        <ellipse
-          className="spotlight"
-          cx={parseFloat(attrs.pos[0]) + width}
-          cy={parseFloat(attrs.pos[1]) + height}
-          rx={width + 9}
-          ry={height + 8.5}
-        />
-      )
-    }
-
-    const gAttrs = {
-      textRendering: "geometricPrecision",
-      shapeRendering: "geometricPrecision",
-      onKeyDown: this.props.onKeyDown,
-      onWheel: this.props.onWheel,
-      onMouseEnter: this.props.onMouseEnter,
-      onMouseLeave: this.props.onMouseLeave,
-      onClick: this.props.onClick,
-    }
-
-    const rectAttrs = {
-      height: this.props.JSON.height,
-      width: this.props.JSON.width,
-      x: this.props.JSON.pos[0],
-      y: this.props.JSON.pos[1],
-    }
-
-    if (this.props.className === "node") {
-      rectAttrs["rx"] = "8"
-      rectAttrs["ry"] = "8"
-    }
-
-    const rectStyle = {
-      fill: this.props.JSON.fill,
-    }
-
-    const textXOffset = this.props.JSON.pos[0] + this.props.JSON.width / 2
-
-    // TODO: Look at this.props to see what we need to give the g
-    return (
-      <g
-        {...gAttrs}
-        id={this.props.JSON.id_}
-        className={newClassName}
-        data-testid={this.getDataTestId()}
-      >
-        {ellipse}
-        <rect
-          {...rectAttrs}
-          style={rectStyle}
-          filter={
-            this.props.className === "hybrid"
-              ? ""
-              : `url(#${this.props.nodeDropshadowFilter})`
-          }
-        />
-        {this.props.JSON.text.map(function (textTag, i) {
-          const textAttrs = {
-            x: textXOffset,
-            y: textTag.pos[1],
-          }
-          return (
-            <text {...textAttrs} key={i}>
-              {textTag.text}
-            </text>
-          )
-        })}
-      </g>
+  let ellipse = null
+  const newClassName = props.className + " " + props.status
+  if (props.highlighted) {
+    const attrs = props.JSON
+    const width = parseFloat(attrs.width) / 2
+    const height = parseFloat(attrs.height) / 2
+    ellipse = (
+      <ellipse
+        className="spotlight"
+        cx={parseFloat(attrs.pos[0]) + width}
+        cy={parseFloat(attrs.pos[1]) + height}
+        rx={width + 9}
+        ry={height + 8.5}
+      />
     )
   }
+
+  const gAttrs = {
+    textRendering: "geometricPrecision",
+    shapeRendering: "geometricPrecision",
+    onKeyDown: props.onKeyDown,
+    onWheel: props.onWheel,
+    onMouseEnter: props.onMouseEnter,
+    onMouseLeave: props.onMouseLeave,
+    onClick: props.onClick,
+  }
+
+  const rectAttrs = {
+    height: props.JSON.height,
+    width: props.JSON.width,
+    x: props.JSON.pos[0],
+    y: props.JSON.pos[1],
+  }
+
+  if (props.className === "node") {
+    rectAttrs["rx"] = "8"
+    rectAttrs["ry"] = "8"
+  }
+
+  const rectStyle = {
+    fill: props.JSON.fill,
+  }
+
+  const textXOffset = props.JSON.pos[0] + props.JSON.width / 2
+
+  return (
+    <g
+      {...gAttrs}
+      id={props.JSON.id_}
+      className={newClassName}
+      data-testid={getDataTestId()}
+    >
+      {ellipse}
+      <rect
+        {...rectAttrs}
+        style={rectStyle}
+        filter={
+          props.className === "hybrid" ? "" : `url(#${props.nodeDropshadowFilter})`
+        }
+      />
+      {props.JSON.text.map(function (textTag, i) {
+        const textAttrs = {
+          x: textXOffset,
+          y: textTag.pos[1],
+        }
+        return (
+          <text {...textAttrs} key={i}>
+            {textTag.text}
+          </text>
+        )
+      })}
+    </g>
+  )
 }
 
 Node.propTypes = {
