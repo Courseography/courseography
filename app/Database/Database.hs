@@ -43,7 +43,7 @@ runDatabase = do
     setupDistributionTable
     print distTableSetUpStr
     setupBreadthTable
-    print breathTableSetUpStr  
+    print breathTableSetUpStr
     parseAll
     seedVideos
 
