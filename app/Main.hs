@@ -16,7 +16,7 @@ import System.Environment (getArgs)
 import System.IO (hPutStrLn, stderr)
 
 -- internal dependencies
-import qualified Database.Database as Db (parseDatabase, setupDatabase)
+import Database.Database (runDatabase, setupDatabase)
 import Server (runServer)
 import Svg.Parser (parsePrebuiltSvgs)
 import Util.Documentation (generateDocs)
@@ -28,7 +28,7 @@ import DynamicGraphs.WriteRunDot (generatePrereqsForCourses)
 taskMap :: Map.Map String ([String] -> IO ())
 taskMap = Map.fromList [
     ("server", const runServer),
-    ("database", const Db.parseDatabase),
+    ("database", const runDatabase),
     ("graphs", const parsePrebuiltSvgs),
     ("docs", const generateDocs),
     ("generate", generate),
@@ -43,13 +43,6 @@ main = do
                 [] -> ("server", [])
                 (command : remaining) -> (command, remaining)
     fromMaybe putUsage (Map.lookup taskName taskMap) rest
-
-
-setupDatabase :: IO ()
-setupDatabase = do
-    Db.setupDatabase
-
-
 
 -- | Print usage message to user (when main gets an incorrect argument).
 putUsage :: [String] -> IO ()

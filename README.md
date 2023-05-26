@@ -49,8 +49,9 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 
 #### Parsing and Generation
 
-1. Create database file for an parse prerequisite graph `$ stack run graphs`
-2. Parse course information `$ stack run database`
+1. Create database file `$stack exec courseography database-setup`
+2. Parse prerequisite graph `$ stack run graphs`
+3. Parse course information `$ stack run database`
 
 #### Running
 
