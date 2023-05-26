@@ -7,7 +7,7 @@ inserting it into the database. Run when @cabal run database@ is executed.
 -}
 
 module Database.Database
-    (setupDatabase) where
+    (parseDatabase, setupDatabase) where
 
 import Config (databasePath)
 import Data.Maybe (fromMaybe)
@@ -39,6 +39,9 @@ setupDatabase = do
     print distTableSetUpStr
     setupBreadthTable
     print breathTableSetUpStr
+
+parseDatabase :: IO ()
+parseDatabase = do    
     parseAll
     seedVideos
 
