@@ -61,6 +61,11 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 When running in production you should run `$ yarn build` instead of `$ yarn watch` to build the web assets.
 This will take longer but results in smaller asset files.
 
+#### Running front-end tests
+
+To run all tests, run `$ yarn run test`. However, if you need to run a specific file or folder of tests,
+run `$ yarn run test -- <path>`.
+
 #### Developers
 
 If you are contributing to Courseography, you should install our pre-commit hooks:
