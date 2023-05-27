@@ -1,15 +1,18 @@
-import React from "react"
 import { shallow } from "enzyme"
-
-import EdgeGroup from "../EdgeGroup"
+import { Graph } from "../Graph"
 
 describe("EdgeGroup", () => {
   it("should match shallow snapshot", () => {
-    const edgeGroupProps = {
+    const params = {
       edgesJSON: {},
-      svg: {},
+      edgesStatus: {},
     }
-    const component = shallow(<EdgeGroup {...edgeGroupProps} />)
+
+    const graph = new Graph({})
+    const component = shallow(
+      graph.renderEdgeGroup(params.edgesJSON, params.edgesStatus)
+    )
+
     expect(component).toMatchSnapshot()
   })
 })

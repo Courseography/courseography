@@ -1,23 +1,43 @@
-import React from "react"
 import { shallow } from "enzyme"
-
-import NodeGroup from "../NodeGroup"
+import { Graph } from "../Graph"
 
 describe("NodeGroup", () => {
   it("should match shallow snapshot", () => {
-    const props = {
-      edgesJSON: [],
-      highlightedNodes: [],
-      hybridsJSON: {},
+    const params = {
       nodeClick: jest.fn(),
-      nodeMouseDown: jest.fn(),
       nodeMouseEnter: jest.fn(),
       nodeMouseLeave: jest.fn(),
+      nodeMouseDown: jest.fn(),
+      onKeyDown: jest.fn(),
+      onWheel: jest.fn(),
+      nodesStatus: {},
       nodesJSON: {},
-      onDraw: false,
-      svg: null,
+      hybridsJSON: {},
+      highlightedNodes: [],
+      edgesJSON: [],
+      connections: {},
+      nodeDropshadowFilter: "",
     }
-    const component = shallow(<NodeGroup {...props} />)
+
+    const graph = new Graph({})
+    const component = shallow(
+      graph.renderNodeGroup(
+        params.nodeClick,
+        params.nodeMouseEnter,
+        params.nodeMouseLeave,
+        params.nodeMouseDown,
+        params.onKeyDown,
+        params.onWheel,
+        params.nodesStatus,
+        params.nodesJSON,
+        params.hybridsJSON,
+        params.highlightedNodes,
+        params.edgesJSON,
+        params.connections,
+        params.nodeDropshadowFilter
+      )
+    )
+
     expect(component).toMatchSnapshot()
   })
 })
