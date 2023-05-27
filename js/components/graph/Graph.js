@@ -1352,7 +1352,6 @@ export class Graph extends React.Component {
               onMouseDown={nodeMouseDown}
               onWheel={onWheel}
               onKeydown={onKeyDown}
-              // editMode={editMode}
               nodeDropshadowFilter={nodeDropshadowFilter}
             />
           )

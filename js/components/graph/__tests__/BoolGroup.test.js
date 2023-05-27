@@ -13,7 +13,7 @@ describe("BoolGroup", () => {
     const component = shallow(
       graph.renderBoolGroup(params.boolsJSON, params.boolsStatus, params.connections)
     )
-    // const component = shallow(<BoolGroup {...boolGroupProps} />)
+
     expect(component).toMatchSnapshot()
   })
 })
