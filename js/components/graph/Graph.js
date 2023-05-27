@@ -1227,13 +1227,23 @@ export class Graph extends React.Component {
    * @return {JSX.Element}
    */
   renderBoolGroup = (boolsJSON, boolsStatus, connections) => {
-    return (
-      <g id="bools">
-        {Object.values(boolsJSON).map(boolJSON =>
-          generateBool(boolJSON, boolsStatus, connections)
-        )}
-      </g>
-    )
+    generateBool = boolJSON => {
+      const { parents } = connections
+      return (
+        <Bool
+          JSON={boolJSON}
+          className="bool"
+          key={boolJSON.id_}
+          parents={parents[boolJSON.id_]}
+          logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || "and"}
+          inEdges={connections.inEdges[boolJSON.id_]}
+          outEdges={connections.outEdges[boolJSON.id_]}
+          status={boolsStatus[boolJSON.id_]}
+        />
+      )
+    }
+
+    return <g id="bools">{Object.values(boolsJSON).map(generateBool)}</g>
   }
 
   /**
@@ -1243,6 +1253,19 @@ export class Graph extends React.Component {
    * @return {JSX.Element}
    */
   renderEdgeGroup = (edgesJSON, edgesStatus) => {
+    generateEdge = edgeJSON => {
+      return (
+        <Edge
+          className="path"
+          key={edgeJSON.id_}
+          source={edgeJSON.source}
+          target={edgeJSON.target}
+          points={edgeJSON.points}
+          status={edgesStatus[edgeJSON.id_]}
+        />
+      )
+    }
+
     // Missing edges must be rendered last. The sort
     // method custom sorts a copy of edgesJSON so that all missing edges
     // are last in the list. Then render based on that list.
@@ -1270,9 +1293,7 @@ export class Graph extends React.Component {
       }
     })
 
-    return (
-      <g id="edges">{edgesCopy.map(edgeJSON => generateEdge(edgeJSON, edgesStatus))}</g>
-    )
+    return <g id="edges">{edgesCopy.map(generateEdge)}</g>
   }
 
   /**
@@ -1653,47 +1674,6 @@ export var findRelationship = (course, nodesJSON) => {
     n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course))
   )
   return node
-}
-
-/**
- * Helper for rendering BoolGroups. Generates React Component representation of a Bool node.
- * @param {JSON} boolJSON
- * @param {Object} boolsStatus
- * @param {Object} connections
- * @return {Bool} The React Component representing a Bool node
- */
-function generateBool(boolJSON, boolsStatus, connections) {
-  const { parents } = connections
-  return (
-    <Bool
-      JSON={boolJSON}
-      className="bool"
-      key={boolJSON.id_}
-      parents={parents[boolJSON.id_]}
-      logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || "and"}
-      inEdges={connections.inEdges[boolJSON.id_]}
-      outEdges={connections.outEdges[boolJSON.id_]}
-      status={boolsStatus[boolJSON.id_]}
-    />
-  )
-}
-
-/**
- * Helper for rendering EdgeGroups. Generates React Component representation of an edge
- * @param {JSON} edgeJSON Represents a single edge
- * @return {Edge} The React Component representing an edge in the graph
- */
-function generateEdge(edgeJSON, edgesStatus) {
-  return (
-    <Edge
-      className="path"
-      key={edgeJSON.id_}
-      source={edgeJSON.source}
-      target={edgeJSON.target}
-      points={edgeJSON.points}
-      status={edgesStatus[edgeJSON.id_]}
-    />
-  )
 }
 
 Graph.propTypes = {
