@@ -7,7 +7,7 @@ inserting it into the database. Run when @cabal run database@ is executed.
 -}
 
 module Database.Database
-    (runDatabase, setupDatabase) where
+    (populateCourseInfo, setupDatabase) where
 
 import Config (databasePath)
 import Data.Maybe (fromMaybe)
@@ -28,7 +28,7 @@ breathTableSetUpStr = "breadth table set up"
 -- | Creates the database if it doesn't exist and runs migrations.
 setupDatabase :: IO ()
 setupDatabase = do
-  -- Create db folder if it doesn't exist
+      -- Create db folder if it doesn't exist
       let ind = (T.length databasePath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ databasePath
           db = T.unpack $ T.take ind databasePath
       createDirectoryIfMissing True db
@@ -38,8 +38,8 @@ setupDatabase = do
 --
 -- TODO: Probably combine seeding of Distribution and Breadth tables,
 -- and split off from @parseAll@.
-runDatabase :: IO ()
-runDatabase = do
+populateCourseInfo :: IO ()
+populateCourseInfo = do
     setupDistributionTable
     print distTableSetUpStr
     setupBreadthTable
