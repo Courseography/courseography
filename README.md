@@ -49,8 +49,9 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 
 #### Parsing and Generation
 
-1. Create database file for an parse prerequisite graph `$ stack run graphs`
-2. Parse course information `$ stack run database`
+1. Create the database file `$ stack run database-setup`
+2. Parse prerequisite graphs `$ stack run database-graphs`
+3. Parse course information `$ stack run database-courses`
 
 #### Running
 
@@ -118,6 +119,7 @@ Hermish Mehta,
 Mia Meng,
 Christine Murad,
 Justin Park,
+Harsh Patel,
 Sam Shaftoe,
 Ian Stewart-Binks,
 Maryam Taj,
