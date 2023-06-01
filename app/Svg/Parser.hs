@@ -25,10 +25,11 @@ import Data.List.Split (splitOn)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
+import Database.CourseQueries (getGraph)
 import Database.DataType
 import Database.Persist.Sqlite (SqlPersistM, runSqlite)
 import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
-import Svg.Database (deleteGraphs, insertElements, insertGraph)
+import Svg.Database (deleteGraph, insertElements, insertGraph)
 import Text.HTML.TagSoup (Tag)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Text.Parsec ((<|>))
@@ -39,7 +40,8 @@ import Text.Read (readMaybe)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
-    deleteGraphs
+--    deleteGraphs
+--    deleteExistingGraph "Computer Science"
     performParse "Computer Science" "csc2023.svg"
     performParse "Statistics" "sta2022.svg"
     -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
@@ -71,9 +73,18 @@ performParse :: T.Text -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> SqlPersistM ()
 performParse graphName inputFilename = do
+    deleteExistingGraph graphName
     liftIO . print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
     graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
     performParseFromMemory graphName graphFile False
+
+-- | Check if a graph exists and delete it if it does
+deleteExistingGraph :: T.Text -> SqlPersistM ()
+deleteExistingGraph graphName = do
+  maybeResponse <- liftIO $ getGraph graphName
+  case maybeResponse of
+    Just _ -> deleteGraph graphName
+    Nothing -> liftIO $ putStrLn "Graph does not exist"
 
 performParseFromMemory :: T.Text -- ^ The title of the graph
                        -> T.Text -- ^ Filename of the SVG to parse

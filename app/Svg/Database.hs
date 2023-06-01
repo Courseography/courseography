@@ -8,8 +8,9 @@ here as well at some point in the future.
 -}
 
 module Svg.Database
-    (insertGraph, insertElements, deleteGraphs) where
+    (insertGraph, insertElements, deleteGraph) where
 
+import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Database.Persist.Sqlite
 import Database.Tables hiding (graphDynamic, graphHeight, graphWidth, paths, shapes, texts)
@@ -31,11 +32,28 @@ insertElements (paths, shapes, texts) = do
     mapM_ insert_ paths
     mapM_ insert_ texts
 
--- | Delete graphs from the database.
-deleteGraphs :: SqlPersistM ()
-deleteGraphs = do
-    runMigration migrateAll
-    deleteWhere ([] :: [Filter Text])
-    deleteWhere ([] :: [Filter Shape])
-    deleteWhere ([] :: [Filter Path])
-    deleteWhere ([] :: [Filter Graph])
+-- | Delete a graph with the given name from the database
+deleteGraph :: T.Text -> SqlPersistM ()
+deleteGraph graphName = do
+  runMigration migrateAll
+  mGraph <- selectFirst [GraphTitle ==. graphName] []
+  case mGraph of
+    Just (Entity graphId _) -> do
+      deleteWhere [TextGraph ==. graphId]
+      deleteWhere [ShapeGraph ==. graphId]
+      deleteWhere [PathGraph ==. graphId]
+      deleteWhere [GraphTitle ==. graphName]
+      liftIO $ putStrLn "Graph deleted"
+    Nothing ->
+      liftIO $ putStrLn "Graph does not exist"
+--  deleteWhere [GraphTitle ==. graphName]
+--  liftIO $ putStrLn "Graph deleted"
+
+---- | Delete graphs from the database.
+--deleteGraphs :: SqlPersistM ()
+--deleteGraphs = do
+--    runMigration migrateAll
+--    deleteWhere ([] :: [Filter Text])
+--    deleteWhere ([] :: [Filter Shape])
+--    deleteWhere ([] :: [Filter Path])
+--    deleteWhere ([] :: [Filter Graph])
