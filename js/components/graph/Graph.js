@@ -1227,7 +1227,7 @@ export class Graph extends React.Component {
    * @return {JSX.Element}
    */
   renderBoolGroup = (boolsJSON, boolsStatus, connections) => {
-    generateBool = boolJSON => {
+    const generateBool = boolJSON => {
       const { parents } = connections
       return (
         <Bool
@@ -1253,7 +1253,7 @@ export class Graph extends React.Component {
    * @return {JSX.Element}
    */
   renderEdgeGroup = (edgesJSON, edgesStatus) => {
-    generateEdge = edgeJSON => {
+    const generateEdge = edgeJSON => {
       return (
         <Edge
           className="path"
