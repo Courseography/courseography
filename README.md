@@ -49,8 +49,9 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 
 #### Parsing and Generation
 
-1. Create database file for an parse prerequisite graph `$ stack run graphs`
-2. Parse course information `$ stack run database`
+1. Create the database file `$ stack run database-setup`
+2. Parse prerequisite graphs `$ stack run database-graphs`
+3. Parse course information `$ stack run database-courses`
 
 #### Running
 
@@ -60,6 +61,11 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 
 When running in production you should run `$ yarn build` instead of `$ yarn watch` to build the web assets.
 This will take longer but results in smaller asset files.
+
+#### Running front-end tests
+
+To run all tests, run `$ yarn run test`. However, if you need to run a specific file or folder of tests,
+run `$ yarn run test -- <path>`.
 
 #### Developers
 
@@ -102,6 +108,7 @@ Nazanin Ghazitabatabai,
 Sidharth Gupta,
 Parker Hutcheson,
 Philip Kukulak,
+Jaeyong Lee,
 Ryan Lee,
 Tamara Lipowski,
 Lydia Liu,
@@ -112,6 +119,7 @@ Hermish Mehta,
 Mia Meng,
 Christine Murad,
 Justin Park,
+Harsh Patel,
 Sam Shaftoe,
 Ian Stewart-Binks,
 Maryam Taj,
