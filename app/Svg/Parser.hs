@@ -40,8 +40,6 @@ import Text.Read (readMaybe)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
---    deleteGraphs
---    deleteExistingGraph "Computer Science"
     performParse "Computer Science" "csc2023.svg"
     performParse "Statistics" "sta2022.svg"
     -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
@@ -84,7 +82,7 @@ deleteExistingGraph graphName = do
   maybeResponse <- liftIO $ getGraph graphName
   case maybeResponse of
     Just _ -> deleteGraph graphName
-    Nothing -> liftIO $ putStrLn "Graph does not exist"
+    Nothing -> pure ()
 
 performParseFromMemory :: T.Text -- ^ The title of the graph
                        -> T.Text -- ^ Filename of the SVG to parse

@@ -10,7 +10,6 @@ here as well at some point in the future.
 module Svg.Database
     (insertGraph, insertElements, deleteGraph) where
 
-import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Database.Persist.Sqlite
 import Database.Tables hiding (graphDynamic, graphHeight, graphWidth, paths, shapes, texts)
@@ -36,24 +35,11 @@ insertElements (paths, shapes, texts) = do
 deleteGraph :: T.Text -> SqlPersistM ()
 deleteGraph graphName = do
   runMigration migrateAll
-  mGraph <- selectFirst [GraphTitle ==. graphName] []
-  case mGraph of
+  graph <- selectFirst [GraphTitle ==. graphName] []
+  case graph of
     Just (Entity graphId _) -> do
       deleteWhere [TextGraph ==. graphId]
       deleteWhere [ShapeGraph ==. graphId]
       deleteWhere [PathGraph ==. graphId]
       deleteWhere [GraphTitle ==. graphName]
-      liftIO $ putStrLn "Graph deleted"
-    Nothing ->
-      liftIO $ putStrLn "Graph does not exist"
---  deleteWhere [GraphTitle ==. graphName]
---  liftIO $ putStrLn "Graph deleted"
-
----- | Delete graphs from the database.
---deleteGraphs :: SqlPersistM ()
---deleteGraphs = do
---    runMigration migrateAll
---    deleteWhere ([] :: [Filter Text])
---    deleteWhere ([] :: [Filter Shape])
---    deleteWhere ([] :: [Filter Path])
---    deleteWhere ([] :: [Filter Graph])
+    Nothing -> pure ()
