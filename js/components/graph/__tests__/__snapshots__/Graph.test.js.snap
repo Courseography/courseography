@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`BoolGroup BoolGroup should match shallow snapshot 1`] = `
+<g
+  id="bools"
+/>
+`;
+
+exports[`EdgeGroup should match shallow snapshot 1`] = `
+<g
+  id="edges"
+/>
+`;
+
 exports[`Graph rendering RegionGroup should match shallow snapshot 1`] = `
 <g
   id="regions"
@@ -26,4 +38,10 @@ exports[`Graph rendering RegionGroup should match shallow snapshot 1`] = `
     Systems
   </text>
 </g>
+`;
+
+exports[`NodeGroup should match shallow snapshot 1`] = `
+<g
+  id="nodes"
+/>
 `;

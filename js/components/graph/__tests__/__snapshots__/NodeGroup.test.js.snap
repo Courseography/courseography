@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`NodeGroup should match shallow snapshot 1`] = `
-<g
-  id="nodes"
-/>
-`;
