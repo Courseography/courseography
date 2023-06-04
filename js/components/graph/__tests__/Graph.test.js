@@ -1,6 +1,7 @@
 import TestGraph from "./TestGraph"
 import { fireEvent } from "@testing-library/react"
 import { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT } from "../Graph"
+import { shallow } from "enzyme"
 import { Graph } from "../Graph"
 
 describe("Graph Navigation", () => {
@@ -174,5 +175,79 @@ describe("Graph rendering RegionGroup", () => {
 
     const wrapper = new Graph({})
     expect(wrapper.renderRegionsLabels(regionsJSON, labelsJSON)).toMatchSnapshot()
+  })
+})
+
+describe("EdgeGroup", () => {
+  it("should match shallow snapshot", () => {
+    const params = {
+      edgesJSON: {},
+      edgesStatus: {},
+    }
+
+    const graph = new Graph({})
+    const component = shallow(
+      graph.renderEdgeGroup(params.edgesJSON, params.edgesStatus)
+    )
+
+    expect(component).toMatchSnapshot()
+  })
+})
+
+describe("BoolGroup", () => {
+  it("BoolGroup should match shallow snapshot", () => {
+    const params = {
+      boolsJSON: {},
+      boolsStatus: { bool1: "inactive", bool2: "inactive" },
+      connections: {},
+    }
+
+    const graph = new Graph({})
+    const component = shallow(
+      graph.renderBoolGroup(params.boolsJSON, params.boolsStatus, params.connections)
+    )
+
+    expect(component).toMatchSnapshot()
+  })
+})
+
+describe("NodeGroup", () => {
+  it("should match shallow snapshot", () => {
+    const params = {
+      nodeClick: jest.fn(),
+      nodeMouseEnter: jest.fn(),
+      nodeMouseLeave: jest.fn(),
+      nodeMouseDown: jest.fn(),
+      onKeyDown: jest.fn(),
+      onWheel: jest.fn(),
+      nodesStatus: {},
+      nodesJSON: {},
+      hybridsJSON: {},
+      highlightedNodes: [],
+      edgesJSON: [],
+      connections: {},
+      nodeDropshadowFilter: "",
+    }
+
+    const graph = new Graph({})
+    const component = shallow(
+      graph.renderNodeGroup(
+        params.nodeClick,
+        params.nodeMouseEnter,
+        params.nodeMouseLeave,
+        params.nodeMouseDown,
+        params.onKeyDown,
+        params.onWheel,
+        params.nodesStatus,
+        params.nodesJSON,
+        params.hybridsJSON,
+        params.highlightedNodes,
+        params.edgesJSON,
+        params.connections,
+        params.nodeDropshadowFilter
+      )
+    )
+
+    expect(component).toMatchSnapshot()
   })
 })
