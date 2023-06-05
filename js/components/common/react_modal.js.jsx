@@ -33,6 +33,7 @@ class CourseModal extends React.Component {
       course: [],
       sessions: {},
       courseTitle: "",
+      visitedCourses: [],
     }
   }
 
@@ -98,9 +99,12 @@ class CourseModal extends React.Component {
 
   /**
    * Change the courseId state, whenever a course link is clicked.
+   * Additionally, add the class to the list of visited courses.
    */
   linkStateChange = courseLink => {
     this.setState({ courseId: courseLink })
+    const newVisitedCourses = [...this.state.visitedCourses, courseLink]
+    this.setState({ visitedCourses: newVisitedCourses })
   }
 
   /**
@@ -132,6 +136,7 @@ class CourseModal extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props.showCourseModal !== prevProps.showCourseModal) {
       this.setState({ courseId: this.props.courseId })
+      this.setState({ visitedCourses: [this.props.courseId] })
     } else if (prevState.courseId !== this.state.courseId) {
       getCourse(this.state.courseId).then(course => {
         const newCourse = {
@@ -225,7 +230,37 @@ class CourseModal extends React.Component {
         onRequestClose={this.props.onClose}
         ariaHideApp={false}
       >
-        <div className="modal-header">{this.state.courseTitle}</div>
+        <div
+          className="modal-header"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          {this.state.courseTitle}
+          {console.log(this.state.visitedCourses)}
+
+          {/* TODO: make this boolean conditionally render the buttons iff the visitedCourses state array has length at least 2 */}
+          {this.state.visitedCourses.length >= 2 && (
+            <div style={{ marginLeft: "auto" }}>
+              {/* TODO: DO NOT use list.pop to directly modify state for the Back button. */}
+              <button
+                type="button"
+                class="info-modal-button"
+                onClick={() =>
+                  this.setState({ courseId: this.state.visitedCourses.pop() })
+                }
+              >
+                Back
+              </button>
+              <button type="button" class="info-modal-button">
+                Forward
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="modal-body">
           <Description course={this.state.course} sessions={this.state.sessions} />
         </div>
