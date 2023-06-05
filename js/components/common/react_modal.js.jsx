@@ -34,6 +34,7 @@ class CourseModal extends React.Component {
       sessions: {},
       courseTitle: "",
       visitedCourses: [],
+      currVisitedIndex: 0,
     }
   }
 
@@ -105,6 +106,7 @@ class CourseModal extends React.Component {
     this.setState({ courseId: courseLink })
     const newVisitedCourses = [...this.state.visitedCourses, courseLink]
     this.setState({ visitedCourses: newVisitedCourses })
+    this.setState({ currVisitedIndex: this.state.currVisitedIndex + 1 })
   }
 
   /**
@@ -160,6 +162,11 @@ class CourseModal extends React.Component {
         })
       })
     }
+  }
+
+  backClick = () => {
+    linkStateChange(this.state.newVisitedCourses[this.state.currVisitedIndex - 1])
+    this.setState({ currVisitedIndex: this.state.currVisitedIndex - 1 })
   }
 
   /* Generate the data needed for each row of the timetable based on course meeting times for
@@ -245,13 +252,7 @@ class CourseModal extends React.Component {
           {this.state.visitedCourses.length >= 2 && (
             <div style={{ marginLeft: "auto" }}>
               {/* TODO: DO NOT use list.pop to directly modify state for the Back button. */}
-              <button
-                type="button"
-                class="info-modal-button"
-                onClick={() =>
-                  this.setState({ courseId: this.state.visitedCourses.pop() })
-                }
-              >
+              <button type="button" class="info-modal-button" onClick={backClick}>
                 Back
               </button>
               <button type="button" class="info-modal-button">
