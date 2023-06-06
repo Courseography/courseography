@@ -105,6 +105,8 @@ export class Graph extends React.Component {
   }
 
   componentWillUnmount() {
+    this.state.infoboxTimeouts.forEach(timeout => clearTimeout(timeout))
+    this.state.dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
     document.body.removeEventListener("keydown", this.onKeyDown)
   }
 
