@@ -25,9 +25,8 @@ import Data.List.Split (splitOn)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
-import Database.CourseQueries (getGraph)
 import Database.DataType
-import Database.Persist.Sqlite (SqlPersistM, runSqlite)
+import Database.Persist.Sqlite
 import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
 import Svg.Database (deleteGraph, insertElements, insertGraph)
 import Text.HTML.TagSoup (Tag)
@@ -66,7 +65,8 @@ parseDynamicSvg :: T.Text -> T.Text -> IO ()
 parseDynamicSvg graphName graphContents =
     runSqlite databasePath $ performParseFromMemory graphName graphContents True
 
--- | The starting point for parsing a graph with a given title and file.
+-- | The starting point for parsing a graph with a given title and file
+-- after removing the graph if it already exists.
 performParse :: T.Text -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> SqlPersistM ()
@@ -76,12 +76,14 @@ performParse graphName inputFilename = do
     graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
     performParseFromMemory graphName graphFile False
 
--- | Check if a graph exists and delete it if it does
+-- | Deletes the graph with the given name from the database if it exists.
 deleteExistingGraph :: T.Text -> SqlPersistM ()
 deleteExistingGraph graphName = do
-  maybeResponse <- liftIO $ getGraph graphName
-  case maybeResponse of
-    Just _ -> deleteGraph graphName
+  graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
+  case graphEnt of
+    Just graph -> do
+      let gId = entityKey graph
+      deleteGraph gId
     Nothing -> pure ()
 
 performParseFromMemory :: T.Text -- ^ The title of the graph

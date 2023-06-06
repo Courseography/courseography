@@ -31,15 +31,10 @@ insertElements (paths, shapes, texts) = do
     mapM_ insert_ paths
     mapM_ insert_ texts
 
--- | Delete a graph with the given name from the database
-deleteGraph :: T.Text -> SqlPersistM ()
-deleteGraph graphName = do
-  runMigration migrateAll
-  graph <- selectFirst [GraphTitle ==. graphName] []
-  case graph of
-    Just (Entity graphId _) -> do
-      deleteWhere [TextGraph ==. graphId]
-      deleteWhere [ShapeGraph ==. graphId]
-      deleteWhere [PathGraph ==. graphId]
-      deleteWhere [GraphTitle ==. graphName]
-    Nothing -> pure ()
+-- | Delete a graph with the given graph ID from the database.
+deleteGraph :: Key Graph -> SqlPersistM ()
+deleteGraph gId = do
+    deleteWhere [TextGraph ==. gId]
+    deleteWhere [ShapeGraph ==. gId]
+    deleteWhere [PathGraph ==. gId]
+    deleteWhere [GraphId ==. gId]

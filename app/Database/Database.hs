@@ -50,7 +50,6 @@ populateCourseInfo = do
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = runSqlite databasePath $ do
-    runMigration migrateAll
     insert_ $ Distribution "Humanities"
     insert_ $ Distribution "Social Science"
     insert_ $ Distribution "Science"
@@ -58,7 +57,6 @@ setupDistributionTable = runSqlite databasePath $ do
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
 setupBreadthTable = runSqlite databasePath $ do
-    runMigration migrateAll
     insert_ $ Breadth "Creative and Cultural Representations (1)"
     insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
     insert_ $ Breadth "Society and its Institutions (3)"
