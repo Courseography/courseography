@@ -102,11 +102,20 @@ class CourseModal extends React.Component {
    * Change the courseId state, whenever a course link is clicked.
    * Additionally, add the class to the list of visited courses.
    */
-  linkStateChange = courseLink => {
+  linkStateChange = (courseLink, buttonClicked = false) => {
     this.setState({ courseId: courseLink })
-    const newVisitedCourses = [...this.state.visitedCourses, courseLink]
-    this.setState({ visitedCourses: newVisitedCourses })
-    this.setState({ currVisitedIndex: this.state.currVisitedIndex + 1 })
+    console.log(this.state.visitedCourses)
+
+    if (!buttonClicked) {
+      const newVisitedCourses = [...this.state.visitedCourses]
+      const insertIndex = this.state.currVisitedIndex + 1
+      newVisitedCourses.splice(insertIndex, 0, courseLink)
+
+      this.setState({
+        visitedCourses: newVisitedCourses,
+        currVisitedIndex: this.state.currVisitedIndex + 1,
+      })
+    }
   }
 
   /**
@@ -162,11 +171,6 @@ class CourseModal extends React.Component {
         })
       })
     }
-  }
-
-  backClick = () => {
-    linkStateChange(this.state.newVisitedCourses[this.state.currVisitedIndex - 1])
-    this.setState({ currVisitedIndex: this.state.currVisitedIndex - 1 })
   }
 
   /* Generate the data needed for each row of the timetable based on course meeting times for
@@ -228,6 +232,22 @@ class CourseModal extends React.Component {
     })
   }
 
+  infoModalBackClick = () => {
+    this.linkStateChange(
+      this.state.visitedCourses[this.state.currVisitedIndex - 1],
+      true
+    )
+    this.setState({ currVisitedIndex: this.state.currVisitedIndex - 1 })
+  }
+
+  infoModalForwardClick = () => {
+    this.linkStateChange(
+      this.state.visitedCourses[this.state.currVisitedIndex + 1],
+      true
+    )
+    this.setState({ currVisitedIndex: this.state.currVisitedIndex + 1 })
+  }
+
   render() {
     return (
       <ReactModal
@@ -246,20 +266,28 @@ class CourseModal extends React.Component {
           }}
         >
           {this.state.courseTitle}
-          {console.log(this.state.visitedCourses)}
 
-          {/* TODO: make this boolean conditionally render the buttons iff the visitedCourses state array has length at least 2 */}
-          {this.state.visitedCourses.length >= 2 && (
-            <div style={{ marginLeft: "auto" }}>
-              {/* TODO: DO NOT use list.pop to directly modify state for the Back button. */}
-              <button type="button" class="info-modal-button" onClick={backClick}>
+          <div style={{ marginLeft: "auto" }}>
+            {this.state.currVisitedIndex !== 0 && (
+              <button
+                type="button"
+                className="info-modal-button"
+                onClick={this.infoModalBackClick}
+              >
                 Back
               </button>
-              <button type="button" class="info-modal-button">
+            )}
+
+            {this.state.currVisitedIndex !== this.state.visitedCourses.length - 1 && (
+              <button
+                type="button"
+                className="info-modal-button"
+                onClick={this.infoModalForwardClick}
+              >
                 Forward
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         <div className="modal-body">
