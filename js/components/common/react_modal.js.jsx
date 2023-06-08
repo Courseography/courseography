@@ -268,25 +268,29 @@ class CourseModal extends React.Component {
           {this.state.courseTitle}
 
           <div className="button-container">
-            <button
-              type="button"
-              className="info-modal-button"
-              onClick={this.infoModalBackClick}
-              disabled={this.state.currVisitedIndex == 0}
-            >
-              {"<"}
-            </button>
+            {this.state.visitedCourses.length !== 1 && (
+              <div>
+                <button
+                  type="button"
+                  className="info-modal-button"
+                  onClick={this.infoModalBackClick}
+                  disabled={this.state.currVisitedIndex == 0}
+                >
+                  {"<"}
+                </button>
 
-            <button
-              type="button"
-              className="info-modal-button"
-              onClick={this.infoModalForwardClick}
-              disabled={
-                this.state.currVisitedIndex == this.state.visitedCourses.length - 1
-              }
-            >
-              {">"}
-            </button>
+                <button
+                  type="button"
+                  className="info-modal-button"
+                  onClick={this.infoModalForwardClick}
+                  disabled={
+                    this.state.currVisitedIndex == this.state.visitedCourses.length - 1
+                  }
+                >
+                  {">"}
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

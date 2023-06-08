@@ -808,6 +808,10 @@ div.sidebar.collapsed {
   width: 50px;
 }
 
+.info-modal-button:disabled {
+  background-color: #a0aec0;
+}
+
 .flip {
   transform: rotate(180deg);
   transform: rotate(180deg);
