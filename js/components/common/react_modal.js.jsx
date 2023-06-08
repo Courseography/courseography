@@ -104,7 +104,6 @@ class CourseModal extends React.Component {
    */
   linkStateChange = (courseLink, buttonClicked = false) => {
     this.setState({ courseId: courseLink })
-    console.log(this.state.visitedCourses)
 
     if (!buttonClicked) {
       const newVisitedCourses = [...this.state.visitedCourses]
@@ -148,6 +147,7 @@ class CourseModal extends React.Component {
     if (this.props.showCourseModal !== prevProps.showCourseModal) {
       this.setState({ courseId: this.props.courseId })
       this.setState({ visitedCourses: [this.props.courseId] })
+      this.setState({ currVisitedIndex: 0 })
     } else if (prevState.courseId !== this.state.courseId) {
       getCourse(this.state.courseId).then(course => {
         const newCourse = {
@@ -261,32 +261,32 @@ class CourseModal extends React.Component {
           className="modal-header"
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "space-evenly",
             alignItems: "center",
           }}
         >
           {this.state.courseTitle}
 
-          <div style={{ marginLeft: "auto" }}>
-            {this.state.currVisitedIndex !== 0 && (
-              <button
-                type="button"
-                className="info-modal-button"
-                onClick={this.infoModalBackClick}
-              >
-                Back
-              </button>
-            )}
+          <div className="button-container">
+            <button
+              type="button"
+              className="info-modal-button"
+              onClick={this.infoModalBackClick}
+              disabled={this.state.currVisitedIndex == 0}
+            >
+              {"<"}
+            </button>
 
-            {this.state.currVisitedIndex !== this.state.visitedCourses.length - 1 && (
-              <button
-                type="button"
-                className="info-modal-button"
-                onClick={this.infoModalForwardClick}
-              >
-                Forward
-              </button>
-            )}
+            <button
+              type="button"
+              className="info-modal-button"
+              onClick={this.infoModalForwardClick}
+              disabled={
+                this.state.currVisitedIndex == this.state.visitedCourses.length - 1
+              }
+            >
+              {">"}
+            </button>
           </div>
         </div>
 

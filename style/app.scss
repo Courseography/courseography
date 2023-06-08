@@ -792,9 +792,20 @@ div.sidebar.collapsed {
   z-index: 1;
 }
 
+.button-container {
+  display: flex;
+  margin-left: auto;
+}
+
 .info-modal-button {
-  height: "35px";
-  width: "100px";
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 1px 0 5px 0 #808080;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-right: 20px;
+  margin-top: 10px;
+  width: 50px;
 }
 
 .flip {
