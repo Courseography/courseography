@@ -105,7 +105,7 @@ class CourseModal extends React.Component {
   linkStateChange = (courseLink, buttonClicked = false) => {
     this.setState({ courseId: courseLink })
 
-    if (!buttonClicked) {
+    if (!buttonClicked && this.state.courseId !== courseLink) {
       const newVisitedCourses = [...this.state.visitedCourses]
       const insertIndex = this.state.currVisitedIndex + 1
       newVisitedCourses.splice(insertIndex, 0, courseLink)
