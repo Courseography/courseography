@@ -274,7 +274,7 @@ class CourseModal extends React.Component {
                   type="button"
                   className="info-modal-button"
                   onClick={this.infoModalBackClick}
-                  disabled={this.state.currVisitedIndex == 0}
+                  disabled={this.state.currVisitedIndex === 0}
                 >
                   {"<"}
                 </button>
@@ -284,7 +284,7 @@ class CourseModal extends React.Component {
                   className="info-modal-button"
                   onClick={this.infoModalForwardClick}
                   disabled={
-                    this.state.currVisitedIndex == this.state.visitedCourses.length - 1
+                    this.state.currVisitedIndex === this.state.visitedCourses.length - 1
                   }
                 >
                   {">"}
