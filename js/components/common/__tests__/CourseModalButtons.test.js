@@ -1,6 +1,7 @@
 import React from "react"
 import "@testing-library/jest-dom"
 import { CourseModal } from "../react_modal.js.jsx"
+import { shallow } from "enzyme"
 import { render, screen } from "@testing-library/react"
 
 describe("CourseModal", () => {
@@ -14,7 +15,7 @@ describe("CourseModal", () => {
     expect(backButton).toBeDisabled()
   })
 
-  it("disables forward button when there are no selected courses remaining to go through", () => {
+  it("disables forward button when there are no visited courses remaining to go through", () => {
     render(
       <CourseModal
         showCourseModal={true}
@@ -24,7 +25,7 @@ describe("CourseModal", () => {
       />
     )
 
-    const forwardButton = screen.getByRole("button", { name: /</i })
+    const forwardButton = screen.getByRole("button", { name: />/i })
 
     expect(forwardButton).toBeDisabled()
   })
