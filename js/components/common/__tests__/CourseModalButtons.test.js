@@ -16,12 +16,16 @@ describe("CourseModal", () => {
     screen.debug()
   })
 
-  it("renders buttons when course link is clicked", () => {
-    render(<CourseModal showCourseModal={true} onClose={() => {}} />)
+  it("renders buttons when a course link is clicked for the first time", () => {
+    // Render the CSC111 course specific course modal.
+    render(<CourseModal showCourseModal={true} courseId="csc111" onClose={() => {}} />)
+    screen.debug()
 
-    const link = screen.getByRole("link", { class: "course-selection" })
+    // Find a course link
+    // const link = screen.getByRole("link", { ... })
     userEvent.click(link)
 
+    // Find the buttons
     const backButton = screen.queryByRole("button", { name: /</i })
     const forwardButton = screen.queryByRole("button", { name: />/i })
 
