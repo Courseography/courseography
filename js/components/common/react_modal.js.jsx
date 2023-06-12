@@ -268,13 +268,13 @@ class CourseModal extends React.Component {
           {this.state.courseTitle}
 
           <div className="button-container">
-            {this.state.visitedCourses.length !== 1 && (
+            {this.state.visitedCourses.length > 1 && (
               <div>
                 <button
                   type="button"
                   className="info-modal-button"
                   onClick={this.infoModalBackClick}
-                  disabled={this.state.currVisitedIndex === 0}
+                  //                   disabled={this.state.currVisitedIndex === 0}
                 >
                   {"<"}
                 </button>
