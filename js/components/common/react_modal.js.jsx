@@ -106,15 +106,20 @@ class CourseModal extends React.Component {
     this.setState({ courseId: courseLink })
 
     if (!buttonClicked && this.state.courseId !== courseLink) {
-      const newVisitedCourses = [...this.state.visitedCourses]
-      const insertIndex = this.state.currVisitedIndex + 1
-      newVisitedCourses.splice(insertIndex, 0, courseLink)
+      //       const newVisitedCourses = [...this.state.visitedCourses]
+
+      //       const insertIndex = this.state.currVisitedIndex + 1
+      const newVisitedCourses = this.state.visitedCourses.slice(
+        0,
+        this.state.currVisitedIndex + 1
+      )
 
       this.setState({
-        visitedCourses: newVisitedCourses,
+        visitedCourses: newVisitedCourses.concat(courseLink),
         currVisitedIndex: this.state.currVisitedIndex + 1,
       })
     }
+    console.log(this.state.visitedCourses)
   }
 
   /**
