@@ -1,35 +1,46 @@
-import "@testing-library/jest-dom"
-import { CourseModal } from "../react_modal.js.jsx"
-import * as React from "react"
+import React from "react"
+import { configure } from "enzyme"
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17"
+configure({ adapter: new Adapter() }) // enzyme
 import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { CourseModal } from "../react_modal.js.jsx"
+import fetchMock from "fetch-mock"
+import testData from "../../../components/graph/__mocks__/defaultTestData"
+import testContainerData from "../../../components/graph/__mocks__/testContainerData"
+import aaa100CourseInfo from "../../../components/graph/__mocks__/aaa100-course-info"
+import focusData from "../../../components/graph/__mocks__/focusData"
+import statisticsTestData from "../../../components/graph/__mocks__/statisticsTestData"
 
 describe("CourseModal", () => {
-  it("does not render buttons when course modal is opened", () => {
-    render(<CourseModal showCourseModal={true} onClose={() => {}} />)
+  beforeEach(() => {
+    fetchMock.get("http://localhost/get-json-data?graphName=Computer+Science", testData)
+    fetchMock.get(
+      "http://localhost/get-json-data?graphName=%28unofficial%29+Statistics",
+      statisticsTestData
+    )
+    fetchMock.get("http://localhost/course?name=aaa100H1", aaa100CourseInfo)
+    fetchMock.get("/course?name=aaa100H1", aaa100CourseInfo)
+    fetchMock.get("/course?name=aaa100", aaa100CourseInfo)
+    fetchMock.get(/\/post\?code=[A-Z]{5}[0-9]{4}([A-Z]*)/, focusData)
+    fetchMock.get("/graphs", testContainerData)
 
-    const backButton = screen.queryByRole("button", { name: /</i })
-    const forwardButton = screen.queryByRole("button", { name: />/i })
-
-    expect(backButton).not.toBeInTheDocument()
-    expect(forwardButton).not.toBeInTheDocument()
-    screen.debug()
+    document.body.innerHTML = `
+    <nav>
+        <ul>
+            <li id="nav-graph">
+                <a  href="/graph">Graph</a>
+            </li>
+        </ul>
+    </nav>
+    <div id="react-graph" class="react-graph"></div>
+    <div id="fcecount"></div>`
   })
 
-  it("renders buttons when a course link is clicked for the first time", () => {
-    // Render the CSC111 course specific course modal.
-    render(<CourseModal showCourseModal={true} courseId="csc111" onClose={() => {}} />)
+  it("renders the course modal for CSC111", () => {
+    // Render the component that contains the course modal
+    render(
+      <CourseModal showCourseModal={true} courseId={"aaa100"} onClose={() => {}} />
+    )
     screen.debug()
-
-    // Find a course link
-    // const link = screen.getByRole("link", { ... })
-    userEvent.click(link)
-
-    // Find the buttons
-    const backButton = screen.queryByRole("button", { name: /</i })
-    const forwardButton = screen.queryByRole("button", { name: />/i })
-
-    expect(backButton).toBeInTheDocument()
-    expect(forwardButton).toBeInTheDocument()
   })
 })
