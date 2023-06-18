@@ -1,46 +1,37 @@
-import React from "react"
-import { configure } from "enzyme"
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17"
-configure({ adapter: new Adapter() }) // enzyme
-import { render, screen } from "@testing-library/react"
+import "@testing-library/jest-dom"
 import { CourseModal } from "../react_modal.js.jsx"
-import fetchMock from "fetch-mock"
-import testData from "../../../components/graph/__mocks__/defaultTestData"
-import testContainerData from "../../../components/graph/__mocks__/testContainerData"
-import aaa100CourseInfo from "../../../components/graph/__mocks__/aaa100-course-info"
-import focusData from "../../../components/graph/__mocks__/focusData"
-import statisticsTestData from "../../../components/graph/__mocks__/statisticsTestData"
+import * as React from "react"
+import { render, screen, userEvent, fireEvent } from "@testing-library/react"
+import TestGraph from "../../graph/__tests__/TestGraph.js"
 
 describe("CourseModal", () => {
-  beforeEach(() => {
-    fetchMock.get("http://localhost/get-json-data?graphName=Computer+Science", testData)
-    fetchMock.get(
-      "http://localhost/get-json-data?graphName=%28unofficial%29+Statistics",
-      statisticsTestData
-    )
-    fetchMock.get("http://localhost/course?name=aaa100H1", aaa100CourseInfo)
-    fetchMock.get("/course?name=aaa100H1", aaa100CourseInfo)
-    fetchMock.get("/course?name=aaa100", aaa100CourseInfo)
-    fetchMock.get(/\/post\?code=[A-Z]{5}[0-9]{4}([A-Z]*)/, focusData)
-    fetchMock.get("/graphs", testContainerData)
+  it("does not render buttons when course modal is initially opened", async () => {
+    await TestGraph.build()
 
-    document.body.innerHTML = `
-    <nav>
-        <ul>
-            <li id="nav-graph">
-                <a  href="/graph">Graph</a>
-            </li>
-        </ul>
-    </nav>
-    <div id="react-graph" class="react-graph"></div>
-    <div id="fcecount"></div>`
+    const node = document.querySelector('[data-testid="aaa100"]')
+    fireEvent.mouseOver(node)
+
+    const infobox = document.getElementById("aaa100-tooltip-rect")
+    fireEvent.click(infobox)
+
+    // course modal appears, but the buttons are not visible
+    expect(document.querySelector(".info-modal-button")).toBeNull
   })
 
-  it("renders the course modal for CSC111", () => {
-    // Render the component that contains the course modal
-    render(
-      <CourseModal showCourseModal={true} courseId={"aaa100"} onClose={() => {}} />
-    )
-    screen.debug()
+  it("renders buttons when course link is clicked", async () => {
+    await TestGraph.build()
+
+    const node = document.querySelector('[data-testid="aaa100"]')
+    fireEvent.mouseOver(node)
+
+    const infobox = document.getElementById("aaa100-tooltip-rect")
+    fireEvent.click(infobox)
+
+    // course modal appears, but the buttons are not visible
+    const link = document.querySelector(".course-selection")
+    console.log(link)
+    //    fireEvent.click(link)
+    //
+    //    expect(document.querySelector(".info-modal-button")).toBeNull
   })
 })
