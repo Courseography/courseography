@@ -18,14 +18,3 @@ fetchMock.get("/course?name=aaa100H1", aaa100CourseInfo)
 fetchMock.get("/course?name=aaa100", aaa100CourseInfo)
 fetchMock.get(/\/post\?code=[A-Z]{5}[0-9]{4}([A-Z]*)/, focusData)
 fetchMock.get("/graphs", testContainerData)
-
-document.body.innerHTML = `
-<nav>
-    <ul>
-        <li id="nav-graph">
-            <a  href="/graph">Graph</a>
-        </li>
-    </ul>
-</nav>
-<div id="react-graph" class="react-graph"></div>
-<div id="fcecount"></div>`
