@@ -16,7 +16,7 @@ import Database.CourseVideoSeed (seedVideos)
 import Database.Persist.Sqlite (insert_, runMigration, runSqlite)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
-import WebParsing.ParseAll (parseAll)
+import WebParsing.ParseAll (parseCalendar, parseTimetable)
 
 
 distTableSetUpStr :: String
@@ -44,7 +44,8 @@ populateCourseInfo = do
     print distTableSetUpStr
     setupBreadthTable
     print breathTableSetUpStr
-    parseAll
+    parseCalendar
+    parseTimetable
     seedVideos
 
 -- | Sets up the Distribution table.

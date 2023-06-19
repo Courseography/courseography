@@ -1,11 +1,14 @@
 module WebParsing.ParseAll
-     (parseAll) where
+     (parseCalendar, parseTimetable) where
 
 import WebParsing.ArtSciParser (parseArtSci, parseBuildings)
 import WebParsing.UtsgJsonParser (getAllCourses)
 
-parseAll :: IO ()
-parseAll = do
+parseCalendar :: IO ()
+parseCalendar = do
     parseArtSci
-    getAllCourses
     parseBuildings
+
+parseTimetable :: IO ()
+parseTimetable = do
+    getAllCourses
