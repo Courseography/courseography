@@ -103,7 +103,6 @@ parseDepartment (relativeURL, _) = do
     where
         isProgramHeaderInfix = T.isInfixOf "view-programs-view"
 
-
 -- | Parse the section of the course calendar listing the programs offered by a department.
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
 parsePrograms programs = mapM_ addPostToDatabase $ TS.partitions isAccordionHeader programs
