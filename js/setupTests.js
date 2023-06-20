@@ -16,6 +16,7 @@ fetchMock.get(
 fetchMock.get("http://localhost/course?name=aaa100H1", aaa100CourseInfo)
 fetchMock.get("/course?name=aaa100H1", aaa100CourseInfo)
 fetchMock.get("/course?name=aaa100", aaa100CourseInfo)
+fetchMock.get("/course?name=BBB100H1", aaa100CourseInfo)
 fetchMock.get(/\/post\?code=[A-Z]{5}[0-9]{4}([A-Z]*)/, focusData)
 fetchMock.get("/graphs", testContainerData)
 

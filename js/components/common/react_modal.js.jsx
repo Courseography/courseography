@@ -106,9 +106,6 @@ class CourseModal extends React.Component {
     this.setState({ courseId: courseLink })
 
     if (!buttonClicked && this.state.courseId !== courseLink) {
-      //       const newVisitedCourses = [...this.state.visitedCourses]
-
-      //       const insertIndex = this.state.currVisitedIndex + 1
       const newVisitedCourses = this.state.visitedCourses.slice(
         0,
         this.state.currVisitedIndex + 1
@@ -119,7 +116,6 @@ class CourseModal extends React.Component {
         currVisitedIndex: this.state.currVisitedIndex + 1,
       })
     }
-    console.log(this.state.visitedCourses)
   }
 
   /**
@@ -176,6 +172,7 @@ class CourseModal extends React.Component {
         })
       })
     }
+    console.log(this.state.visitedCourses)
   }
 
   /* Generate the data needed for each row of the timetable based on course meeting times for

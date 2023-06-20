@@ -372,6 +372,6 @@ export default {
   exclusions: "",
   title: "Introduction to AAA Thinking",
   description:
-    "AAA100H1 is about learning about all things triple A. We literally memorize a list of AAA acronyms from here: https://acronyms.thefreedictionary.com/AAA",
+    "AAA100H1 is about learning about all things triple A. We literally memorize a list of AAA acronyms from here: https://acronyms.thefreedictionary.com/AAA . Students can also explore further with BBB100H1.",
   coreqs: null,
 }
