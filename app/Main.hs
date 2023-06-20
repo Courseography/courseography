@@ -16,7 +16,7 @@ import System.Environment (getArgs)
 import System.IO (hPutStrLn, stderr)
 
 -- internal dependencies
-import Database.Database (populateCourseInfo, setupDatabase)
+import Database.Database
 import Server (runServer)
 import Svg.Parser (parsePrebuiltSvgs)
 import Util.Documentation (generateDocs)
@@ -28,7 +28,9 @@ import DynamicGraphs.WriteRunDot (generatePrereqsForCourses)
 taskMap :: Map.Map String ([String] -> IO ())
 taskMap = Map.fromList [
     ("server", const runServer),
-    ("database-courses", const populateCourseInfo),
+    ("database-preliminaries", const runPreliminaries),
+    ("database-calendar", const populateCalendar),
+    ("database-timetable", const populateTimetable),
     ("database-graphs", const parsePrebuiltSvgs),
     ("docs", const generateDocs),
     ("generate", generate),

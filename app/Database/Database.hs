@@ -7,7 +7,7 @@ inserting it into the database. Run when @cabal run database@ is executed.
 -}
 
 module Database.Database
-    (populateCourseInfo, setupDatabase) where
+    (populateCalendar, populateTimetable, runPreliminaries, setupDatabase) where
 
 import Config (databasePath)
 import Data.Maybe (fromMaybe)
@@ -34,19 +34,27 @@ setupDatabase = do
       createDirectoryIfMissing True db
       runSqlite databasePath $ runMigration migrateAll
 
--- | Sets up the database with course information.
+-- | Sets up the tables and seeds the videos for the database.
 --
 -- TODO: Probably combine seeding of Distribution and Breadth tables,
 -- and split off from @parseAll@.
-populateCourseInfo :: IO ()
-populateCourseInfo = do
+runPreliminaries :: IO ()
+runPreliminaries = do
     setupDistributionTable
     print distTableSetUpStr
     setupBreadthTable
     print breathTableSetUpStr
-    parseCalendar
-    parseTimetable
     seedVideos
+
+-- | Sets up the course information from Artsci Calendar
+populateCalendar :: IO ()
+populateCalendar = do
+    parseCalendar
+
+-- | Sets up the course information from Artsci Timetable
+populateTimetable :: IO ()
+populateTimetable = do
+    parseTimetable
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
