@@ -1,6 +1,4 @@
-import { CourseModal } from "../react_modal.js.jsx"
-import * as React from "react"
-import { render, screen, waitFor, fireEvent } from "@testing-library/react"
+import { screen, waitFor, fireEvent } from "@testing-library/react"
 import TestGraph from "../../graph/__tests__/TestGraph.js"
 
 describe("CourseModal", () => {
