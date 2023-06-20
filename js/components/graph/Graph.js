@@ -109,6 +109,21 @@ export class Graph extends React.Component {
     this.state.infoboxTimeouts.forEach(timeout => clearTimeout(timeout))
     this.state.dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
     document.body.removeEventListener("keydown", this.onKeyDown)
+
+    if (document.getElementById("nav-export")) {
+      document
+        .getElementById("nav-export")
+        .removeEventListener("click", this.exportModal.current.openModal)
+    }
+
+    if (document.querySelector("#nav-graph > a")) {
+      document
+        .querySelector("#nav-graph > a")
+        .removeEventListener("mouseenter", this.setShowGraphDropdown)
+      document
+        .querySelector("#nav-graph > a")
+        .removeEventListener("mouseleave", this.hideGraphDropdown)
+    }
   }
 
   getGraph = () => {

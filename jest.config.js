@@ -10,7 +10,10 @@ module.exports = {
     "<rootDir>/js/components/graph/__tests__/TestFocusBar.js",
     "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js",
   ],
-  setupFilesAfterEnv: ["<rootDir>/js/components/graph/__tests__/cleanup-after-each.js"],
+  setupFilesAfterEnv: [
+    "<rootDir>/js/setupTestsAfterEnv.js",
+    "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js",
+  ],
   moduleFileExtensions: ["js", "jsx"],
   moduleDirectories: ["node_modules"],
   moduleNameMapper: {
