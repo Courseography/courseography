@@ -20,7 +20,7 @@ See [CONTRIBUTING.md](https://github.com/Courseography/courseography/blob/master
 
 First install the following:
 
-1. Stack ([Windows](https://docs.haskellstack.org/en/stable/README/)) ([Mac/Linux](https://www.haskell.org/ghcup/))
+1. [Haskell](https://www.haskell.org/ghcup/)
 2. [Node.js](https://nodejs.org/en/download/)
 3. Yarn, by opening a terminal and running: `npm install -g yarn`
 4. [ImageMagick](http://www.imagemagick.org/script/download.php)
