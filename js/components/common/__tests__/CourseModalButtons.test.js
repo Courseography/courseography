@@ -2,22 +2,7 @@ import { screen, waitFor, fireEvent } from "@testing-library/react"
 import TestGraph from "../../graph/__tests__/TestGraph.js"
 
 describe("CourseModal", () => {
-  it("does not render buttons when course modal is initially opened", async () => {
-    await TestGraph.build()
-
-    const node = document.querySelector('[data-testid="aaa100"]')
-    fireEvent.mouseOver(node)
-
-    const infobox = document.getElementById("aaa100-tooltip-rect")
-    fireEvent.click(infobox)
-
-    // course modal appears, but the buttons are not visible
-    expect(document.querySelector(".ReactModal__Body--open")).not.toBeNull
-    expect(document.querySelector(".info-modal-button")).toBeNull
-  })
-
-  it("renders buttons when course link is clicked", async () => {
-    // create a graph
+  beforeEach(async () => {
     await TestGraph.build()
 
     // find the course node aa100
@@ -27,13 +12,19 @@ describe("CourseModal", () => {
     // find the infobox beside it, and click on it
     const infobox = document.getElementById("aaa100-tooltip-rect")
     fireEvent.click(infobox)
+  })
 
+  it("does not render buttons when course modal is initially opened", async () => {
+    expect(document.querySelector(".ReactModal__Body--open")).not.toBeNull
+    expect(document.querySelector(".info-modal-button")).toBeNull
+  })
+
+  it("renders buttons when course link is clicked", async () => {
     // find the modal
     await waitFor(() => {
       const modal = document.querySelector(".ReactModalPortal")
       return modal !== null
     })
-    const modal = document.querySelector(".ReactModalPortal")
 
     // find the link
     const link = screen.getByText("BBB100H1")
