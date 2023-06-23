@@ -23,7 +23,6 @@ const TIMEOUT_NAMES_ENUM = {
   DROPDOWN: 1,
 }
 
-// Graph component for rendering graphs
 export class Graph extends React.Component {
   constructor(props) {
     super(props)
