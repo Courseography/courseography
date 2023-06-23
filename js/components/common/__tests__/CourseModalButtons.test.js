@@ -5,14 +5,20 @@ describe("CourseModal", () => {
   beforeEach(async () => {
     await TestGraph.build()
 
-    // find the course node AAA100
+    // find the course node AAA100 and open its info modal
     const node = document.querySelector('[data-testid="aaa100"]')
     fireEvent.mouseOver(node)
-
-    // find and click info box beside it
     const infobox = document.getElementById("aaa100-tooltip-rect")
     fireEvent.click(infobox)
   })
+
+  // this function encapsulates that waiting logic for the modal updates
+  const waitForModalUpdate = async () => {
+    await waitFor(() => {
+      const updatedModal = document.querySelector(".ReactModalPortal")
+      return updatedModal
+    })
+  }
 
   it("does not render buttons when course modal is initially opened", async () => {
     expect(document.querySelector(".ReactModal__Body--open")).not.toBeNull
@@ -20,11 +26,7 @@ describe("CourseModal", () => {
   })
 
   it("renders buttons when a course link is clicked", async () => {
-    await waitFor(() => {
-      const modal = document.querySelector(".ReactModalPortal")
-      return modal !== null
-    })
-
+    await waitForModalUpdate()
     const courseLink = screen.getByText("BBB100H1")
     fireEvent.click(courseLink)
 
@@ -40,32 +42,19 @@ describe("CourseModal", () => {
   })
 
   it("takes user back to the previously viewed course when back button is clicked", async () => {
-    await waitFor(() => {
-      const modal = document.querySelector(".ReactModalPortal")
-      return modal !== null
-    })
-
+    await waitForModalUpdate()
     const courseLink = screen.getByText("BBB100H1")
     fireEvent.click(courseLink)
 
-    // wait for modal to update to bbb100 information
-    await waitFor(() => {
-      const updatedModal = document.querySelector(".ReactModalPortal")
-      return updatedModal
-    })
-
+    // check that BBB100H1 info has opened
+    await waitForModalUpdate()
     let modalHeader = document.querySelector(".modal-header")
     expect(modalHeader.textContent).toContain("BBB100H1 Introduction to BBB Thinking")
 
+    // check that AAA100H1 info is displayed after back button click
     const backButton = screen.getByText("<")
     fireEvent.click(backButton)
-
-    // wait for modal to update back to aaa100 information
-    await waitFor(() => {
-      const updatedModal = document.querySelector(".ReactModalPortal")
-      return updatedModal
-    })
-
+    await waitForModalUpdate()
     modalHeader = document.querySelector(".modal-header")
     expect(modalHeader.textContent).toContain("AAA100 Introduction to AAA Thinking")
   })

@@ -172,7 +172,6 @@ class CourseModal extends React.Component {
         })
       })
     }
-    console.log(this.state.visitedCourses)
   }
 
   /* Generate the data needed for each row of the timetable based on course meeting times for
