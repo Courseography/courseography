@@ -41,7 +41,7 @@ describe("CourseModal", () => {
     expect(backButton.disabled).toBe(false)
   })
 
-  it("takes user back to the previously viewed course when back button is clicked", async () => {
+  it("allows users to navigate back and forward through viewed courses", async () => {
     await waitForModalUpdate()
     const courseLink = screen.getByText("BBB100H1")
     fireEvent.click(courseLink)
@@ -57,5 +57,12 @@ describe("CourseModal", () => {
     await waitForModalUpdate()
     modalHeader = document.querySelector(".modal-header")
     expect(modalHeader.textContent).toContain("AAA100 Introduction to AAA Thinking")
+
+    // check that BBB100H1 info is displayed after forward button click
+    const forwardButton = screen.getByText(">")
+    fireEvent.click(forwardButton)
+    await waitForModalUpdate()
+    modalHeader = document.querySelector(".modal-header")
+    expect(modalHeader.textContent).toContain("BBB100H1 Introduction to BBB Thinking")
   })
 })
