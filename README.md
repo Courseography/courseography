@@ -135,5 +135,3 @@ Zi Kai Xu
 Click [here](/PRIVACY.md) to learn about our Privacy Policy.
 
 Click [here](/LICENSE) to learn about our licensing.
-
-# Yello
