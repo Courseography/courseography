@@ -12,7 +12,7 @@ describe("CourseModal", () => {
     fireEvent.click(infobox)
   })
 
-  // this function encapsulates that waiting logic for the modal updates
+  // wait for the modal to appear
   const waitForModalUpdate = async () => {
     await waitFor(() => {
       const updatedModal = document.querySelector(".ReactModalPortal")
@@ -21,20 +21,25 @@ describe("CourseModal", () => {
   }
 
   it("does not render buttons when course modal is initially opened", async () => {
-    expect(document.querySelector(".ReactModal__Body--open")).not.toBeNull
-    expect(document.querySelector(".info-modal-button")).toBeNull
+    await waitForModalUpdate()
+
+    // the back and forward buttons do not appear
+    const buttons = document.querySelectorAll(".info-modal-button")
+    expect(buttons.length === 0).toBe(true)
   })
 
   it("renders buttons when a course link is clicked", async () => {
     await waitForModalUpdate()
+
+    // click on the course link BBB100H1
     const courseLink = screen.getByText("BBB100H1")
     fireEvent.click(courseLink)
 
-    // check that two buttons have been rendered
+    // the back and forward buttons render
     const buttons = document.querySelectorAll(".info-modal-button")
     expect(buttons.length == 2).toBe(true)
 
-    // check that forward button is disabled, back button is enabled
+    // the forward button is disabled, but the back button is enabled
     const forwardButton = screen.getByText(">")
     const backButton = screen.getByText("<")
     expect(forwardButton.disabled).toBe(true)
@@ -43,22 +48,24 @@ describe("CourseModal", () => {
 
   it("allows users to navigate back and forward through viewed courses", async () => {
     await waitForModalUpdate()
+
+    // click on the course link BBB100H1
     const courseLink = screen.getByText("BBB100H1")
     fireEvent.click(courseLink)
 
-    // check that BBB100H1 info has opened
+    // BBB100H1's modal opens
     await waitForModalUpdate()
     let modalHeader = document.querySelector(".modal-header")
     expect(modalHeader.textContent).toContain("BBB100H1 Introduction to BBB Thinking")
 
-    // check that AAA100H1 info is displayed after back button click
+    // click on the back button, and AAA100H1's modal appears
     const backButton = screen.getByText("<")
     fireEvent.click(backButton)
     await waitForModalUpdate()
     modalHeader = document.querySelector(".modal-header")
     expect(modalHeader.textContent).toContain("AAA100 Introduction to AAA Thinking")
 
-    // check that BBB100H1 info is displayed after forward button click
+    // click on the forward button, and BBB100's modal appears
     const forwardButton = screen.getByText(">")
     fireEvent.click(forwardButton)
     await waitForModalUpdate()
