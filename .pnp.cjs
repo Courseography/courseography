@@ -40,7 +40,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.3.2"],\
             ["babel-jest", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.5.0"],\
             ["babel-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:9.1.2"],\
-            ["bootstrap", "npm:3.4.1"],\
+            ["bootstrap", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.3.0"],\
             ["core-js", "npm:3.30.1"],\
             ["css-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:6.7.3"],\
             ["cypress", "npm:12.15.0"],\
@@ -4919,10 +4919,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["bootstrap", [\
-        ["npm:3.4.1", {\
-          "packageLocation": "./.yarn/cache/bootstrap-npm-3.4.1-c63015f4c4-5742035e8c.zip/node_modules/bootstrap/",\
+        ["npm:5.3.0", {\
+          "packageLocation": "./.yarn/cache/bootstrap-npm-5.3.0-240c38a3b2-29a83cc8ca.zip/node_modules/bootstrap/",\
           "packageDependencies": [\
-            ["bootstrap", "npm:3.4.1"]\
+            ["bootstrap", "npm:5.3.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.3.0", {\
+          "packageLocation": "./.yarn/__virtual__/bootstrap-virtual-9dbfa10e8a/0/cache/bootstrap-npm-5.3.0-240c38a3b2-29a83cc8ca.zip/node_modules/bootstrap/",\
+          "packageDependencies": [\
+            ["bootstrap", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.3.0"],\
+            ["@popperjs/core", null],\
+            ["@types/popperjs__core", null]\
+          ],\
+          "packagePeers": [\
+            "@popperjs/core",\
+            "@types/popperjs__core"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5536,7 +5549,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.3.2"],\
             ["babel-jest", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.5.0"],\
             ["babel-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:9.1.2"],\
-            ["bootstrap", "npm:3.4.1"],\
+            ["bootstrap", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.3.0"],\
             ["core-js", "npm:3.30.1"],\
             ["css-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:6.7.3"],\
             ["cypress", "npm:12.15.0"],\
