@@ -7447,7 +7447,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/handlebars-npm-4.7.7-a9ccfabf80-1e79a43f5e.zip/node_modules/handlebars/",\
           "packageDependencies": [\
             ["handlebars", "npm:4.7.7"],\
-            ["minimist", "npm:1.2.5"],\
+            ["minimist", "npm:1.2.8"],\
             ["neo-async", "npm:2.6.2"],\
             ["source-map", "npm:0.6.1"],\
             ["uglify-js", "npm:3.8.0"],\
@@ -9687,13 +9687,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["minimist", [\
-        ["npm:1.2.5", {\
-          "packageLocation": "./.yarn/cache/minimist-npm-1.2.5-ced0e1f617-86706ce5b3.zip/node_modules/minimist/",\
-          "packageDependencies": [\
-            ["minimist", "npm:1.2.5"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:1.2.8", {\
           "packageLocation": "./.yarn/cache/minimist-npm-1.2.8-d7af7b1dce-75a6d645fb.zip/node_modules/minimist/",\
           "packageDependencies": [\
