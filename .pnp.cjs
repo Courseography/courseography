@@ -66,7 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:17.0.2"],\
             ["react-leaflet", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.2.5"],\
             ["react-modal", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.16.1"],\
-            ["sass", "npm:1.62.0"],\
+            ["sass", "npm:1.63.6"],\
             ["sass-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:13.2.2"],\
             ["style-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.3.2"],\
             ["stylelint", "npm:15.6.0"],\
@@ -5486,7 +5486,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:17.0.2"],\
             ["react-leaflet", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.2.5"],\
             ["react-modal", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.16.1"],\
-            ["sass", "npm:1.62.0"],\
+            ["sass", "npm:1.63.6"],\
             ["sass-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:13.2.2"],\
             ["style-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.3.2"],\
             ["stylelint", "npm:15.6.0"],\
@@ -11656,10 +11656,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["sass", [\
-        ["npm:1.62.0", {\
-          "packageLocation": "./.yarn/cache/sass-npm-1.62.0-bf9dbdfb5f-d5f606aa25.zip/node_modules/sass/",\
+        ["npm:1.63.6", {\
+          "packageLocation": "./.yarn/cache/sass-npm-1.63.6-f415fe5e15-3372319904.zip/node_modules/sass/",\
           "packageDependencies": [\
-            ["sass", "npm:1.62.0"],\
+            ["sass", "npm:1.63.6"],\
             ["chokidar", "npm:3.5.3"],\
             ["immutable", "npm:4.3.0"],\
             ["source-map-js", "npm:1.0.2"]\
@@ -11688,7 +11688,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["klona", "npm:2.0.6"],\
             ["neo-async", "npm:2.6.2"],\
             ["node-sass", null],\
-            ["sass", "npm:1.62.0"],\
+            ["sass", "npm:1.63.6"],\
             ["sass-embedded", null],\
             ["webpack", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.81.0"]\
           ],\
