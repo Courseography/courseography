@@ -109,7 +109,6 @@ executable courseography
     Util.Happstack,
     WebParsing.ArtSciParser,
     WebParsing.Ligature,
-    WebParsing.ParseAll,
     WebParsing.PostParser,
     WebParsing.ReqParser,
     WebParsing.UtsgJsonParser,

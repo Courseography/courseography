@@ -1,5 +1,5 @@
 module WebParsing.UtsgJsonParser
-     (getAllCourses,
+     (parseTimetable,
       parseAllCourses,
       insertAllMeetings) where
 
@@ -37,8 +37,8 @@ parseCourses = do
     mapM_ insertMeeting meetings
 
 -- | Parse all timetable data.
-getAllCourses :: IO ()
-getAllCourses = do
+parseTimetable :: IO ()
+parseTimetable = do
     orgs <- getOrgs
     runSqlite databasePath $ mapM_ insertAllMeetings orgs
 
