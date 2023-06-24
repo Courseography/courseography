@@ -42,7 +42,7 @@
     "babel-jest": "^29.5.0",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.3",
-    "cypress": "3.4.1",
+    "cypress": "12.15.0",
     "enzyme": "3.11.0",
     "enzyme-to-json": "3.6.2",
     "eslint": "^8.37.0",
