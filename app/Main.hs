@@ -16,10 +16,11 @@ import System.Environment (getArgs)
 import System.IO (hPutStrLn, stderr)
 
 -- internal dependencies
-import Database.Database
+import Database.Database (populateCalendar, setupDatabase)
 import Server (runServer)
 import Svg.Parser (parsePrebuiltSvgs)
 import Util.Documentation (generateDocs)
+import WebParsing.UtsgJsonParser (parseTimetable)
 
 -- dynamic graph generation
 import DynamicGraphs.WriteRunDot (generatePrereqsForCourses)
@@ -28,9 +29,8 @@ import DynamicGraphs.WriteRunDot (generatePrereqsForCourses)
 taskMap :: Map.Map String ([String] -> IO ())
 taskMap = Map.fromList [
     ("server", const runServer),
-    ("database-preliminaries", const runPreliminaries),
     ("database-calendar", const populateCalendar),
-    ("database-timetable", const populateTimetable),
+    ("database-timetable", const parseTimetable),
     ("database-graphs", const parsePrebuiltSvgs),
     ("docs", const generateDocs),
     ("generate", generate),

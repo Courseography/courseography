@@ -17,7 +17,7 @@
     "*": "prettier --ignore-unknown --write"
   },
   "dependencies": {
-    "@babel/runtime": "^7.21.0",
+    "@babel/runtime": "^7.22.5",
     "ag-grid-community": "^29.3.2",
     "ag-grid-react": "^29.3.2",
     "bootstrap": "^3.1.1",
@@ -42,7 +42,7 @@
     "babel-jest": "^29.5.0",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.3",
-    "cypress": "3.4.1",
+    "cypress": "12.15.0",
     "enzyme": "3.11.0",
     "enzyme-to-json": "3.6.2",
     "eslint": "^8.37.0",
@@ -57,7 +57,7 @@
     "precise-commits": "1.0.2",
     "prettier": "^2.8.7",
     "prop-types": "15.8.1",
-    "sass": "^1.60.0",
+    "sass": "^1.63.6",
     "sass-loader": "^13.2.2",
     "style-loader": "^3.3.2",
     "stylelint": "^15.3.0",
