@@ -269,40 +269,29 @@ class CourseModal extends React.Component {
         onRequestClose={this.props.onClose}
         ariaHideApp={false}
       >
-        <div
-          className="modal-header"
-          style={{
-            display: "flex",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-          }}
-        >
+        <div className="modal-header">
           {this.state.courseTitle}
 
           <div className="button-container">
-            {this.state.visitedCourses.length > 1 && (
-              <div>
-                <button
-                  type="button"
-                  className="info-modal-button"
-                  onClick={this.infoModalBackClick}
-                  disabled={this.state.currVisitedIndex === 0}
-                >
-                  {"<"}
-                </button>
+            <button
+              type="button"
+              className="info-modal-button"
+              onClick={this.infoModalBackClick}
+              disabled={this.state.currVisitedIndex === 0}
+            >
+              {"<"}
+            </button>
 
-                <button
-                  type="button"
-                  className="info-modal-button"
-                  onClick={this.infoModalForwardClick}
-                  disabled={
-                    this.state.currVisitedIndex === this.state.visitedCourses.length - 1
-                  }
-                >
-                  {">"}
-                </button>
-              </div>
-            )}
+            <button
+              type="button"
+              className="info-modal-button"
+              onClick={this.infoModalForwardClick}
+              disabled={
+                this.state.currVisitedIndex === this.state.visitedCourses.length - 1
+              }
+            >
+              {">"}
+            </button>
           </div>
         </div>
 
