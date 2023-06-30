@@ -236,6 +236,10 @@ class CourseModal extends React.Component {
     })
   }
 
+  /**
+   * Handles the click event when the back button is clicked in the info modal.
+   * Updates the state to navigate back to the previous visited course and updates the current visited index.
+   */
   infoModalBackClick = () => {
     this.linkStateChange(
       this.state.visitedCourses[this.state.currVisitedIndex - 1],
@@ -244,6 +248,10 @@ class CourseModal extends React.Component {
     this.setState({ currVisitedIndex: this.state.currVisitedIndex - 1 })
   }
 
+  /**
+   * Handles the click event when the forward button is clicked in the info modal.
+   * Updates the state to navigate forward to the next visited course and updates the current visited index.
+   */
   infoModalForwardClick = () => {
     this.linkStateChange(
       this.state.visitedCourses[this.state.currVisitedIndex + 1],
