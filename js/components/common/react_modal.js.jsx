@@ -102,8 +102,11 @@ class CourseModal extends React.Component {
    * Change the courseId state, whenever a course link is clicked.
    * Additionally, add the courseId to the list of visited courses.
    */
-  linkStateChange = (courseLink, buttonClicked = false) => {
-    if (!buttonClicked && this.state.courseId !== courseLink) {
+  linkStateChange = (courseLink, index) => {
+    if (this.state.courseId === courseLink) {
+      // No state is required to update. Do nothing.
+    } else if (index === undefined) {
+      // In this case, a course link was clicked.
       const newVisitedCourses = this.state.visitedCourses.slice(
         0,
         this.state.currVisitedIndex + 1
@@ -115,7 +118,11 @@ class CourseModal extends React.Component {
         currVisitedIndex: this.state.currVisitedIndex + 1,
       })
     } else {
-      this.setState({ courseId: courseLink })
+      // In this case, a button was clicked.
+      this.setState({
+        courseId: courseLink,
+        currVisitedIndex: index,
+      })
     }
   }
 
@@ -243,9 +250,8 @@ class CourseModal extends React.Component {
   infoModalBackClick = () => {
     this.linkStateChange(
       this.state.visitedCourses[this.state.currVisitedIndex - 1],
-      true
+      this.state.currVisitedIndex - 1
     )
-    this.setState({ currVisitedIndex: this.state.currVisitedIndex - 1 })
   }
 
   /**
@@ -255,9 +261,8 @@ class CourseModal extends React.Component {
   infoModalForwardClick = () => {
     this.linkStateChange(
       this.state.visitedCourses[this.state.currVisitedIndex + 1],
-      true
+      this.state.currVisitedIndex + 1
     )
-    this.setState({ currVisitedIndex: this.state.currVisitedIndex + 1 })
   }
 
   render() {
