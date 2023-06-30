@@ -100,11 +100,9 @@ class CourseModal extends React.Component {
 
   /**
    * Change the courseId state, whenever a course link is clicked.
-   * Additionally, add the class to the list of visited courses.
+   * Additionally, add the courseId to the list of visited courses.
    */
   linkStateChange = (courseLink, buttonClicked = false) => {
-    this.setState({ courseId: courseLink })
-
     if (!buttonClicked && this.state.courseId !== courseLink) {
       const newVisitedCourses = this.state.visitedCourses.slice(
         0,
@@ -112,9 +110,12 @@ class CourseModal extends React.Component {
       )
 
       this.setState({
+        courseId: courseLink,
         visitedCourses: newVisitedCourses.concat(courseLink),
         currVisitedIndex: this.state.currVisitedIndex + 1,
       })
+    } else {
+      this.setState({ courseId: courseLink })
     }
   }
 
@@ -146,9 +147,11 @@ class CourseModal extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.showCourseModal !== prevProps.showCourseModal) {
-      this.setState({ courseId: this.props.courseId })
-      this.setState({ visitedCourses: [this.props.courseId] })
-      this.setState({ currVisitedIndex: 0 })
+      this.setState({
+        courseId: this.props.courseId,
+        visitedCourses: [this.props.courseId],
+        currVisitedIndex: 0,
+      })
     } else if (prevState.courseId !== this.state.courseId) {
       getCourse(this.state.courseId).then(course => {
         const newCourse = {
