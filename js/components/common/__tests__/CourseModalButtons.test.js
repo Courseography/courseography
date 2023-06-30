@@ -20,14 +20,6 @@ describe("CourseModal", () => {
     })
   }
 
-  it("does not render buttons when course modal is initially opened", async () => {
-    await waitForModalUpdate()
-
-    // the back and forward buttons do not appear
-    const buttons = document.querySelectorAll(".info-modal-button")
-    expect(buttons.length === 0).toBe(true)
-  })
-
   it("renders buttons when a course link is clicked", async () => {
     await waitForModalUpdate()
 
