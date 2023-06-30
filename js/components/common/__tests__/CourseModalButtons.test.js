@@ -14,10 +14,7 @@ describe("CourseModal", () => {
 
   // wait for the modal to appear
   const waitForModalUpdate = async () => {
-    await waitFor(() => {
-      const updatedModal = document.querySelector(".ReactModalPortal")
-      return updatedModal
-    })
+    await waitFor(() => document.querySelector(".ReactModalPortal"))
   }
 
   it("renders buttons when a course link is clicked", async () => {
