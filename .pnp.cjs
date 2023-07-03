@@ -57,7 +57,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jquery", "npm:3.6.0"],\
             ["leaflet", "npm:1.9.3"],\
             ["lodash", "npm:4.17.21"],\
-            ["mini-css-extract-plugin", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.5"],\
+            ["mini-css-extract-plugin", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.6"],\
             ["node-fetch", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.6.9"],\
             ["precise-commits", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:1.0.2"],\
             ["prettier", "npm:2.8.7"],\
@@ -5531,7 +5531,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jquery", "npm:3.6.0"],\
             ["leaflet", "npm:1.9.3"],\
             ["lodash", "npm:4.17.21"],\
-            ["mini-css-extract-plugin", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.5"],\
+            ["mini-css-extract-plugin", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.6"],\
             ["node-fetch", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.6.9"],\
             ["precise-commits", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:1.0.2"],\
             ["prettier", "npm:2.8.7"],\
@@ -9625,17 +9625,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["mini-css-extract-plugin", [\
-        ["npm:2.7.5", {\
-          "packageLocation": "./.yarn/cache/mini-css-extract-plugin-npm-2.7.5-7e01d66430-afc37cdfb7.zip/node_modules/mini-css-extract-plugin/",\
+        ["npm:2.7.6", {\
+          "packageLocation": "./.yarn/cache/mini-css-extract-plugin-npm-2.7.6-0014d24fe7-be6f7cefc6.zip/node_modules/mini-css-extract-plugin/",\
           "packageDependencies": [\
-            ["mini-css-extract-plugin", "npm:2.7.5"]\
+            ["mini-css-extract-plugin", "npm:2.7.6"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.5", {\
-          "packageLocation": "./.yarn/__virtual__/mini-css-extract-plugin-virtual-3a9f67b81a/0/cache/mini-css-extract-plugin-npm-2.7.5-7e01d66430-afc37cdfb7.zip/node_modules/mini-css-extract-plugin/",\
+        ["virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.6", {\
+          "packageLocation": "./.yarn/__virtual__/mini-css-extract-plugin-virtual-904f62da42/0/cache/mini-css-extract-plugin-npm-2.7.6-0014d24fe7-be6f7cefc6.zip/node_modules/mini-css-extract-plugin/",\
           "packageDependencies": [\
-            ["mini-css-extract-plugin", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.5"],\
+            ["mini-css-extract-plugin", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.6"],\
             ["@types/webpack", null],\
             ["schema-utils", "npm:4.0.0"],\
             ["webpack", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.81.0"]\
