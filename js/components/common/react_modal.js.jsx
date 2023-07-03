@@ -33,6 +33,8 @@ class CourseModal extends React.Component {
       course: [],
       sessions: {},
       courseTitle: "",
+      visitedCourses: [],
+      currVisitedIndex: 0,
     }
   }
 
@@ -98,9 +100,30 @@ class CourseModal extends React.Component {
 
   /**
    * Change the courseId state, whenever a course link is clicked.
+   * Additionally, add the courseId to the list of visited courses.
    */
-  linkStateChange = courseLink => {
-    this.setState({ courseId: courseLink })
+  linkStateChange = (courseLink, index) => {
+    if (this.state.courseId === courseLink) {
+      // No state is required to update. Do nothing.
+    } else if (index === undefined) {
+      // In this case, a course link was clicked.
+      const newVisitedCourses = this.state.visitedCourses.slice(
+        0,
+        this.state.currVisitedIndex + 1
+      )
+
+      this.setState({
+        courseId: courseLink,
+        visitedCourses: newVisitedCourses.concat(courseLink),
+        currVisitedIndex: this.state.currVisitedIndex + 1,
+      })
+    } else {
+      // In this case, a button was clicked.
+      this.setState({
+        courseId: courseLink,
+        currVisitedIndex: index,
+      })
+    }
   }
 
   /**
@@ -131,7 +154,11 @@ class CourseModal extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.showCourseModal !== prevProps.showCourseModal) {
-      this.setState({ courseId: this.props.courseId })
+      this.setState({
+        courseId: this.props.courseId,
+        visitedCourses: [this.props.courseId],
+        currVisitedIndex: 0,
+      })
     } else if (prevState.courseId !== this.state.courseId) {
       getCourse(this.state.courseId).then(course => {
         const newCourse = {
@@ -216,6 +243,28 @@ class CourseModal extends React.Component {
     })
   }
 
+  /**
+   * Handles the click event when the back button is clicked in the info modal.
+   * Updates the state to navigate back to the previous visited course and updates the current visited index.
+   */
+  infoModalBackClick = () => {
+    this.linkStateChange(
+      this.state.visitedCourses[this.state.currVisitedIndex - 1],
+      this.state.currVisitedIndex - 1
+    )
+  }
+
+  /**
+   * Handles the click event when the forward button is clicked in the info modal.
+   * Updates the state to navigate forward to the next visited course and updates the current visited index.
+   */
+  infoModalForwardClick = () => {
+    this.linkStateChange(
+      this.state.visitedCourses[this.state.currVisitedIndex + 1],
+      this.state.currVisitedIndex + 1
+    )
+  }
+
   render() {
     return (
       <ReactModal
@@ -225,7 +274,32 @@ class CourseModal extends React.Component {
         onRequestClose={this.props.onClose}
         ariaHideApp={false}
       >
-        <div className="modal-header">{this.state.courseTitle}</div>
+        <div className="modal-header">
+          {this.state.courseTitle}
+
+          <div className="button-container">
+            <button
+              type="button"
+              className="info-modal-button"
+              onClick={this.infoModalBackClick}
+              disabled={this.state.currVisitedIndex === 0}
+            >
+              {"<"}
+            </button>
+
+            <button
+              type="button"
+              className="info-modal-button"
+              onClick={this.infoModalForwardClick}
+              disabled={
+                this.state.currVisitedIndex === this.state.visitedCourses.length - 1
+              }
+            >
+              {">"}
+            </button>
+          </div>
+        </div>
+
         <div className="modal-body">
           <Description course={this.state.course} sessions={this.state.sessions} />
         </div>
