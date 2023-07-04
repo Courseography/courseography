@@ -11,8 +11,10 @@ import Data.Aeson.KeyMap as KM hiding (insert, map)
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (catMaybes)
 import qualified Data.Text as T
-import Database.Persist.Sqlite
-import Database.Tables
+import Database.Persist.Sqlite (Filter, SqlPersistM, Update, entityKey, deleteWhere, upsert,
+                                insertMany_, runSqlite, selectFirst, (==.), (=.))
+import Database.Tables (Courses (..), EntityField (..), MeetTime (..), Meeting (..),
+                        Times (..), buildTimes)
 import Network.HTTP.Conduit (simpleHttp)
 
 coursesJson :: FilePath
