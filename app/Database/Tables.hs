@@ -70,6 +70,7 @@ Meeting
     wait Int
     extra Int
     deriving Generic Show
+    UniqueMeeting code session section
 
 Times
     weekDay Double

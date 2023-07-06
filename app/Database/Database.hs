@@ -7,7 +7,7 @@ inserting it into the database. Run when @cabal run database@ is executed.
 -}
 
 module Database.Database
-    (populateCourseInfo, setupDatabase) where
+    (populateCalendar, setupDatabase) where
 
 import Config (databasePath)
 import Data.Maybe (fromMaybe)
@@ -16,7 +16,7 @@ import Database.CourseVideoSeed (seedVideos)
 import Database.Persist.Sqlite (insert_, runMigration, runSqlite)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
-import WebParsing.ParseAll (parseAll)
+import WebParsing.ArtSciParser (parseCalendar)
 
 
 distTableSetUpStr :: String
@@ -34,23 +34,24 @@ setupDatabase = do
       createDirectoryIfMissing True db
       runSqlite databasePath $ runMigration migrateAll
 
--- | Sets up the database with course information.
---
--- TODO: Probably combine seeding of Distribution and Breadth tables,
--- and split off from @parseAll@.
-populateCourseInfo :: IO ()
-populateCourseInfo = do
+-- | Sets up the course information from Artsci Calendar
+populateCalendar :: IO ()
+populateCalendar = do
+    populateStaticInfo
+    parseCalendar
+
+-- | Sets up the tables and seeds the videos for the database.
+populateStaticInfo :: IO ()
+populateStaticInfo = do
     setupDistributionTable
     print distTableSetUpStr
     setupBreadthTable
     print breathTableSetUpStr
-    parseAll
     seedVideos
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = runSqlite databasePath $ do
-    runMigration migrateAll
     insert_ $ Distribution "Humanities"
     insert_ $ Distribution "Social Science"
     insert_ $ Distribution "Science"
@@ -58,7 +59,6 @@ setupDistributionTable = runSqlite databasePath $ do
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
 setupBreadthTable = runSqlite databasePath $ do
-    runMigration migrateAll
     insert_ $ Breadth "Creative and Cultural Representations (1)"
     insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
     insert_ $ Breadth "Society and its Institutions (3)"

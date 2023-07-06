@@ -267,7 +267,10 @@ a:active {
 }
 
 .modal-header {
+  align-items: center;
   color: #437699;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .modal-body p,
@@ -790,6 +793,29 @@ div.sidebar.collapsed {
   position: relative;
   width: 25px;
   z-index: 1;
+}
+
+.button-container {
+  display: flex;
+  margin-left: auto;
+}
+
+.info-modal-button {
+  align-items: center;
+  border-color: transparent;
+  border-radius: 10px;
+  box-shadow: 1px 0 5px 0 #808080;
+  display: flex;
+  height: 30px;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-right: 20px;
+  margin-top: 10px;
+  width: 50px;
+}
+
+.info-modal-button:disabled {
+  background-color: #a0aec0;
 }
 
 .flip {

@@ -1,5 +1,5 @@
 module WebParsing.ArtSciParser
-    (parseArtSci, getDeptList, parseBuildings) where
+    (parseCalendar, getDeptList) where
 
 import Config (databasePath, fasCalendarUrl, programsUrl)
 import Control.Monad.IO.Class (liftIO)
@@ -26,6 +26,11 @@ import Text.ParserCombinators.Parsec (parseFromFile)
 import WebParsing.ParsecCombinators (text)
 import WebParsing.PostParser (addPostToDatabase)
 import WebParsing.ReqParser (parseReqs)
+
+parseCalendar :: IO ()
+parseCalendar = do
+    parseArtSci
+    parseBuildings
 
 -- The file name is building.csv and it is in the courseography/db folder
 buildingsCSV :: IO Prelude.FilePath
