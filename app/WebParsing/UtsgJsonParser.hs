@@ -11,9 +11,9 @@ import Data.Aeson.KeyMap as KM hiding (insert, map)
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (catMaybes)
 import qualified Data.Text as T
-import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insert, insertMany_, runSqlite,
-                                selectFirst, (==.))
-import Database.Tables (Courses (..), EntityField (CoursesCode), MeetTime (..), Meeting (..),
+import Database.Persist.Sqlite (Filter, SqlPersistM, Update, entityKey, deleteWhere, upsert,
+                                insertMany_, runSqlite, selectFirst, (==.), (=.))
+import Database.Tables (Courses (..), EntityField (..), MeetTime (..), Meeting (..),
                         Times (..), buildTimes)
 import Network.HTTP.Conduit (simpleHttp)
 
@@ -63,7 +63,8 @@ insertAllMeetings org = do
         meetings = concat sections
     mapM_ insertMeeting meetings
 
--- | Insert a meeting and its corresponding Times into the database.
+-- | Insert or update a meeting and then delete
+--   and re-insert the corresponding Times into the database.
 insertMeeting :: MeetTime -> SqlPersistM ()
 insertMeeting (MeetTime meetingData meetingTime) = do
     -- Check that the meeting belongs to a course that exists
@@ -71,10 +72,24 @@ insertMeeting (MeetTime meetingData meetingTime) = do
     courseKey <- selectFirst [ CoursesCode ==. code ] []
     case courseKey of
         Just _ -> do
-          meetingKey <- insert meetingData
+          entity <- upsert meetingData (meetingUpdates meetingData)
+          let meetingKey = entityKey entity
+          deleteWhere [ TimesMeeting ==. meetingKey ]
           let allTimes = map (buildTimes meetingKey) meetingTime
           insertMany_ allTimes
         Nothing -> return ()
+
+-- | Update the entries of the Meeting Table if necessary
+meetingUpdates :: Meeting -> [Update Meeting]
+meetingUpdates m = [ MeetingCode =. meetingCode m
+                   , MeetingSession =. meetingSession m
+                   , MeetingSection =. meetingSection m
+                   , MeetingCap =. meetingCap m
+                   , MeetingInstructor =. meetingInstructor m
+                   , MeetingEnrol =. meetingEnrol m
+                   , MeetingWait =. meetingWait m
+                   , MeetingExtra =. meetingExtra m
+                   ]
 
 newtype DB = DB { dbData :: (Courses, [MeetTime]) }
   deriving Show
