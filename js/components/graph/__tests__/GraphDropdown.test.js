@@ -16,6 +16,7 @@ describe("GraphDropdown", () => {
     const component = shallow(<GraphDropdown {...graphDropdownProps} />)
     expect(component).toMatchSnapshot()
   })
+
   it("should appear when hovering over the graph tab and be hidden before", async () => {
     const mouseEnter = new MouseEvent("mouseenter", {
       bubbles: false,
@@ -46,7 +47,7 @@ describe("GraphDropdown", () => {
     await waitFor(() => {
       expect(graphDropdown.classList.contains("hidden")).toBe(true)
     })
-  })
+  }, 5000)
 
   it("should disappear a second after the cursor isn't hovered on the graph tab", async () => {
     const mouseEnter = new MouseEvent("mouseenter", {
@@ -69,5 +70,5 @@ describe("GraphDropdown", () => {
     await waitFor(() => {
       expect(graphDropdown.classList.contains("hidden")).toBe(true)
     })
-  })
+  }, 5000)
 })
