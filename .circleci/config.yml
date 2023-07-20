@@ -40,7 +40,7 @@ jobs:
           name: Run tests
           command: |
             stack --no-terminal test
-            yarn test
+            yarn test --runInBand
 
       - save_cache:
           name: Cache Dependencies (Haskell)
