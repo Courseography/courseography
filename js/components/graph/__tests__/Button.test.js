@@ -1,5 +1,5 @@
 import React from "react"
-import { shallow } from "enzyme"
+import ShallowRenderer from "react-shallow-renderer"
 
 import Button from "../Button"
 
@@ -10,7 +10,9 @@ describe("Button", () => {
       text: "Reset",
       disabled: true,
     }
-    const component = shallow(<Button {...buttonProps} />)
-    expect(component).toMatchSnapshot()
+    const renderer = new ShallowRenderer()
+    renderer.render(<Button {...buttonProps} />)
+    const button = renderer.getRenderOutput()
+    expect(button).toMatchSnapshot()
   })
 })
