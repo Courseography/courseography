@@ -1,8 +1,8 @@
 import React from "react"
-import { shallow } from "enzyme"
 import Bool from "../Bool"
 import { fireEvent } from "@testing-library/react"
 import TestGraph from "./TestGraph"
+import ShallowRenderer from "react-shallow-renderer"
 
 describe("Bool", () => {
   it("should already have two classes when instantated by Graph", async () => {
@@ -49,8 +49,10 @@ describe("AND Bool", () => {
       svg: {},
       status: "inactive",
     }
-    const wrapper = shallow(<Bool {...boolProps} />)
-    expect(wrapper).toMatchSnapshot()
+    const renderer = new ShallowRenderer()
+    renderer.render(<Bool {...boolProps} />)
+    const bool = renderer.getRenderOutput()
+    expect(bool).toMatchSnapshot()
   })
 
   it("should not do anything when you hover or click on it", async () => {
@@ -80,6 +82,7 @@ describe("AND Bool", () => {
     expect(andBool.classList.contains("active")).toBe(true)
     expect(aaa303.classList.contains("takeable")).toBe(true)
   })
+
   it("AND should have the missing class when the mouse is hovering over a child class.", async () => {
     const graph = await TestGraph.build()
     const andBool = graph.getNodeByText("and")
@@ -157,8 +160,10 @@ describe("OR Bool", () => {
       svg: {},
       status: "inactive",
     }
-    const wrapper = shallow(<Bool {...boolProps} />)
-    expect(wrapper).toMatchSnapshot()
+    const renderer = new ShallowRenderer()
+    renderer.render(<Bool {...boolProps} />)
+    const bool = renderer.getRenderOutput()
+    expect(bool).toMatchSnapshot()
   })
 
   it("should not do anything when you hover or click on it", async () => {
