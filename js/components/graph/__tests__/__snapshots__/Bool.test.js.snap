@@ -40,7 +40,6 @@ exports[`AND Bool should match shallow snapshot 1`] = `
     ry="7.3684001"
   />
   <text
-    key="0"
     x={1020.015148}
     y={246.655709}
   >
@@ -89,7 +88,6 @@ exports[`OR Bool should match shallow snapshot 1`] = `
     ry="7.3684001"
   />
   <text
-    key="0"
     x={1020.015148}
     y={246.655709}
   >

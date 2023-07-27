@@ -1,5 +1,5 @@
 import React from "react"
-import { shallow } from "enzyme"
+import ShallowRenderer from "react-shallow-renderer"
 import InfoBox from "../InfoBox"
 import TestGraph from "./TestGraph"
 import { fireEvent, waitFor } from "@testing-library/react"
@@ -15,8 +15,10 @@ describe("InfoBox", () => {
       xPos: 0,
       yPos: 0,
     }
-    const component = shallow(<InfoBox {...infoBoxProps} />)
-    expect(component).toMatchSnapshot()
+    const renderer = new ShallowRenderer()
+    renderer.render(<InfoBox {...infoBoxProps} />)
+    const infoBox = renderer.getRenderOutput()
+    expect(infoBox).toMatchSnapshot()
   })
 
   it("should appear when hovering over a course", async () => {
