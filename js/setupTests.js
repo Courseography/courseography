@@ -1,6 +1,3 @@
-import { configure } from "enzyme"
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17"
-configure({ adapter: new Adapter() }) // enzyme
 import testData from "./components/graph/__mocks__/defaultTestData"
 import testContainerData from "./components/graph/__mocks__/testContainerData"
 import aaa100CourseInfo from "./components/graph/__mocks__/aaa100-course-info"
