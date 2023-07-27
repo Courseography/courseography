@@ -1,7 +1,7 @@
 import React from "react"
 import TestContainer from "./TestContainer"
 import GraphDropdown from "../GraphDropdown"
-import { shallow } from "enzyme"
+import ShallowRenderer from "react-shallow-renderer"
 import { fireEvent, waitFor } from "@testing-library/react"
 
 describe("GraphDropdown", () => {
@@ -13,8 +13,10 @@ describe("GraphDropdown", () => {
       graphs: [],
       updateGraph: jest.fn(),
     }
-    const component = shallow(<GraphDropdown {...graphDropdownProps} />)
-    expect(component).toMatchSnapshot()
+    const renderer = new ShallowRenderer()
+    renderer.render(<GraphDropdown {...graphDropdownProps} />)
+    const graphDropdown = renderer.getRenderOutput()
+    expect(graphDropdown).toMatchSnapshot()
   })
 
   it("should appear when hovering over the graph tab and be hidden before", async () => {
