@@ -1,8 +1,7 @@
 import React from "react"
-import { shallow } from "enzyme"
 import TestGraph from "./TestGraph"
 import { fireEvent } from "@testing-library/react"
-
+import ShallowRenderer from "react-shallow-renderer"
 import Edge from "../Edge"
 
 describe("Edge", () => {
@@ -20,8 +19,10 @@ describe("Edge", () => {
       updateEdgeStatus: null,
       svg: {},
     }
-    const component = shallow(<Edge {...edgeProps} />)
-    expect(component).toMatchSnapshot()
+    const renderer = new ShallowRenderer()
+    renderer.render(<Edge {...edgeProps} />)
+    const edge = renderer.getRenderOutput()
+    expect(edge).toMatchSnapshot()
   })
 
   describe("Clicking course nodes", () => {

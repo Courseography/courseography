@@ -1,8 +1,11 @@
 import TestGraph from "./TestGraph"
 import { fireEvent } from "@testing-library/react"
 import { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT } from "../Graph"
-import { shallow } from "enzyme"
 import { Graph } from "../Graph"
+
+jest.mock("../Edge", () => () => null)
+jest.mock("../Bool", () => () => null)
+jest.mock("../Node", () => () => null)
 
 describe("Graph Navigation", () => {
   it("Should pan right when the right arrow key is pressed", async () => {
@@ -173,8 +176,8 @@ describe("Graph rendering RegionGroup", () => {
       },
     ]
 
-    const wrapper = new Graph({})
-    expect(wrapper.renderRegionsLabels(regionsJSON, labelsJSON)).toMatchSnapshot()
+    const graph = new Graph({})
+    expect(graph.renderRegionsLabels(regionsJSON, labelsJSON)).toMatchSnapshot()
   })
 })
 
@@ -186,11 +189,8 @@ describe("EdgeGroup", () => {
     }
 
     const graph = new Graph({})
-    const component = shallow(
-      graph.renderEdgeGroup(params.edgesJSON, params.edgesStatus)
-    )
-
-    expect(component).toMatchSnapshot()
+    const edgeGroup = graph.renderEdgeGroup(params.edgesJSON, params.edgesStatus)
+    expect(edgeGroup).toMatchSnapshot()
   })
 })
 
@@ -203,11 +203,12 @@ describe("BoolGroup", () => {
     }
 
     const graph = new Graph({})
-    const component = shallow(
-      graph.renderBoolGroup(params.boolsJSON, params.boolsStatus, params.connections)
+    const boolGroup = graph.renderBoolGroup(
+      params.boolsJSON,
+      params.boolsStatus,
+      params.connections
     )
-
-    expect(component).toMatchSnapshot()
+    expect(boolGroup).toMatchSnapshot()
   })
 })
 
@@ -230,24 +231,21 @@ describe("NodeGroup", () => {
     }
 
     const graph = new Graph({})
-    const component = shallow(
-      graph.renderNodeGroup(
-        params.nodeClick,
-        params.nodeMouseEnter,
-        params.nodeMouseLeave,
-        params.nodeMouseDown,
-        params.onKeyDown,
-        params.onWheel,
-        params.nodesStatus,
-        params.nodesJSON,
-        params.hybridsJSON,
-        params.highlightedNodes,
-        params.edgesJSON,
-        params.connections,
-        params.nodeDropshadowFilter
-      )
+    const nodeGroup = graph.renderNodeGroup(
+      params.nodeClick,
+      params.nodeMouseEnter,
+      params.nodeMouseLeave,
+      params.nodeMouseDown,
+      params.onKeyDown,
+      params.onWheel,
+      params.nodesStatus,
+      params.nodesJSON,
+      params.hybridsJSON,
+      params.highlightedNodes,
+      params.edgesJSON,
+      params.connections,
+      params.nodeDropshadowFilter
     )
-
-    expect(component).toMatchSnapshot()
+    expect(nodeGroup).toMatchSnapshot()
   })
 })
