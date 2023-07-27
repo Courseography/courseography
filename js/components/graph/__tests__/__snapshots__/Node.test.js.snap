@@ -25,7 +25,6 @@ exports[`Course Node should match shallow snapshot 1`] = `
     y={38.09390799999999}
   />
   <text
-    key="0"
     x={NaN}
     y={59.379107999999995}
   >
@@ -55,14 +54,12 @@ exports[`Hybrid Node should match snapshot 1`] = `
     y={471.586698}
   />
   <text
-    key="0"
     x={50.772596500000006}
     y={481.389408}
   >
     CSC318/418/
   </text>
   <text
-    key="1"
     x={50.772596500000006}
     y={493.640408}
   >
