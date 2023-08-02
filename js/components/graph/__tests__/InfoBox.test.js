@@ -1,11 +1,12 @@
 import React from "react"
-import ShallowRenderer from "react-shallow-renderer"
+//import ShallowRenderer from "react-shallow-renderer"
+import renderer from "react-test-renderer"
 import InfoBox from "../InfoBox"
 import TestGraph from "./TestGraph"
 import { fireEvent, waitFor } from "@testing-library/react"
 
 describe("InfoBox", () => {
-  it("should match shallow snapshot", () => {
+  it("should match snapshot", () => {
     const infoBoxProps = {
       onClick: jest.fn(),
       onMouseDown: jest.fn(),
@@ -15,10 +16,12 @@ describe("InfoBox", () => {
       xPos: 0,
       yPos: 0,
     }
-    const renderer = new ShallowRenderer()
-    renderer.render(<InfoBox {...infoBoxProps} />)
-    const infoBox = renderer.getRenderOutput()
-    expect(infoBox).toMatchSnapshot()
+    const tree = renderer.create(<InfoBox {...infoBoxProps} />).toJSON()
+    expect(tree).toMatchSnapshot()
+    //    const renderer = new ShallowRenderer()
+    //    renderer.render(<InfoBox {...infoBoxProps} />)
+    //    const infoBox = renderer.getRenderOutput()
+    //    expect(infoBox).toMatchSnapshot()
   })
 
   it("should appear when hovering over a course", async () => {

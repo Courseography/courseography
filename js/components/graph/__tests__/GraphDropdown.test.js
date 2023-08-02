@@ -1,11 +1,12 @@
 import React from "react"
 import TestContainer from "./TestContainer"
 import GraphDropdown from "../GraphDropdown"
-import ShallowRenderer from "react-shallow-renderer"
+//import ShallowRenderer from "react-shallow-renderer"
+import renderer from "react-test-renderer"
 import { fireEvent, waitFor } from "@testing-library/react"
 
 describe("GraphDropdown", () => {
-  it("should match shallow snapshot", () => {
+  it("should match snapshot", () => {
     const graphDropdownProps = {
       onMouseMove: jest.fn(),
       onMouseLeave: jest.fn(),
@@ -13,10 +14,12 @@ describe("GraphDropdown", () => {
       graphs: [],
       updateGraph: jest.fn(),
     }
-    const renderer = new ShallowRenderer()
-    renderer.render(<GraphDropdown {...graphDropdownProps} />)
-    const graphDropdown = renderer.getRenderOutput()
-    expect(graphDropdown).toMatchSnapshot()
+    const tree = renderer.create(<GraphDropdown {...graphDropdownProps} />).toJSON()
+    expect(tree).toMatchSnapshot()
+    //    const renderer = new ShallowRenderer()
+    //    renderer.render(<GraphDropdown {...graphDropdownProps} />)
+    //    const graphDropdown = renderer.getRenderOutput()
+    //    expect(graphDropdown).toMatchSnapshot()
   })
 
   it("should appear when hovering over the graph tab and be hidden before", async () => {
