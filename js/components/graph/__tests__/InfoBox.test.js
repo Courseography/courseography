@@ -1,5 +1,4 @@
 import React from "react"
-//import ShallowRenderer from "react-shallow-renderer"
 import renderer from "react-test-renderer"
 import InfoBox from "../InfoBox"
 import TestGraph from "./TestGraph"
@@ -18,10 +17,6 @@ describe("InfoBox", () => {
     }
     const tree = renderer.create(<InfoBox {...infoBoxProps} />).toJSON()
     expect(tree).toMatchSnapshot()
-    //    const renderer = new ShallowRenderer()
-    //    renderer.render(<InfoBox {...infoBoxProps} />)
-    //    const infoBox = renderer.getRenderOutput()
-    //    expect(infoBox).toMatchSnapshot()
   })
 
   it("should appear when hovering over a course", async () => {

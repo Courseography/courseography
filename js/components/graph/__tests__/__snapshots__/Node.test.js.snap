@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Course Node should match shallow snapshot 1`] = `
+exports[`Course Node should match snapshot 1`] = `
 <g
   className="node takeable"
   data-testid="csc108"

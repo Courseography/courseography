@@ -2,7 +2,6 @@ import React from "react"
 import Bool from "../Bool"
 import { fireEvent } from "@testing-library/react"
 import TestGraph from "./TestGraph"
-//import ShallowRenderer from "react-shallow-renderer"
 import renderer from "react-test-renderer"
 
 describe("Bool", () => {
@@ -52,10 +51,6 @@ describe("AND Bool", () => {
     }
     const tree = renderer.create(<Bool {...boolProps} />).toJSON()
     expect(tree).toMatchSnapshot()
-    //    const renderer = new ShallowRenderer()
-    //    renderer.render(<Bool {...boolProps} />)
-    //    const bool = renderer.getRenderOutput()
-    //    expect(bool).toMatchSnapshot()
   })
 
   it("should not do anything when you hover or click on it", async () => {

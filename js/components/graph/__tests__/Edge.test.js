@@ -1,7 +1,6 @@
 import React from "react"
 import TestGraph from "./TestGraph"
 import { fireEvent } from "@testing-library/react"
-//import ShallowRenderer from "react-shallow-renderer"
 import renderer from "react-test-renderer"
 import Edge from "../Edge"
 
@@ -22,10 +21,6 @@ describe("Edge", () => {
     }
     const tree = renderer.create(<Edge {...edgeProps} />).toJSON()
     expect(tree).toMatchSnapshot()
-    //    const renderer = new ShallowRenderer()
-    //    renderer.render(<Edge {...edgeProps} />)
-    //    const edge = renderer.getRenderOutput()
-    //    expect(edge).toMatchSnapshot()
   })
 
   describe("Clicking course nodes", () => {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`InfoBox should match shallow snapshot 1`] = `
+exports[`InfoBox should match snapshot 1`] = `
 <g
   className="tooltip-group-hidden"
   id="infoBox"

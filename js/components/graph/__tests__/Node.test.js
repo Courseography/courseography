@@ -1,5 +1,4 @@
 import React from "react"
-//import ShallowRenderer from "react-shallow-renderer"
 import renderer from "react-test-renderer"
 import { fireEvent } from "@testing-library/react"
 import Node from "../Node"
@@ -56,10 +55,6 @@ describe("Hybrid Node", () => {
     }
     const tree = renderer.create(<Node {...hybridNodeProps} />).toJSON()
     expect(tree).toMatchSnapshot()
-    //    const renderer = new ShallowRenderer()
-    //    renderer.render(<Node {...hybridNodeProps} />)
-    //    const node = renderer.getRenderOutput()
-    //    expect(node).toMatchSnapshot()
   })
 
   it("should have the 'hybrid' CSS class", async () => {
@@ -158,10 +153,6 @@ describe("Course Node", () => {
     }
     const tree = renderer.create(<Node {...courseProps} />).toJSON()
     expect(tree).toMatchSnapshot()
-    //    const renderer = new ShallowRenderer()
-    //    renderer.render(<Node {...courseProps} />)
-    //    const node = renderer.getRenderOutput()
-    //    expect(node).toMatchSnapshot()
   })
   it("should have the CSS class: 'node'", async () => {
     const graph = await TestGraph.build()
