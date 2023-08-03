@@ -160,10 +160,6 @@ describe("OR Bool", () => {
     }
     const tree = renderer.create(<Bool {...boolProps} />).toJSON()
     expect(tree).toMatchSnapshot()
-    //    const renderer = new ShallowRenderer()
-    //    renderer.render(<Bool {...boolProps} />)
-    //    const bool = renderer.getRenderOutput()
-    //    expect(bool).toMatchSnapshot()
   })
 
   it("should not do anything when you hover or click on it", async () => {
