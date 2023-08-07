@@ -59,7 +59,7 @@
     "prop-types": "15.8.1",
     "sass": "^1.63.6",
     "sass-loader": "^13.3.2",
-    "style-loader": "^3.3.2",
+    "style-loader": "^3.3.3",
     "stylelint": "^15.10.1",
     "stylelint-config-sass-guidelines": "^10.0.0",
     "webpack": "^5.81.0",
