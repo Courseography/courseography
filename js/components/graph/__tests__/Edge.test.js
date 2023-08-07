@@ -1,12 +1,11 @@
 import React from "react"
-import { shallow } from "enzyme"
 import TestGraph from "./TestGraph"
 import { fireEvent } from "@testing-library/react"
-
+import renderer from "react-test-renderer"
 import Edge from "../Edge"
 
 describe("Edge", () => {
-  it("should match shallow snapshot", () => {
+  it("should match snapshot", () => {
     const edgeProps = {
       className: "path",
       edgeID: "p1",
@@ -20,8 +19,8 @@ describe("Edge", () => {
       updateEdgeStatus: null,
       svg: {},
     }
-    const component = shallow(<Edge {...edgeProps} />)
-    expect(component).toMatchSnapshot()
+    const tree = renderer.create(<Edge {...edgeProps} />).toJSON()
+    expect(tree).toMatchSnapshot()
   })
 
   describe("Clicking course nodes", () => {

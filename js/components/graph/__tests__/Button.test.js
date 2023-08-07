@@ -1,16 +1,15 @@
 import React from "react"
-import { shallow } from "enzyme"
-
+import renderer from "react-test-renderer"
 import Button from "../Button"
 
 describe("Button", () => {
-  it("should match shallow snapshot", () => {
+  it("should match snapshot", () => {
     const buttonProps = {
       divId: "reset-button",
       text: "Reset",
       disabled: true,
     }
-    const component = shallow(<Button {...buttonProps} />)
-    expect(component).toMatchSnapshot()
+    const tree = renderer.create(<Button {...buttonProps} />).toJSON()
+    expect(tree).toMatchSnapshot()
   })
 })

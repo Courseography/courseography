@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AND Bool should match shallow snapshot 1`] = `
+exports[`AND Bool should match snapshot 1`] = `
 <g
   className="bool inactive"
   data-testid="and(csc209,csc258)"
@@ -40,7 +40,6 @@ exports[`AND Bool should match shallow snapshot 1`] = `
     ry="7.3684001"
   />
   <text
-    key="0"
     x={1020.015148}
     y={246.655709}
   >
@@ -49,7 +48,7 @@ exports[`AND Bool should match shallow snapshot 1`] = `
 </g>
 `;
 
-exports[`OR Bool should match shallow snapshot 1`] = `
+exports[`OR Bool should match snapshot 1`] = `
 <g
   className="bool inactive"
   data-testid="and(csc209,csc258)"
@@ -89,7 +88,6 @@ exports[`OR Bool should match shallow snapshot 1`] = `
     ry="7.3684001"
   />
   <text
-    key="0"
     x={1020.015148}
     y={246.655709}
   >

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GraphDropdown should match shallow snapshot 1`] = `
+exports[`GraphDropdown should match snapshot 1`] = `
 <ul
   className="hidden"
   data-testid="test-graph-dropdown"
