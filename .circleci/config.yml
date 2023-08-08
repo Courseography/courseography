@@ -40,7 +40,7 @@ jobs:
           name: Run tests
           command: |
             stack --no-terminal test
-            yarn test
+            yarn test --maxWorkers=4
 
       - save_cache:
           name: Cache Dependencies (Haskell)
@@ -62,3 +62,5 @@ jobs:
       - store_artifacts:
           path: doc
           destination: docs
+    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: large

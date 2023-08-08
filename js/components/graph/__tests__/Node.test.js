@@ -1,5 +1,5 @@
 import React from "react"
-import { shallow } from "enzyme"
+import renderer from "react-test-renderer"
 import { fireEvent } from "@testing-library/react"
 import Node from "../Node"
 import TestGraph from "./TestGraph"
@@ -53,8 +53,8 @@ describe("Hybrid Node", () => {
       status: "inactive",
       selected: false,
     }
-    const wrapper = shallow(<Node {...hybridNodeProps} />)
-    expect(wrapper).toMatchSnapshot()
+    const tree = renderer.create(<Node {...hybridNodeProps} />).toJSON()
+    expect(tree).toMatchSnapshot()
   })
 
   it("should have the 'hybrid' CSS class", async () => {
@@ -115,7 +115,7 @@ describe("Hybrid Node", () => {
 })
 
 describe("Course Node", () => {
-  it("should match shallow snapshot", () => {
+  it("should match snapshot", () => {
     const courseProps = {
       JSON: {
         fill: "#5dd5b8",
@@ -151,9 +151,8 @@ describe("Course Node", () => {
       status: "takeable",
       selected: false,
     }
-
-    const wrapper = shallow(<Node {...courseProps} />)
-    expect(wrapper).toMatchSnapshot()
+    const tree = renderer.create(<Node {...courseProps} />).toJSON()
+    expect(tree).toMatchSnapshot()
   })
   it("should have the CSS class: 'node'", async () => {
     const graph = await TestGraph.build()
