@@ -626,6 +626,12 @@ export class Graph extends React.Component {
     })
   }
 
+  degreePlannerMouseClick = () => {
+    this.setState({
+      showDegreeModal: true,
+    })
+  }
+
   setShowGraphDropdown = () => {
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.DROPDOWN)
     this.setState({ showGraphDropdown: true })
@@ -1543,6 +1549,12 @@ export class Graph extends React.Component {
           graphs={this.props.graphs}
           updateGraph={this.props.updateGraph}
         />
+        <button
+          className="reset-selections button-group"
+          onClick={this.degreePlannerMouseClick}
+        >
+          Create plan
+        </button>
         {Object.keys(this.state.nodesJSON).length > 1 && (
           <div className="graph-button-group">
             <div className="button-group">
