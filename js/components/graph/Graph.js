@@ -1,6 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { CourseModal } from "../common/react_modal.js.jsx"
+import DegreeModal from "../common/degree_modal.js.jsx"
 import { ExportModal } from "../common/export.js.jsx"
 import { getPost } from "../common/utils.js"
 import Bool from "./Bool"
@@ -640,7 +641,10 @@ export class Graph extends React.Component {
   }
 
   onClose = () => {
-    this.setState({ showCourseModal: false })
+    this.setState({
+      showCourseModal: false,
+      showDegreeModal: false,
+    })
   }
 
   openExportModal = () => {
@@ -1524,6 +1528,11 @@ export class Graph extends React.Component {
         <CourseModal
           showCourseModal={this.state.showCourseModal}
           courseId={this.state.courseId}
+          onClose={this.onClose}
+        />
+        <DegreeModal
+          showDegreeModal={this.state.showDegreeModal}
+          courses={this.selectedNodes}
           onClose={this.onClose}
         />
         <ExportModal context="graph" session="" ref={this.exportModal} />
