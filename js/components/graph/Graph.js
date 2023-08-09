@@ -61,6 +61,7 @@ export class Graph extends React.Component {
       panStartX: 0,
       panStartY: 0,
       showCourseModal: false,
+      showDegreeModal: false,
       showGraphDropdown: false,
       selectedNodes: new Set(),
     }
@@ -623,6 +624,12 @@ export class Graph extends React.Component {
     this.setState({
       courseId: newCourse,
       showCourseModal: true,
+    })
+  }
+
+  toggleDegreeModal = () => {
+    this.setState({
+      showDegreeModal: true,
     })
   }
 
@@ -1522,6 +1529,8 @@ export class Graph extends React.Component {
                 node.text.length > 0 ? node.text[node.text.length - 1].text : "",
               ])}
               courseClick={this.handleCourseClick}
+              toggleDegreeModal={this.toggleDegreeModal}
+              showDegreeModal={this.state.showDegreeModal}
             />
           )
         }
@@ -1532,7 +1541,6 @@ export class Graph extends React.Component {
         />
         <DegreeModal
           showDegreeModal={this.state.showDegreeModal}
-          courses={this.selectedNodes}
           onClose={this.onClose}
         />
         <ExportModal context="graph" session="" ref={this.exportModal} />
