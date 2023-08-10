@@ -95,6 +95,7 @@ instance FromJSON DB where
     sectionsList :: [MeetTime] <- o .:? "sections" .!= []
     let finalSectionsList = map (\m -> m { meetInfo = (meetInfo m) { meetingCode = coursesCode course, meetingSession = session } }) sectionsList
     return $ DB finalSectionsList
+
 newtype DBList = DBList [DB]
   deriving Show
 
