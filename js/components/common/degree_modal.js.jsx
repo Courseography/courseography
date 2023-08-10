@@ -17,13 +17,15 @@ function DegreeModal(props) {
           <div>Courseography Degree Planner</div>
         </div>
 
-        <div className="planner-selected-courses">
+        <div className="selected-courses-container">
           Currently Selected Courses:
-          {coursesList.map(course => (
-            <div className="node" key={`active ${course}`}>
-              <div className="rect">{course}</div>
-            </div>
-          ))}
+          <div className="planner-selected-courses">
+            {coursesList.map(course => (
+              <div key={`active ${course}`}>
+                <div className="planner-node">{course}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </ReactModal>

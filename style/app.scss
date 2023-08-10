@@ -386,13 +386,33 @@ ol {
   justify-content: space-between;
 }
 
-.planner-selected-courses {
+.selected-courses-container {
   background-color: #edf2f7;
   border-radius: 10px;
   font-size: 16px;
-  height: 20vh;
   margin-top: 10px;
   padding: 10px;
+}
+
+.planner-selected-courses {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 7px;
+}
+
+.planner-node {
+  align-items: center;
+  background-color: rgba(122, 106, 150, 0.7803);
+  border-radius: 10px;
+  display: flex;
+  font-size: 14px;
+  height: 4vh;
+  justify-content: center;
+  margin: 7px;
+  text-align: center;
+  width: 9vh;
 }
 
 .degree-planner {
