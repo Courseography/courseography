@@ -365,6 +365,40 @@ ol {
   position: relative;
 }
 
+.degree-planner-modal-class {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 30px;
+  height: 90%;
+  left: 50%;
+  overflow-y: auto;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+}
+
+.planner-header {
+  align-items: center;
+  color: #437699;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.planner-selected-courses {
+  background-color: #edf2f7;
+  border-radius: 10px;
+  font-size: 16px;
+  height: 20vh;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.degree-planner {
+  padding: 20px;
+}
+
 .modal-class {
   background-color: #fff;
   border-radius: 10px;
