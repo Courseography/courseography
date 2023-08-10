@@ -2,6 +2,8 @@ import React from "react"
 import ReactModal from "react-modal"
 
 function DegreeModal(props) {
+  const coursesList = props.activeCourses ? [...props.activeCourses] : []
+
   return (
     <ReactModal
       className="degree-planner-modal-class"
@@ -13,10 +15,16 @@ function DegreeModal(props) {
       <div className="degree-planner">
         <div className="planner-header">
           <div>Courseography Degree Planner</div>
-          <div>X</div>
         </div>
 
-        <div className="planner-selected-courses">Currently Selected Courses:</div>
+        <div className="planner-selected-courses">
+          Currently Selected Courses:
+          {coursesList.map(course => (
+            <div className="node" key={`active ${course}`}>
+              <div className="rect">{course}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </ReactModal>
   )

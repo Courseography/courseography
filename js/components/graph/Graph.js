@@ -1541,6 +1541,7 @@ export class Graph extends React.Component {
         />
         <DegreeModal
           showDegreeModal={this.state.showDegreeModal}
+          activeCourses={this.state.selectedNodes}
           onClose={this.onClose}
         />
         <ExportModal context="graph" session="" ref={this.exportModal} />
