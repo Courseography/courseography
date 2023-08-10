@@ -3,7 +3,7 @@ module WebParsing.UtsgJsonParser
 
 import Config (databasePath, timetableApiUrl, reqHeaders, createReqBody)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (FromJSON (parseJSON), withObject, Value (..), encode, decode, (.!=), (.:?), (.:))
+import Data.Aeson (FromJSON (parseJSON), withObject, encode, decode, (.!=), (.:?), (.:))
 import qualified Data.Set as Set
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, Update, Entity, entityKey, entityVal, deleteWhere, upsert,
