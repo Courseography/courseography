@@ -153,6 +153,7 @@ executable courseography
     MissingH,
     text,
     http-conduit,
+    http-types,
     resourcet,
     conduit,
     persistent >= 2.1.2,

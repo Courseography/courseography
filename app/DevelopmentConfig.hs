@@ -14,9 +14,10 @@ module Config (
     genCssPath,
     timetableUrl,
     timetableApiUrl,
-    orgApiUrl,
     fasCalendarUrl,
     programsUrl,
+    createReqBody,
+    reqHeaders,
     fallStartDate,
     fallEndDate,
     winterStartDate,
@@ -25,10 +26,13 @@ module Config (
     holidays
     ) where
 
+import Data.Aeson
 import Data.Text (Text)
+import qualified Data.Text as T
 import Data.Time (Day, fromGregorian)
 import Happstack.Server (Conf (..), LogAccess, nullConf)
 import System.Log.Logger (Priority (INFO), logM)
+import Network.HTTP.Types.Header (RequestHeaders)
 
 -- SERVER CONFIGURATION
 
@@ -76,15 +80,11 @@ genCssPath = "./public/style/"
 
 -- | The URL for U of T's official timetable.
 timetableUrl :: String
-timetableUrl = "https://timetable.iit.artsci.utoronto.ca/"
+timetableUrl = "https://ttb.utoronto.ca/"
 
 -- | The Faculty of Arts and Science API for course timetables (by unit).
 timetableApiUrl :: Text
-timetableApiUrl = "https://timetable.iit.artsci.utoronto.ca/api/20229/courses?org="
-
--- | The Faculty of Arts and Science API for a list of all units.
-orgApiUrl :: String
-orgApiUrl = "https://timetable.iit.artsci.utoronto.ca/api/orgs"
+timetableApiUrl = "https://api.easi.utoronto.ca/ttb/getPageableCourses"
 
 -- | The URLs of the Faculty of Arts & Science calendar.
 fasCalendarUrl :: String
@@ -93,23 +93,53 @@ fasCalendarUrl = "https://artsci.calendar.utoronto.ca/"
 programsUrl :: String
 programsUrl = "https://artsci.calendar.utoronto.ca/listing-program-subject-areas"
 
+-- HTTP REQUEST STRINGS
+
+-- | Create the body for the HTTP request based on the org
+createReqBody :: Text -> Value
+createReqBody org = object [ "campuses" .= ([] :: [T.Text]),
+                       "courseCodeAndTitleProps" .= object
+                       [ "courseCode" .= ("" :: T.Text),
+                         "courseSectionCode" .= ("" :: T.Text),
+                         "courseTitle" .= org,
+                         "searchCourseDescription" .= True
+                       ],
+                        "courseLevels" .= ([] :: [T.Text]),
+                        "creditWeights" .= ([] :: [T.Text]),
+                        "dayPreferences" .= ([] :: [T.Text]),
+                        "deliveryModes" .= ([] :: [T.Text]),
+                        "departmentProps" .= ([] :: [T.Text]),
+                        "direction" .= ("asc" :: T.Text),
+                        "divisions" .= [T.pack "ARTSC"],
+                        "instructor" .= ("" :: T.Text),
+                        "page" .= (1 :: Int),
+                        "pageSize" .= (200 :: Int),
+                        "requirementProps" .= ([] :: [T.Text]),
+                        "sessions" .= [T.pack "20239", T.pack "20241", T.pack "20239-20241"],
+                        "timePreferences" .= ([] :: [T.Text])
+                     ]
+
+-- | The headers for the HTTP request
+reqHeaders :: RequestHeaders
+reqHeaders = [("Content-Type", "application/json"), ("Accept", "application/json")]
+
 -- CALENDAR RESPONSE DATES
 
 -- | First day of classes for the fall term.
 fallStartDate :: Day
-fallStartDate = fromGregorian 2022 09 08
+fallStartDate = fromGregorian 2023 09 07
 
 -- | Last day of classes for the fall term.
 fallEndDate :: Day
-fallEndDate = fromGregorian 2022 12 07
+fallEndDate = fromGregorian 2023 12 06
 
 -- | First day of classes for the winter term.
 winterStartDate :: Day
-winterStartDate = fromGregorian 2023 01 09
+winterStartDate = fromGregorian 2024 01 08
 
 -- | Last day of classes for the winter term.
 winterEndDate :: Day
-winterEndDate = fromGregorian 2023 04 06
+winterEndDate = fromGregorian 2024 04 05
 
 -- | Out of date day. Used to control forbidden inputs for days.
 outDay :: Day
@@ -117,7 +147,7 @@ outDay = fromGregorian 2024 01 01
 
 -- Holidays for the fall and winter term.
 holidays :: [String]
-holidays = ["20221010T", "20221107T", "20221108T",
-            "20221109T", "20221110T", "20221111T",
-            "20230220T", "20230221T", "20230222T",
-            "20200223T", "20230224T"]
+holidays = ["20231009T", "20231106T", "20231107T",
+            "20231108T", "20231109T", "20231110T",
+            "20240219T", "20240220T", "20230221T",
+            "20240222T", "20240223T"]
