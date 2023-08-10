@@ -90,10 +90,11 @@ newtype DB = DB { dbData :: [MeetTime]}
 
 instance FromJSON DB where
   parseJSON = withObject "Expected an Object for DB" $ \o -> do
-    course <- parseJSON (Object o)
-    session :: T.Text <- o .:? "sectionCode" .!= "F"
+    codeExtraChars <- o .: "code"
+    let courseCode = T.dropEnd 2 codeExtraChars
+    session :: T.Text <- o .: "sectionCode"
     sectionsList :: [MeetTime] <- o .:? "sections" .!= []
-    let finalSectionsList = map (\m -> m { meetInfo = (meetInfo m) { meetingCode = coursesCode course, meetingSession = session } }) sectionsList
+    let finalSectionsList = map (\m -> m { meetInfo = (meetInfo m) { meetingCode = courseCode, meetingSession = session } }) sectionsList
     return $ DB finalSectionsList
 
 newtype DBList = DBList [DB]

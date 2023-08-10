@@ -19,9 +19,9 @@ straightforward.
 
 module Database.Tables where
 
-import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), Value (..), genericToJSON, withObject,
-                   (.!=), (.:?), (.:))
-import Data.Aeson.Types (Options (..), Parser, defaultOptions)
+import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject,
+                    (.!=), (.:?), (.:))
+import Data.Aeson.Types (Options (..), Parser, Value(Object), Value, defaultOptions)
 import Data.Char (toLower)
 import qualified Data.Text as T
 import Data.Time.Clock (UTCTime)
@@ -29,7 +29,6 @@ import Database.DataType
 import Database.Persist.Sqlite (Key, SqlPersistM, entityVal, selectFirst, (==.))
 import Database.Persist.TH
 import GHC.Generics
-import WebParsing.ReqParser (parseReqs)
 
 -- | A two-dimensional point.
 type Point = (Double, Double)
@@ -215,42 +214,6 @@ instance ToJSON Location
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
 instance FromJSON SvgJSON
-
--- JSON encoding/decoding
-instance FromJSON Courses where
-  parseJSON = withObject "Expected Object for Courses" $ \o -> do
-    codeExtraChars <- o .:? "code" .!= "CSC?????"
-    let newCode = T.dropEnd 2 codeExtraChars
-    courseInfoMaybe <- o .:? "cmCourseInfo"
-    case courseInfoMaybe of
-      Just courseInfo -> do
-        newTitle  <- courseInfo .:? "title"
-        newDescription  <- courseInfo .:? "description"
-        newPrereqString <- courseInfo .:? "prerequisitesText"
-        let newPrereqs = fmap (T.pack . show . parseReqs . T.unpack) newPrereqString
-        newExclusions <- courseInfo .:? "exclusionsText"
-        newCoreqs <- courseInfo .:? "corequisitesText"
-        return $ Courses newCode
-                             newTitle
-                             newDescription
-                             newPrereqs
-                             newExclusions
-                             Nothing -- breadth
-                             Nothing -- distribution
-                             Nothing -- (Just prereqString)
-                             newCoreqs
-                             []
-      Nothing -> do
-        return $ Courses newCode
-                             Nothing -- Title
-                             Nothing -- Description
-                             Nothing -- Prereqs
-                             Nothing -- Exclusions
-                             Nothing -- breadth
-                             Nothing -- distribution
-                             Nothing -- (Just prereqString)
-                             Nothing -- Coreqs
-                             []
 
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
