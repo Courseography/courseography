@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: fpco/stack-build:lts-19
+      - image: fpco/stack-build:lts-21
     steps:
       - checkout
 
@@ -14,15 +14,14 @@ jobs:
 
       - run:
           name: Install Package Dependencies
-          # See https://github.com/NVIDIA/nvidia-docker/issues/1632
           command: |
-            wget -qO - https://packages.confluent.io/deb/5.2/archive.key | sudo apt-key add -
-            sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
             sudo apt-get update
             sudo apt-get install -y imagemagick texlive-latex-base
+            sudo dpkg --remove --force-remove-reinstreq nodejs
             stack update
 
-            curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - &&\
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+            sudo dpkg --remove --force-remove-reinstreq libnode72:amd64
             sudo apt-get install -y nodejs
 
             corepack enable
