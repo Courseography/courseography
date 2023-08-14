@@ -1,6 +1,5 @@
 import React from "react"
 import ReactModal from "react-modal"
-import { DragDropContext } from "react-beautiful-dnd"
 
 function DegreeModal(props) {
   const coursesList = props.activeCourses ? [...props.activeCourses] : []
