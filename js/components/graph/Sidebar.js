@@ -157,4 +157,5 @@ Sidebar.propTypes = {
   activeCourses: PropTypes.instanceOf(Set),
   courses: PropTypes.array,
   courseClick: PropTypes.func,
+  toggleDegreeModal: PropTypes.func,
 }
