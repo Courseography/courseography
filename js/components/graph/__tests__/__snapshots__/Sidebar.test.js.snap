@@ -89,6 +89,11 @@ exports[`Sidebar should match shallow snapshot 1`] = `
           >
             Reset Selections
           </button>
+          <button
+            class="reset-selections"
+          >
+            Create plan
+          </button>
         </div>
         <div
           class="sidebar-button"
@@ -148,6 +153,11 @@ exports[`Sidebar should match shallow snapshot 1`] = `
           data-testid="test-reset"
         >
           Reset Selections
+        </button>
+        <button
+          class="reset-selections"
+        >
+          Create plan
         </button>
       </div>
       <div
