@@ -1,6 +1,5 @@
 module.exports = {
   setupFiles: ["<rootDir>/js/setupTests.js"],
-  snapshotSerializers: ["enzyme-to-json/serializer"],
   testPathIgnorePatterns: [
     "<rootDir>/node_modules/",
     "<rootDir>/cypress/",
@@ -10,7 +9,10 @@ module.exports = {
     "<rootDir>/js/components/graph/__tests__/TestFocusBar.js",
     "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js",
   ],
-  setupFilesAfterEnv: ["<rootDir>/js/components/graph/__tests__/cleanup-after-each.js"],
+  setupFilesAfterEnv: [
+    "<rootDir>/js/setupTestsAfterEnv.js",
+    "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js",
+  ],
   moduleFileExtensions: ["js", "jsx"],
   moduleDirectories: ["node_modules"],
   moduleNameMapper: {

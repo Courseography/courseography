@@ -19,22 +19,16 @@ straightforward.
 
 module Database.Tables where
 
-import Control.Applicative ((<|>))
-import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), Value (..), genericToJSON, withObject,
-                   (.!=), (.:?))
-import Data.Aeson.KeyMap (elems)
-import Data.Aeson.Types (Options (..), Parser, defaultOptions)
+import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject,
+                    (.!=), (.:?), (.:))
+import Data.Aeson.Types (Options (..), Parser, Value(Object), Value, defaultOptions)
 import Data.Char (toLower)
-import qualified Data.HashMap.Strict as HM
-import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Time.Clock (UTCTime)
 import Database.DataType
 import Database.Persist.Sqlite (Key, SqlPersistM, entityVal, selectFirst, (==.))
 import Database.Persist.TH
 import GHC.Generics
-import Text.Read (readMaybe)
-import WebParsing.ReqParser (parseReqs)
 
 -- | A two-dimensional point.
 type Point = (Double, Double)
@@ -70,6 +64,7 @@ Meeting
     wait Int
     extra Int
     deriving Generic Show
+    UniqueMeeting code session section
 
 Times
     weekDay Double
@@ -220,27 +215,6 @@ instance ToJSON Location
 -- not necessary otherwise.
 instance FromJSON SvgJSON
 
--- JSON encoding/decoding
-instance FromJSON Courses where
-  parseJSON = withObject "Expected Object for Courses" $ \o -> do
-    newCode <- o .:? "code" .!= "CSC???"
-    newTitle  <- o .:? "courseTitle"
-    newDescription  <- o .:? "courseDescription"
-    newPrereqString <- o .:? "prerequisite"
-    let newPrereqs = fmap (T.pack . show . parseReqs . T.unpack) newPrereqString
-    newExclusions <- o .:? "exclusion"
-    newCoreqs <- o .:? "corequisite"
-    return $ Courses newCode
-                     newTitle
-                     newDescription
-                     newPrereqs
-                     newExclusions
-                     Nothing -- breadth
-                     Nothing -- distribution
-                     Nothing -- (Just prereqString)
-                     newCoreqs
-                     []
-
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
@@ -250,23 +224,16 @@ instance ToJSON Meeting where
 
 instance FromJSON Meeting where
   parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do
-    teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
+    teachingMethod :: T.Text <- o .:? "teachMethod" .!= ""
     sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
     let sectionId = T.concat [teachingMethod, sectionNumber]
 
-    capStr <- o .:? "enrollmentCapacity" .!= "-1"
-    enrolStr <- o .:? "actualEnrolment" .!= "0"
-    waitStr <- o .:? "actualWaitlist" .!= "0"
-    let cap = fromMaybe (-1) $ readMaybe capStr
-        enrol = fromMaybe 0 $ readMaybe enrolStr
-        wait = fromMaybe 0 $ readMaybe waitStr
-    instrMap2 :: Value <- o .:? "instructors" .!= Null
-    let instrList =
-          case instrMap2 of
-            Object obj -> elems obj
-            _ -> []
-
+    cap <- o .:? "maxEnrolment" .!= (-1)
+    enrol <- o .:? "currentEnrolment" .!= 0
+    wait <- o .:? "currentWaitlist" .!= 0
+    instrList <- o .:? "instructors" .!= []
     instrs <- mapM parseInstr instrList
+
     let extra = 0
     let instructor = T.intercalate "; " $ filter (not . T.null) instrs
     if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
@@ -277,19 +244,26 @@ instance FromJSON Meeting where
 
 instance FromJSON Time' where
   parseJSON = withObject "Expected Object for Times" $ \o -> do
-    meetingDayStr <- o .:? "meetingDay"
-    meetingStartTimeStr <- o .:? "meetingStartTime"
-    meetingEndTimeStr <- o .:? "meetingEndTime"
-    meetingRoom1 <- o .:? "assignedRoom1" .!= Nothing
+    startObject <- o .: "start"
+    endObject <- o .: "end"
+    meetingDay :: Maybe Int <- startObject .:? "day" .!= Nothing
+    meetingStartTime :: Maybe Int <- startObject .:? "millisofday" .!= Nothing
+    meetingEndTime :: Maybe Int <- endObject .:? "millisofday" .!= Nothing
+
+    building <- o .: "building"
+    buildingCode <- building .: "buildingCode"
+    buildingRoomNumber <- building .: "buildingRoomNumber"
+    let meetingRoom1 = Just (T.concat [buildingCode, buildingRoomNumber])
     meetingRoom2 <- o .:? "assignedRoom2" .!= Nothing
-    let (meetingDay, meetingStartTime, meetingEndTime) = getTimeVals meetingDayStr meetingStartTimeStr meetingEndTimeStr
-    return $ Time' meetingDay meetingStartTime meetingEndTime meetingRoom1 meetingRoom2
+
+    let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
+    return $ Time' adjustedDay adjustedStartTime adjustedEndTime meetingRoom1 meetingRoom2
 
 instance FromJSON MeetTime where
   parseJSON (Object o) = do
     meeting <- parseJSON (Object o)
-    timeMap :: HM.HashMap T.Text Time' <- o .:? "schedule" .!= HM.empty <|> return HM.empty
-    return $ MeetTime meeting (HM.elems timeMap)
+    timesList :: [Time'] <- o .:? "meetingTimes" .!= []
+    return $ MeetTime meeting timesList
   parseJSON _ = fail "Invalid meeting"
 
 -- | Helpers for parsing JSON
@@ -300,30 +274,36 @@ parseInstr (Object io) = do
   return (T.concat [firstName, ". ", lastName])
 parseInstr _ = return ""
 
--- | Converts 24-hour time into a double
+-- | Converts the miliseconds time into hourly time
 -- | Assumes times are rounded to the nearest hour
-getHourVal :: String -> Double
-getHourVal time = (read $ take 2 time :: Double) + (/) (read $ drop 3 time :: Double) 60
+getHourVal :: Int -> Double
+getHourVal millis =
+  let
+    seconds = fromIntegral millis / 1000.0
+    minutes = seconds / 60
+    hours = minutes / 60
+  in
+    hours
 
--- | Converts a weekday into a double
--- | Monday to Friday becomes 0.0 to 4.0
-getDayVal :: String -> Double
-getDayVal "MO" = 0.0
-getDayVal "TU" = 1.0
-getDayVal "WE" = 2.0
-getDayVal "TH" = 3.0
-getDayVal "FR" = 4.0
-getDayVal _    = 4.0
+-- | Converts a the given day into a double representation for the database
+-- | Monday (1) to Friday (5) becomes 0.0 to 4.0
+getDayVal :: Int -> Double
+getDayVal 1 = 0.0
+getDayVal 2 = 1.0
+getDayVal 3 = 2.0
+getDayVal 4 = 3.0
+getDayVal 5 = 4.0
+getDayVal _ = 4.0
 
 -- | Convert the given day, start time and end time to a tuple of Doubles. If nothing is given,
 --   the place holder is 5 and 25, indicating the day and times are invalid.
-getTimeVals :: Maybe String -> Maybe String -> Maybe String -> (Double, Double, Double)
-getTimeVals (Just day) (Just start) (Just end) = do
+convertTimeVals :: Maybe Int -> Maybe Int -> Maybe Int -> (Double, Double, Double)
+convertTimeVals (Just day) (Just start) (Just end) =
     let dayDbl = getDayVal day
         startDbl = getHourVal start
         endDbl = getHourVal end
-    (dayDbl, startDbl, endDbl)
-getTimeVals _ _ _ = (5.0, 25.0, 25.0)
+    in (dayDbl, startDbl, endDbl)
+convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
 
 -- | Convert Times into Time
 buildTime :: Times -> SqlPersistM Time

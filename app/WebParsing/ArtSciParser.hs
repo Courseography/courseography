@@ -1,5 +1,5 @@
 module WebParsing.ArtSciParser
-    (parseArtSci, getDeptList, parseBuildings) where
+    (parseCalendar, getDeptList) where
 
 import Config (databasePath, fasCalendarUrl, programsUrl)
 import Control.Monad.IO.Class (liftIO)
@@ -26,6 +26,11 @@ import Text.ParserCombinators.Parsec (parseFromFile)
 import WebParsing.ParsecCombinators (text)
 import WebParsing.PostParser (addPostToDatabase)
 import WebParsing.ReqParser (parseReqs)
+
+parseCalendar :: IO ()
+parseCalendar = do
+    parseArtSci
+    parseBuildings
 
 -- The file name is building.csv and it is in the courseography/db folder
 buildingsCSV :: IO Prelude.FilePath
@@ -92,11 +97,10 @@ parseDepartment :: (T.Text, T.Text) -> SqlPersistM ()
 parseDepartment (relativeURL, _) = do
     liftIO $ print relativeURL
     bodyTags <- liftIO $ httpBodyTags $ fasCalendarUrl ++ T.unpack relativeURL
-    let contentTags = dropWhile (not . tagOpenAttrLit "div" ("class", "content")) bodyTags
-        contentTags' = takeWhile (not . tagOpenAttrLit "footer" ("class", "site-footer")) contentTags
-        programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags'
-        programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "courses-view")) programs
-        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "courses-view")) programs
+    let contentTags = dropWhile (not . tagOpenAttrLit "footer" ("class", "view-footer")) bodyTags
+        programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags
+        programs' = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-content")) programs
+        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "courses-view")) contentTags
         courseTags' = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-content")) courseTags
     parsePrograms programs'
     mapM_ insertCourse $ parseCourses courseTags'

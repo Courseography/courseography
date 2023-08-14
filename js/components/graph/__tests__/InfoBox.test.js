@@ -1,11 +1,11 @@
 import React from "react"
-import { shallow } from "enzyme"
+import renderer from "react-test-renderer"
 import InfoBox from "../InfoBox"
 import TestGraph from "./TestGraph"
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, waitFor } from "@testing-library/react"
 
 describe("InfoBox", () => {
-  it("should match shallow snapshot", () => {
+  it("should match snapshot", () => {
     const infoBoxProps = {
       onClick: jest.fn(),
       onMouseDown: jest.fn(),
@@ -15,8 +15,8 @@ describe("InfoBox", () => {
       xPos: 0,
       yPos: 0,
     }
-    const component = shallow(<InfoBox {...infoBoxProps} />)
-    expect(component).toMatchSnapshot()
+    const tree = renderer.create(<InfoBox {...infoBoxProps} />).toJSON()
+    expect(tree).toMatchSnapshot()
   })
 
   it("should appear when hovering over a course", async () => {
@@ -39,9 +39,9 @@ describe("InfoBox", () => {
 
     fireEvent.mouseOut(aaa100)
 
-    setTimeout(() => {
+    await waitFor(() => {
       expect(infoBox.classList.contains("tooltip-group-hidden")).toBe(true)
-    }, 1000)
+    })
   }, 5000)
 
   it("Pressing on the info box should create a new pop up", async () => {
@@ -51,10 +51,8 @@ describe("InfoBox", () => {
     const infoBox = graph.getNodeByText("Info")
     fireEvent.click(infoBox)
 
-    // wait for fake fetch to finish
-    setTimeout(() => {
-      // expect description in the modal box to appear
+    await waitFor(() => {
       expect(graph.textExists(/AAA Thinking/)).toBe(true)
-    }, 1000)
+    })
   })
 })
