@@ -18,7 +18,7 @@ import qualified Data.Text as T
 import Database.Persist.Class (selectKeysList)
 import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, runSqlite, selectFirst,
                                 (==.))
-import Database.Tables hiding (breadth, distribution, paths, shapes, texts)
+import Database.Tables hiding (paths, shapes, texts)
 import Happstack.Server.SimpleHTTP (Response, toResponse)
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables

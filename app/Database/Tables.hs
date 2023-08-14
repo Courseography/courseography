@@ -26,7 +26,7 @@ import Data.Char (toLower)
 import qualified Data.Text as T
 import Data.Time.Clock (UTCTime)
 import Database.DataType
-import Database.Persist.Sqlite (Key, SqlPersistM, entityVal, selectFirst, (==.))
+import Database.Persist.Sqlite (Key, SqlPersistM, selectFirst, (==.))
 import Database.Persist.TH
 import GHC.Generics
 
@@ -52,7 +52,7 @@ Courses
     prereqString T.Text Maybe
     coreqs T.Text Maybe
     videoUrls [T.Text]
-    deriving Show
+    deriving Generic Show
 
 Meeting
     code T.Text
@@ -148,8 +148,6 @@ Building
     deriving Generic Show
 |]
 
--- ** TODO: Remove these extra types and class instances
-
 -- | JSON SVG data
 data SvgJSON =
     SvgJSON { texts :: [Text],
@@ -157,63 +155,34 @@ data SvgJSON =
               paths :: [Path]
             } deriving (Show, Generic)
 
-data Time' =
-  Time' { weekDay' :: Double,
-          startHour' :: Double,
-          endHour' :: Double,
-          firstRoom' :: Maybe T.Text,
-          secondRoom' :: Maybe T.Text
-        } deriving (Show, Generic)
-
 data Time =
   Time { weekDay :: Double,
           startHour :: Double,
           endHour :: Double,
-          firstRoom :: Maybe Location,
-          secondRoom :: Maybe Location
+          firstRoom :: Maybe T.Text,
+          secondRoom :: Maybe T.Text
         } deriving (Show, Generic)
 
-data Location =
-  Location { room :: T.Text,
-            bName :: T.Text,
-            bCode :: T.Text,
-            address :: T.Text,
-            postalCode :: T.Text,
-            lat :: Double,
-            lng :: Double
-          } deriving (Show, Generic)
 
 -- | A Meeting with its associated Times.
-data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time'] }
+data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time] }
   deriving (Show, Generic)
-
-data MeetTime' = MeetTime' { meetData :: Meeting, timeData :: [Time] }
-  deriving (Show, Generic)
-
--- | A Course. TODO: remove this data type (it's redundant).
-data Course =
-    Course { breadth :: Maybe T.Text,
-             description :: Maybe T.Text,
-             title :: Maybe T.Text,
-             prereqString :: Maybe T.Text,
-             allMeetingTimes :: Maybe [MeetTime'],
-             name :: !T.Text,
-             exclusions :: Maybe T.Text,
-             distribution :: Maybe T.Text,
-             coreqs :: Maybe T.Text,
-             videoUrls :: [T.Text]
-           } deriving (Show, Generic)
-
-instance ToJSON Course
-instance ToJSON Post
-instance ToJSON Time
-instance ToJSON MeetTime'
-instance ToJSON Building
-instance ToJSON Location
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
+instance ToJSON Post
+instance ToJSON Building
 instance FromJSON SvgJSON
+
+instance ToJSON Courses where
+  toJSON = genericToJSON defaultOptions {
+    fieldLabelModifier = firstToLower
+  }
+
+firstToLower :: String -> String
+firstToLower [] = []
+firstToLower (x:xs) = toLower x : xs
+
 
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
@@ -242,7 +211,7 @@ instance FromJSON Meeting where
     else
       fail "Not a lecture, Tutorial or Practical"
 
-instance FromJSON Time' where
+instance FromJSON Time where
   parseJSON = withObject "Expected Object for Times" $ \o -> do
     startObject <- o .: "start"
     endObject <- o .: "end"
@@ -257,12 +226,12 @@ instance FromJSON Time' where
     meetingRoom2 <- o .:? "assignedRoom2" .!= Nothing
 
     let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
-    return $ Time' adjustedDay adjustedStartTime adjustedEndTime meetingRoom1 meetingRoom2
+    return $ Time adjustedDay adjustedStartTime adjustedEndTime meetingRoom1 meetingRoom2
 
 instance FromJSON MeetTime where
   parseJSON (Object o) = do
     meeting <- parseJSON (Object o)
-    timesList :: [Time'] <- o .:? "meetingTimes" .!= []
+    timesList :: [Time] <- o .:? "meetingTimes" .!= []
     return $ MeetTime meeting timesList
   parseJSON _ = fail "Invalid meeting"
 
@@ -316,16 +285,16 @@ buildTime t = do
     room1
     room2
 
-buildTimes :: Key Meeting -> Time' -> Times
+buildTimes :: Key Meeting -> Time -> Times
 buildTimes meetingKey t =
-  Times (weekDay' t)
-    (startHour' t)
-    (endHour' t)
+  Times (weekDay t)
+    (startHour t)
+    (endHour t)
     meetingKey
-    (firstRoom' t)
-    (secondRoom' t)
+    (firstRoom t)
+    (secondRoom t)
 
-buildLocation :: Maybe T.Text -> SqlPersistM (Maybe Location)
+buildLocation :: Maybe T.Text -> SqlPersistM (Maybe T.Text)
 buildLocation rm = do
   case rm of
     Nothing -> return Nothing
@@ -333,12 +302,4 @@ buildLocation rm = do
       maybeEntityBuilding <- selectFirst [BuildingCode ==. T.take 2 r] []
       case maybeEntityBuilding of
         Nothing -> return Nothing
-        Just entBuilding -> do
-          let building = entityVal entBuilding
-          return $ Just $ Location r
-                                  (buildingName building)
-                                  (buildingCode building)
-                                  (buildingAddress building)
-                                  (buildingPostalCode building)
-                                  (buildingLat building)
-                                  (buildingLng building)
+        Just _ -> return (Just r)

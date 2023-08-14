@@ -37,15 +37,9 @@ import Happstack.Server.SimpleHTTP
 import Svg.Builder
 import Util.Happstack (createJSONResponse)
 
--- | Queries the database for all matching lectures, tutorials,
-meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
-meetingQuery meetingCodes = do
-    allMeetings <- selectList [MeetingCode <-. meetingCodes] []
-    mapM buildMeetTimes allMeetings
-
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.
-returnCourse :: T.Text -> IO (Maybe Course)
+returnCourse :: T.Text -> IO (Maybe Courses)
 returnCourse lowerStr = runSqlite databasePath $ do
     let courseStr = T.toUpper lowerStr
     -- TODO: require the client to pass the full course code
@@ -54,9 +48,7 @@ returnCourse lowerStr = runSqlite databasePath $ do
     case sqlCourse of
       Nothing -> return Nothing
       Just course -> do
-        meetings <- meetingQuery fullCodes
-        Just <$> buildCourse meetings
-                                (entityVal course)
+        Just <$> buildCourse (entityVal course)
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
@@ -109,42 +101,19 @@ returnMeeting lowerStr sect session = do
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
-buildCourse :: [MeetTime'] -> Courses -> SqlPersistM Course
-buildCourse allMeetings course = do
-    cBreadth <- getDescriptionB (coursesBreadth course)
-    cDistribution <- getDescriptionD (coursesDistribution course)
-    return $ Course cBreadth
+buildCourse :: Courses -> SqlPersistM Tables.Courses
+buildCourse course = do
+    return $ Courses (coursesCode course)
            -- TODO: Remove the filter and allow double-quotes
-           (fmap (T.filter (/='\"')) (coursesDescription course))
            (fmap (T.filter (/='\"')) (coursesTitle course))
-           (coursesPrereqString course)
-           (Just allMeetings)
-           (coursesCode course)
+           (fmap (T.filter (/='\"')) (coursesDescription course))
+           (coursesPrereqs course)
            (coursesExclusions course)
-           cDistribution
+           (coursesBreadth course)
+           (coursesDistribution course)
+           (coursesPrereqString course)
            (coursesCoreqs course)
            (coursesVideoUrls course)
-
--- | Queries the database for the breadth description
-getDescriptionB :: Maybe (Key Breadth) -> SqlPersistM (Maybe T.Text)
-getDescriptionB Nothing = return Nothing
-getDescriptionB (Just key) = do
-    maybeBreadth <- get key
-    return $ fmap breadthDescription maybeBreadth
-
--- | Queries the database for the distribution description
-getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe T.Text)
-getDescriptionD Nothing = return Nothing
-getDescriptionD (Just key) = do
-    maybeDistribution <- get key
-    return $ fmap distributionDescription maybeDistribution
-
--- | Queries the database for all times corresponding to a given meeting.
-buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime'
-buildMeetTimes meet = do
-    allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
-    parsedTime <- mapM (buildTime . entityVal) allTimes
-    return $ Tables.MeetTime' (entityVal meet) parsedTime
 
 -- ** Other queries
 
@@ -232,18 +201,15 @@ prereqsForCourse courseCode = runSqlite databasePath $ do
 courseInfo :: T.Text -> ServerPart Response
 courseInfo dept = fmap createJSONResponse (getDeptCourses dept)
 
-getDeptCourses :: MonadIO m => T.Text -> m [Course]
+getDeptCourses :: MonadIO m => T.Text -> m [Courses]
 getDeptCourses dept =
     liftIO $ runSqlite databasePath $ do
         courses :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
         let deptCourses = map entityVal courses
-        meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map coursesCode deptCourses] []
-        mapM (processCourse meetings) deptCourses
+        mapM processCourse deptCourses
     where
-        processCourse allMeetings course = do
-            let courseMeetings = filter (\m -> meetingCode (entityVal m) == coursesCode course) allMeetings
-            allTimes <- mapM buildMeetTimes courseMeetings
-            buildCourse allTimes course
+        processCourse course = do
+            buildCourse course
 
 -- | Return a list of all departments.
 deptList :: IO Response

@@ -64,12 +64,12 @@ getCoursesInfo courses = map courseInfo allCourses
         allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
-pullDatabase :: (Code, Section, Session) -> IO MeetTime'
+pullDatabase :: (Code, Section, Session) -> IO MeetTime
 pullDatabase (code, section, session) = runSqlite databasePath $ do
     meet <- returnMeeting code fullSection session
     allTimes <- selectList [TimesMeeting ==. entityKey meet] []
     parsedTime <- mapM (buildTime . entityVal) allTimes
-    return $ MeetTime' (entityVal meet) parsedTime
+    return $ MeetTime (entityVal meet) parsedTime
     where
     fullSection
         | T.isPrefixOf "L" section = T.append "LEC" sectCode
@@ -82,7 +82,7 @@ pullDatabase (code, section, session) = runSqlite databasePath $ do
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> MeetTime' -> Events
+getEvents :: SystemTime -> MeetTime -> Events
 getEvents systemTime lect =
     concatMap eventsByDate (zip' (third courseInfo)
                                  (fourth courseInfo)
@@ -117,10 +117,10 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: MeetTime' -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
+getCourseInfo :: MeetTime -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
 getCourseInfo meeting =
-    let meet = meetData meeting
-        allTimes = timeData meeting
+    let meet = meetInfo meeting
+        allTimes = timeInfo meeting
         code = meetingCode meet
         sect = meetingSection meet
         dataInOrder = orderTimeFields allTimes

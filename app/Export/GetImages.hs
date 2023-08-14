@@ -85,8 +85,8 @@ convertTimeToArray Time {weekDay=day, startHour=startTime, endHour=endTime} =
 
 addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Time]) -> [[[T.Text]]]
 addCourseToSchedule schedule (course, courseTimes) =
-  let time' = filter (\t-> mod' (startHour t) 1 == 0) courseTimes
-      timeArray = concatMap convertTimeToArray time'
+  let time = filter (\t-> mod' (startHour t) 1 == 0) courseTimes
+      timeArray = concatMap convertTimeToArray time
   in foldl (addCourseHelper course) schedule timeArray
 
 -- | Appends information of course to the current schedule for specified day and time.
