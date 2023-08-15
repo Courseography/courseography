@@ -1,10 +1,9 @@
 import { screen, waitFor, fireEvent } from "@testing-library/react"
 import TestContainer from "../../graph/__tests__/TestContainer.js"
-import TestSidebar from "../../graph/__tests__/TestSidebar.js"
 
 describe("DegreeModal", () => {
   it("Clicking on the 'Create plan' button opens up the modal", async () => {
-    const container = await TestContainer.build()
+    await TestContainer.build()
 
     // Click on the 'Create plan' button inside the sidebar
     const createPlanButton = screen.getByText("Create plan")
@@ -20,7 +19,7 @@ describe("DegreeModal", () => {
   })
 
   it("The sidebar's selected courses appear inside the degree modal", async () => {
-    const container = await TestContainer.build()
+    await TestContainer.build()
 
     // Click on the AAA100 course node
     const aaa100 = container.getByTestId("aaa100")
