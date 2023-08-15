@@ -3,7 +3,7 @@ import TestContainer from "../../graph/__tests__/TestContainer.js"
 
 describe("DegreeModal", () => {
   it("Clicking on the 'Create plan' button opens up the modal", async () => {
-    const container = await TestContainer.build()
+    await TestContainer.build()
 
     // Click on the 'Create plan' button inside the sidebar
     const createPlanButton = screen.getByText("Create plan")
