@@ -3,13 +3,10 @@
     Description : Includes functions for converting SVG files to PNG.
 -}
 module Export.ImageConversion
-    (createImageFile, removeFile) where
+    (createImageFile) where
 
-import Data.List.Split (splitOn)
-import Filesystem.Path.CurrentOS as Path
 import GHC.IO.Handle.Types
 import System.Process (ProcessHandle, createProcess, shell, waitForProcess)
-import Turtle.Prelude (rm)
 
 -- | Opens a new process to convert an SVG (inName) to a PNG (outName)
 -- Note: hGetContents can be used to read Handles. Useful when trying to read from
@@ -30,7 +27,3 @@ convertToImage :: String -> String -> IO
                       ProcessHandle)
 convertToImage inName outName =
     createProcess $ shell $ "convert " ++ inName ++ " " ++ outName
-
--- | Removes a file.
-removeFile :: String -> IO ()
-removeFile name = mapM_ (rm . Path.decodeString) (splitOn " " name)

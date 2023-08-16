@@ -10,7 +10,7 @@ allow-newer: true
 extra-deps:
   - stylish-haskell-0.13.0.0
 compiler-check: newer-minor
-resolver: lts-20.4
+resolver: lts-21.6
 dump-logs: all
 require-stack-version: ! ">= 1.6"
 ghc-options:

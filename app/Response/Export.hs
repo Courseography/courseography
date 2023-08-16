@@ -7,11 +7,11 @@ import Data.ByteString.Base64.Lazy as BEnc
 import qualified Data.ByteString.Lazy as L
 import qualified Data.Text as T
 import Export.GetImages
-import Export.ImageConversion (removeFile)
 import Export.LatexGenerator
 import Export.PdfGenerator
 import Happstack.Server
 import Response.Image (returnImageData)
+import System.Directory (removeFile)
 
 -- | Returns an image of the timetable requested by the user.
 exportTimetableImageResponse :: T.Text -> String -> ServerPart Response
@@ -44,5 +44,5 @@ returnPDF graphSvg graphImg fallTimetableSvg fallTimetableImg springTimetableSvg
         pdfName = rand ++ ".pdf"
     generateTex [graphImg, fallTimetableImg, springTimetableImg] texName -- generate a temporary TEX file
     createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
-    _ <- removeFile (graphSvg ++ " " ++ graphImg ++ " " ++ fallTimetableSvg ++ " " ++ fallTimetableImg ++ " " ++ springTimetableSvg ++ " " ++ springTimetableImg)
+    mapM_ removeFile [graphSvg, graphImg, fallTimetableSvg, fallTimetableImg, springTimetableSvg, springTimetableImg]
     return pdfName

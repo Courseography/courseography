@@ -1,6 +1,6 @@
 {-# LANGUAGE DataKinds, DeriveGeneric, DerivingStrategies, EmptyDataDecls, FlexibleContexts,
              FlexibleInstances, GADTs, GeneralizedNewtypeDeriving, MultiParamTypeClasses,
-             QuasiQuotes, StandaloneDeriving, TemplateHaskell, TypeFamilies,
+             QuasiQuotes, StandaloneDeriving, TemplateHaskell, TypeFamilies, TypeOperators,
              UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-name-shadowing #-}
 
@@ -19,9 +19,9 @@ straightforward.
 
 module Database.Tables where
 
-import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject,
-                    (.!=), (.:?), (.:))
-import Data.Aeson.Types (Options (..), Parser, Value(Object), Value, defaultOptions)
+import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject, (.!=), (.:),
+                   (.:?))
+import Data.Aeson.Types (Options (..), Parser, Value (Object), defaultOptions)
 import Data.Char (toLower)
 import qualified Data.Text as T
 import Data.Time.Clock (UTCTime)

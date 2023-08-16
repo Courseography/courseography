@@ -6,8 +6,8 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Base64 as BEnc
 import qualified Data.Text as T
 import Export.GetImages (getActiveGraphImage, getTimetableImage)
-import Export.ImageConversion
 import Happstack.Server
+import System.Directory (removeFile)
 
 -- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.
 graphImageResponse :: String -> ServerPart Response
