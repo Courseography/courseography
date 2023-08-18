@@ -135,6 +135,9 @@ export default class Sidebar extends React.Component {
           >
             Reset Selections
           </button>
+          <button className="reset-selections" onClick={this.props.toggleDegreeModal}>
+            Create plan
+          </button>
         </div>
         <div
           className="sidebar-button"
@@ -154,4 +157,5 @@ Sidebar.propTypes = {
   activeCourses: PropTypes.instanceOf(Set),
   courses: PropTypes.array,
   courseClick: PropTypes.func,
+  toggleDegreeModal: PropTypes.func,
 }

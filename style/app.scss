@@ -365,6 +365,119 @@ ol {
   position: relative;
 }
 
+.degree-planner-modal {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 30px;
+  height: 90%;
+  left: 50%;
+  overflow-y: auto;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+}
+
+.degree-planner-header {
+  align-items: center;
+  color: #437699;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.selected-courses-container {
+  background-color: #edf2f7;
+  border-radius: 10px;
+  font-size: 16px;
+  margin: 10px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.selected-courses {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 7px;
+}
+
+.course-node {
+  align-items: center;
+  background-color: rgba(122, 106, 150, 0.7803);
+  border-radius: 10px;
+  color: #222;
+  display: flex;
+  font-size: 14px;
+  height: 4vh;
+  justify-content: center;
+  margin: 7px;
+  text-align: center;
+  width: 9vh;
+}
+
+.degree-planner-calendar {
+  background-color: #edf2f7;
+  margin: 10px;
+}
+
+.school-year {
+  align-items: flex-start;
+  background-color: #edf2f7;
+  border-color: #222;
+  border-style: solid;
+  border-width: thin;
+  display: flex;
+  height: 30vh;
+}
+
+.year {
+  align-items: center;
+  background-color: rgba(211, 102, 203, 0.25);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 25%;
+}
+
+.semester-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 25%;
+}
+
+.semester-name {
+  align-items: center;
+  background-color: #db94b8;
+  border-color: #222;
+  border-style: solid;
+  border-width: thin;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.semester-courses-container {
+  background-color: #edf2f7;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 50%;
+}
+
+.semester-courses {
+  align-items: center;
+  border-color: #222;
+  border-style: solid;
+  border-width: thin;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
 .modal-class {
   background-color: #fff;
   border-radius: 10px;

@@ -1,6 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { CourseModal } from "../common/react_modal.js.jsx"
+import DegreeModal from "../common/degree_modal.js.jsx"
 import { ExportModal } from "../common/export.js.jsx"
 import { getPost } from "../common/utils.js"
 import Bool from "./Bool"
@@ -60,6 +61,7 @@ export class Graph extends React.Component {
       panStartX: 0,
       panStartY: 0,
       showCourseModal: false,
+      showDegreeModal: false,
       showGraphDropdown: false,
       selectedNodes: new Set(),
     }
@@ -625,6 +627,12 @@ export class Graph extends React.Component {
     })
   }
 
+  toggleDegreeModal = () => {
+    this.setState({
+      showDegreeModal: true,
+    })
+  }
+
   setShowGraphDropdown = () => {
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.DROPDOWN)
     this.setState({ showGraphDropdown: true })
@@ -640,7 +648,10 @@ export class Graph extends React.Component {
   }
 
   onClose = () => {
-    this.setState({ showCourseModal: false })
+    this.setState({
+      showCourseModal: false,
+      showDegreeModal: false,
+    })
   }
 
   openExportModal = () => {
@@ -1518,12 +1529,19 @@ export class Graph extends React.Component {
                 node.text.length > 0 ? node.text[node.text.length - 1].text : "",
               ])}
               courseClick={this.handleCourseClick}
+              toggleDegreeModal={this.toggleDegreeModal}
+              showDegreeModal={this.state.showDegreeModal}
             />
           )
         }
         <CourseModal
           showCourseModal={this.state.showCourseModal}
           courseId={this.state.courseId}
+          onClose={this.onClose}
+        />
+        <DegreeModal
+          showDegreeModal={this.state.showDegreeModal}
+          activeCourses={this.state.selectedNodes}
           onClose={this.onClose}
         />
         <ExportModal context="graph" session="" ref={this.exportModal} />
