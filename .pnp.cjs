@@ -57,7 +57,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mini-css-extract-plugin", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.6"],\
             ["node-fetch", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.6.12"],\
             ["precise-commits", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:1.0.2"],\
-            ["prettier", "npm:2.8.8"],\
+            ["prettier", "npm:3.0.3"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:17.0.2"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:17.0.2"],\
@@ -5621,7 +5621,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mini-css-extract-plugin", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.7.6"],\
             ["node-fetch", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:2.6.12"],\
             ["precise-commits", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:1.0.2"],\
-            ["prettier", "npm:2.8.8"],\
+            ["prettier", "npm:3.0.3"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:17.0.2"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:17.0.2"],\
@@ -6478,7 +6478,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/prettier", null],\
             ["eslint", "npm:8.46.0"],\
             ["eslint-config-prettier", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:8.9.0"],\
-            ["prettier", "npm:2.8.8"],\
+            ["prettier", "npm:3.0.3"],\
             ["prettier-linter-helpers", "npm:1.0.0"]\
           ],\
           "packagePeers": [\
@@ -10565,7 +10565,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ignore", "npm:3.3.10"],\
             ["mri", "npm:1.2.0"],\
             ["ora", "npm:1.4.0"],\
-            ["prettier", "npm:2.8.8"]\
+            ["prettier", "npm:3.0.3"]\
           ],\
           "packagePeers": [\
             "@types/prettier",\
@@ -10584,10 +10584,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["prettier", [\
-        ["npm:2.8.8", {\
-          "packageLocation": "./.yarn/cache/prettier-npm-2.8.8-430828a36c-b49e409431.zip/node_modules/prettier/",\
+        ["npm:3.0.3", {\
+          "packageLocation": "./.yarn/unplugged/prettier-npm-3.0.3-fced695dae/node_modules/prettier/",\
           "packageDependencies": [\
-            ["prettier", "npm:2.8.8"]\
+            ["prettier", "npm:3.0.3"]\
           ],\
           "linkType": "HARD"\
         }]\
