@@ -5,12 +5,12 @@
 
 packages:
 - completed:
-    hackage: stylish-haskell-0.13.0.0@sha256:a8a648042f7f6a5ba2dc5cf3d692e41b4aa33f55c8a64f94436412362632b4c7,6143
+    hackage: stylish-haskell-0.14.6.0@sha256:00cf494e091219ad9c27ed425336737f53558f8011676b588f10085c345e7ed6,4552
     pantry-tree:
-      sha256: 0f7589ccae900b43967c5ff26ec9d8ba8843b76aafc69b0dcbd6da6d91ab6d96
-      size: 3812
+      sha256: 2d46ed4ad4425038896566b849a1ccf5056e521bddfb6891d5608d6c42f49ebf
+      size: 3891
   original:
-    hackage: stylish-haskell-0.13.0.0
+    hackage: stylish-haskell-0.14.6.0
 snapshots:
 - completed:
     sha256: a81fb3877c4f9031e1325eb3935122e608d80715dc16b586eb11ddbff8671ecd

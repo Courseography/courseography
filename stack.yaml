@@ -8,7 +8,7 @@ packages:
   - .
 allow-newer: true
 extra-deps:
-  - stylish-haskell-0.13.0.0
+  - stylish-haskell-0.14.6.0
 compiler-check: newer-minor
 resolver: lts-21.25
 dump-logs: all
