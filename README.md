@@ -21,7 +21,7 @@ See [CONTRIBUTING.md](https://github.com/Courseography/courseography/blob/master
 First install the following:
 
 1. [Haskell](https://www.haskell.org/ghcup/)
-2. [Node.js](https://nodejs.org/en/download/)
+2. [Node.js](https://nodejs.org/en/download/) _v18.20.2_ (not v20+)
 3. Yarn, by opening a terminal and running: `npm install -g yarn`
 4. [ImageMagick](http://www.imagemagick.org/script/download.php)
 5. [GraphViz](https://graphviz.org/download/)
