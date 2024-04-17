@@ -68,3 +68,6 @@ coverage
 /cypress/integration/examples
 /cypress/plugins
 /cypress/support
+
+# Python virtual environment
+venv
