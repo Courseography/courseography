@@ -73,9 +73,10 @@ run `$ yarn run test -- <path>`.
 If you are contributing to Courseography, you should install our pre-commit hooks:
 
 1. Install Python 3.
-2. In the project repository, install the [`pre-commit`](https://pre-commit.com/#installation) Python package: `$ pip install pre-commit`.
+2. In the project repository, install the [`pre-commit`](https://pre-commit.com/#installation) Python package: `pip install pre-commit`.
 3. Run `pre-commit install` to install the hooks.
-4. Finally, run `pre-commit run` to test out the hooks. You should see the following:
+4. Run `stack install hlint` to install [HLint](https://github.com/ndmitchell/hlint).
+5. Finally, run `pre-commit run` to test out the hooks. You should see the following:
 
    ```console
    $ pre-commit run

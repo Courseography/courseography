@@ -177,3 +177,5 @@ executable courseography
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app
+
+extra-packages: hlint
