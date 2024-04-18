@@ -3961,6 +3961,7 @@ __metadata:
     eslint-plugin-react: ^7.32.0
     fetch-mock: ^9.11.0
     handlebars: ^4.7.7
+    husky: ^9.0.11
     jest: ^29.5.0
     jest-environment-jsdom: ^29.5.0
     jquery: ^3.6.0
@@ -6036,6 +6037,15 @@ __metadata:
   dependencies:
     ms: ^2.0.0
   checksum: 9c7a74a2827f9294c009266c82031030eae811ca87b0da3dceb8d6071b9bde22c9f3daef0469c3c533cc67a97d8a167cd9fc0389350e5f415f61a79b171ded16
+  languageName: node
+  linkType: hard
+
+"husky@npm:^9.0.11":
+  version: 9.0.11
+  resolution: "husky@npm:9.0.11"
+  bin:
+    husky: bin.mjs
+  checksum: 1aebc3334dc7ac6288ff5e1fb72cfb447cfa474e72cf7ba692e8c5698c573ab725c28c6a5088c9f8e6aca5f47d40fa7261beffbc07a4d307ca21656dc4571f07
   languageName: node
   linkType: hard
 

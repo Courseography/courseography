@@ -70,23 +70,11 @@ run `$ yarn run test -- <path>`.
 
 #### Developers
 
-If you are contributing to Courseography, you should install our pre-commit hooks:
+If you are contributing to Courseography, you should run the following to install and test our pre-commit hooks:
 
-1. Install Python 3.
-2. In the project repository, install the [`pre-commit`](https://pre-commit.com/#installation) Python package: `pip install pre-commit`.
-3. Run `pre-commit install` to install the hooks.
-4. Run `stack install hlint` to install [HLint](https://github.com/ndmitchell/hlint).
-5. Finally, run `pre-commit run` to test out the hooks. You should see the following:
-
-   ```console
-   $ pre-commit run
-   Trim Trailing Whitespace.............................(no files to check)Skipped
-   Fix End of Files.....................................(no files to check)Skipped
-   Check Yaml...........................................(no files to check)Skipped
-   prettier.............................................(no files to check)Skipped
-   stylelint............................................(no files to check)Skipped
-   Check Haskell files with stylish-haskell.............(no files to check)Skipped
-   ```
+1. `yarn prepare`
+2. `stack install hlint`
+3. `npx lint-staged` (this will run the pre-commit hooks; make sure that it runs without errors)
 
 ## Contributors
 

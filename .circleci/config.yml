@@ -33,6 +33,7 @@ jobs:
             rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
             cp app/DevelopmentConfig.hs app/Config.hs
             stack --no-terminal build --fast -j1 --ghc-options -Werror
+            stack build hlint
             yarn install
 
       - run:
@@ -49,9 +50,9 @@ jobs:
             - ".stack-work"
 
       - run:
-          name: Lint JS
+          name: Run lint-staged checks
           command: |
-            yarn run eslint
+            npx lint-staged --diff="master...$(git branch --show-current)"
 
       - run:
           name: Generate documentation
