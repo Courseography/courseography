@@ -10,11 +10,15 @@
     "build": "webpack --config webpack.prod.js --disable-interpret",
     "test": "jest",
     "prettier": "prettier --write .",
-    "eslint": "eslint --fix-dry-run --ignore-path .prettierignore js"
+    "eslint": "eslint --fix-dry-run --ignore-path .prettierignore js",
+    "prepare": "husky"
   },
   "private": true,
   "lint-staged": {
-    "*": "prettier --ignore-unknown --write"
+    "*": "yarn prettier --ignore-unknown --write",
+    "*.js": "yarn run eslint --cache --fix --ignore-path .prettierignore",
+    "*.css": "yarn run stylelint --fix",
+    "*.hs": "stack exec hlint"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.4",
@@ -47,6 +51,7 @@
     "eslint-plugin-prettier": "5",
     "eslint-plugin-react": "^7.32.0",
     "fetch-mock": "^9.11.0",
+    "husky": "^9.0.11",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "mini-css-extract-plugin": "^2.7.6",
