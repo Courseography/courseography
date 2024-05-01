@@ -10,13 +10,13 @@
     "build": "webpack --config webpack.prod.js --disable-interpret",
     "test": "jest",
     "prettier": "prettier --write .",
-    "eslint": "eslint --fix-dry-run --ignore-path .prettierignore js",
+    "eslint": "eslint --fix --ignore-path .prettierignore js",
     "prepare": "husky"
   },
   "private": true,
   "lint-staged": {
     "*": "yarn prettier --ignore-unknown --write",
-    "*.js": "yarn run eslint --cache --fix --ignore-path .prettierignore",
+    "*.js": "yarn run eslint --cache --fix --ignore-path .prettierignore js",
     "*.css": "yarn run stylelint --fix",
     "*.hs": "stack exec hlint"
   },
