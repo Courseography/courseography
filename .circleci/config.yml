@@ -6,6 +6,8 @@ jobs:
       - image: fpco/stack-build:lts-21
     steps:
       - checkout
+      - run: git remote add upstream https://github.com/Courseography/courseography.git
+      - run: git fetch upstream
 
       - restore_cache:
           name: Restore Cached Dependencies (Haskell)
@@ -52,7 +54,7 @@ jobs:
       - run:
           name: Run lint-staged checks
           command: |
-            npx lint-staged --diff="master...$(git branch --show-current)"
+            npx lint-staged --diff="upstream/master...$(git branch --show-current)"
 
       - run:
           name: Generate documentation
