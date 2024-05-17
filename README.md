@@ -80,7 +80,8 @@ If you are contributing to Courseography, you should run the following to instal
 
 This project would not exist without the contributions of many students in the Department of Computer Science. In alphabetical order, our contributors are:
 
-Ismail Ahmed
+Ismail Ahmed,
+Mimis Chlympatsos,
 Alex Baluta,
 Mehdi Benallegue,
 Alexander Biggs,
