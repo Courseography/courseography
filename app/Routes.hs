@@ -3,10 +3,11 @@ module Routes
 
 import Control.Monad (MonadPlus (mplus), msum)
 import Control.Monad.IO.Class (liftIO)
+import Controllers.Course (retrieveCourse, allCourses, courseInfo)
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
-import Database.CourseQueries (allCourses, courseInfo, deptList, getGraphJSON, queryGraphs,
-                               retrieveCourse, retrievePost)
+import Database.CourseQueries (deptList, getGraphJSON, queryGraphs,
+                               retrievePost)
 import DynamicGraphs.WriteRunDot (findAndSavePrereqsResponse)
 import Happstack.Server hiding (host)
 import Response
@@ -32,15 +33,16 @@ strictRoutes aboutContents privacyContents = [
     ("draw", drawResponse),
     ("about", aboutResponse aboutContents),
     ("privacy", privacyResponse privacyContents),
-    ("course", lookText' "name" >>= retrieveCourse),
-    ("all-courses", liftIO allCourses),
     ("graphs", liftIO queryGraphs),
-    ("course-info", lookText' "dept" >>= courseInfo),
-    ("depts", liftIO deptList),
     ("timesearch", searchResponse),
     ("generate", generateResponse),
-    ("calendar", look "courses" >>= calendarResponse),
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
+    
+    ("course", lookText' "name" >>= retrieveCourse),
+    ("all-courses", liftIO allCourses),
+    ("course-info", lookText' "dept" >>= courseInfo),
+    ("depts", liftIO deptList),
+    ("calendar", look "courses" >>= calendarResponse),
     ("loading", lookText' "size" >>= loadingResponse),
     ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
     ]
