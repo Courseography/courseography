@@ -97,6 +97,8 @@ executable courseography
     Response.Privacy,
     Response.Search,
     Response.Generate,
+    Controllers,
+    Controllers.Graph,
     Routes,
     Scripts,
     Server,
