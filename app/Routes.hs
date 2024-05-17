@@ -7,7 +7,7 @@ import Controllers.Course (retrieveCourse, allCourses, courseInfo)
 import Controllers.Graph (graphResponse, findAndSavePrereqsResponse, queryGraphs)
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
-import Database.CourseQueries (getGraphJSON, retrievePost)
+import Database.CourseQueries (getGraphJSON, retrievePost, deptList)
 import Happstack.Server hiding (host)
 import Response hiding (graphResponse)
 
