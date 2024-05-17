@@ -4,13 +4,13 @@ module Routes
 import Control.Monad (MonadPlus (mplus), msum)
 import Control.Monad.IO.Class (liftIO)
 import Controllers.Course (retrieveCourse, allCourses, courseInfo)
+import Controllers.Graph (graphResponse, findAndSavePrereqsResponse, queryGraphs)
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
-import Database.CourseQueries (deptList, getGraphJSON, queryGraphs,
-                               retrievePost)
-import DynamicGraphs.WriteRunDot (findAndSavePrereqsResponse)
+import Database.CourseQueries (getGraphJSON, retrievePost)
 import Happstack.Server hiding (host)
-import Response
+import Response hiding (graphResponse)
+
 
 routeResponses :: String -> Text -> Text -> ServerPartT IO Response
 routeResponses staticDir aboutContents privacyContents =
