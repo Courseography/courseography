@@ -16,7 +16,7 @@ module Database.CourseQueries
      courseInfo,
      getDeptCourses,
      queryGraphs,
-     deptList,
+     depts,
      returnMeeting,
      getGraph,
      getGraphJSON,
@@ -246,12 +246,12 @@ getDeptCourses dept =
             buildCourse allTimes course
 
 -- | Return a list of all departments.
-deptList :: IO Response
-deptList = do
-    depts <- runSqlite databasePath $ do
+depts :: IO Response
+depts = do
+    deptsList <- runSqlite databasePath $ do
         courses :: [Entity Courses] <- selectList [] []
         return $ sort . nub $ map g courses :: SqlPersistM [String]
-    return $ createJSONResponse depts
+    return $ createJSONResponse deptsList
     where
         g = take 3 . T.unpack . coursesCode . entityVal
 

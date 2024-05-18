@@ -1,4 +1,4 @@
-module Controllers.Graph (graphResponse, findAndSavePrereqsResponse, queryGraphs) where
+module Controllers.Graph (graphResponse, findAndSavePrereqsResponse, graphs) where
 
 import Happstack.Server (ServerPart, Response, toResponse, ok)
 import MasterTemplate
@@ -34,9 +34,10 @@ findAndSavePrereqsResponse = do
     let coursesOptions :: CourseGraphOptions = fromJust $ decode body
     liftIO $ generateAndSavePrereqResponse coursesOptions
 
-queryGraphs :: IO Response
-queryGraphs = runSqlite databasePath $ do
-    graphs :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
-    return $ createJSONResponse graphs :: SqlPersistM Response
+
+graphs :: IO Response
+graphs = runSqlite databasePath $ do
+    graphsList :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
+    return $ createJSONResponse graphsList :: SqlPersistM Response
 
 

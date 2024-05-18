@@ -1,5 +1,5 @@
 module Controllers.Course
-    (retrieveCourse, allCourses, courseInfo, deptList) where
+    (retrieveCourse, courses, courseInfo, deptList) where
 
 import Config (databasePath)
 import Control.Monad.IO.Class (MonadIO, liftIO)
@@ -87,11 +87,11 @@ buildMeetTimes meet = do
     return $ Tables.MeetTime' (entityVal meet) parsedTime
 
 -- | Builds a list of all course codes in the database.
-allCourses :: IO Response
-allCourses = do
+courses :: IO Response
+courses = do
   response <- runSqlite databasePath $ do
-      courses :: [Entity Courses] <- selectList [] []
-      let codes = map (coursesCode . entityVal) courses
+      coursesList :: [Entity Courses] <- selectList [] []
+      let codes = map (coursesCode . entityVal) coursesList
       return $ T.unlines codes :: SqlPersistM T.Text
   return $ toResponse response
 
@@ -102,8 +102,8 @@ courseInfo dept = fmap createJSONResponse (getDeptCourses dept)
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept =
     liftIO $ runSqlite databasePath $ do
-        courses :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
-        let deptCourses = map entityVal courses
+        coursesList :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
+        let deptCourses = map entityVal coursesList
         meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map coursesCode deptCourses] []
         mapM (processCourse meetings) deptCourses
     where
@@ -116,8 +116,8 @@ getDeptCourses dept =
 deptList :: IO Response
 deptList = do
     depts <- runSqlite databasePath $ do
-        courses :: [Entity Courses] <- selectList [] []
-        return $ sort . nub $ map g courses :: SqlPersistM [String]
+        coursesList :: [Entity Courses] <- selectList [] []
+        return $ sort . nub $ map g coursesList :: SqlPersistM [String]
     return $ createJSONResponse depts
     where
         g = take 3 . T.unpack . coursesCode . entityVal
