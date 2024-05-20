@@ -2,13 +2,12 @@ module DynamicGraphs.WriteRunDot where
 
 import Control.Monad (forM_)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (decode)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
 import Data.GraphViz hiding (Str)
 import Data.Hash.MD5 (Str (Str), md5s)
 import Data.List (sort)
-import Data.Maybe (fromJust, fromMaybe)
+import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.Encoding (decodeUtf8)
 import Database.CourseQueries (getGraph)
