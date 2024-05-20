@@ -30,7 +30,7 @@ import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter
 import Database.DataType ( ShapeType( Node ) , ShapeType( Hybrid ), ShapeType( BoolNode ))
 import Database.Persist.Sqlite (Entity, PersistEntity, SqlPersistM, PersistValue( PersistInt64 ), runSqlite, selectList,
                                 entityKey, entityVal, selectFirst, (==.), (<-.), get, keyToValues, PersistValue( PersistText ),
-                                SelectOpt( Asc ), rawSql)
+                                rawSql)
 import Database.Tables as Tables
 import Happstack.Server.SimpleHTTP (ServerPart, Response, Request, askRq, lookText', ifModifiedSince)
 import Svg.Builder (intersectsWithShape, buildPath, buildEllipses, buildRect)
@@ -225,13 +225,6 @@ getDeptCourses dept =
             let courseMeetings = filter (\m -> meetingCode (entityVal m) == coursesCode course) allMeetings
             allTimes <- mapM buildMeetTimes courseMeetings
             buildCourse allTimes course
-
--- | Queries the graphs table and returns a JSON response of Graph JSON
--- objects.
-queryGraphs :: IO Response
-queryGraphs = runSqlite databasePath $ do
-    graphs :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
-    return $ createJSONResponse graphs :: SqlPersistM Response
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a @course@, returns a list of Time.
