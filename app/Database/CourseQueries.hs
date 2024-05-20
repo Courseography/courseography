@@ -12,7 +12,6 @@ module Database.CourseQueries
     (retrievePost,
      returnCourse,
      prereqsForCourse,
-     queryGraphs,
      returnMeeting,
      getGraph,
      getGraphJSON,
