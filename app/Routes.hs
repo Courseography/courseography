@@ -8,9 +8,36 @@ import Controllers.Graph (graphResponse, findAndSavePrereqsResponse, graphs)
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
 import Database.CourseQueries (getGraphJSON, retrievePost)
-import Happstack.Server hiding (host)
-import Response hiding (graphResponse)
-
+import Happstack.Server
+    ( serveDirectory,
+      seeOther,
+      dir,
+      method,
+      noTrailingSlash,
+      nullDir,
+      look,
+      lookBS,
+      lookText',
+      Browsing(DisableBrowsing),
+      ServerPart,
+      ServerPartT,
+      Method(PUT),
+      Response,
+      ToMessage(toResponse) )
+import Response
+    ( drawResponse,
+      aboutResponse,
+      privacyResponse,
+      notFoundResponse,
+      searchResponse,
+      generateResponse,
+      postResponse,
+      loadingResponse,
+      gridResponse,
+      calendarResponse,
+      graphImageResponse,
+      exportTimetableImageResponse,
+      exportTimetablePDFResponse )
 
 routeResponses :: String -> Text -> Text -> ServerPartT IO Response
 routeResponses staticDir aboutContents privacyContents =

@@ -1,19 +1,24 @@
 module Controllers.Graph (graphResponse, findAndSavePrereqsResponse, graphs) where
 
 import Happstack.Server (ServerPart, Response, toResponse, ok)
-import MasterTemplate
-import Scripts
+import MasterTemplate (masterTemplate, header)
+import Scripts (graphScripts)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import DynamicGraphs.GraphOptions (CourseGraphOptions (..))
-import DynamicGraphs.WriteRunDot hiding (findAndSavePrereqsResponse)
+import DynamicGraphs.WriteRunDot (getBody, generateAndSavePrereqResponse)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (decode)
 import Data.Maybe (fromJust)
 import Database.Tables as Tables
-import Database.Persist
 import Database.Persist.Sqlite
+    ( Entity,
+      SelectOpt(Asc),
+      (==.),
+      selectList,
+      runSqlite,
+      SqlPersistM )
 import Config (databasePath)
 import Util.Happstack (createJSONResponse)
 
