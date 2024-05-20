@@ -15,7 +15,6 @@ module Database.CourseQueries
      prereqsForCourse,
      courseInfo,
      getDeptCourses,
-     queryGraphs,
      depts,
      returnMeeting,
      getGraph,
@@ -255,12 +254,6 @@ depts = do
     where
         g = take 3 . T.unpack . coursesCode . entityVal
 
--- | Queries the graphs table and returns a JSON response of Graph JSON
--- objects.
-queryGraphs :: IO Response
-queryGraphs = runSqlite databasePath $ do
-    graphs :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
-    return $ createJSONResponse graphs :: SqlPersistM Response
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a @course@, returns a list of Time.

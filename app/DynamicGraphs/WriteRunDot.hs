@@ -43,12 +43,6 @@ getBody = do
         Just rqbody -> return . unBody $ rqbody
         Nothing     -> return ""
 
-findAndSavePrereqsResponse :: ServerPart Response
-findAndSavePrereqsResponse = do
-    body <- getBody
-    let coursesOptions :: CourseGraphOptions = fromJust $ decode body
-    liftIO $ generateAndSavePrereqResponse coursesOptions
-
 generateAndSavePrereqResponse :: CourseGraphOptions -> IO Response
 generateAndSavePrereqResponse coursesOptions = do
   cached <- getGraph graphHash
