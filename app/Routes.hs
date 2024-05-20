@@ -3,11 +3,11 @@ module Routes
 
 import Control.Monad (MonadPlus (mplus), msum)
 import Control.Monad.IO.Class (liftIO)
-import Controllers.Course (retrieveCourse, courses, courseInfo)
+import Controllers.Course (retrieveCourse, courses, courseInfo, depts)
 import Controllers.Graph (graphResponse, findAndSavePrereqsResponse, graphs)
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
-import Database.CourseQueries (getGraphJSON, retrievePost, depts)
+import Database.CourseQueries (getGraphJSON, retrievePost)
 import Happstack.Server hiding (host)
 import Response hiding (graphResponse)
 
@@ -39,7 +39,7 @@ strictRoutes aboutContents privacyContents = [
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     
     ("course", lookText' "name" >>= retrieveCourse),
-    ("all-courses", liftIO courses),
+    ("courses", liftIO courses),
     ("course-info", lookText' "dept" >>= courseInfo),
     ("depts", liftIO depts),
     ("calendar", look "courses" >>= calendarResponse),
