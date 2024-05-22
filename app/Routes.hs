@@ -4,7 +4,7 @@ module Routes
 import Control.Monad (MonadPlus (mplus), msum)
 import Control.Monad.IO.Class (liftIO)
 import Controllers.Course (retrieveCourse, courses, courseInfo, depts)
-import Controllers.Graph (graphResponse, findAndSavePrereqsResponse, graphs)
+import Controllers.Graph as GraphControllers
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
 import Database.CourseQueries (getGraphJSON, retrievePost)
@@ -46,12 +46,12 @@ routeResponses staticDir aboutContents privacyContents =
           nullDir >> seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
           notFoundResponse])
 
-strictRoutes :: Text -> Text -> [ (String, ServerPart Response)]
+strictRoutes :: Text -> Text -> [ (String, ServerPart Response)] 
 strictRoutes aboutContents privacyContents = [
     ("grid", gridResponse),
-    ("graph", graphResponse),
+    ("graph", GraphControllers.graphResponse),
     ("graph-generate", do method PUT
-                          findAndSavePrereqsResponse),
+                          GraphControllers.findAndSavePrereqsResponse),
     ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
     ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
     ("timetable-pdf", look "courses" >>= \coursesList -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse coursesList),
@@ -60,7 +60,7 @@ strictRoutes aboutContents privacyContents = [
     ("draw", drawResponse),
     ("about", aboutResponse aboutContents),
     ("privacy", privacyResponse privacyContents),
-    ("graphs", liftIO graphs),
+    ("graphs", GraphControllers.index),
     ("timesearch", searchResponse),
     ("generate", generateResponse),
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),

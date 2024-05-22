@@ -24,7 +24,7 @@ module Database.CourseQueries
 import Config (databasePath)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Aeson (object, toJSON, (.=))
-import Data.List (partition, )
+import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc)
 import Database.DataType ( ShapeType( Node ) , ShapeType( Hybrid ), ShapeType( BoolNode ))
