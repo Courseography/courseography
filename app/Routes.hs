@@ -3,7 +3,7 @@ module Routes
 
 import Control.Monad (MonadPlus (mplus), msum)
 import Control.Monad.IO.Class (liftIO)
-import Controllers.Course (retrieveCourse, courses, courseInfo, depts)
+import Controllers.Course as CourseControllers (retrieveCourse, index, courseInfo, depts)
 import Controllers.Graph as GraphControllers
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
@@ -65,10 +65,10 @@ strictRoutes aboutContents privacyContents = [
     ("generate", generateResponse),
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     
-    ("course", lookText' "name" >>= retrieveCourse),
-    ("courses", liftIO courses),
-    ("course-info", lookText' "dept" >>= courseInfo),
-    ("depts", liftIO depts),
+    ("course", lookText' "name" >>= CourseControllers.retrieveCourse),
+    ("courses", CourseControllers.index),
+    ("course-info", lookText' "dept" >>= CourseControllers.courseInfo),
+    ("depts", CourseControllers.depts),
     ("calendar", look "courses" >>= calendarResponse),
     ("loading", lookText' "size" >>= loadingResponse),
     ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)

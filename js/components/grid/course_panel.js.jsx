@@ -308,7 +308,7 @@ class CourseList extends React.Component {
 
     // This makes an AJAX call to retrieve courses from the database
     fetch(
-      "/all-courses" // url to which the AJAX request is sent to
+      "/courses" // url to which the AJAX request is sent to
     )
       .then(response => response.text())
       .then(data => {

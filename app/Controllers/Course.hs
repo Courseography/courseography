@@ -1,5 +1,5 @@
 module Controllers.Course
-    (retrieveCourse, courses, courseInfo, depts) where
+    (retrieveCourse, index, courseInfo, depts) where
 
 import Config (databasePath)
 import Control.Monad.IO.Class (liftIO)
@@ -18,9 +18,9 @@ retrieveCourse :: T.Text -> ServerPart Response
 retrieveCourse = liftIO . CourseHelpers.queryCourse
 
 -- | Builds a list of all course codes in the database.
-courses :: IO Response
-courses = do
-  response <- runSqlite databasePath $ do
+index :: ServerPart Response
+index = do
+  response <- liftIO $ runSqlite databasePath $ do
       coursesList :: [Entity Courses] <- selectList [] []
       let codes = map (coursesCode . entityVal) coursesList
       return $ T.unlines codes :: SqlPersistM T.Text
@@ -31,9 +31,9 @@ courseInfo :: T.Text -> ServerPart Response
 courseInfo dept = fmap createJSONResponse (CourseHelpers.getDeptCourses dept)
 
 -- | Return a list of all departments.
-depts :: IO Response
+depts :: ServerPart Response
 depts = do
-    deptList <- runSqlite databasePath $ do
+    deptList <- liftIO $ runSqlite databasePath $ do
         coursesList :: [Entity Courses] <- selectList [] []
         return $ sort . nub $ map g coursesList :: SqlPersistM [String]
     return $ createJSONResponse deptList
