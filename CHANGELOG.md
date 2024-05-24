@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Button to deselect courses in "FCE count" side panel
+
 ### 🐛 Bug fixes
 
 ### 🔧 Internal changes
