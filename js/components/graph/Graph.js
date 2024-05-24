@@ -422,6 +422,21 @@ export class Graph extends React.Component {
     }
   }
 
+  nodeUnselect = courseId => {
+    const courseLabelArray = this.state.nodesJSON[courseId].text
+    const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
+    const wasSelected = this.state.nodesStatus[courseId].selected
+    const temp = this.state.selectedNodes
+
+    wasSelected ? this.toggleSelection(courseId) : {}
+
+    if (typeof this.props.incrementFCECount === "function" && wasSelected) {
+      // TODO: Differentiate half- and full-year courses
+      this.props.incrementFCECount(-0.5)
+      temp.delete(courseLabel)
+    }
+  }
+
   /**
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
@@ -1517,7 +1532,7 @@ export class Graph extends React.Component {
                 node.id_,
                 node.text.length > 0 ? node.text[node.text.length - 1].text : "",
               ])}
-              courseClick={this.handleCourseClick}
+              xClick={this.nodeUnselect}
             />
           )
         }
