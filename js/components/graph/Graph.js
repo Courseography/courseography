@@ -1532,6 +1532,7 @@ export class Graph extends React.Component {
                 node.id_,
                 node.text.length > 0 ? node.text[node.text.length - 1].text : "",
               ])}
+              courseClick={this.handleCourseClick}
               xClick={this.nodeUnselect}
             />
           )
