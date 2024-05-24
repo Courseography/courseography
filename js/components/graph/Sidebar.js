@@ -1,5 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
+import Button from "./Button"
 
 export default class Sidebar extends React.Component {
   constructor(props) {
@@ -87,10 +88,14 @@ export default class Sidebar extends React.Component {
             <div
               key={`active ${course}`}
               data-testid={`test ${course}`}
-              onClick={() => this.props.courseClick(course)}
               className="course-selection"
             >
               {course}
+
+              <Button
+                text="X"
+                mouseDown={() => this.props.xClick(course.toLowerCase())}
+              />
             </div>
           )
         })}
@@ -154,4 +159,5 @@ Sidebar.propTypes = {
   activeCourses: PropTypes.instanceOf(Set),
   courses: PropTypes.array,
   courseClick: PropTypes.func,
+  xClick: PropTypes.func,
 }
