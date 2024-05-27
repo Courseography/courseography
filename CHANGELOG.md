@@ -14,8 +14,6 @@
 - Updated pull request template
 - Refactored graph and course related route functionality into controllers
 
-### ♻️ Refactoring
-
 ## [0.5.0] - 2023-08-13
 
 See [commit history](https://github.com/Courseography/courseography/commits/master/) for changes at this release and earlier.

@@ -3,8 +3,8 @@ module Routes
 
 import Control.Monad (MonadPlus (mplus), msum)
 import Control.Monad.IO.Class (liftIO)
-import Controllers.Course as CourseControllers (retrieveCourse, index, courseInfo, depts)
-import Controllers.Graph as GraphControllers
+import Controllers.Course as CoursesController (retrieveCourse, index, courseInfo, depts)
+import Controllers.Graph as GraphsController
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
 import Database.CourseQueries (getGraphJSON, retrievePost)
@@ -49,9 +49,9 @@ routeResponses staticDir aboutContents privacyContents =
 strictRoutes :: Text -> Text -> [ (String, ServerPart Response)] 
 strictRoutes aboutContents privacyContents = [
     ("grid", gridResponse),
-    ("graph", GraphControllers.graphResponse),
+    ("graph", GraphsController.graphResponse),
     ("graph-generate", do method PUT
-                          GraphControllers.findAndSavePrereqsResponse),
+                          GraphsController.findAndSavePrereqsResponse),
     ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
     ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
     ("timetable-pdf", look "courses" >>= \coursesList -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse coursesList),
@@ -60,15 +60,15 @@ strictRoutes aboutContents privacyContents = [
     ("draw", drawResponse),
     ("about", aboutResponse aboutContents),
     ("privacy", privacyResponse privacyContents),
-    ("graphs", GraphControllers.index),
+    ("graphs", GraphsController.index),
     ("timesearch", searchResponse),
     ("generate", generateResponse),
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     
-    ("course", lookText' "name" >>= CourseControllers.retrieveCourse),
-    ("courses", CourseControllers.index),
-    ("course-info", lookText' "dept" >>= CourseControllers.courseInfo),
-    ("depts", CourseControllers.depts),
+    ("course", lookText' "name" >>= CoursesController.retrieveCourse),
+    ("courses", CoursesController.index),
+    ("course-info", lookText' "dept" >>= CoursesController.courseInfo),
+    ("depts", CoursesController.depts),
     ("calendar", look "courses" >>= calendarResponse),
     ("loading", lookText' "size" >>= loadingResponse),
     ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
