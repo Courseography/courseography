@@ -54,7 +54,7 @@ strictRoutes aboutContents privacyContents = [
                           GraphsController.findAndSavePrereqsResponse),
     ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
     ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
-    ("timetable-pdf", look "courses" >>= \coursesList -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse coursesList),
+    ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse courses),
     ("post", retrievePost),
     ("post-progress", postResponse),
     ("draw", drawResponse),
