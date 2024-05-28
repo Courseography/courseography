@@ -89,9 +89,11 @@ export default class Sidebar extends React.Component {
               key={`active ${course}`}
               data-testid={`test ${course}`}
               className="course-selection"
+              onClick={() => {
+                this.props.courseLinkClick(course)
+              }}
             >
               {course}
-
               <Button
                 text="X"
                 mouseDown={() => this.props.xClick(course.toLowerCase())}
@@ -159,5 +161,6 @@ Sidebar.propTypes = {
   activeCourses: PropTypes.instanceOf(Set),
   courses: PropTypes.array,
   courseClick: PropTypes.func,
+  courseLinkClick: PropTypes.func,
   xClick: PropTypes.func,
 }

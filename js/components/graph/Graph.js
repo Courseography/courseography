@@ -640,6 +640,13 @@ export class Graph extends React.Component {
     })
   }
 
+  courseLinkMouseClick = courseCode => {
+    this.setState({
+      courseId: courseCode.substring(0, 6),
+      showCourseModal: true,
+    })
+  }
+
   setShowGraphDropdown = () => {
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.DROPDOWN)
     this.setState({ showGraphDropdown: true })
@@ -1534,6 +1541,7 @@ export class Graph extends React.Component {
               ])}
               courseClick={this.handleCourseClick}
               xClick={this.nodeUnselect}
+              courseLinkClick={this.courseLinkMouseClick}
             />
           )
         }
