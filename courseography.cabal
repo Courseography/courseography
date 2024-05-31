@@ -65,6 +65,8 @@ executable courseography
   other-modules:
     Config,
     Css.Constants,
+    Controllers.Course,
+    Controllers.Graph,
     Database.CourseInsertion,
     Database.CourseQueries,
     Database.CourseVideoSeed,
@@ -88,7 +90,6 @@ executable courseography
     Response.Calendar,
     Response.Draw,
     Response.Export,
-    Response.Graph,
     Response.Grid,
     Response.Image,
     Response.Loading,
