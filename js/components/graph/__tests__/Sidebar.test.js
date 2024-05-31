@@ -1,4 +1,4 @@
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, within } from "@testing-library/react"
 import TestSidebar from "./TestSidebar"
 import TestContainer from "./TestContainer"
 
@@ -53,6 +53,32 @@ describe("Sidebar", () => {
     fireEvent.click(container.getByTestId("aaa100"))
     fireEvent.click(container.getByTestId("aaa303"))
     expect(sidebar.queryByTestId("test AAA100")).toBeNull()
+    expect(sidebar.queryByTestId("test AAA303")).toBeNull()
+  })
+
+  it("Clicking the `x` button next to a selected course removes that course from the Selected Courses", async () => {
+    const container = await TestContainer.build()
+    fireEvent.click(container.getByTestId("aaa100"))
+    const sidebar = await TestSidebar.build()
+    expect(sidebar.getByTestId("test AAA100")).toBeDefined()
+    fireEvent.mouseDown(within(sidebar.getByTestId("test AAA100")).getByText("X"))
+    expect(sidebar.queryByTestId("test AAA100")).toBeNull()
+  })
+
+  it("Clicking the `x` buttons next to selected courses removes those courses from the Selected Courses", async () => {
+    const container = await TestContainer.build()
+    fireEvent.click(container.getByTestId("aaa100"))
+    fireEvent.click(container.getByTestId("aaa303"))
+
+    const sidebar = await TestSidebar.build()
+
+    expect(sidebar.getByTestId("test AAA100")).toBeDefined()
+    expect(sidebar.getByTestId("test AAA303")).toBeDefined()
+
+    fireEvent.mouseDown(within(sidebar.getByTestId("test AAA100")).getByText("X"))
+    expect(sidebar.queryByTestId("test AAA100")).toBeNull()
+
+    fireEvent.mouseDown(within(sidebar.getByTestId("test AAA303")).getByText("X"))
     expect(sidebar.queryByTestId("test AAA303")).toBeNull()
   })
 
