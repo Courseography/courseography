@@ -31,6 +31,20 @@ export default class Sidebar extends React.Component {
       .sort()
   }
 
+  /**
+   * Given a course label return the id of the corresponding Node component.
+   * e.g. "CSC263/265" will resolve to "csc263265"
+   * @return {string} course node id
+   */
+  courseIdFromLabel(courseLabel) {
+    for (let i = 0; i < this.props.courses.length; i++) {
+      if (this.props.courses[i][1] === courseLabel) {
+        return this.props.courses[i][0]
+      }
+    }
+    return null
+  }
+
   // Sidebar rendering methods
   /**
    * Render the FCE counter above the sidebar on the left side.
@@ -90,13 +104,13 @@ export default class Sidebar extends React.Component {
               data-testid={`test ${course}`}
               className="course-selection"
               onClick={() => {
-                this.props.courseLinkClick(course)
+                this.props.courseLinkClick(this.courseIdFromLabel(course))
               }}
             >
               {course}
               <Button
                 text="X"
-                mouseDown={() => this.props.xClick(course.toLowerCase())}
+                mouseDown={() => this.props.xClick(this.courseIdFromLabel(course))}
               />
             </div>
           )
