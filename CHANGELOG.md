@@ -14,6 +14,7 @@
 
 - Started a changelog.
 - Updated pull request template
+- Refactored graph and course related route functionality into controllers
 
 ## [0.5.0] - 2023-08-13
 
