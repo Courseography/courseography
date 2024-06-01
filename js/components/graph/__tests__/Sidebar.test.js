@@ -34,6 +34,17 @@ describe("Sidebar", () => {
     expect(container.getByText("FCE Count: 0.5")).toBeDefined()
   })
 
+  it("Click the course code on the sidebar should decrease the FCE count", async () => {
+    const container = await TestContainer.build()
+    expect(container.getByText("FCE Count: 0.0")).toBeDefined()
+    fireEvent.click(container.getByTestId("aaa100"))
+    expect(container.getByText("FCE Count: 0.5")).toBeDefined()
+    const sidebar = await TestSidebar.build()
+    expect(sidebar.getByTestId("test AAA100")).toBeDefined()
+    fireEvent.click(sidebar.getByTestId("test AAA100"))
+    expect(container.getByText("FCE Count: 0.0")).toBeDefined()
+  })
+
   it("Clicking a graph button adds and removes the course to the Selected Courses", async () => {
     const container = await TestContainer.build()
     fireEvent.click(container.getByTestId("aaa100"))
