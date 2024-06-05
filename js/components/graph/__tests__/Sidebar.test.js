@@ -34,7 +34,7 @@ describe("Sidebar", () => {
     expect(container.getByText("FCE Count: 0.5")).toBeDefined()
   })
 
-  it("Click the course code on the sidebar should decrease the FCE count", async () => {
+  it("Clicking the course code on the sidebar should decrease the FCE count", async () => {
     const container = await TestContainer.build()
     expect(container.getByText("FCE Count: 0.0")).toBeDefined()
     fireEvent.click(container.getByTestId("aaa100"))
