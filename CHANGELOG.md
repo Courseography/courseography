@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Fixed bug that causes FCE count to increase when toggling course via sidebar
+
 ### 🔧 Internal changes
 
 - Started a changelog.
