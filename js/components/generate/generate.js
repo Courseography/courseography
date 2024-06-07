@@ -74,7 +74,20 @@ class GenerateForm extends React.Component {
     }
 
     fetch("/graph-generate", putData)
-      .then(res => res.json())
+      .then(res => {
+        if (res.statusText === "OK") {
+          return res.json()
+        } else {
+          // "Bad Request"
+          this.graph.current.setState({
+            nodesJSON: [],
+            boolsJSON: [],
+            edgesJSON: [],
+          })
+          alert("No valid courses entered. Please check your input.")
+          throw new Error("No valid courses!")
+        }
+      })
       .then(data => {
         const labelsJSON = {}
         const regionsJSON = {}

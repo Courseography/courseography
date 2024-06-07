@@ -1,6 +1,6 @@
 module Controllers.Graph (graphResponse, findAndSavePrereqsResponse, index) where
 
-import Happstack.Server (ServerPart, Response, toResponse, ok)
+import Happstack.Server (ServerPart, Response, toResponse, ok, badRequest)
 import MasterTemplate (masterTemplate, header)
 import Scripts (graphScripts)
 import Text.Blaze ((!))
@@ -21,6 +21,8 @@ import Database.Persist.Sqlite
       SqlPersistM )
 import Config (databasePath)
 import Util.Happstack (createJSONResponse)
+import Database.CourseQueries as CourseHelper (getAllCourseCodes)
+import qualified Data.Text.Lazy as TL
 
 graphResponse :: ServerPart Response
 graphResponse =
@@ -37,9 +39,15 @@ findAndSavePrereqsResponse :: ServerPart Response
 findAndSavePrereqsResponse = do
     body <- getBody
     let coursesOptions :: CourseGraphOptions = fromJust $ decode body
-    liftIO $ generateAndSavePrereqResponse coursesOptions
-
-
+    let selectedCourses = courses coursesOptions
+    allCourses <- liftIO CourseHelper.getAllCourseCodes
+    let isValid = any ((`elem` allCourses) . TL.unpack) selectedCourses
+    if isValid
+        then 
+            liftIO $ generateAndSavePrereqResponse coursesOptions
+        else do
+            badRequest $ toResponse ("Invalid course selected" :: String)
+            
 index :: ServerPart Response
 index = liftIO (runSqlite databasePath $ do
     graphsList :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]

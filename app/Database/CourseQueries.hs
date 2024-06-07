@@ -18,7 +18,8 @@ module Database.CourseQueries
      getMeetingTime,
      buildTime,
      queryCourse,
-     getDeptCourses
+     getDeptCourses,
+     getAllCourseCodes
      ) where
 
 import Config (databasePath)
@@ -26,7 +27,7 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Aeson (object, toJSON, (.=))
 import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
-import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc)
+import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, unpack)
 import Database.DataType ( ShapeType( Node ) , ShapeType( Hybrid ), ShapeType( BoolNode ))
 import Database.Persist.Sqlite (Entity, PersistEntity, SqlPersistM, PersistValue( PersistInt64 ), runSqlite, selectList,
                                 entityKey, entityVal, selectFirst, (==.), (<-.), get, keyToValues, PersistValue( PersistText ),
@@ -244,3 +245,10 @@ getMeetingSection sec
     | T.isPrefixOf "P" sec = T.append "PRA" sectCode
     | otherwise            = sec
     where sectCode = T.tail sec
+
+getAllCourseCodes :: IO [String]
+getAllCourseCodes = runSqlite databasePath $ do
+    coursesList <- selectList [] []
+    let codes = map (T.unpack . coursesCode . entityVal) coursesList
+    return codes
+    
