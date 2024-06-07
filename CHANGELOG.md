@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- For Generate, when no valid courses are inputted a message is shown and nothing is displayed on the graph.
+
 ### 🐛 Bug fixes
 
 - Fixed bug that causes FCE count to increase when toggling course via sidebar
