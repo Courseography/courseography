@@ -202,16 +202,18 @@ getGraph graphName =
                 return (Just response) :: SqlPersistM (Maybe Response)
 
 -- | Retrieves the prerequisites for a course (code) as a string.
-prereqsForCourse :: T.Text -> IO (Either String T.Text)
+-- Also retrieves the actual course code in the database in case
+-- the one the user inputs doesn't match it exactly
+prereqsForCourse :: T.Text -> IO (Either String (T.Text, T.Text))
 prereqsForCourse courseCode = runSqlite databasePath $ do
-    course <- selectFirst [CoursesCode ==. courseCode] []
+    course <- selectFirst [CoursesCode <-. [T.toUpper courseCode, T.toUpper courseCode `T.append` "H1", courseCode `T.append` "Y1"]] []
     case course of
         Nothing -> return (Left "Course not found")
         Just courseEntity ->
-            return (Right $
-                fromMaybe "" $
+            return (Right
+                (coursesCode $ entityVal courseEntity, fromMaybe "" $
                 coursesPrereqString $
-                entityVal courseEntity) :: SqlPersistM (Either String T.Text)
+                entityVal courseEntity)) :: SqlPersistM (Either String (T.Text, T.Text))
 
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept =
