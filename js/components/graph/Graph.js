@@ -428,10 +428,9 @@ export class Graph extends React.Component {
     const wasSelected = this.state.nodesStatus[courseId].selected
     const temp = this.state.selectedNodes
 
-    wasSelected ? this.toggleSelection(courseId) : {}
-
     if (typeof this.props.incrementFCECount === "function" && wasSelected) {
       // TODO: Differentiate half- and full-year courses
+      this.toggleSelection(courseId)
       this.props.incrementFCECount(-0.5)
       temp.delete(courseLabel)
     }
@@ -488,23 +487,11 @@ export class Graph extends React.Component {
    * This handles clicking of dropdown items from the side bar search.
    * @param  {string} id
    */
-  handleCourseClick = id => {
-    id = id.toLowerCase()
-    this.toggleSelection(id)
-    const courseLabelArray = this.state.nodesJSON[id].text
-    const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
-    const temp = [...this.state.selectedNodes]
-    if (this.state.nodesStatus[id].selected) {
-      this.setState({
-        selectedNodes: new Set(temp.filter(course => course !== courseLabel)),
-      })
-      this.props.incrementFCECount(-0.5)
-    } else {
-      this.setState({
-        selectedNodes: new Set([...temp, courseLabel]),
-      })
-      this.props.incrementFCECount(0.5)
-    }
+  handleCourseClick = courseCode => {
+    this.setState({
+      courseId: courseCode.substring(0, 6),
+      showCourseModal: true,
+    })
   }
 
   /**
@@ -636,13 +623,6 @@ export class Graph extends React.Component {
     const newCourse = this.state.infoBoxNodeId.substring(0, 6)
     this.setState({
       courseId: newCourse,
-      showCourseModal: true,
-    })
-  }
-
-  courseLinkMouseClick = courseCode => {
-    this.setState({
-      courseId: courseCode.substring(0, 6),
       showCourseModal: true,
     })
   }
@@ -1541,7 +1521,6 @@ export class Graph extends React.Component {
               ])}
               courseClick={this.handleCourseClick}
               xClick={this.nodeUnselect}
-              courseLinkClick={this.courseLinkMouseClick}
             />
           )
         }
