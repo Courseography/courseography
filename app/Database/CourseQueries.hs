@@ -206,14 +206,15 @@ getGraph graphName =
 -- the one the user inputs doesn't match it exactly
 prereqsForCourse :: T.Text -> IO (Either String (T.Text, T.Text))
 prereqsForCourse courseCode = runSqlite databasePath $ do
-    course <- selectFirst [CoursesCode <-. [T.toUpper courseCode, T.toUpper courseCode `T.append` "H1", courseCode `T.append` "Y1"]] []
+    let upperCaseCourseCode = T.toUpper courseCode
+    course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
     case course of
         Nothing -> return (Left "Course not found")
         Just courseEntity ->
             return (Right
-                (coursesCode $ entityVal courseEntity, fromMaybe "" $
-                coursesPrereqString $
-                entityVal courseEntity)) :: SqlPersistM (Either String (T.Text, T.Text))
+                     (coursesCode $ entityVal courseEntity, 
+                      fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
+                    ) :: SqlPersistM (Either String (T.Text, T.Text))
 
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept =
