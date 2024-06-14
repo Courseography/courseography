@@ -33,7 +33,9 @@ export default class Sidebar extends React.Component {
 
   /**
    * Given a course label return the id of the corresponding Node component.
+   * If an invalid course label is supplied, `null` will be returned.
    * e.g. "CSC263/265" will resolve to "csc263265"
+   *      "CSC999" will resolve to `null`
    * @return {string} course node id
    */
   courseIdFromLabel(courseLabel) {
@@ -102,10 +104,10 @@ export default class Sidebar extends React.Component {
             <div
               key={`active ${course}`}
               data-testid={`test ${course}`}
-              className="course-selection"
               onClick={() => {
                 this.props.courseClick(this.courseIdFromLabel(course))
               }}
+              className="course-selection"
             >
               {course}
               <Button

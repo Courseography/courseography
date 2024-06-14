@@ -484,7 +484,8 @@ export class Graph extends React.Component {
   }
 
   /**
-   * This handles clicking of dropdown items from the side bar search.
+   * This handles the clicking of course items from the side bar, pulling up
+   * the corresponding course-info modal.
    * @param  {string} id
    */
   handleCourseClick = courseCode => {
