@@ -3,13 +3,41 @@ module Routes
 
 import Control.Monad (MonadPlus (mplus), msum)
 import Control.Monad.IO.Class (liftIO)
+import Controllers.Course as CoursesController (retrieveCourse, index, courseInfo, depts)
+import Controllers.Graph as GraphsController
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
-import Database.CourseQueries (allCourses, courseInfo, deptList, getGraphJSON, queryGraphs,
-                               retrieveCourse, retrievePost)
-import DynamicGraphs.WriteRunDot (findAndSavePrereqsResponse)
-import Happstack.Server hiding (host)
+import Database.CourseQueries (getGraphJSON, retrievePost)
+import Happstack.Server
+    ( serveDirectory,
+      seeOther,
+      dir,
+      method,
+      noTrailingSlash,
+      nullDir,
+      look,
+      lookBS,
+      lookText',
+      Browsing(DisableBrowsing),
+      ServerPart,
+      ServerPartT,
+      Method(PUT),
+      Response,
+      ToMessage(toResponse) )
 import Response
+    ( drawResponse,
+      aboutResponse,
+      privacyResponse,
+      notFoundResponse,
+      searchResponse,
+      generateResponse,
+      postResponse,
+      loadingResponse,
+      gridResponse,
+      calendarResponse,
+      graphImageResponse,
+      exportTimetableImageResponse,
+      exportTimetablePDFResponse )
 
 routeResponses :: String -> Text -> Text -> ServerPartT IO Response
 routeResponses staticDir aboutContents privacyContents =
@@ -18,12 +46,12 @@ routeResponses staticDir aboutContents privacyContents =
           nullDir >> seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
           notFoundResponse])
 
-strictRoutes :: Text -> Text -> [ (String, ServerPart Response)]
+strictRoutes :: Text -> Text -> [ (String, ServerPart Response)] 
 strictRoutes aboutContents privacyContents = [
     ("grid", gridResponse),
-    ("graph", graphResponse),
+    ("graph", GraphsController.graphResponse),
     ("graph-generate", do method PUT
-                          findAndSavePrereqsResponse),
+                          GraphsController.findAndSavePrereqsResponse),
     ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
     ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
     ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse courses),
@@ -32,15 +60,16 @@ strictRoutes aboutContents privacyContents = [
     ("draw", drawResponse),
     ("about", aboutResponse aboutContents),
     ("privacy", privacyResponse privacyContents),
-    ("course", lookText' "name" >>= retrieveCourse),
-    ("all-courses", liftIO allCourses),
-    ("graphs", liftIO queryGraphs),
-    ("course-info", lookText' "dept" >>= courseInfo),
-    ("depts", liftIO deptList),
+    ("graphs", GraphsController.index),
     ("timesearch", searchResponse),
     ("generate", generateResponse),
-    ("calendar", look "courses" >>= calendarResponse),
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
+    
+    ("course", lookText' "name" >>= CoursesController.retrieveCourse),
+    ("courses", CoursesController.index),
+    ("course-info", lookText' "dept" >>= CoursesController.courseInfo),
+    ("depts", CoursesController.depts),
+    ("calendar", look "courses" >>= calendarResponse),
     ("loading", lookText' "size" >>= loadingResponse),
     ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
     ]

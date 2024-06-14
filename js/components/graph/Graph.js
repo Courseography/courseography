@@ -479,7 +479,7 @@ export class Graph extends React.Component {
     const courseLabelArray = this.state.nodesJSON[id].text
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const temp = [...this.state.selectedNodes]
-    if (this.state.nodesStatus[id].isSelected) {
+    if (this.state.nodesStatus[id].selected) {
       this.setState({
         selectedNodes: new Set(temp.filter(course => course !== courseLabel)),
       })
