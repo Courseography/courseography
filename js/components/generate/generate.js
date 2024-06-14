@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
+import ErrorMessage from "./ErrorMessage"
 
 class GenerateForm extends React.Component {
   constructor(props) {
@@ -16,6 +17,8 @@ class GenerateForm extends React.Component {
       includeRaws: false,
       includeGrades: false,
       fceCount: 0,
+      showWarning: false,
+      invalidCourses: [],
     }
 
     this.graph = React.createRef()
@@ -65,6 +68,8 @@ class GenerateForm extends React.Component {
       }
     }
 
+    let submittedCourses = data["courses"]
+
     const putData = {
       method: "PUT",
       headers: {
@@ -76,6 +81,15 @@ class GenerateForm extends React.Component {
     fetch("/graph-generate", putData)
       .then(res => res.json())
       .then(data => {
+        const returnedCourses = data.texts.map(t => t.text)
+        const missingCourses = submittedCourses.filter(
+          c => !returnedCourses.includes(c)
+        )
+        if (missingCourses.length !== 0) {
+          this.setState({ showWarning: true })
+          this.setState({ invalidCourses: missingCourses })
+        }
+
         const labelsJSON = {}
         const regionsJSON = {}
         const nodesJSON = {}
@@ -239,6 +253,12 @@ class GenerateForm extends React.Component {
   render() {
     return (
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
+        {this.state.showWarning && (
+          <ErrorMessage
+            message={`The courses [${this.state.invalidCourses}] were invalid! Please check your input.`}
+            onClose={() => this.setState({ showWarning: false, invalidCourses: [] })}
+          />
+        )}
         <Disclaimer />
         <div
           id="generateDiv"
