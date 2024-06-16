@@ -486,7 +486,7 @@ export class Graph extends React.Component {
   /**
    * This handles the clicking of course items from the side bar, pulling up
    * the corresponding course-info modal.
-   * @param  {string} id
+   * @param  {string} courseCode - the course code for the clicked course
    */
   handleCourseClick = courseCode => {
     this.setState({
