@@ -55,8 +55,7 @@ class GenerateForm extends React.Component {
     event.preventDefault()
 
     if (!this.state.courses.length) {
-      alert("Cannot generate graph -- no courses entered!")
-      return
+      this.setState({ showWarning: true, invalidCourses: [] })
     }
     const data = {}
 
@@ -250,12 +249,16 @@ class GenerateForm extends React.Component {
   }
 
   /**
-   * Given an array of invalid courses, produce an appropriate warning message string.
+   * Produce an appropriate warning message string in the case that no courses have been entered
+   * or that one or more invalid courses have been entered.
+   * @param {string} coursesString - The string version of the inputted courses
    * @param {string[]} invalidCourses - The array of invalid course codes
    * @returns {string} The warning message string.
    */
-  computeMessage(invalidCourses) {
-    if (invalidCourses.length === 0) {
+  computeMessage(coursesString, invalidCourses) {
+    if (!coursesString.length) {
+      return "Cannot generate graph -- no courses entered!"
+    } else if (invalidCourses.length === 0) {
       return ""
     } else if (invalidCourses.length === 1) {
       return `The course ${invalidCourses} was invalid! Please check your input.`
@@ -269,7 +272,7 @@ class GenerateForm extends React.Component {
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
         <ErrorMessage
           title="Invalid Course Input"
-          message={this.computeMessage(this.state.invalidCourses)}
+          message={this.computeMessage(this.state.courses, this.state.invalidCourses)}
           onClose={() => this.setState({ showWarning: false })}
           isOpen={this.state.showWarning}
         />
