@@ -86,8 +86,7 @@ class GenerateForm extends React.Component {
           c => !returnedCourses.includes(c)
         )
         if (missingCourses.length !== 0) {
-          this.setState({ showWarning: true })
-          this.setState({ invalidCourses: missingCourses })
+          this.setState({ showWarning: true, invalidCourses: missingCourses })
         }
 
         const labelsJSON = {}
@@ -250,13 +249,28 @@ class GenerateForm extends React.Component {
       })
   }
 
+  /**
+   * Given an array of invalid courses, produce an appropriate warning message string.
+   * @param {string[]} invalidCourses - The array of invalid course codes
+   * @returns {string} The warning message string.
+   */
+  computeMessage(invalidCourses) {
+    if (invalidCourses.length === 0) {
+      return ""
+    } else if (invalidCourses.length === 1) {
+      return `The course ${invalidCourses} was invalid! Please check your input.`
+    } else {
+      return `The courses [${invalidCourses}] were invalid! Please check your input.`
+    }
+  }
+
   render() {
     return (
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
         {this.state.showWarning && (
           <ErrorMessage
-            message={`The courses [${this.state.invalidCourses}] were invalid! Please check your input.`}
-            onClose={() => this.setState({ showWarning: false, invalidCourses: [] })}
+            message={this.computeMessage(this.state.invalidCourses)}
+            onClose={() => this.setState({ showWarning: false })}
           />
         )}
         <Disclaimer />

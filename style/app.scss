@@ -2251,42 +2251,27 @@ main-filter input {
   white-space: nowrap;
 }
 
-.error-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+.error-modal-class {
+  @extend .modal-class;
+  background-color: #ffeded;
+  height: 150px;
+  width: 800px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
 }
 
-.error-message-box {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  max-width: 500px;
-  width: 90%;
+.error-overlay {
+  @extend .overlay;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .error-close-button {
-  background-color: #d77546;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+  @extend .info-modal-button;
   font-size: 20px;
-  margin-top: 10px;
+  width: 75px;
 }
 
 .error-close-button:hover {
-  background-color: #c36132;
+  background-color: #feb7b7;
 }
