@@ -3,7 +3,7 @@ import ReactDOM from "react-dom"
 
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
-import ErrorMessage from "./ErrorMessage"
+import { ErrorMessage } from "../common/react_modal.js.jsx"
 
 class GenerateForm extends React.Component {
   constructor(props) {
@@ -267,12 +267,12 @@ class GenerateForm extends React.Component {
   render() {
     return (
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-        {this.state.showWarning && (
-          <ErrorMessage
-            message={this.computeMessage(this.state.invalidCourses)}
-            onClose={() => this.setState({ showWarning: false })}
-          />
-        )}
+        <ErrorMessage
+          title="Invalid Course Input"
+          message={this.computeMessage(this.state.invalidCourses)}
+          onClose={() => this.setState({ showWarning: false })}
+          isOpen={this.state.showWarning}
+        />
         <Disclaimer />
         <div
           id="generateDiv"
