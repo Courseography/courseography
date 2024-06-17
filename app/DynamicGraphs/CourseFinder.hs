@@ -26,9 +26,9 @@ lookupCourse options code = do
     prereqResults <- lift $ prereqsForCourse $ T.toStrict code
     case prereqResults of
         Left _ -> return ()
-        Right prereqStr -> do
+        Right (courseCode, prereqStr) -> do
             let prereqs = parseReqs (T.unpack $ T.fromStrict prereqStr)
-            modify $ Map.insert code prereqs
+            modify $ Map.insert (T.fromStrict courseCode) prereqs
             lookupReqs options prereqs
 
 lookupReqs :: GraphOptions -> Req -> StateT (Map.Map T.Text Req) IO ()

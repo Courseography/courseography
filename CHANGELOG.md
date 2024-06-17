@@ -9,6 +9,7 @@
 ### 🐛 Bug fixes
 
 - Fixed bug that causes FCE count to increase when toggling course via sidebar
+- Fixed bug that forced users to input a course codes in a specific way when generating a dependency graph
 
 ### 🔧 Internal changes
 
