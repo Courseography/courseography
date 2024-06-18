@@ -2266,12 +2266,29 @@ main-filter input {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-.error-close-button {
+.error-close-button-x {
   @extend .info-modal-button;
   font-size: 20px;
   width: 75px;
 }
 
-.error-close-button:hover {
+.error-close-button-x:hover {
   background-color: #feb7b7;
+}
+
+.error-close-button {
+  @extend .info-modal-button;
+  display: block;
+  margin: 0 auto;
+  font-size: 22px;
+  width: 90px;
+  height: 35px;
+  background-color: #d77546;
+  color: #fefff6;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.error-close-button:hover {
+  background-color: #c36132;
 }

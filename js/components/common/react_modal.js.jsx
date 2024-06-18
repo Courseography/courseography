@@ -994,19 +994,27 @@ function ErrorMessage({ title, message, onClose, isOpen }) {
       overlayClassName="error-overlay"
       isOpen={isOpen}
       ariaHideApp={false}
-      onRequestClose={onClose}
       contentLabel="Pop-up warning for invalid courses"
     >
       <div className="modal-header">
         {title}
         <div className="button-container">
-          <button onClick={onClose} className="error-close-button" type="button">
-            Close
+          <button onClick={onClose} className="error-close-button-x" type="button">
+            <b> X </b>
           </button>
         </div>
       </div>
 
-      <div className="modal-body">{message}</div>
+      <div className="modal-body">
+        <div>{message}</div>
+
+        <div className="button-container">
+          <button onClick={onClose} className="error-close-button">
+            {" "}
+            Okay{" "}
+          </button>
+        </div>
+      </div>
     </ReactModal>
   )
 }

@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Added warning message modal for when the user enters invalid courses in Generate
+
 ### 🐛 Bug fixes
 
 - Fixed bug that causes FCE count to increase when toggling course via sidebar
