@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Added button to deselect courses in "FCE count" side panel
+
 ### 🐛 Bug fixes
 
 - Fixed bug that causes FCE count to increase when toggling course via sidebar
