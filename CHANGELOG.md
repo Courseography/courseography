@@ -4,14 +4,18 @@
 
 ### 🚨 Breaking changes
 
+- Update Computer Science graph for 2024
+
 ### ✨ New features/enhancements
 
 - Added button to deselect courses in "FCE count" side panel
+- Increase font size for hybrid nodes in graphs
 
 ### 🐛 Bug fixes
 
 - Fixed bug that causes FCE count to increase when toggling course via sidebar
 - Fixed bug that forced users to input a course codes in a specific way when generating a dependency graph
+- Correctly handle `'l'` directives in svg path attributes
 
 ### 🔧 Internal changes
 
