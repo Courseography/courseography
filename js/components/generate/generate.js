@@ -257,7 +257,7 @@ class GenerateForm extends React.Component {
    */
   computeMessage(coursesString, invalidCourses) {
     if (!coursesString.length) {
-      return "Cannot generate graph -- no courses entered!"
+      return "Cannot generate graph – no courses entered!"
     } else if (invalidCourses.length === 0) {
       return ""
     } else if (invalidCourses.length === 1) {

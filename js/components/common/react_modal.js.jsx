@@ -1000,7 +1000,7 @@ function ErrorMessage({ title, message, onClose, isOpen }) {
         {title}
         <div className="button-container">
           <button onClick={onClose} className="error-close-button-x" type="button">
-            <b> X </b>
+            X
           </button>
         </div>
       </div>
@@ -1010,8 +1010,7 @@ function ErrorMessage({ title, message, onClose, isOpen }) {
 
         <div className="button-container">
           <button onClick={onClose} className="error-close-button">
-            {" "}
-            Okay{" "}
+            Okay
           </button>
         </div>
       </div>
