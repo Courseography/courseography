@@ -1,5 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
+import Button from "./Button"
 
 export default class Sidebar extends React.Component {
   constructor(props) {
@@ -28,6 +29,22 @@ export default class Sidebar extends React.Component {
         )
       })
       .sort()
+  }
+
+  /**
+   * Given a course label return the id of the corresponding Node component.
+   * If an invalid course label is supplied, `null` will be returned.
+   * e.g. "CSC263/265" will resolve to "csc263265"
+   *      "CSC999" will resolve to `null`
+   * @return {string} course node id
+   */
+  courseIdFromLabel(courseLabel) {
+    for (let i = 0; i < this.props.courses.length; i++) {
+      if (this.props.courses[i][1] === courseLabel) {
+        return this.props.courses[i][0]
+      }
+    }
+    return null
   }
 
   // Sidebar rendering methods
@@ -87,10 +104,16 @@ export default class Sidebar extends React.Component {
             <div
               key={`active ${course}`}
               data-testid={`test ${course}`}
-              onClick={() => this.props.courseClick(course)}
+              onClick={() => {
+                this.props.courseClick(this.courseIdFromLabel(course))
+              }}
               className="course-selection"
             >
               {course}
+              <Button
+                text="X"
+                mouseDown={() => this.props.xClick(this.courseIdFromLabel(course))}
+              />
             </div>
           )
         })}
@@ -154,4 +177,5 @@ Sidebar.propTypes = {
   activeCourses: PropTypes.instanceOf(Set),
   courses: PropTypes.array,
   courseClick: PropTypes.func,
+  xClick: PropTypes.func,
 }

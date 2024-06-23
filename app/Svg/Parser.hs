@@ -39,7 +39,7 @@ import Text.Read (readMaybe)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
-    performParse "Computer Science" "csc2023.svg"
+    performParse "Computer Science" "csc2024.svg"
     performParse "Statistics" "sta2022.svg"
     -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
     -- performParse "(unofficial) Biochemistry" "bch2015.svg"
@@ -538,7 +538,7 @@ parsePathD = parseValWithState parser initialState
         absoluteMove      :: P.Parsec String PathDState ()
         absoluteMove      = (P.char 'L' <|> P.char 'M') >> setMode AbsoluteMove
         relativeMove      :: P.Parsec String PathDState ()
-        relativeMove      = P.char 'm' >> setMode RelativeMove
+        relativeMove      = (P.char 'l' <|> P.char 'm') >> setMode RelativeMove
         absHorizontalMove :: P.Parsec String PathDState ()
         absHorizontalMove = P.char 'H' >> setMode AbsoluteHorizontal
         absVerticalMove   :: P.Parsec String PathDState ()
