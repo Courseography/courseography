@@ -1,0 +1,6696 @@
+{
+  "CSC111H1": {
+    "height": 116,
+    "paths": [
+      {
+        "fill": "",
+        "graph": 37,
+        "id_": "p256",
+        "isRegion": false,
+        "points": [
+          [40.12, 40.17],
+          [40.12, 64.07]
+        ],
+        "source": "CSC110Y1_counter_0",
+        "stroke": "",
+        "target": "CSC111H1_counter_1"
+      }
+    ],
+    "shapes": [
+      {
+        "fill": "white",
+        "graph": 37,
+        "height": 0,
+        "id_": "graph0",
+        "pos": [4, 112],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 0
+      },
+      {
+        "fill": "orchid",
+        "graph": 37,
+        "height": 36,
+        "id_": "CSC110Y1_counter_0",
+        "pos": [4, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 37,
+            "pos": [40.12, 26.28],
+            "rId": "",
+            "text": "CSC110Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "orchid",
+        "graph": 37,
+        "height": 36,
+        "id_": "CSC111H1_counter_1",
+        "pos": [4.38, 76],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 37,
+            "pos": [40.12, 98.28],
+            "rId": "",
+            "text": "CSC111H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 71.5
+      },
+      {
+        "fill": "black",
+        "graph": 37,
+        "height": -10,
+        "id_": "CSC110Y1_counter_0|CSC111H1_counter_1",
+        "pos": [40.13, 74.07],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      }
+    ],
+    "texts": [
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 37,
+        "pos": [40.12, 26.28],
+        "rId": "",
+        "text": "CSC110Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 37,
+        "pos": [40.12, 98.28],
+        "rId": "",
+        "text": "CSC111H1"
+      }
+    ],
+    "width": 80
+  },
+
+  "MAT777H1": {
+    "height": 8,
+    "paths": [],
+    "shapes": [
+      {
+        "fill": "white",
+        "graph": 149,
+        "height": 0,
+        "id_": "graph0",
+        "pos": [4, 4],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 0
+      }
+    ],
+    "texts": [],
+    "width": 8
+  },
+
+  "MAT777H1, asdasdasd, CSC876Y1": {
+    "height": 8,
+    "paths": [],
+    "shapes": [
+      {
+        "fill": "white",
+        "graph": 141,
+        "height": 0,
+        "id_": "graph0",
+        "pos": [4, 4],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 0
+      }
+    ],
+    "texts": [],
+    "width": 8
+  },
+
+  "CSC443H1": {
+    "height": 1023,
+    "paths": [
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p800",
+        "isRegion": false,
+        "points": [
+          [40.12, 184.17000000000007],
+          [40.12, 208.07000000000005]
+        ],
+        "source": "CSC108H1_counter_0",
+        "stroke": "",
+        "target": "CSC148H1_counter_3"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p801",
+        "isRegion": false,
+        "points": [
+          [453.96, 112.47000000000003],
+          [453.96, 212.20000000000005],
+          [257.53999999999996, 212.20000000000005],
+          [257.53999999999996, 212.93000000000006]
+        ],
+        "source": "CSC110Y1_counter_1",
+        "stroke": "",
+        "target": "CSC111H1_counter_2"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p802",
+        "isRegion": false,
+        "points": [
+          [467.12, 112.17000000000007],
+          [467.12, 148.75]
+        ],
+        "source": "CSC110Y1_counter_1",
+        "stroke": "",
+        "target": "or_counter_14"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p803",
+        "isRegion": false,
+        "points": [
+          [208.85, 256.1700000000001],
+          [208.85, 292.75]
+        ],
+        "source": "CSC111H1_counter_2",
+        "stroke": "",
+        "target": "or_counter_7"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p804",
+        "isRegion": false,
+        "points": [
+          [259.14, 256.26],
+          [259.14, 382.20000000000005],
+          [260.31, 382.20000000000005]
+        ],
+        "source": "CSC111H1_counter_2",
+        "stroke": "",
+        "target": "or_counter_11"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p805",
+        "isRegion": false,
+        "points": [
+          [265.03, 256.44000000000005],
+          [265.03, 308.20000000000005],
+          [374.36, 308.20000000000005]
+        ],
+        "source": "CSC111H1_counter_2",
+        "stroke": "",
+        "target": "or_counter_36"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p806",
+        "isRegion": false,
+        "points": [
+          [242.53, 256.1700000000001],
+          [242.53, 293.07000000000005]
+        ],
+        "source": "CSC111H1_counter_2",
+        "stroke": "",
+        "target": "or_counter_89"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p807",
+        "isRegion": false,
+        "points": [
+          [76.68, 247.20000000000005],
+          [191.12, 247.20000000000005],
+          [191.12, 310.20000000000005],
+          [192.09, 310.20000000000005]
+        ],
+        "source": "CSC148H1_counter_3",
+        "stroke": "",
+        "target": "or_counter_7"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p808",
+        "isRegion": false,
+        "points": [
+          [76.43, 250.20000000000005],
+          [171.72, 250.20000000000005],
+          [171.72, 292.97]
+        ],
+        "source": "CSC148H1_counter_3",
+        "stroke": "",
+        "target": "and_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p809",
+        "isRegion": false,
+        "points": [
+          [76.68, 253.20000000000005],
+          [152.72, 253.20000000000005],
+          [152.72, 364.95000000000005]
+        ],
+        "source": "CSC148H1_counter_3",
+        "stroke": "",
+        "target": "and_counter_16"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p810",
+        "isRegion": false,
+        "points": [
+          [40.12, 256.22],
+          [40.12, 278.20000000000005],
+          [237.72, 278.20000000000005],
+          [237.72, 292.95000000000005]
+        ],
+        "source": "CSC148H1_counter_3",
+        "stroke": "",
+        "target": "or_counter_89"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p811",
+        "isRegion": false,
+        "points": [
+          [362.19, 112.35000000000002],
+          [362.19, 208.20000000000005],
+          [176.52, 208.20000000000005],
+          [176.52, 293.01]
+        ],
+        "source": "CSC165H1_counter_5",
+        "stroke": "",
+        "target": "and_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p812",
+        "isRegion": false,
+        "points": [
+          [421.69, 112.22000000000003],
+          [421.69, 166.20000000000005],
+          [448.11, 166.20000000000005]
+        ],
+        "source": "CSC165H1_counter_5",
+        "stroke": "",
+        "target": "or_counter_14"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p813",
+        "isRegion": false,
+        "points": [
+          [415.23, 112.43000000000006],
+          [415.23, 310.20000000000005],
+          [416.16, 310.20000000000005]
+        ],
+        "source": "CSC165H1_counter_5",
+        "stroke": "",
+        "target": "or_counter_18"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p814",
+        "isRegion": false,
+        "points": [
+          [393.12, 112.42000000000007],
+          [393.12, 292.88]
+        ],
+        "source": "CSC165H1_counter_5",
+        "stroke": "",
+        "target": "or_counter_36"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p815",
+        "isRegion": false,
+        "points": [
+          [231.12, 400.1700000000001],
+          [231.12, 424.07000000000005]
+        ],
+        "source": "CSC207H1_counter_6",
+        "stroke": "",
+        "target": "CSC209H1_counter_8"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p816",
+        "isRegion": false,
+        "points": [
+          [253.36, 394.20000000000005],
+          [382.26, 394.20000000000005],
+          [382.26, 436.97]
+        ],
+        "source": "CSC207H1_counter_6",
+        "stroke": "",
+        "target": "and_counter_35"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p817",
+        "isRegion": false,
+        "points": [
+          [208.12, 315.6500000000001],
+          [208.12, 352.1400000000001]
+        ],
+        "source": "or_counter_7",
+        "stroke": "",
+        "target": "CSC207H1_counter_6"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p818",
+        "isRegion": false,
+        "points": [
+          [245.12, 472.47],
+          [245.12, 496.18000000000006]
+        ],
+        "source": "CSC209H1_counter_8",
+        "stroke": "",
+        "target": "and_counter_52"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p819",
+        "isRegion": false,
+        "points": [
+          [477.17, 472.36],
+          [477.17, 515.2],
+          [486.56, 515.2]
+        ],
+        "source": "CSC236H1_counter_10",
+        "stroke": "",
+        "target": "or_counter_21"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p820",
+        "isRegion": false,
+        "points": [
+          [470.08, 472.31000000000006],
+          [470.08, 479.20000000000005],
+          [585.12, 479.20000000000005],
+          [585.12, 542.8600000000001]
+        ],
+        "source": "CSC236H1_counter_10",
+        "stroke": "",
+        "target": "and_counter_31"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p821",
+        "isRegion": false,
+        "points": [
+          [284.89, 384.20000000000005],
+          [418.46, 384.20000000000005],
+          [418.46, 424.1500000000001]
+        ],
+        "source": "or_counter_11",
+        "stroke": "",
+        "target": "CSC236H1_counter_10"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p822",
+        "isRegion": false,
+        "points": [
+          [173.96, 315.5400000000001],
+          [173.96, 355.20000000000005],
+          [279.6, 355.20000000000005],
+          [279.6, 364.80000000000007]
+        ],
+        "source": "and_counter_12",
+        "stroke": "",
+        "target": "or_counter_11"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p823",
+        "isRegion": false,
+        "points": [
+          [529.54, 249.20000000000005],
+          [434.79, 249.20000000000005],
+          [434.79, 293.30000000000007]
+        ],
+        "source": "CSC240H1_counter_13",
+        "stroke": "",
+        "target": "or_counter_18"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p824",
+        "isRegion": false,
+        "points": [
+          [529.58, 251.20000000000005],
+          [505.12, 251.20000000000005],
+          [505.12, 496.4100000000001]
+        ],
+        "source": "CSC240H1_counter_13",
+        "stroke": "",
+        "target": "or_counter_21"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p825",
+        "isRegion": false,
+        "points": [
+          [562.12, 256.4100000000001],
+          [562.12, 602.3100000000001]
+        ],
+        "source": "CSC240H1_counter_13",
+        "stroke": "",
+        "target": "or_counter_30"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p826",
+        "isRegion": false,
+        "points": [
+          [529.76, 246.20000000000005],
+          [398.52, 246.20000000000005],
+          [398.52, 294.30000000000007]
+        ],
+        "source": "CSC240H1_counter_13",
+        "stroke": "",
+        "target": "or_counter_36"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p827",
+        "isRegion": false,
+        "points": [
+          [474.79, 166.20000000000005],
+          [533.96, 166.20000000000005],
+          [533.96, 208]
+        ],
+        "source": "or_counter_14",
+        "stroke": "",
+        "target": "CSC240H1_counter_13"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p828",
+        "isRegion": false,
+        "points": [
+          [155.12, 472.3900000000001],
+          [155.12, 514.2],
+          [226.25, 514.2]
+        ],
+        "source": "CSC258H1_counter_15",
+        "stroke": "",
+        "target": "and_counter_52"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p829",
+        "isRegion": false,
+        "points": [
+          [155.12, 387.6500000000001],
+          [155.12, 424.1400000000001]
+        ],
+        "source": "and_counter_16",
+        "stroke": "",
+        "target": "CSC258H1_counter_15"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p830",
+        "isRegion": false,
+        "points": [
+          [432.12, 315.7800000000001],
+          [432.12, 324.20000000000005],
+          [157.53, 324.20000000000005],
+          [157.53, 365.1500000000001]
+        ],
+        "source": "or_counter_18",
+        "stroke": "",
+        "target": "and_counter_16"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p831",
+        "isRegion": false,
+        "points": [
+          [495.73, 637.84],
+          [495.73, 746.51]
+        ],
+        "source": "CSC263H1_counter_19",
+        "stroke": "",
+        "target": "or_counter_56"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p832",
+        "isRegion": false,
+        "points": [
+          [505.12, 565.6800000000001],
+          [505.12, 589.6]
+        ],
+        "source": "and_counter_20",
+        "stroke": "",
+        "target": "CSC263H1_counter_19"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p833",
+        "isRegion": false,
+        "points": [
+          [505.12, 519.1400000000001],
+          [505.12, 542.9000000000001]
+        ],
+        "source": "or_counter_21",
+        "stroke": "",
+        "target": "and_counter_20"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p834",
+        "isRegion": false,
+        "points": [
+          [722.99, 515.2],
+          [573.54, 515.2],
+          [573.54, 560.2],
+          [524.22, 560.2]
+        ],
+        "source": "or_counter_22",
+        "stroke": "",
+        "target": "and_counter_20"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p835",
+        "isRegion": false,
+        "points": [
+          [880.12, 472.1500000000001],
+          [880.12, 487.20000000000005],
+          [728.68, 487.20000000000005],
+          [728.68, 496.33000000000004]
+        ],
+        "source": "STA237H1_counter_23",
+        "stroke": "",
+        "target": "or_counter_22"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p836",
+        "isRegion": false,
+        "points": [
+          [844.48, 448.20000000000005],
+          [838.73, 448.20000000000005],
+          [838.73, 496.7700000000001]
+        ],
+        "source": "STA237H1_counter_23",
+        "stroke": "",
+        "target": "or_counter_32"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p837",
+        "isRegion": false,
+        "points": [
+          [725.8, 472.47],
+          [725.8, 497.47]
+        ],
+        "source": "STA247H1_counter_24",
+        "stroke": "",
+        "target": "or_counter_22"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p838",
+        "isRegion": false,
+        "points": [
+          [734.45, 472.38],
+          [734.45, 501.20000000000005],
+          [831.52, 501.20000000000005],
+          [831.52, 501.9200000000001]
+        ],
+        "source": "STA247H1_counter_24",
+        "stroke": "",
+        "target": "or_counter_32"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p839",
+        "isRegion": false,
+        "points": [
+          [957.33, 472.22],
+          [957.33, 494.20000000000005],
+          [731.57, 494.20000000000005],
+          [731.57, 496.23]
+        ],
+        "source": "STA255H1_counter_25",
+        "stroke": "",
+        "target": "or_counter_22"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p840",
+        "isRegion": false,
+        "points": [
+          [980.92, 472.4100000000001],
+          [980.92, 512.2],
+          [854.07, 512.2]
+        ],
+        "source": "STA255H1_counter_25",
+        "stroke": "",
+        "target": "or_counter_32"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p841",
+        "isRegion": false,
+        "points": [
+          [791.12, 472.3900000000001],
+          [791.12, 514.2],
+          [749.12, 514.2]
+        ],
+        "source": "STA257H1_counter_26",
+        "stroke": "",
+        "target": "or_counter_22"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p842",
+        "isRegion": false,
+        "points": [
+          [826.64, 460.20000000000005],
+          [835.12, 460.20000000000005],
+          [835.12, 496.19000000000005]
+        ],
+        "source": "STA257H1_counter_26",
+        "stroke": "",
+        "target": "or_counter_32"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p843",
+        "isRegion": false,
+        "points": [
+          [623.38, 472.4100000000001],
+          [623.38, 512.2],
+          [711.27, 512.2]
+        ],
+        "source": "STA286H1_counter_27",
+        "stroke": "",
+        "target": "or_counter_22"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p844",
+        "isRegion": false,
+        "points": [
+          [525.58, 692.2],
+          [500.52, 692.2],
+          [500.52, 746.48]
+        ],
+        "source": "CSC265H1_counter_28",
+        "stroke": "",
+        "target": "or_counter_56"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p845",
+        "isRegion": false,
+        "points": [
+          [562.12, 625.25],
+          [562.12, 661.74]
+        ],
+        "source": "or_counter_30",
+        "stroke": "",
+        "target": "CSC265H1_counter_28"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p846",
+        "isRegion": false,
+        "points": [
+          [585.12, 565.74],
+          [585.12, 620.2],
+          [581.17, 620.2]
+        ],
+        "source": "and_counter_31",
+        "stroke": "",
+        "target": "or_counter_30"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p847",
+        "isRegion": false,
+        "points": [
+          [835.12, 519.1400000000001],
+          [835.12, 560.2],
+          [604.12, 560.2]
+        ],
+        "source": "or_counter_32",
+        "stroke": "",
+        "target": "and_counter_31"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p848",
+        "isRegion": false,
+        "points": [
+          [1060.12, 472.36],
+          [1060.12, 515.2],
+          [853.62, 515.2]
+        ],
+        "source": "MAT377H1_counter_33",
+        "stroke": "",
+        "target": "or_counter_32"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p849",
+        "isRegion": false,
+        "points": [
+          [382.12, 710],
+          [382.12, 924.4200000000001]
+        ],
+        "source": "CSC343H1_counter_34",
+        "stroke": "",
+        "target": "and_counter_58"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p850",
+        "isRegion": false,
+        "points": [
+          [382.12, 459.87],
+          [382.12, 661.84]
+        ],
+        "source": "and_counter_35",
+        "stroke": "",
+        "target": "CSC343H1_counter_34"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p851",
+        "isRegion": false,
+        "points": [
+          [396.66, 315.13],
+          [396.66, 454.20000000000005],
+          [395.97, 454.20000000000005]
+        ],
+        "source": "or_counter_36",
+        "stroke": "",
+        "target": "and_counter_35"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p852",
+        "isRegion": false,
+        "points": [
+          [459.59, 238.20000000000005],
+          [396.73, 238.20000000000005],
+          [396.73, 293.32000000000005]
+        ],
+        "source": "and_counter_37",
+        "stroke": "",
+        "target": "or_counter_36"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p853",
+        "isRegion": false,
+        "points": [
+          [709.04, 40.210000000000036],
+          [709.04, 192.20000000000005],
+          [469.52, 192.20000000000005],
+          [469.52, 221.23000000000002]
+        ],
+        "source": "MAT135H1_counter_38",
+        "stroke": "",
+        "target": "and_counter_37"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p854",
+        "isRegion": false,
+        "points": [
+          [677.62, 40.22000000000003],
+          [677.62, 94.20000000000005],
+          [564.14, 94.20000000000005]
+        ],
+        "source": "MAT135H1_counter_38",
+        "stroke": "",
+        "target": "or_counter_62"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p855",
+        "isRegion": false,
+        "points": [
+          [747.78, 22.200000000000045],
+          [991.52, 22.200000000000045],
+          [991.52, 221.1500000000001]
+        ],
+        "source": "MAT135H1_counter_38",
+        "stroke": "",
+        "target": "and_counter_79"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p856",
+        "isRegion": false,
+        "points": [
+          [684.88, 40.25999999999999],
+          [684.88, 236.20000000000005],
+          [645.72, 236.20000000000005]
+        ],
+        "source": "MAT135H1_counter_38",
+        "stroke": "",
+        "target": "and_counter_85"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p857",
+        "isRegion": false,
+        "points": [
+          [728.21, 40.31000000000006],
+          [728.21, 196.20000000000005],
+          [916.89, 196.20000000000005],
+          [916.89, 221.0200000000001]
+        ],
+        "source": "MAT135H1_counter_38",
+        "stroke": "",
+        "target": "and_counter_93"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p858",
+        "isRegion": false,
+        "points": [
+          [607.75, 178.20000000000005],
+          [464.73, 178.20000000000005],
+          [464.73, 220.97000000000003]
+        ],
+        "source": "MAT136H1_counter_39",
+        "stroke": "",
+        "target": "and_counter_37"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p859",
+        "isRegion": false,
+        "points": [
+          [675.85, 184.33000000000004],
+          [675.85, 188.20000000000005],
+          [986.73, 188.20000000000005],
+          [986.73, 221.16000000000008]
+        ],
+        "source": "MAT136H1_counter_39",
+        "stroke": "",
+        "target": "and_counter_79"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p860",
+        "isRegion": false,
+        "points": [
+          [627.12, 184.17000000000007],
+          [627.12, 220.75]
+        ],
+        "source": "MAT136H1_counter_39",
+        "stroke": "",
+        "target": "and_counter_85"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p861",
+        "isRegion": false,
+        "points": [
+          [672.59, 184.30000000000007],
+          [672.59, 200.20000000000005],
+          [914.41, 200.20000000000005],
+          [914.41, 221.85000000000002]
+        ],
+        "source": "MAT136H1_counter_39",
+        "stroke": "",
+        "target": "and_counter_93"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p862",
+        "isRegion": false,
+        "points": [
+          [366.69, 254.20000000000005],
+          [389.52, 254.20000000000005],
+          [389.52, 293.34000000000003]
+        ],
+        "source": "MAT135Y1_counter_40",
+        "stroke": "",
+        "target": "or_counter_36"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p863",
+        "isRegion": false,
+        "points": [
+          [713.69, 256.24],
+          [713.69, 320.20000000000005],
+          [392.99, 320.20000000000005],
+          [392.99, 319.74]
+        ],
+        "source": "MAT137Y1_counter_41",
+        "stroke": "",
+        "target": "or_counter_36"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p864",
+        "isRegion": false,
+        "points": [
+          [760.06, 256.1500000000001],
+          [760.06, 271.20000000000005],
+          [966.52, 271.20000000000005],
+          [966.52, 293.4100000000001]
+        ],
+        "source": "MAT137Y1_counter_41",
+        "stroke": "",
+        "target": "or_counter_78"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p865",
+        "isRegion": false,
+        "points": [
+          [689.63, 250.20000000000005],
+          [664.52, 250.20000000000005],
+          [664.52, 292.97]
+        ],
+        "source": "MAT137Y1_counter_41",
+        "stroke": "",
+        "target": "or_counter_84"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p866",
+        "isRegion": false,
+        "points": [
+          [757.91, 256.38],
+          [757.91, 285.20000000000005],
+          [915.52, 285.20000000000005],
+          [915.52, 293.70000000000005]
+        ],
+        "source": "MAT137Y1_counter_41",
+        "stroke": "",
+        "target": "or_counter_92"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p867",
+        "isRegion": false,
+        "points": [
+          [762.22, 256.34000000000003],
+          [762.22, 312.20000000000005],
+          [772.61, 312.20000000000005]
+        ],
+        "source": "MAT137Y1_counter_41",
+        "stroke": "",
+        "target": "or_counter_100"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p868",
+        "isRegion": false,
+        "points": [
+          [869.62, 184.41000000000008],
+          [869.62, 216.20000000000005],
+          [394.93, 216.20000000000005],
+          [394.93, 292.9000000000001]
+        ],
+        "source": "MAT157Y1_counter_42",
+        "stroke": "",
+        "target": "or_counter_36"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p869",
+        "isRegion": false,
+        "points": [
+          [919.68, 178.20000000000005],
+          [1055.2, 178.20000000000005],
+          [1055.2, 221.79000000000008]
+        ],
+        "source": "MAT157Y1_counter_42",
+        "stroke": "",
+        "target": "and_counter_68"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p870",
+        "isRegion": false,
+        "points": [
+          [919.7, 181.20000000000005],
+          [970.12, 181.20000000000005],
+          [970.12, 292.62]
+        ],
+        "source": "MAT157Y1_counter_42",
+        "stroke": "",
+        "target": "or_counter_78"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p871",
+        "isRegion": false,
+        "points": [
+          [844.58, 160.20000000000005],
+          [687.38, 160.20000000000005],
+          [687.38, 308.20000000000005],
+          [680.81, 308.20000000000005]
+        ],
+        "source": "MAT157Y1_counter_42",
+        "stroke": "",
+        "target": "or_counter_84"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p872",
+        "isRegion": false,
+        "points": [
+          [906.07, 184.26],
+          [906.07, 310.20000000000005],
+          [906.64, 310.20000000000005]
+        ],
+        "source": "MAT157Y1_counter_42",
+        "stroke": "",
+        "target": "or_counter_92"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p873",
+        "isRegion": false,
+        "points": [
+          [844.59, 172.20000000000005],
+          [791.12, 172.20000000000005],
+          [791.12, 292.9100000000001]
+        ],
+        "source": "MAT157Y1_counter_42",
+        "stroke": "",
+        "target": "or_counter_100"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p874",
+        "isRegion": false,
+        "points": [
+          [218.4, 99.66000000000008],
+          [218.4, 130.20000000000005],
+          [391.32, 130.20000000000005],
+          [391.32, 292.9100000000001]
+        ],
+        "source": "and_counter_43",
+        "stroke": "",
+        "target": "or_counter_36"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p875",
+        "isRegion": false,
+        "points": [
+          [416.06, 40.25999999999999],
+          [416.06, 52.200000000000045],
+          [221.53, 52.200000000000045],
+          [221.53, 77.0200000000001]
+        ],
+        "source": "MAT186H1_counter_44",
+        "stroke": "",
+        "target": "and_counter_43"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p876",
+        "isRegion": false,
+        "points": [
+          [462.19, 40.1400000000001],
+          [462.19, 64.20000000000005],
+          [542.73, 64.20000000000005],
+          [542.73, 77.0200000000001]
+        ],
+        "source": "MAT186H1_counter_44",
+        "stroke": "",
+        "target": "or_counter_62"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p877",
+        "isRegion": false,
+        "points": [
+          [216.72, 40.17000000000007],
+          [216.72, 77.07000000000005]
+        ],
+        "source": "MAT187H1_counter_45",
+        "stroke": "",
+        "target": "and_counter_43"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p878",
+        "isRegion": false,
+        "points": [
+          [139.12, 243.84000000000003],
+          [139.12, 263.20000000000005],
+          [387.73, 263.20000000000005],
+          [387.73, 294.5]
+        ],
+        "source": "and_counter_46",
+        "stroke": "",
+        "target": "or_counter_36"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p879",
+        "isRegion": false,
+        "points": [
+          [241.21, 184.20000000000005],
+          [241.21, 204.20000000000005],
+          [141.53, 204.20000000000005],
+          [141.53, 220.91000000000008]
+        ],
+        "source": "MAT194H1_counter_47",
+        "stroke": "",
+        "target": "and_counter_46"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p880",
+        "isRegion": false,
+        "points": [
+          [136.72, 184.17000000000007],
+          [136.72, 221.07000000000005]
+        ],
+        "source": "MAT195H1_counter_48",
+        "stroke": "",
+        "target": "and_counter_46"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p881",
+        "isRegion": false,
+        "points": [
+          [344.56, 776.2],
+          [378.52, 776.2],
+          [378.52, 925.1500000000001]
+        ],
+        "source": "CSC369H1_counter_51",
+        "stroke": "",
+        "target": "and_counter_58"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p882",
+        "isRegion": false,
+        "points": [
+          [252.43, 512.2],
+          [276.62, 512.2],
+          [276.62, 733.6]
+        ],
+        "source": "and_counter_52",
+        "stroke": "",
+        "target": "CSC369H1_counter_51"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p883",
+        "isRegion": false,
+        "points": [
+          [463.12, 854.07],
+          [463.12, 877.7800000000001]
+        ],
+        "source": "CSC373H1_counter_55",
+        "stroke": "",
+        "target": "or_counter_59"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p884",
+        "isRegion": false,
+        "points": [
+          [495.09, 768.7800000000001],
+          [495.09, 805.76]
+        ],
+        "source": "or_counter_56",
+        "stroke": "",
+        "target": "CSC373H1_counter_55"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p885",
+        "isRegion": false,
+        "points": [
+          [382.12, 947.2800000000001],
+          [382.12, 971.2]
+        ],
+        "source": "and_counter_58",
+        "stroke": "",
+        "target": "CSC443H1_counter_57"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p886",
+        "isRegion": false,
+        "points": [
+          [455.7, 895.2],
+          [385.73, 895.2],
+          [385.73, 925.3000000000001]
+        ],
+        "source": "or_counter_59",
+        "stroke": "",
+        "target": "and_counter_58"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p887",
+        "isRegion": false,
+        "points": [
+          [553.12, 853.8100000000001],
+          [553.12, 895.2],
+          [482.31, 895.2]
+        ],
+        "source": "CSC375H1_counter_60",
+        "stroke": "",
+        "target": "or_counter_59"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p888",
+        "isRegion": false,
+        "points": [
+          [894.62, 250.20000000000005],
+          [919.12, 250.20000000000005],
+          [919.12, 292.97]
+        ],
+        "source": "MAT133Y1_counter_61",
+        "stroke": "",
+        "target": "or_counter_92"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p889",
+        "isRegion": false,
+        "points": [
+          [545.12, 99.65000000000009],
+          [545.12, 155.20000000000005],
+          [596.09, 155.20000000000005]
+        ],
+        "source": "or_counter_62",
+        "stroke": "",
+        "target": "MAT136H1_counter_39"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p890",
+        "isRegion": false,
+        "points": [
+          [547.53, 40.17000000000007],
+          [547.53, 77.07000000000005]
+        ],
+        "source": "MAT196H1_counter_63",
+        "stroke": "",
+        "target": "or_counter_62"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p891",
+        "isRegion": false,
+        "points": [
+          [1285.12, 112.17000000000007],
+          [1285.12, 136.07000000000005]
+        ],
+        "source": "MAT240H1_counter_64",
+        "stroke": "",
+        "target": "MAT247H1_counter_65"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p892",
+        "isRegion": false,
+        "points": [
+          [1247.44, 175.20000000000005],
+          [1058.47, 175.20000000000005],
+          [1058.47, 220.69000000000005]
+        ],
+        "source": "MAT247H1_counter_65",
+        "stroke": "",
+        "target": "and_counter_68"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p893",
+        "isRegion": false,
+        "points": [
+          [1285.12, 184.43000000000006],
+          [1285.12, 382.20000000000005],
+          [1079.12, 382.20000000000005]
+        ],
+        "source": "MAT247H1_counter_65",
+        "stroke": "",
+        "target": "and_counter_72"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p894",
+        "isRegion": false,
+        "points": [
+          [1060.12, 328.1700000000001],
+          [1060.12, 364.75]
+        ],
+        "source": "MAT257Y1_counter_67",
+        "stroke": "",
+        "target": "and_counter_72"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p895",
+        "isRegion": false,
+        "points": [
+          [1059.12, 243.6500000000001],
+          [1059.12, 280.1400000000001]
+        ],
+        "source": "and_counter_68",
+        "stroke": "",
+        "target": "MAT257Y1_counter_67"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p896",
+        "isRegion": false,
+        "points": [
+          [1060.12, 387.6500000000001],
+          [1060.12, 424.1400000000001]
+        ],
+        "source": "and_counter_72",
+        "stroke": "",
+        "target": "MAT377H1_counter_33"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p897",
+        "isRegion": false,
+        "points": [
+          [1127.12, 112.22000000000003],
+          [1127.12, 166.20000000000005],
+          [1138.04, 166.20000000000005]
+        ],
+        "source": "STA220H1_counter_74",
+        "stroke": "",
+        "target": "or_counter_76"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p898",
+        "isRegion": false,
+        "points": [
+          [1109.56, 112.43000000000006],
+          [1109.56, 310.20000000000005],
+          [1120.15, 310.20000000000005]
+        ],
+        "source": "STA220H1_counter_74",
+        "stroke": "",
+        "target": "or_counter_91"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p899",
+        "isRegion": false,
+        "points": [
+          [1139.12, 256.1700000000001],
+          [1139.12, 292.75]
+        ],
+        "source": "STA221H1_counter_75",
+        "stroke": "",
+        "target": "or_counter_91"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p900",
+        "isRegion": false,
+        "points": [
+          [1157.12, 171.6500000000001],
+          [1157.12, 208.1400000000001]
+        ],
+        "source": "or_counter_76",
+        "stroke": "",
+        "target": "STA221H1_counter_75"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p901",
+        "isRegion": false,
+        "points": [
+          [1159.04, 112.17000000000007],
+          [1159.04, 149.07000000000005]
+        ],
+        "source": "STA288H1_counter_77",
+        "stroke": "",
+        "target": "or_counter_76"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p902",
+        "isRegion": false,
+        "points": [
+          [1208.5, 112.43000000000006],
+          [1208.5, 310.20000000000005],
+          [1158.33, 310.20000000000005]
+        ],
+        "source": "STA288H1_counter_77",
+        "stroke": "",
+        "target": "or_counter_91"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p903",
+        "isRegion": false,
+        "points": [
+          [967.39, 315.5],
+          [967.39, 337.20000000000005],
+          [900.23, 337.20000000000005],
+          [900.23, 424.24]
+        ],
+        "source": "or_counter_78",
+        "stroke": "",
+        "target": "STA237H1_counter_23"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p904",
+        "isRegion": false,
+        "points": [
+          [981.79, 238.20000000000005],
+          [973.73, 238.20000000000005],
+          [973.73, 293.32000000000005]
+        ],
+        "source": "and_counter_79",
+        "stroke": "",
+        "target": "or_counter_78"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p905",
+        "isRegion": false,
+        "points": [
+          [669.03, 384.20000000000005],
+          [679.11, 384.20000000000005],
+          [679.11, 424.1500000000001]
+        ],
+        "source": "and_counter_83",
+        "stroke": "",
+        "target": "STA247H1_counter_24"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p906",
+        "isRegion": false,
+        "points": [
+          [662.12, 315.6500000000001],
+          [662.12, 364.6600000000001]
+        ],
+        "source": "or_counter_84",
+        "stroke": "",
+        "target": "and_counter_83"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p907",
+        "isRegion": false,
+        "points": [
+          [634.04, 240.20000000000005],
+          [659.73, 240.20000000000005],
+          [659.73, 293.01]
+        ],
+        "source": "and_counter_85",
+        "stroke": "",
+        "target": "or_counter_84"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p908",
+        "isRegion": false,
+        "points": [
+          [247.18, 312.20000000000005],
+          [378.59, 312.20000000000005],
+          [378.59, 380.20000000000005],
+          [643.32, 380.20000000000005]
+        ],
+        "source": "or_counter_89",
+        "stroke": "",
+        "target": "and_counter_83"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p909",
+        "isRegion": false,
+        "points": [
+          [969.12, 387.6500000000001],
+          [969.12, 424.1400000000001]
+        ],
+        "source": "and_counter_90",
+        "stroke": "",
+        "target": "STA255H1_counter_25"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p910",
+        "isRegion": false,
+        "points": [
+          [1139.12, 315.6600000000001],
+          [1139.12, 346.20000000000005],
+          [971.86, 346.20000000000005],
+          [971.86, 365.20000000000005]
+        ],
+        "source": "or_counter_91",
+        "stroke": "",
+        "target": "and_counter_90"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p911",
+        "isRegion": false,
+        "points": [
+          [920.91, 315.51],
+          [920.91, 380.20000000000005],
+          [950.5, 380.20000000000005]
+        ],
+        "source": "or_counter_92",
+        "stroke": "",
+        "target": "and_counter_90"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p912",
+        "isRegion": false,
+        "points": [
+          [922.73, 243.18000000000006],
+          [922.73, 293.36]
+        ],
+        "source": "and_counter_93",
+        "stroke": "",
+        "target": "or_counter_92"
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "id_": "p913",
+        "isRegion": false,
+        "points": [
+          [791.12, 315.82000000000005],
+          [791.12, 424.1700000000001]
+        ],
+        "source": "or_counter_100",
+        "stroke": "",
+        "target": "STA257H1_counter_26"
+      }
+    ],
+    "shapes": [
+      {
+        "fill": "white",
+        "graph": 79,
+        "height": 0,
+        "id_": "graph0",
+        "pos": [4, 1019.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 0
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC108H1_counter_0",
+        "pos": [4, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [40.12, 170.2700000000001],
+            "rId": "",
+            "text": "CSC108H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC148H1_counter_3",
+        "pos": [4, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [40.12, 242.2700000000001],
+            "rId": "",
+            "text": "CSC148H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC108H1_counter_0|CSC148H1_counter_3",
+        "pos": [40.13, 218.07000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC110Y1_counter_1",
+        "pos": [448, 76],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [484.12, 98.2700000000001],
+            "rId": "",
+            "text": "CSC110Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC111H1_counter_2",
+        "pos": [202.38, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [238.12, 242.2700000000001],
+            "rId": "",
+            "text": "CSC111H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 71.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC110Y1_counter_1|CSC111H1_counter_2",
+        "pos": [257.53999999999996, 218.01],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5000000000000284
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC110Y1_counter_1|or_counter_14",
+        "pos": [467.13, 158.75],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC111H1_counter_2|or_counter_7",
+        "pos": [208.85, 302.75],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "CSC111H1_counter_2|or_counter_11",
+        "pos": [269.33, 382.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -9.999999999999972
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "CSC111H1_counter_2|or_counter_36",
+        "pos": [384.36, 308.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC111H1_counter_2|or_counter_89",
+        "pos": [242.53, 303.07000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "CSC148H1_counter_3|or_counter_7",
+        "pos": [199.3, 310.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC148H1_counter_3|and_counter_12",
+        "pos": [171.73, 302.97],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC148H1_counter_3|and_counter_16",
+        "pos": [152.73, 374.95000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC148H1_counter_3|or_counter_89",
+        "pos": [237.73, 302.95000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC165H1_counter_5",
+        "pos": [358, 76],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [394.12, 98.2700000000001],
+            "rId": "",
+            "text": "CSC165H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC165H1_counter_5|and_counter_12",
+        "pos": [176.53, 303.01],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "CSC165H1_counter_5|or_counter_14",
+        "pos": [458.11, 166.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "CSC165H1_counter_5|or_counter_18",
+        "pos": [422.96, 310.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC165H1_counter_5|or_counter_36",
+        "pos": [393.13, 302.88],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC207H1_counter_6",
+        "pos": [181, 364],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [217.12, 386.2700000000001],
+            "rId": "",
+            "text": "CSC207H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC209H1_counter_8",
+        "pos": [209, 436],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [245.12, 458.2700000000001],
+            "rId": "",
+            "text": "CSC209H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC207H1_counter_6|CSC209H1_counter_8",
+        "pos": [231.13, 434.07000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC207H1_counter_6|and_counter_35",
+        "pos": [382.26, 446.97],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_7|CSC207H1_counter_6",
+        "pos": [208.13, 362.1400000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC209H1_counter_8|and_counter_52",
+        "pos": [245.13, 506.18000000000006],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC236H1_counter_10",
+        "pos": [412, 436],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [448.12, 458.2700000000001],
+            "rId": "",
+            "text": "CSC236H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "CSC236H1_counter_10|or_counter_21",
+        "pos": [496.56, 515.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC236H1_counter_10|and_counter_31",
+        "pos": [585.13, 552.8600000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_11|CSC236H1_counter_10",
+        "pos": [418.46, 434.1500000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_12|or_counter_11",
+        "pos": [279.6, 374.80000000000007],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC240H1_counter_13",
+        "pos": [530, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [566.12, 242.2700000000001],
+            "rId": "",
+            "text": "CSC240H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC240H1_counter_13|or_counter_18",
+        "pos": [434.79, 303.30000000000007],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC240H1_counter_13|or_counter_21",
+        "pos": [505.13, 506.4100000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC240H1_counter_13|or_counter_30",
+        "pos": [562.13, 612.3100000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC240H1_counter_13|or_counter_36",
+        "pos": [398.53, 304.30000000000007],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_14|CSC240H1_counter_13",
+        "pos": [533.96, 218],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC258H1_counter_15",
+        "pos": [119, 436],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [155.12, 458.2700000000001],
+            "rId": "",
+            "text": "CSC258H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "CSC258H1_counter_15|and_counter_52",
+        "pos": [236.25, 514.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_16|CSC258H1_counter_15",
+        "pos": [155.13, 434.1400000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_18|and_counter_16",
+        "pos": [157.53, 375.1500000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC263H1_counter_19",
+        "pos": [463, 601.6],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [499.12, 623.8700000000001],
+            "rId": "",
+            "text": "CSC263H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC263H1_counter_19|or_counter_56",
+        "pos": [495.73, 756.51],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_20|CSC263H1_counter_19",
+        "pos": [505.13, 599.6],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_21|and_counter_20",
+        "pos": [505.13, 552.9000000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "or_counter_22|and_counter_20",
+        "pos": [514.22, 560.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "cornflowerblue",
+        "graph": 79,
+        "height": 36,
+        "id_": "STA237H1_counter_23",
+        "pos": [844.75, 436],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [880.12, 458.2700000000001],
+            "rId": "",
+            "text": "STA237H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 70.75
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "STA237H1_counter_23|or_counter_22",
+        "pos": [728.69, 506.33000000000004],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "STA237H1_counter_23|or_counter_32",
+        "pos": [838.73, 506.7700000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "cornflowerblue",
+        "graph": 79,
+        "height": 36,
+        "id_": "STA247H1_counter_24",
+        "pos": [666.75, 436],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [702.12, 458.2700000000001],
+            "rId": "",
+            "text": "STA247H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 70.75
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "STA247H1_counter_24|or_counter_22",
+        "pos": [725.81, 507.47],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "STA247H1_counter_24|or_counter_32",
+        "pos": [831.53, 506.9200000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "cornflowerblue",
+        "graph": 79,
+        "height": 36,
+        "id_": "STA255H1_counter_25",
+        "pos": [933.75, 436],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [969.12, 458.2700000000001],
+            "rId": "",
+            "text": "STA255H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 70.75
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "STA255H1_counter_25|or_counter_22",
+        "pos": [731.57, 506.23],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "STA255H1_counter_25|or_counter_32",
+        "pos": [844.07, 512.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "cornflowerblue",
+        "graph": 79,
+        "height": 36,
+        "id_": "STA257H1_counter_26",
+        "pos": [755.75, 436],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [791.12, 458.2700000000001],
+            "rId": "",
+            "text": "STA257H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 70.75
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "STA257H1_counter_26|or_counter_22",
+        "pos": [739.12, 514.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "STA257H1_counter_26|or_counter_32",
+        "pos": [835.13, 506.19000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "cornflowerblue",
+        "graph": 79,
+        "height": 36,
+        "id_": "STA286H1_counter_27",
+        "pos": [577.75, 436],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [613.12, 458.2700000000001],
+            "rId": "",
+            "text": "STA286H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 70.75
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "STA286H1_counter_27|or_counter_22",
+        "pos": [721.27, 512.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC265H1_counter_28",
+        "pos": [526, 673.6],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [562.12, 695.8700000000001],
+            "rId": "",
+            "text": "CSC265H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC265H1_counter_28|or_counter_56",
+        "pos": [500.53, 756.48],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_30|CSC265H1_counter_28",
+        "pos": [562.13, 671.74],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "and_counter_31|or_counter_30",
+        "pos": [571.17, 620.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "or_counter_32|and_counter_31",
+        "pos": [594.12, 560.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT377H1_counter_33",
+        "pos": [1022.88, 436],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1060.12, 458.2700000000001],
+            "rId": "",
+            "text": "MAT377H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.50000000000011
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "MAT377H1_counter_33|or_counter_32",
+        "pos": [843.62, 515.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC343H1_counter_34",
+        "pos": [346, 673.6],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [382.12, 695.8700000000001],
+            "rId": "",
+            "text": "CSC343H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC343H1_counter_34|and_counter_58",
+        "pos": [382.13, 934.4200000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_35|CSC343H1_counter_34",
+        "pos": [382.13, 671.84],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "or_counter_36|and_counter_35",
+        "pos": [391.25, 454.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_37|or_counter_36",
+        "pos": [396.73, 303.32000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT135H1_counter_38",
+        "pos": [672.88, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [710.12, 26.270000000000095],
+            "rId": "",
+            "text": "MAT135H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT135H1_counter_38|and_counter_37",
+        "pos": [469.53, 231.23000000000002],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "MAT135H1_counter_38|or_counter_62",
+        "pos": [554.14, 94.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT135H1_counter_38|and_counter_79",
+        "pos": [991.53, 231.1500000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "MAT135H1_counter_38|and_counter_85",
+        "pos": [635.72, 236.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT135H1_counter_38|and_counter_93",
+        "pos": [916.89, 231.0200000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT136H1_counter_39",
+        "pos": [607.88, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [645.12, 170.2700000000001],
+            "rId": "",
+            "text": "MAT136H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT136H1_counter_39|and_counter_37",
+        "pos": [464.73, 230.97000000000003],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT136H1_counter_39|and_counter_79",
+        "pos": [986.73, 231.16000000000008],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT136H1_counter_39|and_counter_85",
+        "pos": [627.13, 230.75],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT136H1_counter_39|and_counter_93",
+        "pos": [914.41, 231.85000000000002],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT135Y1_counter_40",
+        "pos": [291.88, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [329.12, 242.2700000000001],
+            "rId": "",
+            "text": "MAT135Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT135Y1_counter_40|or_counter_36",
+        "pos": [389.53, 303.34000000000003],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT137Y1_counter_41",
+        "pos": [689.88, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [727.12, 242.2700000000001],
+            "rId": "",
+            "text": "MAT137Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 10,
+        "id_": "MAT137Y1_counter_41|or_counter_36",
+        "pos": [392.99, 317.09000000000003],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT137Y1_counter_41|or_counter_78",
+        "pos": [966.53, 303.4100000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT137Y1_counter_41|or_counter_84",
+        "pos": [664.53, 302.97],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT137Y1_counter_41|or_counter_92",
+        "pos": [915.53, 303.70000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "MAT137Y1_counter_41|or_counter_100",
+        "pos": [782.61, 312.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT157Y1_counter_42",
+        "pos": [844.88, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [882.12, 170.2700000000001],
+            "rId": "",
+            "text": "MAT157Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT157Y1_counter_42|or_counter_36",
+        "pos": [394.93, 302.9000000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT157Y1_counter_42|and_counter_68",
+        "pos": [1055.2, 231.79000000000008],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT157Y1_counter_42|or_counter_78",
+        "pos": [970.13, 302.62],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "MAT157Y1_counter_42|or_counter_84",
+        "pos": [670.81, 308.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "MAT157Y1_counter_42|or_counter_92",
+        "pos": [910.17, 310.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT157Y1_counter_42|or_counter_100",
+        "pos": [791.13, 302.9100000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_43|or_counter_36",
+        "pos": [391.33, 302.9100000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT186H1_counter_44",
+        "pos": [401.88, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [439.12, 26.270000000000095],
+            "rId": "",
+            "text": "MAT186H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT186H1_counter_44|and_counter_43",
+        "pos": [221.53, 87.0200000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT186H1_counter_44|or_counter_62",
+        "pos": [542.73, 87.0200000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT187H1_counter_45",
+        "pos": [181.88, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [219.12, 26.270000000000095],
+            "rId": "",
+            "text": "MAT187H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT187H1_counter_45|and_counter_43",
+        "pos": [216.73, 87.07000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_46|or_counter_36",
+        "pos": [387.73, 304.5],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT194H1_counter_47",
+        "pos": [224.88, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [262.12, 170.2700000000001],
+            "rId": "",
+            "text": "MAT194H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT194H1_counter_47|and_counter_46",
+        "pos": [141.53, 230.91000000000008],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT195H1_counter_48",
+        "pos": [131.88, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [169.12, 170.2700000000001],
+            "rId": "",
+            "text": "MAT195H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT195H1_counter_48|and_counter_46",
+        "pos": [136.73, 231.07000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36.00000000000003,
+        "id_": "CSC369H1_counter_51",
+        "pos": [272, 745.6],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [308.12, 767.87],
+            "rId": "",
+            "text": "CSC369H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC369H1_counter_51|and_counter_58",
+        "pos": [378.53, 935.1500000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_52|CSC369H1_counter_51",
+        "pos": [276.63, 743.6],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC373H1_counter_55",
+        "pos": [427, 817.6],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [463.12, 839.8800000000001],
+            "rId": "",
+            "text": "CSC373H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "CSC373H1_counter_55|or_counter_59",
+        "pos": [463.13, 887.7800000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_56|CSC373H1_counter_55",
+        "pos": [495.09, 815.76],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC443H1_counter_57",
+        "pos": [346, 983.2],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [382.12, 1005.48],
+            "rId": "",
+            "text": "CSC443H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_58|CSC443H1_counter_57",
+        "pos": [382.13, 981.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_59|and_counter_58",
+        "pos": [385.73, 935.3000000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 79,
+        "height": 36,
+        "id_": "CSC375H1_counter_60",
+        "pos": [517, 817.6],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [553.12, 839.8800000000001],
+            "rId": "",
+            "text": "CSC375H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "CSC375H1_counter_60|or_counter_59",
+        "pos": [472.31, 895.2],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT133Y1_counter_61",
+        "pos": [819.88, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [857.12, 242.2700000000001],
+            "rId": "",
+            "text": "MAT133Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT133Y1_counter_61|or_counter_92",
+        "pos": [919.13, 302.97],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "or_counter_62|MAT136H1_counter_39",
+        "pos": [606.09, 155.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT196H1_counter_63",
+        "pos": [507.88, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [545.12, 26.270000000000095],
+            "rId": "",
+            "text": "MAT196H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT196H1_counter_63|or_counter_62",
+        "pos": [547.53, 87.07000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT240H1_counter_64",
+        "pos": [1247.88, 76],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1285.12, 98.2700000000001],
+            "rId": "",
+            "text": "MAT240H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT247H1_counter_65",
+        "pos": [1247.88, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1285.12, 170.2700000000001],
+            "rId": "",
+            "text": "MAT247H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT240H1_counter_64|MAT247H1_counter_65",
+        "pos": [1285.13, 146.07000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT247H1_counter_65|and_counter_68",
+        "pos": [1058.48, 230.69000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "MAT247H1_counter_65|and_counter_72",
+        "pos": [1069.12, 382.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "orange",
+        "graph": 79,
+        "height": 36,
+        "id_": "MAT257Y1_counter_67",
+        "pos": [1021.88, 292],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1059.12, 314.2700000000001],
+            "rId": "",
+            "text": "MAT257Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.50000000000011
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "MAT257Y1_counter_67|and_counter_72",
+        "pos": [1060.13, 374.75],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_68|MAT257Y1_counter_67",
+        "pos": [1059.13, 290.1400000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_72|MAT377H1_counter_33",
+        "pos": [1060.13, 434.1400000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "cornflowerblue",
+        "graph": 79,
+        "height": 36,
+        "id_": "STA220H1_counter_74",
+        "pos": [1061.75, 76],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1097.12, 98.2700000000001],
+            "rId": "",
+            "text": "STA220H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 70.75
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "STA220H1_counter_74|or_counter_76",
+        "pos": [1148.04, 166.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "STA220H1_counter_74|or_counter_91",
+        "pos": [1130.15, 310.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "cornflowerblue",
+        "graph": 79,
+        "height": 36,
+        "id_": "STA221H1_counter_75",
+        "pos": [1121.75, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1157.12, 242.2700000000001],
+            "rId": "",
+            "text": "STA221H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 70.75
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "STA221H1_counter_75|or_counter_91",
+        "pos": [1139.13, 302.75],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_76|STA221H1_counter_75",
+        "pos": [1157.13, 218.1400000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "cornflowerblue",
+        "graph": 79,
+        "height": 36,
+        "id_": "STA288H1_counter_77",
+        "pos": [1153.75, 76],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1189.12, 98.2700000000001],
+            "rId": "",
+            "text": "STA288H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 70.75
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "STA288H1_counter_77|or_counter_76",
+        "pos": [1159.04, 159.07000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -3.5,
+        "id_": "STA288H1_counter_77|or_counter_91",
+        "pos": [1148.33, 310.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_78|STA237H1_counter_23",
+        "pos": [900.23, 434.24],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_79|or_counter_78",
+        "pos": [973.73, 303.32000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_83|STA247H1_counter_24",
+        "pos": [679.11, 434.1500000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_84|and_counter_83",
+        "pos": [662.13, 374.6600000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_85|or_counter_84",
+        "pos": [659.73, 303.01],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "or_counter_89|and_counter_83",
+        "pos": [653.32, 380.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_90|STA255H1_counter_25",
+        "pos": [969.13, 434.1400000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_91|and_counter_90",
+        "pos": [971.86, 375.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": 3.5,
+        "id_": "or_counter_92|and_counter_90",
+        "pos": [960.5, 380.20000000000005],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "and_counter_93|or_counter_92",
+        "pos": [922.73, 303.36],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 79,
+        "height": -10,
+        "id_": "or_counter_100|STA257H1_counter_26",
+        "pos": [791.13, 434.1700000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_14",
+        "pos": [467.12, 166],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [467.12, 167.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_7",
+        "pos": [208.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [208.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_11",
+        "pos": [278.12, 382],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [278.12, 383.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_36",
+        "pos": [393.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [393.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_89",
+        "pos": [240.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [240.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_12",
+        "pos": [174.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [174.12, 311.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_16",
+        "pos": [155.12, 382],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [155.12, 383.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_18",
+        "pos": [432.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [432.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_35",
+        "pos": [382.12, 454],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [382.12, 455.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_52",
+        "pos": [245.12, 513.4000000000001],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [245.12, 515.35],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_21",
+        "pos": [505.12, 513.4000000000001],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [505.12, 515.35],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_31",
+        "pos": [585.12, 560.2],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [585.12, 562.1500000000001],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_30",
+        "pos": [562.12, 619.6],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [562.12, 621.5500000000001],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_56",
+        "pos": [498.12, 763.6],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [498.12, 765.5500000000001],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_20",
+        "pos": [505.12, 560.2],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [505.12, 562.1500000000001],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_22",
+        "pos": [730.12, 513.4000000000001],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [730.12, 515.35],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_32",
+        "pos": [835.12, 513.4000000000001],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [835.12, 515.35],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_58",
+        "pos": [382.12, 941.8000000000001],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [382.12, 943.75],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_37",
+        "pos": [467.12, 238],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [467.12, 239.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_62",
+        "pos": [545.12, 94],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [545.12, 95.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_79",
+        "pos": [989.12, 238],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [989.12, 239.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_85",
+        "pos": [627.12, 238],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [627.12, 239.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_93",
+        "pos": [919.12, 238],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [919.12, 239.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_78",
+        "pos": [970.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [970.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_84",
+        "pos": [662.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [662.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_92",
+        "pos": [919.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [919.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_100",
+        "pos": [791.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [791.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_68",
+        "pos": [1059.12, 238],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1059.12, 239.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_43",
+        "pos": [219.12, 94],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [219.12, 95.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_46",
+        "pos": [139.12, 238],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [139.12, 239.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_59",
+        "pos": [463.12, 895],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [463.12, 896.95],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_72",
+        "pos": [1060.12, 382],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1060.12, 383.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_76",
+        "pos": [1157.12, 166],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1157.12, 167.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "or_counter_91",
+        "pos": [1139.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [1139.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_83",
+        "pos": [662.12, 382],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [662.12, 383.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 79,
+        "height": 10.8,
+        "id_": "and_counter_90",
+        "pos": [969.12, 382],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 79,
+            "pos": [969.12, 383.95000000000005],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      }
+    ],
+    "texts": [
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [40.12, 170.2700000000001],
+        "rId": "",
+        "text": "CSC108H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [40.12, 242.2700000000001],
+        "rId": "",
+        "text": "CSC148H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [484.12, 98.2700000000001],
+        "rId": "",
+        "text": "CSC110Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [238.12, 242.2700000000001],
+        "rId": "",
+        "text": "CSC111H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [467.12, 167.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [208.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [278.12, 383.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [393.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [240.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [174.12, 311.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [155.12, 383.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [394.12, 98.2700000000001],
+        "rId": "",
+        "text": "CSC165H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [432.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [217.12, 386.2700000000001],
+        "rId": "",
+        "text": "CSC207H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [245.12, 458.2700000000001],
+        "rId": "",
+        "text": "CSC209H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [382.12, 455.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [245.12, 515.35],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [448.12, 458.2700000000001],
+        "rId": "",
+        "text": "CSC236H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [505.12, 515.35],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [585.12, 562.1500000000001],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [566.12, 242.2700000000001],
+        "rId": "",
+        "text": "CSC240H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [562.12, 621.5500000000001],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [155.12, 458.2700000000001],
+        "rId": "",
+        "text": "CSC258H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [499.12, 623.8700000000001],
+        "rId": "",
+        "text": "CSC263H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [498.12, 765.5500000000001],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [505.12, 562.1500000000001],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [730.12, 515.35],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [880.12, 458.2700000000001],
+        "rId": "",
+        "text": "STA237H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [835.12, 515.35],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [702.12, 458.2700000000001],
+        "rId": "",
+        "text": "STA247H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [969.12, 458.2700000000001],
+        "rId": "",
+        "text": "STA255H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [791.12, 458.2700000000001],
+        "rId": "",
+        "text": "STA257H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [613.12, 458.2700000000001],
+        "rId": "",
+        "text": "STA286H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [562.12, 695.8700000000001],
+        "rId": "",
+        "text": "CSC265H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1060.12, 458.2700000000001],
+        "rId": "",
+        "text": "MAT377H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [382.12, 695.8700000000001],
+        "rId": "",
+        "text": "CSC343H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [382.12, 943.75],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [467.12, 239.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [710.12, 26.270000000000095],
+        "rId": "",
+        "text": "MAT135H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [545.12, 95.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [989.12, 239.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [627.12, 239.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [919.12, 239.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [645.12, 170.2700000000001],
+        "rId": "",
+        "text": "MAT136H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [329.12, 242.2700000000001],
+        "rId": "",
+        "text": "MAT135Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [727.12, 242.2700000000001],
+        "rId": "",
+        "text": "MAT137Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [970.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [662.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [919.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [791.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [882.12, 170.2700000000001],
+        "rId": "",
+        "text": "MAT157Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1059.12, 239.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [219.12, 95.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [439.12, 26.270000000000095],
+        "rId": "",
+        "text": "MAT186H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [219.12, 26.270000000000095],
+        "rId": "",
+        "text": "MAT187H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [139.12, 239.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [262.12, 170.2700000000001],
+        "rId": "",
+        "text": "MAT194H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [169.12, 170.2700000000001],
+        "rId": "",
+        "text": "MAT195H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [308.12, 767.87],
+        "rId": "",
+        "text": "CSC369H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [463.12, 839.8800000000001],
+        "rId": "",
+        "text": "CSC373H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [463.12, 896.95],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [382.12, 1005.48],
+        "rId": "",
+        "text": "CSC443H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [553.12, 839.8800000000001],
+        "rId": "",
+        "text": "CSC375H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [857.12, 242.2700000000001],
+        "rId": "",
+        "text": "MAT133Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [545.12, 26.270000000000095],
+        "rId": "",
+        "text": "MAT196H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1285.12, 98.2700000000001],
+        "rId": "",
+        "text": "MAT240H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1285.12, 170.2700000000001],
+        "rId": "",
+        "text": "MAT247H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1060.12, 383.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1059.12, 314.2700000000001],
+        "rId": "",
+        "text": "MAT257Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1097.12, 98.2700000000001],
+        "rId": "",
+        "text": "STA220H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1157.12, 167.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1139.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1157.12, 242.2700000000001],
+        "rId": "",
+        "text": "STA221H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [1189.12, 98.2700000000001],
+        "rId": "",
+        "text": "STA288H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [662.12, 383.95000000000005],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 79,
+        "pos": [969.12, 383.95000000000005],
+        "rId": "",
+        "text": "and"
+      }
+    ],
+    "width": 1326
+  },
+
+  "CSC110Y1, SDS777H1, CSC343H1, MAT888Y1, MAT237Y1": {
+    "height": 451,
+    "paths": [
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1567",
+        "isRegion": false,
+        "points": [
+          [40.12, 112.17000000000002],
+          [40.12, 136.07]
+        ],
+        "source": "CSC108H1_counter_0",
+        "stroke": "",
+        "target": "CSC148H1_counter_3"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1568",
+        "isRegion": false,
+        "points": [
+          [130.12, 112.17000000000002],
+          [130.12, 136.07]
+        ],
+        "source": "CSC110Y1_counter_1",
+        "stroke": "",
+        "target": "CSC111H1_counter_2"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1569",
+        "isRegion": false,
+        "points": [
+          [166.45, 94.80000000000001],
+          [175.12, 94.80000000000001],
+          [175.12, 166.8],
+          [176.3, 166.8]
+        ],
+        "source": "CSC110Y1_counter_1",
+        "stroke": "",
+        "target": "or_counter_9"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1570",
+        "isRegion": false,
+        "points": [
+          [98.35, 184.17000000000002],
+          [98.35, 221.39000000000001]
+        ],
+        "source": "CSC111H1_counter_2",
+        "stroke": "",
+        "target": "or_counter_7"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1571",
+        "isRegion": false,
+        "points": [
+          [161.94, 184.27000000000004],
+          [161.94, 196.8],
+          [336.69, 196.8],
+          [336.69, 292.72]
+        ],
+        "source": "CSC111H1_counter_2",
+        "stroke": "",
+        "target": "or_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1572",
+        "isRegion": false,
+        "points": [
+          [40.12, 184.37],
+          [40.12, 238.8],
+          [76.42, 238.8]
+        ],
+        "source": "CSC148H1_counter_3",
+        "stroke": "",
+        "target": "or_counter_7"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1573",
+        "isRegion": false,
+        "points": [
+          [194.12, 112.17000000000002],
+          [194.12, 148.75]
+        ],
+        "source": "CSC165H1_counter_5",
+        "stroke": "",
+        "target": "or_counter_9"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1574",
+        "isRegion": false,
+        "points": [
+          [251.29, 112.19],
+          [251.29, 311.8],
+          [319.51, 311.8]
+        ],
+        "source": "CSC165H1_counter_5",
+        "stroke": "",
+        "target": "or_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1575",
+        "isRegion": false,
+        "points": [
+          [238.59, 328.47],
+          [238.59, 352.18]
+        ],
+        "source": "CSC207H1_counter_6",
+        "stroke": "",
+        "target": "and_counter_11"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1576",
+        "isRegion": false,
+        "points": [
+          [95.12, 243.71],
+          [95.12, 310.8],
+          [161.23, 310.8]
+        ],
+        "source": "or_counter_7",
+        "stroke": "",
+        "target": "CSC207H1_counter_6"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1577",
+        "isRegion": false,
+        "points": [
+          [230.46, 247.8],
+          [333.81, 247.8],
+          [333.81, 293.61]
+        ],
+        "source": "CSC240H1_counter_8",
+        "stroke": "",
+        "target": "or_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1578",
+        "isRegion": false,
+        "points": [
+          [194.12, 171.65000000000003],
+          [194.12, 208.14000000000001]
+        ],
+        "source": "or_counter_9",
+        "stroke": "",
+        "target": "CSC240H1_counter_8"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1579",
+        "isRegion": false,
+        "points": [
+          [239.12, 374.88],
+          [239.12, 398.8]
+        ],
+        "source": "and_counter_11",
+        "stroke": "",
+        "target": "CSC343H1_counter_10"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1580",
+        "isRegion": false,
+        "points": [
+          [338.12, 315.52],
+          [338.12, 369.8],
+          [258.08000000000004, 369.8]
+        ],
+        "source": "or_counter_12",
+        "stroke": "",
+        "target": "and_counter_11"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1581",
+        "isRegion": false,
+        "points": [
+          [321.12, 243.56],
+          [321.12, 308.8],
+          [322.09, 308.8]
+        ],
+        "source": "and_counter_13",
+        "stroke": "",
+        "target": "or_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1582",
+        "isRegion": false,
+        "points": [
+          [281.29, 40.48000000000002],
+          [281.29, 238.8],
+          [302.31, 238.8]
+        ],
+        "source": "MAT135H1_counter_14",
+        "stroke": "",
+        "target": "and_counter_13"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1583",
+        "isRegion": false,
+        "points": [
+          [287.33, 40.370000000000005],
+          [287.33, 94.80000000000001],
+          [330.03, 94.80000000000001]
+        ],
+        "source": "MAT135H1_counter_14",
+        "stroke": "",
+        "target": "or_counter_27"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1584",
+        "isRegion": false,
+        "points": [
+          [321.12, 184.17000000000002],
+          [321.12, 220.75]
+        ],
+        "source": "MAT136H1_counter_15",
+        "stroke": "",
+        "target": "and_counter_13"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1585",
+        "isRegion": false,
+        "points": [
+          [383.63, 251.8],
+          [342.44, 251.8],
+          [342.44, 293.92]
+        ],
+        "source": "MAT135Y1_counter_16",
+        "stroke": "",
+        "target": "or_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1586",
+        "isRegion": false,
+        "points": [
+          [514.12, 256.34000000000003],
+          [514.12, 307.8],
+          [356.76, 307.8]
+        ],
+        "source": "MAT137Y1_counter_17",
+        "stroke": "",
+        "target": "or_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1587",
+        "isRegion": false,
+        "points": [
+          [607.12, 256.37],
+          [607.12, 310.8],
+          [357.11, 310.8]
+        ],
+        "source": "MAT157Y1_counter_18",
+        "stroke": "",
+        "target": "or_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1588",
+        "isRegion": false,
+        "points": [
+          [442.12, 99.85000000000002],
+          [442.12, 208.8],
+          [339.56, 208.8],
+          [339.56, 292.76]
+        ],
+        "source": "and_counter_19",
+        "stroke": "",
+        "target": "or_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1589",
+        "isRegion": false,
+        "points": [
+          [442.12, 40.170000000000016],
+          [442.12, 76.75]
+        ],
+        "source": "MAT186H1_counter_20",
+        "stroke": "",
+        "target": "and_counter_19"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1590",
+        "isRegion": false,
+        "points": [
+          [419.9, 40.370000000000005],
+          [419.9, 94.80000000000001],
+          [368.21, 94.80000000000001]
+        ],
+        "source": "MAT186H1_counter_20",
+        "stroke": "",
+        "target": "or_counter_27"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1591",
+        "isRegion": false,
+        "points": [
+          [524.62, 40.370000000000005],
+          [524.62, 94.80000000000001],
+          [461.25, 94.80000000000001]
+        ],
+        "source": "MAT187H1_counter_21",
+        "stroke": "",
+        "target": "and_counter_19"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1592",
+        "isRegion": false,
+        "points": [
+          [669.12, 243.87],
+          [669.12, 312.8],
+          [356.25, 312.8]
+        ],
+        "source": "and_counter_22",
+        "stroke": "",
+        "target": "or_counter_12"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1593",
+        "isRegion": false,
+        "points": [
+          [651.88, 184.37],
+          [651.88, 238.8],
+          [652.86, 238.8]
+        ],
+        "source": "MAT194H1_counter_23",
+        "stroke": "",
+        "target": "and_counter_22"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1594",
+        "isRegion": false,
+        "points": [
+          [677.38, 166.8],
+          [670.85, 166.8],
+          [670.85, 220.9]
+        ],
+        "source": "MAT195H1_counter_24",
+        "stroke": "",
+        "target": "and_counter_22"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1595",
+        "isRegion": false,
+        "points": [
+          [349.12, 99.65000000000003],
+          [349.12, 136.14]
+        ],
+        "source": "or_counter_27",
+        "stroke": "",
+        "target": "MAT136H1_counter_15"
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "id_": "p1596",
+        "isRegion": false,
+        "points": [
+          [349.12, 40.170000000000016],
+          [349.12, 76.75]
+        ],
+        "source": "MAT196H1_counter_28",
+        "stroke": "",
+        "target": "or_counter_27"
+      }
+    ],
+    "shapes": [
+      {
+        "fill": "white",
+        "graph": 142,
+        "height": 0,
+        "id_": "graph0",
+        "pos": [4, 446.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 0
+      },
+      {
+        "fill": "orchid",
+        "graph": 142,
+        "height": 36,
+        "id_": "CSC108H1_counter_0",
+        "pos": [4, 76],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [40.12, 98.27000000000004],
+            "rId": "",
+            "text": "CSC108H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "orchid",
+        "graph": 142,
+        "height": 36,
+        "id_": "CSC148H1_counter_3",
+        "pos": [4, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [40.12, 170.27000000000004],
+            "rId": "",
+            "text": "CSC148H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "CSC108H1_counter_0|CSC148H1_counter_3",
+        "pos": [40.13, 146.07],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 142,
+        "height": 36,
+        "id_": "CSC110Y1_counter_1",
+        "pos": [94, 76],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [130.12, 98.27000000000004],
+            "rId": "",
+            "text": "CSC110Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "orchid",
+        "graph": 142,
+        "height": 36,
+        "id_": "CSC111H1_counter_2",
+        "pos": [94.38, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [130.12, 170.27000000000004],
+            "rId": "",
+            "text": "CSC111H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 71.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "CSC110Y1_counter_1|CSC111H1_counter_2",
+        "pos": [130.13, 146.07],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": 3.5,
+        "id_": "CSC110Y1_counter_1|or_counter_9",
+        "pos": [185.32, 166.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "CSC111H1_counter_2|or_counter_7",
+        "pos": [98.35, 231.39000000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "CSC111H1_counter_2|or_counter_12",
+        "pos": [336.69, 302.72],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": 3.5,
+        "id_": "CSC148H1_counter_3|or_counter_7",
+        "pos": [86.42, 238.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "orchid",
+        "graph": 142,
+        "height": 36,
+        "id_": "CSC165H1_counter_5",
+        "pos": [184, 76],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [220.12, 98.27000000000004],
+            "rId": "",
+            "text": "CSC165H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "CSC165H1_counter_5|or_counter_9",
+        "pos": [194.13, 158.75],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": 3.5,
+        "id_": "CSC165H1_counter_5|or_counter_12",
+        "pos": [329.51, 311.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "orchid",
+        "graph": 142,
+        "height": 36.000000000000014,
+        "id_": "CSC207H1_counter_6",
+        "pos": [173, 292],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [209.12, 314.27],
+            "rId": "",
+            "text": "CSC207H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "CSC207H1_counter_6|and_counter_11",
+        "pos": [238.59, 362.18],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": 3.5,
+        "id_": "or_counter_7|CSC207H1_counter_6",
+        "pos": [171.23, 310.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "orchid",
+        "graph": 142,
+        "height": 36,
+        "id_": "CSC240H1_counter_8",
+        "pos": [158, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [194.12, 242.27],
+            "rId": "",
+            "text": "CSC240H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "CSC240H1_counter_8|or_counter_12",
+        "pos": [333.81, 303.61],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "or_counter_9|CSC240H1_counter_8",
+        "pos": [194.13, 218.14000000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orchid",
+        "graph": 142,
+        "height": 36,
+        "id_": "CSC343H1_counter_10",
+        "pos": [203, 410.8],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [239.12, 433.08],
+            "rId": "",
+            "text": "CSC343H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 72.25
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "and_counter_11|CSC343H1_counter_10",
+        "pos": [239.13, 408.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -3.5,
+        "id_": "or_counter_12|and_counter_11",
+        "pos": [248.08, 369.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": 3.5,
+        "id_": "and_counter_13|or_counter_12",
+        "pos": [329.3, 308.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT135H1_counter_14",
+        "pos": [218.88, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [256.12, 26.27000000000004],
+            "rId": "",
+            "text": "MAT135H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": 3.5,
+        "id_": "MAT135H1_counter_14|and_counter_13",
+        "pos": [312.31, 238.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": 3.5,
+        "id_": "MAT135H1_counter_14|or_counter_27",
+        "pos": [340.03, 94.80000000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT136H1_counter_15",
+        "pos": [311.88, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [349.12, 170.27000000000004],
+            "rId": "",
+            "text": "MAT136H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "MAT136H1_counter_15|and_counter_13",
+        "pos": [321.13, 230.75],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT135Y1_counter_16",
+        "pos": [383.88, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [421.12, 242.27],
+            "rId": "",
+            "text": "MAT135Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "MAT135Y1_counter_16|or_counter_12",
+        "pos": [342.45, 303.92],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT137Y1_counter_17",
+        "pos": [476.88, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [514.12, 242.27],
+            "rId": "",
+            "text": "MAT137Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -3.5,
+        "id_": "MAT137Y1_counter_17|or_counter_12",
+        "pos": [346.76, 307.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT157Y1_counter_18",
+        "pos": [569.88, 220],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [607.12, 242.27],
+            "rId": "",
+            "text": "MAT157Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -3.5,
+        "id_": "MAT157Y1_counter_18|or_counter_12",
+        "pos": [347.11, 310.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "and_counter_19|or_counter_12",
+        "pos": [339.57, 302.76],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT186H1_counter_20",
+        "pos": [404.88, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [442.12, 26.27000000000004],
+            "rId": "",
+            "text": "MAT186H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "MAT186H1_counter_20|and_counter_19",
+        "pos": [442.13, 86.75],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -3.5,
+        "id_": "MAT186H1_counter_20|or_counter_27",
+        "pos": [358.21, 94.80000000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT187H1_counter_21",
+        "pos": [497.88, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [535.12, 26.27000000000004],
+            "rId": "",
+            "text": "MAT187H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -3.5,
+        "id_": "MAT187H1_counter_21|and_counter_19",
+        "pos": [451.25, 94.80000000000001],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -3.5,
+        "id_": "and_counter_22|or_counter_12",
+        "pos": [346.25, 312.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 10
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT194H1_counter_23",
+        "pos": [584.88, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [622.12, 170.27000000000004],
+            "rId": "",
+            "text": "MAT194H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": 3.5,
+        "id_": "MAT194H1_counter_23|and_counter_22",
+        "pos": [660.2, 238.8],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": -10
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT195H1_counter_24",
+        "pos": [677.88, 148],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [715.12, 170.27000000000004],
+            "rId": "",
+            "text": "MAT195H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "MAT195H1_counter_24|and_counter_22",
+        "pos": [670.85, 230.9],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "or_counter_27|MAT136H1_counter_15",
+        "pos": [349.13, 146.14],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT196H1_counter_28",
+        "pos": [311.88, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [349.12, 26.27000000000004],
+            "rId": "",
+            "text": "MAT196H1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "black",
+        "graph": 142,
+        "height": -10,
+        "id_": "MAT196H1_counter_28|or_counter_27",
+        "pos": [349.13, 86.75],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 3.5
+      },
+      {
+        "fill": "orange",
+        "graph": 142,
+        "height": 36,
+        "id_": "MAT237Y1_counter_29",
+        "pos": [590.88, 4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [628.12, 26.27000000000004],
+            "rId": "",
+            "text": "MAT237Y1"
+          }
+        ],
+        "type_": "Node",
+        "width": 74.5
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "height": 10.8,
+        "id_": "or_counter_9",
+        "pos": [194.12, 166],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [194.12, 167.95],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "height": 10.8,
+        "id_": "or_counter_7",
+        "pos": [95.12, 238],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [95.12, 239.95000000000002],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "height": 10.8,
+        "id_": "or_counter_12",
+        "pos": [338.12, 310],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [338.12, 311.95000000000005],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "height": 10.8,
+        "id_": "and_counter_11",
+        "pos": [239.12, 369.4],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [239.12, 371.35],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "height": 10.8,
+        "id_": "and_counter_13",
+        "pos": [321.12, 238],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [321.12, 239.95000000000002],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "height": 10.8,
+        "id_": "or_counter_27",
+        "pos": [349.12, 94],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [349.12, 95.94999999999999],
+            "rId": "",
+            "text": "or"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "height": 10.8,
+        "id_": "and_counter_19",
+        "pos": [442.12, 94],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [442.12, 95.94999999999999],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      },
+      {
+        "fill": "",
+        "graph": 142,
+        "height": 10.8,
+        "id_": "and_counter_22",
+        "pos": [669.12, 238],
+        "stroke": "",
+        "text": [
+          {
+            "align": "begin",
+            "fill": "",
+            "graph": 142,
+            "pos": [669.12, 239.95000000000002],
+            "rId": "",
+            "text": "and"
+          }
+        ],
+        "type_": "BoolNode",
+        "width": 14.4
+      }
+    ],
+    "texts": [
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [40.12, 98.27000000000004],
+        "rId": "",
+        "text": "CSC108H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [40.12, 170.27000000000004],
+        "rId": "",
+        "text": "CSC148H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [130.12, 98.27000000000004],
+        "rId": "",
+        "text": "CSC110Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [130.12, 170.27000000000004],
+        "rId": "",
+        "text": "CSC111H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [194.12, 167.95],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [95.12, 239.95000000000002],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [338.12, 311.95000000000005],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [220.12, 98.27000000000004],
+        "rId": "",
+        "text": "CSC165H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [209.12, 314.27],
+        "rId": "",
+        "text": "CSC207H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [239.12, 371.35],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [194.12, 242.27],
+        "rId": "",
+        "text": "CSC240H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [239.12, 433.08],
+        "rId": "",
+        "text": "CSC343H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [321.12, 239.95000000000002],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [256.12, 26.27000000000004],
+        "rId": "",
+        "text": "MAT135H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [349.12, 95.94999999999999],
+        "rId": "",
+        "text": "or"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [349.12, 170.27000000000004],
+        "rId": "",
+        "text": "MAT136H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [421.12, 242.27],
+        "rId": "",
+        "text": "MAT135Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [514.12, 242.27],
+        "rId": "",
+        "text": "MAT137Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [607.12, 242.27],
+        "rId": "",
+        "text": "MAT157Y1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [442.12, 95.94999999999999],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [442.12, 26.27000000000004],
+        "rId": "",
+        "text": "MAT186H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [535.12, 26.27000000000004],
+        "rId": "",
+        "text": "MAT187H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [669.12, 239.95000000000002],
+        "rId": "",
+        "text": "and"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [622.12, 170.27000000000004],
+        "rId": "",
+        "text": "MAT194H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [715.12, 170.27000000000004],
+        "rId": "",
+        "text": "MAT195H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [349.12, 26.27000000000004],
+        "rId": "",
+        "text": "MAT196H1"
+      },
+      {
+        "align": "begin",
+        "fill": "",
+        "graph": 142,
+        "pos": [628.12, 26.27000000000004],
+        "rId": "",
+        "text": "MAT237Y1"
+      }
+    ],
+    "width": 756
+  },
+
+  "": {
+    "height": 8,
+    "paths": [],
+    "shapes": [
+      {
+        "fill": "white",
+        "graph": 130,
+        "height": 0,
+        "id_": "graph0",
+        "pos": [4, 4],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 0
+      }
+    ],
+    "texts": [],
+    "width": 8
+  },
+
+  "   ": {
+    "height": 8,
+    "paths": [],
+    "shapes": [
+      {
+        "fill": "white",
+        "graph": 130,
+        "height": 0,
+        "id_": "graph0",
+        "pos": [4, 4],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 0
+      }
+    ],
+    "texts": [],
+    "width": 8
+  }
+}
