@@ -6,6 +6,7 @@ import ccc100CourseInfo from "./components/graph/__mocks__/ccc100-course-info"
 import focusData from "./components/graph/__mocks__/focusData"
 import statisticsTestData from "./components/graph/__mocks__/statisticsTestData"
 import fetchMock from "fetch-mock"
+import courseToResp from "./components/generate/__mocks__/sample_responses.json"
 
 fetchMock.get("http://localhost/get-json-data?graphName=Computer+Science", testData)
 fetchMock.get(
@@ -19,3 +20,21 @@ fetchMock.get("/course?name=BBB100H1", bbb100CourseInfo)
 fetchMock.get("/course?name=CCC100H1", ccc100CourseInfo)
 fetchMock.get(/\/post\?code=[A-Z]{5}[0-9]{4}([A-Z]*)/, focusData)
 fetchMock.get("/graphs", testContainerData)
+fetchMock.put("/graph-generate", graphGenMocker)
+
+function graphGenMocker(_, opts) {
+  const courseInput = JSON.parse(opts.body)["courses"].join(", ").trim()
+  let resp = courseToResp[courseInput]
+  let responseStatus, responseBody
+  if (resp === undefined) {
+    responseStatus = 400
+    responseBody = "Inputted course does not exist in the sample-responses JSON file!"
+  } else {
+    responseStatus = 200
+    responseBody = JSON.stringify(resp)
+  }
+  return {
+    status: responseStatus,
+    body: responseBody,
+  }
+}

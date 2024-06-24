@@ -1,5 +1,4 @@
 import React from "react"
-
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
 import { ErrorMessage } from "../common/react_modal.js.jsx"
@@ -53,11 +52,7 @@ export default class GenerateForm extends React.Component {
   handleSubmit = event => {
     event.preventDefault()
 
-    // NOTE: Due to the aynchronous nature of state update, this does not have any effect in the running function,
-    // but plays a role in the next render
-    this.setState({ courses: this.state.courses.replaceAll(" ", "") })
-
-    if (!this.state.courses.length) {
+    if (!this.state.courses.trim().length) {
       this.setState({ showWarning: true, invalidCourses: [] })
     }
 
@@ -86,7 +81,14 @@ export default class GenerateForm extends React.Component {
         const returnedCourses = data.texts.map(t => t.text)
 
         const missingCourses = submittedCourses.filter(
-          c => !returnedCourses.includes(c)
+          c =>
+            !(
+              returnedCourses.includes(c) ||
+              returnedCourses.includes(c + "H1") ||
+              returnedCourses.includes(c + "Y1") ||
+              returnedCourses.includes(c + "H0") ||
+              returnedCourses.includes(c + "Y0")
+            )
         )
 
         if (missingCourses.length !== 0) {
@@ -256,15 +258,12 @@ export default class GenerateForm extends React.Component {
   /**
    * Produce an appropriate warning message string in the case that no courses have been entered
    * or that one or more invalid courses have been entered.
-   * @param {string} coursesString - The string version of the inputted courses
    * @param {string[]} invalidCourses - The array of invalid course codes
    * @returns {string} The warning message string.
    */
-  computeMessage(coursesString, invalidCourses) {
-    if (!coursesString.length) {
+  computeMessage(invalidCourses) {
+    if (invalidCourses.length === 0) {
       return "Cannot generate graph – no courses entered!"
-    } else if (invalidCourses.length === 0) {
-      return ""
     } else if (invalidCourses.length === 1) {
       return `The course ${invalidCourses} was invalid! Please check your input.`
     } else {
@@ -275,10 +274,11 @@ export default class GenerateForm extends React.Component {
   render() {
     return (
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-        {/* {console.log(this.state.showWarning, "~"+this.state.courses+"~", this.state.invalidCourses)} */}
         <ErrorMessage
           title="Invalid Course Input"
-          message={this.computeMessage(this.state.courses, this.state.invalidCourses)}
+          message={this.computeMessage(
+            this.state.invalidCourses.filter(str => !!/\S/.test(str))
+          )}
           onClose={() => {
             this.setState({ showWarning: false })
           }}

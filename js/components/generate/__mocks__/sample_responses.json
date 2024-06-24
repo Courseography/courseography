@@ -121,6 +121,26 @@
     "width": 8
   },
 
+  "CSC443H7": {
+    "height": 8,
+    "paths": [],
+    "shapes": [
+      {
+        "fill": "white",
+        "graph": 159,
+        "height": 0,
+        "id_": "graph0",
+        "pos": [4, 4],
+        "stroke": "",
+        "text": [],
+        "type_": "Node",
+        "width": 0
+      }
+    ],
+    "texts": [],
+    "width": 8
+  },
+
   "MAT777H1, asdasdasd, CSC876Y1": {
     "height": 8,
     "paths": [],

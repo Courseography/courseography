@@ -980,9 +980,11 @@ function convertTimeToString(time) {
 }
 
 /**
- * For use in Generate - a warning modal for when the user enters one or more invalid courses
+ * For use in Generate - a warning modal for when the user's course selection is invalid
+ * This could be the user entering invalid courses or no courses at all
  *
  * Props:
+ *  - title: The title that will be displayed for the modal
  *  - message: The message to be displayed
  *  - onClose: the function to be invoked when the close-button is clicked (or `esc`)
  *  - isOpen: boolean that determines whether the modal should be visible or not
