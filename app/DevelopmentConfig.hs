@@ -115,7 +115,7 @@ createReqBody org = object [ "campuses" .= ([] :: [T.Text]),
                         "page" .= (1 :: Int),
                         "pageSize" .= (200 :: Int),
                         "requirementProps" .= ([] :: [T.Text]),
-                        "sessions" .= [T.pack "20239", T.pack "20241", T.pack "20239-20241"],
+                        "sessions" .= [T.pack "20249", T.pack "20251", T.pack "20249-20251"],
                         "timePreferences" .= ([] :: [T.Text])
                      ]
 
@@ -127,27 +127,27 @@ reqHeaders = [("Content-Type", "application/json"), ("Accept", "application/json
 
 -- | First day of classes for the fall term.
 fallStartDate :: Day
-fallStartDate = fromGregorian 2023 09 07
+fallStartDate = fromGregorian 2024 09 03
 
 -- | Last day of classes for the fall term.
 fallEndDate :: Day
-fallEndDate = fromGregorian 2023 12 06
+fallEndDate = fromGregorian 2024 12 03
 
 -- | First day of classes for the winter term.
 winterStartDate :: Day
-winterStartDate = fromGregorian 2024 01 08
+winterStartDate = fromGregorian 2025 01 06
 
 -- | Last day of classes for the winter term.
 winterEndDate :: Day
-winterEndDate = fromGregorian 2024 04 05
+winterEndDate = fromGregorian 2025 04 04
 
 -- | Out of date day. Used to control forbidden inputs for days.
 outDay :: Day
-outDay = fromGregorian 2024 01 01
+outDay = fromGregorian 2026 01 01
 
 -- Holidays for the fall and winter term.
 holidays :: [String]
-holidays = ["20231009T", "20231106T", "20231107T",
-            "20231108T", "20231109T", "20231110T",
-            "20240219T", "20240220T", "20230221T",
-            "20240222T", "20240223T"]
+holidays = ["20241014T", "20241028T", "20241029T",
+            "20241030T", "20241031T", "20241101T",
+            "20250217T", "20250218T", "20240219T",
+            "20250220T", "20250221T"]

@@ -5,6 +5,7 @@
 ### 🚨 Breaking changes
 
 - Update Computer Science graph for 2024
+- Update course information for 2024
 
 ### ✨ New features/enhancements
 
