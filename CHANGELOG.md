@@ -4,6 +4,16 @@
 
 ### 🚨 Breaking changes
 
+### ✨ New features/enhancements
+
+### 🐛 Bug fixes
+
+### 🔧 Internal changes
+
+## [0.6.0] - 2024-06-24
+
+### 🚨 Breaking changes
+
 - Update Computer Science graph for 2024
 - Update course information for 2024
 - Do not display room numbers in timetable information
