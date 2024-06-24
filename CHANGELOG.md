@@ -6,6 +6,7 @@
 
 - Update Computer Science graph for 2024
 - Update course information for 2024
+- Do not display room numbers in timetable information
 
 ### ✨ New features/enhancements
 
