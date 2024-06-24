@@ -18,6 +18,7 @@
 - Fixed bug that causes FCE count to increase when toggling course via sidebar
 - Fixed bug that forced users to input a course codes in a specific way when generating a dependency graph
 - Correctly handle `'l'` directives in svg path attributes
+- Fixed bug that prevented timetable information from loading in Grid page
 
 ### 🔧 Internal changes
 
