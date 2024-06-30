@@ -13,7 +13,7 @@ export default class TestContainer {
       edit: false,
     }
 
-    const container = render(<Container {...containerProps} />)
+    const container = render(<Container {...containerProps} />, { legacyRoot: true })
 
     // Need to wait for lifecycle hooks
     const flushPromises = () => new Promise(setImmediate)

@@ -65,4 +65,9 @@ module.exports = {
       jQuery: "jquery",
     }),
   ],
+  resolve: {
+    alias: {
+      "react-dom/client": "react-dom"  // TODO: Remove after upgrading to React 18
+    }
+  },
 }
