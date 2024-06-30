@@ -13,7 +13,7 @@ export default class TestSidebar {
       graphs: ["Computer Science", "Biology"],
     }
 
-    const sidebar = render(<Sidebar {...sidebarProps} />)
+    const sidebar = render(<Sidebar {...sidebarProps} />, { legacyRoot: true })
     return sidebar
   }
 }

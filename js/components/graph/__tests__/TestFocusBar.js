@@ -13,7 +13,7 @@ export default class TestFocusBar {
       focusBarEnabled: true,
     }
 
-    const focusBar = render(<FocusBar {...focusBarProps} />)
+    const focusBar = render(<FocusBar {...focusBarProps} />, { legacyRoot: true })
     return focusBar
   }
 }

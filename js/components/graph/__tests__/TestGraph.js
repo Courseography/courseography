@@ -30,7 +30,7 @@ export default class TestGraph {
       updateGraph: () => {},
     }
 
-    const rtlGraph = render(<Graph {...graphProps} />)
+    const rtlGraph = render(<Graph {...graphProps} />, { legacyRoot: true })
     await waitFor(() => rtlGraph.queryByText("AAA100") !== null)
     return new TestGraph(rtlGraph)
   }
