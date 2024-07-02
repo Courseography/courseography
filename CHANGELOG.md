@@ -22,6 +22,7 @@
 
 - Added button to deselect courses in "FCE count" side panel
 - Increase font size for hybrid nodes in graphs
+- Added warning message modal for when the user enters invalid courses in Generate
 
 ### 🐛 Bug fixes
 

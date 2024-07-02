@@ -1,10 +1,9 @@
 import React from "react"
-import ReactDOM from "react-dom"
-
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
+import { ErrorMessage } from "../common/react_modal.js.jsx"
 
-class GenerateForm extends React.Component {
+export default class GenerateForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -16,6 +15,8 @@ class GenerateForm extends React.Component {
       includeRaws: false,
       includeGrades: false,
       fceCount: 0,
+      showWarning: false,
+      invalidCourses: [],
     }
 
     this.graph = React.createRef()
@@ -51,10 +52,11 @@ class GenerateForm extends React.Component {
   handleSubmit = event => {
     event.preventDefault()
 
-    if (!this.state.courses.length) {
-      alert("Cannot generate graph -- no courses entered!")
+    if (!this.state.courses.trim().length) {
+      this.setState({ showWarning: true, invalidCourses: [] })
       return
     }
+
     const data = {}
 
     for (const key in this.state) {
@@ -65,6 +67,8 @@ class GenerateForm extends React.Component {
       }
     }
 
+    let submittedCourses = data["courses"]
+
     const putData = {
       method: "PUT",
       headers: {
@@ -72,10 +76,27 @@ class GenerateForm extends React.Component {
       },
       body: JSON.stringify(data), // We send data in JSON format
     }
-
+    
     fetch("/graph-generate", putData)
       .then(res => res.json())
       .then(data => {
+        const returnedCourses = data.texts.map(t => t.text)
+
+        const missingCourses = submittedCourses.filter(
+          c =>
+            !(
+              returnedCourses.includes(c) ||
+              returnedCourses.includes(c + "H1") ||
+              returnedCourses.includes(c + "Y1") ||
+              returnedCourses.includes(c + "H0") ||
+              returnedCourses.includes(c + "Y0")
+            )
+        )
+
+        if (missingCourses.length !== 0) {
+          this.setState({ showWarning: true, invalidCourses: missingCourses })
+        }
+
         const labelsJSON = {}
         const regionsJSON = {}
         const nodesJSON = {}
@@ -236,9 +257,35 @@ class GenerateForm extends React.Component {
       })
   }
 
+  /**
+   * Produce an appropriate warning message string in the case that no courses have been entered
+   * or that one or more invalid courses have been entered.
+   * @param {string[]} invalidCourses - The array of invalid course codes
+   * @returns {string} The warning message string.
+   */
+  computeMessage(invalidCourses) {
+    if (invalidCourses.length === 0) {
+      return "Cannot generate graph – no courses entered!"
+    } else if (invalidCourses.length === 1) {
+      return `The course ${invalidCourses} was invalid! Please check your input.`
+    } else {
+      return `The courses [${invalidCourses}] were invalid! Please check your input.`
+    }
+  }
+
   render() {
     return (
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
+        <ErrorMessage
+          title="Invalid Course Input"
+          message={this.computeMessage(
+            this.state.invalidCourses.filter(str => !!/\S/.test(str))
+          )}
+          onClose={() => {
+            this.setState({ showWarning: false })
+          }}
+          isOpen={this.state.showWarning}
+        />
         <Disclaimer />
         <div
           id="generateDiv"
@@ -350,5 +397,3 @@ class GenerateForm extends React.Component {
     )
   }
 }
-
-ReactDOM.render(<GenerateForm />, document.getElementById("generateRoot"))

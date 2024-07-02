@@ -979,4 +979,45 @@ function convertTimeToString(time) {
   return ((time === 12.5 ? 12 : Math.floor(time)) % 12) + ":30" + meridiem
 }
 
-export { CourseModal, MapModal, FocusModal }
+/**
+ * For use in Generate - a warning modal for when the user's course selection is invalid
+ * This could be the user entering invalid courses or no courses at all
+ *
+ * Props:
+ *  - title: The title that will be displayed for the modal
+ *  - message: The message to be displayed
+ *  - onClose: the function to be invoked when the close-button is clicked (or `esc`)
+ *  - isOpen: boolean that determines whether the modal should be visible or not
+ */
+function ErrorMessage({ title, message, onClose, isOpen }) {
+  return (
+    <ReactModal
+      className="error-modal-class"
+      overlayClassName="error-overlay"
+      isOpen={isOpen}
+      ariaHideApp={false}
+      contentLabel="Pop-up warning for invalid courses"
+    >
+      <div className="modal-header">
+        {title}
+        <div className="button-container">
+          <button onClick={onClose} className="error-close-button-x" type="button">
+            X
+          </button>
+        </div>
+      </div>
+
+      <div className="modal-body">
+        <div>{message}</div>
+
+        <div className="button-container">
+          <button onClick={onClose} className="error-close-button">
+            Okay
+          </button>
+        </div>
+      </div>
+    </ReactModal>
+  )
+}
+
+export { CourseModal, MapModal, FocusModal, ErrorMessage }
