@@ -1,11 +1,10 @@
 import React from "react"
-import ReactDOM from "react-dom"
+import {createRoot} from "react-dom/client"
 import Container from "./Container"
 
 // The "main"
 document.addEventListener("DOMContentLoaded", () => {
-  ReactDOM.render(
-    <Container start_blank={false} edit={false} />,
-    document.getElementById("container")
-  )
+  const container = document.getElementById("container")
+  const root = createRoot(container)
+  root.render(<Container start_blank={false} edit={false} />)
 })

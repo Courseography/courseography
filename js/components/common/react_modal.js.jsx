@@ -812,6 +812,7 @@ class CampusMap extends React.Component {
     const map = this.mapRef.current.leafletElement
     const mapGroup = this.groupRef.current.leafletElement
 
+
     // markerCount is the number of markers on the map.
     // Only adjust the map bounds if there are multiple markers because the zoom will
     // be strange for 1 marker. Note that the map will be centered on the single marker
@@ -916,7 +917,7 @@ class CampusMap extends React.Component {
     }
 
     return (
-      <div ref="map" id="campus-map" className="col-md-8 col-xs-6">
+      <div id="campus-map" className="col-md-8 col-xs-6">
         <MapContainer
           center={center}
           zoom={16}

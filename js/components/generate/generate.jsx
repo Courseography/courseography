@@ -1,4 +1,6 @@
-import ReactDOM from "react-dom"
+import {createRoot} from "react-dom/client"
 import GenerateForm from "./GenerateForm.js"
 
-ReactDOM.render(<GenerateForm />, document.getElementById("generateRoot"))
+const container = document.getElementById("generateRoot")
+const root = createRoot(container)
+root.render(<GenerateForm />)
