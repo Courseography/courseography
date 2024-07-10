@@ -1,4 +1,4 @@
-import {createRoot} from "react-dom/client"
+import { createRoot } from "react-dom/client"
 import GenerateForm from "./GenerateForm.js"
 
 const container = document.getElementById("generateRoot")

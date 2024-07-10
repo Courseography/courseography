@@ -1,6 +1,6 @@
 import React from "react"
-import {createRoot} from "react-dom/client"
-import {createRef} from "react"
+import { createRoot } from "react-dom/client"
+import { createRef } from "react"
 
 function filterCourse(inst, time, lec) {
   return lec.meetData.instructor.indexOf(inst) >= 0 && hasTime(time, lec.timeData)
@@ -140,7 +140,10 @@ class Search extends React.Component {
           </div>
         </div>
         <div id="timetableContainer">
-          <Timetable dept={this.state.curDept} ref=/*"timetable"*/ {this.timetableRef} />
+          <Timetable
+            dept={this.state.curDept}
+            ref=/*"timetable"*/ {this.timetableRef}
+          />
         </div>
       </div>
     )

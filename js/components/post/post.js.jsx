@@ -1,7 +1,7 @@
 import { SpecialistPost, MajorPost, MinorPost } from "./post_components.js.jsx"
 
 import React from "react"
-import {createRoot} from "react-dom/client"
+import { createRoot } from "react-dom/client"
 import { createRef } from "react"
 
 export default class CheckMyPost extends React.Component {
@@ -13,9 +13,10 @@ export default class CheckMyPost extends React.Component {
     this.updatePostStatus = this.updatePostStatus.bind(this)
     this.postNavRef = createRef(null)
     this.tabs = ["spePost", "majPost", "minPost"]
-    this.postTypeRefMap = this.tabs.reduce((a, v) => (
-      { ...a, [v]: createRef(null)}), {}
-    ) 
+    this.postTypeRefMap = this.tabs.reduce(
+      (a, v) => ({ ...a, [v]: createRef(null) }),
+      {}
+    )
   }
 
   componentDidMount() {
@@ -37,15 +38,18 @@ export default class CheckMyPost extends React.Component {
   }
 
   updateNavCreditCounts() {
-    const newCounts = this.tabs.map(
-      (tab) => this.postTypeRefMap[tab].current.getCreditCount()
+    const newCounts = this.tabs.map(tab =>
+      this.postTypeRefMap[tab].current.getCreditCount()
     )
-    this.postNavRef.current.setState({ creditCounts: newCounts }, this.updatePostStatus())
+    this.postNavRef.current.setState(
+      { creditCounts: newCounts },
+      this.updatePostStatus()
+    )
   }
 
   updatePostStatus() {
-    const newStatuses = this.tabs.map(
-      (tab) => this.postTypeRefMap[tab].current.setIfCompleted()
+    const newStatuses = this.tabs.map(tab =>
+      this.postTypeRefMap[tab].current.setIfCompleted()
     )
     this.postNavRef.current.setState({ completed: newStatuses })
   }

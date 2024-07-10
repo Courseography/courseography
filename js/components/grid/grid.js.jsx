@@ -1,6 +1,5 @@
 import React from "react"
-import {createRoot} from "react-dom/client"
-
+import { createRoot } from "react-dom/client"
 import { CoursePanel } from "./course_panel.js.jsx"
 import { Row } from "./calendar.js.jsx"
 import { ExportModal } from "../common/export.js.jsx"
