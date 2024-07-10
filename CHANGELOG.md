@@ -4,6 +4,8 @@
 
 ### 🚨 Breaking changes
 
+- Upgraded to React v18
+
 ### ✨ New features/enhancements
 
 ### 🐛 Bug fixes

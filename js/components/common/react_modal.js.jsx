@@ -916,7 +916,7 @@ class CampusMap extends React.Component {
     }
 
     return (
-      <div ref="map" id="campus-map" className="col-md-8 col-xs-6">
+      <div id="campus-map" className="col-md-8 col-xs-6">
         <MapContainer
           center={center}
           zoom={16}

@@ -2,6 +2,7 @@ import React from "react"
 import { CourseCategory2 } from "./course_components.js.jsx"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import * as Data from "./post_data"
+import { createRef } from "react"
 
 /**
  * Returns whether course is a specialist course or not
@@ -61,6 +62,8 @@ class Post extends React.Component {
     this.changeCreditCount = this.changeCreditCount.bind(this)
     this.calculateCreditCount = this.calculateCreditCount.bind(this)
     this.openModal = this.openModal.bind(this)
+
+    this.modalRef = createRef(null)
   }
 
   componentWillMount() {
@@ -125,7 +128,7 @@ class Post extends React.Component {
   }
 
   openModal(nodeId) {
-    const modal = this.refs.modal
+    const modal = this.modalRef.current
     const newCourse = nodeId.substring(0, 6)
     modal.openModal(newCourse)
   }
@@ -141,7 +144,7 @@ class Post extends React.Component {
 
     return (
       <div id={"post_" + this.props.postType} className={classes}>
-        <CourseModal ref="modal" />
+        <CourseModal ref={this.modalRef} />
 
         <CourseCategory2
           yearName="First Year"
@@ -199,6 +202,7 @@ export class SpecialistPost extends React.Component {
     this.changeTabView = this.changeTabView.bind(this)
     this.setIfCompleted = this.setIfCompleted.bind(this)
     this.getCreditCount = this.getCreditCount.bind(this)
+    this.postRef = createRef(null)
   }
 
   changeTabView(isSelected) {
@@ -206,14 +210,14 @@ export class SpecialistPost extends React.Component {
   }
 
   setIfCompleted() {
-    const isCompleted = this.refs.post.state.creditCount >= 12.0
+    const isCompleted = this.postRef.current.state.creditCount >= 12.0
     this.setState({ completed: isCompleted })
     return isCompleted
   }
 
   getCreditCount() {
-    return this.refs.post.state.creditCount < 12.0
-      ? this.refs.post.state.creditCount
+    return this.postRef.current.state.creditCount < 12.0
+      ? this.postRef.current.state.creditCount
       : 12.0
   }
 
@@ -250,7 +254,7 @@ export class SpecialistPost extends React.Component {
     return (
       <Post
         postType="specialist"
-        ref="post"
+        ref={this.postRef}
         firstYearCourses={firstYearCourses}
         secondYearCourses={secondYearCourses}
         laterYearCourses={laterYearCourses}
@@ -279,6 +283,7 @@ export class MajorPost extends React.Component {
     this.changeTabView = this.changeTabView.bind(this)
     this.setIfCompleted = this.setIfCompleted.bind(this)
     this.getCreditCount = this.getCreditCount.bind(this)
+    this.postRef = createRef(null)
   }
 
   changeTabView(isSelected) {
@@ -286,14 +291,14 @@ export class MajorPost extends React.Component {
   }
 
   setIfCompleted() {
-    const isCompleted = this.refs.post.state.creditCount >= 8.0
+    const isCompleted = this.postRef.current.state.creditCount >= 8.0
     this.setState({ completed: isCompleted })
     return isCompleted
   }
 
   getCreditCount() {
-    return this.refs.post.state.creditCount < 8.0
-      ? this.refs.post.state.creditCount
+    return this.postRef.current.state.creditCount < 8.0
+      ? this.postRef.current.state.creditCount
       : 8.0
   }
 
@@ -340,7 +345,7 @@ export class MajorPost extends React.Component {
     return (
       <Post
         postType="major"
-        ref="post"
+        ref={this.postRef}
         firstYearCourses={firstYearCourses}
         secondYearCourses={secondYearCourses}
         laterYearCourses={laterYearCourses}
@@ -369,6 +374,7 @@ export class MinorPost extends React.Component {
     this.changeTabView = this.changeTabView.bind(this)
     this.setIfCompleted = this.setIfCompleted.bind(this)
     this.getCreditCount = this.getCreditCount.bind(this)
+    this.postRef = createRef(null)
   }
 
   changeTabView(isSelected) {
@@ -376,14 +382,14 @@ export class MinorPost extends React.Component {
   }
 
   setIfCompleted() {
-    const isCompleted = this.refs.post.state.creditCount >= 4.0
+    const isCompleted = this.postRef.current.state.creditCount >= 4.0
     this.setState({ completed: isCompleted })
     return isCompleted
   }
 
   getCreditCount() {
-    return this.refs.post.state.creditCount < 4.0
-      ? this.refs.post.state.creditCount
+    return this.postRef.current.state.creditCount < 4.0
+      ? this.postRef.current.state.creditCount
       : 4.0
   }
 
@@ -409,7 +415,7 @@ export class MinorPost extends React.Component {
     return (
       <Post
         postType="minor"
-        ref="post"
+        ref={this.postRef}
         firstYearCourses={firstYearCourses}
         secondYearCourses={secondYearCourses}
         laterYearCourses={laterYearCourses}
