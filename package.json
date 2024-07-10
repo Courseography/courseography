@@ -8,7 +8,7 @@
     "start": "stack exec courseography",
     "watch": "webpack --watch --config webpack.dev.js --disable-interpret",
     "build": "webpack --config webpack.prod.js --disable-interpret",
-    "test" : "jest",
+    "test": "jest",
     "prettier": "prettier --write .",
     "eslint": "eslint --fix --ignore-path .prettierignore js",
     "prepare": "husky"
