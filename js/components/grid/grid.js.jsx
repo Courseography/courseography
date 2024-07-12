@@ -1,5 +1,5 @@
 import React from "react"
-import ReactDOM from "react-dom"
+import { createRoot } from "react-dom/client"
 
 import { CoursePanel } from "./course_panel.js.jsx"
 import { Row } from "./calendar.js.jsx"
@@ -197,4 +197,6 @@ class Grid extends React.Component {
   }
 }
 
-ReactDOM.render(<Grid />, document.getElementById("grid-body"))
+const container = document.getElementById("grid-body")
+const root = createRoot(container)
+root.render(<Grid />)

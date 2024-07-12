@@ -1,5 +1,5 @@
 import React from "react"
-import ReactDOM from "react-dom"
+import { createRoot } from "react-dom/client"
 
 function filterCourse(inst, time, lec) {
   return lec.meetData.instructor.indexOf(inst) >= 0 && hasTime(time, lec.timeData)
@@ -64,6 +64,8 @@ class Search extends React.Component {
       depts: [],
     }
     this.updateDept = this.updateDept.bind(this)
+    this.deptRef = React.createRef(null)
+    this.timetableRef = React.createRef(null)
   }
 
   componentDidMount() {
@@ -80,9 +82,9 @@ class Search extends React.Component {
   }
 
   updateDept() {
-    const selectedDept = ReactDOM.findDOMNode(this.refs.deptSelect).value
+    const selectedDept = this.deptRef.current.value
     this.setState({ curDept: selectedDept })
-    this.refs.timetable.populateTable(selectedDept)
+    this.timetableRef.current.populateTable(selectedDept)
   }
 
   render() {
@@ -101,7 +103,7 @@ class Search extends React.Component {
           <div id="searchOptions">
             <label htmlFor="deptSelect">Dept:</label>
             <select
-              ref="deptSelect"
+              ref={this.deptRef}
               name="dept"
               onChange={this.updateDept}
               id="deptSelect"
@@ -137,7 +139,7 @@ class Search extends React.Component {
           </div>
         </div>
         <div id="timetableContainer">
-          <Timetable dept={this.state.curDept} ref="timetable" />
+          <Timetable dept={this.state.curDept} ref={this.timetableRef} />
         </div>
       </div>
     )
@@ -300,4 +302,6 @@ class Timetable extends React.Component {
   }
 }
 
-ReactDOM.render(<Search />, document.getElementById("content"))
+const container = document.getElementById("content")
+const root = createRoot(container)
+root.render(<Search />)

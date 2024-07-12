@@ -7,6 +7,11 @@ import focusData from "./components/graph/__mocks__/focusData"
 import statisticsTestData from "./components/graph/__mocks__/statisticsTestData"
 import fetchMock from "fetch-mock"
 import courseToResp from "./components/generate/__mocks__/sample_responses.json"
+import { TextEncoder, TextDecoder } from "util"
+
+// This is needed after upgrade to React v18
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder
 
 fetchMock.get("http://localhost/get-json-data?graphName=Computer+Science", testData)
 fetchMock.get(

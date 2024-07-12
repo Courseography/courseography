@@ -1,7 +1,7 @@
 import { SpecialistPost, MajorPost, MinorPost } from "./post_components.js.jsx"
 
 import React from "react"
-import ReactDOM from "react-dom"
+import { createRoot } from "react-dom/client"
 
 export default class CheckMyPost extends React.Component {
   constructor(props) {
@@ -10,56 +10,60 @@ export default class CheckMyPost extends React.Component {
     this.changeActiveTab = this.changeActiveTab.bind(this)
     this.updateNavCreditCounts = this.updateNavCreditCounts.bind(this)
     this.updatePostStatus = this.updatePostStatus.bind(this)
+    this.postNavRef = React.createRef(null)
+    this.tabs = ["spePost", "majPost", "minPost"]
+    this.postTypeRefMap = this.tabs.reduce(
+      (a, v) => ({ ...a, [v]: React.createRef(null) }),
+      {}
+    )
   }
 
   componentDidMount() {
-    const activeTab = this.refs.postNav.state.activeTab + "Post"
+    const activeTab = this.postNavRef.current.state.activeTab + "Post"
     this.changeActiveTab(activeTab)
     this.updateNavCreditCounts()
   }
 
   changeActiveTab(newTab) {
     const activeTab = newTab
-    const tabs = ["spePost", "majPost", "minPost"]
 
-    tabs.forEach(tab => {
+    this.tabs.forEach(tab => {
       if (tab === activeTab) {
-        this.refs[tab].changeTabView(true)
+        this.postTypeRefMap[tab].current.changeTabView(true)
       } else {
-        this.refs[tab].changeTabView(false)
+        this.postTypeRefMap[tab].current.changeTabView(false)
       }
     })
   }
 
   updateNavCreditCounts() {
-    const newCounts = [
-      this.refs.spePost.getCreditCount(),
-      this.refs.majPost.getCreditCount(),
-      this.refs.minPost.getCreditCount(),
-    ]
-    this.refs.postNav.setState({ creditCounts: newCounts }, this.updatePostStatus())
+    const newCounts = this.tabs.map(tab =>
+      this.postTypeRefMap[tab].current.getCreditCount()
+    )
+    this.postNavRef.current.setState(
+      { creditCounts: newCounts },
+      this.updatePostStatus()
+    )
   }
 
   updatePostStatus() {
-    const newStatuses = [
-      this.refs.spePost.setIfCompleted(),
-      this.refs.majPost.setIfCompleted(),
-      this.refs.minPost.setIfCompleted(),
-    ]
-    this.refs.postNav.setState({ completed: newStatuses })
+    const newStatuses = this.tabs.map(tab =>
+      this.postTypeRefMap[tab].current.setIfCompleted()
+    )
+    this.postNavRef.current.setState({ completed: newStatuses })
   }
 
   render() {
     return (
       <div id="check_my_post">
         <PostNav
-          ref="postNav"
+          ref={this.postNavRef}
           updateTab={this.changeActiveTab}
           getCreditCountClass={this.getCreditCountClass}
         />
-        <SpecialistPost ref="spePost" />
-        <MajorPost ref="majPost" />
-        <MinorPost ref="minPost" />
+        <SpecialistPost ref={this.postTypeRefMap["spePost"]} />
+        <MajorPost ref={this.postTypeRefMap["majPost"]} />
+        <MinorPost ref={this.postTypeRefMap["minPost"]} />
       </div>
     )
   }
@@ -143,4 +147,6 @@ class PostNav extends React.Component {
   }
 }
 
-ReactDOM.render(<CheckMyPost />, document.getElementById("all_posts"))
+const container = document.getElementById("all_posts")
+const root = createRoot(container)
+root.render(<CheckMyPost />)

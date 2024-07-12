@@ -30,9 +30,9 @@
     "jquery": "^3.6.0",
     "leaflet": "^1.9.3",
     "lodash": "^4.17.21",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-leaflet": "^3.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1",
     "react-modal": "^3.16.1"
   },
   "devDependencies": {
@@ -60,7 +60,7 @@
     "precise-commits": "1.0.2",
     "prettier": "^3.2.5",
     "prop-types": "15.8.1",
-    "react-test-renderer": "17.0.2",
+    "react-test-renderer": "18.3.1",
     "sass": "^1.63.6",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.3.2",

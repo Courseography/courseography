@@ -76,7 +76,7 @@ export default class GenerateForm extends React.Component {
       },
       body: JSON.stringify(data), // We send data in JSON format
     }
-    
+
     fetch("/graph-generate", putData)
       .then(res => res.json())
       .then(data => {

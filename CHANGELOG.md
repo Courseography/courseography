@@ -10,6 +10,8 @@
 
 ### 🔧 Internal changes
 
+- Upgraded to React v18
+
 ## [0.6.0] - 2024-06-24
 
 ### 🚨 Breaking changes
