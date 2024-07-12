@@ -2,7 +2,6 @@ import React from "react"
 import { CourseCategory2 } from "./course_components.js.jsx"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import * as Data from "./post_data"
-import { createRef } from "react"
 
 /**
  * Returns whether course is a specialist course or not
@@ -63,7 +62,7 @@ class Post extends React.Component {
     this.calculateCreditCount = this.calculateCreditCount.bind(this)
     this.openModal = this.openModal.bind(this)
 
-    this.modalRef = createRef(null)
+    this.modalRef = React.createRef(null)
   }
 
   componentWillMount() {
@@ -202,7 +201,7 @@ export class SpecialistPost extends React.Component {
     this.changeTabView = this.changeTabView.bind(this)
     this.setIfCompleted = this.setIfCompleted.bind(this)
     this.getCreditCount = this.getCreditCount.bind(this)
-    this.postRef = createRef(null)
+    this.postRef = React.createRef(null)
   }
 
   changeTabView(isSelected) {
@@ -283,7 +282,7 @@ export class MajorPost extends React.Component {
     this.changeTabView = this.changeTabView.bind(this)
     this.setIfCompleted = this.setIfCompleted.bind(this)
     this.getCreditCount = this.getCreditCount.bind(this)
-    this.postRef = createRef(null)
+    this.postRef = React.createRef(null)
   }
 
   changeTabView(isSelected) {
@@ -374,7 +373,7 @@ export class MinorPost extends React.Component {
     this.changeTabView = this.changeTabView.bind(this)
     this.setIfCompleted = this.setIfCompleted.bind(this)
     this.getCreditCount = this.getCreditCount.bind(this)
-    this.postRef = createRef(null)
+    this.postRef = React.createRef(null)
   }
 
   changeTabView(isSelected) {

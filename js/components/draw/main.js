@@ -1,6 +1,6 @@
 import React from "react"
+import { createRoot } from 'react-dom/client'
 import { Graph } from "../graph/Graph"
-import { createRoot } from 'react-dom/client';
 
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("react-graph")

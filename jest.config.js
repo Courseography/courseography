@@ -192,7 +192,7 @@ const config = {
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  transformIgnorePatterns: ["/node_modules/(?!(react-leaflet|@react-leaflet).*)"],
+  transformIgnorePatterns: ["/node_modules/(?!(@?react-leaflet).*)"],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,

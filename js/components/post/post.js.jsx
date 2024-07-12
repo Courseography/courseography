@@ -2,7 +2,6 @@ import { SpecialistPost, MajorPost, MinorPost } from "./post_components.js.jsx"
 
 import React from "react"
 import { createRoot } from "react-dom/client"
-import { createRef } from "react"
 
 export default class CheckMyPost extends React.Component {
   constructor(props) {
@@ -11,10 +10,10 @@ export default class CheckMyPost extends React.Component {
     this.changeActiveTab = this.changeActiveTab.bind(this)
     this.updateNavCreditCounts = this.updateNavCreditCounts.bind(this)
     this.updatePostStatus = this.updatePostStatus.bind(this)
-    this.postNavRef = createRef(null)
+    this.postNavRef = React.createRef(null)
     this.tabs = ["spePost", "majPost", "minPost"]
     this.postTypeRefMap = this.tabs.reduce(
-      (a, v) => ({ ...a, [v]: createRef(null) }),
+      (a, v) => ({ ...a, [v]: React.createRef(null) }),
       {}
     )
   }

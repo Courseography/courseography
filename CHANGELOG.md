@@ -4,15 +4,13 @@
 
 ### 🚨 Breaking changes
 
-- Upgraded to React v18
-
-- Upgraded to React v18
-
 ### ✨ New features/enhancements
 
 ### 🐛 Bug fixes
 
 ### 🔧 Internal changes
+
+- Upgraded to React v18
 
 ## [0.6.0] - 2024-06-24
 
