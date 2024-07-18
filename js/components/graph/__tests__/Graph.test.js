@@ -5,7 +5,6 @@ import { Graph } from "../Graph"
 
 jest.mock("../Edge", () => () => null)
 jest.mock("../Bool", () => () => null)
-jest.mock("../Node", () => () => null)
 
 describe("Graph Navigation", () => {
   it("Should pan right when the right arrow key is pressed", async () => {

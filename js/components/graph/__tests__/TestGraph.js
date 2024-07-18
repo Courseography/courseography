@@ -14,7 +14,7 @@ export default class TestGraph {
 
   /**
    * For async construction of the TestGraph
-   * @return {TestGraph}
+   * @return {Promise<TestGraph>}
    */
   static async build() {
     const graphProps = {
@@ -31,7 +31,7 @@ export default class TestGraph {
     }
 
     const rtlGraph = render(<Graph {...graphProps} />)
-    await waitFor(() => rtlGraph.queryByText("AAA100") !== null)
+    await waitFor(() => rtlGraph.getByText("AAA100") !== null)
     return new TestGraph(rtlGraph)
   }
 
