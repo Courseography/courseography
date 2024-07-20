@@ -11,6 +11,7 @@
 ### 🔧 Internal changes
 
 - Upgraded to React v18
+- Upgraded the Testing Library from 12.0 to 16.0
 
 ## [0.6.0] - 2024-06-24
 
