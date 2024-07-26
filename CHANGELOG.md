@@ -11,6 +11,7 @@
 ### 🔧 Internal changes
 
 - Upgraded to React v18
+- Replace `react-test-renderer` (deprecated) for snapshot testing
 
 ## [0.6.0] - 2024-06-24
 
