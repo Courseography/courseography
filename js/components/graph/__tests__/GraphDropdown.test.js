@@ -14,6 +14,8 @@ describe("GraphDropdown", () => {
     }
     await act(async () => render(<GraphDropdown {...graphDropdownProps} />))
     const graphDropdownElement = screen.getByTestId("test-graph-dropdown")
+    console.log("hey")
+    console.log(graphDropdownElement)
     expect(graphDropdownElement).toMatchSnapshot()
   })
 
