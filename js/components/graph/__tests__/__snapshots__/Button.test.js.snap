@@ -2,8 +2,8 @@
 
 exports[`Button should match snapshot 1`] = `
 <button
-  className="graph-control-button"
-  disabled={true}
+  class="graph-control-button"
+  disabled=""
   id="reset-button"
 >
   Reset

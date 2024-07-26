@@ -1,11 +1,10 @@
 import React from "react"
-import renderer from "react-test-renderer"
 import InfoBox from "../InfoBox"
 import TestGraph from "./TestGraph"
-import { fireEvent, waitFor } from "@testing-library/react"
+import { fireEvent, waitFor, act, screen, render } from "@testing-library/react"
 
 describe("InfoBox", () => {
-  it("should match snapshot", () => {
+  it("should match snapshot", async () => {
     const infoBoxProps = {
       onClick: jest.fn(),
       onMouseDown: jest.fn(),
@@ -15,8 +14,9 @@ describe("InfoBox", () => {
       xPos: 0,
       yPos: 0,
     }
-    const tree = renderer.create(<InfoBox {...infoBoxProps} />).toJSON()
-    expect(tree).toMatchSnapshot()
+    await act(async () => render(<InfoBox {...infoBoxProps} />))
+    const infoBoxElement = screen.getByText("Info").closest("g")
+    expect(infoBoxElement).toMatchSnapshot()
   })
 
   it("should appear when hovering over a course", async () => {

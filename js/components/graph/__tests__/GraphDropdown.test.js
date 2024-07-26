@@ -1,11 +1,10 @@
 import React from "react"
 import TestContainer from "./TestContainer"
 import GraphDropdown from "../GraphDropdown"
-import renderer from "react-test-renderer"
-import { fireEvent, waitFor } from "@testing-library/react"
+import { fireEvent, waitFor, render, screen, act } from "@testing-library/react"
 
 describe("GraphDropdown", () => {
-  it("should match snapshot", () => {
+  it("should match snapshot", async () => {
     const graphDropdownProps = {
       onMouseMove: jest.fn(),
       onMouseLeave: jest.fn(),
@@ -13,8 +12,9 @@ describe("GraphDropdown", () => {
       graphs: [],
       updateGraph: jest.fn(),
     }
-    const tree = renderer.create(<GraphDropdown {...graphDropdownProps} />).toJSON()
-    expect(tree).toMatchSnapshot()
+    await act(async () => render(<GraphDropdown {...graphDropdownProps} />))
+    const graphDropdownElement = screen.getByTestId("test-graph-dropdown")
+    expect(graphDropdownElement).toMatchSnapshot()
   })
 
   it("should appear when hovering over the graph tab and be hidden before", async () => {
