@@ -3,9 +3,6 @@ import { fireEvent } from "@testing-library/react"
 import { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT } from "../Graph"
 import { Graph } from "../Graph"
 
-jest.mock("../Edge", () => () => null)
-jest.mock("../Bool", () => () => null)
-
 describe("Graph Navigation", () => {
   it("Should pan right when the right arrow key is pressed", async () => {
     await TestGraph.build()

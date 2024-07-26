@@ -1,6 +1,6 @@
 import React from "react"
 import { Graph } from "../Graph"
-import { render, waitFor } from "@testing-library/react"
+import { render } from "@testing-library/react"
 
 export default class TestGraph {
   constructor(graph) {
@@ -31,7 +31,7 @@ export default class TestGraph {
     }
 
     const rtlGraph = render(<Graph {...graphProps} />)
-    await waitFor(() => rtlGraph.getByText("AAA100") !== null)
+    await rtlGraph.findByText("AAA100")
     return new TestGraph(rtlGraph)
   }
 
