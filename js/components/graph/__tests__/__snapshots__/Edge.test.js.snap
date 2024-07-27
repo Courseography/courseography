@@ -2,9 +2,9 @@
 
 exports[`Edge should match snapshot 1`] = `
 <path
-  className="path inactive"
+  class="path inactive"
   d="M497.651848,69.09890799999998 497.651848,130.885308 "
   data-testid="csc165240->csc236240"
-  markerEnd="url(#arrowHead)"
+  marker-end="url(#arrowHead)"
 />
 `;

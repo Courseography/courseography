@@ -2,31 +2,24 @@
 
 exports[`Course Node should match snapshot 1`] = `
 <g
-  className="node takeable"
+  class="node takeable"
   data-testid="csc108"
   id="csc108"
-  onClick={[MockFunction]}
-  onMouseEnter={[MockFunction]}
-  onMouseLeave={[MockFunction]}
-  shapeRendering="geometricPrecision"
-  textRendering="geometricPrecision"
+  shape-rendering="geometricPrecision"
+  text-rendering="geometricPrecision"
 >
   <rect
     filter="url(#undefined)"
-    height={30}
+    height="30"
     rx="8"
     ry="8"
-    style={
-      {
-        "fill": "#5dd5b8",
-      }
-    }
-    x={594.294128}
-    y={38.09390799999999}
+    style="fill: #5dd5b8;"
+    x="594.294128"
+    y="38.09390799999999"
   />
   <text
-    x={NaN}
-    y={59.379107999999995}
+    x="NaN"
+    y="59.379107999999995"
   >
     CSC108
   </text>
@@ -35,33 +28,29 @@ exports[`Course Node should match snapshot 1`] = `
 
 exports[`Hybrid Node should match snapshot 1`] = `
 <g
-  className="hybrid inactive"
+  class="hybrid inactive"
   data-testid="h(csc301,csc318,csc384,csc418)"
   id="h46"
-  shapeRendering="geometricPrecision"
-  textRendering="geometricPrecision"
+  shape-rendering="geometricPrecision"
+  text-rendering="geometricPrecision"
 >
   <rect
     filter=""
-    height={24}
-    style={
-      {
-        "fill": "#888888",
-      }
-    }
-    width={65.207497}
-    x={18.168848}
-    y={471.586698}
+    height="24"
+    style="fill: #888888;"
+    width="65.207497"
+    x="18.168848"
+    y="471.586698"
   />
   <text
-    x={50.772596500000006}
-    y={481.389408}
+    x="50.772596500000006"
+    y="481.389408"
   >
     CSC318/418/
   </text>
   <text
-    x={50.772596500000006}
-    y={493.640408}
+    x="50.772596500000006"
+    y="493.640408"
   >
     301/384
   </text>

@@ -1,11 +1,10 @@
 import React from "react"
 import TestGraph from "./TestGraph"
-import { fireEvent } from "@testing-library/react"
-import renderer from "react-test-renderer"
+import { fireEvent, render, act, screen } from "@testing-library/react"
 import Edge from "../Edge"
 
 describe("Edge", () => {
-  it("should match snapshot", () => {
+  it("should match snapshot", async () => {
     const edgeProps = {
       className: "path",
       edgeID: "p1",
@@ -19,8 +18,10 @@ describe("Edge", () => {
       updateEdgeStatus: null,
       svg: {},
     }
-    const tree = renderer.create(<Edge {...edgeProps} />).toJSON()
-    expect(tree).toMatchSnapshot()
+    await act(async () => render(<Edge {...edgeProps} />))
+    const edgeTestId = `csc165240->csc236240`
+    const edgeElement = screen.getByTestId(edgeTestId)
+    expect(edgeElement).toMatchSnapshot()
   })
 
   describe("Clicking course nodes", () => {
