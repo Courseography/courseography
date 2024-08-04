@@ -1,17 +1,17 @@
-import { screen, fireEvent, act } from "@testing-library/react"
+import { screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import TestGraph from "../../graph/__tests__/TestGraph.js"
-
-// `act` is used below to ensure completion of asynchronous tasks before making assertions
 
 describe("CourseModal", () => {
   beforeEach(async () => {
+    const user = userEvent.setup()
     await TestGraph.build()
 
     // find the course node AAA100 and open its info modal
     const node = document.querySelector('[data-testid="aaa100"]')
-    await act(async () => fireEvent.mouseOver(node))
+    await user.hover(node)
     const infobox = document.getElementById("aaa100-tooltip-rect")
-    await act(async () => fireEvent.click(infobox))
+    await user.click(infobox)
   })
 
   it("renders disabled buttons when course modal first opens", async () => {
@@ -27,9 +27,11 @@ describe("CourseModal", () => {
   })
 
   it("enables back button when a course link is clicked", async () => {
+    const user = userEvent.setup()
+
     // click on the course link BBB100H1, and BBB100H1's modal opens
     const bbbCourseLink = screen.getByText("BBB100H1")
-    await act(async () => fireEvent.click(bbbCourseLink))
+    await user.click(bbbCourseLink)
 
     // the forward button is disabled, but the back button is enabled
     const forwardButton = screen.getByText(">")
@@ -39,14 +41,16 @@ describe("CourseModal", () => {
   })
 
   it("enables forward button when user clicks on course link, and goes back", async () => {
+    const user = userEvent.setup()
+
     // click on the course link BBB100H1, and BBB100H1's modal opens
     const bbbCourseLink = screen.getByText("BBB100H1")
-    await act(async () => fireEvent.click(bbbCourseLink))
+    await user.click(bbbCourseLink)
 
     // click on the back button, and AAA100's modal opens
     const forwardButton = screen.getByText(">")
     const backButton = screen.getByText("<")
-    await act(async () => fireEvent.click(backButton))
+    await user.click(backButton)
 
     // the forward button is enabled but the back button is disabled
     expect(forwardButton.disabled).toBe(false)
@@ -54,19 +58,21 @@ describe("CourseModal", () => {
   })
 
   it("enables buttons when user clicks on a course link, then clicks on another course link, and goes back", async () => {
+    const user = userEvent.setup()
+
     // click on the course link BBB100H1, and BBB100H1's modal opens
     const bbbCourseLink = screen.getByText("BBB100H1")
-    await act(async () => fireEvent.click(bbbCourseLink))
+    await user.click(bbbCourseLink)
 
     // click on the course link CCC100H1, and CCC100H1's modal opens
     const cccCourseLink = screen.getByText("CCC100H1")
-    await act(async () => fireEvent.click(cccCourseLink))
+    await user.click(cccCourseLink)
 
     // click on the back button, and BBB100's modal opens
     const forwardButton = screen.getByText(">")
     const backButton = screen.getByText("<")
 
-    await act(async () => fireEvent.click(backButton))
+    await user.click(backButton)
 
     // both buttons are enabled
     expect(forwardButton.disabled).toBe(false)
@@ -75,10 +81,11 @@ describe("CourseModal", () => {
 
   it("allows users to navigate back and forward through viewed courses", async () => {
     let modalHeader
+    const user = userEvent.setup()
 
     // click on the course link BBB100H1
     const courseLink = screen.getByText("BBB100H1")
-    await act(async () => fireEvent.click(courseLink))
+    await user.click(courseLink)
 
     // BBB100H1's modal opens
     modalHeader = screen.getByText("BBB100H1 Introduction to BBB Thinking")
@@ -86,25 +93,26 @@ describe("CourseModal", () => {
 
     // click on the back button, and AAA100H1's modal appears
     const backButton = screen.getByText("<")
-    await act(async () => fireEvent.click(backButton))
+    await user.click(backButton)
     modalHeader = screen.getByText("AAA100 Introduction to AAA Thinking")
     expect(modalHeader).toBeDefined()
 
     // click on the forward button, and BBB100's modal appears
     const forwardButton = screen.getByText(">")
-    await act(async () => fireEvent.click(forwardButton))
+    await user.click(forwardButton)
     modalHeader = screen.getByText("BBB100H1 Introduction to BBB Thinking")
     expect(modalHeader).toBeDefined()
   })
 
   it("the buttons function like back and forward buttons in a browser", async () => {
+    const user = userEvent.setup()
     let modalHeader
 
     // click on the course link BBB100H1, and BBB100H1's modal opens. The user's
     // history of courses looks like: [AAA100, BBB100], with the user currently
     // on BBB100
     const bbbCourseLink = screen.getByText("BBB100H1")
-    await act(async () => fireEvent.click(bbbCourseLink))
+    await user.click(bbbCourseLink)
     modalHeader = screen.getByText("BBB100H1 Introduction to BBB Thinking")
     expect(modalHeader).toBeDefined()
 
@@ -112,7 +120,7 @@ describe("CourseModal", () => {
     // history of courses looks like: [AAA100, BBB100], with the user currently
     // on AAA100
     const backButton = screen.getByText("<")
-    await act(async () => fireEvent.click(backButton))
+    await user.click(backButton)
     modalHeader = screen.getByText("AAA100 Introduction to AAA Thinking")
     expect(modalHeader).toBeDefined()
 
@@ -120,14 +128,14 @@ describe("CourseModal", () => {
     // history of courses looks like: [AAA100, CCC100], with the user currently
     // on CCC100
     const cccCourseLink = screen.getByText("CCC100H1")
-    await act(async () => fireEvent.click(cccCourseLink))
+    await user.click(cccCourseLink)
     modalHeader = screen.getByText("CCC100H1 Introduction to CCC Thinking")
     expect(modalHeader).toBeDefined()
 
     // click on the back button, and AAA100's modal should open. The user's
     // history of courses looks like: [AAA100, CCC100], with the user currently
     // on AAA100
-    await act(async () => fireEvent.click(backButton))
+    await user.click(backButton)
     modalHeader = screen.getByText("AAA100 Introduction to AAA Thinking")
     expect(modalHeader).toBeDefined()
 
@@ -135,7 +143,7 @@ describe("CourseModal", () => {
     // history of courses looks like: [AAA100, CCC100], with the user currently
     // on CCC100.
     const forwardButton = screen.getByText(">")
-    await act(async () => fireEvent.click(forwardButton))
+    await user.click(forwardButton)
     modalHeader = screen.getByText("CCC100H1 Introduction to CCC Thinking")
     expect(modalHeader).toBeDefined()
 
