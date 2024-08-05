@@ -2742,10 +2742,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:^29.3.2":
-  version: 29.3.5
-  resolution: "ag-grid-community@npm:29.3.5"
-  checksum: ad071f6ea80ebfa96e79d3e9e77947a52182c783bcee5f7ed377f5de2758f0e88bbf3dbace9272c80e7fb566931fe6a56227dd1e2526670a7e17dd1152d854d6
+"ag-charts-types@npm:10.0.2":
+  version: 10.0.2
+  resolution: "ag-charts-types@npm:10.0.2"
+  checksum: f00a635bcc6eb1a08c0f6fece2145185259a755decc25a1762b66f8e65a0ddb31e5711fca95f32379663c9e816ff25dedf8876016026e59d1a26a00d68765348
+  languageName: node
+  linkType: hard
+
+"ag-grid-community@npm:^32.0.1":
+  version: 32.0.2
+  resolution: "ag-grid-community@npm:32.0.2"
+  dependencies:
+    ag-charts-types: 10.0.2
+  checksum: 5fa46c863ae911615be6dffbc4ffcb4963158df9f1c58b4c646510656f03e17ef29ff5a91e737afc2032b2dbd9e0a87cc16aad875069f68bdbafd60cbf119c6e
   languageName: node
   linkType: hard
 
@@ -3971,7 +3980,7 @@ __metadata:
     "@testing-library/dom": ^10.3.2
     "@testing-library/react": ^16.0.0
     "@testing-library/user-event": ^14.5.2
-    ag-grid-community: ^29.3.2
+    ag-grid-community: ^32.0.1
     ag-grid-react: ^29.3.2
     babel-jest: ^29.5.0
     babel-loader: ^9.1.2
