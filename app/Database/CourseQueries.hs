@@ -26,7 +26,7 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Aeson (object, toJSON, (.=))
 import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
-import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc)
+import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, take)
 import Database.DataType ( ShapeType( Node ) , ShapeType( Hybrid ), ShapeType( BoolNode ))
 import Database.Persist.Sqlite (Entity, PersistEntity, SqlPersistM, PersistValue( PersistInt64 ), runSqlite, selectList,
                                 entityKey, entityVal, selectFirst, (==.), (<-.), get, keyToValues, PersistValue( PersistText ),
@@ -39,7 +39,7 @@ import Util.Happstack (createJSONResponse)
 -- | Queries the database for all matching lectures, tutorials,
 meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
 meetingQuery meetingCodes = do
-    allMeetings <- selectList [MeetingCode <-. meetingCodes] []
+    allMeetings <- selectList [MeetingCode <-. map (T.take 6) meetingCodes] []
     mapM buildMeetTimes allMeetings
 
 -- | Queries the database for all information about @course@,
@@ -202,16 +202,19 @@ getGraph graphName =
                 return (Just response) :: SqlPersistM (Maybe Response)
 
 -- | Retrieves the prerequisites for a course (code) as a string.
-prereqsForCourse :: T.Text -> IO (Either String T.Text)
+-- Also retrieves the actual course code in the database in case
+-- the one the user inputs doesn't match it exactly
+prereqsForCourse :: T.Text -> IO (Either String (T.Text, T.Text))
 prereqsForCourse courseCode = runSqlite databasePath $ do
-    course <- selectFirst [CoursesCode ==. courseCode] []
+    let upperCaseCourseCode = T.toUpper courseCode
+    course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
     case course of
         Nothing -> return (Left "Course not found")
         Just courseEntity ->
-            return (Right $
-                fromMaybe "" $
-                coursesPrereqString $
-                entityVal courseEntity) :: SqlPersistM (Either String T.Text)
+            return (Right
+                     (coursesCode $ entityVal courseEntity, 
+                      fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
+                    ) :: SqlPersistM (Either String (T.Text, T.Text))
 
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept =

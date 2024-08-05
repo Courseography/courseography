@@ -422,6 +422,20 @@ export class Graph extends React.Component {
     }
   }
 
+  nodeUnselect = courseId => {
+    const courseLabelArray = this.state.nodesJSON[courseId].text
+    const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
+    const wasSelected = this.state.nodesStatus[courseId].selected
+    const temp = this.state.selectedNodes
+
+    if (typeof this.props.incrementFCECount === "function" && wasSelected) {
+      // TODO: Differentiate half- and full-year courses
+      this.toggleSelection(courseId)
+      this.props.incrementFCECount(-0.5)
+      temp.delete(courseLabel)
+    }
+  }
+
   /**
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
@@ -470,26 +484,15 @@ export class Graph extends React.Component {
   }
 
   /**
-   * This handles clicking of dropdown items from the side bar search.
-   * @param  {string} id
+   * This handles the clicking of course items from the side bar, pulling up
+   * the corresponding course-info modal.
+   * @param  {string} courseCode - the course code for the clicked course
    */
-  handleCourseClick = id => {
-    id = id.toLowerCase()
-    this.toggleSelection(id)
-    const courseLabelArray = this.state.nodesJSON[id].text
-    const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
-    const temp = [...this.state.selectedNodes]
-    if (this.state.nodesStatus[id].isSelected) {
-      this.setState({
-        selectedNodes: new Set(temp.filter(course => course !== courseLabel)),
-      })
-      this.props.incrementFCECount(-0.5)
-    } else {
-      this.setState({
-        selectedNodes: new Set([...temp, courseLabel]),
-      })
-      this.props.incrementFCECount(0.5)
-    }
+  handleCourseClick = courseCode => {
+    this.setState({
+      courseId: courseCode.substring(0, 6),
+      showCourseModal: true,
+    })
   }
 
   /**
@@ -1518,6 +1521,7 @@ export class Graph extends React.Component {
                 node.text.length > 0 ? node.text[node.text.length - 1].text : "",
               ])}
               courseClick={this.handleCourseClick}
+              xClick={this.nodeUnselect}
             />
           )
         }

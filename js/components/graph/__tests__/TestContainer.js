@@ -1,11 +1,11 @@
 import React from "react"
 import Container from "../Container"
-import { render } from "@testing-library/react"
+import { render, act } from "@testing-library/react"
 
 export default class TestContainer {
   /**
    * For async construction of the TestContainer
-   * @return {Container}
+   * @return {Promise<Container>}
    */
   static async build() {
     const containerProps = {
@@ -13,7 +13,8 @@ export default class TestContainer {
       edit: false,
     }
 
-    const container = render(<Container {...containerProps} />)
+    // `act` needed to ensure async tasks are performed before we make any assertions
+    const container = await act(async () => render(<Container {...containerProps} />))
 
     // Need to wait for lifecycle hooks
     const flushPromises = () => new Promise(setImmediate)

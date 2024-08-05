@@ -2,46 +2,27 @@
 
 exports[`AND Bool should match snapshot 1`] = `
 <g
-  className="bool inactive"
+  class="bool inactive"
   data-testid="and(csc209,csc258)"
   fill=""
-  graph={1}
-  height={14.7368002}
+  graph="1"
+  height="14.7368002"
   id="bool1"
-  pos={
-    [
-      1020.015148,
-      243.51310800000002,
-    ]
-  }
+  pos="1020.015148,243.51310800000002"
   stroke=""
-  text={
-    [
-      {
-        "align": "begin",
-        "fill": "",
-        "graph": 1,
-        "pos": [
-          1012.903868,
-          246.655709,
-        ],
-        "rID": "text512",
-        "text": "and",
-      },
-    ]
-  }
+  text="[object Object]"
   type_="BoolNode"
-  width={19.7600002}
+  width="19.7600002"
 >
   <ellipse
-    cx={1020.015148}
-    cy={243.51310800000002}
+    cx="1020.015148"
+    cy="243.51310800000002"
     rx="9.8800001"
     ry="7.3684001"
   />
   <text
-    x={1020.015148}
-    y={246.655709}
+    x="1020.015148"
+    y="246.655709"
   >
     and
   </text>
@@ -50,46 +31,27 @@ exports[`AND Bool should match snapshot 1`] = `
 
 exports[`OR Bool should match snapshot 1`] = `
 <g
-  className="bool inactive"
+  class="bool inactive"
   data-testid="and(csc209,csc258)"
   fill=""
-  graph={1}
-  height={14.7368002}
+  graph="1"
+  height="14.7368002"
   id="bool1"
-  pos={
-    [
-      1020.015148,
-      243.51310800000002,
-    ]
-  }
+  pos="1020.015148,243.51310800000002"
   stroke=""
-  text={
-    [
-      {
-        "align": "begin",
-        "fill": "",
-        "graph": 1,
-        "pos": [
-          1012.903868,
-          246.655709,
-        ],
-        "rID": "text512",
-        "text": "or",
-      },
-    ]
-  }
+  text="[object Object]"
   type_="BoolNode"
-  width={19.7600002}
+  width="19.7600002"
 >
   <ellipse
-    cx={1020.015148}
-    cy={243.51310800000002}
+    cx="1020.015148"
+    cy="243.51310800000002"
     rx="9.8800001"
     ry="7.3684001"
   />
   <text
-    x={1020.015148}
-    y={246.655709}
+    x="1020.015148"
+    y="246.655709"
   >
     or
   </text>

@@ -1,8 +1,7 @@
 import React from "react"
 import Bool from "../Bool"
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import TestGraph from "./TestGraph"
-import renderer from "react-test-renderer"
 
 describe("Bool", () => {
   it("should already have two classes when instantated by Graph", async () => {
@@ -18,7 +17,7 @@ describe("Bool", () => {
 })
 
 describe("AND Bool", () => {
-  it("should match snapshot", () => {
+  it("should match snapshot", async () => {
     const boolProps = {
       JSON: {
         fill: "",
@@ -49,8 +48,9 @@ describe("AND Bool", () => {
       svg: {},
       status: "inactive",
     }
-    const tree = renderer.create(<Bool {...boolProps} />).toJSON()
-    expect(tree).toMatchSnapshot()
+    await render(<Bool {...boolProps} />)
+    const boolElement = screen.getByTestId("and(csc209,csc258)")
+    expect(boolElement).toMatchSnapshot()
   })
 
   it("should not do anything when you hover or click on it", async () => {
@@ -127,7 +127,7 @@ describe("AND Bool", () => {
 })
 
 describe("OR Bool", () => {
-  it("should match snapshot", () => {
+  it("should match snapshot", async () => {
     const boolProps = {
       JSON: {
         fill: "",
@@ -158,8 +158,9 @@ describe("OR Bool", () => {
       svg: {},
       status: "inactive",
     }
-    const tree = renderer.create(<Bool {...boolProps} />).toJSON()
-    expect(tree).toMatchSnapshot()
+    await render(<Bool {...boolProps} />)
+    const boolElement = screen.getByTestId("and(csc209,csc258)")
+    expect(boolElement).toMatchSnapshot()
   })
 
   it("should not do anything when you hover or click on it", async () => {
