@@ -1,7 +1,8 @@
 import React from "react"
 import Bool from "../Bool"
-import { fireEvent, render, screen } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import TestGraph from "./TestGraph"
+import { userEvent } from "@testing-library/user-event"
 
 describe("Bool", () => {
   it("should already have two classes when instantated by Graph", async () => {
@@ -54,18 +55,20 @@ describe("AND Bool", () => {
   })
 
   it("should not do anything when you hover or click on it", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const andBool = graph.getNodeByText("and")
 
     expect(andBool.classList.contains("inactive")).toBe(true)
 
-    fireEvent.mouseOver(andBool)
+    await user.hover(andBool)
     expect(andBool.classList.contains("inactive")).toBe(true)
 
-    fireEvent.click(andBool)
+    await user.click(andBool)
     expect(andBool.classList.contains("inactive")).toBe(true)
   })
   it("AND should become selected when its prereq parents are satisfied", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const andBool = graph.getNodeByText("and")
     const aaa102 = graph.getByTestId("aaa102")
@@ -74,14 +77,16 @@ describe("AND Bool", () => {
 
     // AAA201 and AAA102 => AAA303
     expect(andBool.classList.contains("inactive")).toBe(true)
-    fireEvent.click(aaa102)
+    await user.click(aaa102)
     expect(andBool.classList.contains("inactive")).toBe(true)
-    fireEvent.click(aaa201)
+    await user.click(aaa201)
     expect(andBool.classList.contains("active")).toBe(true)
     expect(aaa303.classList.contains("takeable")).toBe(true)
   })
 
   it("AND should have the missing class when the mouse is hovering over a child class.", async () => {
+    const user = userEvent.setup()
+
     const graph = await TestGraph.build()
     const andBool = graph.getNodeByText("and")
     const aaa303 = graph.getByTestId("aaa303")
@@ -90,13 +95,14 @@ describe("AND Bool", () => {
     expect(andBool.classList.contains("inactive")).toBe(true)
 
     // mouseout or clicking triggers code to set the CSS class
-    fireEvent.mouseOver(aaa303)
-    fireEvent.mouseOut(aaa303)
-    fireEvent.mouseOver(aaa303)
+    await user.hover(aaa303)
+    await user.unhover(aaa303)
+    await user.hover(aaa303)
     expect(andBool.classList.contains("missing")).toBe(true)
   })
 
   it("AND should not have the missing class when it's already active and the mouse is hovering over a child class.", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const andBool = graph.getNodeByText("and")
     const aaa102 = graph.getByTestId("aaa102")
@@ -104,24 +110,25 @@ describe("AND Bool", () => {
     const aaa303 = graph.getByTestId("aaa303")
 
     // AAA201 and AAA102 => AAA303
-    fireEvent.click(aaa102)
-    fireEvent.click(aaa201)
+    await user.click(aaa102)
+    await user.click(aaa201)
     expect(andBool.classList.contains("active")).toBe(true)
-    fireEvent.mouseOver(aaa303)
-    fireEvent.mouseOut(aaa303)
-    fireEvent.mouseOver(aaa303)
+    await user.hover(aaa303)
+    await user.unhover(aaa303)
+    await user.hover(aaa303)
     expect(andBool.classList.contains("active")).toBe(true)
   })
 
   it("Clicking the reset selections clears the Selected bools", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const andBool = graph.getNodeByText("and")
 
-    fireEvent.click(graph.getByTestId("aaa102"))
-    fireEvent.click(graph.getByTestId("aaa201"))
+    await user.click(graph.getByTestId("aaa102"))
+    await user.click(graph.getByTestId("aaa201"))
     expect(andBool.classList.contains("active")).toBe(true)
 
-    fireEvent.click(graph.getByTestId("test-reset"))
+    await user.click(graph.getByTestId("test-reset"))
     expect(andBool.classList.contains("inactive")).toBe(true)
   })
 })
@@ -164,18 +171,20 @@ describe("OR Bool", () => {
   })
 
   it("should not do anything when you hover or click on it", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const orBool = graph.getNodeByText("or")
 
     expect(orBool.classList.contains("inactive")).toBe(true)
 
-    fireEvent.mouseOver(orBool)
+    await user.hover(orBool)
     expect(orBool.classList.contains("inactive")).toBe(true)
 
-    fireEvent.click(orBool)
+    await user.click(orBool)
     expect(orBool.classList.contains("inactive")).toBe(true)
   })
   it("or should become selected when its prereq parents are satisfied", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const orBool = graph.getNodeByText("or")
     const aaa102 = graph.getByTestId("aaa102")
@@ -185,50 +194,53 @@ describe("OR Bool", () => {
     // AAA201 or AAA102 => AAA202
     expect(orBool.classList.contains("inactive")).toBe(true)
 
-    fireEvent.click(aaa102)
+    await user.click(aaa102)
     expect(orBool.classList.contains("active")).toBe(true)
     expect(aaa202.classList.contains("takeable")).toBe(true)
 
-    fireEvent.click(aaa201)
+    await user.click(aaa201)
     expect(orBool.classList.contains("active")).toBe(true)
     expect(aaa202.classList.contains("takeable")).toBe(true)
   })
   it("or should have the missing class when the mouse is hovering over a child class.", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const orBool = graph.getNodeByText("or")
     const aaa202 = graph.getByTestId("aaa202")
 
     // AAA201 or AAA102 => AAA202
     expect(orBool.classList.contains("inactive")).toBe(true)
-    fireEvent.mouseOver(aaa202)
-    fireEvent.mouseOut(aaa202)
-    fireEvent.mouseOver(aaa202)
+    await user.hover(aaa202)
+    await user.unhover(aaa202)
+    await user.hover(aaa202)
     expect(orBool.classList.contains("missing")).toBe(true)
   })
 
   it("or should not have the missing class when it's already active and the mouse is hovering over a child class.", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const orBool = graph.getNodeByText("or")
     const aaa102 = graph.getByTestId("aaa102")
     const aaa202 = graph.getByTestId("aaa202")
 
     // AAA201 or AAA102 => AAA202
-    fireEvent.click(aaa102)
+    await user.click(aaa102)
     expect(orBool.classList.contains("active")).toBe(true)
-    fireEvent.mouseOver(aaa202)
-    fireEvent.mouseOut(aaa202)
-    fireEvent.mouseOver(aaa202)
+    await user.hover(aaa202)
+    await user.unhover(aaa202)
+    await user.hover(aaa202)
     expect(orBool.classList.contains("active")).toBe(true)
   })
 
   it("Clicking the reset selections clears the Selected or bool", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const orBool = graph.getNodeByText("or")
 
-    fireEvent.click(graph.getByTestId("aaa102"))
+    await user.click(graph.getByTestId("aaa102"))
     expect(orBool.classList.contains("active")).toBe(true)
 
-    fireEvent.click(graph.getByTestId("test-reset"))
+    await user.click(graph.getByTestId("test-reset"))
     expect(orBool.classList.contains("inactive")).toBe(true)
   })
   describe("Bool status", () => {
@@ -239,13 +251,14 @@ describe("OR Bool", () => {
       })
     })
     it("should store status on page reload", async () => {
+      const user = userEvent.setup()
       const graph = await TestGraph.build()
       const bool1 = graph.getByTestId("and(aaa201,aaa102)")
       const bool2 = graph.getByTestId("and(aaa102,aaa201)")
       const aaa102 = graph.getByTestId("aaa102")
       const aaa201 = graph.getByTestId("aaa201")
-      fireEvent.click(aaa102)
-      fireEvent.click(aaa201)
+      await user.click(aaa102)
+      await user.click(aaa201)
       expect(bool1.classList.contains("active")).toBe(true)
       expect(bool2.classList.contains("active")).toBe(true)
       window.location.reload()
