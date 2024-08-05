@@ -37,7 +37,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/dom", "npm:10.3.2"],\
             ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.0"],\
             ["@testing-library/user-event", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:14.5.2"],\
-            ["ag-grid-community", "npm:29.3.5"],\
+            ["ag-grid-community", "npm:32.0.2"],\
             ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.3.5"],\
             ["babel-jest", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.7.0"],\
             ["babel-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:9.1.3"],\
@@ -4434,11 +4434,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["ag-grid-community", [\
-        ["npm:29.3.5", {\
-          "packageLocation": "./.yarn/cache/ag-grid-community-npm-29.3.5-5aa44383f7-ad071f6ea8.zip/node_modules/ag-grid-community/",\
+      ["ag-charts-types", [\
+        ["npm:10.0.2", {\
+          "packageLocation": "./.yarn/cache/ag-charts-types-npm-10.0.2-f8c73042b8-f00a635bcc.zip/node_modules/ag-charts-types/",\
           "packageDependencies": [\
-            ["ag-grid-community", "npm:29.3.5"]\
+            ["ag-charts-types", "npm:10.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["ag-grid-community", [\
+        ["npm:32.0.2", {\
+          "packageLocation": "./.yarn/cache/ag-grid-community-npm-32.0.2-93862ebcf6-5fa46c863a.zip/node_modules/ag-grid-community/",\
+          "packageDependencies": [\
+            ["ag-grid-community", "npm:32.0.2"],\
+            ["ag-charts-types", "npm:10.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -4458,7 +4468,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/ag-grid-community", null],\
             ["@types/react", null],\
             ["@types/react-dom", null],\
-            ["ag-grid-community", "npm:29.3.5"],\
+            ["ag-grid-community", "npm:32.0.2"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:18.3.1"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
@@ -5972,7 +5982,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/dom", "npm:10.3.2"],\
             ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.0"],\
             ["@testing-library/user-event", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:14.5.2"],\
-            ["ag-grid-community", "npm:29.3.5"],\
+            ["ag-grid-community", "npm:32.0.2"],\
             ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.3.5"],\
             ["babel-jest", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.7.0"],\
             ["babel-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:9.1.3"],\
