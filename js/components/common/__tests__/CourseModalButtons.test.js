@@ -3,8 +3,9 @@ import userEvent from "@testing-library/user-event"
 import TestGraph from "../../graph/__tests__/TestGraph.js"
 
 describe("CourseModal", () => {
+  let user
   beforeEach(async () => {
-    const user = userEvent.setup()
+    user = userEvent.setup()
     await TestGraph.build()
 
     // find the course node AAA100 and open its info modal
@@ -27,8 +28,6 @@ describe("CourseModal", () => {
   })
 
   it("enables back button when a course link is clicked", async () => {
-    const user = userEvent.setup()
-
     // click on the course link BBB100H1, and BBB100H1's modal opens
     const bbbCourseLink = screen.getByText("BBB100H1")
     await user.click(bbbCourseLink)
@@ -41,8 +40,6 @@ describe("CourseModal", () => {
   })
 
   it("enables forward button when user clicks on course link, and goes back", async () => {
-    const user = userEvent.setup()
-
     // click on the course link BBB100H1, and BBB100H1's modal opens
     const bbbCourseLink = screen.getByText("BBB100H1")
     await user.click(bbbCourseLink)
@@ -58,8 +55,6 @@ describe("CourseModal", () => {
   })
 
   it("enables buttons when user clicks on a course link, then clicks on another course link, and goes back", async () => {
-    const user = userEvent.setup()
-
     // click on the course link BBB100H1, and BBB100H1's modal opens
     const bbbCourseLink = screen.getByText("BBB100H1")
     await user.click(bbbCourseLink)
@@ -81,7 +76,6 @@ describe("CourseModal", () => {
 
   it("allows users to navigate back and forward through viewed courses", async () => {
     let modalHeader
-    const user = userEvent.setup()
 
     // click on the course link BBB100H1
     const courseLink = screen.getByText("BBB100H1")
@@ -105,7 +99,6 @@ describe("CourseModal", () => {
   })
 
   it("the buttons function like back and forward buttons in a browser", async () => {
-    const user = userEvent.setup()
     let modalHeader
 
     // click on the course link BBB100H1, and BBB100H1's modal opens. The user's

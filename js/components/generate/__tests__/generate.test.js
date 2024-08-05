@@ -52,8 +52,9 @@ describe("Handle invalid course inputs appropriately", () => {
 })
 
 describe("Exiting the Warning Modal works", () => {
+  let user
   beforeEach(async () => {
-    const user = userEvent.setup()
+    user = userEvent.setup()
     render(<GenerateForm />)
     const coursesInputText = "MAT777H1"
     const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
@@ -68,7 +69,6 @@ describe("Exiting the Warning Modal works", () => {
   })
 
   it("`Okay` button works", async () => {
-    const user = userEvent.setup()
     const okayButton = screen.getByText("Okay")
     expect(okayButton).toBeDefined()
     await user.click(okayButton)
@@ -77,7 +77,6 @@ describe("Exiting the Warning Modal works", () => {
     })
   })
   it("`X` button works", async () => {
-    const user = userEvent.setup()
     const XButton = screen.getByText("X")
     expect(XButton).toBeDefined()
     await user.click(XButton)

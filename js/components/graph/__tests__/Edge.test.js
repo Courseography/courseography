@@ -267,15 +267,14 @@ describe("Edge", () => {
         const path_102_and = graph.getByTestId("aaa102->bool1")
         const path_and_303 = graph.getByTestId("bool1->aaa303")
 
-        user.click(aaa303) // selected node with missing prereqs
+        await user.click(aaa303) // selected node with missing prereqs
+        await user.unhover(aaa303)
 
         expect(path_101_201.classList.contains("inactive")).toBe(true)
         expect(path_201_and.classList.contains("inactive")).toBe(true)
         expect(path_102_and.classList.contains("inactive")).toBe(true)
         expect(path_and_303.classList.contains("inactive")).toBe(true)
 
-        await user.unhover(aaa303)
-        await user.unhover(aaa303)
         await user.hover(aaa303)
 
         expect(path_101_201.classList.contains("missing")).toBe(true)
