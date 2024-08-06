@@ -1128,6 +1128,9 @@ export class Graph extends React.Component {
               })
             }
           })
+          this.setState(prevState => ({
+            highlightedNodes: [...prevState.highlightedNodes, nodeId],
+          }))
         }
       )
     }
@@ -1138,6 +1141,7 @@ export class Graph extends React.Component {
    *  active, inactive, overridden, takeable
    */
   unfocusPrereqs = nodeId => {
+    this.highlightFocuses([])
     this.updateNode(nodeId, false)
     const parents = this.state.connections.parents[nodeId]
     const inEdges = this.state.connections.inEdges[nodeId]
@@ -1499,7 +1503,13 @@ export class Graph extends React.Component {
       reactGraphClass += " panning"
     }
     if (this.state.highlightedNodes.length > 0) {
-      reactGraphClass += " highlight-nodes"
+      if (this.props.currFocus) {
+        reactGraphClass =
+          reactGraphClass.replace("highlight-nodes-light", "") + " highlight-nodes"
+      } else {
+        reactGraphClass =
+          reactGraphClass.replace("highlight-nodes", "") + " highlight-nodes-light"
+      }
     }
 
     return (
