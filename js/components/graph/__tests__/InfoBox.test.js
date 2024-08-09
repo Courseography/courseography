@@ -1,7 +1,9 @@
 import React from "react"
 import InfoBox from "../InfoBox"
 import TestGraph from "./TestGraph"
-import { fireEvent, waitFor, act, screen, render } from "@testing-library/react"
+import { waitFor, act, screen, render } from "@testing-library/react"
+
+import { userEvent } from "@testing-library/user-event"
 
 describe("InfoBox", () => {
   it("should match snapshot", async () => {
@@ -20,24 +22,26 @@ describe("InfoBox", () => {
   })
 
   it("should appear when hovering over a course", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const aaa100 = graph.getByTestId("aaa100")
 
     const infoBox = graph.getNodeByText("Info")
     expect(infoBox.classList.contains("tooltip-group-hidden")).toBe(true)
-    fireEvent.mouseOver(aaa100)
+    await user.hover(aaa100)
     expect(infoBox.classList.contains("tooltip-group-display")).toBe(true)
   })
 
   it("should disappear a second after the the cursor isn't hovered over the course", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const aaa100 = graph.getByTestId("aaa100")
 
-    fireEvent.mouseOver(aaa100)
+    await user.hover(aaa100)
     const infoBox = graph.getNodeByText("Info")
     expect(infoBox.classList.contains("tooltip-group-display")).toBe(true)
 
-    fireEvent.mouseOut(aaa100)
+    await user.unhover(aaa100)
 
     await waitFor(() => {
       expect(infoBox.classList.contains("tooltip-group-hidden")).toBe(true)
@@ -45,11 +49,12 @@ describe("InfoBox", () => {
   }, 5000)
 
   it("Pressing on the info box should create a new pop up", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const aaa100 = graph.getByTestId("aaa100")
-    fireEvent.mouseOver(aaa100)
+    await user.hover(aaa100)
     const infoBox = graph.getNodeByText("Info")
-    fireEvent.click(infoBox)
+    await user.click(infoBox)
 
     await waitFor(() => {
       expect(graph.textExists(/AAA Thinking/)).toBe(true)

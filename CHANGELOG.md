@@ -15,6 +15,7 @@
 - Upgraded to React v18
 - Upgraded the Testing Library from 12.0 to 16.0
 - Replace `react-test-renderer` (deprecated) for snapshot testing
+- Use `user-event` for user interactions (instead of `fireEvent`)
 
 ## [0.6.0] - 2024-06-24
 
