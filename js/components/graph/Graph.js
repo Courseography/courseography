@@ -404,7 +404,14 @@ export class Graph extends React.Component {
   }
 
   nodeClick = event => {
-    const courseId = event.currentTarget.id
+    let courseId
+    if (event.currentTarget.tagName === "g") {
+      courseId = event.currentTarget.id
+    } else if (event.currentTarget.tagName === "LI") {
+      courseId = event.currentTarget.getAttribute("nodeid")
+    } else {
+      throw new Error("Invalid Element Type!")
+    }
     const courseLabelArray = this.state.nodesJSON[courseId].text
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const wasSelected = this.state.nodesStatus[courseId].selected
@@ -440,7 +447,20 @@ export class Graph extends React.Component {
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
   nodeMouseEnter = event => {
-    const courseId = event.currentTarget.id
+    let courseId
+    if (event.currentTarget.tagName === "g") {
+      courseId = event.currentTarget.id
+    } else if (event.currentTarget.tagName === "LI") {
+      courseId = event.currentTarget.getAttribute("nodeid")
+    } else if (event.currentTarget.tagName === "DIV") {
+      console.log(event.currentTarget.childNodes)
+      courseId = event.currentTarget.childNodes[0].textContent.toLowerCase()
+    } else {
+      throw new Error("Invalid Element Type!")
+    }
+
+    console.log("courseId: ", courseId)
+
     const currentNode = this.state.nodesJSON[courseId]
     this.focusPrereqs(courseId)
 
@@ -470,7 +490,18 @@ export class Graph extends React.Component {
   }
 
   nodeMouseLeave = event => {
-    const courseId = event.currentTarget.id
+    let courseId
+    if (event.currentTarget.tagName === "g") {
+      courseId = event.currentTarget.id
+    } else if (event.currentTarget.tagName === "LI") {
+      courseId = event.currentTarget.getAttribute("nodeid")
+    } else if (event.currentTarget.tagName === "DIV") {
+      console.log(event.currentTarget.childNodes)
+      courseId = event.currentTarget.childNodes[0].textContent.toLowerCase()
+    } else {
+      throw new Error("Invalid Element Type!")
+    }
+
     this.unfocusPrereqs(courseId)
 
     const timeout = setTimeout(() => {
@@ -1532,6 +1563,9 @@ export class Graph extends React.Component {
               ])}
               courseClick={this.handleCourseClick}
               xClick={this.nodeUnselect}
+              sidebarItemClick={this.nodeClick}
+              onHover={this.nodeMouseEnter}
+              onMouseLeave={this.nodeMouseLeave}
             />
           )
         }
