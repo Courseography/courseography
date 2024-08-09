@@ -408,16 +408,16 @@ export class Graph extends React.Component {
     const courseLabelArray = this.state.nodesJSON[courseId].text
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const wasSelected = this.state.nodesStatus[courseId].selected
-    const temp = this.state.selectedNodes
+    const temp = [...this.state.selectedNodes]
     this.toggleSelection(courseId)
     if (typeof this.props.incrementFCECount === "function") {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5)
-        temp.delete(courseLabel)
+        this.setState({ selectedNodes: new Set(temp.filter(e => e !== courseLabel)) })
       } else {
         this.props.incrementFCECount(0.5)
-        temp.add(courseLabel)
+        this.setState({ selectedNodes: new Set([...temp, courseLabel]) })
       }
     }
   }
