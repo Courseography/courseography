@@ -453,13 +453,10 @@ export class Graph extends React.Component {
     } else if (event.currentTarget.tagName === "LI") {
       courseId = event.currentTarget.getAttribute("data-node-id")
     } else if (event.currentTarget.tagName === "DIV") {
-      console.log(event.currentTarget.childNodes)
       courseId = event.currentTarget.childNodes[0].textContent.toLowerCase()
     } else {
       throw new Error("Invalid Element Type!")
     }
-
-    console.log("courseId: ", courseId)
 
     const currentNode = this.state.nodesJSON[courseId]
     this.focusPrereqs(courseId)
@@ -496,7 +493,6 @@ export class Graph extends React.Component {
     } else if (event.currentTarget.tagName === "LI") {
       courseId = event.currentTarget.getAttribute("data-node-id")
     } else if (event.currentTarget.tagName === "DIV") {
-      console.log(event.currentTarget.childNodes)
       courseId = event.currentTarget.childNodes[0].textContent.toLowerCase()
     } else {
       throw new Error("Invalid Element Type!")
@@ -1159,9 +1155,11 @@ export class Graph extends React.Component {
               })
             }
           })
-          this.setState(prevState => ({
-            highlightedNodes: [...prevState.highlightedNodes, nodeId],
-          }))
+          if (!this.props.currFocus) {
+            this.setState(prevState => ({
+              highlightedNodes: [...prevState.highlightedNodes, nodeId],
+            }))
+          }
         }
       )
     }
@@ -1172,7 +1170,9 @@ export class Graph extends React.Component {
    *  active, inactive, overridden, takeable
    */
   unfocusPrereqs = nodeId => {
-    this.highlightFocuses([])
+    if (!this.props.currFocus) {
+      this.highlightFocuses([])
+    }
     this.updateNode(nodeId, false)
     const parents = this.state.connections.parents[nodeId]
     const inEdges = this.state.connections.inEdges[nodeId]
@@ -1401,6 +1401,7 @@ export class Graph extends React.Component {
               parents={connections.parents[entry.id_]}
               status={nodesStatus[entry.id_].status}
               highlighted={highlighted}
+              focused={highlighted && this.props.currFocus}
               onClick={nodeClick}
               onMouseEnter={nodeMouseEnter}
               onMouseLeave={nodeMouseLeave}
@@ -1535,12 +1536,16 @@ export class Graph extends React.Component {
     }
     if (this.state.highlightedNodes.length > 0) {
       if (this.props.currFocus) {
-        reactGraphClass =
-          reactGraphClass.replace("highlight-nodes-light", "") + " highlight-nodes"
-      } else {
-        reactGraphClass =
-          reactGraphClass.replace("highlight-nodes", "") + " highlight-nodes-light"
+        reactGraphClass += " highlight-nodes"
       }
+
+      // if (this.props.currFocus) {
+      //   reactGraphClass =
+      //     reactGraphClass.replace("highlight-nodes-light", "") + " highlight-nodes"
+      // } else {
+      //   reactGraphClass =
+      //     reactGraphClass.replace("highlight-nodes", "") + " highlight-nodes-light"
+      // }
     }
 
     return (

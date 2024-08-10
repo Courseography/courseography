@@ -673,6 +673,11 @@ div.sidebar.collapsed {
 }
 
 .spotlight {
+  fill: #ffd9b7;
+  stroke: #ffbd8e;
+}
+
+.spotlight-focus {
   fill: #fff;
   stroke: none;
 }
@@ -958,10 +963,7 @@ g.takeable > text {
   opacity: 0.69999;
 }
 
-g.missing > rect,
 g.missing > ellipse {
-  stroke: #c01;
-  stroke-width: 3;
   stroke-width: 2px;
 }
 
