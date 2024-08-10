@@ -408,7 +408,7 @@ export class Graph extends React.Component {
     if (event.currentTarget.tagName === "g") {
       courseId = event.currentTarget.id
     } else if (event.currentTarget.tagName === "LI") {
-      courseId = event.currentTarget.getAttribute("nodeid")
+      courseId = event.currentTarget.getAttribute("data-node-id")
     } else {
       throw new Error("Invalid Element Type!")
     }
@@ -451,7 +451,7 @@ export class Graph extends React.Component {
     if (event.currentTarget.tagName === "g") {
       courseId = event.currentTarget.id
     } else if (event.currentTarget.tagName === "LI") {
-      courseId = event.currentTarget.getAttribute("nodeid")
+      courseId = event.currentTarget.getAttribute("data-node-id")
     } else if (event.currentTarget.tagName === "DIV") {
       console.log(event.currentTarget.childNodes)
       courseId = event.currentTarget.childNodes[0].textContent.toLowerCase()
@@ -494,7 +494,7 @@ export class Graph extends React.Component {
     if (event.currentTarget.tagName === "g") {
       courseId = event.currentTarget.id
     } else if (event.currentTarget.tagName === "LI") {
-      courseId = event.currentTarget.getAttribute("nodeid")
+      courseId = event.currentTarget.getAttribute("data-node-id")
     } else if (event.currentTarget.tagName === "DIV") {
       console.log(event.currentTarget.childNodes)
       courseId = event.currentTarget.childNodes[0].textContent.toLowerCase()
