@@ -33,13 +33,13 @@ export default function Node(props) {
 
   let ellipse = null
   const newClassName = props.className + " " + props.status
-  if (props.highlighted) {
+  if (props.highlightFoc || props.highlightDep) {
     const attrs = props.JSON
     const width = parseFloat(attrs.width) / 2
     const height = parseFloat(attrs.height) / 2
     ellipse = (
       <ellipse
-        className={props.focused ? "spotlight-focus" : "spotlight"}
+        className={props.highlightDep ? "spotlight" : "spotlight-focus"}
         cx={parseFloat(attrs.pos[0]) + width}
         cy={parseFloat(attrs.pos[1]) + height}
         rx={width + 9}
@@ -110,7 +110,8 @@ Node.propTypes = {
   className: PropTypes.string,
   editMode: PropTypes.bool,
   focused: PropTypes.bool,
-  highlighted: PropTypes.bool,
+  highlightDep: PropTypes.bool,
+  highlightFoc: PropTypes.bool,
   hybrid: PropTypes.bool,
   JSON: PropTypes.object,
   onClick: PropTypes.func,
