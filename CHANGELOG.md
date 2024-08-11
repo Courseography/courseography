@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Fix React state mutation
+
 ### 🔧 Internal changes
 
 - Upgraded to React v18
