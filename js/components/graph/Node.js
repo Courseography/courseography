@@ -38,13 +38,21 @@ export default function Node(props) {
     const width = parseFloat(attrs.width) / 2
     const height = parseFloat(attrs.height) / 2
     ellipse = (
-      <ellipse
-        className={props.highlightDep ? "spotlight" : "spotlight-focus"}
-        cx={parseFloat(attrs.pos[0]) + width}
-        cy={parseFloat(attrs.pos[1]) + height}
-        rx={width + 9}
-        ry={height + 8.5}
-      />
+      <svg>
+        <defs>
+          <filter id="filter">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+          </filter>
+        </defs>
+        <ellipse
+          className={props.highlightDep ? "spotlight" : "spotlight-focus"}
+          cx={parseFloat(attrs.pos[0]) + width}
+          cy={parseFloat(attrs.pos[1]) + height}
+          rx={width + 9}
+          ry={height + 8.5}
+          filter="url(#filter)" // Apply the blur filter here
+        />
+      </svg>
     )
   }
 

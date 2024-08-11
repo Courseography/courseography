@@ -1404,7 +1404,6 @@ export class Graph extends React.Component {
         })}
         {Object.values(nodesJSON).map(entry => {
           // using `includes` to match "mat235" from "mat235237257calc2" and other math/stats courses
-          console.log("111")
           const highlightFoc = highlightedNodesFocus.some(node =>
             entry.id_.includes(node)
           )
