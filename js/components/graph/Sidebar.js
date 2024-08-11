@@ -75,17 +75,20 @@ export default class Sidebar extends React.Component {
       return (
         <ul className={masterDropdown} data-testid="test-searchDropdown">
           {this.state.results?.map(([resultId, resultLabel]) => (
-            <li
-              aria-label="test-li"
-              key={`search ${resultId}`}
-              className="dropdown-item"
-              onClick={this.props.sidebarItemClick}
-              data-node-id={this.courseIdFromLabel(resultLabel)}
-              onMouseEnter={this.props.onHover}
-              onMouseLeave={this.props.onMouseLeave}
-            >
-              {resultLabel}
-            </li>
+            <>
+              <li
+                aria-label="test-li"
+                key={`search ${resultId}`}
+                className="dropdown-item"
+                onClick={this.props.sidebarItemClick}
+                data-node-id={this.courseIdFromLabel(resultLabel)}
+                onMouseEnter={this.props.onHover}
+                onMouseLeave={this.props.onMouseLeave}
+              >
+                {resultLabel}
+              </li>
+              <li className="separator"> _ </li>
+            </>
           ))}
         </ul>
       )
@@ -104,22 +107,25 @@ export default class Sidebar extends React.Component {
       <div className="courses" data-testid="test-course-selection">
         {temp.map(course => {
           return (
-            <div
-              key={`active ${course}`}
-              data-testid={`test ${course}`}
-              onClick={() => {
-                this.props.courseClick(this.courseIdFromLabel(course))
-              }}
-              className="course-selection"
-              onMouseEnter={this.props.onHover}
-              onMouseLeave={this.props.onMouseLeave}
-            >
-              {course}
-              <Button
-                text="X"
-                mouseDown={() => this.props.xClick(this.courseIdFromLabel(course))}
-              />
-            </div>
+            <>
+              <div
+                key={`active ${course}`}
+                data-testid={`test ${course}`}
+                onClick={() => {
+                  this.props.courseClick(this.courseIdFromLabel(course))
+                }}
+                className="course-selection"
+                onMouseEnter={this.props.onHover}
+                onMouseLeave={this.props.onMouseLeave}
+              >
+                {course}
+                <Button
+                  text="X"
+                  mouseDown={() => this.props.xClick(this.courseIdFromLabel(course))}
+                />
+              </div>
+              <div className="separator"> _ </div>
+            </>
           )
         })}
       </div>

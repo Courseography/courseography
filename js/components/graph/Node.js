@@ -109,7 +109,7 @@ export default function Node(props) {
 Node.propTypes = {
   className: PropTypes.string,
   editMode: PropTypes.bool,
-  focused: PropTypes.string,
+  focused: PropTypes.bool,
   highlighted: PropTypes.bool,
   hybrid: PropTypes.bool,
   JSON: PropTypes.object,

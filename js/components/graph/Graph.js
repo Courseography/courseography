@@ -447,13 +447,14 @@ export class Graph extends React.Component {
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
   nodeMouseEnter = event => {
+    const currTarg = event.currentTarget
     let courseId
-    if (event.currentTarget.tagName === "g") {
-      courseId = event.currentTarget.id
-    } else if (event.currentTarget.tagName === "LI") {
-      courseId = event.currentTarget.getAttribute("data-node-id")
-    } else if (event.currentTarget.tagName === "DIV") {
-      courseId = event.currentTarget.childNodes[0].textContent.toLowerCase()
+    if (currTarg.tagName === "g") {
+      courseId = currTarg.id
+    } else if (currTarg.tagName === "LI") {
+      courseId = currTarg.getAttribute("data-node-id")
+    } else if (currTarg.tagName === "DIV") {
+      courseId = currTarg.childNodes[0].textContent.toLowerCase()
     } else {
       throw new Error("Invalid Element Type!")
     }
@@ -487,13 +488,14 @@ export class Graph extends React.Component {
   }
 
   nodeMouseLeave = event => {
+    const currTarg = event.currentTarget
     let courseId
-    if (event.currentTarget.tagName === "g") {
-      courseId = event.currentTarget.id
-    } else if (event.currentTarget.tagName === "LI") {
-      courseId = event.currentTarget.getAttribute("data-node-id")
-    } else if (event.currentTarget.tagName === "DIV") {
-      courseId = event.currentTarget.childNodes[0].textContent.toLowerCase()
+    if (currTarg.tagName === "g") {
+      courseId = currTarg.id
+    } else if (currTarg.tagName === "LI") {
+      courseId = currTarg.getAttribute("data-node-id")
+    } else if (currTarg.tagName === "DIV") {
+      courseId = currTarg.childNodes[0].textContent.toLowerCase()
     } else {
       throw new Error("Invalid Element Type!")
     }
@@ -1000,7 +1002,10 @@ export class Graph extends React.Component {
       this.setState(
         prevState => {
           if (nodeId in prevState.nodesStatus) {
-            const nodesStatus = { ...prevState.nodesStatus }
+            const nodesStatus = {}
+            Object.keys(prevState.nodesStatus).forEach(key => {
+              nodesStatus[key] = { ...prevState.nodesStatus[key] }
+            })
             nodesStatus[nodeId].status = newState
             return { nodesStatus: nodesStatus }
           } else if (nodeId in prevState.boolsStatus) {
@@ -1032,7 +1037,10 @@ export class Graph extends React.Component {
     } else {
       this.setState(
         prevState => {
-          const nodesStatus = { ...prevState.nodesStatus }
+          const nodesStatus = {}
+          Object.keys(prevState.nodesStatus).forEach(key => {
+            nodesStatus[key] = { ...prevState.nodesStatus[key] }
+          })
           nodesStatus[nodeId].status = newState
           return { nodesStatus: nodesStatus }
         },
@@ -1126,7 +1134,10 @@ export class Graph extends React.Component {
     if (["inactive", "overridden", "takeable"].includes(status)) {
       this.setState(
         prevState => {
-          const nodesStatus = { ...prevState.nodesStatus }
+          const nodesStatus = {}
+          Object.keys(prevState.nodesStatus).forEach(key => {
+            nodesStatus[key] = { ...prevState.nodesStatus[key] }
+          })
           nodesStatus[nodeId].status = "missing"
           return { nodesStatus: nodesStatus }
         },
@@ -1401,7 +1412,7 @@ export class Graph extends React.Component {
               parents={connections.parents[entry.id_]}
               status={nodesStatus[entry.id_].status}
               highlighted={highlighted}
-              focused={highlighted && this.props.currFocus}
+              focused={highlighted && this.props.currFocus !== null}
               onClick={nodeClick}
               onMouseEnter={nodeMouseEnter}
               onMouseLeave={nodeMouseLeave}
@@ -1538,14 +1549,6 @@ export class Graph extends React.Component {
       if (this.props.currFocus) {
         reactGraphClass += " highlight-nodes"
       }
-
-      // if (this.props.currFocus) {
-      //   reactGraphClass =
-      //     reactGraphClass.replace("highlight-nodes-light", "") + " highlight-nodes"
-      // } else {
-      //   reactGraphClass =
-      //     reactGraphClass.replace("highlight-nodes", "") + " highlight-nodes-light"
-      // }
     }
 
     return (
