@@ -75,7 +75,7 @@ export default class Sidebar extends React.Component {
       return (
         <ul className={masterDropdown} data-testid="test-searchDropdown">
           {this.state.results?.map(([resultId, resultLabel]) => (
-            <>
+            <div key={`${resultId}-pair`}>
               <li
                 aria-label="test-li"
                 key={`search ${resultId}`}
@@ -87,8 +87,11 @@ export default class Sidebar extends React.Component {
               >
                 {resultLabel}
               </li>
-              <li className="separator"> _ </li>
-            </>
+              <li className="separator" key={`${resultLabel}-separator`}>
+                {" "}
+                _{" "}
+              </li>
+            </div>
           ))}
         </ul>
       )
@@ -107,7 +110,7 @@ export default class Sidebar extends React.Component {
       <div className="courses" data-testid="test-course-selection">
         {temp.map(course => {
           return (
-            <>
+            <div key={`${course}-pair`}>
               <div
                 key={`active ${course}`}
                 data-testid={`test ${course}`}
@@ -124,8 +127,11 @@ export default class Sidebar extends React.Component {
                   mouseDown={() => this.props.xClick(this.courseIdFromLabel(course))}
                 />
               </div>
-              <div className="separator"> _ </div>
-            </>
+              <li className="separator" key={`${course}-separator`}>
+                {" "}
+                _{" "}
+              </li>
+            </div>
           )
         })}
       </div>
