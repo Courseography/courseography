@@ -734,6 +734,16 @@ export class Graph extends React.Component {
     )
   }
 
+  renderEllipse = () => {
+    return (
+      <defs>
+        <filter id="blur-filter">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+        </filter>
+      </defs>
+    )
+  }
+
   /** Zoom into the graph by calculating new viewbox dimensions
    *
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
@@ -1007,10 +1017,7 @@ export class Graph extends React.Component {
       this.setState(
         prevState => {
           if (nodeId in prevState.nodesStatus) {
-            const nodesStatus = {}
-            Object.keys(prevState.nodesStatus).forEach(key => {
-              nodesStatus[key] = { ...prevState.nodesStatus[key] }
-            })
+            const nodesStatus = { ...prevState.nodesStatus }
             nodesStatus[nodeId].status = newState
             return { nodesStatus: nodesStatus }
           } else if (nodeId in prevState.boolsStatus) {
@@ -1042,10 +1049,7 @@ export class Graph extends React.Component {
     } else {
       this.setState(
         prevState => {
-          const nodesStatus = {}
-          Object.keys(prevState.nodesStatus).forEach(key => {
-            nodesStatus[key] = { ...prevState.nodesStatus[key] }
-          })
+          const nodesStatus = { ...prevState.nodesStatus }
           nodesStatus[nodeId].status = newState
           return { nodesStatus: nodesStatus }
         },
@@ -1139,12 +1143,12 @@ export class Graph extends React.Component {
     if (["inactive", "overridden", "takeable"].includes(status)) {
       this.setState(
         prevState => {
-          const nodesStatus = {}
-          Object.keys(prevState.nodesStatus).forEach(key => {
-            nodesStatus[key] = { ...prevState.nodesStatus[key] }
-          })
+          const nodesStatus = { ...prevState.nodesStatus }
           nodesStatus[nodeId].status = "missing"
-          return { nodesStatus: nodesStatus }
+          return {
+            nodesStatus: nodesStatus,
+            highlightedNodesDeps: [...prevState.highlightedNodesDeps, nodeId],
+          }
         },
         () => {
           inEdges?.forEach(edge => {
@@ -1171,9 +1175,6 @@ export class Graph extends React.Component {
               })
             }
           })
-          this.setState(prevState => ({
-            highlightedNodesDeps: [...prevState.highlightedNodesDeps, nodeId],
-          }))
         }
       )
     }
@@ -1404,10 +1405,10 @@ export class Graph extends React.Component {
         })}
         {Object.values(nodesJSON).map(entry => {
           // using `includes` to match "mat235" from "mat235237257calc2" and other math/stats courses
-          const highlightFoc = highlightedNodesFocus.some(node =>
+          const highlightFocus = highlightedNodesFocus.some(node =>
             entry.id_.includes(node)
           )
-          const highlightDep = highlightedNodesDeps.some(node =>
+          const highlightDeps = highlightedNodesDeps.some(node =>
             entry.id_.includes(node)
           )
           return (
@@ -1418,8 +1419,8 @@ export class Graph extends React.Component {
               hybrid={false}
               parents={connections.parents[entry.id_]}
               status={nodesStatus[entry.id_].status}
-              highlightDep={highlightDep}
-              highlightFoc={highlightFoc}
+              highlightDeps={highlightDeps}
+              highlightFocus={highlightFocus}
               onClick={nodeClick}
               onMouseEnter={nodeMouseEnter}
               onMouseLeave={nodeMouseLeave}
@@ -1552,10 +1553,8 @@ export class Graph extends React.Component {
     if (this.state.panning) {
       reactGraphClass += " panning"
     }
-    if (this.state.highlightedNodesFocus.length > 0) {
-      if (this.props.currFocus) {
-        reactGraphClass += " highlight-nodes"
-      }
+    if (this.state.highlightedNodesFocus.length > 0 && this.props.currFocus) {
+      reactGraphClass += " highlight-nodes"
     }
 
     return (
@@ -1650,6 +1649,7 @@ export class Graph extends React.Component {
             </feMerge>
           </filter>
           {this.renderArrowHead()}
+          {this.renderEllipse()}
           {this.renderRegionsLabels(this.state.regionsJSON, this.state.labelsJSON)}
 
           {this.renderBoolGroup(

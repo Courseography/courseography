@@ -33,24 +33,19 @@ export default function Node(props) {
 
   let ellipse = null
   const newClassName = props.className + " " + props.status
-  if (props.highlightFoc || props.highlightDep) {
+  if (props.highlightFocus || props.highlightDeps) {
     const attrs = props.JSON
     const width = parseFloat(attrs.width) / 2
     const height = parseFloat(attrs.height) / 2
     ellipse = (
       <svg>
-        <defs>
-          <filter id="filter">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
-          </filter>
-        </defs>
         <ellipse
-          className={props.highlightDep ? "spotlight" : "spotlight-focus"}
+          className={props.highlightDeps ? "spotlight" : "spotlight-focus"}
           cx={parseFloat(attrs.pos[0]) + width}
           cy={parseFloat(attrs.pos[1]) + height}
           rx={width + 9}
           ry={height + 8.5}
-          filter="url(#filter)" // Apply the blur filter here
+          filter="url(#blur-filter)" // Apply the blur filter here
         />
       </svg>
     )
@@ -118,8 +113,8 @@ Node.propTypes = {
   className: PropTypes.string,
   editMode: PropTypes.bool,
   focused: PropTypes.bool,
-  highlightDep: PropTypes.bool,
-  highlightFoc: PropTypes.bool,
+  highlightDeps: PropTypes.bool,
+  highlightFocus: PropTypes.bool,
   hybrid: PropTypes.bool,
   JSON: PropTypes.object,
   onClick: PropTypes.func,

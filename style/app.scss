@@ -666,6 +666,7 @@ div.sidebar.collapsed {
 .dropdown-item {
   font-size: 14px;
   width: 100%;
+  margin-bottom: 3px;
 }
 
 .dropdown-item:hover {
@@ -673,7 +674,7 @@ div.sidebar.collapsed {
 }
 
 .spotlight {
-  fill: #ffd9b7;
+  fill: #feefc8;
   stroke: #ffbd8e;
 }
 
@@ -2298,9 +2299,4 @@ main-filter input {
 
 .error-close-button:hover {
   background-color: #c36132;
-}
-
-.separator {
-  height: 1.5px;
-  color: transparent;
 }
