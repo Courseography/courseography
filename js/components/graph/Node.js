@@ -44,7 +44,7 @@ export default function Node(props) {
         cy={parseFloat(attrs.pos[1]) + height}
         rx={width + 9}
         ry={height + 8.5}
-        filter="url(#blur-filter)" // Apply the blur filter here
+        filter="url(#blur-filter)"
       />
     )
   }
