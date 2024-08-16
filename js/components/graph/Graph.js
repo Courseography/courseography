@@ -734,7 +734,7 @@ export class Graph extends React.Component {
     )
   }
 
-  renderEllipse = () => {
+  renderEllipseBlurFilter = () => {
     return (
       <defs>
         <filter id="blur-filter">
@@ -1649,7 +1649,7 @@ export class Graph extends React.Component {
             </feMerge>
           </filter>
           {this.renderArrowHead()}
-          {this.renderEllipse()}
+          {this.renderEllipseBlurFilter()}
           {this.renderRegionsLabels(this.state.regionsJSON, this.state.labelsJSON)}
 
           {this.renderBoolGroup(
