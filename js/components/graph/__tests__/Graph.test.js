@@ -1,5 +1,5 @@
 import TestGraph from "./TestGraph"
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, screen, within } from "@testing-library/react"
 import { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT } from "../Graph"
 import { Graph } from "../Graph"
 import userEvent from "@testing-library/user-event"
@@ -255,5 +255,58 @@ describe("NodeGroup", () => {
       params.nodeDropshadowFilter
     )
     expect(nodeGroup).toMatchSnapshot()
+  })
+})
+
+describe("Dependency Highlighting", () => {
+  it("Hovering over course node highlights it and its dependencies", async () => {
+    await TestGraph.build()
+    const user = userEvent.setup()
+    const aaa303 = screen.getByText("AAA303")
+    const aaa202 = screen.getByText("AAA201")
+    await user.hover(aaa303)
+    const aaa303Spotlight = aaa303.closest("svg").querySelector(".spotlight") // aaa303 ellipse
+    expect(aaa303Spotlight).not.toBeNull()
+    const aaa202Spotlight = aaa202.closest("svg").querySelector(".spotlight") // aaa202 ellipse
+    expect(aaa202Spotlight).not.toBeNull()
+  })
+
+  it("Hovering over course result in Sidebar search highlights the corresponding node and its dependencies", async () => {
+    await TestGraph.build()
+    const user = userEvent.setup()
+    const sidebar = screen.getByTestId("test-searchDropdown")
+    const sidebarExpandButton = screen.getByTestId("test-sidebar-button")
+    await user.click(sidebarExpandButton)
+    const sidebarInput = screen.getByTestId("test-search-bar")
+    await user.tripleClick(sidebarInput)
+    await user.keyboard("AAA")
+    const aaa100SearchResult = within(sidebar).getByText("AAA100")
+    const aaa100Node = screen.getByTestId("aaa100")
+    expect(aaa100Node.querySelector(".spotlight")).toBeNull()
+    await user.hover(aaa100SearchResult)
+    expect(aaa100Node.querySelector(".spotlight")).not.toBeNull()
+    await user.unhover(aaa100SearchResult)
+    expect(aaa100Node.querySelector(".spotlight")).toBeNull()
+  })
+
+  it("Hovering over selected course in Sidebar highlights the corresponding node and its dependencies", async () => {
+    await TestGraph.build()
+    const user = userEvent.setup()
+    const sidebar = screen.getByTestId("test-searchDropdown")
+    const sidebarExpandButton = screen.getByTestId("test-sidebar-button")
+    await user.click(sidebarExpandButton)
+    const sidebarInput = screen.getByTestId("test-search-bar")
+    await user.tripleClick(sidebarInput)
+    await user.keyboard("AAA303")
+    const aaa100SearchResult = within(sidebar).getByText("AAA303")
+    await user.click(aaa100SearchResult)
+    const aaa100SelectedCourse = screen.getByTestId("test AAA303") // in the `selected` section of the sidebar
+    await user.unhover(aaa100SearchResult)
+    const aaa100Node = screen.getByTestId("aaa303")
+    expect(aaa100Node.querySelector(".spotlight")).toBeNull()
+    await user.hover(aaa100SelectedCourse)
+    expect(aaa100Node.querySelector(".spotlight")).not.toBeNull()
+    await user.unhover(aaa100SelectedCourse)
+    expect(aaa100Node.querySelector(".spotlight")).toBeNull()
   })
 })

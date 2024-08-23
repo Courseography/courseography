@@ -662,6 +662,7 @@ div.sidebar.collapsed {
 .dropdown-item {
   font-size: 14px;
   width: 100%;
+  margin-bottom: 3px;
 }
 
 .dropdown-item:hover {
@@ -669,6 +670,11 @@ div.sidebar.collapsed {
 }
 
 .spotlight {
+  fill: #feefc8;
+  stroke: #ffbd8e;
+}
+
+.spotlight-focus {
   fill: #fff;
   stroke: none;
 }
@@ -954,10 +960,7 @@ g.takeable > text {
   opacity: 0.69999;
 }
 
-g.missing > rect,
 g.missing > ellipse {
-  stroke: #c01;
-  stroke-width: 3;
   stroke-width: 2px;
 }
 

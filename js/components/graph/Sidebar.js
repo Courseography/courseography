@@ -79,7 +79,10 @@ export default class Sidebar extends React.Component {
               aria-label="test-li"
               key={`search ${resultId}`}
               className="dropdown-item"
-              onClick={() => this.props.courseClick(resultId)}
+              onClick={this.props.sidebarItemClick}
+              data-node-id={this.courseIdFromLabel(resultLabel)}
+              onMouseEnter={this.props.onHover}
+              onMouseLeave={this.props.onMouseLeave}
             >
               {resultLabel}
             </li>
@@ -108,6 +111,8 @@ export default class Sidebar extends React.Component {
                 this.props.courseClick(this.courseIdFromLabel(course))
               }}
               className="course-selection"
+              onMouseEnter={this.props.onHover}
+              onMouseLeave={this.props.onMouseLeave}
             >
               {course}
               <Button
@@ -178,4 +183,7 @@ Sidebar.propTypes = {
   courses: PropTypes.array,
   courseClick: PropTypes.func,
   xClick: PropTypes.func,
+  sidebarItemClick: PropTypes.func,
+  onHover: PropTypes.func,
+  onMouseLeave: PropTypes.func,
 }

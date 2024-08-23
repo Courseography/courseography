@@ -36,7 +36,8 @@ export class Graph extends React.Component {
       edgesJSON: {},
       edgesStatus: {},
       boolsStatus: {},
-      highlightedNodes: [],
+      highlightedNodesFocus: [],
+      highlightedNodesDeps: [],
       infoboxTimeouts: [],
       dropdownTimeouts: [],
       width: window.innerWidth,
@@ -404,7 +405,14 @@ export class Graph extends React.Component {
   }
 
   nodeClick = event => {
-    const courseId = event.currentTarget.id
+    let courseId
+    if (event.currentTarget.tagName === "g") {
+      courseId = event.currentTarget.id
+    } else if (event.currentTarget.tagName === "LI") {
+      courseId = event.currentTarget.getAttribute("data-node-id")
+    } else {
+      throw new Error("Invalid Element Type!")
+    }
     const courseLabelArray = this.state.nodesJSON[courseId].text
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const wasSelected = this.state.nodesStatus[courseId].selected
@@ -440,7 +448,18 @@ export class Graph extends React.Component {
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
   nodeMouseEnter = event => {
-    const courseId = event.currentTarget.id
+    const currTarg = event.currentTarget
+    let courseId
+    if (currTarg.tagName === "g") {
+      courseId = currTarg.id
+    } else if (currTarg.tagName === "LI") {
+      courseId = currTarg.getAttribute("data-node-id")
+    } else if (currTarg.tagName === "DIV") {
+      courseId = currTarg.childNodes[0].textContent.toLowerCase()
+    } else {
+      throw new Error("Invalid Element Type!")
+    }
+
     const currentNode = this.state.nodesJSON[courseId]
     this.focusPrereqs(courseId)
 
@@ -470,7 +489,18 @@ export class Graph extends React.Component {
   }
 
   nodeMouseLeave = event => {
-    const courseId = event.currentTarget.id
+    const currTarg = event.currentTarget
+    let courseId
+    if (currTarg.tagName === "g") {
+      courseId = currTarg.id
+    } else if (currTarg.tagName === "LI") {
+      courseId = currTarg.getAttribute("data-node-id")
+    } else if (currTarg.tagName === "DIV") {
+      courseId = currTarg.childNodes[0].textContent.toLowerCase()
+    } else {
+      throw new Error("Invalid Element Type!")
+    }
+
     this.unfocusPrereqs(courseId)
 
     const timeout = setTimeout(() => {
@@ -704,6 +734,16 @@ export class Graph extends React.Component {
     )
   }
 
+  renderEllipseBlurFilter = () => {
+    return (
+      <defs>
+        <filter id="blur-filter">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+        </filter>
+      </defs>
+    )
+  }
+
   /** Zoom into the graph by calculating new viewbox dimensions
    *
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
@@ -832,8 +872,12 @@ export class Graph extends React.Component {
     }
   }
 
+  highlightDependencies = dependencies => {
+    this.setState({ highlightedNodesDeps: dependencies })
+  }
+
   highlightFocuses = focuses => {
-    this.setState({ highlightedNodes: focuses })
+    this.setState({ highlightedNodesFocus: focuses })
   }
 
   /** Allows panning and entering draw mode via the keyboard.
@@ -1101,7 +1145,10 @@ export class Graph extends React.Component {
         prevState => {
           const nodesStatus = { ...prevState.nodesStatus }
           nodesStatus[nodeId].status = "missing"
-          return { nodesStatus: nodesStatus }
+          return {
+            nodesStatus: nodesStatus,
+            highlightedNodesDeps: [...prevState.highlightedNodesDeps, nodeId],
+          }
         },
         () => {
           inEdges?.forEach(edge => {
@@ -1138,6 +1185,7 @@ export class Graph extends React.Component {
    *  active, inactive, overridden, takeable
    */
   unfocusPrereqs = nodeId => {
+    this.highlightDependencies([])
     this.updateNode(nodeId, false)
     const parents = this.state.connections.parents[nodeId]
     const inEdges = this.state.connections.inEdges[nodeId]
@@ -1332,7 +1380,8 @@ export class Graph extends React.Component {
     nodesStatus,
     nodesJSON,
     hybridsJSON,
-    highlightedNodes,
+    highlightedNodesFocus,
+    highlightedNodesDeps,
     connections,
     nodeDropshadowFilter
   ) => {
@@ -1356,7 +1405,12 @@ export class Graph extends React.Component {
         })}
         {Object.values(nodesJSON).map(entry => {
           // using `includes` to match "mat235" from "mat235237257calc2" and other math/stats courses
-          const highlighted = highlightedNodes.some(node => entry.id_.includes(node))
+          const highlightFocus = highlightedNodesFocus.some(node =>
+            entry.id_.includes(node)
+          )
+          const highlightDeps = highlightedNodesDeps.some(node =>
+            entry.id_.includes(node)
+          )
           return (
             <Node
               JSON={entry}
@@ -1365,7 +1419,8 @@ export class Graph extends React.Component {
               hybrid={false}
               parents={connections.parents[entry.id_]}
               status={nodesStatus[entry.id_].status}
-              highlighted={highlighted}
+              highlightDeps={highlightDeps}
+              highlightFocus={highlightFocus}
               onClick={nodeClick}
               onMouseEnter={nodeMouseEnter}
               onMouseLeave={nodeMouseLeave}
@@ -1498,7 +1553,7 @@ export class Graph extends React.Component {
     if (this.state.panning) {
       reactGraphClass += " panning"
     }
-    if (this.state.highlightedNodes.length > 0) {
+    if (this.state.highlightedNodesFocus.length > 0 && this.props.currFocus) {
       reactGraphClass += " highlight-nodes"
     }
 
@@ -1522,6 +1577,9 @@ export class Graph extends React.Component {
               ])}
               courseClick={this.handleCourseClick}
               xClick={this.nodeUnselect}
+              sidebarItemClick={this.nodeClick}
+              onHover={this.nodeMouseEnter}
+              onMouseLeave={this.nodeMouseLeave}
             />
           )
         }
@@ -1591,6 +1649,7 @@ export class Graph extends React.Component {
             </feMerge>
           </filter>
           {this.renderArrowHead()}
+          {this.renderEllipseBlurFilter()}
           {this.renderRegionsLabels(this.state.regionsJSON, this.state.labelsJSON)}
 
           {this.renderBoolGroup(
@@ -1611,7 +1670,8 @@ export class Graph extends React.Component {
             this.state.nodesStatus,
             this.state.nodesJSON,
             this.state.hybridsJSON,
-            this.state.highlightedNodes,
+            this.state.highlightedNodesFocus,
+            this.state.highlightedNodesDeps,
             this.state.connections,
             this.nodeDropshadowFilter
           )}

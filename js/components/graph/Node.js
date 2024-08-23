@@ -33,17 +33,19 @@ export default function Node(props) {
 
   let ellipse = null
   const newClassName = props.className + " " + props.status
-  if (props.highlighted) {
+  if (props.highlightFocus || props.highlightDeps) {
     const attrs = props.JSON
     const width = parseFloat(attrs.width) / 2
     const height = parseFloat(attrs.height) / 2
+    const isCombo = props.JSON.id_.length > 8
     ellipse = (
       <ellipse
-        className="spotlight"
+        className={props.highlightDeps ? "spotlight" : "spotlight-focus"}
         cx={parseFloat(attrs.pos[0]) + width}
         cy={parseFloat(attrs.pos[1]) + height}
-        rx={width + 9}
-        ry={height + 8.5}
+        rx={isCombo ? width + 18 : width + 9}
+        ry={isCombo ? height + 17 : height + 8.5}
+        filter="url(#blur-filter)"
       />
     )
   }
@@ -109,7 +111,9 @@ export default function Node(props) {
 Node.propTypes = {
   className: PropTypes.string,
   editMode: PropTypes.bool,
-  highlighted: PropTypes.bool,
+  focused: PropTypes.bool,
+  highlightDeps: PropTypes.bool,
+  highlightFocus: PropTypes.bool,
   hybrid: PropTypes.bool,
   JSON: PropTypes.object,
   onClick: PropTypes.func,
