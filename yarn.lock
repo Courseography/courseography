@@ -2833,23 +2833,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:31.3.4, ag-grid-community@npm:^31.3.4":
-  version: 31.3.4
-  resolution: "ag-grid-community@npm:31.3.4"
-  checksum: 725532245ad8ab5fe602177f8bbc671ea05ae2f9225c5a910675d2bc6af52e1ffd282fb9a0437e04ea993a4896ab427d6ba7d64fdf2db206def5dc89bbba660a
+"ag-charts-types@npm:10.1.0":
+  version: 10.1.0
+  resolution: "ag-charts-types@npm:10.1.0"
+  checksum: 9c94dafe17e8d36c2c6ca4516d138eecbd5ba866a368a246fc674643eee68ef9d23ac98194c2fb9c2097f6ff03cee211da9ae10c1d8c76eff3db7795d8956873
   languageName: node
   linkType: hard
 
-"ag-grid-react@npm:^31.3.4":
-  version: 31.3.4
-  resolution: "ag-grid-react@npm:31.3.4"
+"ag-grid-community@npm:32.1.0, ag-grid-community@npm:^32.1.0":
+  version: 32.1.0
+  resolution: "ag-grid-community@npm:32.1.0"
   dependencies:
-    ag-grid-community: 31.3.4
+    ag-charts-types: 10.1.0
+  checksum: 85dcb5bab7f5b52c4b3f93db99f66db48f9ab43457a8afdc083fe4220c9f330294be71c0ab8d4a14d5cbd2662cc6716813804eeb13ffcf2d6968d899c17697bf
+  languageName: node
+  linkType: hard
+
+"ag-grid-react@npm:^32.1.0":
+  version: 32.1.0
+  resolution: "ag-grid-react@npm:32.1.0"
+  dependencies:
+    ag-grid-community: 32.1.0
     prop-types: ^15.8.1
   peerDependencies:
     react: ^16.3.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
-  checksum: e28ce2c8ec8f2630fe43eda781bffedfe373b5bd98697f8e791e2bcda927668980972dac767476159f891129ea7db8da733300ad9fdd80deda6d3cd30a9410d4
+  checksum: aec8a9ce41e2ff3ef8d91634a258cd4b985e4712272de29bb9e898e7ce47f450759c41d6ed53c7843abaec81fca3ce820a94fa0854676fc4fcb17672d2d23dc9
   languageName: node
   linkType: hard
 
@@ -4062,8 +4071,8 @@ __metadata:
     "@testing-library/dom": ^10.3.2
     "@testing-library/react": ^16.0.0
     "@testing-library/user-event": ^14.5.2
-    ag-grid-community: ^31.3.4
-    ag-grid-react: ^31.3.4
+    ag-grid-community: ^32.1.0
+    ag-grid-react: ^32.1.0
     babel-jest: ^29.5.0
     babel-loader: ^9.1.2
     bootstrap: ^3.1.1
