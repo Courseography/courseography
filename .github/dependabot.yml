@@ -11,5 +11,5 @@ updates:
       interval: "monthly"
     groups:
       ag-grid:
-        pattern:
+        patterns:
           - "ag-grid-*"
