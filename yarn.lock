@@ -2722,23 +2722,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:^29.3.2":
-  version: 29.3.5
-  resolution: "ag-grid-community@npm:29.3.5"
-  checksum: ad071f6ea80ebfa96e79d3e9e77947a52182c783bcee5f7ed377f5de2758f0e88bbf3dbace9272c80e7fb566931fe6a56227dd1e2526670a7e17dd1152d854d6
+"ag-grid-community@npm:31.3.4, ag-grid-community@npm:^31.3.4":
+  version: 31.3.4
+  resolution: "ag-grid-community@npm:31.3.4"
+  checksum: 725532245ad8ab5fe602177f8bbc671ea05ae2f9225c5a910675d2bc6af52e1ffd282fb9a0437e04ea993a4896ab427d6ba7d64fdf2db206def5dc89bbba660a
   languageName: node
   linkType: hard
 
-"ag-grid-react@npm:^29.3.2":
-  version: 29.3.5
-  resolution: "ag-grid-react@npm:29.3.5"
+"ag-grid-react@npm:^31.3.4":
+  version: 31.3.4
+  resolution: "ag-grid-react@npm:31.3.4"
   dependencies:
+    ag-grid-community: 31.3.4
     prop-types: ^15.8.1
   peerDependencies:
-    ag-grid-community: ~29.3.5
     react: ^16.3.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
-  checksum: e22371250461069096c3528ff1e9a4310e44d2167467729776b9ff1af0b63827f034069a791240fa2d2e69f22dfa2d1a846d7d490b0beb9814fd085d25b19426
+  checksum: e28ce2c8ec8f2630fe43eda781bffedfe373b5bd98697f8e791e2bcda927668980972dac767476159f891129ea7db8da733300ad9fdd80deda6d3cd30a9410d4
   languageName: node
   linkType: hard
 
@@ -3951,8 +3951,8 @@ __metadata:
     "@testing-library/dom": ^10.3.2
     "@testing-library/react": ^16.0.0
     "@testing-library/user-event": ^14.5.2
-    ag-grid-community: ^29.3.2
-    ag-grid-react: ^29.3.2
+    ag-grid-community: ^31.3.4
+    ag-grid-react: ^31.3.4
     babel-jest: ^29.5.0
     babel-loader: ^9.1.2
     bootstrap: ^3.1.1
