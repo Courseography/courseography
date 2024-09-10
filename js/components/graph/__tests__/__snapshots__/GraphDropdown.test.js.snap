@@ -2,14 +2,8 @@
 
 exports[`GraphDropdown should match snapshot 1`] = `
 <ul
-  className="hidden"
+  class="hidden"
   data-testid="test-graph-dropdown"
-  onMouseLeave={[MockFunction]}
-  onMouseMove={[MockFunction]}
-  style={
-    {
-      "left": 0,
-    }
-  }
+  style="left: 0px;"
 />
 `;

@@ -1,6 +1,6 @@
 cabal-version:       3.0
 name:                courseography
-version:             0.5.0.0
+version:             0.6.0.0
 synopsis:            Program and course planning app for the University of Toronto.
 description:         A web application designed to aid students in planning their courses
                      at the University of Toronto.
@@ -65,6 +65,8 @@ executable courseography
   other-modules:
     Config,
     Css.Constants,
+    Controllers.Course,
+    Controllers.Graph,
     Database.CourseInsertion,
     Database.CourseQueries,
     Database.CourseVideoSeed,
@@ -88,7 +90,6 @@ executable courseography
     Response.Calendar,
     Response.Draw,
     Response.Export,
-    Response.Graph,
     Response.Grid,
     Response.Image,
     Response.Loading,

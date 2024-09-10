@@ -1,46 +1,45 @@
 {-|
     Module: Database.CourseQueries
     Description: Respond to various requests involving database course
-                 information.
+                 information. Includes helpers for response functionality
+                 defined in Controllers.Course
 
 This module contains the functions that perform different database queries
 and serve the information back to the client.
 -}
 
 module Database.CourseQueries
-    (retrieveCourse,
-     retrievePost,
+    (retrievePost,
      returnCourse,
-     allCourses,
      prereqsForCourse,
-     courseInfo,
-     getDeptCourses,
-     queryGraphs,
-     deptList,
      returnMeeting,
      getGraph,
      getGraphJSON,
      getMeetingTime,
-     buildTime) where
+     buildTime,
+     queryCourse,
+     getDeptCourses
+     ) where
 
 import Config (databasePath)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Aeson (object, toJSON, (.=))
-import Data.List
+import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
-import qualified Data.Text as T
-import Database.DataType
-import Database.Persist
-import Database.Persist.Sqlite
+import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, take)
+import Database.DataType ( ShapeType( Node ) , ShapeType( Hybrid ), ShapeType( BoolNode ))
+import Database.Persist.Sqlite (Entity, PersistEntity, SqlPersistM, PersistValue( PersistInt64 ), runSqlite, selectList,
+                                entityKey, entityVal, selectFirst, (==.), (<-.), get, keyToValues, PersistValue( PersistText ),
+                                rawSql)
 import Database.Tables as Tables
-import Happstack.Server.SimpleHTTP
-import Svg.Builder
+import Happstack.Server.SimpleHTTP (ServerPart, Response, Request, askRq, lookText', ifModifiedSince)
+import Svg.Builder (intersectsWithShape, buildPath, buildEllipses, buildRect)
 import Util.Happstack (createJSONResponse)
 
 -- | Queries the database for all matching lectures, tutorials,
 meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
 meetingQuery meetingCodes = do
-    allMeetings <- selectList [MeetingCode <-. meetingCodes] []
+    allMeetings <- selectList [MeetingCode <-. map (T.take 6) meetingCodes] []
     mapM buildMeetTimes allMeetings
 
 -- | Queries the database for all information about @course@,
@@ -57,11 +56,6 @@ returnCourse lowerStr = runSqlite databasePath $ do
         meetings <- meetingQuery fullCodes
         Just <$> buildCourse meetings
                                 (entityVal course)
-
--- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
--- of the course as a response.
-retrieveCourse :: T.Text -> ServerPart Response
-retrieveCourse = liftIO . queryCourse
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
@@ -207,30 +201,20 @@ getGraph graphName =
 
                 return (Just response) :: SqlPersistM (Maybe Response)
 
--- | Builds a list of all course codes in the database.
-allCourses :: IO Response
-allCourses = do
-  response <- runSqlite databasePath $ do
-      courses :: [Entity Courses] <- selectList [] []
-      let codes = map (coursesCode . entityVal) courses
-      return $ T.unlines codes :: SqlPersistM T.Text
-  return $ toResponse response
-
 -- | Retrieves the prerequisites for a course (code) as a string.
-prereqsForCourse :: T.Text -> IO (Either String T.Text)
+-- Also retrieves the actual course code in the database in case
+-- the one the user inputs doesn't match it exactly
+prereqsForCourse :: T.Text -> IO (Either String (T.Text, T.Text))
 prereqsForCourse courseCode = runSqlite databasePath $ do
-    course <- selectFirst [CoursesCode ==. courseCode] []
+    let upperCaseCourseCode = T.toUpper courseCode
+    course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
     case course of
         Nothing -> return (Left "Course not found")
         Just courseEntity ->
-            return (Right $
-                fromMaybe "" $
-                coursesPrereqString $
-                entityVal courseEntity) :: SqlPersistM (Either String T.Text)
-
--- | Returns all course info for a given department.
-courseInfo :: T.Text -> ServerPart Response
-courseInfo dept = fmap createJSONResponse (getDeptCourses dept)
+            return (Right
+                     (coursesCode $ entityVal courseEntity, 
+                      fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
+                    ) :: SqlPersistM (Either String (T.Text, T.Text))
 
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept =
@@ -244,23 +228,6 @@ getDeptCourses dept =
             let courseMeetings = filter (\m -> meetingCode (entityVal m) == coursesCode course) allMeetings
             allTimes <- mapM buildMeetTimes courseMeetings
             buildCourse allTimes course
-
--- | Return a list of all departments.
-deptList :: IO Response
-deptList = do
-    depts <- runSqlite databasePath $ do
-        courses :: [Entity Courses] <- selectList [] []
-        return $ sort . nub $ map g courses :: SqlPersistM [String]
-    return $ createJSONResponse depts
-    where
-        g = take 3 . T.unpack . coursesCode . entityVal
-
--- | Queries the graphs table and returns a JSON response of Graph JSON
--- objects.
-queryGraphs :: IO Response
-queryGraphs = runSqlite databasePath $ do
-    graphs :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
-    return $ createJSONResponse graphs :: SqlPersistM Response
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a @course@, returns a list of Time.

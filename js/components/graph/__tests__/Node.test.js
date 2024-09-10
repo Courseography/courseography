@@ -1,11 +1,11 @@
 import React from "react"
-import renderer from "react-test-renderer"
-import { fireEvent } from "@testing-library/react"
+import { act, screen, render } from "@testing-library/react"
 import Node from "../Node"
 import TestGraph from "./TestGraph"
+import { userEvent } from "@testing-library/user-event"
 
 describe("Hybrid Node", () => {
-  it("should match snapshot", () => {
+  it("should match snapshot", async () => {
     const hybridNodeProps = {
       JSON: {
         fill: "#888888",
@@ -53,8 +53,9 @@ describe("Hybrid Node", () => {
       status: "inactive",
       selected: false,
     }
-    const tree = renderer.create(<Node {...hybridNodeProps} />).toJSON()
-    expect(tree).toMatchSnapshot()
+    await act(async () => render(<Node {...hybridNodeProps} />))
+    const nodeElement = screen.getByText("CSC318/418/").closest("g")
+    expect(nodeElement).toMatchSnapshot()
   })
 
   it("should have the 'hybrid' CSS class", async () => {
@@ -63,20 +64,21 @@ describe("Hybrid Node", () => {
     expect(hybrid101.classList.contains("hybrid")).toBe(true)
   })
   it("shouldn't do anything when you hover or click it", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const hybrid101 = graph.getByTestId("h(aaa101)")
 
     // convert DOMTokenList to object so we can deep copy
     const cssClassDeepCopy = JSON.parse(JSON.stringify(hybrid101.classList))
 
-    fireEvent.click(hybrid101)
+    await user.click(hybrid101)
     // need to convert the classList into an object on order to use Jest's compare
     expect({ ...hybrid101.classList }).toEqual(cssClassDeepCopy)
-    fireEvent.click(hybrid101)
+    await user.click(hybrid101)
     expect({ ...hybrid101.classList }).toEqual(cssClassDeepCopy)
-    fireEvent.mouseOver(hybrid101)
+    await user.hover(hybrid101)
     expect({ ...hybrid101.classList }).toEqual(cssClassDeepCopy)
-    fireEvent.mouseOut(hybrid101)
+    await user.unhover(hybrid101)
     expect({ ...hybrid101.classList }).toEqual(cssClassDeepCopy)
   })
   it("should be 'inactive' when it's prereq parent is NOT met", async () => {
@@ -85,37 +87,40 @@ describe("Hybrid Node", () => {
     expect(hybrid101.classList.contains("inactive")).toBe(true)
   })
   it("should be 'active' when its prereq parent is met", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const hybrid101 = graph.getByTestId("h(aaa101)")
     const aaa101 = graph.getByTestId("aaa101")
-    fireEvent.click(aaa101)
+    await user.click(aaa101)
     expect(hybrid101.classList.contains("active")).toBe(true)
   })
 
   it("should be 'missing' if not 'active' and it's an unmet prereq of the currently hovered course", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const hybrid101 = graph.getByTestId("h(aaa101)")
     const aaa303 = graph.getByTestId("aaa303")
 
-    fireEvent.mouseOver(aaa303)
+    await user.hover(aaa303)
     expect(hybrid101.classList.contains("missing")).toBe(true)
   })
 
   it("Clicking the reset selections clears the Selected hybrid node", async () => {
+    const user = userEvent.setup()
     const graph = await TestGraph.build()
     const hybrid101 = graph.getByTestId("h(aaa101)")
-    fireEvent.click(hybrid101)
+    await user.click(hybrid101)
     const aaa101 = graph.getByTestId("aaa101")
-    fireEvent.click(aaa101)
+    await user.click(aaa101)
     expect(hybrid101.classList.contains("active")).toBe(true)
 
-    fireEvent.click(graph.getByTestId("test-reset"))
+    await user.click(graph.getByTestId("test-reset"))
     expect(hybrid101.classList.contains("inactive")).toBe(true)
   })
 })
 
 describe("Course Node", () => {
-  it("should match snapshot", () => {
+  it("should match snapshot", async () => {
     const courseProps = {
       JSON: {
         fill: "#5dd5b8",
@@ -151,8 +156,9 @@ describe("Course Node", () => {
       status: "takeable",
       selected: false,
     }
-    const tree = renderer.create(<Node {...courseProps} />).toJSON()
-    expect(tree).toMatchSnapshot()
+    await act(async () => render(<Node {...courseProps} />))
+    const nodeElement = screen.getByText("CSC108").closest("g")
+    expect(nodeElement).toMatchSnapshot()
   })
   it("should have the CSS class: 'node'", async () => {
     const graph = await TestGraph.build()
@@ -172,27 +178,30 @@ describe("Course Node", () => {
       expect(aaa201.classList.contains("inactive")).toBe(true)
     })
     it("should be 'takeable' if the prereqs are met", async () => {
+      const user = userEvent.setup()
       const graph = await TestGraph.build()
       const aaa101 = graph.getByTestId("aaa101")
       const aaa201 = graph.getByTestId("aaa201")
-      fireEvent.click(aaa101) // the only prereq for AAA201
+      await user.click(aaa101) // the only prereq for AAA201
       expect(aaa201.classList.contains("takeable")).toBe(true)
     })
     it('should be "missing" when unselected and hovered over', async () => {
+      const user = userEvent.setup()
       const graph = await TestGraph.build()
       const aaa100 = graph.getByTestId("aaa100")
-      fireEvent.mouseOver(aaa100)
+      await user.hover(aaa100)
       expect(aaa100.classList.contains("missing")).toBe(true)
     })
 
     it("when hovered, should set all unmet prereqs and itself as 'missing'", async () => {
+      const user = userEvent.setup()
       const graph = await TestGraph.build()
       const aaa101 = graph.getByTestId("aaa101")
       const aaa201 = graph.getByTestId("aaa201")
       const aaa102 = graph.getByTestId("aaa102")
       const aaa303 = graph.getByTestId("aaa303")
 
-      fireEvent.mouseOver(aaa303)
+      await user.hover(aaa303)
       expect(aaa101.classList.contains("missing")).toBe(true)
       expect(aaa102.classList.contains("missing")).toBe(true)
       expect(aaa201.classList.contains("missing")).toBe(true)
@@ -202,53 +211,60 @@ describe("Course Node", () => {
 
   describe("Selected Course Node", () => {
     it("with met prereqs should 'active'", async () => {
+      const user = userEvent.setup()
       const graph = await TestGraph.build()
       const aaa100 = graph.getByTestId("aaa100")
-      fireEvent.click(aaa100)
+      await user.click(aaa100)
       expect(aaa100.classList.contains("active")).toBe(true)
     })
     describe("selected course with un-met prereqs", () => {
       it("should be 'overridden' (if you don't hover over it)", async () => {
+        const user = userEvent.setup()
         const graph = await TestGraph.build()
         const aaa201 = graph.getByTestId("aaa201")
-        fireEvent.click(aaa201)
+        await user.click(aaa201)
         expect(aaa201.classList.contains("overridden")).toBe(true)
       })
 
       it("'overridden' course counts as a satisfied prereq (acts like 'active')", async () => {
+        const user = userEvent.setup()
         const graph = await TestGraph.build()
         const aaa201 = graph.getByTestId("aaa201")
         const aaa202 = graph.getByTestId("aaa202")
-        fireEvent.click(aaa201)
+        await user.click(aaa201)
         expect(aaa201.classList.contains("overridden")).toBe(true)
         expect(aaa202.classList.contains("takeable")).toBe(true)
       })
 
       it("hovering over a course with an 'overridden' prereq does not mark the 'overridden' unmet prereqs as 'missing'", async () => {
+        const user = userEvent.setup()
         const graph = await TestGraph.build()
         const aaa101 = graph.getByTestId("aaa101")
         const aaa201 = graph.getByTestId("aaa201")
         const aaa202 = graph.getByTestId("aaa202")
-        fireEvent.click(aaa201)
-        fireEvent.mouseOver(aaa202)
+        await user.click(aaa201)
+        await user.hover(aaa202)
         // not missing because aaa201 is overridden
         expect(aaa101.classList.contains("takeable")).toBe(true)
       })
 
       it("selected and hovered over: sets itself and all unmet prereqs to be 'missing'", async () => {
+        const user = userEvent.setup()
         const graph = await TestGraph.build()
         const aaa101 = graph.getByTestId("aaa101")
         const aaa201 = graph.getByTestId("aaa201")
         const aaa102 = graph.getByTestId("aaa102")
         const aaa303 = graph.getByTestId("aaa303")
-        fireEvent.click(aaa303)
+
+        await user.click(aaa303)
+        await user.unhover(aaa303) // needed to move mouse away
 
         expect(aaa101.classList.contains("takeable")).toBe(true)
         expect(aaa102.classList.contains("takeable")).toBe(true)
         expect(aaa201.classList.contains("inactive")).toBe(true)
         expect(aaa303.classList.contains("overridden")).toBe(true)
 
-        fireEvent.mouseOver(aaa303)
+        await user.hover(aaa303)
 
         expect(aaa101.classList.contains("missing")).toBe(true)
         expect(aaa102.classList.contains("missing")).toBe(true)
@@ -257,33 +273,37 @@ describe("Course Node", () => {
       })
 
       it("selected + hovered over + unmet prereqs: 'missing'", async () => {
+        const user = userEvent.setup()
         const graph = await TestGraph.build()
         const aaa303 = graph.getByTestId("aaa303")
-        fireEvent.click(aaa303)
+        await user.click(aaa303)
         expect(aaa303.classList.contains("overridden")).toBe(true)
 
-        fireEvent.mouseOver(aaa303)
+        await user.unhover(aaa303) // needed to allow hover after click
+        await user.hover(aaa303)
         expect(aaa303.classList.contains("missing")).toBe(true)
       })
       it("Clicking the reset selections clears the Selected course node with parents", async () => {
+        const user = userEvent.setup()
         const graph = await TestGraph.build()
         const aaa101 = graph.getByTestId("aaa101")
         const aaa201 = graph.getByTestId("aaa201")
-        fireEvent.click(aaa101)
+        await user.click(aaa101)
         expect(aaa201.classList.contains("takeable")).toBe(true)
 
-        fireEvent.click(graph.getByTestId("test-reset"))
+        await user.click(graph.getByTestId("test-reset"))
         expect(aaa201.classList.contains("inactive")).toBe(true)
       })
 
       it("Clicking the reset selections clears the Selected course node with no parents", async () => {
+        const user = userEvent.setup()
         const graph = await TestGraph.build()
         const aaa101 = graph.getByTestId("aaa101")
-        fireEvent.click(aaa101)
+        await user.click(aaa101)
 
         expect(aaa101.classList.contains("active")).toBe(true)
 
-        fireEvent.click(graph.getByTestId("test-reset"))
+        await user.click(graph.getByTestId("test-reset"))
         expect(aaa101.classList.contains("takeable")).toBe(true)
       })
     })

@@ -1,10 +1,9 @@
 import React from "react"
-import ReactDOM from "react-dom"
+import { createRoot } from 'react-dom/client'
 import { Graph } from "../graph/Graph"
 
 document.addEventListener("DOMContentLoaded", () => {
-  return ReactDOM.render(
-    <Graph start_blank={true} edit={true} initialDrawMode="draw-node" />,
-    document.getElementById("react-graph")
-  )
+  const container = document.getElementById("react-graph")
+  const root = createRoot(container)
+  root.render(<Graph start_blank={true} edit={true} initialDrawMode="draw-node" />)
 })

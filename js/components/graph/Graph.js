@@ -36,7 +36,8 @@ export class Graph extends React.Component {
       edgesJSON: {},
       edgesStatus: {},
       boolsStatus: {},
-      highlightedNodes: [],
+      highlightedNodesFocus: [],
+      highlightedNodesDeps: [],
       infoboxTimeouts: [],
       dropdownTimeouts: [],
       width: window.innerWidth,
@@ -404,21 +405,42 @@ export class Graph extends React.Component {
   }
 
   nodeClick = event => {
-    const courseId = event.currentTarget.id
+    let courseId
+    if (event.currentTarget.tagName === "g") {
+      courseId = event.currentTarget.id
+    } else if (event.currentTarget.tagName === "LI") {
+      courseId = event.currentTarget.getAttribute("data-node-id")
+    } else {
+      throw new Error("Invalid Element Type!")
+    }
     const courseLabelArray = this.state.nodesJSON[courseId].text
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const wasSelected = this.state.nodesStatus[courseId].selected
-    const temp = this.state.selectedNodes
+    const temp = [...this.state.selectedNodes]
     this.toggleSelection(courseId)
     if (typeof this.props.incrementFCECount === "function") {
       if (wasSelected) {
         // TODO: Differentiate half- and full-year courses
         this.props.incrementFCECount(-0.5)
-        temp.delete(courseLabel)
+        this.setState({ selectedNodes: new Set(temp.filter(e => e !== courseLabel)) })
       } else {
         this.props.incrementFCECount(0.5)
-        temp.add(courseLabel)
+        this.setState({ selectedNodes: new Set([...temp, courseLabel]) })
       }
+    }
+  }
+
+  nodeUnselect = courseId => {
+    const courseLabelArray = this.state.nodesJSON[courseId].text
+    const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
+    const wasSelected = this.state.nodesStatus[courseId].selected
+    const temp = this.state.selectedNodes
+
+    if (typeof this.props.incrementFCECount === "function" && wasSelected) {
+      // TODO: Differentiate half- and full-year courses
+      this.toggleSelection(courseId)
+      this.props.incrementFCECount(-0.5)
+      temp.delete(courseLabel)
     }
   }
 
@@ -426,7 +448,18 @@ export class Graph extends React.Component {
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
   nodeMouseEnter = event => {
-    const courseId = event.currentTarget.id
+    const currTarg = event.currentTarget
+    let courseId
+    if (currTarg.tagName === "g") {
+      courseId = currTarg.id
+    } else if (currTarg.tagName === "LI") {
+      courseId = currTarg.getAttribute("data-node-id")
+    } else if (currTarg.tagName === "DIV") {
+      courseId = currTarg.childNodes[0].textContent.toLowerCase()
+    } else {
+      throw new Error("Invalid Element Type!")
+    }
+
     const currentNode = this.state.nodesJSON[courseId]
     this.focusPrereqs(courseId)
 
@@ -456,7 +489,18 @@ export class Graph extends React.Component {
   }
 
   nodeMouseLeave = event => {
-    const courseId = event.currentTarget.id
+    const currTarg = event.currentTarget
+    let courseId
+    if (currTarg.tagName === "g") {
+      courseId = currTarg.id
+    } else if (currTarg.tagName === "LI") {
+      courseId = currTarg.getAttribute("data-node-id")
+    } else if (currTarg.tagName === "DIV") {
+      courseId = currTarg.childNodes[0].textContent.toLowerCase()
+    } else {
+      throw new Error("Invalid Element Type!")
+    }
+
     this.unfocusPrereqs(courseId)
 
     const timeout = setTimeout(() => {
@@ -470,26 +514,15 @@ export class Graph extends React.Component {
   }
 
   /**
-   * This handles clicking of dropdown items from the side bar search.
-   * @param  {string} id
+   * This handles the clicking of course items from the side bar, pulling up
+   * the corresponding course-info modal.
+   * @param  {string} courseCode - the course code for the clicked course
    */
-  handleCourseClick = id => {
-    id = id.toLowerCase()
-    this.toggleSelection(id)
-    const courseLabelArray = this.state.nodesJSON[id].text
-    const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
-    const temp = [...this.state.selectedNodes]
-    if (this.state.nodesStatus[id].isSelected) {
-      this.setState({
-        selectedNodes: new Set(temp.filter(course => course !== courseLabel)),
-      })
-      this.props.incrementFCECount(-0.5)
-    } else {
-      this.setState({
-        selectedNodes: new Set([...temp, courseLabel]),
-      })
-      this.props.incrementFCECount(0.5)
-    }
+  handleCourseClick = courseCode => {
+    this.setState({
+      courseId: courseCode.substring(0, 6),
+      showCourseModal: true,
+    })
   }
 
   /**
@@ -701,6 +734,16 @@ export class Graph extends React.Component {
     )
   }
 
+  renderEllipseBlurFilter = () => {
+    return (
+      <defs>
+        <filter id="blur-filter">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+        </filter>
+      </defs>
+    )
+  }
+
   /** Zoom into the graph by calculating new viewbox dimensions
    *
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
@@ -829,8 +872,12 @@ export class Graph extends React.Component {
     }
   }
 
+  highlightDependencies = dependencies => {
+    this.setState({ highlightedNodesDeps: dependencies })
+  }
+
   highlightFocuses = focuses => {
-    this.setState({ highlightedNodes: focuses })
+    this.setState({ highlightedNodesFocus: focuses })
   }
 
   /** Allows panning and entering draw mode via the keyboard.
@@ -1098,7 +1145,10 @@ export class Graph extends React.Component {
         prevState => {
           const nodesStatus = { ...prevState.nodesStatus }
           nodesStatus[nodeId].status = "missing"
-          return { nodesStatus: nodesStatus }
+          return {
+            nodesStatus: nodesStatus,
+            highlightedNodesDeps: [...prevState.highlightedNodesDeps, nodeId],
+          }
         },
         () => {
           inEdges?.forEach(edge => {
@@ -1135,6 +1185,7 @@ export class Graph extends React.Component {
    *  active, inactive, overridden, takeable
    */
   unfocusPrereqs = nodeId => {
+    this.highlightDependencies([])
     this.updateNode(nodeId, false)
     const parents = this.state.connections.parents[nodeId]
     const inEdges = this.state.connections.inEdges[nodeId]
@@ -1329,7 +1380,8 @@ export class Graph extends React.Component {
     nodesStatus,
     nodesJSON,
     hybridsJSON,
-    highlightedNodes,
+    highlightedNodesFocus,
+    highlightedNodesDeps,
     connections,
     nodeDropshadowFilter
   ) => {
@@ -1353,7 +1405,12 @@ export class Graph extends React.Component {
         })}
         {Object.values(nodesJSON).map(entry => {
           // using `includes` to match "mat235" from "mat235237257calc2" and other math/stats courses
-          const highlighted = highlightedNodes.some(node => entry.id_.includes(node))
+          const highlightFocus = highlightedNodesFocus.some(node =>
+            entry.id_.includes(node)
+          )
+          const highlightDeps = highlightedNodesDeps.some(node =>
+            entry.id_.includes(node)
+          )
           return (
             <Node
               JSON={entry}
@@ -1362,7 +1419,8 @@ export class Graph extends React.Component {
               hybrid={false}
               parents={connections.parents[entry.id_]}
               status={nodesStatus[entry.id_].status}
-              highlighted={highlighted}
+              highlightDeps={highlightDeps}
+              highlightFocus={highlightFocus}
               onClick={nodeClick}
               onMouseEnter={nodeMouseEnter}
               onMouseLeave={nodeMouseLeave}
@@ -1495,7 +1553,7 @@ export class Graph extends React.Component {
     if (this.state.panning) {
       reactGraphClass += " panning"
     }
-    if (this.state.highlightedNodes.length > 0) {
+    if (this.state.highlightedNodesFocus.length > 0 && this.props.currFocus) {
       reactGraphClass += " highlight-nodes"
     }
 
@@ -1518,6 +1576,10 @@ export class Graph extends React.Component {
                 node.text.length > 0 ? node.text[node.text.length - 1].text : "",
               ])}
               courseClick={this.handleCourseClick}
+              xClick={this.nodeUnselect}
+              sidebarItemClick={this.nodeClick}
+              onHover={this.nodeMouseEnter}
+              onMouseLeave={this.nodeMouseLeave}
             />
           )
         }
@@ -1587,6 +1649,7 @@ export class Graph extends React.Component {
             </feMerge>
           </filter>
           {this.renderArrowHead()}
+          {this.renderEllipseBlurFilter()}
           {this.renderRegionsLabels(this.state.regionsJSON, this.state.labelsJSON)}
 
           {this.renderBoolGroup(
@@ -1607,7 +1670,8 @@ export class Graph extends React.Component {
             this.state.nodesStatus,
             this.state.nodesJSON,
             this.state.hybridsJSON,
-            this.state.highlightedNodes,
+            this.state.highlightedNodesFocus,
+            this.state.highlightedNodesDeps,
             this.state.connections,
             this.nodeDropshadowFilter
           )}

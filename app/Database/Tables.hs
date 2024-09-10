@@ -335,7 +335,7 @@ buildLocation rm = do
         Nothing -> return Nothing
         Just entBuilding -> do
           let building = entityVal entBuilding
-          return $ Just $ Location r
+          return $ Just $ Location (T.take 2 r)  -- Remove room number
                                   (buildingName building)
                                   (buildingCode building)
                                   (buildingAddress building)

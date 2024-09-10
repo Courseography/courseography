@@ -1,5 +1,4 @@
 import React from "react"
-import ReactDOM from "react-dom"
 import ReactModal from "react-modal"
 
 if (document.getElementById("nav-export")) {

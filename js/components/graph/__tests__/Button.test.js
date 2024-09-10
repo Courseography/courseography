@@ -1,15 +1,17 @@
 import React from "react"
-import renderer from "react-test-renderer"
 import Button from "../Button"
+import { render, screen, act } from "@testing-library/react"
 
 describe("Button", () => {
-  it("should match snapshot", () => {
+  it("should match snapshot", async () => {
+    const buttonText = "Reset"
     const buttonProps = {
       divId: "reset-button",
-      text: "Reset",
+      text: buttonText,
       disabled: true,
     }
-    const tree = renderer.create(<Button {...buttonProps} />).toJSON()
-    expect(tree).toMatchSnapshot()
+    await act(async () => render(<Button {...buttonProps} />))
+    const buttonElement = screen.getByText(buttonText)
+    expect(buttonElement).toMatchSnapshot()
   })
 })

@@ -1,54 +1,56 @@
 import TestGraph from "./TestGraph"
-import { fireEvent } from "@testing-library/react"
+import { fireEvent, screen, within } from "@testing-library/react"
 import { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT } from "../Graph"
 import { Graph } from "../Graph"
-
-jest.mock("../Edge", () => () => null)
-jest.mock("../Bool", () => () => null)
-jest.mock("../Node", () => () => null)
+import userEvent from "@testing-library/user-event"
 
 describe("Graph Navigation", () => {
   it("Should pan right when the right arrow key is pressed", async () => {
+    const user = userEvent.setup()
     await TestGraph.build()
     const svg = document.querySelector("svg")
     const initialX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
-    fireEvent.keyDown(document.body, { key: "ArrowRight", code: "ArrowRight" })
+    await user.keyboard("{ArrowRight}")
     const newX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
     const expected = initialX - KEYBOARD_PANNING_INCREMENT
     expect(newX).toBe(expected)
   })
 
   it("Should pan left when the left arrow key is pressed", async () => {
+    const user = userEvent.setup()
     await TestGraph.build()
     const svg = document.querySelector("svg")
     const initialX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
-    fireEvent.keyDown(document.body, { key: "ArrowLeft", code: "ArrowLeft" })
+    await user.keyboard("{ArrowLeft}")
     const newX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
     const expected = initialX + KEYBOARD_PANNING_INCREMENT
     expect(newX).toBe(expected)
   })
 
   it("Should pan down when the down arrow key is pressed", async () => {
+    const user = userEvent.setup()
     await TestGraph.build()
     const svg = document.querySelector("svg")
     const initialY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
-    fireEvent.keyDown(document.body, { key: "ArrowDown", code: "ArrowDown" })
+    await user.keyboard("{ArrowDown}")
     const newY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
     const expected = initialY - KEYBOARD_PANNING_INCREMENT
     expect(newY).toBe(expected)
   })
 
   it("Should pan up when the up arrow key is pressed", async () => {
+    const user = userEvent.setup()
     await TestGraph.build()
     const svg = document.querySelector("svg")
     const initialY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
-    fireEvent.keyDown(document.body, { key: "ArrowUp", code: "ArrowUp" })
+    await user.keyboard("{ArrowUp}")
     const newY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
     const expected = initialY + KEYBOARD_PANNING_INCREMENT
     expect(newY).toBe(expected)
   })
 
   it("Should zoom in when the user presses the + key", async () => {
+    const user = userEvent.setup()
     await TestGraph.build()
     const svg = document.querySelector("svg")
     const initialDims = svg
@@ -56,7 +58,7 @@ describe("Graph Navigation", () => {
       .split(" ")
       .splice(2)
       .map(dim => parseFloat(dim))
-    fireEvent.keyDown(document.body, { key: "+" })
+    await user.keyboard("{+}")
     const newDims = svg
       .getAttribute("viewBox")
       .split(" ")
@@ -69,6 +71,7 @@ describe("Graph Navigation", () => {
   })
 
   it("Should zoom out when the user presses the - key", async () => {
+    const user = userEvent.setup()
     await TestGraph.build()
     const svg = document.querySelector("svg")
     const initialDims = svg
@@ -76,7 +79,7 @@ describe("Graph Navigation", () => {
       .split(" ")
       .splice(2)
       .map(dim => parseFloat(dim))
-    fireEvent.keyDown(document.body, { key: "-" })
+    await user.keyboard("{-}")
     const newDims = svg
       .getAttribute("viewBox")
       .split(" ")
@@ -89,13 +92,18 @@ describe("Graph Navigation", () => {
   })
 
   it("Should pan when the user clicks and drags", async () => {
+    const user = userEvent.setup()
     await TestGraph.build()
     const svg = document.querySelector("svg")
     const initialX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
     const initialY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
-    fireEvent.mouseDown(svg, { clientX: 250, clientY: 10 })
-    fireEvent.mouseMove(svg, { clientX: 100, clientY: 20 })
-    fireEvent.mouseUp(svg, { clientX: 100, clientY: 20 })
+
+    await user.pointer([
+      { keys: "[MouseLeft>]", target: svg, coords: { x: 250, y: 10 } }, // Mouse down
+      { coords: { x: 100, y: 20 } }, // Mouse move
+      { keys: "[/MouseLeft]" }, // Mouse up
+    ])
+
     const newX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
     const newY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
     const expectedX = initialX + 150
@@ -247,5 +255,58 @@ describe("NodeGroup", () => {
       params.nodeDropshadowFilter
     )
     expect(nodeGroup).toMatchSnapshot()
+  })
+})
+
+describe("Dependency Highlighting", () => {
+  it("Hovering over course node highlights it and its dependencies", async () => {
+    await TestGraph.build()
+    const user = userEvent.setup()
+    const aaa303 = screen.getByText("AAA303")
+    const aaa202 = screen.getByText("AAA201")
+    await user.hover(aaa303)
+    const aaa303Spotlight = aaa303.closest("svg").querySelector(".spotlight") // aaa303 ellipse
+    expect(aaa303Spotlight).not.toBeNull()
+    const aaa202Spotlight = aaa202.closest("svg").querySelector(".spotlight") // aaa202 ellipse
+    expect(aaa202Spotlight).not.toBeNull()
+  })
+
+  it("Hovering over course result in Sidebar search highlights the corresponding node and its dependencies", async () => {
+    await TestGraph.build()
+    const user = userEvent.setup()
+    const sidebar = screen.getByTestId("test-searchDropdown")
+    const sidebarExpandButton = screen.getByTestId("test-sidebar-button")
+    await user.click(sidebarExpandButton)
+    const sidebarInput = screen.getByTestId("test-search-bar")
+    await user.tripleClick(sidebarInput)
+    await user.keyboard("AAA")
+    const aaa100SearchResult = within(sidebar).getByText("AAA100")
+    const aaa100Node = screen.getByTestId("aaa100")
+    expect(aaa100Node.querySelector(".spotlight")).toBeNull()
+    await user.hover(aaa100SearchResult)
+    expect(aaa100Node.querySelector(".spotlight")).not.toBeNull()
+    await user.unhover(aaa100SearchResult)
+    expect(aaa100Node.querySelector(".spotlight")).toBeNull()
+  })
+
+  it("Hovering over selected course in Sidebar highlights the corresponding node and its dependencies", async () => {
+    await TestGraph.build()
+    const user = userEvent.setup()
+    const sidebar = screen.getByTestId("test-searchDropdown")
+    const sidebarExpandButton = screen.getByTestId("test-sidebar-button")
+    await user.click(sidebarExpandButton)
+    const sidebarInput = screen.getByTestId("test-search-bar")
+    await user.tripleClick(sidebarInput)
+    await user.keyboard("AAA303")
+    const aaa100SearchResult = within(sidebar).getByText("AAA303")
+    await user.click(aaa100SearchResult)
+    const aaa100SelectedCourse = screen.getByTestId("test AAA303") // in the `selected` section of the sidebar
+    await user.unhover(aaa100SearchResult)
+    const aaa100Node = screen.getByTestId("aaa303")
+    expect(aaa100Node.querySelector(".spotlight")).toBeNull()
+    await user.hover(aaa100SelectedCourse)
+    expect(aaa100Node.querySelector(".spotlight")).not.toBeNull()
+    await user.unhover(aaa100SelectedCourse)
+    expect(aaa100Node.querySelector(".spotlight")).toBeNull()
   })
 })

@@ -10,10 +10,14 @@ import { getCourse } from "../common/utils"
 export class CoursePanel extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { value: "" }
+    this.state = {
+      value: "",
+      courseInfoId: null, // The course code to display in the CourseModal
+    }
     this.handleInput = this.handleInput.bind(this)
     this.clearAllCourses = this.clearAllCourses.bind(this)
     this.selectCourse = this.props.selectCourse.bind(this)
+    this.displayInfo = this.displayInfo.bind(this)
   }
 
   handleInput(event) {
@@ -28,6 +32,10 @@ export class CoursePanel extends React.Component {
     }
   }
 
+  displayInfo(courseId) {
+    this.setState({ courseInfoId: courseId })
+  }
+
   render() {
     const courses = this.props.selectedCourses.map(course => (
       <Course
@@ -38,6 +46,7 @@ export class CoursePanel extends React.Component {
         hoverLecture={this.props.hoverLecture}
         unhoverLecture={this.props.unhoverLecture}
         selectLecture={this.props.selectLecture}
+        displayInfo={this.displayInfo}
       />
     ))
 
@@ -72,6 +81,11 @@ export class CoursePanel extends React.Component {
             {courses}
           </ul>
         </div>
+        <CourseModal
+          showCourseModal={!!this.state.courseInfoId}
+          courseId={this.state.courseInfoId}
+          onClose={() => this.setState({ courseInfoId: null })}
+        />
       </div>
     )
   }
@@ -86,7 +100,6 @@ export class CoursePanel extends React.Component {
 class Course extends React.Component {
   constructor(props) {
     super(props)
-    this.modal = React.createRef()
     this.state = {
       selected: false,
       courseInfo: {},
@@ -95,7 +108,6 @@ class Course extends React.Component {
     this.toggleSelect = this.toggleSelect.bind(this)
     this.removeCourse = this.removeCourse.bind(this)
     this.parseLectures = this.parseLectures.bind(this)
-    this.displayInfo = this.displayInfo.bind(this)
     this.containsSelectedLecture = this.containsSelectedLecture.bind(this)
   }
 
@@ -164,10 +176,6 @@ class Course extends React.Component {
     this.props.removeCourse(this.props.courseCode)
   }
 
-  displayInfo() {
-    this.modal.current.openModal(this.props.courseCode)
-  }
-
   containsSelectedLecture() {
     // Only use method subString on the value of this.state.courseInfo.courseCode if
     // if the this.state.courseInfo.courseCode exists (ie the course information has already been fetched)
@@ -192,7 +200,6 @@ class Course extends React.Component {
           className="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top"
           id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}
         >
-          <CourseModal ref={this.modal} />
           <div className="icon-div">
             <img
               src="/static/res/ico/delete.png"
@@ -202,7 +209,7 @@ class Course extends React.Component {
             <img
               src="/static/res/ico/about.png"
               className="close-icon"
-              onClick={this.displayInfo}
+              onClick={() => this.props.displayInfo(this.props.courseCode)}
             />
           </div>
           <h3
@@ -308,7 +315,7 @@ class CourseList extends React.Component {
 
     // This makes an AJAX call to retrieve courses from the database
     fetch(
-      "/all-courses" // url to which the AJAX request is sent to
+      "/courses" // url to which the AJAX request is sent to
     )
       .then(response => response.text())
       .then(data => {
