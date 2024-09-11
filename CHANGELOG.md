@@ -17,6 +17,7 @@
 - Replace `react-test-renderer` (deprecated) for snapshot testing
 - Use `user-event` for user interactions (instead of `fireEvent`)
 - Add `ag-grid` group to dependabot configuration
+- Refactored `strictRoutes` by removing query parameters into functions for symmetry
 
 ## [0.6.0] - 2024-06-24
 
