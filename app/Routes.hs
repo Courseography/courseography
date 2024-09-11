@@ -5,7 +5,7 @@ import Control.Monad (MonadPlus (mplus), msum)
 import Control.Monad.IO.Class (liftIO)
 import Controllers.Course as CoursesController (retrieveCourse, index, courseInfo, depts)
 import Controllers.Graph as GraphsController
-import Controllers.Timetable as GridController
+import Controllers.Timetable as GridController (gridResponse, exportTimetableImageResponse, exportTimetablePDFResponse)
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
 import Database.CourseQueries (getGraphJSON, retrievePost)
@@ -35,9 +35,7 @@ import Response
       postResponse,
       loadingResponse,
       calendarResponse,
-      graphImageResponse,
-      exportTimetableImageResponse,
-      exportTimetablePDFResponse )
+      graphImageResponse)
 
 routeResponses :: String -> Text -> Text -> ServerPartT IO Response
 routeResponses staticDir aboutContents privacyContents =
@@ -53,8 +51,8 @@ strictRoutes aboutContents privacyContents = [
     ("graph-generate", do method PUT
                           GraphsController.findAndSavePrereqsResponse),
     ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
-    ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
-    ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse courses),
+    ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= GridController.exportTimetableImageResponse session),
+    ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= GridController.exportTimetablePDFResponse courses),
     ("post", retrievePost),
     ("post-progress", postResponse),
     ("draw", drawResponse),

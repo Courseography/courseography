@@ -90,7 +90,6 @@ executable courseography
     Response.About,
     Response.Calendar,
     Response.Draw,
-    Response.Export,
     Response.Image,
     Response.Loading,
     Response.NotFound,
