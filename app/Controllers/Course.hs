@@ -8,14 +8,15 @@ import Data.List (sort, nub)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, runSqlite, selectList, entityVal)
 import Database.Tables as Tables (Courses, coursesCode)
+import Happstack.Server(lookText')
 import Happstack.Server.SimpleHTTP (ServerPart, Response, toResponse)
 import Util.Happstack (createJSONResponse)
 import qualified Database.CourseQueries as CourseHelpers (queryCourse, getDeptCourses)
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
-retrieveCourse :: T.Text -> ServerPart Response
-retrieveCourse = liftIO . CourseHelpers.queryCourse
+retrieveCourse :: ServerPart Response
+retrieveCourse = lookText' "name" >>= liftIO . CourseHelpers.queryCourse
 
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response
@@ -27,8 +28,8 @@ index = do
   return $ toResponse response
 
   -- | Returns all course info for a given department.
-courseInfo :: T.Text -> ServerPart Response
-courseInfo dept = fmap createJSONResponse (CourseHelpers.getDeptCourses dept)
+courseInfo :: ServerPart Response
+courseInfo = fmap createJSONResponse (lookText' "dept" >>= CourseHelpers.getDeptCourses)
 
 -- | Return a list of all departments.
 depts :: ServerPart Response

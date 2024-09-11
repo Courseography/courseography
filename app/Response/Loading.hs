@@ -1,23 +1,24 @@
 module Response.Loading
     (loadingResponse) where
 
-import qualified Data.Text as T
 import Happstack.Server
 import MasterTemplate
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
-loadingResponse :: T.Text -> ServerPart Response
-loadingResponse size =
-   ok $ toResponse $
+loadingResponse :: ServerPart Response
+loadingResponse =
+   lookText' "size" >>= \size ->
+       let loadingIcon = if size == "small"
+                         then smallLoadingIcon
+                         else largeLoadingIcon
+   in ok $ toResponse $
     masterTemplate "Courseography - Loading..."
                 []
                 (do
                     header "Loading..."
-                    if size == "small"
-                        then smallLoadingIcon
-                        else largeLoadingIcon
+                    loadingIcon
                 )
                 ""
 

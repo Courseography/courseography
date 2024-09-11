@@ -144,8 +144,8 @@ buildMeetTimes meet = do
 
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements
 -- for rendering graph (returned as JSON).
-getGraphJSON :: T.Text -> IO Response
-getGraphJSON graphName = getGraph graphName >>= withDefault
+getGraphJSON :: ServerPart Response
+getGraphJSON = lookText' "graphName" >>= \graphName -> liftIO $ getGraph graphName >>= withDefault
     where
         withDefault (Just response) = return response
         withDefault Nothing = return $

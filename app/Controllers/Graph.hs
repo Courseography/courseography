@@ -1,6 +1,6 @@
 module Controllers.Graph (graphResponse, findAndSavePrereqsResponse, index) where
 
-import Happstack.Server (ServerPart, Response, toResponse, ok)
+import Happstack.Server (ServerPart, Response, toResponse, ok, method, Method(PUT))
 import MasterTemplate (masterTemplate, header)
 import Scripts (graphScripts)
 import Text.Blaze ((!))
@@ -35,6 +35,7 @@ graphResponse =
 
 findAndSavePrereqsResponse :: ServerPart Response
 findAndSavePrereqsResponse = do
+    method PUT
     body <- getBody
     let coursesOptions :: CourseGraphOptions = fromJust $ decode body
     liftIO $ generateAndSavePrereqResponse coursesOptions

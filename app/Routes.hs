@@ -2,7 +2,6 @@ module Routes
     (routeResponses) where
 
 import Control.Monad (MonadPlus (mplus), msum)
-import Control.Monad.IO.Class (liftIO)
 import Controllers.Course as CoursesController (retrieveCourse, index, courseInfo, depts)
 import Controllers.Graph as GraphsController
 import Data.Text.Lazy (Text)
@@ -12,16 +11,11 @@ import Happstack.Server
     ( serveDirectory,
       seeOther,
       dir,
-      method,
       noTrailingSlash,
       nullDir,
-      look,
-      lookBS,
-      lookText',
       Browsing(DisableBrowsing),
       ServerPart,
       ServerPartT,
-      Method(PUT),
       Response,
       ToMessage(toResponse) )
 import Response
@@ -50,11 +44,10 @@ strictRoutes :: Text -> Text -> [ (String, ServerPart Response)]
 strictRoutes aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", GraphsController.graphResponse),
-    ("graph-generate", do method PUT
-                          GraphsController.findAndSavePrereqsResponse),
-    ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
-    ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
-    ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse courses),
+    ("graph-generate", GraphsController.findAndSavePrereqsResponse),
+    ("image", graphImageResponse),
+    ("timetable-image", exportTimetableImageResponse),
+    ("timetable-pdf", exportTimetablePDFResponse),
     ("post", retrievePost),
     ("post-progress", postResponse),
     ("draw", drawResponse),
@@ -63,15 +56,14 @@ strictRoutes aboutContents privacyContents = [
     ("graphs", GraphsController.index),
     ("timesearch", searchResponse),
     ("generate", generateResponse),
-    ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
-    
-    ("course", lookText' "name" >>= CoursesController.retrieveCourse),
+    ("get-json-data", getGraphJSON),
+    ("course", CoursesController.retrieveCourse),
     ("courses", CoursesController.index),
-    ("course-info", lookText' "dept" >>= CoursesController.courseInfo),
+    ("course-info", CoursesController.courseInfo),
     ("depts", CoursesController.depts),
-    ("calendar", look "courses" >>= calendarResponse),
-    ("loading", lookText' "size" >>= loadingResponse),
-    ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
+    ("calendar", calendarResponse),
+    ("loading", loadingResponse),
+    ("save-json", saveGraphJSON)
     ]
 
 strictMatchDir :: (String, ServerPart Response) -> ServerPartT IO Response

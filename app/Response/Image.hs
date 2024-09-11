@@ -10,8 +10,9 @@ import Happstack.Server
 import System.Directory (removeFile)
 
 -- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.
-graphImageResponse :: String -> ServerPart Response
-graphImageResponse graphInfo = do
+graphImageResponse :: ServerPart Response
+graphImageResponse = do
+    graphInfo <- look "JsonLocalStorageObj"
     (svgFilename, imageFilename) <- liftIO $ getActiveGraphImage graphInfo
     liftIO $ returnImageData svgFilename imageFilename
 

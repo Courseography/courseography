@@ -14,14 +14,18 @@ import Response.Image (returnImageData)
 import System.Directory (removeFile)
 
 -- | Returns an image of the timetable requested by the user.
-exportTimetableImageResponse :: T.Text -> String -> ServerPart Response
-exportTimetableImageResponse session selectedCourses = do
+exportTimetableImageResponse :: ServerPart Response
+exportTimetableImageResponse = do
+    session <- lookText' "session"
+    selectedCourses <- look "courses"
     (svgFilename, imageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) session
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns a PDF containing graph and timetable requested by the user.
-exportTimetablePDFResponse :: String -> String -> ServerPart Response
-exportTimetablePDFResponse selectedCourses graphInfo = do
+exportTimetablePDFResponse :: ServerPart Response
+exportTimetablePDFResponse = do
+    selectedCourses <- look "courses"
+    graphInfo <- look "JsonLocalStorageObj"
     (graphSvg, graphImg) <- liftIO $ getActiveGraphImage graphInfo
     (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Fall"
     (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Spring"
