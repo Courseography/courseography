@@ -15,7 +15,9 @@ import qualified Database.CourseQueries as CourseHelpers (queryCourse, getDeptCo
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
 retrieveCourse :: ServerPart Response
-retrieveCourse = lookText' "name" >>= liftIO . CourseHelpers.queryCourse
+retrieveCourse = do
+    name <- lookText' "name"
+    liftIO $ CourseHelpers.queryCourse name
 
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response

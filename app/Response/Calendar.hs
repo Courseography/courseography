@@ -17,7 +17,9 @@ import Text.Read (readMaybe)
 
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: ServerPart Response
-calendarResponse = look "courses" >>= liftIO . getCalendar . T.pack
+calendarResponse = do
+    courses <- look "courses"
+    liftIO $ getCalendar $ T.pack courses
 
 -- | Gets together all the pieces of the program.
 getCalendar :: T.Text -> IO Response
