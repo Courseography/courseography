@@ -30,7 +30,9 @@ index = do
 
   -- | Returns all course info for a given department.
 courseInfo :: ServerPart Response
-courseInfo = fmap createJSONResponse (lookText' "dept" >>= CourseHelpers.getDeptCourses)
+courseInfo = do
+    dept <- lookText' "dept"
+    fmap createJSONResponse (CourseHelpers.getDeptCourses dept)
 
 -- | Return a list of all departments.
 depts :: ServerPart Response
