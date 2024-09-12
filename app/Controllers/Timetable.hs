@@ -97,9 +97,9 @@ type ICSFile = String
 -- | Generates a string representing an ICS file.
 getICS :: Events -> ICSFile
 getICS [] = ""
-getICS events = unlines $ header ++ events ++ bottom
+getICS events = unlines $ header_ ++ events ++ bottom
     where
-        header = ["BEGIN:VCALENDAR",
+        header_ = ["BEGIN:VCALENDAR",
                   "VERSION:2.0",
                   "PRODID:-//Courseography//Calendar",
                   "CALSCALE:GREGORIAN",
