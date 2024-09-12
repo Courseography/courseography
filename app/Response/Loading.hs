@@ -8,17 +8,16 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
 loadingResponse :: ServerPart Response
-loadingResponse =
-   lookText' "size" >>= \size ->
-       let loadingIcon = if size == "small"
-                         then smallLoadingIcon
-                         else largeLoadingIcon
-   in ok $ toResponse $
+loadingResponse = do
+   size <- lookText' "size"
+   ok $ toResponse $
     masterTemplate "Courseography - Loading..."
                 []
                 (do
                     header "Loading..."
-                    loadingIcon
+                    if size == "small"
+                        then smallLoadingIcon
+                        else largeLoadingIcon
                 )
                 ""
 
