@@ -16,6 +16,8 @@
 - Upgraded the Testing Library from 12.0 to 16.0
 - Replace `react-test-renderer` (deprecated) for snapshot testing
 - Use `user-event` for user interactions (instead of `fireEvent`)
+- Add `ag-grid` group to dependabot configuration
+- Moved all contents from `Response/Grid.hs` to new module `Timetable.hs` in `app/Controllers`
 
 ## [0.6.0] - 2024-06-24
 
