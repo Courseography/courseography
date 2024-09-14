@@ -51,7 +51,7 @@ export class CoursePanel extends React.Component {
     ))
 
     return (
-      <div id="search-layout" className="col-md-3 col-xs-6">
+      <div id="search-layout" className="col-md-2 col-12">
         <div id="filter-container">
           <form onSubmit={() => false}>
             <input
