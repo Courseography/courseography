@@ -12,14 +12,14 @@ import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
 import Database.CourseQueries (returnMeeting)
 import Database.Persist.Sqlite (entityKey, entityVal, runSqlite, selectList, (==.))
 import Database.Tables
-import Happstack.Server (Response, ServerPart, toResponse, look)
+import Happstack.Server (Response, ServerPart, toResponse, lookText')
 import Text.Read (readMaybe)
 
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: ServerPart Response
 calendarResponse = do
-    courses <- look "courses"
-    liftIO $ getCalendar $ T.pack courses
+    courses <- lookText' "courses"
+    liftIO $ getCalendar courses
 
 -- | Gets together all the pieces of the program.
 getCalendar :: T.Text -> IO Response

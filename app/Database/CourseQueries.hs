@@ -146,8 +146,9 @@ buildMeetTimes meet = do
 -- for rendering graph (returned as JSON).
 getGraphJSON :: ServerPart Response
 getGraphJSON = do
-    graphName <- lookText' "graphName" 
-    liftIO $ getGraph graphName >>= withDefault
+    graphName <- lookText' "graphName"
+    response <- liftIO $ getGraph graphName
+    withDefault response
     where
         withDefault (Just response) = return response
         withDefault Nothing = return $

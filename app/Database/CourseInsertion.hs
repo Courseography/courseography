@@ -19,7 +19,7 @@ import Database.Persist.Class (selectKeysList)
 import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, runSqlite, selectFirst,
                                 (==.))
 import Database.Tables hiding (breadth, distribution, paths, shapes, texts)
-import Happstack.Server(lookBS, lookText', ServerPart, Response, toResponse)
+import Happstack.Server (lookBS, lookText', ServerPart, Response, toResponse)
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: ServerPart Response

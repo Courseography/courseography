@@ -5,7 +5,6 @@ import Control.Monad.IO.Class (liftIO)
 import qualified Data.ByteString as BS
 import Data.ByteString.Base64.Lazy as BEnc
 import qualified Data.ByteString.Lazy as L
-import qualified Data.Text as T
 import Export.GetImages
 import Export.LatexGenerator
 import Export.PdfGenerator
@@ -17,18 +16,18 @@ import System.Directory (removeFile)
 exportTimetableImageResponse :: ServerPart Response
 exportTimetableImageResponse = do
     session <- lookText' "session"
-    selectedCourses <- look "courses"
-    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) session
+    selectedCourses <- lookText' "courses"
+    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable selectedCourses session
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns a PDF containing graph and timetable requested by the user.
 exportTimetablePDFResponse :: ServerPart Response
 exportTimetablePDFResponse = do
-    selectedCourses <- look "courses"
+    selectedCourses <- lookText' "courses"
     graphInfo <- look "JsonLocalStorageObj"
     (graphSvg, graphImg) <- liftIO $ getActiveGraphImage graphInfo
-    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Fall"
-    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Spring"
+    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable selectedCourses "Fall"
+    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable selectedCourses "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     liftIO $ returnPdfBS pdfName
 
