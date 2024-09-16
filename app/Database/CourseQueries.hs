@@ -14,7 +14,6 @@ module Database.CourseQueries
      prereqsForCourse,
      returnMeeting,
      getGraph,
-     getGraphJSON,
      getMeetingTime,
      buildTime,
      queryCourse,
@@ -23,7 +22,7 @@ module Database.CourseQueries
 
 import Config (databasePath)
 import Control.Monad.IO.Class (MonadIO, liftIO)
-import Data.Aeson (object, toJSON, (.=))
+import Data.Aeson (object, toJSON)
 import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, take)
@@ -141,18 +140,6 @@ buildMeetTimes meet = do
     return $ Tables.MeetTime' (entityVal meet) parsedTime
 
 -- ** Other queries
-
--- | Looks up a graph using its title then gets the Shape, Text and Path elements
--- for rendering graph (returned as JSON).
-getGraphJSON :: T.Text -> IO Response
-getGraphJSON graphName = getGraph graphName >>= withDefault
-    where
-        withDefault (Just response) = return response
-        withDefault Nothing = return $
-            createJSONResponse $
-            object ["texts" .= ([] :: [Text]),
-                    "shapes" .= ([] :: [Text]),
-                    "paths" .= ([] :: [Text])]
 
 getGraph :: T.Text -> IO (Maybe Response)
 getGraph graphName =
