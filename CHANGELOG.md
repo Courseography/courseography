@@ -16,6 +16,9 @@
 - Upgraded the Testing Library from 12.0 to 16.0
 - Replace `react-test-renderer` (deprecated) for snapshot testing
 - Use `user-event` for user interactions (instead of `fireEvent`)
+- Add `ag-grid` group to dependabot configuration
+- Refactored graph and generation related route functionality into controllers
+- Moved the routes related to downloads to the `Timetable` controller to be triggered
 
 ## [0.6.0] - 2024-06-24
 

@@ -178,7 +178,7 @@ class Grid extends React.Component {
       ? this.state.selectedLectures.concat(this.state.hoveredLecture)
       : this.state.selectedLectures
     return (
-      <div>
+      <>
         <Disclaimer />
         <CoursePanel
           selectedCourses={this.state.selectedCourses}
@@ -192,7 +192,7 @@ class Grid extends React.Component {
         />
         <Row lectureSections={updatedList} />
         <ExportModal context="grid" session="fall" ref={this.setExportRef} />
-      </div>
+      </>
     )
   }
 }
