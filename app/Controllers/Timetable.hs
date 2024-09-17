@@ -1,19 +1,79 @@
-module Response.Calendar
-    (calendarResponse) where
+module Controllers.Timetable 
+    (gridResponse, returnPDF, exportTimetableImageResponse, 
+     exportTimetablePDFResponse, calendarResponse) where 
 
+import Happstack.Server
+import MasterTemplate
+import Scripts
+import Text.Blaze ((!))
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as A
+import Control.Monad.IO.Class (liftIO)
+import qualified Data.ByteString as BS
+import Data.ByteString.Base64.Lazy as BEnc
+import qualified Data.ByteString.Lazy as L
+import qualified Data.Text as T
+import Export.GetImages
+import Export.LatexGenerator
+import Export.PdfGenerator
+import Response.Image (returnImageData)
+import System.Directory (removeFile)
 import Config (databasePath, fallEndDate, fallStartDate, holidays, outDay, winterEndDate,
                winterStartDate)
-import Control.Monad.IO.Class (liftIO)
 import Data.List (groupBy, sort, sortOn)
 import Data.List.Split (splitOn)
-import qualified Data.Text as T
 import Data.Time (Day, defaultTimeLocale, formatTime, getCurrentTime, toGregorian)
 import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
 import Database.CourseQueries (returnMeeting)
 import Database.Persist.Sqlite (entityKey, entityVal, runSqlite, selectList, (==.))
 import Database.Tables
-import Happstack.Server (Response, ServerPart, toResponse)
 import Text.Read (readMaybe)
+
+gridResponse :: ServerPart Response
+gridResponse =
+    ok $ toResponse $
+        masterTemplate "Courseography - Grid"
+            []
+            (do header "grid"
+                H.div ! A.id "grid-body"! A.class_ "row main" $ ""
+            )
+            timetableScripts
+
+
+-- | Returns an image of the timetable requested by the user.
+exportTimetableImageResponse :: T.Text -> String -> ServerPart Response
+exportTimetableImageResponse session selectedCourses = do
+    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) session
+    liftIO $ returnImageData svgFilename imageFilename
+
+-- | Returns a PDF containing graph and timetable requested by the user.
+exportTimetablePDFResponse :: String -> String -> ServerPart Response
+exportTimetablePDFResponse selectedCourses graphInfo = do
+    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage graphInfo
+    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Fall"
+    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Spring"
+    pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
+    liftIO $ returnPdfBS pdfName
+
+-- | Returns 64base bytestring of PDF for given name, then deletes PDF from local.
+returnPdfBS :: String -> IO Response
+returnPdfBS pdfFilename = do
+    pdfData <- BS.readFile pdfFilename
+    _ <- removeFile pdfFilename
+    return $ toResponseBS "application/pdf" $ BEnc.encode $ L.fromStrict pdfData
+
+-- | Returns the name of a generated pdf that contains graphImg and timetableImg
+-- and deletes all of the img and svg files passed as arguments
+returnPDF :: String -> String -> String -> String -> String -> String -> IO String
+returnPDF graphSvg graphImg fallTimetableSvg fallTimetableImg springTimetableSvg springTimetableImg = do
+    rand <- randomName
+    let texName = rand ++ ".tex"
+        pdfName = rand ++ ".pdf"
+    generateTex [graphImg, fallTimetableImg, springTimetableImg] texName -- generate a temporary TEX file
+    createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
+    mapM_ removeFile [graphSvg, graphImg, fallTimetableSvg, fallTimetableImg, springTimetableSvg, springTimetableImg]
+    return pdfName
+
 
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
@@ -37,9 +97,9 @@ type ICSFile = String
 -- | Generates a string representing an ICS file.
 getICS :: Events -> ICSFile
 getICS [] = ""
-getICS events = unlines $ header ++ events ++ bottom
+getICS events = unlines $ header_ ++ events ++ bottom
     where
-        header = ["BEGIN:VCALENDAR",
+        header_ = ["BEGIN:VCALENDAR",
                   "VERSION:2.0",
                   "PRODID:-//Courseography//Calendar",
                   "CALSCALE:GREGORIAN",

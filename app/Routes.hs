@@ -7,6 +7,7 @@ import Controllers.Course as CoursesController (retrieveCourse, index, courseInf
 import Controllers.Graph as GraphsController
     ( graphResponse, index, getGraphJSON, graphImageResponse )
 import Controllers.Generate as GenerateController (generateResponse, findAndSavePrereqsResponse)
+import Controllers.Timetable as TimetableController
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
 import Database.CourseQueries (retrievePost)
@@ -33,11 +34,7 @@ import Response
       notFoundResponse,
       searchResponse,
       postResponse,
-      loadingResponse,
-      gridResponse,
-      calendarResponse,
-      exportTimetableImageResponse,
-      exportTimetablePDFResponse )
+      loadingResponse)
 
 routeResponses :: String -> Text -> Text -> ServerPartT IO Response
 routeResponses staticDir aboutContents privacyContents =
@@ -48,13 +45,13 @@ routeResponses staticDir aboutContents privacyContents =
 
 strictRoutes :: Text -> Text -> [ (String, ServerPart Response)] 
 strictRoutes aboutContents privacyContents = [
-    ("grid", gridResponse),
+    ("grid", TimetableController.gridResponse),
     ("graph", GraphsController.graphResponse),
     ("graph-generate", do method PUT
                           GenerateController.findAndSavePrereqsResponse),
     ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
-    ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
-    ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse courses),
+    ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= TimetableController.exportTimetableImageResponse session),
+    ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= TimetableController.exportTimetablePDFResponse courses),
     ("post", retrievePost),
     ("post-progress", postResponse),
     ("draw", drawResponse),
@@ -69,7 +66,7 @@ strictRoutes aboutContents privacyContents = [
     ("courses", CoursesController.index),
     ("course-info", lookText' "dept" >>= CoursesController.courseInfo),
     ("depts", CoursesController.depts),
-    ("calendar", look "courses" >>= calendarResponse),
+    ("calendar", look "courses" >>= TimetableController.calendarResponse),
     ("loading", lookText' "size" >>= loadingResponse),
     ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
     ]
