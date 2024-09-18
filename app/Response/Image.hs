@@ -1,20 +1,13 @@
 module Response.Image
-    (graphImageResponse, timetableImageResponse, returnImageData) where
+    (timetableImageResponse, returnImageData) where
 
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Base64 as BEnc
 import qualified Data.Text as T
-import Export.GetImages (getActiveGraphImage, getTimetableImage)
+import Export.GetImages (getTimetableImage)
 import Happstack.Server
 import System.Directory (removeFile)
-
--- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.
-graphImageResponse :: ServerPart Response
-graphImageResponse = do
-    graphInfo <- look "JsonLocalStorageObj"
-    (svgFilename, imageFilename) <- liftIO $ getActiveGraphImage graphInfo
-    liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: T.Text -> T.Text -> ServerPart Response

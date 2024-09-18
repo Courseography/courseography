@@ -4,9 +4,12 @@ module Routes
 import Control.Monad (MonadPlus (mplus), msum)
 import Controllers.Course as CoursesController (retrieveCourse, index, courseInfo, depts)
 import Controllers.Graph as GraphsController
+    ( graphResponse, index, getGraphJSON, graphImageResponse )
+import Controllers.Generate as GenerateController (generateResponse, findAndSavePrereqsResponse)
+import Controllers.Timetable as TimetableController
 import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
-import Database.CourseQueries (getGraphJSON, retrievePost)
+import Database.CourseQueries (retrievePost)
 import Happstack.Server
     ( serveDirectory,
       seeOther,
@@ -24,14 +27,8 @@ import Response
       privacyResponse,
       notFoundResponse,
       searchResponse,
-      generateResponse,
       postResponse,
-      loadingResponse,
-      gridResponse,
-      calendarResponse,
-      graphImageResponse,
-      exportTimetableImageResponse,
-      exportTimetablePDFResponse )
+      loadingResponse)
 
 routeResponses :: String -> Text -> Text -> ServerPartT IO Response
 routeResponses staticDir aboutContents privacyContents =
@@ -42,12 +39,12 @@ routeResponses staticDir aboutContents privacyContents =
 
 strictRoutes :: Text -> Text -> [ (String, ServerPart Response)] 
 strictRoutes aboutContents privacyContents = [
-    ("grid", gridResponse),
+    ("grid", TimetableController.gridResponse),
     ("graph", GraphsController.graphResponse),
-    ("graph-generate", GraphsController.findAndSavePrereqsResponse),
+    ("graph-generate", GenerateController.findAndSavePrereqsResponse),
     ("image", graphImageResponse),
-    ("timetable-image", exportTimetableImageResponse),
-    ("timetable-pdf", exportTimetablePDFResponse),
+    ("timetable-image", TimetableController.exportTimetableImageResponse),
+    ("timetable-pdf", TimetableController.exportTimetablePDFResponse),
     ("post", retrievePost),
     ("post-progress", postResponse),
     ("draw", drawResponse),
@@ -61,7 +58,7 @@ strictRoutes aboutContents privacyContents = [
     ("courses", CoursesController.index),
     ("course-info", CoursesController.courseInfo),
     ("depts", CoursesController.depts),
-    ("calendar", calendarResponse),
+    ("calendar", TimetableController.calendarResponse),
     ("loading", loadingResponse),
     ("save-json", saveGraphJSON)
     ]
