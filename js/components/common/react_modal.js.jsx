@@ -39,66 +39,6 @@ class CourseModal extends React.Component {
   }
 
   /**
-   * Generate the data needed for each row of the timetable based on course meeting times for
-   * each session F, S, Y.
-   */
-  getTable(allMeetingTimes, session) {
-    const sessions = allMeetingTimes.filter(lec => lec.meetData.session === session)
-    const sortedSessions = sessions.sort((firstLec, secondLec) =>
-      firstLec.meetData.section > secondLec.meetData.section ? 1 : -1
-    )
-
-    return sortedSessions.map(lecture => {
-      const occurrences = { times: [], rooms: [] }
-      const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
-        occ1.weekDay > occ2.weekDay ? 1 : -1
-      )
-      sortedTimeData.map(occurrence => {
-        let firstRoom = ""
-        if (occurrence.firstRoom === null || occurrence.firstRoom === undefined) {
-          firstRoom = " "
-        } else {
-          firstRoom = occurrence.firstRoom.room
-        }
-
-        let secondRoom = ""
-        if (occurrence.secondRoom === null || occurrence.secondRoom === undefined) {
-          secondRoom = " "
-        } else {
-          secondRoom = occurrence.secondRoom.room
-        }
-
-        if ((firstRoom != " ") & (secondRoom != " ")) {
-          firstRoom += ", "
-        }
-        occurrences.rooms.push(firstRoom + secondRoom)
-        occurrences.times.push(
-          DAY_TO_INT[occurrence.weekDay] +
-            "  " +
-            occurrence.startHour +
-            " - " +
-            occurrence.endHour
-        )
-      })
-      const rowData = {
-        activity: lecture.meetData.section,
-        instructor: lecture.meetData.instructor,
-        availability:
-          lecture.meetData.cap -
-          lecture.meetData.enrol +
-          " of " +
-          lecture.meetData.cap +
-          " available",
-        waitList: lecture.meetData.wait + " students",
-        time: occurrences.times,
-        room: occurrences.rooms,
-      }
-
-      return rowData
-    })
-  }
-
-  /**
    * Change the courseId state, whenever a course link is clicked.
    * Additionally, add the courseId to the list of visited courses.
    */
