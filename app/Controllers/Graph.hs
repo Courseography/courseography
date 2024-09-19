@@ -36,7 +36,6 @@ graphResponse =
                 graphScripts
 
 
-
 index :: ServerPart Response
 index = liftIO (runSqlite databasePath $ do
     graphsList :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
