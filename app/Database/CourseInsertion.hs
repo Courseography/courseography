@@ -12,23 +12,25 @@ module Database.CourseInsertion
      saveGraphJSON) where
 
 import Config (databasePath)
+import Control.Monad.IO.Class (liftIO)
 import qualified Data.Aeson as Aeson
-import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.Text as T
 import Database.Persist.Class (selectKeysList)
 import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, runSqlite, selectFirst,
                                 (==.))
 import Database.Tables hiding (breadth, distribution, paths, shapes, texts)
-import Happstack.Server.SimpleHTTP (Response, toResponse)
+import Happstack.Server (lookBS, lookText', ServerPart, Response, toResponse)
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
-saveGraphJSON :: BSL.ByteString -> T.Text -> IO Response
-saveGraphJSON jsonStr nameStr = do
-    let jsonObj = Aeson.decode jsonStr
+saveGraphJSON :: ServerPart Response
+saveGraphJSON = do
+    jsonStr <- lookBS "jsonData"
+    nameStr <- lookText' "nameData"
+    let jsonObj = Aeson.decode jsonStr :: Maybe SvgJSON
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            _ <- runSqlite databasePath $ insertGraph nameStr texts shapes paths
+            _ <- liftIO $ runSqlite databasePath $ insertGraph nameStr texts shapes paths
             return $ toResponse ("Success" :: String)
     where
         insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()

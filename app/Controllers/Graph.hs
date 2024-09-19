@@ -1,12 +1,11 @@
 module Controllers.Graph (graphResponse, index, getGraphJSON, graphImageResponse) where
 
-import Happstack.Server (ServerPart, Response, toResponse, ok)
+import Happstack.Server (ServerPart, Response, toResponse, ok, lookText', look)
 import MasterTemplate (masterTemplate, header)
 import Scripts (graphScripts)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import qualified Data.Text as T (Text)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (object, (.=))
 
@@ -45,8 +44,11 @@ index = liftIO (runSqlite databasePath $ do
 
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements
 -- for rendering graph (returned as JSON).
-getGraphJSON :: T.Text -> IO Response
-getGraphJSON graphName = getGraph graphName >>= withDefault
+getGraphJSON :: ServerPart Response
+getGraphJSON = do
+    graphName <- lookText' "graphName"
+    response <- liftIO $ getGraph graphName
+    withDefault response
     where
         withDefault (Just response) = return response
         withDefault Nothing = return $
@@ -57,7 +59,8 @@ getGraphJSON graphName = getGraph graphName >>= withDefault
 
 
 -- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.
-graphImageResponse :: String -> ServerPart Response
-graphImageResponse graphInfo = do
+graphImageResponse :: ServerPart Response
+graphImageResponse = do
+    graphInfo <- look "JsonLocalStorageObj"
     (svgFilename, imageFilename) <- liftIO $ getActiveGraphImage graphInfo
     liftIO $ returnImageData svgFilename imageFilename
