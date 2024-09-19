@@ -140,6 +140,7 @@ buildMeetTimes meet = do
     return $ Tables.MeetTime' (entityVal meet) parsedTime
 
 -- ** Other queries
+
 getGraph :: T.Text -> IO (Maybe Response)
 getGraph graphName =
     runSqlite databasePath $ do

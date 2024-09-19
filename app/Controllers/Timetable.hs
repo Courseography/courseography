@@ -78,6 +78,7 @@ returnPDF graphSvg graphImg fallTimetableSvg fallTimetableImg springTimetableSvg
     mapM_ removeFile [graphSvg, graphImg, fallTimetableSvg, fallTimetableImg, springTimetableSvg, springTimetableImg]
     return pdfName
 
+
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: ServerPart Response
 calendarResponse = do

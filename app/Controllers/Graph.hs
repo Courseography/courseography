@@ -8,6 +8,7 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (object, (.=))
+
 import Database.Tables as Tables
     ( EntityField(GraphTitle, GraphDynamic), Text, Graph )
 import Database.CourseQueries (getGraph)
@@ -34,10 +35,13 @@ graphResponse =
                 )
                 graphScripts
 
+
+
 index :: ServerPart Response
 index = liftIO (runSqlite databasePath $ do
     graphsList :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
     return $ createJSONResponse graphsList :: SqlPersistM Response)
+
 
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements
 -- for rendering graph (returned as JSON).
@@ -53,6 +57,7 @@ getGraphJSON = do
             object ["texts" .= ([] :: [Text]),
                     "shapes" .= ([] :: [Text]),
                     "paths" .= ([] :: [Text])]
+
 
 -- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.
 graphImageResponse :: ServerPart Response
