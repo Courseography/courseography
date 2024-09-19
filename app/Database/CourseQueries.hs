@@ -22,7 +22,7 @@ module Database.CourseQueries
 
 import Config (databasePath)
 import Control.Monad.IO.Class (MonadIO, liftIO)
-import Data.Aeson (object, toJSON)
+import Data.Aeson (object, toJSON, Value)
 import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, take)
@@ -58,10 +58,10 @@ returnCourse lowerStr = runSqlite databasePath $ do
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
-queryCourse :: T.Text -> IO Response
+queryCourse :: T.Text -> IO Value
 queryCourse str = do
     courseJSON <- returnCourse str
-    return $ createJSONResponse courseJSON
+    return $ toJSON courseJSON
 
 -- | Takes a http request with a post code and sends a JSON response containing the post data
 -- | if the post data has been modified since the timestamp in the request,
@@ -141,7 +141,7 @@ buildMeetTimes meet = do
 
 -- ** Other queries
 
-getGraph :: T.Text -> IO (Maybe Response)
+getGraph :: T.Text -> IO (Maybe Value)
 getGraph graphName =
     runSqlite databasePath $ do
         graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
@@ -177,8 +177,7 @@ getGraph graphName =
                                              intersectsWithShape (rects ++ ellipses))
                                             graphtexts
 
-                    response = createJSONResponse $
-                        object [
+                    response = object [
                             ("texts", toJSON $ graphtexts ++ regionTexts),
                             ("shapes", toJSON $ rects ++ ellipses),
                             ("paths", toJSON $ graphpaths ++ regions),
@@ -186,7 +185,7 @@ getGraph graphName =
                             ("height", toJSON $ graphHeight $ entityVal graph)
                         ]
 
-                return (Just response) :: SqlPersistM (Maybe Response)
+                return (Just response)
 
 -- | Retrieves the prerequisites for a course (code) as a string.
 -- Also retrieves the actual course code in the database in case

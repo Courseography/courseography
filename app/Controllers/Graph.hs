@@ -50,7 +50,7 @@ getGraphJSON = do
     response <- liftIO $ getGraph graphName
     withDefault response
     where
-        withDefault (Just response) = return response
+        withDefault (Just response) = return $ createJSONResponse response
         withDefault Nothing = return $
             createJSONResponse $
             object ["texts" .= ([] :: [Text]),
