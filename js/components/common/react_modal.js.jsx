@@ -251,6 +251,55 @@ class CourseModal extends React.Component {
 //Use React component from search.js
 class Description extends React.Component {
   render() {
+    const timetableUnavailable =
+      Object.keys(this.props.sessions).length !== 0 &&
+      this.props.sessions.F.length === 0 &&
+      this.props.sessions.S.length === 0 &&
+      this.props.sessions.Y.length === 0
+
+    let timetableDisplay
+    if (timetableUnavailable) {
+      timetableDisplay = (
+        <div>
+          <strong>Timetable Unavailable</strong>
+        </div>
+      )
+    } else {
+      timetableDisplay = Object.keys(this.props.sessions).map(session =>
+        this.props.sessions[session].length !== 0 ? (
+          <div key={session}>
+            <strong>{this.props.course.name + "-" + session}</strong>
+            <div className="ag-theme-alpine" style={{ height: 500, width: 940 }}>
+              <AgGridReact
+                rowData={this.props.sessions[session]}
+                columnDefs={[
+                  { field: "activity", width: 130 },
+                  { field: "instructor", width: 170 },
+                  { field: "availability" },
+                  { field: "waitList", width: 120 },
+                  {
+                    field: "time",
+                    cellStyle: { whiteSpace: "pre" },
+                    cellRenderer: col => col.data.time.join("\n"),
+                  },
+                  {
+                    field: "room",
+                    cellStyle: { whiteSpace: "pre" },
+                    cellRenderer: col => col.data.room.join("\n"),
+                    width: 140,
+                  },
+                ]}
+                rowSelection="multiple"
+                rowHeight="100"
+              ></AgGridReact>
+            </div>
+          </div>
+        ) : (
+          <div key={session}></div>
+        )
+      )
+    }
+
     //We want to use the Timetable component, but that component needs to be independent before using it here
     return (
       <div>
@@ -271,39 +320,7 @@ class Description extends React.Component {
           <strong>Timetable: </strong>
         </p>
 
-        {Object.keys(this.props.sessions).map(session =>
-          this.props.sessions[session].length !== 0 ? (
-            <div key={session}>
-              <strong>{this.props.course.name + "-" + session}</strong>
-              <div className="ag-theme-alpine" style={{ height: 500, width: 940 }}>
-                <AgGridReact
-                  rowData={this.props.sessions[session]}
-                  columnDefs={[
-                    { field: "activity", width: 130 },
-                    { field: "instructor", width: 170 },
-                    { field: "availability" },
-                    { field: "waitList", width: 120 },
-                    {
-                      field: "time",
-                      cellStyle: { whiteSpace: "pre" },
-                      cellRenderer: col => col.data.time.join("\n"),
-                    },
-                    {
-                      field: "room",
-                      cellStyle: { whiteSpace: "pre" },
-                      cellRenderer: col => col.data.room.join("\n"),
-                      width: 140,
-                    },
-                  ]}
-                  rowSelection="multiple"
-                  rowHeight="100"
-                ></AgGridReact>
-              </div>
-            </div>
-          ) : (
-            <div key={session}></div>
-          )
-        )}
+        {timetableDisplay}
 
         {/* <Video urls={this.props.course.videoUrls} /> */}
       </div>
