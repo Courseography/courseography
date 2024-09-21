@@ -2280,3 +2280,36 @@ main-filter input {
 .error-close-button:hover {
   background-color: #c36132;
 }
+
+.timetable-unavailable-warning {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 60px;
+}
+
+.timetable-unavailable-warning div {
+  padding: 16px;
+  width: 600px;
+  border: #f0d92b solid 2px;
+  background-color: rgb(250, 229, 93, 0.1);
+  border-radius: 12px;
+}
+
+.timetable-unavailable-warning h5 {
+  color: rgb(98, 93, 54);
+  font-style: italic;
+}
+
+.timetable-unavailable-warning p {
+  font-size: small;
+  font-style: italic;
+  color: rgb(161, 152, 65);
+}
+
+.timetable-unavailable-warning a {
+  color: rgb(128, 121, 71);
+  text-decoration: underline;
+}

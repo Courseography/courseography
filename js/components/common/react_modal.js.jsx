@@ -261,13 +261,21 @@ class Description extends React.Component {
     if (timetableUnavailable) {
       timetableDisplay = (
         <div className="timetable-unavailable-warning">
-          <p className="warning-title">TIMETABLE UNAVAILABLE</p>
-          <p className="warning-content">
-            This course is either not offered this year, or parsed incorrectly. Please
-            consult the
-            <a href="https://timetable.iit.artsci.utoronto.ca/"> official timetable </a>
-            for reliable information!
-          </p>
+          <div>
+            <h5 className="warning-title">
+              <strong>TIMETABLE UNAVAILABLE</strong>
+            </h5>
+            <p className="warning-content">
+              Please consult the&nbsp;
+              <a
+                href="https://timetable.iit.artsci.utoronto.ca/"
+                rel="noopener noreferrer"
+              >
+                official timetable
+              </a>
+              &nbsp;for reliable information!
+            </p>
+          </div>
         </div>
       )
     } else {
