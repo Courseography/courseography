@@ -56,8 +56,8 @@ returnCourse lowerStr = runSqlite databasePath $ do
         Just <$> buildCourse meetings
                                 (entityVal course)
 
--- | Queries the database for all information about @course@, constructs a JSON object
--- representing the course and returns the appropriate JSON response.
+-- | Queries the database for all information about @course@, and returns a JSON
+-- object representing the course.
 queryCourse :: T.Text -> IO Value
 queryCourse str = do
     courseJSON <- returnCourse str

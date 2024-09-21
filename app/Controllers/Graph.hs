@@ -48,14 +48,7 @@ getGraphJSON :: ServerPart Response
 getGraphJSON = do
     graphName <- lookText' "graphName"
     response <- liftIO $ getGraph graphName
-    withDefault response
-    where
-        withDefault (Just response) = return $ createJSONResponse response
-        withDefault Nothing = return $
-            createJSONResponse $
-            object ["texts" .= ([] :: [Text]),
-                    "shapes" .= ([] :: [Text]),
-                    "paths" .= ([] :: [Text])]
+    return $ maybe (createJSONResponse $ object ["texts" .= ([] :: [Text]), "shapes" .= ([] :: [Text]), "paths" .= ([] :: [Text])]) createJSONResponse response
 
 
 -- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.

@@ -20,7 +20,7 @@
 - Refactored `strictRoutes` by removing query parameters into functions for symmetry
 - Refactored graph and generation related route functionality into controllers
 - Moved the routes related to downloads to the `Timetable` controller to be triggered
-- Refactored the HTTPS response generation from the model in `App/Database/CourseQueries` to the controller `App/Controllers/`
+- Refactored the HTTPS response generation from `App/Database/CourseQueries` to the controller `App/Controllers/`
 
 ## [0.6.0] - 2024-06-24
 
