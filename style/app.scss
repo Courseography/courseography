@@ -2293,23 +2293,23 @@ main-filter input {
 .timetable-unavailable-warning div {
   padding: 16px;
   width: 600px;
-  border: #f0d92b solid 2px;
-  background-color: rgb(250, 229, 93, 0.1);
+  border: #de6746 solid 2px;
+  background-color: rgb(255, 66, 66, 0.1);
   border-radius: 12px;
 }
 
 .timetable-unavailable-warning h5 {
-  color: rgb(98, 93, 54);
+  color: #5c1717;
   font-style: italic;
 }
 
 .timetable-unavailable-warning p {
   font-size: small;
   font-style: italic;
-  color: rgb(161, 152, 65);
+  color: #903333;
 }
 
 .timetable-unavailable-warning a {
-  color: rgb(128, 121, 71);
+  color: #722222;
   text-decoration: underline;
 }

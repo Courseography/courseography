@@ -273,7 +273,7 @@ class Description extends React.Component {
               >
                 official timetable
               </a>
-              &nbsp;for reliable information!
+              &nbsp;for more information!
             </p>
           </div>
         </div>
