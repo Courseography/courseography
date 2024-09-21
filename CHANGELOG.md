@@ -20,6 +20,7 @@
 - Refactored `strictRoutes` by removing query parameters into functions for symmetry
 - Refactored graph and generation related route functionality into controllers
 - Moved the routes related to downloads to the `Timetable` controller to be triggered
+- Added text warning when there's no timetable information available to display
 
 ## [0.6.0] - 2024-06-24
 
