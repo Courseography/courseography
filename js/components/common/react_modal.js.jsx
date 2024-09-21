@@ -260,8 +260,14 @@ class Description extends React.Component {
     let timetableDisplay
     if (timetableUnavailable) {
       timetableDisplay = (
-        <div>
-          <strong>Timetable Unavailable</strong>
+        <div className="timetable-unavailable-warning">
+          <p className="warning-title">TIMETABLE UNAVAILABLE</p>
+          <p className="warning-content">
+            This course is either not offered this year, or parsed incorrectly. Please
+            consult the
+            <a href="https://timetable.iit.artsci.utoronto.ca/"> official timetable </a>
+            for reliable information!
+          </p>
         </div>
       )
     } else {
