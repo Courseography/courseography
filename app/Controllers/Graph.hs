@@ -8,6 +8,7 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (object, (.=))
+import Data.Maybe (fromMaybe)
 
 import Database.Tables as Tables
     ( EntityField(GraphTitle, GraphDynamic), Text, Graph )
@@ -48,7 +49,9 @@ getGraphJSON :: ServerPart Response
 getGraphJSON = do
     graphName <- lookText' "graphName"
     response <- liftIO $ getGraph graphName
-    return $ maybe (createJSONResponse $ object ["texts" .= ([] :: [Text]), "shapes" .= ([] :: [Text]), "paths" .= ([] :: [Text])]) createJSONResponse response
+    return $ createJSONResponse $ fromMaybe (object ["texts" .= ([] :: [Text]),
+                                                    "shapes" .= ([] :: [Text]),
+                                                    "paths" .= ([] :: [Text])]) response
 
 
 -- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.
