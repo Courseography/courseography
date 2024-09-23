@@ -975,4 +975,4 @@ function ErrorMessage({ title, message, onClose, isOpen }) {
   )
 }
 
-export { CourseModal, MapModal, FocusModal, ErrorMessage }
+export { CourseModal, Description, MapModal, FocusModal, ErrorMessage }
