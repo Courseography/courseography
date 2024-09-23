@@ -260,23 +260,7 @@ class Description extends React.Component {
     let timetableDisplay
     if (timetableUnavailable) {
       timetableDisplay = (
-        <div className="timetable-unavailable-warning">
-          <div>
-            <h5 className="warning-title">
-              <strong>TIMETABLE UNAVAILABLE</strong>
-            </h5>
-            <p className="warning-content">
-              Please consult the&nbsp;
-              <a
-                href="https://timetable.iit.artsci.utoronto.ca/"
-                rel="noopener noreferrer"
-              >
-                official timetable
-              </a>
-              &nbsp;for more information!
-            </p>
-          </div>
-        </div>
+        <div className="timetable-unavailable">No timetable information available</div>
       )
     } else {
       timetableDisplay = Object.keys(this.props.sessions).map(session =>

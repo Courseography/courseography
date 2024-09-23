@@ -2281,35 +2281,12 @@ main-filter input {
   background-color: #c36132;
 }
 
-.timetable-unavailable-warning {
+.timetable-unavailable {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
   margin-top: 60px;
-}
-
-.timetable-unavailable-warning div {
-  padding: 16px;
-  width: 600px;
-  border: #de6746 solid 2px;
-  background-color: rgb(255, 66, 66, 0.1);
-  border-radius: 12px;
-}
-
-.timetable-unavailable-warning h5 {
-  color: #5c1717;
+  font-size: medium;
   font-style: italic;
-}
-
-.timetable-unavailable-warning p {
-  font-size: small;
-  font-style: italic;
-  color: #903333;
-}
-
-.timetable-unavailable-warning a {
-  color: #722222;
-  text-decoration: underline;
 }
