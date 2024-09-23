@@ -20,6 +20,7 @@ import Happstack.Server.Types (takeRequestBody, unBody)
 import Svg.Parser (parseDynamicSvg)
 import System.Directory (createDirectoryIfMissing)
 import System.FilePath (combine, normalise)
+import Util.Happstack (createJSONResponse)
 
 doDots :: PrintDotRepr dg n => [(FilePath, dg n)] -> IO ()
 doDots cases = do
@@ -46,14 +47,14 @@ generateAndSavePrereqResponse :: CourseGraphOptions -> IO Response
 generateAndSavePrereqResponse coursesOptions = do
   cached <- getGraph graphHash
   case cached of
-    Just cachedGraph -> return cachedGraph
+    Just cachedGraph -> return $ createJSONResponse cachedGraph
     Nothing -> do
       graph <- coursesToPrereqGraphExcluding (courses coursesOptions) (graphOptions coursesOptions)
       bString <- graphToByteString graph
       -- Parse the generated SVG and store it in the database.
       parseDynamicSvg graphHash $ decodeUtf8 bString
       storedGraph <- getGraph graphHash
-      return $ fromMaybe graphNotFound storedGraph
+      return $ createJSONResponse $ fromMaybe graphNotFound storedGraph
   where
     graphHash :: T.Text
     graphHash = hash coursesOptions
