@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Added text warning when there's no timetable information available to display
+
 ### 🐛 Bug fixes
 
 - Fix React state mutation
