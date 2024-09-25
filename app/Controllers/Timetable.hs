@@ -41,17 +41,21 @@ gridResponse =
 
 
 -- | Returns an image of the timetable requested by the user.
-exportTimetableImageResponse :: T.Text -> String -> ServerPart Response
-exportTimetableImageResponse session selectedCourses = do
-    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) session
+exportTimetableImageResponse :: ServerPart Response
+exportTimetableImageResponse = do
+    session <- lookText' "session"
+    selectedCourses <- lookText' "courses"
+    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable selectedCourses session
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns a PDF containing graph and timetable requested by the user.
-exportTimetablePDFResponse :: String -> String -> ServerPart Response
-exportTimetablePDFResponse selectedCourses graphInfo = do
+exportTimetablePDFResponse :: ServerPart Response
+exportTimetablePDFResponse = do
+    selectedCourses <- lookText' "courses"
+    graphInfo <- look "JsonLocalStorageObj"
     (graphSvg, graphImg) <- liftIO $ getActiveGraphImage graphInfo
-    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Fall"
-    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Spring"
+    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable selectedCourses "Fall"
+    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable selectedCourses "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     liftIO $ returnPdfBS pdfName
 
@@ -76,8 +80,10 @@ returnPDF graphSvg graphImg fallTimetableSvg fallTimetableImg springTimetableSvg
 
 
 -- | Returns an ICS file of events as requested by the user.
-calendarResponse :: String -> ServerPart Response
-calendarResponse = liftIO . getCalendar . T.pack
+calendarResponse :: ServerPart Response
+calendarResponse = do
+    courses <- lookText' "courses"
+    liftIO $ getCalendar courses
 
 -- | Gets together all the pieces of the program.
 getCalendar :: T.Text -> IO Response

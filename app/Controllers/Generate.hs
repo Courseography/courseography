@@ -33,6 +33,7 @@ generatePrerequisites =
 
 findAndSavePrereqsResponse :: ServerPart Response
 findAndSavePrereqsResponse = do
-    responseBody <- getBody
-    let coursesOptions :: CourseGraphOptions = fromJust $ decode responseBody
+    method PUT
+    requestBody <- getBody
+    let coursesOptions :: CourseGraphOptions = fromJust $ decode requestBody
     liftIO $ generateAndSavePrereqResponse coursesOptions

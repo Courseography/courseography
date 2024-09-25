@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Added text warning when there's no timetable information available to display
+
 ### 🐛 Bug fixes
 
 - Fix React state mutation
@@ -17,8 +19,10 @@
 - Replace `react-test-renderer` (deprecated) for snapshot testing
 - Use `user-event` for user interactions (instead of `fireEvent`)
 - Add `ag-grid` group to dependabot configuration
+- Refactored `strictRoutes` by removing query parameters into functions for symmetry
 - Refactored graph and generation related route functionality into controllers
 - Moved the routes related to downloads to the `Timetable` controller to be triggered
+- Refactored the HTTPS response generation from `App/Database/CourseQueries` to the controller `App/Controllers/`
 
 ## [0.6.0] - 2024-06-24
 
