@@ -28,5 +28,6 @@ seedVideo (code, videos) =
 
 -- | Sets the video routes of all course rows.
 seedVideos :: IO ()
-seedVideos = runSqlite databasePath $
-    mapM_ seedVideo courseVideos
+seedVideos = do
+    dbPath <- databasePath
+    runSqlite dbPath $ mapM_ seedVideo courseVideos

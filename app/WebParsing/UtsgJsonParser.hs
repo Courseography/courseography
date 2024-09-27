@@ -16,15 +16,18 @@ import Network.HTTP.Conduit (method, responseBody, requestHeaders, RequestBody(R
 parseTimetable :: IO ()
 parseTimetable = do
     orgs <- getOrgs
-    runSqlite databasePath $ mapM_ insertAllMeetings orgs
+    dbPath <- databasePath
+    runSqlite dbPath $ mapM_ insertAllMeetings orgs
 
 -- | Get all the orgs from the courses table in the database
 getOrgs :: IO [T.Text]
-getOrgs = runSqlite databasePath $ do
-    courseEntities <- selectList [] [] :: SqlPersistM [Entity Courses]
-    let courseCodes = map (coursesCode . entityVal) courseEntities
-    let orgsSet = Set.fromList $ map (T.take 3) courseCodes
-    return $ Set.toList orgsSet
+getOrgs = do
+    dbPath <- databasePath
+    runSqlite dbPath $ do
+        courseEntities <- selectList [] [] :: SqlPersistM [Entity Courses]
+        let courseCodes = map (coursesCode . entityVal) courseEntities
+        let orgsSet = Set.fromList $ map (T.take 3) courseCodes
+        return $ Set.toList orgsSet
 
 -- | insert/update all the data into the Meeting and Times schema by creating and sending
 --   the http request to Artsci Timetable and then parsing the JSON response
@@ -33,9 +36,11 @@ insertAllMeetings org = do
     liftIO . print $ T.append "parsing JSON data from: " org
 
     -- set up the request
-    let reqBody = createReqBody org
-    request <- liftIO $ parseRequest (T.unpack timetableApiUrl)
-    let request' = request {method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
+    reqBody <- liftIO $ createReqBody org
+    timetableApi <- liftIO timetableApiUrl
+    request <- liftIO $ parseRequest (T.unpack timetableApi)
+    rHeaders <- liftIO reqHeaders
+    let request' = request {method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = rHeaders}
 
     -- make the request
     manager <- liftIO $ newManager tlsManagerSettings

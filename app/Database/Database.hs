@@ -9,6 +9,7 @@ inserting it into the database. Run when @cabal run database@ is executed.
 module Database.Database
     (populateCalendar, setupDatabase) where
 
+import Control.Monad.IO.Class (liftIO)
 import Config (databasePath)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
@@ -29,10 +30,11 @@ breathTableSetUpStr = "breadth table set up"
 setupDatabase :: IO ()
 setupDatabase = do
       -- Create db folder if it doesn't exist
-      let ind = (T.length databasePath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ databasePath
-          db = T.unpack $ T.take ind databasePath
+      dbPath <- liftIO databasePath
+      let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
+          db = T.unpack $ T.take ind dbPath
       createDirectoryIfMissing True db
-      runSqlite databasePath $ runMigration migrateAll
+      runSqlite dbPath $ runMigration migrateAll
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()
@@ -51,17 +53,21 @@ populateStaticInfo = do
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
-setupDistributionTable = runSqlite databasePath $ do
-    insert_ $ Distribution "Humanities"
-    insert_ $ Distribution "Social Science"
-    insert_ $ Distribution "Science"
+setupDistributionTable = do
+    dbPath <- databasePath
+    runSqlite dbPath $ do
+        insert_ $ Distribution "Humanities"
+        insert_ $ Distribution "Social Science"
+        insert_ $ Distribution "Science"
 
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
-setupBreadthTable = runSqlite databasePath $ do
-    insert_ $ Breadth "Creative and Cultural Representations (1)"
-    insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
-    insert_ $ Breadth "Society and its Institutions (3)"
-    insert_ $ Breadth "Living Things and Their Environment (4)"
-    insert_ $ Breadth "The Physical and Mathematical Universes (5)"
-    insert_ $ Breadth "No Breadth"
+setupBreadthTable = do
+    dbPath <- databasePath
+    runSqlite dbPath $ do
+        insert_ $ Breadth "Creative and Cultural Representations (1)"
+        insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
+        insert_ $ Breadth "Society and its Institutions (3)"
+        insert_ $ Breadth "Living Things and Their Environment (4)"
+        insert_ $ Breadth "The Physical and Mathematical Universes (5)"
+        insert_ $ Breadth "No Breadth"

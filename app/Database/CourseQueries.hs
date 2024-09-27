@@ -44,17 +44,19 @@ meetingQuery meetingCodes = do
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.
 returnCourse :: T.Text -> IO (Maybe Course)
-returnCourse lowerStr = runSqlite databasePath $ do
-    let courseStr = T.toUpper lowerStr
-    -- TODO: require the client to pass the full course code
-    let fullCodes = [courseStr, T.append courseStr "H1", T.append courseStr "Y1"]
-    sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode <-. fullCodes] []
-    case sqlCourse of
-      Nothing -> return Nothing
-      Just course -> do
-        meetings <- meetingQuery fullCodes
-        Just <$> buildCourse meetings
-                                (entityVal course)
+returnCourse lowerStr = do
+    dbPath <- databasePath
+    runSqlite dbPath $ do
+        let courseStr = T.toUpper lowerStr
+        -- TODO: require the client to pass the full course code
+        let fullCodes = [courseStr, T.append courseStr "H1", T.append courseStr "Y1"]
+        sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode <-. fullCodes] []
+        case sqlCourse of
+          Nothing -> return Nothing
+          Just course -> do
+            meetings <- meetingQuery fullCodes
+            Just <$> buildCourse meetings
+                                    (entityVal course)
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
@@ -84,11 +86,13 @@ queryPost req code = do
 
 -- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)
-returnPost code = runSqlite databasePath $ do
-    sqlPost <- selectFirst [PostCode ==. code] []
-    case sqlPost of
-        Nothing -> return Nothing
-        Just post -> return $ Just $ entityVal post
+returnPost code = do
+    dbPath <- databasePath
+    runSqlite dbPath $ do
+        sqlPost <- selectFirst [PostCode ==. code] []
+        case sqlPost of
+            Nothing -> return Nothing
+            Just post -> return $ Just $ entityVal post
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.
@@ -142,8 +146,9 @@ buildMeetTimes meet = do
 -- ** Other queries
 
 getGraph :: T.Text -> IO (Maybe Response)
-getGraph graphName =
-    runSqlite databasePath $ do
+getGraph graphName = do
+    dbPath <- liftIO databasePath
+    runSqlite dbPath $ do
         graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
         case graphEnt of
             Nothing -> return Nothing
@@ -192,20 +197,23 @@ getGraph graphName =
 -- Also retrieves the actual course code in the database in case
 -- the one the user inputs doesn't match it exactly
 prereqsForCourse :: T.Text -> IO (Either String (T.Text, T.Text))
-prereqsForCourse courseCode = runSqlite databasePath $ do
-    let upperCaseCourseCode = T.toUpper courseCode
-    course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
-    case course of
-        Nothing -> return (Left "Course not found")
-        Just courseEntity ->
-            return (Right
-                     (coursesCode $ entityVal courseEntity, 
-                      fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
-                    ) :: SqlPersistM (Either String (T.Text, T.Text))
+prereqsForCourse courseCode = do
+    dbPath <- databasePath
+    runSqlite dbPath $ do
+        let upperCaseCourseCode = T.toUpper courseCode
+        course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
+        case course of
+            Nothing -> return (Left "Course not found")
+            Just courseEntity ->
+                return (Right
+                         (coursesCode $ entityVal courseEntity,
+                          fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
+                        ) :: SqlPersistM (Either String (T.Text, T.Text))
 
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
-getDeptCourses dept =
-    liftIO $ runSqlite databasePath $ do
+getDeptCourses dept = do
+    dbPath <- liftIO databasePath
+    liftIO $ runSqlite dbPath $ do
         courses :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
         let deptCourses = map entityVal courses
         meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map coursesCode deptCourses] []

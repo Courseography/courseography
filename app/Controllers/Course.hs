@@ -22,7 +22,8 @@ retrieveCourse = do
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response
 index = do
-  response <- liftIO $ runSqlite databasePath $ do
+  dbPath <- liftIO databasePath
+  response <- liftIO $ runSqlite dbPath $ do
       coursesList :: [Entity Courses] <- selectList [] []
       let codes = map (coursesCode . entityVal) coursesList
       return $ T.unlines codes :: SqlPersistM T.Text
@@ -37,7 +38,8 @@ courseInfo = do
 -- | Return a list of all departments.
 depts :: ServerPart Response
 depts = do
-    deptList <- liftIO $ runSqlite databasePath $ do
+    dbPath <- liftIO databasePath
+    deptList <- liftIO $ runSqlite dbPath $ do
         coursesList :: [Entity Courses] <- selectList [] []
         return $ sort . nub $ map g coursesList :: SqlPersistM [String]
     return $ createJSONResponse deptList

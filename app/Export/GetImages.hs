@@ -64,8 +64,10 @@ list2tuple _ = undefined
 -- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
 -- returns a list of list of Time.
 getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
-getTimes selectedMeetings = runSqlite databasePath $
-  mapM getMeetingTime selectedMeetings
+getTimes selectedMeetings = do
+  dbPath <- databasePath
+  runSqlite dbPath $
+    mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
 -- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.

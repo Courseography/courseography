@@ -38,32 +38,35 @@ import Text.Read (readMaybe)
 
 
 parsePrebuiltSvgs :: IO ()
-parsePrebuiltSvgs = runSqlite databasePath $ do
-    performParse "Computer Science" "csc2024.svg"
-    performParse "Statistics" "sta2022.svg"
-    -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
-    -- performParse "(unofficial) Biochemistry" "bch2015.svg"
-    -- performParse "(unofficial) Cell & Systems Biology" "csb2015.svg"
-    -- performParse "(unofficial) Estonian" "est2015.svg"
-    -- performParse "(unofficial) Finnish" "fin2015.svg"
-    -- performParse "(unofficial) Italian" "ita2015.svg"
-    -- performParse "(unofficial) Linguistics" "lin2015.svg"
-    -- performParse "(unofficial) Rotman" "rotman2015.svg"
-    -- performParse "(unofficial) Economics" "eco2015.svg"
-    -- performParse "(unofficial) Spanish" "spa2015.svg"
-    -- performParse "(unofficial) Portuguese" "prt2015.svg"
-    -- performParse "(unofficial) Slavic" "sla2015.svg"
-    -- performParse "(unofficial) East Asian Studies" "eas2015.svg"
-    -- performParse "(unofficial) English" "eng2015.svg"
-    -- performParse "(unofficial) History and Philosophy of Science" "hps2015.svg"
-    -- performParse "(unofficial) History" "his2015.svg"
-    -- performParse "(unofficial) Geography" "ggr2015.svg"
-    -- performParse "(unofficial) Aboriginal" "abs2015.svg"
-    -- performParse "(unofficial) German" "ger2015.svg"
+parsePrebuiltSvgs = do
+    dbPath <- databasePath
+    runSqlite dbPath $ do
+        performParse "Computer Science" "csc2024.svg"
+        performParse "Statistics" "sta2022.svg"
+        -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
+        -- performParse "(unofficial) Biochemistry" "bch2015.svg"
+        -- performParse "(unofficial) Cell & Systems Biology" "csb2015.svg"
+        -- performParse "(unofficial) Estonian" "est2015.svg"
+        -- performParse "(unofficial) Finnish" "fin2015.svg"
+        -- performParse "(unofficial) Italian" "ita2015.svg"
+        -- performParse "(unofficial) Linguistics" "lin2015.svg"
+        -- performParse "(unofficial) Rotman" "rotman2015.svg"
+        -- performParse "(unofficial) Economics" "eco2015.svg"
+        -- performParse "(unofficial) Spanish" "spa2015.svg"
+        -- performParse "(unofficial) Portuguese" "prt2015.svg"
+        -- performParse "(unofficial) Slavic" "sla2015.svg"
+        -- performParse "(unofficial) East Asian Studies" "eas2015.svg"
+        -- performParse "(unofficial) English" "eng2015.svg"
+        -- performParse "(unofficial) History and Philosophy of Science" "hps2015.svg"
+        -- performParse "(unofficial) History" "his2015.svg"
+        -- performParse "(unofficial) Geography" "ggr2015.svg"
+        -- performParse "(unofficial) Aboriginal" "abs2015.svg"
+        -- performParse "(unofficial) German" "ger2015.svg"
 
 parseDynamicSvg :: T.Text -> T.Text -> IO ()
-parseDynamicSvg graphName graphContents =
-    runSqlite databasePath $ performParseFromMemory graphName graphContents True
+parseDynamicSvg graphName graphContents = do
+    dbPath <- databasePath
+    runSqlite dbPath $ performParseFromMemory graphName graphContents True
 
 -- | The starting point for parsing a graph with a given title and file
 -- after removing the graph if it already exists.
@@ -71,9 +74,10 @@ performParse :: T.Text -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> SqlPersistM ()
 performParse graphName inputFilename = do
+    gPath <- liftIO graphPath
     deleteExistingGraph graphName
     liftIO . print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
-    graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
+    graphFile <- liftIO $ T.readFile (gPath ++ inputFilename)
     performParseFromMemory graphName graphFile False
 
 -- | Deletes the graph with the given name from the database if it exists.

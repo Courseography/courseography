@@ -41,7 +41,8 @@ buildingsCSV = do
 parseBuildings :: IO ()
 parseBuildings = do
     buildingInfo <- getBuildingsFromCSV =<< buildingsCSV
-    runSqlite databasePath $ do
+    dbPath <- databasePath
+    runSqlite dbPath $ do
         liftIO $ putStrLn "Inserting buildings"
         deleteWhere ([] :: [Filter Building])  :: SqlPersistM ()
         insertMany_ buildingInfo :: SqlPersistM ()
@@ -64,9 +65,11 @@ getBuildingsFromCSV buildingCSVFile = do
 -- into the database.
 parseArtSci :: IO ()
 parseArtSci = do
-    bodyTags <- httpBodyTags programsUrl
+    programs <- programsUrl
+    bodyTags <- httpBodyTags programs
     let deptInfo = getDeptList bodyTags
-    runSqlite databasePath $ do
+    dbPath <- databasePath
+    runSqlite dbPath $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
         mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)
@@ -96,7 +99,8 @@ insertDepts = mapM_ (print >> (insertUnique . Department))
 parseDepartment :: (T.Text, T.Text) -> SqlPersistM ()
 parseDepartment (relativeURL, _) = do
     liftIO $ print relativeURL
-    bodyTags <- liftIO $ httpBodyTags $ fasCalendarUrl ++ T.unpack relativeURL
+    fasCalendar <- liftIO fasCalendarUrl
+    bodyTags <- liftIO $ httpBodyTags $ fasCalendar ++ T.unpack relativeURL
     let contentTags = dropWhile (not . tagOpenAttrLit "footer" ("class", "view-footer")) bodyTags
         programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags
         programs' = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-content")) programs
