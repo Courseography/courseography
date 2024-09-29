@@ -204,7 +204,7 @@ getCourseInfo meeting = do
         dataInOrder = orderTimeFields allTimes
         start = startTimesByCourse dataInOrder (meetingSession meet)
         end = endTimesByCourse dataInOrder (meetingSession meet)
-    dates <- getDatesByCourse dataInOrder (meetingSession meet)  -- Handle IO here
+    dates <- getDatesByCourse dataInOrder (meetingSession meet)
     return (code, sect, start, end, dates)
 
 -- ** Functions that deal with tuples

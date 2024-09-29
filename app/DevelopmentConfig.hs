@@ -7,7 +7,6 @@ containing the production values.
 -}
 
 module Config (
-    loadConfig,
     serverConf,
     databasePath,
     markdownPath,
@@ -108,7 +107,7 @@ parseReqHeaders = map (\hp -> (packHeaderName (key hp), pack (T.unpack (value hp
     packHeaderName :: T.Text -> HeaderName
     packHeaderName = CI.mk . pack . T.unpack
 
--- Load the configuration
+-- Function to load the configuration values from the yaml file
 loadConfig :: IO Config
 loadConfig = loadYamlSettings ["config.yaml"] [] useEnv
 
