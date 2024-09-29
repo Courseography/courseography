@@ -2280,3 +2280,13 @@ main-filter input {
 .error-close-button:hover {
   background-color: #c36132;
 }
+
+.timetable-unavailable {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+  font-size: medium;
+  font-style: italic;
+}

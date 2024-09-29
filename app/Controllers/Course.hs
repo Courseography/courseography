@@ -17,7 +17,8 @@ import qualified Database.CourseQueries as CourseHelpers (queryCourse, getDeptCo
 retrieveCourse :: ServerPart Response
 retrieveCourse = do
     name <- lookText' "name"
-    liftIO $ CourseHelpers.queryCourse name
+    courseJSON <- liftIO $ CourseHelpers.queryCourse name
+    return $ createJSONResponse courseJSON
 
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response
