@@ -141,17 +141,17 @@ logMAccessShort host user _ requestLine responseCode _ referer _ = do
 
 -- | The path to the database file, relative to the project root.
 databasePath :: IO Text
-databasePath = do databasePathValue <$> loadConfig
+databasePath = databasePathValue <$> loadConfig
 
 -- FILE PATH STRINGS
 
 -- | The relative path to the directory with the markdown files rendered for site content.
 markdownPath :: IO String
-markdownPath = do markdownPathValue <$> loadConfig
+markdownPath = markdownPathValue <$> loadConfig
 
 -- | The relative path to the directory that contains all of the graph SVG files.
 graphPath :: IO String
-graphPath = do graphPathValue <$> loadConfig
+graphPath = graphPathValue <$> loadConfig
 
 -- | The relative path to the directory containing all of the generated CSS files.
 genCssPath :: IO String
