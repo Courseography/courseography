@@ -9,6 +9,7 @@ containing the production values.
 module Config (
     serverConf,
     databasePath,
+    runDb,
     markdownPath,
     graphPath,
     genCssPath,
@@ -32,10 +33,13 @@ import qualified Data.Text as T
 import Data.Text (Text)
 import Data.Time (Day)
 import Happstack.Server (Conf (..), LogAccess, nullConf)
-import Network.HTTP.Types.Header (RequestHeaders, HeaderName)
+import Network.HTTP.Types.Header (RequestHeaders)
 import System.Log.Logger (Priority (INFO), logM)
-import qualified Data.CaseInsensitive as CI
-import Data.ByteString.Char8 (pack)
+import Control.Monad.Trans.Reader (ReaderT)
+import Control.Monad.Logger (NoLoggingT)
+import Control.Monad.Trans.Resource (ResourceT, MonadUnliftIO)
+import Database.Persist.Sqlite (SqlBackend, runSqlite)
+import Control.Monad.IO.Class (liftIO)
 
 -- Main configuration data type
 data Config = Config
@@ -49,12 +53,6 @@ data Config = Config
     , timetableApiUrlValue  :: Text
     , fasCalendarUrlValue   :: String
     , programsUrlValue      :: String
-    , directionValue        :: T.Text
-    , divisionsValue        :: [T.Text]
-    , pageValue             :: Int
-    , pageSizeValue         :: Int
-    , sessionsValue         :: [T.Text]
-    , reqHeadersValue       :: RequestHeaders
     , fallStartDateValue    :: Day
     , fallEndDateValue      :: Day
     , winterStartDateValue  :: Day
@@ -75,12 +73,6 @@ instance FromJSON Config where
         <*> obj .: "timetableApiUrl"
         <*> obj .: "fasCalendarUrl"
         <*> obj .: "programsUrl"
-        <*> obj .: "direction"
-        <*> obj .: "divisions"
-        <*> obj .: "page"
-        <*> obj .: "pageSize"
-        <*> obj .: "sessions"
-        <*> (parseReqHeaders <$> obj .: "reqHeaders")
         <*> obj .: "fallStartDate"
         <*> obj .: "fallEndDate"
         <*> obj .: "winterStartDate"
@@ -88,26 +80,7 @@ instance FromJSON Config where
         <*> obj .: "outDay"
         <*> obj .: "holidaysList"
 
--- Define a helper structure that matches the JSON format
-data HeaderPair = HeaderPair
-  { key   :: T.Text
-  , value :: T.Text
-  }
-
--- Parse the key-value pair from the JSON
-instance FromJSON HeaderPair where
-    parseJSON = withObject "HeaderPair" $ \v ->
-        HeaderPair <$> v .: "key"
-                   <*> v .: "value"
-
--- Function to convert parsed JSON to RequestHeaders type
-parseReqHeaders :: [HeaderPair] -> RequestHeaders
-parseReqHeaders = map (\hp -> (packHeaderName (key hp), pack (T.unpack (value hp))))
-  where
-    packHeaderName :: T.Text -> HeaderName
-    packHeaderName = CI.mk . pack . T.unpack
-
--- Function to load the configuration values from the yaml file
+-- Load the configuration
 loadConfig :: IO Config
 loadConfig = loadYamlSettings ["config.yaml"] [] useEnv
 
@@ -142,6 +115,13 @@ logMAccessShort host user _ requestLine responseCode _ referer _ = do
 databasePath :: IO Text
 databasePath = databasePathValue <$> loadConfig
 
+-- | Fetch the database path and execute the given action in the context of the database.
+runDb :: (MonadUnliftIO m) => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a -> m a
+runDb action = do
+  dbPath <- liftIO databasePath
+  runSqlite dbPath action
+
+
 -- FILE PATH STRINGS
 
 -- | The relative path to the directory with the markdown files rendered for site content.
@@ -154,32 +134,30 @@ graphPath = graphPathValue <$> loadConfig
 
 -- | The relative path to the directory containing all of the generated CSS files.
 genCssPath :: IO String
-genCssPath = do genCssPathValue <$> loadConfig
+genCssPath = genCssPathValue <$> loadConfig
 
 -- URLs
 
 -- | The URL for U of T's official timetable.
 timetableUrl :: IO String
-timetableUrl = do timetableUrlValue <$> loadConfig
+timetableUrl = timetableUrlValue <$> loadConfig
 
 -- | The Faculty of Arts and Science API for course timetables (by unit).
 timetableApiUrl :: IO Text
-timetableApiUrl = do timetableApiUrlValue <$> loadConfig
+timetableApiUrl = timetableApiUrlValue <$> loadConfig
 
 -- | The URLs of the Faculty of Arts & Science calendar.
 fasCalendarUrl :: IO String
-fasCalendarUrl = do fasCalendarUrlValue <$> loadConfig
+fasCalendarUrl = fasCalendarUrlValue <$> loadConfig
 
 programsUrl :: IO String
-programsUrl = do programsUrlValue <$> loadConfig
+programsUrl = programsUrlValue <$> loadConfig
 
 -- HTTP REQUEST STRINGS
 
 -- | Create the body for the HTTP request based on the org
-createReqBody :: Text -> IO Value
-createReqBody org = do
-    config <- loadConfig
-    return $ object [ "campuses" .= ([] :: [T.Text]),
+createReqBody :: Text -> Value
+createReqBody org = object [ "campuses" .= ([] :: [T.Text]),
                        "courseCodeAndTitleProps" .= object
                        [ "courseCode" .= ("" :: T.Text),
                          "courseSectionCode" .= ("" :: T.Text),
@@ -191,42 +169,43 @@ createReqBody org = do
                         "dayPreferences" .= ([] :: [T.Text]),
                         "deliveryModes" .= ([] :: [T.Text]),
                         "departmentProps" .= ([] :: [T.Text]),
-                        "direction" .= directionValue config,
-                        "divisions" .= divisionsValue config,
+                        "direction" .= ("asc" :: T.Text),
+                        "divisions" .= [T.pack "ARTSC"],
                         "instructor" .= ("" :: T.Text),
-                        "page" .= pageValue config,
-                        "pageSize" .= pageSizeValue config,
+                        "page" .= (1 :: Int),
+                        "pageSize" .= (200 :: Int),
                         "requirementProps" .= ([] :: [T.Text]),
-                        "sessions" .= sessionsValue config,
+                        "sessions" .= [T.pack "20249", T.pack "20251", T.pack "20249-20251"],
                         "timePreferences" .= ([] :: [T.Text])
                      ]
 
 -- | The headers for the HTTP request
-reqHeaders :: IO RequestHeaders
-reqHeaders = do reqHeadersValue <$> loadConfig
+reqHeaders :: RequestHeaders
+reqHeaders = [("Content-Type", "application/json"), ("Accept", "application/json")]
 
 -- CALENDAR RESPONSE DATES
 
 -- | First day of classes for the fall term.
 fallStartDate :: IO Day
-fallStartDate = do fallStartDateValue <$> loadConfig
+fallStartDate = fallStartDateValue <$> loadConfig
 
 -- | Last day of classes for the fall term.
 fallEndDate :: IO Day
-fallEndDate = do fallEndDateValue <$> loadConfig
+fallEndDate = fallEndDateValue <$> loadConfig
 
 -- | First day of classes for the winter term.
 winterStartDate :: IO Day
-winterStartDate = do winterStartDateValue <$> loadConfig
+winterStartDate = winterStartDateValue <$> loadConfig
 
 -- | Last day of classes for the winter term.
 winterEndDate :: IO Day
-winterEndDate = do winterEndDateValue <$> loadConfig
+winterEndDate = winterEndDateValue <$> loadConfig
 
 -- | Out of date day. Used to control forbidden inputs for days.
 outDay :: IO Day
-outDay = do outDayValue <$> loadConfig
+outDay = outDayValue <$> loadConfig
 
 -- Holidays for the fall and winter term.
 holidays :: IO [String]
-holidays = do holidaysList <$> loadConfig
+holidays = holidaysList <$> loadConfig
+
