@@ -1,7 +1,7 @@
 module WebParsing.ArtSciParser
     (parseCalendar, getDeptList) where
 
-import Config (databasePath, fasCalendarUrl, programsUrl)
+import Config (runDb, fasCalendarUrl, programsUrl)
 import Control.Monad.IO.Class (liftIO)
 import Data.CSV
 import Data.List (findIndex, nubBy)
@@ -11,7 +11,7 @@ import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Database.CourseInsertion (insertCourse)
 import Database.Persist (insertUnique)
-import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insertMany_, runSqlite)
+import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insertMany_)
 import Database.Tables (Building (..), Courses (..), Department (..))
 import Filesystem.Path.CurrentOS as Path
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
@@ -41,8 +41,7 @@ buildingsCSV = do
 parseBuildings :: IO ()
 parseBuildings = do
     buildingInfo <- getBuildingsFromCSV =<< buildingsCSV
-    dbPath <- databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         liftIO $ putStrLn "Inserting buildings"
         deleteWhere ([] :: [Filter Building])  :: SqlPersistM ()
         insertMany_ buildingInfo :: SqlPersistM ()
@@ -68,8 +67,7 @@ parseArtSci = do
     programs <- programsUrl
     bodyTags <- httpBodyTags programs
     let deptInfo = getDeptList bodyTags
-    dbPath <- databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
         mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)

@@ -18,9 +18,8 @@ import Database.Persist.Sqlite
       SelectOpt(Asc),
       (==.),
       selectList,
-      runSqlite,
       SqlPersistM )
-import Config (databasePath)
+import Config (runDb)
 import Util.Happstack (createJSONResponse)
 import Export.GetImages (getActiveGraphImage)
 import Response.Image (returnImageData)
@@ -39,8 +38,7 @@ graphResponse =
 
 index :: ServerPart Response
 index = do
-    dbPath <- liftIO databasePath
-    liftIO $ runSqlite dbPath $ do
+    liftIO $ runDb $ do
         graphsList :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
         return $ createJSONResponse graphsList :: SqlPersistM Response
 

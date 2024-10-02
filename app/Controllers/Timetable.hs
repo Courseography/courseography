@@ -18,14 +18,14 @@ import Export.LatexGenerator
 import Export.PdfGenerator
 import Response.Image (returnImageData)
 import System.Directory (removeFile)
-import Config (databasePath, fallEndDate, fallStartDate, holidays, outDay, winterEndDate,
+import Config (runDb, fallEndDate, fallStartDate, holidays, outDay, winterEndDate,
                winterStartDate)
 import Data.List (groupBy, sort, sortOn)
 import Data.List.Split (splitOn)
 import Data.Time (Day, defaultTimeLocale, formatTime, getCurrentTime, toGregorian)
 import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
 import Database.CourseQueries (returnMeeting)
-import Database.Persist.Sqlite (entityKey, entityVal, runSqlite, selectList, (==.))
+import Database.Persist.Sqlite (entityKey, entityVal, selectList, (==.))
 import Database.Tables
 import Text.Read (readMaybe)
 
@@ -134,8 +134,7 @@ getCoursesInfo courses = map courseInfo allCourses
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
 pullDatabase :: (Code, Section, Session) -> IO MeetTime'
 pullDatabase (code, section, session) = do
-    dbPath <- databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         meet <- returnMeeting code fullSection session
         allTimes <- selectList [TimesMeeting ==. entityKey meet] []
         parsedTime <- mapM (buildTime . entityVal) allTimes

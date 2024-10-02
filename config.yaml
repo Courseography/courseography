@@ -16,23 +16,6 @@ timetableApiUrl: "https://api.easi.utoronto.ca/ttb/getPageableCourses"
 fasCalendarUrl: "https://artsci.calendar.utoronto.ca/"
 programsUrl: "https://artsci.calendar.utoronto.ca/listing-program-subject-areas"
 
-# HTTP Request Strings
-direction: "asc"
-divisions:
-  - "ARTSC"
-page: 1
-pageSize: 200
-sessions:
-  - "20249"
-  - "20251"
-  - "20249-20251"
-
-reqHeaders:
-  - key: "Content-Type"
-    value: "application/json"
-  - key: "Accept"
-    value: "application/json"
-
 # Term dates
 fallStartDate: 2024-09-03
 fallEndDate: 2024-12-03

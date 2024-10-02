@@ -174,7 +174,7 @@ executable courseography
     parsec,
     HaTeX,
     yaml,
-    case-insensitive
+    monad-logger
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app

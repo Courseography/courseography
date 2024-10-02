@@ -1,12 +1,12 @@
 module Controllers.Course
     (retrieveCourse, index, courseInfo, depts) where
 
-import Config (databasePath)
+import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T (Text, unlines, unpack)
 import Data.List (sort, nub)
 import Database.Persist (Entity)
-import Database.Persist.Sqlite (SqlPersistM, runSqlite, selectList, entityVal)
+import Database.Persist.Sqlite (SqlPersistM, selectList, entityVal)
 import Database.Tables as Tables (Courses, coursesCode)
 import Happstack.Server (lookText', ServerPart, Response, toResponse)
 import Util.Happstack (createJSONResponse)
@@ -23,8 +23,7 @@ retrieveCourse = do
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response
 index = do
-  dbPath <- liftIO databasePath
-  response <- liftIO $ runSqlite dbPath $ do
+  response <- liftIO $ runDb $ do
       coursesList :: [Entity Courses] <- selectList [] []
       let codes = map (coursesCode . entityVal) coursesList
       return $ T.unlines codes :: SqlPersistM T.Text
@@ -39,8 +38,7 @@ courseInfo = do
 -- | Return a list of all departments.
 depts :: ServerPart Response
 depts = do
-    dbPath <- liftIO databasePath
-    deptList <- liftIO $ runSqlite dbPath $ do
+    deptList <- liftIO $ runDb $ do
         coursesList :: [Entity Courses] <- selectList [] []
         return $ sort . nub $ map g coursesList :: SqlPersistM [String]
     return $ createJSONResponse deptList

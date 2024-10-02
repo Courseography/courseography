@@ -10,7 +10,7 @@ module Database.Database
     (populateCalendar, setupDatabase) where
 
 import Control.Monad.IO.Class (liftIO)
-import Config (databasePath)
+import Config (databasePath, runDb)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
@@ -54,8 +54,7 @@ populateStaticInfo = do
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = do
-    dbPath <- databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         insert_ $ Distribution "Humanities"
         insert_ $ Distribution "Social Science"
         insert_ $ Distribution "Science"
@@ -63,8 +62,7 @@ setupDistributionTable = do
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
 setupBreadthTable = do
-    dbPath <- databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         insert_ $ Breadth "Creative and Cultural Representations (1)"
         insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
         insert_ $ Breadth "Society and its Institutions (3)"

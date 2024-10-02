@@ -20,14 +20,14 @@ module Database.CourseQueries
      getDeptCourses
      ) where
 
-import Config (databasePath)
+import Config (runDb)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Aeson (object, toJSON, Value)
 import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, take)
 import Database.DataType ( ShapeType( Node ) , ShapeType( Hybrid ), ShapeType( BoolNode ))
-import Database.Persist.Sqlite (Entity, PersistEntity, SqlPersistM, PersistValue( PersistInt64 ), runSqlite, selectList,
+import Database.Persist.Sqlite (Entity, PersistEntity, SqlPersistM, PersistValue( PersistInt64 ), selectList,
                                 entityKey, entityVal, selectFirst, (==.), (<-.), get, keyToValues, PersistValue( PersistText ),
                                 rawSql)
 import Database.Tables as Tables
@@ -45,8 +45,7 @@ meetingQuery meetingCodes = do
 -- constructs and returns a Course value.
 returnCourse :: T.Text -> IO (Maybe Course)
 returnCourse lowerStr = do
-    dbPath <- databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         let courseStr = T.toUpper lowerStr
         -- TODO: require the client to pass the full course code
         let fullCodes = [courseStr, T.append courseStr "H1", T.append courseStr "Y1"]
@@ -87,8 +86,7 @@ queryPost req code = do
 -- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)
 returnPost code = do
-    dbPath <- databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         sqlPost <- selectFirst [PostCode ==. code] []
         case sqlPost of
             Nothing -> return Nothing
@@ -147,8 +145,7 @@ buildMeetTimes meet = do
 
 getGraph :: T.Text -> IO (Maybe Value)
 getGraph graphName = do
-    dbPath <- liftIO databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
         case graphEnt of
             Nothing -> return Nothing
@@ -197,8 +194,7 @@ getGraph graphName = do
 -- the one the user inputs doesn't match it exactly
 prereqsForCourse :: T.Text -> IO (Either String (T.Text, T.Text))
 prereqsForCourse courseCode = do
-    dbPath <- databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         let upperCaseCourseCode = T.toUpper courseCode
         course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
         case course of
@@ -211,8 +207,7 @@ prereqsForCourse courseCode = do
 
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept = do
-    dbPath <- liftIO databasePath
-    liftIO $ runSqlite dbPath $ do
+    liftIO $ runDb $ do
         courses :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
         let deptCourses = map entityVal courses
         meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map coursesCode deptCourses] []

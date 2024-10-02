@@ -16,7 +16,7 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs, parseDynamicSvg) where
 
-import Config (databasePath, graphPath)
+import Config (runDb, graphPath)
 import Control.Monad.IO.Class (liftIO)
 import Data.Bifunctor (bimap)
 import Data.Char (isSpace)
@@ -39,8 +39,7 @@ import Text.Read (readMaybe)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
-    dbPath <- databasePath
-    runSqlite dbPath $ do
+    runDb $ do
         performParse "Computer Science" "csc2024.svg"
         performParse "Statistics" "sta2022.svg"
         -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
@@ -65,8 +64,7 @@ parsePrebuiltSvgs = do
 
 parseDynamicSvg :: T.Text -> T.Text -> IO ()
 parseDynamicSvg graphName graphContents = do
-    dbPath <- databasePath
-    runSqlite dbPath $ performParseFromMemory graphName graphContents True
+    runDb $ performParseFromMemory graphName graphContents True
 
 -- | The starting point for parsing a graph with a given title and file
 -- after removing the graph if it already exists.

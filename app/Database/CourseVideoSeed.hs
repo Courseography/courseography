@@ -5,9 +5,9 @@
 module Database.CourseVideoSeed
     (courseVideos, seedVideos) where
 
-import Config (databasePath)
+import Config (runDb)
 import Data.Text (Text)
-import Database.Persist.Sqlite (SqlPersistM, runSqlite, updateWhere, (=.), (==.))
+import Database.Persist.Sqlite (SqlPersistM, updateWhere, (=.), (==.))
 import Database.Tables hiding (Text)
 
 -- | Defines the constant list of ordered pairs pertaining to the routes for
@@ -29,5 +29,4 @@ seedVideo (code, videos) =
 -- | Sets the video routes of all course rows.
 seedVideos :: IO ()
 seedVideos = do
-    dbPath <- databasePath
-    runSqlite dbPath $ mapM_ seedVideo courseVideos
+    runDb $ mapM_ seedVideo courseVideos
