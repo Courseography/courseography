@@ -15,8 +15,8 @@ import Network.HTTP.Conduit (method, responseBody, requestHeaders, RequestBody(R
 -- | Parse all timetable data.
 parseTimetable :: IO ()
 parseTimetable = do
-    orgs <- getOrgs
-    runSqlite databasePath $ mapM_ insertAllMeetings orgs
+    -- orgs <- getOrgs
+    runSqlite databasePath $ mapM_ insertAllMeetings [1..186 :: Int]
 
 -- | Get all the orgs from the courses table in the database
 getOrgs :: IO [T.Text]
@@ -28,12 +28,13 @@ getOrgs = runSqlite databasePath $ do
 
 -- | insert/update all the data into the Meeting and Times schema by creating and sending
 --   the http request to Artsci Timetable and then parsing the JSON response
-insertAllMeetings :: T.Text -> SqlPersistM ()
-insertAllMeetings org = do
-    liftIO . print $ T.append "parsing JSON data from: " org
+insertAllMeetings :: Int -> SqlPersistM ()
+insertAllMeetings pageNum = do
+    -- liftIO . print $ T.append "parsing JSON data from: " org
+    liftIO $ putStrLn $ "parsing JSON data for page: " ++ show pageNum
 
     -- set up the request
-    let reqBody = createReqBody org
+    let reqBody = createReqBody pageNum
     request <- liftIO $ parseRequest (T.unpack timetableApiUrl)
     let request' = request {method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
 
