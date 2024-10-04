@@ -14,7 +14,7 @@ import Config (databasePath, runDb)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
-import Database.Persist.Sqlite (insert_, runMigration, runSqlite)
+import Database.Persist.Sqlite (insert_, runMigration)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
 import WebParsing.ArtSciParser (parseCalendar)
@@ -34,7 +34,7 @@ setupDatabase = do
       let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
           db = T.unpack $ T.take ind dbPath
       createDirectoryIfMissing True db
-      runSqlite dbPath $ runMigration migrateAll
+      runDb $ runMigration migrateAll
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()
