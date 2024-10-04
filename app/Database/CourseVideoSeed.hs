@@ -28,5 +28,4 @@ seedVideo (code, videos) =
 
 -- | Sets the video routes of all course rows.
 seedVideos :: IO ()
-seedVideos = do
-    runDb $ mapM_ seedVideo courseVideos
+seedVideos = runDb $ mapM_ seedVideo courseVideos

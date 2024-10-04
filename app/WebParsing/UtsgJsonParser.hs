@@ -20,12 +20,11 @@ parseTimetable = do
 
 -- | Get all the orgs from the courses table in the database
 getOrgs :: IO [T.Text]
-getOrgs = do
-    runDb $ do
-        courseEntities <- selectList [] [] :: SqlPersistM [Entity Courses]
-        let courseCodes = map (coursesCode . entityVal) courseEntities
-        let orgsSet = Set.fromList $ map (T.take 3) courseCodes
-        return $ Set.toList orgsSet
+getOrgs = runDb $ do
+    courseEntities <- selectList [] [] :: SqlPersistM [Entity Courses]
+    let courseCodes = map (coursesCode . entityVal) courseEntities
+    let orgsSet = Set.fromList $ map (T.take 3) courseCodes
+    return $ Set.toList orgsSet
 
 -- | insert/update all the data into the Meeting and Times schema by creating and sending
 --   the http request to Artsci Timetable and then parsing the JSON response

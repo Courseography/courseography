@@ -133,19 +133,18 @@ getCoursesInfo courses = map courseInfo allCourses
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
 pullDatabase :: (Code, Section, Session) -> IO MeetTime'
-pullDatabase (code, section, session) = do
-    runDb $ do
-        meet <- returnMeeting code fullSection session
-        allTimes <- selectList [TimesMeeting ==. entityKey meet] []
-        parsedTime <- mapM (buildTime . entityVal) allTimes
-        return $ MeetTime' (entityVal meet) parsedTime
-        where
-        fullSection
-            | T.isPrefixOf "L" section = T.append "LEC" sectCode
-            | T.isPrefixOf "T" section = T.append "TUT" sectCode
-            | T.isPrefixOf "P" section = T.append "PRA" sectCode
-            | otherwise                = section
-        sectCode = T.tail section
+pullDatabase (code, section, session) = runDb $ do
+    meet <- returnMeeting code fullSection session
+    allTimes <- selectList [TimesMeeting ==. entityKey meet] []
+    parsedTime <- mapM (buildTime . entityVal) allTimes
+    return $ MeetTime' (entityVal meet) parsedTime
+    where
+    fullSection
+        | T.isPrefixOf "L" section = T.append "LEC" sectCode
+        | T.isPrefixOf "T" section = T.append "TUT" sectCode
+        | T.isPrefixOf "P" section = T.append "PRA" sectCode
+        | otherwise                = section
+    sectCode = T.tail section
 
 -- | The current date and time as obtained from the system.
 type SystemTime = String

@@ -38,29 +38,28 @@ import Text.Read (readMaybe)
 
 
 parsePrebuiltSvgs :: IO ()
-parsePrebuiltSvgs = do
-    runDb $ do
-        performParse "Computer Science" "csc2024.svg"
-        performParse "Statistics" "sta2022.svg"
-        -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
-        -- performParse "(unofficial) Biochemistry" "bch2015.svg"
-        -- performParse "(unofficial) Cell & Systems Biology" "csb2015.svg"
-        -- performParse "(unofficial) Estonian" "est2015.svg"
-        -- performParse "(unofficial) Finnish" "fin2015.svg"
-        -- performParse "(unofficial) Italian" "ita2015.svg"
-        -- performParse "(unofficial) Linguistics" "lin2015.svg"
-        -- performParse "(unofficial) Rotman" "rotman2015.svg"
-        -- performParse "(unofficial) Economics" "eco2015.svg"
-        -- performParse "(unofficial) Spanish" "spa2015.svg"
-        -- performParse "(unofficial) Portuguese" "prt2015.svg"
-        -- performParse "(unofficial) Slavic" "sla2015.svg"
-        -- performParse "(unofficial) East Asian Studies" "eas2015.svg"
-        -- performParse "(unofficial) English" "eng2015.svg"
-        -- performParse "(unofficial) History and Philosophy of Science" "hps2015.svg"
-        -- performParse "(unofficial) History" "his2015.svg"
-        -- performParse "(unofficial) Geography" "ggr2015.svg"
-        -- performParse "(unofficial) Aboriginal" "abs2015.svg"
-        -- performParse "(unofficial) German" "ger2015.svg"
+parsePrebuiltSvgs = runDb $ do
+    performParse "Computer Science" "csc2024.svg"
+    performParse "Statistics" "sta2022.svg"
+    -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
+    -- performParse "(unofficial) Biochemistry" "bch2015.svg"
+    -- performParse "(unofficial) Cell & Systems Biology" "csb2015.svg"
+    -- performParse "(unofficial) Estonian" "est2015.svg"
+    -- performParse "(unofficial) Finnish" "fin2015.svg"
+    -- performParse "(unofficial) Italian" "ita2015.svg"
+    -- performParse "(unofficial) Linguistics" "lin2015.svg"
+    -- performParse "(unofficial) Rotman" "rotman2015.svg"
+    -- performParse "(unofficial) Economics" "eco2015.svg"
+    -- performParse "(unofficial) Spanish" "spa2015.svg"
+    -- performParse "(unofficial) Portuguese" "prt2015.svg"
+    -- performParse "(unofficial) Slavic" "sla2015.svg"
+    -- performParse "(unofficial) East Asian Studies" "eas2015.svg"
+    -- performParse "(unofficial) English" "eng2015.svg"
+    -- performParse "(unofficial) History and Philosophy of Science" "hps2015.svg"
+    -- performParse "(unofficial) History" "his2015.svg"
+    -- performParse "(unofficial) Geography" "ggr2015.svg"
+    -- performParse "(unofficial) Aboriginal" "abs2015.svg"
+    -- performParse "(unofficial) German" "ger2015.svg"
 
 parseDynamicSvg :: T.Text -> T.Text -> IO ()
 parseDynamicSvg graphName graphContents = do

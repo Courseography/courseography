@@ -44,8 +44,7 @@ buildSVG :: T.Text               -- ^ The name of the graph that is being built.
                                  --   written to.
          -> Bool                 -- ^ Whether to include inline styles.
          -> IO ()
-buildSVG graphName courseMap filename styled = do
-    runDb $ do
+buildSVG graphName courseMap filename styled = runDb $ do
         gIds        :: [Key Graph]    <- selectKeysList [GraphTitle ==. graphName] []
         let gId = if null gIds then toSqlKey 1 else head gIds
 

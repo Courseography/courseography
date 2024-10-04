@@ -44,18 +44,17 @@ meetingQuery meetingCodes = do
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.
 returnCourse :: T.Text -> IO (Maybe Course)
-returnCourse lowerStr = do
-    runDb $ do
-        let courseStr = T.toUpper lowerStr
-        -- TODO: require the client to pass the full course code
-        let fullCodes = [courseStr, T.append courseStr "H1", T.append courseStr "Y1"]
-        sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode <-. fullCodes] []
-        case sqlCourse of
-          Nothing -> return Nothing
-          Just course -> do
-            meetings <- meetingQuery fullCodes
-            Just <$> buildCourse meetings
-                                    (entityVal course)
+returnCourse lowerStr = runDb $ do
+    let courseStr = T.toUpper lowerStr
+    -- TODO: require the client to pass the full course code
+    let fullCodes = [courseStr, T.append courseStr "H1", T.append courseStr "Y1"]
+    sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode <-. fullCodes] []
+    case sqlCourse of
+      Nothing -> return Nothing
+      Just course -> do
+        meetings <- meetingQuery fullCodes
+        Just <$> buildCourse meetings
+                                (entityVal course)
 
 -- | Queries the database for all information about @course@, and returns a JSON
 -- object representing the course.
@@ -85,12 +84,11 @@ queryPost req code = do
 
 -- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)
-returnPost code = do
-    runDb $ do
-        sqlPost <- selectFirst [PostCode ==. code] []
-        case sqlPost of
-            Nothing -> return Nothing
-            Just post -> return $ Just $ entityVal post
+returnPost code = runDb $ do
+    sqlPost <- selectFirst [PostCode ==. code] []
+    case sqlPost of
+        Nothing -> return Nothing
+        Just post -> return $ Just $ entityVal post
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.
@@ -144,70 +142,67 @@ buildMeetTimes meet = do
 -- ** Other queries
 
 getGraph :: T.Text -> IO (Maybe Value)
-getGraph graphName = do
-    runDb $ do
-        graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
-        case graphEnt of
-            Nothing -> return Nothing
-            Just graph -> do
-                let gId = entityKey graph
-                sqlTexts    :: [Entity Text] <- selectList [TextGraph ==. gId] []
-                sqlRects    :: [Entity Shape] <- selectList
-                                                     [ShapeType_ <-. [Node, Hybrid],
-                                                      ShapeGraph ==. gId] []
-                sqlEllipses :: [Entity Shape] <- selectList
-                                                     [ShapeType_ ==. BoolNode,
-                                                      ShapeGraph ==. gId] []
-                sqlPaths    :: [Entity Path] <- selectList [PathGraph ==. gId] []
+getGraph graphName = runDb $ do
+    graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
+    case graphEnt of
+        Nothing -> return Nothing
+        Just graph -> do
+            let gId = entityKey graph
+            sqlTexts    :: [Entity Text] <- selectList [TextGraph ==. gId] []
+            sqlRects    :: [Entity Shape] <- selectList
+                                                 [ShapeType_ <-. [Node, Hybrid],
+                                                  ShapeGraph ==. gId] []
+            sqlEllipses :: [Entity Shape] <- selectList
+                                                 [ShapeType_ ==. BoolNode,
+                                                  ShapeGraph ==. gId] []
+            sqlPaths    :: [Entity Path] <- selectList [PathGraph ==. gId] []
 
-                let
-                    keyAsInt :: PersistEntity a => Entity a -> Integer
-                    keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
+            let
+                keyAsInt :: PersistEntity a => Entity a -> Integer
+                keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
 
-                    graphtexts          = map entityVal sqlTexts
-                    rects          = zipWith (buildRect graphtexts)
-                                             (map entityVal sqlRects)
-                                             (map keyAsInt sqlRects)
-                    ellipses       = zipWith (buildEllipses graphtexts)
-                                             (map entityVal sqlEllipses)
-                                             (map keyAsInt sqlEllipses)
-                    graphpaths     = zipWith (buildPath rects ellipses)
-                                             (map entityVal sqlPaths)
-                                             (map keyAsInt sqlPaths)
-                    (regions, _)   = partition pathIsRegion graphpaths
-                    regionTexts    = filter (not .
-                                             intersectsWithShape (rects ++ ellipses))
-                                            graphtexts
+                graphtexts          = map entityVal sqlTexts
+                rects          = zipWith (buildRect graphtexts)
+                                         (map entityVal sqlRects)
+                                         (map keyAsInt sqlRects)
+                ellipses       = zipWith (buildEllipses graphtexts)
+                                         (map entityVal sqlEllipses)
+                                         (map keyAsInt sqlEllipses)
+                graphpaths     = zipWith (buildPath rects ellipses)
+                                         (map entityVal sqlPaths)
+                                         (map keyAsInt sqlPaths)
+                (regions, _)   = partition pathIsRegion graphpaths
+                regionTexts    = filter (not .
+                                         intersectsWithShape (rects ++ ellipses))
+                                        graphtexts
 
-                    response = object [
-                            ("texts", toJSON $ graphtexts ++ regionTexts),
-                            ("shapes", toJSON $ rects ++ ellipses),
-                            ("paths", toJSON $ graphpaths ++ regions),
-                            ("width", toJSON $ graphWidth $ entityVal graph),
-                            ("height", toJSON $ graphHeight $ entityVal graph)
-                        ]
+                response = object [
+                        ("texts", toJSON $ graphtexts ++ regionTexts),
+                        ("shapes", toJSON $ rects ++ ellipses),
+                        ("paths", toJSON $ graphpaths ++ regions),
+                        ("width", toJSON $ graphWidth $ entityVal graph),
+                        ("height", toJSON $ graphHeight $ entityVal graph)
+                    ]
 
-                return (Just response)
+            return (Just response)
 
 -- | Retrieves the prerequisites for a course (code) as a string.
 -- Also retrieves the actual course code in the database in case
 -- the one the user inputs doesn't match it exactly
 prereqsForCourse :: T.Text -> IO (Either String (T.Text, T.Text))
-prereqsForCourse courseCode = do
-    runDb $ do
-        let upperCaseCourseCode = T.toUpper courseCode
-        course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
-        case course of
-            Nothing -> return (Left "Course not found")
-            Just courseEntity ->
-                return (Right
-                         (coursesCode $ entityVal courseEntity,
-                          fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
-                        ) :: SqlPersistM (Either String (T.Text, T.Text))
+prereqsForCourse courseCode = runDb $ do
+    let upperCaseCourseCode = T.toUpper courseCode
+    course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
+    case course of
+        Nothing -> return (Left "Course not found")
+        Just courseEntity ->
+            return (Right
+                     (coursesCode $ entityVal courseEntity,
+                      fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
+                    ) :: SqlPersistM (Either String (T.Text, T.Text))
 
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
-getDeptCourses dept = do
-    liftIO $ runDb $ do
+getDeptCourses dept = liftIO $ runDb $ do
         courses :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
         let deptCourses = map entityVal courses
         meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map coursesCode deptCourses] []

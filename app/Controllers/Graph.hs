@@ -37,10 +37,9 @@ graphResponse =
 
 
 index :: ServerPart Response
-index = do
-    liftIO $ runDb $ do
-        graphsList :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
-        return $ createJSONResponse graphsList :: SqlPersistM Response
+index = liftIO $ runDb $ do
+    graphsList :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
+    return $ createJSONResponse graphsList :: SqlPersistM Response
 
 
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements

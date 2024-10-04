@@ -34,7 +34,7 @@ The remaining steps should all be run in this terminal window.
 
 _Run this step manually._
 
-Create the db folder with `$ mkdir db`
+1. Create the db folder with `$ mkdir db`
 
 #### Installing
 

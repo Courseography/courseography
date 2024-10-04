@@ -53,19 +53,17 @@ populateStaticInfo = do
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
-setupDistributionTable = do
-    runDb $ do
-        insert_ $ Distribution "Humanities"
-        insert_ $ Distribution "Social Science"
-        insert_ $ Distribution "Science"
+setupDistributionTable = runDb $ do
+    insert_ $ Distribution "Humanities"
+    insert_ $ Distribution "Social Science"
+    insert_ $ Distribution "Science"
 
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
-setupBreadthTable = do
-    runDb $ do
-        insert_ $ Breadth "Creative and Cultural Representations (1)"
-        insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
-        insert_ $ Breadth "Society and its Institutions (3)"
-        insert_ $ Breadth "Living Things and Their Environment (4)"
-        insert_ $ Breadth "The Physical and Mathematical Universes (5)"
-        insert_ $ Breadth "No Breadth"
+setupBreadthTable = runDb $ do
+    insert_ $ Breadth "Creative and Cultural Representations (1)"
+    insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
+    insert_ $ Breadth "Society and its Institutions (3)"
+    insert_ $ Breadth "Living Things and Their Environment (4)"
+    insert_ $ Breadth "The Physical and Mathematical Universes (5)"
+    insert_ $ Breadth "No Breadth"
