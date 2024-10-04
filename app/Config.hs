@@ -9,6 +9,7 @@ containing the production values.
 module Config (
     serverConf,
     databasePath,
+    runDb,
     markdownPath,
     graphPath,
     genCssPath,
@@ -26,28 +27,80 @@ module Config (
     holidays
     ) where
 
-import Data.Aeson
-import Data.Text (Text)
+import Data.Yaml.Config (loadYamlSettings, useEnv)
+import Data.Aeson (FromJSON(..), object, (.=), Value, (.:), withObject)
 import qualified Data.Text as T
-import Data.Time (Day, fromGregorian)
+import Data.Text (Text)
+import Data.Time (Day)
 import Happstack.Server (Conf (..), LogAccess, nullConf)
-import System.Log.Logger (Priority (INFO), logM)
 import Network.HTTP.Types.Header (RequestHeaders)
+import System.Log.Logger (Priority (INFO), logM)
+import Control.Monad.Trans.Reader (ReaderT)
+import Control.Monad.Logger (NoLoggingT)
+import Control.Monad.Trans.Resource (ResourceT, MonadUnliftIO)
+import Database.Persist.Sqlite (SqlBackend, runSqlite)
+import Control.Monad.IO.Class (liftIO)
+
+-- Main configuration data type
+data Config = Config
+    { portValue             :: Int
+    , logMessage            :: String
+    , databasePathValue     :: Text
+    , markdownPathValue     :: String
+    , graphPathValue        :: String
+    , genCssPathValue       :: String
+    , timetableUrlValue     :: String
+    , timetableApiUrlValue  :: Text
+    , fasCalendarUrlValue   :: String
+    , programsUrlValue      :: String
+    , fallStartDateValue    :: Day
+    , fallEndDateValue      :: Day
+    , winterStartDateValue  :: Day
+    , winterEndDateValue    :: Day
+    , outDayValue           :: Day
+    , holidaysList          :: [String]
+    } deriving (Show)
+
+instance FromJSON Config where
+    parseJSON = withObject "Config" $ \obj -> Config
+        <$> obj .: "port"
+        <*> obj .: "logMessage"
+        <*> obj .: "databasePath"
+        <*> obj .: "markdownPath"
+        <*> obj .: "graphPath"
+        <*> obj .: "genCssPath"
+        <*> obj .: "timetableUrl"
+        <*> obj .: "timetableApiUrl"
+        <*> obj .: "fasCalendarUrl"
+        <*> obj .: "programsUrl"
+        <*> obj .: "fallStartDate"
+        <*> obj .: "fallEndDate"
+        <*> obj .: "winterStartDate"
+        <*> obj .: "winterEndDate"
+        <*> obj .: "outDay"
+        <*> obj .: "holidaysList"
+
+-- Load the configuration
+loadConfig :: IO Config
+loadConfig = loadYamlSettings ["config.yaml"] [] useEnv
 
 -- SERVER CONFIGURATION
 
 -- | Server configuration settings.
-serverConf :: Conf
-serverConf = nullConf {
-        port      = 8000,
+serverConf :: IO Conf
+serverConf = do
+  config <- loadConfig
+  return $ nullConf {
+        port      = portValue config,
         logAccess = Just logMAccessShort
     }
 
 -- | Server log configuration. Default is to log access requests using hslogger
 -- and a condensed log formatting.
 logMAccessShort :: LogAccess t
-logMAccessShort host user _ requestLine responseCode _ referer _ =
-    logM "Happstack.Server.AccessLog.Combined" INFO $ unwords [
+logMAccessShort host user _ requestLine responseCode _ referer _ = do
+    config <- loadConfig
+    logM (logMessage config) INFO $ unwords [
         host,
         user,
         requestLine,
@@ -59,39 +112,46 @@ logMAccessShort host user _ requestLine responseCode _ referer _ =
 -- DATABASE CONNECTION STRINGS
 
 -- | The path to the database file, relative to the project root.
-databasePath :: Text
-databasePath = "db/database.sqlite3"
+databasePath :: IO Text
+databasePath = databasePathValue <$> loadConfig
+
+-- | Fetch the database path and execute the given action in the context of the database.
+runDb :: (MonadUnliftIO m) => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a -> m a
+runDb action = do
+  dbPath <- liftIO databasePath
+  runSqlite dbPath action
+
 
 -- FILE PATH STRINGS
 
 -- | The relative path to the directory with the markdown files rendered for site content.
-markdownPath :: String
-markdownPath = "./"
+markdownPath :: IO String
+markdownPath = markdownPathValue <$> loadConfig
 
 -- | The relative path to the directory that contains all of the graph SVG files.
-graphPath :: String
-graphPath = "./graphs/"
+graphPath :: IO String
+graphPath = graphPathValue <$> loadConfig
 
 -- | The relative path to the directory containing all of the generated CSS files.
-genCssPath :: String
-genCssPath = "./public/style/"
+genCssPath :: IO String
+genCssPath = genCssPathValue <$> loadConfig
 
 -- URLs
 
 -- | The URL for U of T's official timetable.
-timetableUrl :: String
-timetableUrl = "https://ttb.utoronto.ca/"
+timetableUrl :: IO String
+timetableUrl = timetableUrlValue <$> loadConfig
 
 -- | The Faculty of Arts and Science API for course timetables (by unit).
-timetableApiUrl :: Text
-timetableApiUrl = "https://api.easi.utoronto.ca/ttb/getPageableCourses"
+timetableApiUrl :: IO Text
+timetableApiUrl = timetableApiUrlValue <$> loadConfig
 
 -- | The URLs of the Faculty of Arts & Science calendar.
-fasCalendarUrl :: String
-fasCalendarUrl = "https://artsci.calendar.utoronto.ca/"
+fasCalendarUrl :: IO String
+fasCalendarUrl = fasCalendarUrlValue <$> loadConfig
 
-programsUrl :: String
-programsUrl = "https://artsci.calendar.utoronto.ca/listing-program-subject-areas"
+programsUrl :: IO String
+programsUrl = programsUrlValue <$> loadConfig
 
 -- HTTP REQUEST STRINGS
 
@@ -126,28 +186,26 @@ reqHeaders = [("Content-Type", "application/json"), ("Accept", "application/json
 -- CALENDAR RESPONSE DATES
 
 -- | First day of classes for the fall term.
-fallStartDate :: Day
-fallStartDate = fromGregorian 2024 09 03
+fallStartDate :: IO Day
+fallStartDate = fallStartDateValue <$> loadConfig
 
 -- | Last day of classes for the fall term.
-fallEndDate :: Day
-fallEndDate = fromGregorian 2024 12 03
+fallEndDate :: IO Day
+fallEndDate = fallEndDateValue <$> loadConfig
 
 -- | First day of classes for the winter term.
-winterStartDate :: Day
-winterStartDate = fromGregorian 2025 01 06
+winterStartDate :: IO Day
+winterStartDate = winterStartDateValue <$> loadConfig
 
 -- | Last day of classes for the winter term.
-winterEndDate :: Day
-winterEndDate = fromGregorian 2025 04 04
+winterEndDate :: IO Day
+winterEndDate = winterEndDateValue <$> loadConfig
 
 -- | Out of date day. Used to control forbidden inputs for days.
-outDay :: Day
-outDay = fromGregorian 2026 01 01
+outDay :: IO Day
+outDay = outDayValue <$> loadConfig
 
 -- Holidays for the fall and winter term.
-holidays :: [String]
-holidays = ["20241014T", "20241028T", "20241029T",
-            "20241030T", "20241031T", "20241101T",
-            "20250217T", "20250218T", "20240219T",
-            "20250220T", "20250221T"]
+holidays :: IO [String]
+holidays = holidaysList <$> loadConfig
+

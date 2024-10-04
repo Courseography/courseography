@@ -32,10 +32,9 @@ The remaining steps should all be run in this terminal window.
 
 #### Other Files
 
-_Run these two steps manually._
+_Run this step manually._
 
-1. Copy app/DevelopmentConfig.hs to app/Config.hs with `$ cp app/DevelopmentConfig.hs app/Config.hs`
-2. Create the db folder with `$ mkdir db`
+1. Create the db folder with `$ mkdir db`
 
 #### Installing
 

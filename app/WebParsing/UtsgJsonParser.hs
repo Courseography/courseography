@@ -1,13 +1,13 @@
 module WebParsing.UtsgJsonParser
      (parseTimetable, insertAllMeetings) where
 
-import Config (databasePath, timetableApiUrl, reqHeaders, createReqBody)
+import Config (runDb, timetableApiUrl, reqHeaders, createReqBody)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON (parseJSON), withObject, encode, decode, (.!=), (.:?), (.:))
 import qualified Data.Set as Set
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, Update, Entity, entityKey, entityVal, deleteWhere, upsert,
-                                insert, insertMany_, runSqlite, selectFirst, selectList, (==.), (=.))
+                                insert, insertMany_, selectFirst, selectList, (==.), (=.))
 import Database.Tables (Courses (..), EntityField (..), MeetTime (..), Meeting (..), buildTimes)
 import Network.HTTP.Conduit (method, responseBody, requestHeaders, RequestBody(RequestBodyLBS), newManager,
                              tlsManagerSettings, httpLbs, requestBody, parseRequest)
@@ -16,11 +16,11 @@ import Network.HTTP.Conduit (method, responseBody, requestHeaders, RequestBody(R
 parseTimetable :: IO ()
 parseTimetable = do
     orgs <- getOrgs
-    runSqlite databasePath $ mapM_ insertAllMeetings orgs
+    runDb $ mapM_ insertAllMeetings orgs
 
 -- | Get all the orgs from the courses table in the database
 getOrgs :: IO [T.Text]
-getOrgs = runSqlite databasePath $ do
+getOrgs = runDb $ do
     courseEntities <- selectList [] [] :: SqlPersistM [Entity Courses]
     let courseCodes = map (coursesCode . entityVal) courseEntities
     let orgsSet = Set.fromList $ map (T.take 3) courseCodes
@@ -34,7 +34,8 @@ insertAllMeetings org = do
 
     -- set up the request
     let reqBody = createReqBody org
-    request <- liftIO $ parseRequest (T.unpack timetableApiUrl)
+    timetableApi <- liftIO timetableApiUrl
+    request <- liftIO $ parseRequest (T.unpack timetableApi)
     let request' = request {method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
 
     -- make the request

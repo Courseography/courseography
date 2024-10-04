@@ -9,11 +9,12 @@ inserting it into the database. Run when @cabal run database@ is executed.
 module Database.Database
     (populateCalendar, setupDatabase) where
 
-import Config (databasePath)
+import Control.Monad.IO.Class (liftIO)
+import Config (databasePath, runDb)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
-import Database.Persist.Sqlite (insert_, runMigration, runSqlite)
+import Database.Persist.Sqlite (insert_, runMigration)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
 import WebParsing.ArtSciParser (parseCalendar)
@@ -29,10 +30,11 @@ breathTableSetUpStr = "breadth table set up"
 setupDatabase :: IO ()
 setupDatabase = do
       -- Create db folder if it doesn't exist
-      let ind = (T.length databasePath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ databasePath
-          db = T.unpack $ T.take ind databasePath
+      dbPath <- liftIO databasePath
+      let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
+          db = T.unpack $ T.take ind dbPath
       createDirectoryIfMissing True db
-      runSqlite databasePath $ runMigration migrateAll
+      runDb $ runMigration migrateAll
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()
@@ -51,14 +53,14 @@ populateStaticInfo = do
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
-setupDistributionTable = runSqlite databasePath $ do
+setupDistributionTable = runDb $ do
     insert_ $ Distribution "Humanities"
     insert_ $ Distribution "Social Science"
     insert_ $ Distribution "Science"
 
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
-setupBreadthTable = runSqlite databasePath $ do
+setupBreadthTable = runDb $ do
     insert_ $ Breadth "Creative and Cultural Representations (1)"
     insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
     insert_ $ Breadth "Society and its Institutions (3)"
