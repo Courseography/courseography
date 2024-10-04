@@ -23,6 +23,7 @@
 - Refactored graph and generation related route functionality into controllers
 - Moved the routes related to downloads to the `Timetable` controller to be triggered
 - Refactored the HTTPS response generation from `App/Database/CourseQueries` to the controller `App/Controllers/`
+- Fixed timetable parsing issue, querying page numbers rather than course codes
 
 ## [0.6.0] - 2024-06-24
 
