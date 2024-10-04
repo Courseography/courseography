@@ -1,14 +1,13 @@
 module WebParsing.UtsgJsonParser
      (parseTimetable, insertAllMeetings) where
 
-import Config (databasePath, timetableApiUrl, reqHeaders, createReqBody)
+import Config (databasePath, timetableApiUrl, reqHeaders, createReqBody, numPages)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON (parseJSON), withObject, encode, decode, (.!=), (.:?), (.:))
-import qualified Data.Set as Set
 import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, Update, Entity, entityKey, entityVal, deleteWhere, upsert,
-                                insert, insertMany_, runSqlite, selectFirst, selectList, (==.), (=.))
-import Database.Tables (Courses (..), EntityField (..), MeetTime (..), Meeting (..), buildTimes)
+import Database.Persist.Sqlite (SqlPersistM, Update, entityKey, deleteWhere, upsert,
+                                insert, insertMany_, runSqlite, selectFirst, (==.), (=.))
+import Database.Tables (EntityField (..), MeetTime (..), Meeting (..), buildTimes)
 import Network.HTTP.Conduit (method, responseBody, requestHeaders, RequestBody(RequestBodyLBS), newManager,
                              tlsManagerSettings, httpLbs, requestBody, parseRequest)
 
@@ -16,22 +15,13 @@ import Network.HTTP.Conduit (method, responseBody, requestHeaders, RequestBody(R
 parseTimetable :: IO ()
 parseTimetable = do
     -- orgs <- getOrgs
-    runSqlite databasePath $ mapM_ insertAllMeetings [1..186 :: Int]
-
--- | Get all the orgs from the courses table in the database
-getOrgs :: IO [T.Text]
-getOrgs = runSqlite databasePath $ do
-    courseEntities <- selectList [] [] :: SqlPersistM [Entity Courses]
-    let courseCodes = map (coursesCode . entityVal) courseEntities
-    let orgsSet = Set.fromList $ map (T.take 3) courseCodes
-    return $ Set.toList orgsSet
+    runSqlite databasePath $ mapM_ insertAllMeetings [1..numPages :: Int]
 
 -- | insert/update all the data into the Meeting and Times schema by creating and sending
 --   the http request to Artsci Timetable and then parsing the JSON response
 insertAllMeetings :: Int -> SqlPersistM ()
 insertAllMeetings pageNum = do
-    -- liftIO . print $ T.append "parsing JSON data from: " org
-    liftIO $ putStrLn $ "parsing JSON data for page: " ++ show pageNum
+    liftIO $ putStrLn $ "parsing JSON data for page: " ++ show pageNum ++ "/" ++ show numPages
 
     -- set up the request
     let reqBody = createReqBody pageNum
