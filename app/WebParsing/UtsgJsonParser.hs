@@ -1,31 +1,34 @@
 module WebParsing.UtsgJsonParser
      (parseTimetable, insertAllMeetings) where
 
-import Config (databasePath, timetableApiUrl, reqHeaders, createReqBody, numPages)
+import Config (runDb, timetableApiUrl, reqHeaders, createReqBody)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (FromJSON (parseJSON), withObject, encode, decode, (.!=), (.:?), (.:))
+import Data.Aeson (FromJSON (parseJSON), withObject, encode, decode, (.!=), (.:?), (.:), Value (..), Object)
+import Data.Aeson.Types (parseMaybe)
 import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, Update, entityKey, deleteWhere, upsert,
-                                insert, insertMany_, runSqlite, selectFirst, (==.), (=.))
-import Database.Tables (EntityField (..), MeetTime (..), Meeting (..), buildTimes)
+import Database.Persist.Sqlite (SqlPersistM, Update, Entity, entityKey, entityVal, deleteWhere, upsert,
+                                insert, insertMany_, selectFirst, selectList, (==.), (=.))
+import Database.Tables (Courses (..), EntityField (..), MeetTime (..), Meeting (..), buildTimes)
 import Network.HTTP.Conduit (method, responseBody, requestHeaders, RequestBody(RequestBodyLBS), newManager,
                              tlsManagerSettings, httpLbs, requestBody, parseRequest)
+import Network.HTTP.Client (Response(responseBody))
+import DynamicGraphs.GraphOptions (CourseGraphOptions(courses))
 
 -- | Parse all timetable data.
 parseTimetable :: IO ()
 parseTimetable = do
-    -- orgs <- getOrgs
-    runSqlite databasePath $ mapM_ insertAllMeetings [1..numPages :: Int]
+    -- runDb $ mapM_ insertAllMeetings [1]
+    (page, pageSize, totalCourses) <- parseTimetable 1
+    insertAllMeetings page pageSize totalCourses
 
--- | insert/update all the data into the Meeting and Times schema by creating and sending
---   the http request to Artsci Timetable and then parsing the JSON response
-insertAllMeetings :: Int -> SqlPersistM ()
-insertAllMeetings pageNum = do
-    liftIO $ putStrLn $ "parsing JSON data for page: " ++ show pageNum ++ "/" ++ show numPages
-
+parseTimatablePage :: Int -> Maybe (Int, Int, Int)
+parseTimatablePage pageNum = do
     -- set up the request
     let reqBody = createReqBody pageNum
-    request <- liftIO $ parseRequest (T.unpack timetableApiUrl)
+    liftIO $ print reqBody
+
+    timetableApi <- liftIO timetableApiUrl
+    request <- liftIO $ parseRequest (T.unpack timetableApi)
     let request' = request {method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
 
     -- make the request
@@ -37,7 +40,31 @@ insertAllMeetings pageNum = do
     let meetings :: Maybe DBList = decode respBody
     case meetings of
       Nothing -> return ()
-      Just dblist ->  mapM_ insertMeeting $ flattenDBList dblist
+      Just dblist -> do mapM_ insertMeeting $ flattenDBList dblist
+
+    -- let pageInfo :: Maybe (Int, Int, Int) = getPageInfo respBody
+    let pageInfo :: Maybe (Int, Int, Int) = getPageInfo respBody
+    case pageInfo of 
+      Nothing -> return (-1, -1, -1)
+      Just info -> return info
+
+getPageInfo respBody = do
+  jsonValue <- decode respBody
+  flip parseMaybe jsonValue $ \obj -> do
+    payload :: Object <- obj .: "payload"
+    pageableCourse :: Object <- payload .: "pageableCourse"
+    page :: Int <- pageableCourse .: "page"
+    pageSize :: Int <- pageableCourse .: "pageSize"
+    totalCourses :: Int <- pageableCourse .: "total"
+    return (page, pageSize, totalCourses)
+
+-- | insert/update all the data into the Meeting and Times schema by creating and sending
+--   the http request to Artsci Timetable and then parsing the JSON response
+-- insertAllMeetings :: Int -> SqlPersistM ()
+insertAllMeetings page pageSize totalCourses = do
+    -- liftIO $ putStrLn $ "parsing JSON data for page: " ++ show pageNum -- ++ "/" ++ show numPages
+    -- parseTimatablePage pageNum
+    liftIO $ putStrLn "hi"
 
 -- | Helper function to flatten the list of DB Objects
 flattenDBList :: DBList -> [MeetTime]

@@ -11,7 +11,7 @@ as well as generating images on the fly for Facebook posting.
 module Svg.Generator
     (buildSVG) where
 
-import Config (databasePath)
+import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
 import Css.Constants (aiDark, boolFontSize, graphicsDark, hciDark, hybridFontSize, introDark,
                       mathDark, nodeFontSize, numDark, regionFontSize, seDark, systemsDark,
@@ -44,8 +44,7 @@ buildSVG :: T.Text               -- ^ The name of the graph that is being built.
                                  --   written to.
          -> Bool                 -- ^ Whether to include inline styles.
          -> IO ()
-buildSVG graphName courseMap filename styled =
-    runSqlite databasePath $ do
+buildSVG graphName courseMap filename styled = runDb $ do
         gIds        :: [Key Graph]    <- selectKeysList [GraphTitle ==. graphName] []
         let gId = if null gIds then toSqlKey 1 else head gIds
 
