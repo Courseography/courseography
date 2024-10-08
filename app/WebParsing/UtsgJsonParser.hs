@@ -3,7 +3,7 @@ module WebParsing.UtsgJsonParser
 
 import Config (runDb, timetableApiUrl, reqHeaders, createReqBody)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (FromJSON (parseJSON), withObject, encode, decode, (.!=), (.:?), (.:), Value (..), Object)
+import Data.Aeson (FromJSON (parseJSON), withObject, encode, decode, (.!=), (.:?), (.:), Value (..), Object, Value)
 import Data.Aeson.Types (parseMaybe)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, Update, Entity, entityKey, entityVal, deleteWhere, upsert,
@@ -14,19 +14,73 @@ import Network.HTTP.Conduit (method, responseBody, requestHeaders, RequestBody(R
 import Network.HTTP.Client (Response(responseBody))
 import DynamicGraphs.GraphOptions (CourseGraphOptions(courses))
 
+import Data.ByteString.Lazy.Internal (ByteString)
+import Text.LaTeX (pagebreak)
+-- import Happstack.Server (decodeBody)
+
 -- | Parse all timetable data.
 parseTimetable :: IO ()
 parseTimetable = do
     -- runDb $ mapM_ insertAllMeetings [1]
-    (page, pageSize, totalCourses) <- parseTimetable 1
-    insertAllMeetings page pageSize totalCourses
+    
+    -- (page, pageSize, totalCourses) <- parseTimetable 1
+    -- insertAllMeetings page pageSize totalCourses
+    respBody <- makeRequest 1
+    -- liftIO $ print respBody
 
-parseTimatablePage :: Int -> Maybe (Int, Int, Int)
-parseTimatablePage pageNum = do
+    let pageInfo :: Maybe (Int, Int, Int) = getPageInfo respBody
+    case pageInfo of 
+      Nothing -> return ()
+      Just (page, pageSize, totalCourses) -> do
+        -- insert the meetings for page 1
+        -- let meetings :: Maybe DBList = decode respBody
+        -- case meetings of
+        --   Nothing -> return ()
+        --   Just dblist -> do mapM_ insertMeeting $ flattenDBList dblist
+        runDb $ helper respBody 
+
+        runDb $ insertAllMeetings (page + 1) pageSize totalCourses
+
+helper :: ByteString -> SqlPersistM ()
+helper respBody = do
+    let meetings :: Maybe DBList = decode respBody
+    case meetings of
+      Nothing -> return ()
+      Just dblist -> do mapM_ insertMeeting $ flattenDBList dblist
+
+   
+
+-- parseTimatablePage :: Int -> IO (Int, Int, Int)
+-- parseTimatablePage pageNum = do
+--     -- set up the request
+--     let reqBody = createReqBody pageNum
+--     liftIO $ print reqBody
+
+--     timetableApi <- liftIO timetableApiUrl
+--     request <- liftIO $ parseRequest (T.unpack timetableApi)
+--     let request' = request {method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
+
+--     -- make the request
+--     manager <- liftIO $ newManager tlsManagerSettings
+--     response <- liftIO $ httpLbs request' manager
+--     let respBody = responseBody response
+
+--     -- decode the response
+--     let meetings :: Maybe DBList = decode respBody
+--     case meetings of
+--       Nothing -> return ()
+--       Just dblist -> do mapM_ insertMeeting $ flattenDBList dblist
+
+--     -- let pageInfo :: Maybe (Int, Int, Int) = getPageInfo respBody
+--     let pageInfo :: Maybe (Int, Int, Int) = getPageInfo respBody
+--     case pageInfo of 
+--       Nothing -> return (-1, -1, -1)
+--       Just info -> return info
+
+makeRequest :: Int -> IO ByteString
+makeRequest pageNum = do 
     -- set up the request
     let reqBody = createReqBody pageNum
-    liftIO $ print reqBody
-
     timetableApi <- liftIO timetableApiUrl
     request <- liftIO $ parseRequest (T.unpack timetableApi)
     let request' = request {method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
@@ -35,36 +89,43 @@ parseTimatablePage pageNum = do
     manager <- liftIO $ newManager tlsManagerSettings
     response <- liftIO $ httpLbs request' manager
     let respBody = responseBody response
+    return respBody
 
-    -- decode the response
-    let meetings :: Maybe DBList = decode respBody
-    case meetings of
-      Nothing -> return ()
-      Just dblist -> do mapM_ insertMeeting $ flattenDBList dblist
-
-    -- let pageInfo :: Maybe (Int, Int, Int) = getPageInfo respBody
-    let pageInfo :: Maybe (Int, Int, Int) = getPageInfo respBody
-    case pageInfo of 
-      Nothing -> return (-1, -1, -1)
-      Just info -> return info
-
+    -- -- decode the response 
+    -- let decodedJson :: Maybe Object = decode respBody
+    -- case decodedJson of 
+    --   Nothing -> return Nothing
+    --   Just json -> return $ Just json
+    
+getPageInfo :: ByteString -> Maybe (Int, Int, Int)
 getPageInfo respBody = do
-  jsonValue <- decode respBody
-  flip parseMaybe jsonValue $ \obj -> do
-    payload :: Object <- obj .: "payload"
-    pageableCourse :: Object <- payload .: "pageableCourse"
-    page :: Int <- pageableCourse .: "page"
-    pageSize :: Int <- pageableCourse .: "pageSize"
-    totalCourses :: Int <- pageableCourse .: "total"
-    return (page, pageSize, totalCourses)
+    jsonValue <- decode respBody
+    case jsonValue of 
+      Nothing -> return (-1, -1, -1)
+      Just json -> do 
+        flip parseMaybe json $ \obj -> do
+          payload :: Object <- obj .: "payload"
+          pageableCourse :: Object <- payload .: "pageableCourse"
+          page :: Int <- pageableCourse .: "page"
+          pageSize :: Int <- pageableCourse .: "pageSize"
+          totalCourses :: Int <- pageableCourse .: "total"
+          return (page, pageSize, totalCourses)
 
 -- | insert/update all the data into the Meeting and Times schema by creating and sending
 --   the http request to Artsci Timetable and then parsing the JSON response
--- insertAllMeetings :: Int -> SqlPersistM ()
+insertAllMeetings :: Int -> Int -> Int -> SqlPersistM ()
 insertAllMeetings page pageSize totalCourses = do
-    -- liftIO $ putStrLn $ "parsing JSON data for page: " ++ show pageNum -- ++ "/" ++ show numPages
-    -- parseTimatablePage pageNum
-    liftIO $ putStrLn "hi"
+    if (page - 1) * pageSize > totalCourses  -- base case
+      then liftIO $ print "All courses have been parsed."
+      else do
+        liftIO $ print $ "Parsing results for page " ++ show page
+        respBody <- liftIO $ makeRequest page
+        let pageInfo :: Maybe (Int, Int, Int) = getPageInfo respBody
+        case pageInfo of 
+          Nothing -> return ()
+          Just (page, pageSize, totalCourses) -> do
+            helper respBody 
+            insertAllMeetings (page + 1) pageSize totalCourses
 
 -- | Helper function to flatten the list of DB Objects
 flattenDBList :: DBList -> [MeetTime]
