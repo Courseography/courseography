@@ -11,6 +11,7 @@
 ### 🐛 Bug fixes
 
 - Fix React state mutation
+- Fixed timetable parsing issue, querying page numbers rather than course codes
 
 ### 🔧 Internal changes
 
@@ -24,7 +25,6 @@
 - Moved the routes related to downloads to the `Timetable` controller to be triggered
 - Refactored the HTTPS response generation from `App/Database/CourseQueries` to the controller `App/Controllers/`
 - Moved config values from .hs file to .yaml file
-- Fixed timetable parsing issue, querying page numbers rather than course codes
 
 ## [0.6.0] - 2024-06-24
 
