@@ -155,7 +155,7 @@ programsUrl = programsUrlValue <$> loadConfig
 
 -- HTTP REQUEST STRINGS
 
--- | Create the body for the HTTP request based on the org
+-- | Create the body for the HTTP request based on the page
 createReqBody :: Int -> Value
 createReqBody page = object [ "campuses" .= ([] :: [T.Text]),
                        "courseCodeAndTitleProps" .= object
