@@ -30,8 +30,7 @@ makeRequest pageNum = do
     -- make the request
     manager <- liftIO $ newManager tlsManagerSettings
     response <- liftIO $ httpLbs request' manager
-    let respBody = responseBody response
-    return respBody
+    return $ responseBody response
 
 -- Get the page number, page size and total number of courses from response
 getPageInfo :: ByteString -> Maybe (Int, Int, Int)
@@ -62,17 +61,16 @@ flattenDBList (DBList meetings) = concatMap (\(DB meetTimes) -> meetTimes) meeti
 insertAllMeetings :: Int -> SqlPersistM ()
 insertAllMeetings page = do
     respBody <- liftIO $ makeRequest page
-
-    let pageInfo :: Maybe (Int, Int, Int) = getPageInfo respBody
+    let pageInfo = getPageInfo respBody
     case pageInfo of 
       Nothing -> return ()
-      Just (page', pageSize, totalCourses) -> do
-        if (page' - 1) * pageSize > totalCourses  -- base case
-        then liftIO $ putStrLn "All courses have been parsed."
-        else do
-          liftIO $ print $ "Parsing results for page " ++ show page' ++ " of " ++ show totalPages
-          insertCourses respBody 
-          insertAllMeetings (page' + 1)
+      Just (_, pageSize, totalCourses) -> do
+        liftIO $ print $ "Parsing results for page " ++ show page ++ " of " ++ show totalPages
+        insertCourses respBody 
+
+        if page * pageSize >= totalCourses 
+          then liftIO $ print ("All courses have been parsed." :: String)
+        else insertAllMeetings (page + 1)
         where
           totalPages :: Int
           totalPages = ceiling (fromIntegral totalCourses / fromIntegral pageSize :: Double)
