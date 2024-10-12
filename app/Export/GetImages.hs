@@ -9,7 +9,7 @@ functions return the name of the created svg and png files after creation.
 module Export.GetImages
     (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable) where
 
-import Config (databasePath)
+import Config (runDb)
 import Data.Aeson (decode)
 import Data.ByteString.Char8 as BC (pack)
 import Data.ByteString.Lazy (fromStrict)
@@ -18,7 +18,6 @@ import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.CourseQueries (getMeetingTime)
-import Database.Persist.Sqlite (runSqlite)
 import Database.Tables as Tables
 import Export.ImageConversion
 import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
@@ -64,8 +63,7 @@ list2tuple _ = undefined
 -- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
 -- returns a list of list of Time.
 getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
-getTimes selectedMeetings = runSqlite databasePath $
-  mapM getMeetingTime selectedMeetings
+getTimes selectedMeetings = runDb $ mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
 -- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.

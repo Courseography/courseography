@@ -16,7 +16,7 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs, parseDynamicSvg) where
 
-import Config (databasePath, graphPath)
+import Config (runDb, graphPath)
 import Control.Monad.IO.Class (liftIO)
 import Data.Bifunctor (bimap)
 import Data.Char (isSpace)
@@ -38,7 +38,7 @@ import Text.Read (readMaybe)
 
 
 parsePrebuiltSvgs :: IO ()
-parsePrebuiltSvgs = runSqlite databasePath $ do
+parsePrebuiltSvgs = runDb $ do
     performParse "Computer Science" "csc2024.svg"
     performParse "Statistics" "sta2022.svg"
     -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
@@ -62,8 +62,8 @@ parsePrebuiltSvgs = runSqlite databasePath $ do
     -- performParse "(unofficial) German" "ger2015.svg"
 
 parseDynamicSvg :: T.Text -> T.Text -> IO ()
-parseDynamicSvg graphName graphContents =
-    runSqlite databasePath $ performParseFromMemory graphName graphContents True
+parseDynamicSvg graphName graphContents = do
+    runDb $ performParseFromMemory graphName graphContents True
 
 -- | The starting point for parsing a graph with a given title and file
 -- after removing the graph if it already exists.
@@ -71,9 +71,10 @@ performParse :: T.Text -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> SqlPersistM ()
 performParse graphName inputFilename = do
+    gPath <- liftIO graphPath
     deleteExistingGraph graphName
     liftIO . print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
-    graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
+    graphFile <- liftIO $ T.readFile (gPath ++ inputFilename)
     performParseFromMemory graphName graphFile False
 
 -- | Deletes the graph with the given name from the database if it exists.
