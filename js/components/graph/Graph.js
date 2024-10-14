@@ -445,8 +445,9 @@ export class Graph extends React.Component {
   }
 
   numCredits = courseId => {
-    // Assuming courseId follows the format: 3 letters for department, 3 numbers for course, and
-    // characters for session and campus. E.g. csc108h1 or mat137y1
+    // Assuming the first section of courseId follows the format:
+    // 3 letters for department, 3 numbers for course, and characters for session and campus.
+    // E.g. csc108h1 or mat235y1mat237y1mat257y1
     let session = courseId[6]
     if (typeof session === "string") {
       return session.toLowerCase() === "y" ? 1.0 : 0.5
