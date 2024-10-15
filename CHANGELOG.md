@@ -11,6 +11,7 @@
 ### 🐛 Bug fixes
 
 - Fix React state mutation
+- Fixed timetable parsing issue, querying page numbers rather than course codes
 
 ### 🔧 Internal changes
 
