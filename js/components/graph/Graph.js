@@ -418,6 +418,7 @@ export class Graph extends React.Component {
     const wasSelected = this.state.nodesStatus[courseId].selected
     const temp = [...this.state.selectedNodes]
     const credits = this.numCredits(courseId)
+
     this.toggleSelection(courseId)
     if (typeof this.props.incrementFCECount === "function") {
       if (wasSelected) {
@@ -444,15 +445,14 @@ export class Graph extends React.Component {
     }
   }
 
+  /**
+   * Assuming the first section of courseId follows the format:
+   * 3 letters for department, 3 numbers for course, and characters for session and campus.
+   * e.g. csc108h1 or mat235y1mat237y1mat257y1
+   */
   numCredits = courseId => {
-    // Assuming the first section of courseId follows the format:
-    // 3 letters for department, 3 numbers for course, and characters for session and campus.
-    // E.g. csc108h1 or mat235y1mat237y1mat257y1
     let session = courseId[6]
-    if (typeof session === "string") {
-      return session.toLowerCase() === "y" ? 1.0 : 0.5
-    }
-    return 0.0
+    return typeof session === "string" && session.toLowerCase() === "y" ? 1.0 : 0.5
   }
 
   /**
