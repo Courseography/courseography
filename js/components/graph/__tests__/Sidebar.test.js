@@ -1,4 +1,4 @@
-import { within, waitFor } from "@testing-library/react"
+import { within, waitFor, cleanup } from "@testing-library/react"
 import TestSidebar from "./TestSidebar"
 import TestContainer from "./TestContainer"
 import { userEvent } from "@testing-library/user-event"
@@ -45,15 +45,45 @@ describe("Sidebar", () => {
     const aaa403y1 = container.getByTestId("aaa403y1")
     const aaa404y1 = container.getByTestId("aaa404y1")
 
-    expect(container.getByText("FCE Count: 0.0")).toBeDefined
+    expect(container.getByText("FCE Count: 0.0")).toBeDefined()
     await user.click(aaa401h1)
-    expect(container.getByText("FCE Count: 0.5")).toBeDefined
+    expect(container.getByText("FCE Count: 0.5")).toBeDefined()
     await user.click(aaa403y1)
-    expect(container.getByText("FCE Count: 1.5")).toBeDefined
+    expect(container.getByText("FCE Count: 1.5")).toBeDefined()
     await user.click(aaa404y1)
-    expect(container.getByText("FCE Count: 2.5")).toBeDefined
+    expect(container.getByText("FCE Count: 2.5")).toBeDefined()
     await user.click(aaa402h1)
-    expect(container.getByText("FCE Count: 3.0")).toBeDefined
+    expect(container.getByText("FCE Count: 3.0")).toBeDefined()
+  })
+
+  it("Should decrement FCE count correctly for year and half year courses", async () => {
+    const user = userEvent.setup()
+    const container = await TestContainer.build()
+    const aaa401h1 = container.getByTestId("aaa401h1")
+    const aaa403y1 = container.getByTestId("aaa403y1")
+
+    await user.click(aaa401h1)
+    await user.click(aaa403y1)
+
+    await user.click(aaa401h1)
+    expect(container.getByText("FCE Count: 1.0")).toBeDefined()
+    await user.click(aaa403y1)
+    expect(container.getByText("FCE Count: 0.0")).toBeDefined()
+  })
+
+  it("Refreshing the page should still count the number of credits correctly", async () => {
+    const user = userEvent.setup()
+    const container = await TestContainer.build()
+    const aaa401h1 = container.getByTestId("aaa401h1")
+    const aaa403y1 = container.getByTestId("aaa403y1")
+    await user.click(aaa401h1)
+    await user.click(aaa403y1)
+    expect(container.getByText("FCE Count: 1.5")).toBeDefined()
+
+    cleanup()
+
+    const refreshedContainer = await TestContainer.build()
+    expect(refreshedContainer.getByText("FCE Count: 1.5")).toBeDefined()
   })
 
   it("Clicking a graph button adds and removes the course to the Selected Courses", async () => {
