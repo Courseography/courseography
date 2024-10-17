@@ -329,7 +329,7 @@ export class Graph extends React.Component {
           !this.state.hybridsJSON[nodeJSON.id_] &&
           this.state.nodesStatus[nodeJSON.id_].selected
         ) {
-          totalFCEs += 0.5
+          totalFCEs += this.numCredits(nodeJSON.id_)
         }
       })
       if (this.props.setFCECount) {
