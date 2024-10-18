@@ -601,7 +601,7 @@ dotProduct v1 v2 = sum $ zipWith (*) v1 v2
 
 -- Converts a Point into a Matrix representing a 2D vector.
 pointToMatrix :: Point -> Matrix
-pointToMatrix (x, y) = [[x, y, 0]]
+pointToMatrix (x, y) = [[x, y, 1]]
 
 -- | Helper to remove leading and trailing whitespace.
 trim :: T.Text -> T.Text
