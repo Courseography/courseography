@@ -32,6 +32,10 @@ import GHC.Generics
 
 -- | A two-dimensional point.
 type Point = (Double, Double)
+-- | A matrix of any dimensions.
+type Matrix = [[Double]]
+-- | A vector of any dimesions.
+type Vector = [Double]
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 
