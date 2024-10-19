@@ -155,13 +155,13 @@ programsUrl = programsUrlValue <$> loadConfig
 
 -- HTTP REQUEST STRINGS
 
--- | Create the body for the HTTP request based on the org
-createReqBody :: Text -> Value
-createReqBody org = object [ "campuses" .= ([] :: [T.Text]),
+-- | Create the body for the HTTP request based on the page
+createReqBody :: Int -> Value
+createReqBody page = object [ "campuses" .= ([] :: [T.Text]),
                        "courseCodeAndTitleProps" .= object
                        [ "courseCode" .= ("" :: T.Text),
                          "courseSectionCode" .= ("" :: T.Text),
-                         "courseTitle" .= org,
+                         "courseTitle" .= ("" :: T.Text),
                          "searchCourseDescription" .= True
                        ],
                         "courseLevels" .= ([] :: [T.Text]),
@@ -172,8 +172,8 @@ createReqBody org = object [ "campuses" .= ([] :: [T.Text]),
                         "direction" .= ("asc" :: T.Text),
                         "divisions" .= [T.pack "ARTSC"],
                         "instructor" .= ("" :: T.Text),
-                        "page" .= (1 :: Int),
-                        "pageSize" .= (200 :: Int),
+                        "page" .= page,
+                        "pageSize" .= (300 :: Int),
                         "requirementProps" .= ([] :: [T.Text]),
                         "sessions" .= [T.pack "20249", T.pack "20251", T.pack "20249-20251"],
                         "timePreferences" .= ([] :: [T.Text])
