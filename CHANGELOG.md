@@ -12,6 +12,7 @@
 
 - Fix React state mutation
 - Fixed timetable parsing issue, querying page numbers rather than course codes
+- Fixed bug to count FCE correctly
 
 ### 🔧 Internal changes
 

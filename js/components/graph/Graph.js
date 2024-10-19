@@ -329,7 +329,7 @@ export class Graph extends React.Component {
           !this.state.hybridsJSON[nodeJSON.id_] &&
           this.state.nodesStatus[nodeJSON.id_].selected
         ) {
-          totalFCEs += 0.5
+          totalFCEs += this.numCredits(nodeJSON.id_)
         }
       })
       if (this.props.setFCECount) {
@@ -417,14 +417,15 @@ export class Graph extends React.Component {
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const wasSelected = this.state.nodesStatus[courseId].selected
     const temp = [...this.state.selectedNodes]
+    const credits = this.numCredits(courseId)
+
     this.toggleSelection(courseId)
     if (typeof this.props.incrementFCECount === "function") {
       if (wasSelected) {
-        // TODO: Differentiate half- and full-year courses
-        this.props.incrementFCECount(-0.5)
+        this.props.incrementFCECount(-credits)
         this.setState({ selectedNodes: new Set(temp.filter(e => e !== courseLabel)) })
       } else {
-        this.props.incrementFCECount(0.5)
+        this.props.incrementFCECount(credits)
         this.setState({ selectedNodes: new Set([...temp, courseLabel]) })
       }
     }
@@ -435,13 +436,23 @@ export class Graph extends React.Component {
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const wasSelected = this.state.nodesStatus[courseId].selected
     const temp = this.state.selectedNodes
+    const credits = this.numCredits(courseId)
 
     if (typeof this.props.incrementFCECount === "function" && wasSelected) {
-      // TODO: Differentiate half- and full-year courses
       this.toggleSelection(courseId)
-      this.props.incrementFCECount(-0.5)
+      this.props.incrementFCECount(-credits)
       temp.delete(courseLabel)
     }
+  }
+
+  /**
+   * Assuming the first section of courseId follows the format:
+   * 3 letters for department, 3 numbers for course, and characters for session and campus.
+   * e.g. csc108h1 or mat235y1mat237y1mat257y1
+   */
+  numCredits = courseId => {
+    let session = courseId[6]
+    return typeof session === "string" && session.toLowerCase() === "y" ? 1.0 : 0.5
   }
 
   /**
