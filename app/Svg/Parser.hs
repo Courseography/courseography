@@ -313,7 +313,7 @@ parseEllipse key tags =
 
 
 parseEllipseHelper :: GraphId     -- ^ The related graph id.
-                   -> Matrix       -- ^ The translation to apply.
+                   -> Matrix      -- ^ The translation to apply.
                    -> Tag T.Text  -- ^ The open ellipse tag.
                    -> T.Text      -- ^ The id of the shape.
                    -> Shape
@@ -588,7 +588,7 @@ addTuples (a,b) (c,d) = (a + c, b + d)
 -- | Apply a matrix transformation to a point.
 matrixPointMultiply :: Matrix -> Point -> Point
 matrixPointMultiply m p =
-    let [x, y, _] = concat $ matrixMultiply m (pointToMatrix p)
+    let [[x, y, _]] = matrixMultiply m (pointToMatrix p)
     in (x, y)
 
 -- | Multiplies two matrices together.
