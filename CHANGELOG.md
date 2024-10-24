@@ -26,6 +26,7 @@
 - Moved the routes related to downloads to the `Timetable` controller to be triggered
 - Refactored the HTTPS response generation from `App/Database/CourseQueries` to the controller `App/Controllers/`
 - Moved config values from .hs file to .yaml file
+- Changed representation from translation to matrix in `App/Svg/Parser`
 
 ## [0.6.0] - 2024-06-24
 
