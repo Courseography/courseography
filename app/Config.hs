@@ -40,6 +40,7 @@ import Control.Monad.Logger (NoLoggingT)
 import Control.Monad.Trans.Resource (ResourceT, MonadUnliftIO)
 import Database.Persist.Sqlite (SqlBackend, runSqlite)
 import Control.Monad.IO.Class (liftIO)
+import System.Environment (getEnv)
 
 -- Main configuration data type
 data Config = Config
@@ -113,7 +114,12 @@ logMAccessShort host user _ requestLine responseCode _ referer _ = do
 
 -- | The path to the database file, relative to the project root.
 databasePath :: IO Text
-databasePath = databasePathValue <$> loadConfig
+databasePath = do
+    config <- loadConfig
+    useTestDb <- getEnv "APP_ENV"
+    return $ case useTestDb of
+        "test"  -> "db/databasetest.sqlite3"
+        _       -> databasePathValue config
 
 -- | Fetch the database path and execute the given action in the context of the database.
 runDb :: (MonadUnliftIO m) => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a -> m a
