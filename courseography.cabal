@@ -50,6 +50,7 @@ test-suite RequirementTests
     base >=4.14,
     bytestring,
     Cabal >= 1.16.0,
+    containers,
     directory,
     happstack-server,
     hslogger,

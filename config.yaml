@@ -2,8 +2,9 @@
 port: 8000
 logMessage: "Happstack.Server.AccessLog.Combined"
 
-# Database Path
+# Database Paths
 databasePath: "db/database.sqlite3"
+testDatabasePath: "db/test.sqlite3"
 
 # File Path Strings
 markdownPath: "./"

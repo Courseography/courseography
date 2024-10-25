@@ -40,13 +40,14 @@ import Control.Monad.Logger (NoLoggingT)
 import Control.Monad.Trans.Resource (ResourceT, MonadUnliftIO)
 import Database.Persist.Sqlite (SqlBackend, runSqlite)
 import Control.Monad.IO.Class (liftIO)
-import System.Environment (getEnv)
+import System.Environment (lookupEnv)
 
 -- Main configuration data type
 data Config = Config
     { portValue             :: Int
     , logMessage            :: String
     , databasePathValue     :: Text
+    , testDatabasePathValue :: Text
     , markdownPathValue     :: String
     , graphPathValue        :: String
     , genCssPathValue       :: String
@@ -67,6 +68,7 @@ instance FromJSON Config where
         <$> obj .: "port"
         <*> obj .: "logMessage"
         <*> obj .: "databasePath"
+        <*> obj .: "testDatabasePath"
         <*> obj .: "markdownPath"
         <*> obj .: "graphPath"
         <*> obj .: "genCssPath"
@@ -115,11 +117,11 @@ logMAccessShort host user _ requestLine responseCode _ referer _ = do
 -- | The path to the database file, relative to the project root.
 databasePath :: IO Text
 databasePath = do
-    config <- loadConfig
-    useTestDb <- getEnv "APP_ENV"
-    return $ case useTestDb of
-        "test"  -> "db/databasetest.sqlite3"
-        _       -> databasePathValue config
+    envVar <- lookupEnv "APP_ENV"
+    case envVar of
+        Just "test"  -> testDatabasePathValue <$> loadConfig
+        Nothing      -> databasePathValue <$> loadConfig
+        _            -> error "APP_ENV should have value 'test' or not exist"
 
 -- | Fetch the database path and execute the given action in the context of the database.
 runDb :: (MonadUnliftIO m) => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a -> m a

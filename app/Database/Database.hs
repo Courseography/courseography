@@ -7,14 +7,14 @@ inserting it into the database. Run when @cabal run database@ is executed.
 -}
 
 module Database.Database
-    (populateCalendar, setupDatabase) where
+    (populateCalendar, setupDatabase, clearDatabase) where
 
 import Control.Monad.IO.Class (liftIO)
 import Config (databasePath, runDb)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
-import Database.Persist.Sqlite (insert_, runMigration)
+import Database.Persist.Sqlite (insert_, runMigration, deleteWhere, Filter, SqlPersistM)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
 import WebParsing.ArtSciParser (parseCalendar)
@@ -35,6 +35,23 @@ setupDatabase = do
           db = T.unpack $ T.take ind dbPath
       createDirectoryIfMissing True db
       runDb $ runMigration migrateAll
+
+-- | Clear all the entries in the database
+clearDatabase :: SqlPersistM ()
+clearDatabase = do
+    deleteWhere ([] :: [Filter Department])
+    deleteWhere ([] :: [Filter Courses])
+    deleteWhere ([] :: [Filter Meeting])
+    deleteWhere ([] :: [Filter Times])
+    deleteWhere ([] :: [Filter Breadth])
+    deleteWhere ([] :: [Filter Distribution])
+    deleteWhere ([] :: [Filter Graph])
+    deleteWhere ([] :: [Filter Database.Tables.Text])
+    deleteWhere ([] :: [Filter Shape])
+    deleteWhere ([] :: [Filter Path])
+    deleteWhere ([] :: [Filter Post])
+    deleteWhere ([] :: [Filter PostCategory])
+    deleteWhere ([] :: [Filter Building])
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()
