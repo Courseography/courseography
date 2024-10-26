@@ -8,6 +8,7 @@ import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Util.Blaze (mdToHTML)
+import Scripts (aboutScripts)
 
 aboutResponse :: Text -> ServerPart Response
 aboutResponse aboutContents =
@@ -18,7 +19,7 @@ aboutResponse aboutContents =
                     header "about"
                     aboutHtml aboutContents
                 )
-                ""
+                aboutScripts
 
 -- | AboutHtml takes in the contents of the README.md file (the GitHub README file) and translates
 -- the markdown to blaze-HTML.

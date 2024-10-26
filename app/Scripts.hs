@@ -1,5 +1,5 @@
 module Scripts (
-    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, generateScripts
+    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, generateScripts, aboutScripts
     )
     where
 
@@ -35,3 +35,7 @@ searchScripts = do
 generateScripts :: H.Html
 generateScripts = do
     H.script ! A.src "/static/js/generate/app.js" $ ""
+
+aboutScripts :: H.Html
+aboutScripts = do 
+    H.script ! A.src "/static/js/about/app.js" $ ""
