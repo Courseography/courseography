@@ -1,7 +1,7 @@
 const path = require("path")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const webpack = require("webpack")
-const RemarkHTML = import("remark-html")
+// const RemarkHTML = import("remark-html")
 
 const presets = [
   ["@babel/preset-env", { useBuiltIns: "usage", corejs: 3 }],
@@ -53,19 +53,23 @@ module.exports = {
         test: /\.s[ac]ss$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
+      // {
+      //   test: /\.md$/,
+      //   use: [
+      //     { loader: "html-loader" },
+      //     {
+      //       loader: "remark-loader",
+      //       options: {
+      //         remarkOptions: {
+      //           plugins: [RemarkHTML],
+      //         },
+      //       },
+      //     },
+      //   ],
+      // },
       {
         test: /\.md$/,
-        use: [
-          { loader: "html-loader" },
-          {
-            loader: "remark-loader",
-            options: {
-              remarkOptions: {
-                plugins: [RemarkHTML],
-              },
-            },
-          },
-        ],
+        use: [{ loader: "html-loader" }, { loader: "markdown-loader" }],
       },
     ],
   },
