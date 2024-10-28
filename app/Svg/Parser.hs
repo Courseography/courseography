@@ -428,10 +428,29 @@ parseTransform "" = [[1, 0, 0],
 parseTransform transform =
     parseVal parser transform
     where
-        parser = P.sepEndBy (scale <|> rotate) P.spaces >> translate
-        scale = P.string "scale(" >> double >> P.spaces >> P.option 0 double
-            >> P.char ')'
-        rotate = P.string "rotate(" >> double >> P.char ')'
+        parser = P.try scale <|> 
+                  P.try rotate <|> 
+                  P.try translate <|> 
+                  P.try matrix <|> 
+                  P.try skewX <|> 
+                  P.try skewY
+        scale = do
+            _ <- P.string "scale("
+            xScale <- double
+            _ <- P.char ',' <|> P.char ' '
+            yScale <- P.option 0 double
+            return [[xScale, 0, 0],
+                    [0, yScale, 0],
+                    [0, 0, 1]]
+        rotate = do
+            _ <- P.string "rotate("
+            angle <- double
+            xRot <- P.option 0 ((P.char ',' <|> P.char ' ') >> double)
+            yRot <- P.option 0 ((P.char ',' <|> P.char ' ') >> double)
+            _ <- P.char ')'
+            return [[cos angle, - sin angle, xRot * (1 - cos angle) + yRot * sin angle],
+                    [sin angle, cos angle, yRot * (1 - cos angle) - xRot * sin angle],
+                    [0, 0, 1]]
         translate = do
             _ <- P.string "translate("
             xPos <- double
@@ -439,6 +458,32 @@ parseTransform transform =
             yPos <- double
             return [[1, 0, xPos],
                     [0, 1, yPos],
+                    [0, 0, 1]]
+        matrix = do
+            _ <- P.string "matrix("
+            a <- double
+            b <- (P.char ',' <|> P.char ' ') >> double
+            c <- (P.char ',' <|> P.char ' ') >> double
+            d <- (P.char ',' <|> P.char ' ') >> double
+            e <- (P.char ',' <|> P.char ' ') >> double
+            f <- (P.char ',' <|> P.char ' ') >> double
+            _ <- P.char ')'
+            return [[a, c, e],
+                    [b, d, f],
+                    [0, 0, 1]]
+        skewX = do
+            _ <- P.string "skewX("
+            angle <- double
+            _ <- P.char ')'
+            return [[1, tan angle, 0],
+                    [0, 1, 0],
+                    [0, 0, 1]]
+        skewY = do
+            _ <- P.string "skewY("
+            angle <- double
+            _ <- P.char ')'
+            return [[1, 0, 0],
+                    [tan angle, 1, 0],
                     [0, 0, 1]]
 
 parseCoord :: T.Text -> Point
