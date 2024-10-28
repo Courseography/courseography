@@ -20,30 +20,32 @@ custom-setup
     process >= 1.2,
     directory
 
-test-suite RequirementTests
-  main-is: RequirementTests/tests.hs
+test-suite Tests
+  main-is: Tests/Main.hs
   other-modules:
+    Config,
+    Controllers.Course,
+    Database.CourseInsertion,
+    Database.CourseQueries,
+    Database.CourseVideoSeed,
+    Database.Database,
     Database.DataType,
     Database.Requirement,
     Database.Tables,
-    RequirementTests.PostParserTests,
-    RequirementTests.ReqParserTests,
-    RequirementTests.PreProcessingTests,
+    DynamicGraphs.GraphNodeUtils,
     RequirementTests.ModifierTests,
+    RequirementTests.PostParserTests,
+    RequirementTests.PreProcessingTests,
+    RequirementTests.ReqParserTests,
+    RequirementTests.RequirementTests,
+    Svg.Builder,
+    Tests.CourseControllerTests,
+    Tests.TestHelpers,
+    Util.Happstack,
     WebParsing.ParsecCombinators,
     WebParsing.PostParser,
     WebParsing.ReqParser,
-    DynamicGraphs.GraphNodeUtils,
-    Config,
-    Database.CourseInsertion,
-    Database.CourseVideoSeed,
-    Database.Database,
-    RequirementTests.CourseControllerTests,
-    WebParsing.ArtSciParser,
-    Controllers.Course,
-    Database.CourseQueries,
-    Svg.Builder,
-    Util.Happstack
+    WebParsing.ArtSciParser
   Type: exitcode-stdio-1.0
   build-depends:
     aeson,

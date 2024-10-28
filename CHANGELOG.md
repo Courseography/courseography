@@ -27,6 +27,8 @@
 - Refactored the HTTPS response generation from `App/Database/CourseQueries` to the controller `App/Controllers/`
 - Moved config values from .hs file to .yaml file
 - Changed representation from translation to matrix in `App/Svg/Parser`
+- Improved general testing infrastructure
+- Added test cases for the index function in `Controllers/Course`
 
 ## [0.6.0] - 2024-06-24
 

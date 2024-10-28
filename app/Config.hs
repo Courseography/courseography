@@ -47,7 +47,6 @@ data Config = Config
     { portValue             :: Int
     , logMessage            :: String
     , databasePathValue     :: Text
-    , testDatabasePathValue :: Text
     , markdownPathValue     :: String
     , graphPathValue        :: String
     , genCssPathValue       :: String
@@ -68,7 +67,6 @@ instance FromJSON Config where
         <$> obj .: "port"
         <*> obj .: "logMessage"
         <*> obj .: "databasePath"
-        <*> obj .: "testDatabasePath"
         <*> obj .: "markdownPath"
         <*> obj .: "graphPath"
         <*> obj .: "genCssPath"
@@ -85,7 +83,13 @@ instance FromJSON Config where
 
 -- Load the configuration
 loadConfig :: IO Config
-loadConfig = loadYamlSettings ["config.yaml"] [] useEnv
+loadConfig = do
+    env <- lookupEnv "APP_ENV"
+    let configFile = case env of
+            Just "test" -> "test.config.yaml"
+            Nothing     -> "config.yaml"
+            _           -> error "APP_ENV should have value 'test' or not exist"
+    loadYamlSettings [configFile] [] useEnv
 
 -- SERVER CONFIGURATION
 
@@ -116,12 +120,7 @@ logMAccessShort host user _ requestLine responseCode _ referer _ = do
 
 -- | The path to the database file, relative to the project root.
 databasePath :: IO Text
-databasePath = do
-    envVar <- lookupEnv "APP_ENV"
-    case envVar of
-        Just "test"  -> testDatabasePathValue <$> loadConfig
-        Nothing      -> databasePathValue <$> loadConfig
-        _            -> error "APP_ENV should have value 'test' or not exist"
+databasePath = databasePathValue <$> loadConfig
 
 -- | Fetch the database path and execute the given action in the context of the database.
 runDb :: (MonadUnliftIO m) => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a -> m a
