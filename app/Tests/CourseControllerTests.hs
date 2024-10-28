@@ -1,7 +1,7 @@
 {-|
-Description: Course Controller Module Tests.
+Description: Course Controller module tests.
 
-Module that contains the tests for the functions in the Course Controller Module.
+Module that contains the tests for the functions in the Course Controller module.
 
 -}
 

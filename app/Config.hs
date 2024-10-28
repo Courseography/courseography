@@ -27,20 +27,20 @@ module Config (
     holidays
     ) where
 
-import Data.Yaml.Config (loadYamlSettings, useEnv)
+import Control.Monad.IO.Class (liftIO)
+import Control.Monad.Logger (NoLoggingT)
+import Control.Monad.Trans.Resource (ResourceT, MonadUnliftIO)
+import Control.Monad.Trans.Reader (ReaderT)
 import Data.Aeson (FromJSON(..), object, (.=), Value, (.:), withObject)
 import qualified Data.Text as T
 import Data.Text (Text)
 import Data.Time (Day)
+import Data.Yaml.Config (loadYamlSettings, useEnv)
+import Database.Persist.Sqlite (SqlBackend, runSqlite)
 import Happstack.Server (Conf (..), LogAccess, nullConf)
 import Network.HTTP.Types.Header (RequestHeaders)
-import System.Log.Logger (Priority (INFO), logM)
-import Control.Monad.Trans.Reader (ReaderT)
-import Control.Monad.Logger (NoLoggingT)
-import Control.Monad.Trans.Resource (ResourceT, MonadUnliftIO)
-import Database.Persist.Sqlite (SqlBackend, runSqlite)
-import Control.Monad.IO.Class (liftIO)
 import System.Environment (lookupEnv)
+import System.Log.Logger (Priority (INFO), logM)
 
 -- Main configuration data type
 data Config = Config

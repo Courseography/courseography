@@ -1,5 +1,5 @@
 {-|
-Description: Requirement tests testing module.
+Description: Requirement test suites module.
 
 Module that contains the test suites for all the requirement tests.
 

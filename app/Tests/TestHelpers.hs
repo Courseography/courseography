@@ -1,7 +1,7 @@
 {-|
 Description: Helper functions for various controller modules tests.
 
-Module that helper functions used in testing controller module functions.
+Module that contains helper functions used in testing controller module functions.
 
 -}
 
