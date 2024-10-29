@@ -1,7 +1,6 @@
 const path = require("path")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const webpack = require("webpack")
-// const RemarkHTML = import("remark-html")
 
 const presets = [
   ["@babel/preset-env", { useBuiltIns: "usage", corejs: 3 }],
