@@ -48,6 +48,7 @@ strictRoutes = [
     ("post-progress", postResponse),
     ("draw", drawResponse),
     ("about", aboutResponse),
+    ("PRIVACY.md", privacyResponse),  -- check for this route in strictMatchDir and redirect to /privacy?
     ("privacy", privacyResponse),
     ("graphs", GraphsController.index),
     ("timesearch", searchResponse),
