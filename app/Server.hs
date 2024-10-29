@@ -9,10 +9,9 @@ responses.
 module Server
     (runServer) where
 
-import Config (markdownPath, serverConf)
+import Config (serverConf)
 import Control.Concurrent (forkIO, killThread)
 import Data.String (fromString)
-import qualified Data.Text.Lazy.IO as LazyIO
 import Filesystem.Path.CurrentOS as Path
 import Happstack.Server hiding (host)
 import Routes (routeResponses)
@@ -25,14 +24,12 @@ runServer :: IO ()
 runServer = do
     configureLogger
     staticDir <- getStaticDir
-    markdown <- markdownPath
-    privacyContents <- LazyIO.readFile $ markdown ++ "PRIVACY.md"
 
     -- Start the HTTP server
     server <- serverConf
     httpThreadId <- forkIO $ simpleHTTP server $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
-      routeResponses staticDir privacyContents
+      routeResponses staticDir
     waitForTermination
     killThread httpThreadId
     where

@@ -7,7 +7,6 @@ import Controllers.Graph as GraphsController
     ( graphResponse, index, getGraphJSON, graphImageResponse )
 import Controllers.Generate as GenerateController (generateResponse, findAndSavePrereqsResponse)
 import Controllers.Timetable as TimetableController
-import Data.Text.Lazy (Text)
 import Database.CourseInsertion (saveGraphJSON)
 import Database.CourseQueries (retrievePost)
 import Happstack.Server
@@ -30,15 +29,15 @@ import Response
       postResponse,
       loadingResponse)
 
-routeResponses :: String -> Text -> ServerPartT IO Response
-routeResponses staticDir privacyContents =
-    msum (map strictMatchDir (strictRoutes privacyContents) ++
+routeResponses :: String -> ServerPartT IO Response
+routeResponses staticDir =
+    msum (map strictMatchDir strictRoutes ++
          [dir "static" $ serveDirectory DisableBrowsing [] staticDir,
           nullDir >> seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
           notFoundResponse])
 
-strictRoutes :: Text -> [ (String, ServerPart Response)] 
-strictRoutes privacyContents = [
+strictRoutes :: [(String, ServerPart Response)] 
+strictRoutes = [
     ("grid", TimetableController.gridResponse),
     ("graph", GraphsController.graphResponse),
     ("graph-generate", GenerateController.findAndSavePrereqsResponse),
@@ -49,7 +48,7 @@ strictRoutes privacyContents = [
     ("post-progress", postResponse),
     ("draw", drawResponse),
     ("about", aboutResponse),
-    ("privacy", privacyResponse privacyContents),
+    ("privacy", privacyResponse),
     ("graphs", GraphsController.index),
     ("timesearch", searchResponse),
     ("generate", generateResponse),
