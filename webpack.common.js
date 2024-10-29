@@ -19,7 +19,7 @@ module.exports = {
     "js/post/app": "./js/components/post/post.js.jsx",
     "js/draw/app": "./js/components/draw/main.js",
     "js/generate/app": "./js/components/generate/generate.jsx",
-    "js/about/app": "./README.md",
+    "js/about/aboutPage": "./js/components/about/about.js",
     "style/app": "./style/app.js",
   },
   output: {

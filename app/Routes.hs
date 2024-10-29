@@ -30,15 +30,15 @@ import Response
       postResponse,
       loadingResponse)
 
-routeResponses :: String -> Text -> Text -> ServerPartT IO Response
-routeResponses staticDir aboutContents privacyContents =
-    msum (map strictMatchDir (strictRoutes aboutContents privacyContents) ++
+routeResponses :: String -> Text -> ServerPartT IO Response
+routeResponses staticDir privacyContents =
+    msum (map strictMatchDir (strictRoutes privacyContents) ++
          [dir "static" $ serveDirectory DisableBrowsing [] staticDir,
           nullDir >> seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
           notFoundResponse])
 
-strictRoutes :: Text -> Text -> [ (String, ServerPart Response)] 
-strictRoutes aboutContents privacyContents = [
+strictRoutes :: Text -> [ (String, ServerPart Response)] 
+strictRoutes privacyContents = [
     ("grid", TimetableController.gridResponse),
     ("graph", GraphsController.graphResponse),
     ("graph-generate", GenerateController.findAndSavePrereqsResponse),
@@ -48,7 +48,7 @@ strictRoutes aboutContents privacyContents = [
     ("post", retrievePost),
     ("post-progress", postResponse),
     ("draw", drawResponse),
-    ("about", aboutResponse aboutContents),
+    ("about", aboutResponse),
     ("privacy", privacyResponse privacyContents),
     ("graphs", GraphsController.index),
     ("timesearch", searchResponse),
