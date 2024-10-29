@@ -53,20 +53,6 @@ module.exports = {
         test: /\.s[ac]ss$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
-      // {
-      //   test: /\.md$/,
-      //   use: [
-      //     { loader: "html-loader" },
-      //     {
-      //       loader: "remark-loader",
-      //       options: {
-      //         remarkOptions: {
-      //           plugins: [RemarkHTML],
-      //         },
-      //       },
-      //     },
-      //   ],
-      // },
       {
         test: /\.md$/,
         use: [{ loader: "html-loader" }, { loader: "markdown-loader" }],
