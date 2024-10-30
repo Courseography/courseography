@@ -18,7 +18,6 @@ module Svg.Parser
 
 import Config (runDb, graphPath)
 import Control.Monad.IO.Class (liftIO)
-import Data.Bifunctor (bimap)
 import Data.Char (isSpace)
 import Data.List as List
 import Data.List.Split (splitOn)
@@ -141,9 +140,9 @@ parseGraph key tags =
         texts = concatMap (parseText key) gTags
         shapes = removeRedundant (ellipses ++ rects)
 
-        paths' = map (\p -> p { pathPoints = map (addTuples globalTransform) $ pathPoints p}) paths
-        shapes' = map (\s -> s { shapePos = addTuples globalTransform (shapePos s)}) $ filter small shapes
-        texts' = map (\t -> t { textPos = addTuples globalTransform (textPos t)}) texts
+        paths' = map (\p -> p { pathPoints = map (matrixPointMultiply globalTransform) $ pathPoints p}) paths
+        shapes' = map (\s -> s { shapePos = matrixPointMultiply globalTransform (shapePos s)}) $ filter small shapes
+        texts' = map (\t -> t { textPos = matrixPointMultiply globalTransform (textPos t)}) texts
     in
         (paths', shapes', texts')
     where
@@ -170,7 +169,7 @@ parseText key tags =
 
 parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
                 -> [(T.Text, T.Text)]
-                -> Point
+                -> Matrix
                 -> [Tag T.Text]
                 -> [Text]
 parseTextHelper key styles' trans textTags =
@@ -178,7 +177,7 @@ parseTextHelper key styles' trans textTags =
     then
         [Text key
               (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
-              (addTuples newTrans (readAttr "x" $ head textTags,
+              (matrixPointMultiply newTrans (readAttr "x" $ head textTags,
                                    readAttr "y" $ head textTags))
               (TS.escapeHTML $ trim $ TS.innerText textTags)
               align
@@ -191,7 +190,7 @@ parseTextHelper key styles' trans textTags =
     where
         newStyle = styles (head textTags) ++ styles'
         currTrans = getTransform $ head textTags
-        newTrans = addTuples trans currTrans
+        newTrans = matrixMultiply trans currTrans
         alignAttr = styleVal "text-anchor" newStyle
         align = if T.null alignAttr
                 then "begin"
@@ -218,9 +217,7 @@ parseRect key tags =
             updateShape fill' $
                 Shape key
                   ""
-                  (bimap
-                   (readAttr "x" rectOpenTag +) (readAttr "y" rectOpenTag +)
-                   trans)
+                  (matrixPointMultiply trans (readAttr "x" rectOpenTag, readAttr "y" rectOpenTag))
                   (readAttr "width" rectOpenTag)
                   (readAttr "height" rectOpenTag)
                   fill'
@@ -233,8 +230,7 @@ parseRect key tags =
             updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
                 (fromAttrib "id" $ head tags)
-                (fst (points !! 1) + fst trans, -- get x value
-                snd (points !! 1) + snd trans) -- get y value
+                (matrixPointMultiply trans (points !! 1))
                 (fst (head points) - fst (points !! 1)) -- calculate width
                 (snd (points !! 2) - snd (points !! 1)) -- calculate height
                 fill
@@ -259,7 +255,7 @@ parsePath key tags =
 
 
 parsePathHelper :: GraphId -- ^ The Path's corresponding graph identifier.
-                -> Point
+                -> Matrix
                 -> (T.Text, T.Text) -- src, dst
                 -> Tag T.Text
                 -> [Path]
@@ -267,7 +263,7 @@ parsePathHelper key trans (src, dst) pathTag =
     let d = fromAttrib "d" pathTag
         styles' = styles pathTag
         currTrans = parseTransform $ fromAttrib "transform" pathTag
-        realD = map (addTuples (addTuples trans currTrans)) $ parsePathD d
+        realD = map (matrixPointMultiply (matrixMultiply trans currTrans)) $ parsePathD d
         fillAttr = styleVal "fill" styles'
         isRegion = not (T.null fillAttr) && fillAttr /= "none"
     in
@@ -317,15 +313,14 @@ parseEllipse key tags =
 
 
 parseEllipseHelper :: GraphId     -- ^ The related graph id.
-                   -> Point       -- ^ The translation to apply.
+                   -> Matrix      -- ^ The translation to apply.
                    -> Tag T.Text  -- ^ The open ellipse tag.
                    -> T.Text      -- ^ The id of the shape.
                    -> Shape
-parseEllipseHelper key (dx, dy) ellipseTag id_ =
+parseEllipseHelper key trans ellipseTag id_ =
     Shape key
           id_
-          (readAttr "cx" ellipseTag + dx,
-           readAttr "cy" ellipseTag + dy)
+          (matrixPointMultiply trans (readAttr "cx" ellipseTag, readAttr "cy" ellipseTag))
           (readAttr "rx" ellipseTag * 2)
           (readAttr "ry" ellipseTag * 2)
           ""
@@ -420,14 +415,16 @@ styleVal nameStr styleMap = fromMaybe "" $ lookup nameStr styleMap
 
 
 -- | Gets transform attribute from a tag, and parses it.
-getTransform :: Tag T.Text -> Point
+getTransform :: Tag T.Text -> Matrix
 getTransform = parseTransform . fromAttrib "transform"
 
 
--- | Parses a translation String into a tuple of Float, ignoring scaling and
--- rotation.
-parseTransform :: T.Text -> Point
-parseTransform "" = (0, 0)
+-- | Parses a translation String into a 2D array of double (Matrix type),
+-- ignoring scaling and rotation.
+parseTransform :: T.Text -> Matrix
+parseTransform "" = [[1, 0, 0],
+                     [0, 1, 0],
+                     [0, 0, 1]]
 parseTransform transform =
     parseVal parser transform
     where
@@ -440,7 +437,9 @@ parseTransform transform =
             xPos <- double
             _ <- P.char ',' <|> P.char ' '
             yPos <- double
-            return (xPos, yPos)
+            return [[1, 0, xPos],
+                    [0, 1, yPos],
+                    [0, 0, 1]]
 
 parseCoord :: T.Text -> Point
 parseCoord "" = (0, 0)
@@ -585,6 +584,23 @@ updateShape fill r =
 -- | Adds two tuples together.
 addTuples :: Point -> Point -> Point
 addTuples (a,b) (c,d) = (a + c, b + d)
+
+-- | Apply a matrix transformation to a point.
+-- The matrix must have dimensions 3x3, representing a transformation for a two-dimensional point,
+-- i.e., the transformation in the z-component is ignored, so the third row is expected to be [0,0,1]
+matrixPointMultiply :: Matrix -> Point -> Point
+matrixPointMultiply matrix (x, y) =
+    case matrix of
+        [[a, b, tx], [c, d, ty], _] -> (a * x + b * y + tx, c * x + d * y + ty)
+        _ -> error "Matrix must be 3x3 for point transformation."
+
+-- | Multiplies two 3x3 matrices together.
+matrixMultiply :: Matrix -> Matrix -> Matrix
+matrixMultiply m1 m2 = [[dotProduct row col | col <- transpose m2] | row <- m1]
+
+-- | Computes the dot product of two vectors.
+dotProduct :: Vector -> Vector -> Double
+dotProduct v1 v2 = sum $ zipWith (*) v1 v2
 
 -- | Helper to remove leading and trailing whitespace.
 trim :: T.Text -> T.Text

@@ -13,6 +13,7 @@
 - Fix React state mutation
 - Fixed timetable parsing issue, querying page numbers rather than course codes
 - Fixed bug to count FCE correctly
+- Fixed parsing of graph transformations
 
 ### 🔧 Internal changes
 
@@ -26,6 +27,7 @@
 - Moved the routes related to downloads to the `Timetable` controller to be triggered
 - Refactored the HTTPS response generation from `App/Database/CourseQueries` to the controller `App/Controllers/`
 - Moved config values from .hs file to .yaml file
+- Changed representation from translation to matrix in `App/Svg/Parser`
 - Optimized about page using Webpack and new dependencies `html-loader` and `markdown-loader`
 - Removed `privacy` route and codes related to it
 
