@@ -18,8 +18,7 @@ module.exports = {
     "js/post/app": "./js/components/post/post.js.jsx",
     "js/draw/app": "./js/components/draw/main.js",
     "js/generate/app": "./js/components/generate/generate.jsx",
-    "js/about/aboutPage": "./js/components/about/about.js",
-    "js/about/privacyPage": "./js/components/about/privacy.js",
+    "js/about/app": "./js/components/about/about.js",
     "style/app": "./style/app.js",
   },
   output: {
