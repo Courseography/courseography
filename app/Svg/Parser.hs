@@ -587,21 +587,18 @@ addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Apply a matrix transformation to a point.
 matrixPointMultiply :: Matrix -> Point -> Point
-matrixPointMultiply m p =
-    let [[x, y, _]] = matrixMultiply m (pointToMatrix p)
-    in (x, y)
+matrixPointMultiply matrix (x, y) =
+    case matrix of
+        [[a, b, tx], [c, d, ty], _] -> (a * x + b * y + tx, c * x + d * y + ty)
+        _ -> error "Matrix must be 3x3 for point transformation."
 
--- | Multiplies two matrices together.
+-- | Multiplies two 3x3 matrices together.
 matrixMultiply :: Matrix -> Matrix -> Matrix
 matrixMultiply m1 m2 = [[dotProduct row col | col <- transpose m2] | row <- m1]
 
 -- | Computes the dot product of two vectors.
 dotProduct :: Vector -> Vector -> Double
 dotProduct v1 v2 = sum $ zipWith (*) v1 v2
-
--- Converts a Point into a Matrix representing a 2D vector.
-pointToMatrix :: Point -> Matrix
-pointToMatrix (x, y) = [[x, y, 1]]
 
 -- | Helper to remove leading and trailing whitespace.
 trim :: T.Text -> T.Text
