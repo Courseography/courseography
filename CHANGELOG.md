@@ -26,6 +26,8 @@
 - Moved the routes related to downloads to the `Timetable` controller to be triggered
 - Refactored the HTTPS response generation from `App/Database/CourseQueries` to the controller `App/Controllers/`
 - Moved config values from .hs file to .yaml file
+- Optimized about page using Webpack and new dependencies `html-loader` and `markdown-loader`
+- Removed `privacy` route and codes related to it
 
 ## [0.6.0] - 2024-06-24
 
