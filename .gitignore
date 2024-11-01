@@ -49,6 +49,7 @@ cabal.sandbox.config
 /public/js/generate/app.js
 /public/js/graph/app.js
 /public/js/draw/app.js
+/public/js/about/app.js
 /public/*.svg
 /public/*.png
 /public/*.ttf
