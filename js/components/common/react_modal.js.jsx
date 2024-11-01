@@ -278,16 +278,15 @@ class Description extends React.Component {
                   {
                     field: "time",
                     cellStyle: { whiteSpace: "pre" },
-                    cellRenderer: col => col.data.time.join("\n"),
+                    valueFormatter: col => col.data.time.join("\n"),
                   },
                   {
                     field: "room",
                     cellStyle: { whiteSpace: "pre" },
-                    cellRenderer: col => col.data.room.join("\n"),
+                    valueFormatter: col => col.data.room.join("\n"),
                     width: 140,
                   },
                 ]}
-                rowSelection="multiple"
                 rowHeight="100"
               ></AgGridReact>
             </div>
