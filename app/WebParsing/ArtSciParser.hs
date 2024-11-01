@@ -1,7 +1,7 @@
 module WebParsing.ArtSciParser
     (parseCalendar, getDeptList) where
 
-import Config (databasePath, fasCalendarUrl, programsUrl)
+import Config (runDb, fasCalendarUrl, programsUrl)
 import Control.Monad.IO.Class (liftIO)
 import Data.CSV
 import Data.List (findIndex, nubBy)
@@ -11,7 +11,7 @@ import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Database.CourseInsertion (insertCourse)
 import Database.Persist (insertUnique)
-import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insertMany_, runSqlite)
+import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insertMany_)
 import Database.Tables (Building (..), Courses (..), Department (..))
 import Filesystem.Path.CurrentOS as Path
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
@@ -41,7 +41,7 @@ buildingsCSV = do
 parseBuildings :: IO ()
 parseBuildings = do
     buildingInfo <- getBuildingsFromCSV =<< buildingsCSV
-    runSqlite databasePath $ do
+    runDb $ do
         liftIO $ putStrLn "Inserting buildings"
         deleteWhere ([] :: [Filter Building])  :: SqlPersistM ()
         insertMany_ buildingInfo :: SqlPersistM ()
@@ -64,9 +64,10 @@ getBuildingsFromCSV buildingCSVFile = do
 -- into the database.
 parseArtSci :: IO ()
 parseArtSci = do
-    bodyTags <- httpBodyTags programsUrl
+    programs <- programsUrl
+    bodyTags <- httpBodyTags programs
     let deptInfo = getDeptList bodyTags
-    runSqlite databasePath $ do
+    runDb $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
         mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)
@@ -96,7 +97,8 @@ insertDepts = mapM_ (print >> (insertUnique . Department))
 parseDepartment :: (T.Text, T.Text) -> SqlPersistM ()
 parseDepartment (relativeURL, _) = do
     liftIO $ print relativeURL
-    bodyTags <- liftIO $ httpBodyTags $ fasCalendarUrl ++ T.unpack relativeURL
+    fasCalendar <- liftIO fasCalendarUrl
+    bodyTags <- liftIO $ httpBodyTags $ fasCalendar ++ T.unpack relativeURL
     let contentTags = dropWhile (not . tagOpenAttrLit "footer" ("class", "view-footer")) bodyTags
         programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags
         programs' = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-content")) programs

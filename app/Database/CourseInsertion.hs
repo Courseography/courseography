@@ -11,12 +11,12 @@ module Database.CourseInsertion
     (insertCourse,
      saveGraphJSON) where
 
-import Config (databasePath)
+import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Aeson as Aeson
 import qualified Data.Text as T
 import Database.Persist.Class (selectKeysList)
-import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, runSqlite, selectFirst,
+import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, selectFirst,
                                 (==.))
 import Database.Tables hiding (breadth, distribution, paths, shapes, texts)
 import Happstack.Server (lookBS, lookText', ServerPart, Response, toResponse)
@@ -30,7 +30,7 @@ saveGraphJSON = do
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            _ <- liftIO $ runSqlite databasePath $ insertGraph nameStr texts shapes paths
+            _ <- liftIO $ runDb $ insertGraph nameStr texts shapes paths
             return $ toResponse ("Success" :: String)
     where
         insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()

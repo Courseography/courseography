@@ -25,11 +25,13 @@ runServer :: IO ()
 runServer = do
     configureLogger
     staticDir <- getStaticDir
-    aboutContents <- LazyIO.readFile $ markdownPath ++ "README.md"
-    privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
+    markdown <- markdownPath
+    aboutContents <- LazyIO.readFile $ markdown ++ "README.md"
+    privacyContents <- LazyIO.readFile $ markdown ++ "PRIVACY.md"
 
     -- Start the HTTP server
-    httpThreadId <- forkIO $ simpleHTTP serverConf $ do
+    server <- serverConf
+    httpThreadId <- forkIO $ simpleHTTP server $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
       routeResponses staticDir aboutContents privacyContents
     waitForTermination
