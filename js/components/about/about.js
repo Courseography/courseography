@@ -1,3 +1,6 @@
 import aboutContent from "../../../README.md"
 
-document.querySelector("#aboutDiv").innerHTML = aboutContent
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("aboutDiv")
+  container.innerHTML = aboutContent
+})
