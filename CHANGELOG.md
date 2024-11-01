@@ -28,6 +28,8 @@
 - Refactored the HTTPS response generation from `App/Database/CourseQueries` to the controller `App/Controllers/`
 - Moved config values from .hs file to .yaml file
 - Changed representation from translation to matrix in `App/Svg/Parser`
+- Optimized about page using Webpack and new dependencies `html-loader` and `markdown-loader`
+- Removed `privacy` route and codes related to it
 
 ## [0.6.0] - 2024-06-24
 
