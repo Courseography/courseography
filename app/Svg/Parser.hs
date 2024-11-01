@@ -438,16 +438,18 @@ parseTransform transform =
             _ <- P.string "scale("
             xScale <- double
             _ <- P.char ',' <|> P.char ' '
-            yScale <- P.option 0 double
+            yScale <- P.option xScale double
             return [[xScale, 0, 0],
                     [0, yScale, 0],
                     [0, 0, 1]]
         rotate = do
             _ <- P.string "rotate("
-            angle <- double
-            xRot <- P.option 0 ((P.char ',' <|> P.char ' ') >> double)
-            yRot <- P.option 0 ((P.char ',' <|> P.char ' ') >> double)
-            _ <- P.char ')'
+            angleDegrees <- double
+            _ <- P.char ',' <|> P.char ' '
+            xRot <- P.option 0 double
+            _ <- P.char ',' <|> P.char ' '
+            yRot <- P.option 0 double
+            let angle = angleDegrees * pi / 180
             return [[cos angle, - sin angle, xRot * (1 - cos angle) + yRot * sin angle],
                     [sin angle, cos angle, yRot * (1 - cos angle) - xRot * sin angle],
                     [0, 0, 1]]
@@ -467,21 +469,20 @@ parseTransform transform =
             d <- (P.char ',' <|> P.char ' ') >> double
             e <- (P.char ',' <|> P.char ' ') >> double
             f <- (P.char ',' <|> P.char ' ') >> double
-            _ <- P.char ')'
             return [[a, c, e],
                     [b, d, f],
                     [0, 0, 1]]
         skewX = do
             _ <- P.string "skewX("
-            angle <- double
-            _ <- P.char ')'
+            angleDegrees <- double
+            let angle = angleDegrees * pi / 180
             return [[1, tan angle, 0],
                     [0, 1, 0],
                     [0, 0, 1]]
         skewY = do
             _ <- P.string "skewY("
-            angle <- double
-            _ <- P.char ')'
+            angleDegrees <- double
+            let angle = angleDegrees * pi / 180
             return [[1, 0, 0],
                     [tan angle, 1, 0],
                     [0, 0, 1]]
