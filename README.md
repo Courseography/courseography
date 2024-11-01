@@ -125,6 +125,6 @@ Zi Kai Xu
 
 ## Privacy Policy and Licensing
 
-Click [here](/PRIVACY.md) to learn about our Privacy Policy.
+Click [here](https://github.com/Courseography/courseography/blob/master/PRIVACY.md) to learn about our Privacy Policy.
 
-Click [here](/LICENSE) to learn about our licensing.
+Click [here](https://github.com/Courseography/courseography/blob/master/LICENSE) to learn about our licensing.
