@@ -2727,32 +2727,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-charts-types@npm:10.2.0":
-  version: 10.2.0
-  resolution: "ag-charts-types@npm:10.2.0"
-  checksum: b21ef236978e0df7988c3842f15007fa2d38521c5c6b48485a6fa84b17cec82e40cb75ca81a6096913a8fe78ac35ac67dbacb129691066dfd229fbbf7dec663a
+"ag-charts-types@npm:10.3.1":
+  version: 10.3.1
+  resolution: "ag-charts-types@npm:10.3.1"
+  checksum: 58d6dadfc663fa24e69b5d2c8555b88a3c45b86d101c5788f3f4787bb426a19cf7ff14f22e40d0ae4b570f0d1a4290b353c88d2835a7696c59bb9556f0aaafc1
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:32.2.1, ag-grid-community@npm:^32.2.1":
-  version: 32.2.1
-  resolution: "ag-grid-community@npm:32.2.1"
+"ag-grid-community@npm:32.3.2, ag-grid-community@npm:^32.3.2":
+  version: 32.3.2
+  resolution: "ag-grid-community@npm:32.3.2"
   dependencies:
-    ag-charts-types: 10.2.0
-  checksum: 3bd0af7af1c217f0108d00b5f50183e2f5faf6c254d248b7b35a0f7d38cba7f33137aa78e8a7c146d84615df12b35acf024415f80bc7b2e89c2687c51e16a886
+    ag-charts-types: 10.3.1
+  checksum: d820bd70c506cf5ae1e1a892e15b1c33b5ce9e29af7e4b0abee0c681baeb2baf753848136efc89710ae5e1c7ffc4f65a632335b6596b9203f6d21117054af7e9
   languageName: node
   linkType: hard
 
-"ag-grid-react@npm:^32.2.1":
-  version: 32.2.1
-  resolution: "ag-grid-react@npm:32.2.1"
+"ag-grid-react@npm:^32.3.2":
+  version: 32.3.2
+  resolution: "ag-grid-react@npm:32.3.2"
   dependencies:
-    ag-grid-community: 32.2.1
+    ag-grid-community: 32.3.2
     prop-types: ^15.8.1
   peerDependencies:
-    react: ^16.3.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
-  checksum: 4125a5f8b9b650a10ad2347a7a2f5053423b525cf8f78c60463c6386c42f26e647d7e882dab0b4430aaaae7174a844ce9ccc7c46f3da605ed131f172f3fe1885
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: bfbf3a804a1db4c74b14610be284d66862732d938cc71b3a1e4839814a61a68bcc82bdadb4f57338492b608a49f9346075557ccffed054c53b1748d642e3aaf6
   languageName: node
   linkType: hard
 
@@ -3986,8 +3986,8 @@ __metadata:
     "@testing-library/dom": ^10.4.0
     "@testing-library/react": ^16.0.0
     "@testing-library/user-event": ^14.5.2
-    ag-grid-community: ^32.2.1
-    ag-grid-react: ^32.2.1
+    ag-grid-community: ^32.3.2
+    ag-grid-react: ^32.3.2
     babel-jest: ^29.5.0
     babel-loader: ^9.1.2
     bootstrap: ^5.3.3
