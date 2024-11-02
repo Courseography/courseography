@@ -10,7 +10,6 @@ module Config (
     serverConf,
     databasePath,
     runDb,
-    markdownPath,
     graphPath,
     genCssPath,
     timetableUrl,
@@ -47,7 +46,6 @@ data Config = Config
     { portValue             :: Int
     , logMessage            :: String
     , databasePathValue     :: Text
-    , markdownPathValue     :: String
     , graphPathValue        :: String
     , genCssPathValue       :: String
     , timetableUrlValue     :: String
@@ -67,7 +65,6 @@ instance FromJSON Config where
         <$> obj .: "port"
         <*> obj .: "logMessage"
         <*> obj .: "databasePath"
-        <*> obj .: "markdownPath"
         <*> obj .: "graphPath"
         <*> obj .: "genCssPath"
         <*> obj .: "timetableUrl"
@@ -130,10 +127,6 @@ runDb action = do
 
 
 -- FILE PATH STRINGS
-
--- | The relative path to the directory with the markdown files rendered for site content.
-markdownPath :: IO String
-markdownPath = markdownPathValue <$> loadConfig
 
 -- | The relative path to the directory that contains all of the graph SVG files.
 graphPath :: IO String

@@ -119,7 +119,6 @@ executable courseography
     Response.Loading,
     Response.NotFound,
     Response.Post,
-    Response.Privacy,
     Response.Search,
     Routes,
     Scripts,
