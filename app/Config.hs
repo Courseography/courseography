@@ -112,6 +112,7 @@ logMAccessShort host user _ requestLine responseCode _ referer _ = do
         referer
         ]
 
+
 -- DATABASE CONNECTION STRINGS
 
 -- | The path to the database file, relative to the project root.
@@ -123,6 +124,7 @@ runDb :: (MonadUnliftIO m) => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a ->
 runDb action = do
   dbPath <- liftIO databasePath
   runSqlite dbPath action
+
 
 -- FILE PATH STRINGS
 
