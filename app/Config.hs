@@ -82,11 +82,11 @@ instance FromJSON Config where
 loadConfig :: IO Config
 loadConfig = do
     env <- lookupEnv "APP_ENV"
-    let configFile = case env of
-            Just "test" -> "test.config.yaml"
-            Nothing     -> "config.yaml"
-            _           -> error "APP_ENV should have value 'test' or not exist"
-    loadYamlSettings [configFile] [] useEnv
+    let configFiles = case env of
+            Nothing     -> ["config.yaml"]
+            Just "test" -> ["test.config.yaml", "config.yaml"]
+            Just _      -> error "APP_ENV should have value 'test' or not exist"
+    loadYamlSettings configFiles [] useEnv
 
 -- SERVER CONFIGURATION
 
@@ -112,7 +112,6 @@ logMAccessShort host user _ requestLine responseCode _ referer _ = do
         referer
         ]
 
-
 -- DATABASE CONNECTION STRINGS
 
 -- | The path to the database file, relative to the project root.
@@ -124,7 +123,6 @@ runDb :: (MonadUnliftIO m) => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a ->
 runDb action = do
   dbPath <- liftIO databasePath
   runSqlite dbPath action
-
 
 -- FILE PATH STRINGS
 
