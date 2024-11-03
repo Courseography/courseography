@@ -1,112 +1,102 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { MapModal } from "../common/react_modal.js.jsx"
 
 /*
  * Holds the containers of the Fall and Spring timetables,
  * and performs some pre-processing steps with a list of 'Lecture' objects
  */
-export class Row extends React.Component {
-  render() {
-    // Create a list of lecture objects
-    let lectures = this.props.lectureSections.map(
-      (lectureSection, index, lectureSections) =>
-        createNewLectures(lectureSection, index, lectureSections)
-    )
-    lectures = [].concat.apply([], lectures)
+export const Row = props => {
+  // Create a list of lecture objects
+  let lectures = props.lectureSections.map((lectureSection, index, lectureSections) =>
+    createNewLectures(lectureSection, index, lectureSections)
+  )
+  lectures = [].concat.apply([], lectures)
 
-    const fallLectures = lectures.filter(lecture => {
-      return lecture.session === "F" || lecture.session === "Y"
-    })
+  const fallLectures = lectures.filter(lecture => {
+    return lecture.session === "F" || lecture.session === "Y"
+  })
 
-    const springLectures = lectures.filter(lecture => {
-      return lecture.session === "S" || lecture.session === "Y"
-    })
+  const springLectures = lectures.filter(lecture => {
+    return lecture.session === "S" || lecture.session === "Y"
+  })
 
-    // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
-    let fallSession, springSession
-    ;[fallSession, springSession] = initializeSessions(lectures)
+  // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
+  let fallSession, springSession
+  ;[fallSession, springSession] = initializeSessions(lectures)
 
-    // For each session, set the 'width' attribute of each Lecture
-    // (go to Lecture constructor for definition of 'width')
-    setWidths(fallSession)
-    setWidths(springSession)
+  // For each session, set the 'width' attribute of each Lecture
+  // (go to Lecture constructor for definition of 'width')
+  setWidths(fallSession)
+  setWidths(springSession)
 
-    // Fill session colSpans dictionaries
-    const fallColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
-    const springColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
-    storeColSpans(fallSession, fallColSpans)
-    storeColSpans(springSession, springColSpans)
-    // Generate a container for each of the Fall and Spring timetables individually
-    return (
-      <>
-        <TimetableContainer
-          session="F"
-          lecturesByTime={fallSession}
-          headColSpans={fallColSpans}
-          lectures={fallLectures}
-        />
-        <TimetableContainer
-          session="S"
-          lecturesByTime={springSession}
-          headColSpans={springColSpans}
-          lectures={springLectures}
-        />
-      </>
-    )
-  }
+  // Fill session colSpans dictionaries
+  const fallColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
+  const springColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
+  storeColSpans(fallSession, fallColSpans)
+  storeColSpans(springSession, springColSpans)
+
+  // Generate a container for each of the Fall and Spring timetables individually
+  return (
+    <>
+      <TimetableContainer
+        session="F"
+        lecturesByTime={fallSession}
+        headColSpans={fallColSpans}
+        lectures={fallLectures}
+      />
+      <TimetableContainer
+        session="S"
+        lecturesByTime={springSession}
+        headColSpans={springColSpans}
+        lectures={springLectures}
+      />
+    </>
+  )
 }
 
 /*
  * The container specifies formatting for all of the elements wrapped inside,
  * (for example, every element inside a container will follow the same margin rules)
  */
-class TimetableContainer extends React.Component {
-  render() {
-    return (
-      <div className="col-md-5 col-12 timetable-container">
-        <Timetable
-          session={this.props.session}
-          lecturesByTime={this.props.lecturesByTime}
-          headColSpans={this.props.headColSpans}
-          lectures={this.props.lectures}
-        />
-      </div>
-    )
-  }
+const TimetableContainer = props => {
+  return (
+    <div className="col-md-5 col-12 timetable-container">
+      <Timetable
+        session={props.session}
+        lecturesByTime={props.lecturesByTime}
+        headColSpans={props.headColSpans}
+        lectures={props.lectures}
+      />
+    </div>
+  )
 }
 
 /*
  * A <table> element for the specified session
  */
-class Timetable extends React.Component {
-  constructor(props) {
-    super(props)
-    this.modal = React.createRef()
-    this.displayMap = this.displayMap.bind(this)
-  }
+const Timetable = props => {
+  const modal = React.createRef()
+  const displayMap = () =>
+    useCallback(() => {
+      modal.current.openModal()
+    }, [])
 
-  displayMap(session) {
-    this.modal.current.openModal()
-  }
-
-  render() {
-    return (
-      <table className={"timetable table"} id={"timetable-" + this.props.session}>
-        <MapModal ref={this.modal} lectures={this.props.lectures} />
-        <TimetableHeader
-          session={this.props.session}
-          lecturesByTime={this.props.lecturesByTime}
-          headColSpans={this.props.headColSpans}
-          openMap={this.displayMap}
-        />
-        <TimetableBody
-          session={this.props.session}
-          lecturesByTime={this.props.lecturesByTime}
-          headColSpans={this.props.headColSpans}
-        />
-      </table>
-    )
-  }
+  return (
+    <table className={"timetable table"} id={"timetable-" + props.session}>
+      <MapModal ref={modal} lectures={props.lectures} />
+      <TimetableHeader
+        session={props.session}
+        lecturesByTime={props.lecturesByTime}
+        headColSpans={props.headColSpans}
+        openMap={displayMap}
+      />
+      <TimetableBody
+        session={props.session}
+        lecturesByTime={props.lecturesByTime}
+        headColSpans={props.headColSpans}
+      />
+    </table>
+  )
 }
 
 /*
