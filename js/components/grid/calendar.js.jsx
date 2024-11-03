@@ -76,7 +76,7 @@ const TimetableContainer = props => {
  */
 const Timetable = props => {
   const modal = React.createRef()
-  const displayMap = () =>
+  const displayMap = session =>
     useCallback(() => {
       modal.current.openModal()
     }, [])
