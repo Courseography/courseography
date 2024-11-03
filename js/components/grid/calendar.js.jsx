@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { createRef, useCallback } from "react"
 import { MapModal } from "../common/react_modal.js.jsx"
 
 /*
@@ -75,7 +75,7 @@ const TimetableContainer = props => {
  * A <table> element for the specified session
  */
 const Timetable = props => {
-  const modal = React.createRef()
+  const modal = createRef()
   const displayMap = session =>
     useCallback(() => {
       modal.current.openModal()
