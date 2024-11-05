@@ -3,7 +3,7 @@ Description: Test some pre-processing functions that clean up the text before ru
 
 -}
 
-module RequirementTests.PreProcessingTests
+module Tests.RequirementTests.PreProcessingTests
 ( preProcTestSuite ) where
 
 import Data.Text as T hiding (map)

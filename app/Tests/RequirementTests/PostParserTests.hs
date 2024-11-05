@@ -5,7 +5,7 @@ Module containing test cases for Post Parsers.
 
 -}
 
-module RequirementTests.PostParserTests
+module Tests.RequirementTests.PostParserTests
 ( postTestSuite ) where
 
 import Data.Bifunctor (second)
