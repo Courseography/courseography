@@ -32,7 +32,7 @@
 - Removed `privacy` route and codes related to it
 - Improved general testing infrastructure
 - Added test cases for the index function in `Controllers/Course`
-- Refactored the class components from `calendar.jsx` to function components
+- Refactored the class components in `/grid` folder to function components
 
 ## [0.6.0] - 2024-06-24
 
