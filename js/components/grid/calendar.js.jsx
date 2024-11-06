@@ -5,7 +5,7 @@ import { MapModal } from "../common/react_modal.js.jsx"
  * Holds the containers of the Fall and Spring timetables,
  * and performs some pre-processing steps with a list of 'Lecture' objects
  */
-export const Row = props => {
+export function Row(props) {
   // Create a list of lecture objects
   let lectures = props.lectureSections.map((lectureSection, index, lectureSections) =>
     createNewLectures(lectureSection, index, lectureSections)
@@ -58,7 +58,7 @@ export const Row = props => {
  * The container specifies formatting for all of the elements wrapped inside,
  * (for example, every element inside a container will follow the same margin rules)
  */
-const TimetableContainer = props => {
+function TimetableContainer(props) {
   return (
     <div className="col-md-5 col-12 timetable-container">
       <Timetable
@@ -74,7 +74,7 @@ const TimetableContainer = props => {
 /*
  * A <table> element for the specified session
  */
-const Timetable = props => {
+function Timetable(props) {
   const modal = createRef()
   const displayMap = session =>
     useCallback(() => {
@@ -103,7 +103,7 @@ const Timetable = props => {
  * Describes what the header of a table should look like, based on the session.
  * The header contains five day cells, a dummy cell, and a term-name cell
  */
-const TimetableHeader = props => {
+function TimetableHeader(props) {
   const dayStrings = ["Mon", "Tue", "Wed", "Thu", "Fri"]
   const colSpans = props.headColSpans
 
@@ -158,7 +158,7 @@ const TimetableHeader = props => {
 /*
  * Describes the body of the Timetable
  */
-const TimetableBody = props => {
+function TimetableBody(props) {
   const rows = []
   // For each row from 8 o'clock to 22 o'clock, there is an 'Hour' and 'Half hour' row
   for (let i = 8; i < 22; i += 0.5) {
@@ -180,7 +180,7 @@ const TimetableBody = props => {
  * Describes what a row in the Timetable should look like,
  * based off of the session, time, and previous cells generated.
  */
-const TimetableRow = props => {
+function TimetableRow(props) {
   const tableData = []
   const dummyCell = (
     <td key="timetable-dummy-cell" className="timetable-dummy-cell"></td>
