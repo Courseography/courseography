@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback, useState } from "react"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import { getCourse } from "../common/utils"
 
@@ -7,88 +7,77 @@ import { getCourse } from "../common/utils"
  * Holds courses selected from the search box, and lists of their F, S and Y lecture, tutorial,
  * and practical sections.
  */
-export class CoursePanel extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: "",
-      courseInfoId: null, // The course code to display in the CourseModal
-    }
-    this.handleInput = this.handleInput.bind(this)
-    this.clearAllCourses = this.clearAllCourses.bind(this)
-    this.selectCourse = this.props.selectCourse.bind(this)
-    this.displayInfo = this.displayInfo.bind(this)
-  }
-
-  handleInput(event) {
-    this.setState({ value: event.target.value })
-  }
+export function CoursePanel(props) {
+  const handleInput = useCallback(event => {
+    setValue(event.target.value)
+  }, [])
 
   // Only clear all selected courses if the user confirms in the alert
   // pop up window.
-  clearAllCourses() {
+  const clearAllCourses = useCallback(() => {
     if (window.confirm("Clear all selected courses?")) {
-      this.props.clearCourses()
+      props.clearCourses()
     }
-  }
+  }, [props.clearCourses])
 
-  displayInfo(courseId) {
-    this.setState({ courseInfoId: courseId })
-  }
+  const displayInfo = useCallback(courseId => {
+    setCourseInfoId(courseId)
+  }, [])
 
-  render() {
-    const courses = this.props.selectedCourses.map(course => (
-      <Course
-        key={course}
-        selectedLectures={this.props.selectedLectures}
-        courseCode={course}
-        removeCourse={this.props.removeCourse}
-        hoverLecture={this.props.hoverLecture}
-        unhoverLecture={this.props.unhoverLecture}
-        selectLecture={this.props.selectLecture}
-        displayInfo={this.displayInfo}
-      />
-    ))
+  const [value, setValue] = useState("")
+  const [courseInfoId, setCourseInfoId] = useState(null) // The course code to display in the CourseModal
 
-    return (
-      <div id="search-layout" className="col-md-2 col-12">
-        <div id="filter-container">
-          <form onSubmit={() => false}>
-            <input
-              id="course-filter"
-              className="form-control"
-              placeholder="Enter a course!"
-              autoComplete="off"
-              type="text"
-              value={this.state.value}
-              onChange={this.handleInput}
-            />
-          </form>
-        </div>
-        <div id="search-container">
-          <CourseList
-            courseFilter={this.state.value.toUpperCase()}
-            selectedCourses={this.props.selectedCourses}
-            selectCourse={this.props.selectCourse}
-            removeCourse={this.props.removeCourse}
+  const courses = props.selectedCourses.map(course => (
+    <Course
+      key={course}
+      selectedLectures={props.selectedLectures}
+      courseCode={course}
+      removeCourse={props.removeCourse}
+      hoverLecture={props.hoverLecture}
+      unhoverLecture={props.unhoverLecture}
+      selectLecture={props.selectLecture}
+      displayInfo={displayInfo}
+    />
+  ))
+
+  return (
+    <div id="search-layout" className="col-md-2 col-12">
+      <div id="filter-container">
+        <form onSubmit={() => false}>
+          <input
+            id="course-filter"
+            className="form-control"
+            placeholder="Enter a course!"
+            autoComplete="off"
+            type="text"
+            value={value}
+            onChange={handleInput}
           />
-        </div>
-        <div id="course-select-wrapper">
-          <ul className="trapScroll-enabled" id="course-select">
-            <li id="clear-all" key="clear-all-grid" onClick={this.clearAllCourses}>
-              <h3>Clear All</h3>
-            </li>
-            {courses}
-          </ul>
-        </div>
-        <CourseModal
-          showCourseModal={!!this.state.courseInfoId}
-          courseId={this.state.courseInfoId}
-          onClose={() => this.setState({ courseInfoId: null })}
+        </form>
+      </div>
+      <div id="search-container">
+        <CourseList
+          courseFilter={value.toUpperCase()}
+          selectedCourses={props.selectedCourses}
+          selectCourse={props.selectCourse}
+          removeCourse={props.removeCourse}
         />
       </div>
-    )
-  }
+      <div id="course-select-wrapper">
+        <ul className="trapScroll-enabled" id="course-select">
+          <li id="clear-all" key="clear-all-grid" onClick={clearAllCourses}>
+            <h3>Clear All</h3>
+          </li>
+          {courses}
+        </ul>
+      </div>
+      <CourseModal
+        showCourseModal={!!courseInfoId}
+        courseId={courseInfoId}
+        onClose={() => setCourseInfoId(null)}
+      />
+    </div>
+  )
 }
 
 /**
