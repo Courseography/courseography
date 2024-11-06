@@ -143,7 +143,6 @@ function Course(props) {
       const lectures = props.selectedLectures.map(lecture =>
         lecture.courseCode.substring(0, 6)
       )
-      console.log(lectures) // TODO remove
       const courseCode = courseInfo.courseCode
       return lectures.indexOf(courseCode.substring(0, 6)) >= 0
     }
@@ -239,7 +238,6 @@ function Course(props) {
  * session.
  */
 function SectionList(props) {
-  console.log(props)
   const lectureSections = props.lectures.map(lecture => (
     <LectureSection
       key={props.courseCode + lecture.lectureCode + props.section}
@@ -329,31 +327,22 @@ function CourseList(props) {
  * Describes a course based on its course code, and whether or not it has been selected
  * (If the course is selected, it is a "starred-course").
  */
-class CourseEntry extends React.Component {
-  constructor(props) {
-    super(props)
-    this.select = this.select.bind(this)
-  }
-
+function CourseEntry(props) {
   // Check whether the course is already in the selectCourses list.
   // Remove the course if it is, or add the course if it is not.
-  select() {
-    if (this.props.selectedCourses.indexOf(this.props.course) != -1) {
-      this.props.removeCourse(this.props.course)
+  const select = useCallback(() => {
+    if (props.selectedCourses.indexOf(props.course) != -1) {
+      props.removeCourse(props.course)
     } else {
-      this.props.selectCourse(this.props.course)
+      props.selectCourse(props.course)
     }
-  }
+  }, [props.course, props.selectedCourses, props.selectCourse, props.removeCourse])
 
-  render() {
-    const classes =
-      this.props.selectedCourses.indexOf(this.props.course) != -1
-        ? "starred-course"
-        : ""
-    return (
-      <li id={this.props.course + "-search"} className={classes} onClick={this.select}>
-        {this.props.course}
-      </li>
-    )
-  }
+  const classes =
+    props.selectedCourses.indexOf(props.course) != -1 ? "starred-course" : ""
+  return (
+    <li id={props.course + "-search"} className={classes} onClick={select}>
+      {props.course}
+    </li>
+  )
 }
