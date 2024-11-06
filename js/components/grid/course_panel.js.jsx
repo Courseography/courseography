@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useState, useEffect } from "react"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import { getCourse } from "../common/utils"
 
@@ -150,8 +150,7 @@ function Course(props) {
     return false
   }, [props.selectedLectures])
 
-  // TODO change to useEffect
-  function componentDidMount() {
+  useEffect(() => {
     getCourse(props.courseCode).then(data => {
       const course = {
         courseCode: "",
@@ -167,9 +166,8 @@ function Course(props) {
       course.S = filterLectureList(parsedLectures, "S")
       course.Y = filterLectureList(parsedLectures, "Y")
       setCourseInfo(course)
-      // this.setState({ courseInfo: course })
     })
-  }
+  }, [])
 
   return (
     <li
