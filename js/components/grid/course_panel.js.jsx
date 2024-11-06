@@ -276,15 +276,10 @@ const LectureSection = props => {
   )
 }
 
-class CourseList extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      courses: [],
-    }
-  }
+function CourseList(props) {
+  const [courses, setCourses] = useState([])
 
-  componentDidMount() {
+  useEffect(() => {
     // AJAX requests allow the programmer to:
     //    1. update a webpage without refreshing
     //    2. Request data from a server AFTER the webpage is loaded
@@ -300,36 +295,34 @@ class CourseList extends React.Component {
         // and stores each individual course code name
         // into 'courses' list
         const courses = data.split("\n").map(course => course.substring(0, 8))
-        this.setState({ courses: courses })
+        setCourses(courses)
       })
+  }, [])
+
+  let searchList = []
+  // If there are courses to be filtered
+  if (props.courseFilter !== "") {
+    // From the "courses" list, filter out elements based off of the prop "courseFilter" passed to
+    // CourseList by SearchPanel
+    searchList = courses
+      .filter(course => course.indexOf(props.courseFilter) > -1)
+      .map(course => (
+        <CourseEntry
+          course={course}
+          key={course}
+          selectCourse={props.selectCourse}
+          removeCourse={props.removeCourse}
+          selectedCourses={props.selectedCourses}
+        />
+      ))
   }
 
-  render() {
-    let searchList = []
-    // If there are courses to be filtered
-    if (this.props.courseFilter !== "") {
-      // From the "courses" list, filter out elements based off of the prop "courseFilter" passed to
-      // CourseList by SearchPanel
-      searchList = this.state.courses
-        .filter(course => course.indexOf(this.props.courseFilter) > -1)
-        .map(course => (
-          <CourseEntry
-            course={course}
-            key={course}
-            selectCourse={this.props.selectCourse}
-            removeCourse={this.props.removeCourse}
-            selectedCourses={this.props.selectedCourses}
-          />
-        ))
-    }
-
-    // Return all the unfiltered courses in the "courses" list in a list
-    return (
-      <div id="search-list">
-        <ul>{searchList}</ul>
-      </div>
-    )
-  }
+  // Return all the unfiltered courses in the "courses" list in a list
+  return (
+    <div id="search-list">
+      <ul>{searchList}</ul>
+    </div>
+  )
 }
 
 /**
