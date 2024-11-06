@@ -240,25 +240,24 @@ function Course(props) {
  * A list of lecture, tutorial and practical sections for the specified course for the specified
  * session.
  */
-class SectionList extends React.Component {
-  render() {
-    const lectureSections = this.props.lectures.map(lecture => (
-      <LectureSection
-        key={this.props.courseCode + lecture.lectureCode + this.props.section}
-        session={this.props.session}
-        courseCode={this.props.courseCode}
-        lecture={lecture}
-        hoverLecture={this.props.hoverLecture}
-        unhoverLecture={this.props.unhoverLecture}
-        selectLecture={this.props.selectLecture}
-      />
-    ))
-    return (
-      <ul className={"sectionList-" + this.props.session} id="lecture-list">
-        {lectureSections}
-      </ul>
-    )
-  }
+function SectionList(props) {
+  console.log(props)
+  const lectureSections = props.lectures.map(lecture => (
+    <LectureSection
+      key={props.courseCode + lecture.lectureCode + props.section}
+      session={props.session}
+      courseCode={props.courseCode}
+      lecture={lecture}
+      hoverLecture={props.hoverLecture}
+      unhoverLecture={props.unhoverLecture}
+      selectLecture={props.selectLecture}
+    />
+  ))
+  return (
+    <ul className={"sectionList-" + props.session} id="lecture-list">
+      {lectureSections}
+    </ul>
+  )
 }
 
 /**
