@@ -8,6 +8,9 @@ import { getCourse } from "../common/utils"
  * and practical sections.
  */
 export function CoursePanel(props) {
+  const [value, setValue] = useState("")
+  const [courseInfoId, setCourseInfoId] = useState(null) // The course code to display in the CourseModal
+
   const handleInput = useCallback(event => {
     setValue(event.target.value)
   }, [])
@@ -23,9 +26,6 @@ export function CoursePanel(props) {
   const displayInfo = useCallback(courseId => {
     setCourseInfoId(courseId)
   }, [])
-
-  const [value, setValue] = useState("")
-  const [courseInfoId, setCourseInfoId] = useState(null) // The course code to display in the CourseModal
 
   const courses = props.selectedCourses.map(course => (
     <Course
