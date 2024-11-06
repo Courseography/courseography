@@ -20,39 +20,64 @@ custom-setup
     process >= 1.2,
     directory
 
-test-suite RequirementTests
-  main-is: RequirementTests/tests.hs
+test-suite Tests
+  main-is: Tests/Main.hs
   other-modules:
+    Config,
+    Controllers.Course,
+    Database.CourseInsertion,
+    Database.CourseQueries,
+    Database.CourseVideoSeed,
+    Database.Database,
     Database.DataType,
     Database.Requirement,
     Database.Tables,
-    RequirementTests.PostParserTests,
-    RequirementTests.ReqParserTests,
-    RequirementTests.PreProcessingTests,
-    RequirementTests.ModifierTests,
+    DynamicGraphs.GraphNodeUtils,
+    Svg.Builder,
+    Tests.Controllers.CourseControllerTests,
+    Tests.RequirementTests.ModifierTests,
+    Tests.RequirementTests.PostParserTests,
+    Tests.RequirementTests.PreProcessingTests,
+    Tests.RequirementTests.ReqParserTests,
+    Tests.RequirementTests.RequirementTests,
+    Tests.TestHelpers,
+    Util.Happstack,
     WebParsing.ParsecCombinators,
     WebParsing.PostParser,
     WebParsing.ReqParser,
-    DynamicGraphs.GraphNodeUtils
+    WebParsing.ArtSciParser
   Type: exitcode-stdio-1.0
   build-depends:
     aeson,
     base >=4.14,
+    bytestring,
     Cabal >= 1.16.0,
+    containers,
+    directory,
+    happstack-server,
+    hslogger,
+    http-conduit,
+    http-types,
     HUnit,
+    MissingH,
+    monad-logger,
     mtl,
     parsec,
     persistent,
     persistent-sqlite,
     QuickCheck,
+    resourcet,
     split,
+    system-filepath,
     tagsoup,
     test-framework,
     test-framework-hunit,
     test-framework-quickcheck2,
     text,
     time,
-    unordered-containers
+    transformers,
+    unordered-containers,
+    yaml
   default-extensions:
     OverloadedStrings,
     ScopedTypeVariables

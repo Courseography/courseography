@@ -1,0 +1,2 @@
+# Test Database Path
+databasePath: "db/testDatabase.sqlite3"

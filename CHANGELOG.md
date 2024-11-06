@@ -30,6 +30,8 @@
 - Changed representation from translation to matrix in `App/Svg/Parser`
 - Optimized about page using Webpack and new dependencies `html-loader` and `markdown-loader`
 - Removed `privacy` route and codes related to it
+- Improved general testing infrastructure
+- Added test cases for the index function in `Controllers/Course`
 - Refactored the class components from `calendar.jsx` to function components
 
 ## [0.6.0] - 2024-06-24
