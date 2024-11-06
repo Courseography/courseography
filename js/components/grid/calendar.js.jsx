@@ -75,11 +75,12 @@ function TimetableContainer(props) {
  * A <table> element for the specified session
  */
 function Timetable(props) {
+  const openMapModal = useCallback(modal => {
+    modal.current.openModal()
+  }, [])
+
   const modal = createRef()
-  const displayMap = session =>
-    useCallback(() => {
-      modal.current.openModal()
-    }, [])
+  const displayMap = session => openMapModal(modal)
 
   return (
     <table className={"timetable table"} id={"timetable-" + props.session}>
