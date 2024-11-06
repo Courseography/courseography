@@ -34,7 +34,6 @@ export function Row(props) {
   const springColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
   storeColSpans(fallSession, fallColSpans)
   storeColSpans(springSession, springColSpans)
-
   // Generate a container for each of the Fall and Spring timetables individually
   return (
     <>
@@ -279,7 +278,6 @@ function TimetableRow(props) {
       tableData.push(dummyCell)
     }
   }
-
   return <tr>{tableData}</tr>
 }
 
