@@ -436,28 +436,27 @@ parseTransform transform =
                   P.try skewY
         scale = do
             _ <- P.string "scale("
-            xScale <- double
-            _ <- P.char ',' <|> P.char ' '
-            yScale <- P.option xScale double
+            args <- double `P.sepBy` (P.char ',' *> P.many (P.char ' ') <|> P.many1 (P.char ' '))
+            let xScale = head args
+                yScale = if length args > 1 then args !! 1 else xScale
             return [[xScale, 0, 0],
                     [0, yScale, 0],
                     [0, 0, 1]]
         rotate = do
             _ <- P.string "rotate("
-            angleDegrees <- double
-            _ <- P.char ',' <|> P.char ' '
-            xRot <- P.option 0 double
-            _ <- P.char ',' <|> P.char ' '
-            yRot <- P.option 0 double
+            args <- double `P.sepBy` (P.char ',' *> P.many (P.char ' ') <|> P.many1 (P.char ' '))
+            let angleDegrees = head args
+                xRot = if length args > 1 then args !! 1 else 0
+                yRot = if length args > 2 then args !! 2 else 0
             let angle = angleDegrees * pi / 180
             return [[cos angle, - sin angle, xRot * (1 - cos angle) + yRot * sin angle],
                     [sin angle, cos angle, yRot * (1 - cos angle) - xRot * sin angle],
                     [0, 0, 1]]
         translate = do
             _ <- P.string "translate("
-            xPos <- double
-            _ <- P.char ',' <|> P.char ' '
-            yPos <- double
+            args <- double `P.sepBy` (P.char ',' *> P.many (P.char ' ') <|> P.many1 (P.char ' '))
+            let xPos = head args
+                yPos = if length args > 1 then args !! 1 else 0
             return [[1, 0, xPos],
                     [0, 1, yPos],
                     [0, 0, 1]]
