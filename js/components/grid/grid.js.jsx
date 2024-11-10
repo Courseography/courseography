@@ -49,7 +49,7 @@ function Grid(props) {
 
     // Enable "Export" link
     document.getElementById("nav-export")?.addEventListener("click", () => {
-      exportModal.openModal()
+      exportModal.current.openModal()
     })
   }, [])
 
