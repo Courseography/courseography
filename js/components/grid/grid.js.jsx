@@ -80,7 +80,7 @@ function Grid(props) {
     const updatedLectures = selectedLectures.filter(
       lecture => !lecture.courseCode.includes(courseCode)
     )
-    selectedCoursesLocalStorage(updatedLectures)
+    setSelectedLectures(updatedLectures)
   })
 
   // Method passed to child component CoursePanel to clear all the courses in selectedCourses.
