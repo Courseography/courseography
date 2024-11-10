@@ -64,7 +64,7 @@ function Grid(props) {
   // Method passed to child component SearchPanel to add a course to selectedCourses.
   const addSelectedCourse = useCallback(courseCode => {
     // updatedCourses is a copy of selectedCourses so that prevState can be distinguished from
-    // the current state in lifecycle methods like componentDidUpdate
+    // the current state when the component updats during its lifecycle.
     const updatedCourses = selectedCourses.slice()
     updatedCourses.push(courseCode)
     setSelectedCourses(updatedCourses)
