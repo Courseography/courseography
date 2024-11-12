@@ -1,301 +1,284 @@
-import React from "react"
+import { createRef, useCallback } from "react"
 import { MapModal } from "../common/react_modal.js.jsx"
 
 /*
  * Holds the containers of the Fall and Spring timetables,
  * and performs some pre-processing steps with a list of 'Lecture' objects
  */
-export class Row extends React.Component {
-  render() {
-    // Create a list of lecture objects
-    let lectures = this.props.lectureSections.map(
-      (lectureSection, index, lectureSections) =>
-        createNewLectures(lectureSection, index, lectureSections)
-    )
-    lectures = [].concat.apply([], lectures)
+export function Row(props) {
+  // Create a list of lecture objects
+  let lectures = props.lectureSections.map((lectureSection, index, lectureSections) =>
+    createNewLectures(lectureSection, index, lectureSections)
+  )
+  lectures = [].concat.apply([], lectures)
 
-    const fallLectures = lectures.filter(lecture => {
-      return lecture.session === "F" || lecture.session === "Y"
-    })
+  const fallLectures = lectures.filter(lecture => {
+    return lecture.session === "F" || lecture.session === "Y"
+  })
 
-    const springLectures = lectures.filter(lecture => {
-      return lecture.session === "S" || lecture.session === "Y"
-    })
+  const springLectures = lectures.filter(lecture => {
+    return lecture.session === "S" || lecture.session === "Y"
+  })
 
-    // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
-    let fallSession, springSession
-    ;[fallSession, springSession] = initializeSessions(lectures)
+  // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
+  let fallSession, springSession
+  ;[fallSession, springSession] = initializeSessions(lectures)
 
-    // For each session, set the 'width' attribute of each Lecture
-    // (go to Lecture constructor for definition of 'width')
-    setWidths(fallSession)
-    setWidths(springSession)
+  // For each session, set the 'width' attribute of each Lecture
+  // (go to Lecture constructor for definition of 'width')
+  setWidths(fallSession)
+  setWidths(springSession)
 
-    // Fill session colSpans dictionaries
-    const fallColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
-    const springColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
-    storeColSpans(fallSession, fallColSpans)
-    storeColSpans(springSession, springColSpans)
-    // Generate a container for each of the Fall and Spring timetables individually
-    return (
-      <>
-        <TimetableContainer
-          session="F"
-          lecturesByTime={fallSession}
-          headColSpans={fallColSpans}
-          lectures={fallLectures}
-        />
-        <TimetableContainer
-          session="S"
-          lecturesByTime={springSession}
-          headColSpans={springColSpans}
-          lectures={springLectures}
-        />
-      </>
-    )
-  }
+  // Fill session colSpans dictionaries
+  const fallColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
+  const springColSpans = { M: 0, T: 0, W: 0, R: 0, F: 0 }
+  storeColSpans(fallSession, fallColSpans)
+  storeColSpans(springSession, springColSpans)
+  // Generate a container for each of the Fall and Spring timetables individually
+  return (
+    <>
+      <TimetableContainer
+        session="F"
+        lecturesByTime={fallSession}
+        headColSpans={fallColSpans}
+        lectures={fallLectures}
+      />
+      <TimetableContainer
+        session="S"
+        lecturesByTime={springSession}
+        headColSpans={springColSpans}
+        lectures={springLectures}
+      />
+    </>
+  )
 }
 
 /*
  * The container specifies formatting for all of the elements wrapped inside,
  * (for example, every element inside a container will follow the same margin rules)
  */
-class TimetableContainer extends React.Component {
-  render() {
-    return (
-      <div className="col-md-5 col-12 timetable-container">
-        <Timetable
-          session={this.props.session}
-          lecturesByTime={this.props.lecturesByTime}
-          headColSpans={this.props.headColSpans}
-          lectures={this.props.lectures}
-        />
-      </div>
-    )
-  }
+function TimetableContainer(props) {
+  return (
+    <div className="col-md-5 col-12 timetable-container">
+      <Timetable
+        session={props.session}
+        lecturesByTime={props.lecturesByTime}
+        headColSpans={props.headColSpans}
+        lectures={props.lectures}
+      />
+    </div>
+  )
 }
 
 /*
  * A <table> element for the specified session
  */
-class Timetable extends React.Component {
-  constructor(props) {
-    super(props)
-    this.modal = React.createRef()
-    this.displayMap = this.displayMap.bind(this)
-  }
+function Timetable(props) {
+  const openMapModal = useCallback(modal => {
+    modal.current.openModal()
+  }, [])
 
-  displayMap(session) {
-    this.modal.current.openModal()
-  }
+  const modal = createRef()
+  const displayMap = session => openMapModal(modal)
 
-  render() {
-    return (
-      <table className={"timetable table"} id={"timetable-" + this.props.session}>
-        <MapModal ref={this.modal} lectures={this.props.lectures} />
-        <TimetableHeader
-          session={this.props.session}
-          lecturesByTime={this.props.lecturesByTime}
-          headColSpans={this.props.headColSpans}
-          openMap={this.displayMap}
-        />
-        <TimetableBody
-          session={this.props.session}
-          lecturesByTime={this.props.lecturesByTime}
-          headColSpans={this.props.headColSpans}
-        />
-      </table>
-    )
-  }
+  return (
+    <table className={"timetable table"} id={"timetable-" + props.session}>
+      <MapModal ref={modal} lectures={props.lectures} />
+      <TimetableHeader
+        session={props.session}
+        lecturesByTime={props.lecturesByTime}
+        headColSpans={props.headColSpans}
+        openMap={displayMap}
+      />
+      <TimetableBody
+        session={props.session}
+        lecturesByTime={props.lecturesByTime}
+        headColSpans={props.headColSpans}
+      />
+    </table>
+  )
 }
 
 /*
  * Describes what the header of a table should look like, based on the session.
  * The header contains five day cells, a dummy cell, and a term-name cell
  */
-class TimetableHeader extends React.Component {
-  render() {
-    const dayStrings = ["Mon", "Tue", "Wed", "Thu", "Fri"]
-    const colSpans = this.props.headColSpans
+function TimetableHeader(props) {
+  const dayStrings = ["Mon", "Tue", "Wed", "Thu", "Fri"]
+  const colSpans = props.headColSpans
 
-    const dayCells = []
-    for (let i = 0; i < 5; i++) {
-      const dayString = dayStrings[i]
-      // Store the React element for this day-cell
-      dayCells.push(
-        <th scope="col" colSpan={colSpans[i]} key={"day-header-" + i}>
-          {dayString}
-        </th>
-      )
-    }
+  const dayCells = []
+  for (let i = 0; i < 5; i++) {
+    const dayString = dayStrings[i]
+    // Store the React element for this day-cell
+    dayCells.push(
+      <th scope="col" colSpan={colSpans[i]} key={"day-header-" + i}>
+        {dayString}
+      </th>
+    )
+  }
 
-    if (this.props.session === "F") {
-      return (
-        <thead>
-          <tr>
-            <th className="timetable-dummy-cell"></th>
-            <th className="term-name">
-              <img
-                src="/static/res/ico/blue-marker.png"
-                className="map-icon"
-                onClick={() => this.props.openMap(this.props.session)}
-              />
-              Fall
-            </th>
-            {dayCells}
-          </tr>
-        </thead>
-      )
-    } else {
-      return (
-        <thead>
-          <tr>
-            {dayCells}
-            <th className="term-name">
-              Spring
-              <img
-                src="/static/res/ico/blue-marker.png"
-                className="map-icon"
-                onClick={() => this.props.openMap(this.props.session)}
-              />
-            </th>
-            <th className="timetable-dummy-cell"></th>
-          </tr>
-        </thead>
-      )
-    }
+  if (props.session === "F") {
+    return (
+      <thead>
+        <tr>
+          <th className="timetable-dummy-cell"></th>
+          <th className="term-name">
+            <img
+              src="/static/res/ico/blue-marker.png"
+              className="map-icon"
+              onClick={() => props.openMap(props.session)}
+            />
+            Fall
+          </th>
+          {dayCells}
+        </tr>
+      </thead>
+    )
+  } else {
+    return (
+      <thead>
+        <tr>
+          {dayCells}
+          <th className="term-name">
+            Spring
+            <img
+              src="/static/res/ico/blue-marker.png"
+              className="map-icon"
+              onClick={() => props.openMap(props.session)}
+            />
+          </th>
+          <th className="timetable-dummy-cell"></th>
+        </tr>
+      </thead>
+    )
   }
 }
 
 /*
  * Describes the body of the Timetable
  */
-class TimetableBody extends React.Component {
-  render() {
-    const rows = []
-    // For each row from 8 o'clock to 22 o'clock, there is an 'Hour' and 'Half hour' row
-    for (let i = 8; i < 22; i += 0.5) {
-      rows.push(
-        <TimetableRow
-          session={this.props.session}
-          time={i}
-          key={"timetable-row-" + i + this.props.session}
-          currentLectures={this.props.lecturesByTime[i]}
-          headColSpans={this.props.headColSpans}
-        />
-      )
-    }
-    return <tbody>{rows}</tbody>
+function TimetableBody(props) {
+  const rows = []
+  // For each row from 8 o'clock to 22 o'clock, there is an 'Hour' and 'Half hour' row
+  for (let i = 8; i < 22; i += 0.5) {
+    rows.push(
+      <TimetableRow
+        session={props.session}
+        time={i}
+        key={"timetable-row-" + i + props.session}
+        currentLectures={props.lecturesByTime[i]}
+        headColSpans={props.headColSpans}
+      />
+    )
   }
+
+  return <tbody>{rows}</tbody>
 }
 
 /*
  * Describes what a row in the Timetable should look like,
  * based off of the session, time, and previous cells generated.
  */
-class TimetableRow extends React.Component {
-  render() {
-    const tableData = []
-    const dummyCell = (
-      <td key="timetable-dummy-cell" className="timetable-dummy-cell"></td>
-    )
-    const currTime = this.props.time
-    const currSess = this.props.session
+function TimetableRow(props) {
+  const tableData = []
+  const dummyCell = (
+    <td key="timetable-dummy-cell" className="timetable-dummy-cell"></td>
+  )
+  const currTime = props.time
+  const currSess = props.session
 
-    // The dictionary of lectures for this hour
-    const currentLectures = this.props.currentLectures
-    const headColSpans = this.props.headColSpans
+  // The dictionary of lectures for this hour
+  const currentLectures = props.currentLectures
+  const headColSpans = props.headColSpans
 
-    for (let day = 0; day < 5; day++) {
-      // Variables for calculations
-      const headerColSpan = headColSpans[day]
-      let totalColSpans = 0
+  for (let day = 0; day < 5; day++) {
+    // Variables for calculations
+    const headerColSpan = headColSpans[day]
+    let totalColSpans = 0
 
-      // Get the list of lectures at this time-day slot, as well as the list of lectures
-      // occuring one hour prior this time-day slot
-      const currentLectureList = currentLectures[day]
+    // Get the list of lectures at this time-day slot, as well as the list of lectures
+    // occuring one hour prior this time-day slot
+    const currentLectureList = currentLectures[day]
 
-      if (currentLectureList.length !== 0) {
-        // Render every lecture at this day-time slot (there can be more than one in a conflict case)
-        currentLectureList.forEach(lecture => {
-          // The 'colSpan' of the cells taken by this lecture, in this time-day slot
-          // This should always be an integer value, since headerColSpan is the product of all
-          // possible lecture widths in that day.
-          const lecColSpan = headerColSpan / lecture.width
+    if (currentLectureList.length !== 0) {
+      // Render every lecture at this day-time slot (there can be more than one in a conflict case)
+      currentLectureList.forEach(lecture => {
+        // The 'colSpan' of the cells taken by this lecture, in this time-day slot
+        // This should always be an integer value, since headerColSpan is the product of all
+        // possible lecture widths in that day.
+        const lecColSpan = headerColSpan / lecture.width
 
-          if (lecture.startTime === currTime) {
-            const rowSpan = 2 * (lecture.endTime - lecture.startTime)
-            tableData.push(
-              <td
-                id={"" + day.toString() + currTime + "-0" + totalColSpans + currSess}
-                key={"" + day.toString() + currTime + "-0" + totalColSpans + currSess}
-                data-in-conflict={lecture.inConflict}
-                data-satisfied={lecture.dataSatisfied}
-                rowSpan={rowSpan}
-                colSpan={lecColSpan}
-                className="timetable-cell timetable-edge"
-                type="L"
-                clicked="true"
-                data-currentlecturelist={currentLectureList}
-              >
-                {lecture.courseCode}
-              </td>
-            )
+        if (lecture.startTime === currTime) {
+          const rowSpan = 2 * (lecture.endTime - lecture.startTime)
+          tableData.push(
+            <td
+              id={"" + day.toString() + currTime + "-0" + totalColSpans + currSess}
+              key={"" + day.toString() + currTime + "-0" + totalColSpans + currSess}
+              data-in-conflict={lecture.inConflict}
+              data-satisfied={lecture.dataSatisfied}
+              rowSpan={rowSpan}
+              colSpan={lecColSpan}
+              className="timetable-cell timetable-edge"
+              type="L"
+              clicked="true"
+              data-currentlecturelist={currentLectureList}
+            >
+              {lecture.courseCode}
+            </td>
+          )
+        }
+        // Record the total width taken up by this time-day slot so far,
+        // from all the lectures generated
+        totalColSpans += lecColSpan
+      })
+    }
+    // In the case where there are not enough cells to fill the headerColSpan
+    // of this time-day cell or if there are no courses to be generated at this time-day cell,
+    // generate remaining number of empty cells
+    // Note: totalColSpans is 0 if there are no courses to be generated at this time-day cell
+    for (let i = totalColSpans; i < headerColSpan; i++) {
+      tableData.push(
+        <td
+          id={"" + day.toString() + currTime + "-0" + i + currSess}
+          key={"" + day.toString() + currTime + "-0" + i + currSess}
+          data-in-conflict="false"
+          data-satisfied="true"
+          rowSpan="1"
+          className={
+            currTime % 1 === 0 ? "timetable-cell-tophalf" : "timetable-cell-bottomhalf"
           }
-          // Record the total width taken up by this time-day slot so far,
-          // from all the lectures generated
-          totalColSpans += lecColSpan
-        })
-      }
-      // In the case where there are not enough cells to fill the headerColSpan
-      // of this time-day cell or if there are no courses to be generated at this time-day cell,
-      // generate remaining number of empty cells
-      // Note: totalColSpans is 0 if there are no courses to be generated at this time-day cell
-      for (let i = totalColSpans; i < headerColSpan; i++) {
-        tableData.push(
-          <td
-            id={"" + day.toString() + currTime + "-0" + i + currSess}
-            key={"" + day.toString() + currTime + "-0" + i + currSess}
-            data-in-conflict="false"
-            data-satisfied="true"
-            rowSpan="1"
-            className={
-              currTime % 1 === 0
-                ? "timetable-cell-tophalf"
-                : "timetable-cell-bottomhalf"
-            }
-          ></td>
-        )
-      }
-    }
-
-    if (currTime % 1 === 0) {
-      // Convert <time> to a 12-hour clock system
-      const adjustedTime = (currTime === 12 ? 12 : currTime % 12) + ":00"
-      const timeCell = (
-        <td key="timetable-time" className="timetable-time" rowSpan="2">
-          {adjustedTime}
-        </td>
+        ></td>
       )
-
-      // Adjust the order at which these cells are rendered
-      if (currSess === "F") {
-        tableData.unshift(timeCell)
-        tableData.unshift(dummyCell)
-      } else if (currSess === "S") {
-        tableData.push(timeCell)
-        tableData.push(dummyCell)
-      }
-    } else {
-      // Adjust the order at which these cells are rendered
-      if (this.props.session === "F") {
-        tableData.unshift(dummyCell)
-      } else if (this.props.session === "S") {
-        tableData.push(dummyCell)
-      }
     }
-    return <tr>{tableData}</tr>
   }
+
+  if (currTime % 1 === 0) {
+    // Convert <time> to a 12-hour clock system
+    const adjustedTime = (currTime === 12 ? 12 : currTime % 12) + ":00"
+    const timeCell = (
+      <td key="timetable-time" className="timetable-time" rowSpan="2">
+        {adjustedTime}
+      </td>
+    )
+
+    // Adjust the order at which these cells are rendered
+    if (currSess === "F") {
+      tableData.unshift(timeCell)
+      tableData.unshift(dummyCell)
+    } else if (currSess === "S") {
+      tableData.push(timeCell)
+      tableData.push(dummyCell)
+    }
+  } else {
+    // Adjust the order at which these cells are rendered
+    if (props.session === "F") {
+      tableData.unshift(dummyCell)
+    } else if (props.session === "S") {
+      tableData.push(dummyCell)
+    }
+  }
+  return <tr>{tableData}</tr>
 }
 
 /**
