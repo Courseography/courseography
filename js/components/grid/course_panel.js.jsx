@@ -1,4 +1,4 @@
-import React from "react"
+import { useCallback, useState, useEffect } from "react"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import { getCourse } from "../common/utils"
 
@@ -7,88 +7,77 @@ import { getCourse } from "../common/utils"
  * Holds courses selected from the search box, and lists of their F, S and Y lecture, tutorial,
  * and practical sections.
  */
-export class CoursePanel extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: "",
-      courseInfoId: null, // The course code to display in the CourseModal
-    }
-    this.handleInput = this.handleInput.bind(this)
-    this.clearAllCourses = this.clearAllCourses.bind(this)
-    this.selectCourse = this.props.selectCourse.bind(this)
-    this.displayInfo = this.displayInfo.bind(this)
-  }
+export function CoursePanel(props) {
+  const [value, setValue] = useState("")
+  const [courseInfoId, setCourseInfoId] = useState(null) // The course code to display in the CourseModal
 
-  handleInput(event) {
-    this.setState({ value: event.target.value })
-  }
+  const handleInput = useCallback(event => {
+    setValue(event.target.value)
+  }, [])
 
   // Only clear all selected courses if the user confirms in the alert
   // pop up window.
-  clearAllCourses() {
+  const clearAllCourses = useCallback(() => {
     if (window.confirm("Clear all selected courses?")) {
-      this.props.clearCourses()
+      props.clearCourses()
     }
-  }
+  }, [props.clearCourses])
 
-  displayInfo(courseId) {
-    this.setState({ courseInfoId: courseId })
-  }
+  const displayInfo = useCallback(courseId => {
+    setCourseInfoId(courseId)
+  }, [])
 
-  render() {
-    const courses = this.props.selectedCourses.map(course => (
-      <Course
-        key={course}
-        selectedLectures={this.props.selectedLectures}
-        courseCode={course}
-        removeCourse={this.props.removeCourse}
-        hoverLecture={this.props.hoverLecture}
-        unhoverLecture={this.props.unhoverLecture}
-        selectLecture={this.props.selectLecture}
-        displayInfo={this.displayInfo}
-      />
-    ))
+  const courses = props.selectedCourses.map(course => (
+    <Course
+      key={course}
+      selectedLectures={props.selectedLectures}
+      courseCode={course}
+      removeCourse={props.removeCourse}
+      hoverLecture={props.hoverLecture}
+      unhoverLecture={props.unhoverLecture}
+      selectLecture={props.selectLecture}
+      displayInfo={displayInfo}
+    />
+  ))
 
-    return (
-      <div id="search-layout" className="col-md-2 col-12">
-        <div id="filter-container">
-          <form onSubmit={() => false}>
-            <input
-              id="course-filter"
-              className="form-control"
-              placeholder="Enter a course!"
-              autoComplete="off"
-              type="text"
-              value={this.state.value}
-              onChange={this.handleInput}
-            />
-          </form>
-        </div>
-        <div id="search-container">
-          <CourseList
-            courseFilter={this.state.value.toUpperCase()}
-            selectedCourses={this.props.selectedCourses}
-            selectCourse={this.props.selectCourse}
-            removeCourse={this.props.removeCourse}
+  return (
+    <div id="search-layout" className="col-md-2 col-12">
+      <div id="filter-container">
+        <form onSubmit={() => false}>
+          <input
+            id="course-filter"
+            className="form-control"
+            placeholder="Enter a course!"
+            autoComplete="off"
+            type="text"
+            value={value}
+            onChange={handleInput}
           />
-        </div>
-        <div id="course-select-wrapper">
-          <ul className="trapScroll-enabled" id="course-select">
-            <li id="clear-all" key="clear-all-grid" onClick={this.clearAllCourses}>
-              <h3>Clear All</h3>
-            </li>
-            {courses}
-          </ul>
-        </div>
-        <CourseModal
-          showCourseModal={!!this.state.courseInfoId}
-          courseId={this.state.courseInfoId}
-          onClose={() => this.setState({ courseInfoId: null })}
+        </form>
+      </div>
+      <div id="search-container">
+        <CourseList
+          courseFilter={value.toUpperCase()}
+          selectedCourses={props.selectedCourses}
+          selectCourse={props.selectCourse}
+          removeCourse={props.removeCourse}
         />
       </div>
-    )
-  }
+      <div id="course-select-wrapper">
+        <ul className="trapScroll-enabled" id="course-select">
+          <li id="clear-all" key="clear-all-grid" onClick={clearAllCourses}>
+            <h3>Clear All</h3>
+          </li>
+          {courses}
+        </ul>
+      </div>
+      <CourseModal
+        showCourseModal={!!courseInfoId}
+        courseId={courseInfoId}
+        onClose={() => setCourseInfoId(null)}
+      />
+    </div>
+  )
 }
 
 /**
@@ -97,48 +86,27 @@ export class CoursePanel extends React.Component {
  * Also retrieves the course information. It holds list of F, S and Y lecture, tutorial
  * and practical sections for the course.
  */
-class Course extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selected: false,
-      courseInfo: {},
-    }
-    this.filterLectureList = this.filterLectureList.bind(this)
-    this.toggleSelect = this.toggleSelect.bind(this)
-    this.removeCourse = this.removeCourse.bind(this)
-    this.parseLectures = this.parseLectures.bind(this)
-    this.containsSelectedLecture = this.containsSelectedLecture.bind(this)
-  }
+function Course(props) {
+  const [selected, setSelected] = useState(false)
+  const [courseInfo, setCourseInfo] = useState({})
 
-  componentDidMount() {
-    getCourse(this.props.courseCode).then(data => {
-      const course = {
-        courseCode: "",
-        F: [],
-        S: [],
-        Y: [],
-      }
-      course.courseCode = data.name
-
-      const parsedLectures = this.parseLectures(data.allMeetingTimes)
-      // Split the lecture sections into Fall, Spring and Years
-      course.F = this.filterLectureList(parsedLectures, "F")
-      course.S = this.filterLectureList(parsedLectures, "S")
-      course.Y = this.filterLectureList(parsedLectures, "Y")
-      this.setState({ courseInfo: course })
-    })
-  }
-
-  filterLectureList(lectures, session) {
+  const filterLectureList = useCallback((lectures, session) => {
     return lectures
       .filter(lec => lec.session === session)
       .sort((firstLec, secondLec) =>
         firstLec.lectureCode > secondLec.lectureCode ? 1 : -1
       )
-  }
+  }, [])
 
-  parseLectures(lectures) {
+  const toggleSelect = useCallback(() => {
+    setSelected(s => !s)
+  }, [])
+
+  const removeCourse = useCallback(() => {
+    props.removeCourse(props.courseCode)
+  }, [props.removeCourse, props.courseCode])
+
+  const parseLectures = useCallback(lectures => {
     const parsedLectures = []
 
     // Loop through the lecture sections to get each section's session code and lecture times
@@ -166,119 +134,126 @@ class Course extends React.Component {
       }
     })
     return parsedLectures
-  }
+  }, [])
 
-  toggleSelect() {
-    this.setState({ selected: !this.state.selected })
-  }
-
-  removeCourse() {
-    this.props.removeCourse(this.props.courseCode)
-  }
-
-  containsSelectedLecture() {
-    // Only use method subString on the value of this.state.courseInfo.courseCode if
-    // if the this.state.courseInfo.courseCode exists (ie the course information has already been fetched)
-    if (this.state.courseInfo.courseCode) {
-      const lectures = this.props.selectedLectures.map(lecture =>
+  const containsSelectedLecture = useCallback(() => {
+    // Only use method subString on the value of courseInfo.courseCode if
+    // if the courseInfo.courseCode exists (ie the course information has already been fetched)
+    if (courseInfo.courseCode) {
+      const lectures = props.selectedLectures.map(lecture =>
         lecture.courseCode.substring(0, 6)
       )
-      const courseCode = this.state.courseInfo.courseCode
+      const courseCode = courseInfo.courseCode
       return lectures.indexOf(courseCode.substring(0, 6)) >= 0
     }
     return false
-  }
+  }, [props.selectedLectures])
 
-  render() {
-    return (
-      <li
-        key={this.props.courseCode}
-        id={this.props.courseCode + "-li"}
-        className={"ui-accordion ui-widget ui-helper-reset"}
+  useEffect(() => {
+    getCourse(props.courseCode).then(data => {
+      const course = {
+        courseCode: "",
+        F: [],
+        S: [],
+        Y: [],
+      }
+      course.courseCode = data.name
+
+      const parsedLectures = parseLectures(data.allMeetingTimes)
+      // Split the lecture sections into Fall, Spring and Years
+      course.F = filterLectureList(parsedLectures, "F")
+      course.S = filterLectureList(parsedLectures, "S")
+      course.Y = filterLectureList(parsedLectures, "Y")
+      setCourseInfo(course)
+    })
+  }, [])
+
+  return (
+    <li
+      key={props.courseCode}
+      id={props.courseCode + "-li"}
+      className={"ui-accordion ui-widget ui-helper-reset"}
+    >
+      <div
+        className="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top"
+        id={"ui-accordion-" + props.courseCode + "-li-header-0"}
       >
-        <div
-          className="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top"
-          id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}
-        >
-          <div className="icon-div">
-            <img
-              src="/static/res/ico/delete.png"
-              className="close-icon"
-              onClick={this.removeCourse}
-            />
-            <img
-              src="/static/res/ico/about.png"
-              className="close-icon"
-              onClick={() => this.props.displayInfo(this.props.courseCode)}
-            />
-          </div>
-          <h3
-            onClick={this.toggleSelect}
-            data-satisfied="true"
-            taken={this.containsSelectedLecture() ? "true" : "false"}
-          >
-            {this.props.courseCode}
-          </h3>
+        <div className="icon-div">
+          <img
+            src="/static/res/ico/delete.png"
+            className="close-icon"
+            onClick={removeCourse}
+          />
+          <img
+            src="/static/res/ico/about.png"
+            className="close-icon"
+            onClick={() => props.displayInfo(props.courseCode)}
+          />
         </div>
-        {this.state.selected && (
-          <div
-            className="sections ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active"
-            id={"ui-accordion-" + this.props.courseCode + "-li-panel-0"}
-          >
-            <SectionList
-              courseCode={this.props.courseCode}
-              session="Y"
-              lectures={this.state.courseInfo.Y}
-              hoverLecture={this.props.hoverLecture}
-              unhoverLecture={this.props.unhoverLecture}
-              selectLecture={this.props.selectLecture}
-            />
-            <SectionList
-              courseCode={this.props.courseCode}
-              session="F"
-              lectures={this.state.courseInfo.F}
-              hoverLecture={this.props.hoverLecture}
-              unhoverLecture={this.props.unhoverLecture}
-              selectLecture={this.props.selectLecture}
-            />
-            <SectionList
-              courseCode={this.props.courseCode}
-              session="S"
-              lectures={this.state.courseInfo.S}
-              hoverLecture={this.props.hoverLecture}
-              unhoverLecture={this.props.unhoverLecture}
-              selectLecture={this.props.selectLecture}
-            />
-          </div>
-        )}
-      </li>
-    )
-  }
+        <h3
+          onClick={toggleSelect}
+          data-satisfied="true"
+          taken={containsSelectedLecture() ? "true" : "false"}
+        >
+          {props.courseCode}
+        </h3>
+      </div>
+      {selected && (
+        <div
+          className="sections ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active"
+          id={"ui-accordion-" + props.courseCode + "-li-panel-0"}
+        >
+          <SectionList
+            courseCode={props.courseCode}
+            session="Y"
+            lectures={courseInfo.Y}
+            hoverLecture={props.hoverLecture}
+            unhoverLecture={props.unhoverLecture}
+            selectLecture={props.selectLecture}
+          />
+          <SectionList
+            courseCode={props.courseCode}
+            session="F"
+            lectures={courseInfo.F}
+            hoverLecture={props.hoverLecture}
+            unhoverLecture={props.unhoverLecture}
+            selectLecture={props.selectLecture}
+          />
+          <SectionList
+            courseCode={props.courseCode}
+            session="S"
+            lectures={courseInfo.S}
+            hoverLecture={props.hoverLecture}
+            unhoverLecture={props.unhoverLecture}
+            selectLecture={props.selectLecture}
+          />
+        </div>
+      )}
+    </li>
+  )
 }
 
 /**
  * A list of lecture, tutorial and practical sections for the specified course for the specified
  * session.
  */
-class SectionList extends React.Component {
-  render() {
-    const lectureSections = this.props.lectures.map(lecture => (
-      <LectureSection
-        key={this.props.courseCode + lecture.lectureCode + this.props.section}
-        session={this.props.session}
-        courseCode={this.props.courseCode}
-        lecture={lecture}
-        hoverLecture={this.props.hoverLecture}
-        unhoverLecture={this.props.unhoverLecture}
-        selectLecture={this.props.selectLecture}
-      />
-    ))
-    return (
-      <ul className={"sectionList-" + this.props.session} id="lecture-list">
-        {lectureSections}
-      </ul>
-    )
-  }
+function SectionList(props) {
+  const lectureSections = props.lectures.map(lecture => (
+    <LectureSection
+      key={props.courseCode + lecture.lectureCode + props.section}
+      session={props.session}
+      courseCode={props.courseCode}
+      lecture={lecture}
+      hoverLecture={props.hoverLecture}
+      unhoverLecture={props.unhoverLecture}
+      selectLecture={props.selectLecture}
+    />
+  ))
+  return (
+    <ul className={"sectionList-" + props.session} id="lecture-list">
+      {lectureSections}
+    </ul>
+  )
 }
 
 /**
@@ -299,15 +274,10 @@ const LectureSection = props => {
   )
 }
 
-class CourseList extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      courses: [],
-    }
-  }
+function CourseList(props) {
+  const [courses, setCourses] = useState([])
 
-  componentDidMount() {
+  useEffect(() => {
     // AJAX requests allow the programmer to:
     //    1. update a webpage without refreshing
     //    2. Request data from a server AFTER the webpage is loaded
@@ -323,67 +293,56 @@ class CourseList extends React.Component {
         // and stores each individual course code name
         // into 'courses' list
         const courses = data.split("\n").map(course => course.substring(0, 8))
-        this.setState({ courses: courses })
+        setCourses(courses)
       })
+  }, [])
+
+  let searchList = []
+  // If there are courses to be filtered
+  if (props.courseFilter !== "") {
+    // From the "courses" list, filter out elements based off of the prop "courseFilter" passed to
+    // CourseList by SearchPanel
+    searchList = courses
+      .filter(course => course.indexOf(props.courseFilter) > -1)
+      .map(course => (
+        <CourseEntry
+          course={course}
+          key={course}
+          selectCourse={props.selectCourse}
+          removeCourse={props.removeCourse}
+          selectedCourses={props.selectedCourses}
+        />
+      ))
   }
 
-  render() {
-    let searchList = []
-    // If there are courses to be filtered
-    if (this.props.courseFilter !== "") {
-      // From the "courses" list, filter out elements based off of the prop "courseFilter" passed to
-      // CourseList by SearchPanel
-      searchList = this.state.courses
-        .filter(course => course.indexOf(this.props.courseFilter) > -1)
-        .map(course => (
-          <CourseEntry
-            course={course}
-            key={course}
-            selectCourse={this.props.selectCourse}
-            removeCourse={this.props.removeCourse}
-            selectedCourses={this.props.selectedCourses}
-          />
-        ))
-    }
-
-    // Return all the unfiltered courses in the "courses" list in a list
-    return (
-      <div id="search-list">
-        <ul>{searchList}</ul>
-      </div>
-    )
-  }
+  // Return all the unfiltered courses in the "courses" list in a list
+  return (
+    <div id="search-list">
+      <ul>{searchList}</ul>
+    </div>
+  )
 }
 
 /**
  * Describes a course based on its course code, and whether or not it has been selected
  * (If the course is selected, it is a "starred-course").
  */
-class CourseEntry extends React.Component {
-  constructor(props) {
-    super(props)
-    this.select = this.select.bind(this)
-  }
-
+function CourseEntry(props) {
   // Check whether the course is already in the selectCourses list.
   // Remove the course if it is, or add the course if it is not.
-  select() {
-    if (this.props.selectedCourses.indexOf(this.props.course) != -1) {
-      this.props.removeCourse(this.props.course)
+  const select = useCallback(() => {
+    if (props.selectedCourses.indexOf(props.course) != -1) {
+      props.removeCourse(props.course)
     } else {
-      this.props.selectCourse(this.props.course)
+      props.selectCourse(props.course)
     }
-  }
+  }, [props.course, props.selectedCourses, props.selectCourse, props.removeCourse])
 
-  render() {
-    const classes =
-      this.props.selectedCourses.indexOf(this.props.course) != -1
-        ? "starred-course"
-        : ""
-    return (
-      <li id={this.props.course + "-search"} className={classes} onClick={this.select}>
-        {this.props.course}
-      </li>
-    )
-  }
+  const classes =
+    props.selectedCourses.indexOf(props.course) != -1 ? "starred-course" : ""
+  return (
+    <li id={props.course + "-search"} className={classes} onClick={select}>
+      {props.course}
+    </li>
+  )
 }
