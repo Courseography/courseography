@@ -28,6 +28,15 @@ jobs:
 
             corepack enable
             corepack prepare yarn@stable --activate
+
+      - run:
+          name: Install Coverage Tools
+          command: |
+            stack install hpc-lcov
+            curl -fsSL https://raw.githubusercontent.com/coverallsapp/coveralls-python/master/coveralls.py > coveralls.py
+            chmod +x coveralls.py
+            sudo mv coveralls.py /usr/local/bin/coveralls
+
       - run:
           name: Resolve/Update Dependencies
           command: |
@@ -38,17 +47,19 @@ jobs:
             yarn install
 
       - run:
-          name: Run tests
+          name: Run tests with coverage
           command: |
-            stack --no-terminal test
-            yarn test --maxWorkers=4
+            stack test --coverage
 
-      - run: |
-          curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz
-          curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-checksums.txt
-          cat coveralls-checksums.txt | grep coveralls-linux.tar.gz | sha256sum --check
-          tar -xzf coveralls-linux.tar.gz
-          ./coveralls
+      - run:
+          name: Generate Coverage Report
+          command: |
+            stack exec -- hpc-lcov $(stack path --local-hpc-root) --include-tests --output coverage.info
+
+      - run:
+          name: Upload Coverage Report to Coveralls
+          command: |
+            COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN coveralls --lcov-file coverage.info
 
       - save_cache:
           name: Cache Dependencies (Haskell)
