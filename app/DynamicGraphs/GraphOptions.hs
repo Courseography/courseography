@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module DynamicGraphs.GraphOptions where
 
 import Data.Aeson (FromJSON (parseJSON), withObject, (.!=), (.:?))

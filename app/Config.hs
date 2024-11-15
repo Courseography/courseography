@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-
 Description: Holds constants that could change between the development and production environments.
 

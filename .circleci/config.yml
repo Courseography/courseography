@@ -43,6 +43,13 @@ jobs:
             stack --no-terminal test
             yarn test --maxWorkers=4
 
+      - run: |
+          curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz
+          curl -sLO https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-checksums.txt
+          cat coveralls-checksums.txt | grep coveralls-linux.tar.gz | sha256sum --check
+          tar -xzf coveralls-linux.tar.gz
+          ./coveralls
+
       - save_cache:
           name: Cache Dependencies (Haskell)
           key: v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}

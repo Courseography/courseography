@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-|
     Module      : Css.Constants
     Description : Defines the constants for the other CSS modules.
