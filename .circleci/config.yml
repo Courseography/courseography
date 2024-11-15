@@ -52,7 +52,7 @@ jobs:
       - run:
           name: Generate Coverage Report
           command: |
-            stack exec -- hpc-lcov $(stack path --local-hpc-root) --include-tests --output coverage.info
+            stack exec -- hpc-lcov /root/.stack-work/install/x86_64-linux-tinfo6/e556f3f73adf0773479f3b3399bf947afc0cf35653630b3e3fe6d15ae6276ea8/9.4.8/hpc --include-tests --output coverage.info
 
       - run:
           name: Upload Coverage Report to Coveralls
