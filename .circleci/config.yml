@@ -33,9 +33,7 @@ jobs:
           name: Install Coverage Tools
           command: |
             stack install hpc-lcov
-            curl -fsSL https://raw.githubusercontent.com/coverallsapp/coveralls-python/master/coveralls.py > coveralls.py
-            chmod +x coveralls.py
-            sudo mv coveralls.py /usr/local/bin/coveralls
+            npm install -g coveralls-lcov
 
       - run:
           name: Resolve/Update Dependencies
@@ -59,7 +57,7 @@ jobs:
       - run:
           name: Upload Coverage Report to Coveralls
           command: |
-            COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN coveralls --lcov-file coverage.info
+            COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN coveralls-lcov --source-coverage coverage.info
 
       - save_cache:
           name: Cache Dependencies (Haskell)
