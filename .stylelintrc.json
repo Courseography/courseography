@@ -1,5 +1,5 @@
 {
-  "extends": ["stylelint-config-sass-guidelines"],
+  "extends": ["stylelint-config-standard-scss"],
   "rules": {
     "selector-class-pattern": null,
     "selector-max-compound-selectors": 3,
