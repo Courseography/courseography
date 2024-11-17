@@ -18,6 +18,7 @@
     "*": "yarn prettier --ignore-unknown --write",
     "*.js": "yarn run eslint --cache --fix --ignore-path .prettierignore js",
     "*.css": "yarn run stylelint --fix",
+    "*.scss": "yarn run stylelint --fix",
     "*.hs": "stack exec hlint"
   },
   "dependencies": {
