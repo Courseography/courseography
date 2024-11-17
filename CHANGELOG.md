@@ -33,6 +33,7 @@
 - Improved general testing infrastructure
 - Added test cases for the index function in `Controllers/Course`
 - Refactored the class components in `/grid` folder to function components
+- Use `magick` command instead of `convert` when serving graph images
 
 ## [0.6.0] - 2024-06-24
 
