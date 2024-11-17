@@ -13,6 +13,9 @@ updates:
       ag-grid:
         patterns:
           - "ag-grid-*"
+      stylelint:
+        patterns:
+          - "stylelint*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
