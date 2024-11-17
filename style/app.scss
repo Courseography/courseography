@@ -1,5 +1,6 @@
 $graph-overlay-top-margin: 15px;
 $graph-overlay-side-margin: 15px;
+
 @import "ag-grid-community/styles/ag-grid.css";
 @import "ag-grid-community/styles/ag-theme-alpine.css";
 @import "leaflet/dist/leaflet.css";
@@ -8,17 +9,9 @@ $graph-overlay-side-margin: 15px;
 @keyframes spin {
   0.0% {
     transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
   }
 
   100.0% {
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
@@ -26,17 +19,9 @@ $graph-overlay-side-margin: 15px;
 @keyframes spin {
   0.0% {
     transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
   }
 
   100.0% {
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
@@ -44,17 +29,9 @@ $graph-overlay-side-margin: 15px;
 @keyframes spin {
   0.0% {
     transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
   }
 
   100.0% {
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
@@ -62,17 +39,9 @@ $graph-overlay-side-margin: 15px;
 @keyframes spin {
   0.0% {
     transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
   }
 
   100.0% {
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
@@ -80,17 +49,9 @@ $graph-overlay-side-margin: 15px;
 @keyframes spin {
   0.0% {
     transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
-    transform: rotate(0deg);
   }
 
   100.0% {
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
-    transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
@@ -104,8 +65,10 @@ html {
 }
 
 body {
-  font-family: "Trebuchet MS", "Arial", sans-serif;
+  color: #222;
+  font-family: "Trebuchet MS", Arial, sans-serif;
   font-size: 17pt;
+  font-weight: normal;
   height: 100%;
   margin: 0;
   min-height: 100%;
@@ -248,14 +211,9 @@ a:active {
 .ui-dialog {
   background-color: #fff;
   box-shadow: 8px 8px 8px;
-  box-shadow: 8px 8px 8px;
-  box-shadow: 8px 8px 8px;
-  box-shadow: 8px 8px 8px;
-  box-shadow: 8px 8px 8px;
   color: #000;
   outline: solid 0 #000;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden auto;
 }
 
 .ui-widget-overlay {
@@ -268,9 +226,15 @@ a:active {
 
 .modal-header {
   align-items: center;
+  border-bottom: solid 1px #000;
   color: #437699;
   display: flex;
+  font-size: 1em;
   justify-content: space-evenly;
+  line-height: 1.8em;
+  padding: 0;
+  padding-left: 25px;
+  text-align: left;
 }
 
 .modal-body p,
@@ -288,14 +252,14 @@ ol {
 
 #zoom-button {
   background-color: #dedae5;
-  border: solid 2px rgba(122, 106, 150, 0.7803);
+  border: solid 2px rgb(122 106 150 / 78%);
   border-radius: 7px;
-  color: rgba(122, 106, 150, 0.7803);
+  color: rgb(122 106 150 / 78%);
   margin-top: 10px;
 }
 
 #zoom-button:hover {
-  background-color: rgba(122, 106, 150, 0.7803);
+  background-color: rgb(122 106 150 / 78%);
   color: #dedae5;
 }
 
@@ -341,7 +305,7 @@ ol {
 
 .unselected-day {
   background-color: #dedae5;
-  color: rgba(122, 106, 150, 0.7803);
+  color: rgb(122 106 150 / 78%);
 }
 
 #map-day-list {
@@ -365,32 +329,30 @@ ol {
   position: relative;
 }
 
-.modal-class {
+%modal-class {
   background-color: #fff;
   border-radius: 10px;
-  bottom: 150px;
-  box-shadow: 0 0 30px;
-  box-shadow: 0 0 30px;
-  box-shadow: 0 0 30px;
-  box-shadow: 0 0 30px;
+  inset: 150px 300px 150px 200px;
   box-shadow: 0 0 30px;
   height: 550px;
-  left: 200px;
   overflow-y: auto;
   position: absolute;
-  right: 300px;
-  top: 150px;
   width: 1000px;
 }
 
-.overlay {
-  background-color: rgba(0, 0, 0, 150);
-  bottom: 0;
-  left: 0;
+.modal-class {
+  @extend %modal-class;
+}
+
+%overlay {
+  background-color: rgb(0 0 0 / 15000%);
+  inset: 0;
   position: fixed;
-  right: 0;
-  top: 0;
   z-index: 2;
+}
+
+.overlay {
+  @extend %overlay;
 }
 
 .ui-dialog-titlebar {
@@ -430,16 +392,6 @@ ol {
   width: 100%;
 }
 
-.modal-header {
-  border-bottom: solid 1px #000;
-  color: #437699;
-  font-size: 1em;
-  line-height: 1.8em;
-  padding: 0;
-  padding-left: 25px;
-  text-align: left;
-}
-
 #post-image {
   border: solid 3px #000;
   border-radius: 5px;
@@ -468,7 +420,7 @@ ol {
 
 #react-graphRootSVG {
   height: 100%;
-  shape-rendering: geometricPrecision;
+  shape-rendering: geometricprecision;
   stroke: #000;
   stroke-linecap: square;
   stroke-miterlimit: 10;
@@ -556,10 +508,6 @@ ol {
 }
 
 .expanded > .sidebar-button > #sidebar-icon {
-  transform: rotate(180deg);
-  transform: rotate(180deg);
-  transform: rotate(180deg);
-  transform: rotate(180deg);
   transform: rotate(180deg);
 }
 
@@ -806,7 +754,7 @@ div.sidebar.collapsed {
   margin-left: auto;
 }
 
-.info-modal-button {
+%info-modal-button {
   align-items: center;
   border-color: transparent;
   border-radius: 10px;
@@ -820,28 +768,20 @@ div.sidebar.collapsed {
   width: 50px;
 }
 
+.info-modal-button {
+  @extend %info-modal-button;
+}
+
 .info-modal-button:disabled {
   background-color: #a0aec0;
 }
 
 .flip {
   transform: rotate(180deg);
-  transform: rotate(180deg);
-  transform: rotate(180deg);
-  transform: rotate(180deg);
-  transform: rotate(180deg);
 }
 
 g text {
   -webkit-touch-callout: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
   user-select: none;
 }
 
@@ -881,11 +821,11 @@ g.node[data-active="inactive"] > rect {
 }
 
 g.node[data-active="takeable"] > rect {
-  opacity: 0.69999;
+  opacity: 0.7;
 }
 
 g.node[data-active="takeable"] > text {
-  opacity: 0.69999;
+  opacity: 0.7;
 }
 
 g.node[data-active="missing"] > rect,
@@ -953,11 +893,11 @@ g.inactive > rect {
 }
 
 g.takeable > rect {
-  opacity: 0.69999;
+  opacity: 0.7;
 }
 
 g.takeable > text {
-  opacity: 0.69999;
+  opacity: 0.7;
 }
 
 g.missing > ellipse {
@@ -1033,7 +973,7 @@ g.bool.missing > ellipse {
 }
 
 g.bool > text {
-  font-family: "Trebuchet MS", "Arial", sans-serif;
+  font-family: "Trebuchet MS", Arial, sans-serif;
   font-size: 6pt;
   font-weight: bold;
   stroke: none;
@@ -1072,7 +1012,6 @@ path.missing {
   stroke: #c01;
   stroke-dasharray: 8, 5;
   stroke-width: 2px;
-  stroke-width: 2px;
 }
 
 #resetButton {
@@ -1088,7 +1027,7 @@ path.missing {
 
 #svgTitle {
   fill: #072d68;
-  font-family: "Bitter", serif;
+  font-family: Bitter, serif;
   font-size: 2.5em;
   font-style: italic;
   font-weight: bold;
@@ -1115,8 +1054,7 @@ path.missing {
 #search-layout {
   background-color: #7a6a96;
   margin: 0;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  overflow: hidden;
   padding: 0;
 }
 
@@ -1444,10 +1382,6 @@ path.missing {
 .timetable td[hover*="remove"] {
   opacity: 0.5;
   transition: all 0.5s ease-in-out 0s;
-  transition: all 0.5s ease-in-out 0s;
-  transition: all 0.5s ease-in-out 0s;
-  transition: all 0.5s ease-in-out 0s;
-  transition: all 0.5s ease-in-out 0s;
 }
 
 .timetable td[data-satisfied*="false"] {
@@ -1544,7 +1478,7 @@ path.missing {
 }
 
 #about-div {
-  font-size: 1.19999em;
+  font-size: 1.2em;
   margin: 0 0 0 10px;
 }
 
@@ -1552,7 +1486,7 @@ path.missing {
   /* background-image : url(/static/res/backgrounds/draw-background.png); */
   background-size: 8px;
   height: 100%;
-  opacity: 0.29999;
+  opacity: 0.3;
   width: 100%;
 }
 
@@ -1582,10 +1516,6 @@ path.missing {
   margin: 0 0 0 5px;
   padding: 0 0 0 5px;
   transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
   width: 93%;
 }
 
@@ -1605,17 +1535,12 @@ path.missing {
 }
 
 .button {
-  border: solid 2px #008080;
   border: solid 2px #000;
   border-radius: 8px;
   font-size: 0.75em;
   margin: 5px;
   padding: 0;
   text-align: center;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
   transition: all 0.2s;
   width: 40%;
 }
@@ -1630,8 +1555,14 @@ input {
   border: solid 2px #dcdcdc;
   border-radius: 8px;
   font-size: 16px;
+  height: 40px;
   margin: 5px 0 5px 5px;
   padding: 0;
+  text-align: center;
+}
+
+input[type="checkbox"] {
+  height: 13px;
 }
 
 input:focus {
@@ -1651,14 +1582,6 @@ input:focus {
   text-align: center;
   text-anchor: middle;
   -webkit-touch-callout: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
   user-select: none;
 }
 
@@ -1688,11 +1611,6 @@ input:focus {
   width: 40%;
 }
 
-body {
-  color: #222;
-  font-weight: normal;
-}
-
 #posts {
   background-color: #fff;
   border-radius: 4px;
@@ -1711,10 +1629,6 @@ body {
 #posts li {
   display: inline-block;
   list-style-type: none;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
   transition: all 0.2s;
   width: 32%;
 }
@@ -1772,10 +1686,6 @@ body {
   text-indent: -20px;
 }
 
-input {
-  font-size: 14px;
-}
-
 #button_wrapper {
   height: 50px;
   padding-left: 20px;
@@ -1786,7 +1696,7 @@ input {
   cursor: pointer;
   font-size: 14px;
   height: 40px;
-  opacity: 0.69999;
+  opacity: 0.7;
 }
 
 #update:hover {
@@ -1815,10 +1725,6 @@ input {
 div .code {
   list-style-type: none;
   padding-left: 20px;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
   transition: all 0.2s;
   width: 99%;
 }
@@ -1858,7 +1764,7 @@ i {
   background-color: #bababa;
   border: solid 2px #949494;
   border-radius: 4px;
-  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
+  box-shadow: 0 2px 2px -1px rgb(0 0 0 / 5.5%);
   cursor: pointer;
   display: none;
   line-height: 40px;
@@ -1866,10 +1772,6 @@ i {
   margin: 0;
   margin-right: 10px;
   text-align: center;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
-  transition: all 0.2s;
   transition: all 0.2s;
 }
 
@@ -1880,15 +1782,6 @@ i {
 .full_name {
   margin: 0;
   text-align: center;
-}
-
-input {
-  height: 40px;
-  text-align: center;
-}
-
-input[type="checkbox"] {
-  height: 13px;
 }
 
 #notes {
@@ -1961,7 +1854,7 @@ div[id*="_inq"] .code::after {
 
 #filter {
   border: solid 1px #000;
-  font-family: "Trebuchet MS", "Arial", sans-serif;
+  font-family: "Trebuchet MS", Arial, sans-serif;
   margin-left: 10px;
   text-align: center;
   width: 200px;
@@ -2124,7 +2017,7 @@ div[id*="_inq"] .code::after {
 }
 
 #header-title {
-  font-size: 1.19999em;
+  font-size: 1.2em;
 }
 
 main-filter {
@@ -2226,7 +2119,8 @@ main-filter input {
 }
 
 .error-modal-class {
-  @extend .modal-class;
+  @extend %modal-class;
+
   background-color: #ffeded;
   height: 150px;
   width: 800px;
@@ -2236,12 +2130,14 @@ main-filter input {
 }
 
 .error-overlay {
-  @extend .overlay;
-  background-color: rgba(0, 0, 0, 0.6);
+  @extend %overlay;
+
+  background-color: rgb(0 0 0 / 60%);
 }
 
 .error-close-button-x {
-  @extend .info-modal-button;
+  @extend %info-modal-button;
+
   font-size: 20px;
   width: 75px;
   font-weight: bold;
@@ -2252,7 +2148,8 @@ main-filter input {
 }
 
 .error-close-button {
-  @extend .info-modal-button;
+  @extend %info-modal-button;
+
   display: block;
   margin: 0 auto;
   font-size: 22px;
