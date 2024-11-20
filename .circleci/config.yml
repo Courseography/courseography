@@ -28,14 +28,13 @@ jobs:
 
             corepack enable
             corepack prepare yarn@stable --activate
+     
       - run:
-          name: Resolve/Update Dependencies
+          name: Check ImageMagick version
           command: |
-            stack --no-terminal setup
-            rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
-            stack --no-terminal build --fast -j1 --ghc-options -Werror
-            stack build hlint
-            yarn install
+            magick -version
+            convert -version
+            which magick
 
       - run:
           name: Run tests
