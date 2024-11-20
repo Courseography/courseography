@@ -19,6 +19,7 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install -y imagemagick texlive-latex-base
+            sudo apt-get update
             sudo dpkg --remove --force-remove-reinstreq nodejs
             stack update
 
