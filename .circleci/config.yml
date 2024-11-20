@@ -18,7 +18,7 @@ jobs:
           name: Install Package Dependencies
           command: |
             sudo apt-get update
-            sudo apt-get install -y imagemagick texlive-latex-base
+            sudo apt-get install -y imagemagick-7 texlive-latex-base
             sudo dpkg --remove --force-remove-reinstreq nodejs
             stack update
 
