@@ -9,7 +9,7 @@ main = defaultMainWithHooks
     where
         -- | Checks that Imagemagick and LaTeX are available
         preBuildChecks _ _ = do
-            mapM_ checkDependency ["convert", "pdflatex"]
+            mapM_ checkDependency ["magick", "pdflatex"]
             return emptyHookedBuildInfo
 
         checkDependency :: String -> IO ()
