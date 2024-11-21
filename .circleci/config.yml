@@ -31,13 +31,6 @@ jobs:
 
             corepack enable
             corepack prepare yarn@stable --activate
-     
-      - run:
-          name: Check ImageMagick version
-          command: |
-            convert -version
-            which magick
-            magick -version
 
       - run:
           name: Run tests
