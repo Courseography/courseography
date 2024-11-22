@@ -1,6 +1,5 @@
 version: 2.1
-orbs:
-  coveralls: coveralls/coveralls@2.2.5
+
 jobs:
   build:
     docker:
@@ -39,6 +38,7 @@ jobs:
             stack build hlint
             yarn install
             stack install hpc-lcov
+            npm install -g coveralls
 
       - run:
           name: Run tests and generate coverage
@@ -48,9 +48,6 @@ jobs:
             TIX_FILE=$(find $(stack path --local-hpc-root) -name "*.tix" | head -n 1)
             echo "Using TIX_FILE=$TIX_FILE"
             stack exec -- hpc-lcov --file "$TIX_FILE" --output coverage.info
-
-      - coveralls/upload:
-          path: coverage.info
 
       - run:
           name: Upload coverage to Coveralls
