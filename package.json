@@ -26,7 +26,7 @@
     "ag-grid-community": "^32.3.2",
     "ag-grid-react": "^32.3.2",
     "bootstrap": "^5.3.3",
-    "core-js": "^3.30.1",
+    "core-js": "^3.39.0",
     "handlebars": "^4.7.8",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.3",
