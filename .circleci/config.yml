@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  coveralls: coveralls/coveralls@1.0.4
+
 jobs:
   build:
     docker:
@@ -28,7 +31,7 @@ jobs:
 
             corepack enable
             corepack prepare yarn@stable --activate
-            npm install -g coveralls-lcov
+            npm install
 
       - run:
           name: Resolve/Update Dependencies
@@ -42,14 +45,16 @@ jobs:
       - run:
           name: Run tests and generate coverage
           command: |
-            stack test --coverage
+            yarn test --maxWorkers=4
+            stack --no-terminal test --coverage
+            TIX_FILE=$(find $(stack path --local-hpc-root) -name "*.tix" | head -n 1)
             echo "Using TIX_FILE=$TIX_FILE"
             stack exec -- hpc-lcov --file "$TIX_FILE" --output coverage.info
 
       - run:
           name: Upload coverage to Coveralls
           command: |
-            COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN coveralls-lcov -v -n coverage.info
+            cat coverage.info | COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN coveralls
 
       - save_cache:
           name: Cache Dependencies (Haskell)
@@ -73,8 +78,3 @@ jobs:
           destination: docs
     # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
     resource_class: large
-
-workflows:
-  build-workflow:
-    jobs:
-      - build
