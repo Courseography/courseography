@@ -28,8 +28,6 @@ jobs:
 
             corepack enable
             corepack prepare yarn@stable --activate
-            npm install
-
       - run:
           name: Resolve/Update Dependencies
           command: |
