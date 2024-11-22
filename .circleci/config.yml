@@ -1,5 +1,6 @@
 version: 2.1
-
+orbs:
+  coveralls: coveralls/coveralls@2.2.5
 jobs:
   build:
     docker:
@@ -28,6 +29,7 @@ jobs:
 
             corepack enable
             corepack prepare yarn@stable --activate
+
       - run:
           name: Resolve/Update Dependencies
           command: |
@@ -36,6 +38,7 @@ jobs:
             stack --no-terminal build --fast -j1 --ghc-options -Werror
             stack build hlint
             yarn install
+            stack install hpc-lcov
 
       - run:
           name: Run tests and generate coverage
@@ -45,6 +48,9 @@ jobs:
             TIX_FILE=$(find $(stack path --local-hpc-root) -name "*.tix" | head -n 1)
             echo "Using TIX_FILE=$TIX_FILE"
             stack exec -- hpc-lcov --file "$TIX_FILE" --output coverage.info
+
+      - coveralls/upload:
+          path: coverage.info
 
       - run:
           name: Upload coverage to Coveralls
