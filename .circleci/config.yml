@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  coveralls: coveralls/coveralls@1.0.4
-
 jobs:
   build:
     docker:
