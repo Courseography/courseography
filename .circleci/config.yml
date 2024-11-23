@@ -19,6 +19,7 @@ jobs:
           command: |
             sudo wget https://imagemagick.org/archive/binaries/magick
             sudo cp magick /usr/local/bin
+            sudo chmod 777 /usr/local/bin/magick
             sudo apt-get install -y texlive-latex-base
             sudo dpkg --remove --force-remove-reinstreq nodejs
             stack update
