@@ -45,11 +45,14 @@ jobs:
       - run:
           name: Run Tests and Generate Coverage
           command: |
-            stack clean
-            stack test --coverage
-            TIX_FILE=$(find $(stack path --local-hpc-root) -name "*.tix" | head -n 1)
+            yarn test --maxWorkers=4
+            stack --no-terminal test --coverage
+
+            TIX_FILE=$(find .stack-work -type f -name "*.tix" | head -n 1)
+            MIX_DIR=$(find .stack-work -type d -name "mix" | head -n 1)           
             echo "Using TIX_FILE=$TIX_FILE"
-            stack exec -- hpc-lcov --file "$TIX_FILE" --output coverage.info --main-package courseography
+            echo "Using MIX_DIR=$MIX_DIR"
+            stack exec -- hpc-lcov --file "$TIX_FILE" --mixdir "$MIX_DIR" --main-package courseography --output coverage.info
 
       #      - run:
       #          name: Upload coverage to Coveralls
