@@ -38,21 +38,21 @@ jobs:
             stack build hlint
             yarn install
             stack install hpc-lcov
-            npm install -g coveralls
-
+      #            npm install -g coveralls
       - run:
-          name: Run tests and generate coverage
+          name: Run Tests and Generate Coverage
           command: |
-            yarn test --maxWorkers=4
-            stack --no-terminal test --coverage
+            stack clean
+            stack test --coverage
             TIX_FILE=$(find $(stack path --local-hpc-root) -name "*.tix" | head -n 1)
             echo "Using TIX_FILE=$TIX_FILE"
-            stack exec -- hpc-lcov --file "$TIX_FILE" --output coverage.info
+            stack exec -- hpc-lcov --file "$TIX_FILE" --output coverage.info --main-package courseography
 
-      - run:
-          name: Upload coverage to Coveralls
-          command: |
-            cat coverage.info | COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN coveralls
+      #      - run:
+      #          name: Upload coverage to Coveralls
+      #          command: |
+      #            cat coverage.info | COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN coveralls
+      - coveralls/upload
 
       - save_cache:
           name: Cache Dependencies (Haskell)
