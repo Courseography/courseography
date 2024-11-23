@@ -17,11 +17,9 @@ jobs:
       - run:
           name: Install Package Dependencies
           command: |
-            sudo apt-get update
-            sudo apt-get install -y software-properties-common
-            sudo add-apt-repository -y ppa:imagemagick/ppa
-            sudo apt-get update
-            sudo apt-get install -y imagemagick texlive-latex-base
+            sudo wget https://imagemagick.org/archive/binaries/magick
+            sudo cp magick user/local/bin
+            sudo apt-get install -y texlive-latex-base
             sudo dpkg --remove --force-remove-reinstreq nodejs
             stack update
 
