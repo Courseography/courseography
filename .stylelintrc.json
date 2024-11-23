@@ -1,7 +1,9 @@
 {
-  "extends": ["stylelint-config-sass-guidelines", "stylelint-config-prettier"],
+  "extends": ["stylelint-config-standard-scss"],
   "rules": {
+    "no-descending-specificity": null,
     "selector-class-pattern": null,
+    "selector-id-pattern": null,
     "selector-max-compound-selectors": 3,
     "selector-max-id": 2,
     "selector-no-qualifying-type": null

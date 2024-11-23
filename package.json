@@ -18,6 +18,7 @@
     "*": "yarn prettier --ignore-unknown --write",
     "*.js": "yarn run eslint --cache --fix --ignore-path .prettierignore js",
     "*.css": "yarn run stylelint --fix",
+    "*.scss": "yarn run stylelint --fix",
     "*.hs": "stack exec hlint"
   },
   "dependencies": {
@@ -25,7 +26,7 @@
     "ag-grid-community": "^32.3.2",
     "ag-grid-react": "^32.3.2",
     "bootstrap": "^5.3.3",
-    "core-js": "^3.30.1",
+    "core-js": "^3.39.0",
     "handlebars": "^4.7.8",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.3",
@@ -67,12 +68,12 @@
     "sass": "^1.78.0",
     "sass-loader": "^13.3.2",
     "style-loader": "^4.0.0",
-    "stylelint": "^16.9.0",
-    "stylelint-config-sass-guidelines": "^12.0.0",
+    "stylelint": "^16.10.0",
+    "stylelint-config-standard-scss": "^13.1.0",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0",
-    "webpack-merge": "^5.9.0"
+    "webpack-merge": "^6.0.1"
   },
   "packageManager": "yarn@3.3.1"
 }
