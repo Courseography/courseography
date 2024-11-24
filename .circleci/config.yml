@@ -29,7 +29,7 @@ jobs:
             curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
             sudo dpkg --remove --force-remove-reinstreq libnode72:amd64
             sudo apt-get install -y nodejs
-            
+
             corepack enable
             corepack prepare yarn@stable --activate
       - run:
