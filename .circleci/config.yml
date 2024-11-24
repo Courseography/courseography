@@ -29,9 +29,9 @@ jobs:
             curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
             sudo dpkg --remove --force-remove-reinstreq libnode72:amd64
             sudo apt-get install -y nodejs
+            
             corepack enable
             corepack prepare yarn@stable --activate
-
       - run:
           name: Resolve/Update Dependencies
           command: |
@@ -40,7 +40,7 @@ jobs:
             stack --no-terminal build --fast -j1 --ghc-options -Werror
             stack build hlint
             yarn install
-   
+
       - run:
           name: Run tests
           command: |
