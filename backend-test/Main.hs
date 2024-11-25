@@ -15,8 +15,8 @@ import System.Directory (removeFile)
 import System.Environment (setEnv, unsetEnv)
 import qualified System.Exit as Exit
 import Test.HUnit (Test (..), failures, runTestTT)
-import Tests.Controllers.CourseControllerTests (courseControllerTestSuite)
-import Tests.RequirementTests.RequirementTests (requirementTests)
+import Controllers.CourseControllerTests (courseControllerTestSuite)
+import RequirementTests.RequirementTests (requirementTests)
 
 tests :: IO Test
 tests = do
