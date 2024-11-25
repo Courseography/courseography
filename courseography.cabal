@@ -46,6 +46,7 @@ library
     containers,
     directory,
     happstack-server,
+    hlint,
     hslogger,
     http-conduit,
     http-types,
@@ -92,29 +93,15 @@ test-suite Tests
     courseography,
     directory,
     happstack-server,
-    hslogger,
-    http-conduit,
-    http-types,
     HUnit,
-    MissingH,
-    monad-logger,
-    mtl,
     parsec,
-    persistent,
     persistent-sqlite,
     QuickCheck,
-    resourcet,
-    split,
-    system-filepath,
     tagsoup,
     test-framework,
     test-framework-hunit,
     test-framework-quickcheck2,
-    text,
-    time,
-    transformers,
-    unordered-containers,
-    yaml
+    text
   default-extensions:
     OverloadedStrings,
     ScopedTypeVariables
@@ -206,6 +193,7 @@ executable courseography
     graphviz,
     happstack-server,
     HaTeX,
+    hlint,
     hslogger,
     HTTP,
     http-client,
@@ -238,5 +226,3 @@ executable courseography
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app
-
-extra-packages: hlint
