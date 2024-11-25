@@ -26,4 +26,4 @@ convertToImage :: String -> String -> IO
                       Maybe Handle,
                       ProcessHandle)
 convertToImage inName outName =
-    createProcess $ shell $ "convert " ++ inName ++ " " ++ outName
+    createProcess $ shell $ "magick " ++ inName ++ " " ++ outName

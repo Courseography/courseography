@@ -193,7 +193,7 @@ parseTextHelper key styles' trans textTags =
         newTrans = matrixMultiply trans currTrans
         alignAttr = styleVal "text-anchor" newStyle
         align = if T.null alignAttr
-                then "begin"
+                then "start"
                 else alignAttr
         fill = styleVal "fill" newStyle
 

@@ -34,6 +34,7 @@
 - Added test cases for the index function in `Controllers/Course`
 - Refactored the class components in `/grid` folder to function components
 - Update stylelint integration with development environment and fix existing stylelint violations
+- Use `magick` command instead of `convert` when serving graph images
 - restructured code base for coverage reports
 - reorganized `.cabal` file
 
