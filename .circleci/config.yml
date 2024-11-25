@@ -39,23 +39,16 @@ jobs:
             rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
             stack --no-terminal build --fast -j1 --ghc-options -Werror
             stack build hlint
+            stack build hpc-lcov
             yarn install
-            stack install hpc-lcov
-      #            npm install -g coveralls
+
       - run:
           name: Run Tests and Generate Coverage
           command: |
             yarn test --maxWorkers=4
             stack --no-terminal test --coverage
+            $(stack exec which hpc-lcov)
 
-            TIX_FILE=$(find .stack-work -type f -name "*.tix" | head -n 1)     
-            echo "Using TIX_FILE=$TIX_FILE"
-            stack exec -- hpc-lcov --file "$TIX_FILE" --main-package courseography
-
-      #      - run:
-      #          name: Upload coverage to Coveralls
-      #          command: |
-      #            cat coverage.info | COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN coveralls
       - coveralls/upload
 
       - save_cache:
