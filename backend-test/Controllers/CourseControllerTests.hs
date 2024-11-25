@@ -5,7 +5,7 @@ Module that contains the tests for the functions in the Course Controller module
 
 -}
 
-module Tests.Controllers.CourseControllerTests
+module Controllers.CourseControllerTests
 ( courseControllerTestSuite ) where
 
 import Config (runDb)
@@ -16,7 +16,7 @@ import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Courses(..))
 import Happstack.Server (rsBody)
 import Test.HUnit (Test(..), assertEqual)
-import Tests.TestHelpers (clearDatabase, runServerPart)
+import TestHelpers (clearDatabase, runServerPart)
 
 -- | Helper function to insert courses into the database
 insertCourses :: [T.Text] -> SqlPersistM ()

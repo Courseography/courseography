@@ -20,9 +20,8 @@ custom-setup
     process >= 1.2,
     directory
 
-test-suite Tests
-  main-is: Tests/Main.hs
-  other-modules:
+library
+  exposed-modules:
     Config,
     Controllers.Course,
     Database.CourseInsertion,
@@ -34,19 +33,11 @@ test-suite Tests
     Database.Tables,
     DynamicGraphs.GraphNodeUtils,
     Svg.Builder,
-    Tests.Controllers.CourseControllerTests,
-    Tests.RequirementTests.ModifierTests,
-    Tests.RequirementTests.PostParserTests,
-    Tests.RequirementTests.PreProcessingTests,
-    Tests.RequirementTests.ReqParserTests,
-    Tests.RequirementTests.RequirementTests,
-    Tests.TestHelpers,
     Util.Happstack,
+    WebParsing.ArtSciParser,
     WebParsing.ParsecCombinators,
     WebParsing.PostParser,
     WebParsing.ReqParser,
-    WebParsing.ArtSciParser
-  Type: exitcode-stdio-1.0
   build-depends:
     aeson,
     base >=4.14,
@@ -55,24 +46,20 @@ test-suite Tests
     containers,
     directory,
     happstack-server,
+    hlint,
     hslogger,
     http-conduit,
     http-types,
-    HUnit,
     MissingH,
     monad-logger,
     mtl,
     parsec,
     persistent,
     persistent-sqlite,
-    QuickCheck,
     resourcet,
     split,
     system-filepath,
     tagsoup,
-    test-framework,
-    test-framework-hunit,
-    test-framework-quickcheck2,
     text,
     time,
     transformers,
@@ -85,27 +72,64 @@ test-suite Tests
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app
 
+
+test-suite Tests
+  main-is: Main.hs
+  other-modules:
+    Controllers.CourseControllerTests,
+    RequirementTests.ModifierTests,
+    RequirementTests.PostParserTests,
+    RequirementTests.PreProcessingTests,
+    RequirementTests.ReqParserTests,
+    RequirementTests.RequirementTests,
+    TestHelpers
+  Type: exitcode-stdio-1.0
+  build-depends:
+    aeson,
+    base >=4.14,
+    bytestring,
+    Cabal >= 1.16.0,
+    containers,
+    courseography,
+    directory,
+    happstack-server,
+    HUnit,
+    parsec,
+    persistent-sqlite,
+    QuickCheck,
+    tagsoup,
+    test-framework,
+    test-framework-hunit,
+    test-framework-quickcheck2,
+    text
+  default-extensions:
+    OverloadedStrings,
+    ScopedTypeVariables
+  default-language: Haskell2010
+  ghc-options: -Wall -fwarn-tabs
+  hs-source-dirs: backend-test
+
 executable courseography
   main-is:             Main.hs
   other-modules:
     Config,
-    Css.Constants,
     Controllers.Course,
     Controllers.Graph,
     Controllers.Generate,
     Controllers.Timetable,
+    Css.Constants,
     Database.CourseInsertion,
     Database.CourseQueries,
     Database.CourseVideoSeed,
-    Database.Requirement,
-    Database.DataType,
     Database.Database,
+    Database.DataType,
+    Database.Requirement,
     Database.Tables,
     DynamicGraphs.CourseFinder,
-    DynamicGraphs.WriteRunDot,
     DynamicGraphs.GraphGenerator,
     DynamicGraphs.GraphNodeUtils,
     DynamicGraphs.GraphOptions,
+    DynamicGraphs.WriteRunDot,
     Export.GetImages,
     Export.ImageConversion,
     Export.LatexGenerator,
@@ -132,14 +156,13 @@ executable courseography
     Util.Happstack,
     WebParsing.ArtSciParser,
     WebParsing.Ligature,
+    WebParsing.ParsecCombinators,
     WebParsing.PostParser,
     WebParsing.ReqParser,
-    WebParsing.UtsgJsonParser,
-    WebParsing.ParsecCombinators
+    WebParsing.UtsgJsonParser
   -- These are compiler extensions used for every module
   default-extensions:
     OverloadedStrings,
-    PartialTypeSignatures,
     ScopedTypeVariables
   other-extensions:
     DeriveGeneric,
@@ -153,54 +176,53 @@ executable courseography
     TemplateHaskell,
     TypeFamilies
   build-depends:
+    aeson,
     base >= 4.9,
-    blaze-markup,
+    base64-bytestring,
     blaze-html,
-    happstack-server,
+    blaze-markup,
     blaze-svg,
     bytestring,
-    aeson,
-    transformers,
-    base64-bytestring,
-    split,
-    fgl,
-    graphviz,
-    filepath,
+    conduit,
     containers,
-    unordered-containers,
-    random,
-    process >= 1.2,
     diagrams-lib >= 1.3,
     diagrams-svg >= 1.3.1,
-    lucid,
-    MissingH,
-    text,
+    directory,
+    fgl,
+    filepath,
+    graphviz,
+    happstack-server,
+    HaTeX,
+    hlint,
+    hslogger,
+    HTTP,
+    http-client,
     http-conduit,
     http-types,
-    resourcet,
-    conduit,
+    lucid,
+    markdown,
+    MissingH,
+    monad-logger,
+    mtl,
+    network,
+    old-locale,
+    parsec,
     persistent >= 2.1.2,
     persistent-sqlite,
-    http-client,
-    network,
-    HTTP,
-    tagsoup,
-    regex-posix,
-    mtl,
     persistent-template,
-    vector,
-    directory,
-    markdown,
+    process >= 1.2,
+    random,
+    regex-posix,
+    resourcet,
+    split,
     system-filepath,
-    hslogger,
-    old-locale,
+    tagsoup,
+    text,
     time,
-    parsec,
-    HaTeX,
-    yaml,
-    monad-logger
+    transformers,
+    unordered-containers,
+    vector,
+    yaml
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app
-
-extra-packages: hlint
