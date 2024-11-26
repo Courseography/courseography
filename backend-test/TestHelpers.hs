@@ -5,7 +5,7 @@ Module that contains helper functions used in testing controller module function
 
 -}
 
-module Tests.TestHelpers
+module TestHelpers
     (mockRequest, runServerPart, clearDatabase) where
 
 import Control.Concurrent.MVar (newMVar, newEmptyMVar)
