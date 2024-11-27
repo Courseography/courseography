@@ -272,9 +272,7 @@ edgeToSVG styled path =
              then
                  mappend
                      (A.strokeWidth "2px") $
-                     A.style (textValue $ T.concat ["fill:",
-                          pathFill path,
-                          ";fill-opacity:1;"])
+                      A.style $ textValue "fill:none;fill-opacity:1;"
              else
                  mempty
 
