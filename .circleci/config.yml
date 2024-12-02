@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  coveralls: coveralls/coveralls@2.2.5
+
 jobs:
   build:
     docker:
@@ -18,10 +21,7 @@ jobs:
           name: Install Package Dependencies
           command: |
             sudo apt-get update
-            sudo apt-get install -y texlive-latex-base
-            sudo wget https://imagemagick.org/archive/binaries/magick
-            sudo cp magick /usr/local/bin
-            sudo chmod 777 /usr/local/bin/magick
+            sudo apt-get install -y imagemagick texlive-latex-base
             sudo dpkg --remove --force-remove-reinstreq nodejs
             stack update
 
@@ -31,6 +31,7 @@ jobs:
 
             corepack enable
             corepack prepare yarn@stable --activate
+
       - run:
           name: Resolve/Update Dependencies
           command: |
@@ -38,13 +39,17 @@ jobs:
             rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
             stack --no-terminal build --fast -j1 --ghc-options -Werror
             stack build hlint
+            stack build hpc-lcov
             yarn install
 
       - run:
-          name: Run tests
+          name: Run Tests and Generate Coverage
           command: |
-            stack --no-terminal test
             yarn test --maxWorkers=4
+            stack --no-terminal test --coverage
+            $(stack exec which hpc-lcov)
+
+      - coveralls/upload
 
       - save_cache:
           name: Cache Dependencies (Haskell)
