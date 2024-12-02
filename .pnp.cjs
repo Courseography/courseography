@@ -35,7 +35,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/preset-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:7.24.7"],\
             ["@babel/runtime", "npm:7.24.4"],\
             ["@testing-library/dom", "npm:10.4.0"],\
-            ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.0"],\
+            ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.1"],\
             ["@testing-library/user-event", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:14.5.2"],\
             ["ag-grid-community", "npm:32.3.2"],\
             ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:32.3.2"],\
@@ -3733,17 +3733,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@testing-library/react", [\
-        ["npm:16.0.0", {\
-          "packageLocation": "./.yarn/cache/@testing-library-react-npm-16.0.0-244d3b3dd4-45a35f0b5f.zip/node_modules/@testing-library/react/",\
+        ["npm:16.0.1", {\
+          "packageLocation": "./.yarn/cache/@testing-library-react-npm-16.0.1-3939518263-1837db473e.zip/node_modules/@testing-library/react/",\
           "packageDependencies": [\
-            ["@testing-library/react", "npm:16.0.0"]\
+            ["@testing-library/react", "npm:16.0.1"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.0", {\
-          "packageLocation": "./.yarn/__virtual__/@testing-library-react-virtual-3190f4f7ed/0/cache/@testing-library-react-npm-16.0.0-244d3b3dd4-45a35f0b5f.zip/node_modules/@testing-library/react/",\
+        ["virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.1", {\
+          "packageLocation": "./.yarn/__virtual__/@testing-library-react-virtual-bb79c3c16d/0/cache/@testing-library-react-npm-16.0.1-3939518263-1837db473e.zip/node_modules/@testing-library/react/",\
           "packageDependencies": [\
-            ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.0"],\
+            ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.1"],\
             ["@babel/runtime", "npm:7.24.4"],\
             ["@testing-library/dom", "npm:10.4.0"],\
             ["@types/react", null],\
@@ -6149,7 +6149,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/preset-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:7.24.7"],\
             ["@babel/runtime", "npm:7.24.4"],\
             ["@testing-library/dom", "npm:10.4.0"],\
-            ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.0"],\
+            ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.1"],\
             ["@testing-library/user-event", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:14.5.2"],\
             ["ag-grid-community", "npm:32.3.2"],\
             ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:32.3.2"],\
