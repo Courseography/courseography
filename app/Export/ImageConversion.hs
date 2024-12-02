@@ -18,7 +18,7 @@ createImageFile inName outName =  do
     _ <- waitForProcess pid
     putStrLn "Process Complete"
 
--- | Converts an SVG file to a PNG file. Note that image magik's 'convert' command
+-- | Converts an SVG file to a PNG file. Note that ImageMagick's 'magick' command
 -- can take in file descriptors.
 convertToImage :: String -> String -> IO
                      (Maybe Handle,
