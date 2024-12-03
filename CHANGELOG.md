@@ -38,6 +38,7 @@
 - Use `magick` command instead of `convert` when serving graph images
 - Restructured code base for coverage reports
 - Reorganized `.cabal` file
+- Added coverage report to test suite
 
 ## [0.6.0] - 2024-06-24
 
