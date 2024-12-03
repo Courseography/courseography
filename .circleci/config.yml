@@ -4,7 +4,7 @@ orbs:
   coveralls: coveralls/coveralls@2.2.5
 
 workflows:
-  test-env-vars:
+  tests:
     jobs:
       - build:
           context: coveralls-context
@@ -57,7 +57,7 @@ jobs:
             yarn test --maxWorkers=4
             stack --no-terminal test --coverage
             $(stack exec which hpc-lcov)
-            COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN
+            -r $COVERALLS_REPO_TOKEN
 
       - coveralls/upload
 
