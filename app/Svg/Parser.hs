@@ -14,7 +14,7 @@ directly to the client when viewing the @/graph@ page.
 -}
 
 module Svg.Parser
-    (parsePrebuiltSvgs, parseDynamicSvg) where
+    (parsePrebuiltSvgs, parseDynamicSvg, matrixPointMultiply) where
 
 import Config (runDb, graphPath)
 import Control.Monad.IO.Class (liftIO)
@@ -175,13 +175,14 @@ parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
 parseTextHelper key styles' trans textTags =
     if not $ any (TS.isTagOpenName "tspan") (tail textTags)
     then
-        [Text key
+        let [[a, c, e], [b, d, f], _] = newTrans
+        in [Text key
               (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
-              (matrixPointMultiply newTrans (readAttr "x" $ head textTags,
-                                   readAttr "y" $ head textTags))
+              (readAttr "x" $ head textTags, readAttr "y" $ head textTags)
               (TS.escapeHTML $ trim $ TS.innerText textTags)
               align
               fill
+              [a, b, c, d, e, f]
         ]
     else
         let tspanTags = TS.partitions (TS.isTagOpenName "tspan") textTags
@@ -214,29 +215,33 @@ parseRect key tags =
         fill' = if T.null fill then fromAttrib "fill" gOpen else fill
         trans = getTransform $ head tags
         makeRect rectOpenTag =
-            updateShape fill' $
+            let [[a, c, e], [b, d, f], _] = trans
+            in updateShape fill' $
                 Shape key
                   ""
-                  (matrixPointMultiply trans (readAttr "x" rectOpenTag, readAttr "y" rectOpenTag))
+                  (readAttr "x" rectOpenTag, readAttr "y" rectOpenTag)
                   (readAttr "width" rectOpenTag)
                   (readAttr "height" rectOpenTag)
                   fill'
                   ""
                   []
                   Node
+                  [a, b, c, d, e, f]
         makePoly polyOpenTag =
           let points = map (parseCoord . T.pack) $ splitOn " " $ T.unpack $ fromAttrib "points" polyOpenTag
+              [[a, c, e], [b, d, f], _] = trans
           in
             updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
                 (fromAttrib "id" $ head tags)
-                (matrixPointMultiply trans (points !! 1))
+                (points !! 1)
                 (fst (head points) - fst (points !! 1)) -- calculate width
                 (snd (points !! 2) - snd (points !! 1)) -- calculate height
                 fill
                 ""
                 []
                 Node
+                [a, b, c, d, e, f]
 
 
 -- | Create a path from a list of tags.
@@ -263,7 +268,9 @@ parsePathHelper key trans (src, dst) pathTag =
     let d = fromAttrib "d" pathTag
         styles' = styles pathTag
         currTrans = parseTransform $ fromAttrib "transform" pathTag
-        realD = map (matrixPointMultiply (matrixMultiply trans currTrans)) $ parsePathD d
+        newTrans = matrixMultiply trans currTrans
+        realD = parsePathD d
+        [[a, c, e], [b, d', f], _] = newTrans
         fillAttr = styleVal "fill" styles'
         isRegion = not (T.null fillAttr) && fillAttr /= "none"
     in
@@ -275,7 +282,9 @@ parsePathHelper key trans (src, dst) pathTag =
             ""
             isRegion
             src
-            dst | not (T.null d || null realD || (T.last d == 'z' && not isRegion))]
+            dst
+            [a, b, c, d', e, f] | not (T.null d || null realD || (T.last d == 'z' && not isRegion))
+        ]
     where
         -- Remove consecutive duplicated points
         removeDups :: Eq a => [a] -> [a]
@@ -318,15 +327,17 @@ parseEllipseHelper :: GraphId     -- ^ The related graph id.
                    -> T.Text      -- ^ The id of the shape.
                    -> Shape
 parseEllipseHelper key trans ellipseTag id_ =
-    Shape key
+    let [[a, c, e], [b, d, f], _] = trans
+    in Shape key
           id_
-          (matrixPointMultiply trans (readAttr "cx" ellipseTag, readAttr "cy" ellipseTag))
+          (readAttr "cx" ellipseTag, readAttr "cy" ellipseTag)
           (readAttr "rx" ellipseTag * 2)
           (readAttr "ry" ellipseTag * 2)
           ""
           ""
           []
           BoolNode
+          [a, b, c, d, e, f]
 
 
 -- * Helpers for parsing
