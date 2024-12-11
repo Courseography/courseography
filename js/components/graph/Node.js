@@ -84,6 +84,7 @@ export default function Node(props) {
       id={props.JSON.id_}
       className={newClassName}
       data-testid={getDataTestId()}
+      transform={props.transform}
     >
       {ellipse}
       <rect
@@ -122,6 +123,7 @@ Node.propTypes = {
   onWheel: PropTypes.func,
   onKeyDown: PropTypes.func,
   status: PropTypes.string,
+  transform: PropTypes.string,
   parents: PropTypes.array,
   nodeDropshadowFilter: PropTypes.string,
 }
