@@ -287,7 +287,7 @@ class Description extends React.Component {
                     width: 140,
                   },
                 ]}
-                rowHeight="100"
+                rowHeight={100}
               ></AgGridReact>
             </div>
           </div>

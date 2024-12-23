@@ -6,6 +6,18 @@ import { Row } from "./calendar.js.jsx"
 import { ExportModal } from "../common/export.js.jsx"
 import Disclaimer from "../common/Disclaimer"
 
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  provideGlobalGridOptions,
+} from "ag-grid-community"
+
+// Register all community features
+ModuleRegistry.registerModules([AllCommunityModule])
+
+// Mark all grids as using legacy themes
+provideGlobalGridOptions({ theme: "legacy" })
+
 /**
  * Renders the course panel, the Fall and Spring timetable grids and search panel.
  * Also keeps track of all the selected courses and lectures.
