@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.24.4",
-    "ag-grid-community": "^32.3.2",
-    "ag-grid-react": "^32.3.2",
+    "ag-grid-community": "^33.0.3",
+    "ag-grid-react": "^33.0.3",
     "bootstrap": "^5.3.3",
     "core-js": "^3.39.0",
     "handlebars": "^4.7.8",
