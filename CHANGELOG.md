@@ -39,6 +39,7 @@
 - Restructured code base for coverage reports
 - Reorganized `.cabal` file
 - Added coverage report to test suite
+- Added parsers for all SVG transformations in `App/Svg/Parser`
 
 ## [0.6.0] - 2024-06-24
 
