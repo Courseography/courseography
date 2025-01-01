@@ -52,7 +52,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fetch-mock", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:9.11.0"],\
             ["handlebars", "npm:4.7.8"],\
             ["html-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.1.0"],\
-            ["husky", "npm:9.0.11"],\
+            ["husky", "npm:9.1.7"],\
             ["jest", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.7.0"],\
             ["jest-environment-jsdom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.7.0"],\
             ["jquery", "npm:3.7.1"],\
@@ -6159,7 +6159,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fetch-mock", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:9.11.0"],\
             ["handlebars", "npm:4.7.8"],\
             ["html-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.1.0"],\
-            ["husky", "npm:9.0.11"],\
+            ["husky", "npm:9.1.7"],\
             ["jest", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.7.0"],\
             ["jest-environment-jsdom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.7.0"],\
             ["jquery", "npm:3.7.1"],\
@@ -8695,10 +8695,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["husky", [\
-        ["npm:9.0.11", {\
-          "packageLocation": "./.yarn/cache/husky-npm-9.0.11-227bb1e4e4-1aebc3334d.zip/node_modules/husky/",\
+        ["npm:9.1.7", {\
+          "packageLocation": "./.yarn/cache/husky-npm-9.1.7-5b02eaabc4-c2412753f1.zip/node_modules/husky/",\
           "packageDependencies": [\
-            ["husky", "npm:9.0.11"]\
+            ["husky", "npm:9.1.7"]\
           ],\
           "linkType": "HARD"\
         }]\
