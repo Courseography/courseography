@@ -165,12 +165,18 @@ export class Graph extends React.Component {
         const storedNodes = new Set()
 
         data.texts.forEach(entry => {
+          if ("transform" in entry) {
+            entry["transform"] = `matrix(${entry["transform"].join(", ")})`
+          }
           if (entry.rId.startsWith("tspan")) {
             labelsJSON[entry.rId] = entry
           }
         })
 
         data.shapes.forEach(function (entry) {
+          if ("transform" in entry) {
+            entry["transform"] = `matrix(${entry["transform"].join(", ")})`
+          }
           if (entry.type_ === "Node") {
             nodesJSON[entry.id_] = entry
           } else if (entry.type_ === "Hybrid") {
@@ -182,6 +188,9 @@ export class Graph extends React.Component {
         })
 
         data.paths.forEach(function (entry) {
+          if ("transform" in entry) {
+            entry["transform"] = `matrix(${entry["transform"].join(", ")})`
+          }
           if (entry.isRegion) {
             regionsJSON[entry.id_] = entry
           } else {
@@ -223,12 +232,12 @@ export class Graph extends React.Component {
         })
 
         Object.values(edgesJSON).forEach(edge => {
-          if (edge.target in parentsObj) {
+          if (edge.target in parentsObj && edge.target in inEdgesObj) {
             parentsObj[edge.target].push(edge.source)
             inEdgesObj[edge.target].push(edge.id_)
           }
 
-          if (edge.source in childrenObj) {
+          if (edge.source in childrenObj && edge.source in outEdgesObj) {
             childrenObj[edge.source].push(edge.target)
             outEdgesObj[edge.source].push(edge.id_)
           }
@@ -1341,6 +1350,7 @@ export class Graph extends React.Component {
           target={edgeJSON.target}
           points={edgeJSON.points}
           status={edgesStatus[edgeJSON.id_]}
+          transform={edgeJSON.transform}
         />
       )
     }
@@ -1408,6 +1418,7 @@ export class Graph extends React.Component {
               parents={connections.parents[entry.id_]}
               childs={connections.children[entry.id_]}
               status={nodesStatus[entry.id_].status}
+              transform={entry.transform}
               onWheel={onWheel}
               onKeydown={onKeyDown}
               nodeDropshadowFilter={nodeDropshadowFilter}
@@ -1430,6 +1441,7 @@ export class Graph extends React.Component {
               hybrid={false}
               parents={connections.parents[entry.id_]}
               status={nodesStatus[entry.id_].status}
+              transform={entry.transform}
               highlightDeps={highlightDeps}
               highlightFocus={highlightFocus}
               onClick={nodeClick}
