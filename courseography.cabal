@@ -33,6 +33,8 @@ library
     Database.Tables,
     DynamicGraphs.GraphNodeUtils,
     Svg.Builder,
+    Svg.Database,
+    Svg.Parser,
     Util.Happstack,
     WebParsing.ArtSciParser,
     WebParsing.ParsecCombinators,
