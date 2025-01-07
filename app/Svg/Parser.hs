@@ -134,17 +134,13 @@ parseGraph ::  GraphId                 -- ^ The unique identifier of the graph.
 parseGraph key tags =
     let gTags = TS.partitions (TS.isTagOpenName "g") tags
         globalTransform = getTransform $ head $ head gTags
-        ellipses = concatMap (parseEllipse key) gTags
-        paths = concatMap (parsePath key) gTags
-        rects = concatMap (parseRect key) gTags
-        texts = concatMap (parseText key) gTags
+        ellipses = concatMap (parseEllipse globalTransform key) gTags
+        paths = concatMap (parsePath globalTransform key) gTags
+        rects = concatMap (parseRect globalTransform key) gTags
+        texts = concatMap (parseText globalTransform key) gTags
         shapes = removeRedundant (ellipses ++ rects)
-
-        paths' = map (\p -> p { pathPoints = map (matrixPointMultiply globalTransform) $ pathPoints p}) paths
-        shapes' = map (\s -> s { shapePos = matrixPointMultiply globalTransform (shapePos s)}) $ filter small shapes
-        texts' = map (\t -> t { textPos = matrixPointMultiply globalTransform (textPos t)}) texts
     in
-        (paths', shapes', texts')
+        (paths, filter small shapes, texts)
     where
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
@@ -158,11 +154,11 @@ parseGraph key tags =
 -- | Create text values from g tags.
 -- This searches for nested tspan tags inside text tags using a recursive
 -- helper function.
-parseText :: GraphId -> [Tag T.Text] -> [Text]
-parseText key tags =
+parseText :: Matrix -> GraphId -> [Tag T.Text] -> [Text]
+parseText globalTrans key tags =
     let trans = getTransform $ head tags
         textTags = TS.partitions (TS.isTagOpenName "text") tags
-        texts = concatMap (parseTextHelper key [] trans) textTags
+        texts = concatMap (parseTextHelper key [] trans globalTrans) textTags
     in
         texts
 
@@ -170,12 +166,13 @@ parseText key tags =
 parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
                 -> [(T.Text, T.Text)]
                 -> Matrix
+                -> Matrix
                 -> [Tag T.Text]
                 -> [Text]
-parseTextHelper key styles' trans textTags =
+parseTextHelper key styles' trans globalTrans textTags =
     if not $ any (TS.isTagOpenName "tspan") (tail textTags)
     then
-        let [[a, c, e], [b, d, f], _] = newTrans
+        let [[a, c, e], [b, d, f], _] = completeTrans
         in [Text key
               (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
               (readAttr "x" $ head textTags, readAttr "y" $ head textTags)
@@ -187,11 +184,12 @@ parseTextHelper key styles' trans textTags =
     else
         let tspanTags = TS.partitions (TS.isTagOpenName "tspan") textTags
         in
-            concatMap (parseTextHelper key newStyle newTrans) tspanTags
+            concatMap (parseTextHelper key newStyle newTrans globalTrans) tspanTags
     where
         newStyle = styles (head textTags) ++ styles'
         currTrans = getTransform $ head textTags
         newTrans = matrixMultiply trans currTrans
+        completeTrans = matrixMultiply globalTrans newTrans
         alignAttr = styleVal "text-anchor" newStyle
         align = if T.null alignAttr
                 then "start"
@@ -200,10 +198,11 @@ parseTextHelper key styles' trans textTags =
 
 
 -- | Create a rectangle from a list of attributes.
-parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
+parseRect :: Matrix
+          -> GraphId -- ^ The Rect's corresponding graph identifier.
           -> [Tag T.Text]
           -> [Shape]
-parseRect key tags =
+parseRect globalTrans key tags =
     let
         rectOpenTags = filter (\tag -> TS.isTagOpenName "rect" tag || TS.isTagOpenName "polygon" tag) tags
     in
@@ -214,8 +213,9 @@ parseRect key tags =
         fill = styleVal "fill" styles'
         fill' = if T.null fill then fromAttrib "fill" gOpen else fill
         trans = getTransform $ head tags
+        completeTrans = matrixMultiply globalTrans trans
         makeRect rectOpenTag =
-            let [[a, c, e], [b, d, f], _] = trans
+            let [[a, c, e], [b, d, f], _] = completeTrans
             in updateShape fill' $
                 Shape key
                   ""
@@ -229,7 +229,7 @@ parseRect key tags =
                   [a, b, c, d, e, f]
         makePoly polyOpenTag =
           let points = map (parseCoord . T.pack) $ splitOn " " $ T.unpack $ fromAttrib "points" polyOpenTag
-              [[a, c, e], [b, d, f], _] = trans
+              [[a, c, e], [b, d, f], _] = completeTrans
           in
             updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
@@ -245,11 +245,12 @@ parseRect key tags =
 
 
 -- | Create a path from a list of tags.
-parsePath :: GraphId
+parsePath :: Matrix
+          -> GraphId
           -> [Tag T.Text]
           -> [Path]
-parsePath key tags =
-    concatMap (parsePathHelper key trans edgeInfo) (filter (TS.isTagOpenName "path") tags)
+parsePath globalTrans key tags =
+    concatMap (parsePathHelper key trans globalTrans edgeInfo) (filter (TS.isTagOpenName "path") tags)
     where
         trans = getTransform $ head tags
         edgeInfo =
@@ -261,16 +262,18 @@ parsePath key tags =
 
 parsePathHelper :: GraphId -- ^ The Path's corresponding graph identifier.
                 -> Matrix
+                -> Matrix
                 -> (T.Text, T.Text) -- src, dst
                 -> Tag T.Text
                 -> [Path]
-parsePathHelper key trans (src, dst) pathTag =
+parsePathHelper key trans globalTrans (src, dst) pathTag =
     let d = fromAttrib "d" pathTag
         styles' = styles pathTag
         currTrans = parseTransform $ fromAttrib "transform" pathTag
         newTrans = matrixMultiply trans currTrans
+        completeTrans = matrixMultiply globalTrans newTrans
+        [[a, c, e], [b, d', f], _] = completeTrans
         realD = parsePathD d
-        [[a, c, e], [b, d', f], _] = newTrans
         fillAttr = styleVal "fill" styles'
         isRegion = not (T.null fillAttr) && fillAttr /= "none"
     in
@@ -297,11 +300,12 @@ parsePathHelper key trans (src, dst) pathTag =
 
 
 -- | Create an ellipse from an open ellipse tag.
-parseEllipse :: GraphId
+parseEllipse :: Matrix
+             -> GraphId
              -> [Tag T.Text]
              -> [Shape]
-parseEllipse key tags =
-    zipWith (parseEllipseHelper key trans) (map fst ellipseGroups) (map getId ellipseGroups)
+parseEllipse globalTrans key tags =
+    zipWith (parseEllipseHelper key trans globalTrans) (map fst ellipseGroups) (map getId ellipseGroups)
     where
         -- Group ellipses and optionally an enclosing g tags
         ellipseGroups :: [(Tag T.Text, Maybe (Tag T.Text))]
@@ -323,11 +327,13 @@ parseEllipse key tags =
 
 parseEllipseHelper :: GraphId     -- ^ The related graph id.
                    -> Matrix      -- ^ The translation to apply.
+                   -> Matrix      -- ^ The graph's global transformation.
                    -> Tag T.Text  -- ^ The open ellipse tag.
                    -> T.Text      -- ^ The id of the shape.
                    -> Shape
-parseEllipseHelper key trans ellipseTag id_ =
-    let [[a, c, e], [b, d, f], _] = trans
+parseEllipseHelper key trans globalTrans ellipseTag id_ =
+    let completeTrans = matrixMultiply globalTrans trans
+        [[a, c, e], [b, d, f], _] = completeTrans
     in Shape key
           id_
           (readAttr "cx" ellipseTag, readAttr "cy" ellipseTag)
