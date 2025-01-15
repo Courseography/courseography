@@ -15,13 +15,12 @@ import System.Directory (removeFile)
 import System.Environment (setEnv, unsetEnv)
 import qualified System.Exit as Exit
 import Test.HUnit (Test (..), failures, runTestTT)
-import Controllers.CourseControllerTests (courseControllerTestSuite)
 import RequirementTests.RequirementTests (requirementTests)
+import Controllers.ControllerTests (controllerTests)
 
 tests :: IO Test
 tests = do
-    courseTest <- courseControllerTestSuite
-    return $ TestList [requirementTests, courseTest]
+    return $ TestList [requirementTests, controllerTests]
 
 main :: IO ()
 main = do
