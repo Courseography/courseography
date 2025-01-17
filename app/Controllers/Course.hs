@@ -3,31 +3,21 @@ module Controllers.Course
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
-import qualified Data.ByteString.Lazy.Char8 as BSL
-import Data.List (sort, nub, find)
-import Data.Maybe (fromMaybe)
-import qualified Database.CourseQueries as CourseHelpers (queryCourse, getDeptCourses)
+import qualified Data.Text as T (Text, unlines, unpack)
+import Data.List (sort, nub)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, selectList, entityVal)
-import qualified Data.Text as T
 import Database.Tables as Tables (Courses, coursesCode)
-import Happstack.Server (lookText', ServerPart, Response, toResponse, rqInputsQuery, Input(..), askRq)
+import Happstack.Server (lookText', ServerPart, Response, toResponse)
 import Util.Happstack (createJSONResponse)
-
--- Helper function to look for the "name" key and extract its value (Right case)
-extractName :: [(String, Input)] -> String
-extractName inputs =
-    fromMaybe "" $ do
-        (_, Input (Right value) _ _) <- find (\(key, _) -> key == "name") inputs
-        return (BSL.unpack value)
+import qualified Database.CourseQueries as CourseHelpers (queryCourse, getDeptCourses)
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
 retrieveCourse :: ServerPart Response
 retrieveCourse = do
-    req <- askRq
-    let name = extractName (rqInputsQuery req)
-    courseJSON <- liftIO $ CourseHelpers.queryCourse (T.pack name)
+    name <- lookText' "name"
+    courseJSON <- liftIO $ CourseHelpers.queryCourse name
     return $ createJSONResponse courseJSON
 
 -- | Builds a list of all course codes in the database.

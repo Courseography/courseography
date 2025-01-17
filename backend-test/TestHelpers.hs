@@ -50,7 +50,7 @@ mockRequestWithQuery courseName = do
         { rqSecure          = False
         , rqMethod          = GET
         , rqPaths           = ["course"]
-        , rqUri             = "/course"
+        , rqUri             = "/course?name=" ++ courseName
         , rqQuery           = "name=" ++ courseName
         , rqInputsQuery     = [("name", Input {
             inputValue = Right (BSL.pack courseName),
