@@ -10,7 +10,6 @@ module Controllers.CourseControllerTests
 ) where
 
 import Config (runDb)
-import Control.Applicative (Alternative(..))
 import Control.Monad (unless)
 import Controllers.Course (index, retrieveCourse)
 import qualified Data.ByteString.Lazy.Char8 as BL
@@ -24,7 +23,7 @@ import Test.HUnit (Test(..), assertEqual)
 import TestHelpers (clearDatabase, runServerPart, runServerPartWithQuery)
 
 -- | List of test cases as (input course name, course data, expected JSON output)
-retrieveCourseTestCases :: [(String, T.Text, Map.Map String String, String)]
+retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, String)]
 retrieveCourseTestCases =
     [ ("Course exists", 
        "STA238", 
@@ -38,9 +37,9 @@ retrieveCourseTestCases =
         ("distribution", "null"),
         ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
         ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."),
-        ("videoUrls", "[\"https://example.com/video1\", \"https://example.com/video2\"]")
+        ("videoUrls", "https://example.com/video1, https://example.com/video2")
         ],
-        "{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"[\\\"https://example.com/video1\\\", \\\"https://example.com/video2\\\"]\"]}"
+        "{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
     ),
     
     ("Course does not exist", 
@@ -57,29 +56,33 @@ retrieveCourseTestCases =
     ]
 
 -- | Run a test case (case, input, expected output) on the retrieveCourse function.
-runRetrieveCourseTest :: String -> T.Text -> Map.Map String String -> String -> Test
+runRetrieveCourseTest :: String -> T.Text -> Map.Map T.Text T.Text -> String -> Test
 runRetrieveCourseTest label courseName courseData expected =
     TestLabel label $ TestCase $ do
-        let currCourseName = T.pack $ fromMaybe "" $ Map.lookup "name" courseData
+        let currCourseName = fromMaybe "" $ Map.lookup "name" courseData
+        
+        let videoUrls = case Map.lookup "videoUrls" courseData of
+                Just urlsText -> map T.strip (T.splitOn "," urlsText)
+                Nothing -> []
 
         let courseToInsert = 
-                [ Courses
+                Courses
                     { coursesCode = currCourseName
-                    , coursesTitle = fmap T.pack $ Map.lookup "title" courseData <|> Nothing
-                    , coursesDescription = fmap T.pack $ Map.lookup "description" courseData <|> Nothing
-                    , coursesPrereqs = fmap T.pack $ Map.lookup "prereqs" courseData <|> Nothing
-                    , coursesExclusions = fmap T.pack $ Map.lookup "exclusions" courseData <|> Nothing
+                    , coursesTitle = Map.lookup "title" courseData
+                    , coursesDescription = Map.lookup "description" courseData
+                    , coursesPrereqs = Map.lookup "prereqs" courseData
+                    , coursesExclusions = Map.lookup "exclusions" courseData
                     , coursesBreadth = Nothing
                     , coursesDistribution = Nothing
-                    , coursesPrereqString = fmap T.pack $ Map.lookup "prereqString" courseData <|> Nothing
-                    , coursesCoreqs = fmap T.pack $ Map.lookup "coreqs" courseData <|> Nothing
-                    , coursesVideoUrls = maybe [] (\urls -> [T.pack urls]) (Map.lookup "videoUrls" courseData)
+                    , coursesPrereqString = Map.lookup "prereqString" courseData
+                    , coursesCoreqs = Map.lookup "coreqs" courseData
+                    , coursesVideoUrls = videoUrls
                     }
-                ]
 
         runDb $ do
             clearDatabase
-            mapM_ (unless (T.null currCourseName) . insert_) courseToInsert
+            unless (T.null currCourseName) $
+                insert_ courseToInsert
 
         response <- runServerPartWithQuery Controllers.Course.retrieveCourse (T.unpack courseName)
         let actual = BL.unpack $ rsBody response
