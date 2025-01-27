@@ -40,6 +40,7 @@
 - Reorganized `.cabal` file
 - Added coverage report to test suite
 - Added test cases for the retrieveCourse function in `Controllers/Course`
+- Fixed CSS issues: modal padding, "and/or" centering, and FCE Count arrow alignment
 
 ## [0.6.0] - 2024-06-24
 
