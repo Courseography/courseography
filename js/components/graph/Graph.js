@@ -57,6 +57,7 @@ export class Graph extends React.Component {
       infoBoxXPos: 0,
       infoBoxYPos: 0,
       infoBoxNodeId: "",
+      isMouseOnInfoBox: false,
       panning: false,
       panStartX: 0,
       panStartY: 0,
@@ -514,14 +515,18 @@ export class Graph extends React.Component {
 
     this.unfocusPrereqs(courseId)
 
-    const timeout = setTimeout(() => {
-      this.setState({ showInfoBox: false })
-    }, 400)
+    setTimeout(() => {
+      if (!this.state.isMouseOnInfoBox) {
+        const timeout = setTimeout(() => {
+          this.setState({ showInfoBox: false })
+        }, 150)
 
-    this.setState({
-      infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout),
-      buttonHover: false,
-    })
+        this.setState({
+          infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout),
+          buttonHover: false,
+        })
+      }
+    }, 50)
   }
 
   /**
@@ -648,13 +653,14 @@ export class Graph extends React.Component {
 
   infoBoxMouseEnter = () => {
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
-    this.setState({ showInfoBox: true })
+    this.setState({ showInfoBox: true, isMouseOnInfoBox: true })
   }
 
   infoBoxMouseLeave = () => {
+    this.setState({ isMouseOnInfoBox: false })
     const timeout = setTimeout(() => {
       this.setState({ showInfoBox: false })
-    }, 400)
+    }, 200)
 
     this.setState({
       infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout),
@@ -760,6 +766,9 @@ export class Graph extends React.Component {
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
    */
   zoomViewbox = zoomMode => {
+    if (this.state.showCourseModal) {
+      return
+    }
     let newZoomFactor = this.state.zoomFactor
     if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
       newZoomFactor -= ZOOM_INCREMENT
