@@ -40,6 +40,7 @@
 - Reorganized `.cabal` file
 - Added coverage report to test suite
 - Added parsers for all SVG transformations in `App/Svg/Parser`
+- Fixed matrix transformation and intersection checking bug when sending graph data to front end
 
 ## [0.6.0] - 2024-06-24
 

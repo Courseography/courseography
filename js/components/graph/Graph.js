@@ -165,18 +165,12 @@ export class Graph extends React.Component {
         const storedNodes = new Set()
 
         data.texts.forEach(entry => {
-          if ("transform" in entry) {
-            entry["transform"] = `matrix(${entry["transform"].join(", ")})`
-          }
           if (entry.rId.startsWith("tspan")) {
             labelsJSON[entry.rId] = entry
           }
         })
 
         data.shapes.forEach(function (entry) {
-          if ("transform" in entry) {
-            entry["transform"] = `matrix(${entry["transform"].join(", ")})`
-          }
           if (entry.type_ === "Node") {
             nodesJSON[entry.id_] = entry
           } else if (entry.type_ === "Hybrid") {
@@ -188,9 +182,6 @@ export class Graph extends React.Component {
         })
 
         data.paths.forEach(function (entry) {
-          if ("transform" in entry) {
-            entry["transform"] = `matrix(${entry["transform"].join(", ")})`
-          }
           if (entry.isRegion) {
             regionsJSON[entry.id_] = entry
           } else {
@@ -465,6 +456,20 @@ export class Graph extends React.Component {
   }
 
   /**
+   * Transforms <x> and <y> with the given transformation.
+   * Assumes that transformation is a valid list of length 6 that represents matrix(a, b, c, d, e, f)
+   * @param {list} transformation - a list that represents a matrix transformation
+   * @param {float} x - the x coordinate to be transformed
+   * @param {float} y - the y coordinate to be transformed
+   */
+  transformPoint = (transformation, x, y) => {
+    const [a, b, c, d, e, f] = transformation
+    const newX = a * x + b * y + e
+    const newY = c * x + d * y + f
+    return [newX, newY]
+  }
+
+  /**
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
   nodeMouseEnter = event => {
@@ -496,6 +501,10 @@ export class Graph extends React.Component {
     }
 
     yPos = parseFloat(yPos)
+
+    if (currentNode.transform) {
+      [xPos, yPos] = this.transformPoint(currentNode.transform, xPos, yPos)
+    }
 
     if (!this.state.onDraw) {
       this.setState({
@@ -1317,9 +1326,14 @@ export class Graph extends React.Component {
   renderBoolGroup = (boolsJSON, boolsStatus, connections) => {
     const generateBool = boolJSON => {
       const { parents } = connections
+      const json = {
+        ...boolJSON,
+        transform: this.formatTransform(boolJSON.transform)
+      }
+
       return (
         <Bool
-          JSON={boolJSON}
+          JSON={json}
           className="bool"
           key={boolJSON.id_}
           parents={parents[boolJSON.id_]}
@@ -1350,7 +1364,7 @@ export class Graph extends React.Component {
           target={edgeJSON.target}
           points={edgeJSON.points}
           status={edgesStatus[edgeJSON.id_]}
-          transform={edgeJSON.transform}
+          transform={this.formatTransform(edgeJSON.transform)}
         />
       )
     }
@@ -1418,7 +1432,7 @@ export class Graph extends React.Component {
               parents={connections.parents[entry.id_]}
               childs={connections.children[entry.id_]}
               status={nodesStatus[entry.id_].status}
-              transform={entry.transform}
+              transform={this.formatTransform(entry.transform)}
               onWheel={onWheel}
               onKeydown={onKeyDown}
               nodeDropshadowFilter={nodeDropshadowFilter}
@@ -1441,7 +1455,7 @@ export class Graph extends React.Component {
               hybrid={false}
               parents={connections.parents[entry.id_]}
               status={nodesStatus[entry.id_].status}
-              transform={entry.transform}
+              transform={this.formatTransform(entry.transform)}
               highlightDeps={highlightDeps}
               highlightFocus={highlightFocus}
               onClick={nodeClick}
@@ -1492,6 +1506,7 @@ export class Graph extends React.Component {
       )
     })
   }
+
   renderRegionsLabels(regionsJSON, labelsJSON) {
     return (
       <g id="regions">
@@ -1499,6 +1514,15 @@ export class Graph extends React.Component {
         {this.renderLabels(labelsJSON)}
       </g>
     )
+  }
+
+  /**
+   * Formats fransformation to a valid CSS transform value.
+   * Assumes that <transform> is a list of length 6 that represents a matrix transformation if it exists,
+   * that is, [a, b, c, d, e, f] => matrix(a, b, c, d, e, f)
+   */
+  formatTransform = transform => {
+    return transform ? `matrix(${transform.join(", ")})` : ""
   }
 
   render() {
