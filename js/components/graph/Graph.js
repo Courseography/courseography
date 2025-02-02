@@ -502,13 +502,15 @@ export class Graph extends React.Component {
 
     yPos = parseFloat(yPos)
 
-    const [transformedXPos, transformedYPos] = this.transformPoint(currentNode.transform, xPos, yPos)
+    if (currentNode.transform) {
+      [xPos, yPos] = this.transformPoint(currentNode.transform, xPos, yPos)
+    }
 
     if (!this.state.onDraw) {
       this.setState({
         showInfoBox: true,
-        infoBoxXPos: transformedXPos,
-        infoBoxYPos: transformedYPos,
+        infoBoxXPos: xPos,
+        infoBoxYPos: yPos,
         infoBoxNodeId: courseId,
       })
     }
