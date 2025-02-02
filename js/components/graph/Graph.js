@@ -1516,11 +1516,11 @@ export class Graph extends React.Component {
 
   /**
    * Formats fransformation to a valid CSS transform value.
-   * Precondition: <transform> is a list of length 6 that represents a matrix transformation,
+   * Assumes that <transform> is a list of length 6 that represents a matrix transformation if it exists,
    * that is, [a, b, c, d, e, f] => matrix(a, b, c, d, e, f)
    */
   formatTransform = transform => {
-    return `matrix(${transform.join(", ")})`
+    return transform ? `matrix(${transform.join(", ")})` : ""
   }
 
   render() {
