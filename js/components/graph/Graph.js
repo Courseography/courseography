@@ -456,6 +456,20 @@ export class Graph extends React.Component {
   }
 
   /**
+   * Transforms <x> and <y> with the given transformation.
+   * Assumes that transformation is a valid list of length 6 that represents matrix(a, b, c, d, e, f)
+   * @param {list} transformation - a list that represents a matrix transformation
+   * @param {float} x - the x coordinate to be transformed
+   * @param {float} y - the y coordinate to be transformed
+   */
+  transformPoint = (transformation, x, y) => {
+    const [a, b, c, d, e, f] = transformation
+    const newX = a * x + b * y + e
+    const newY = c * x + d * y + f
+    return [newX, newY]
+  }
+
+  /**
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
   nodeMouseEnter = event => {
@@ -488,11 +502,13 @@ export class Graph extends React.Component {
 
     yPos = parseFloat(yPos)
 
+    const [transformedXPos, transformedYPos] = this.transformPoint(currentNode.transform, xPos, yPos)
+
     if (!this.state.onDraw) {
       this.setState({
         showInfoBox: true,
-        infoBoxXPos: xPos,
-        infoBoxYPos: yPos,
+        infoBoxXPos: transformedXPos,
+        infoBoxYPos: transformedYPos,
         infoBoxNodeId: courseId,
       })
     }
