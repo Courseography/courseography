@@ -32,6 +32,22 @@ describe("InfoBox", () => {
     expect(infoBox.classList.contains("tooltip-group-display")).toBe(true)
   })
 
+  it("should remain visible when hovering over the InfoBox itself", async () => {
+    const user = userEvent.setup()
+    const graph = await TestGraph.build()
+    const aaa100 = graph.getByTestId("aaa100")
+
+    await user.hover(aaa100)
+    const infoBox = graph.getNodeByText("Info")
+    expect(infoBox.classList.contains("tooltip-group-display")).toBe(true)
+
+    await user.hover(infoBox)
+
+    await waitFor(() => {
+      expect(infoBox.classList.contains("tooltip-group-display")).toBe(true)
+    })
+  })
+
   it("should disappear a second after the the cursor isn't hovered over the course", async () => {
     const user = userEvent.setup()
     const graph = await TestGraph.build()
