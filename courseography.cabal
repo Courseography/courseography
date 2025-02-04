@@ -78,6 +78,7 @@ library
 test-suite Tests
   main-is: Main.hs
   other-modules:
+    Controllers.ControllerTests,
     Controllers.CourseControllerTests,
     RequirementTests.ModifierTests,
     RequirementTests.PostParserTests,

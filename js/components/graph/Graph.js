@@ -57,6 +57,8 @@ export class Graph extends React.Component {
       infoBoxXPos: 0,
       infoBoxYPos: 0,
       infoBoxNodeId: "",
+      isMouseOnInfoBox: false,
+      isMouseOnNode: false,
       panning: false,
       panStartX: 0,
       panStartY: 0,
@@ -503,7 +505,7 @@ export class Graph extends React.Component {
     yPos = parseFloat(yPos)
 
     if (currentNode.transform) {
-      [xPos, yPos] = this.transformPoint(currentNode.transform, xPos, yPos)
+      ;[xPos, yPos] = this.transformPoint(currentNode.transform, xPos, yPos)
     }
 
     if (!this.state.onDraw) {
@@ -512,6 +514,7 @@ export class Graph extends React.Component {
         infoBoxXPos: xPos,
         infoBoxYPos: yPos,
         infoBoxNodeId: courseId,
+        isMouseOnNode: true,
       })
     }
     this.setState({ buttonHover: true })
@@ -533,12 +536,15 @@ export class Graph extends React.Component {
     this.unfocusPrereqs(courseId)
 
     const timeout = setTimeout(() => {
-      this.setState({ showInfoBox: false })
-    }, 400)
+      if (!this.state.isMouseOnInfoBox && !this.state.isMouseOnNode) {
+        this.setState({ showInfoBox: false })
+      }
+    }, 200)
 
     this.setState({
       infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout),
       buttonHover: false,
+      isMouseOnNode: false,
     })
   }
 
@@ -666,13 +672,14 @@ export class Graph extends React.Component {
 
   infoBoxMouseEnter = () => {
     this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
-    this.setState({ showInfoBox: true })
+    this.setState({ showInfoBox: true, isMouseOnInfoBox: true })
   }
 
   infoBoxMouseLeave = () => {
+    this.setState({ isMouseOnInfoBox: false })
     const timeout = setTimeout(() => {
       this.setState({ showInfoBox: false })
-    }, 400)
+    }, 200)
 
     this.setState({
       infoboxTimeouts: this.state.infoboxTimeouts.concat(timeout),
@@ -778,6 +785,9 @@ export class Graph extends React.Component {
    * @param {number} zoomMode - Determines whether to zoom in, zoom out, or rerender at current zoom level
    */
   zoomViewbox = zoomMode => {
+    if (this.state.showCourseModal) {
+      return
+    }
     let newZoomFactor = this.state.zoomFactor
     if (zoomMode === ZOOM_ENUM.ZOOM_IN) {
       newZoomFactor -= ZOOM_INCREMENT
@@ -1328,7 +1338,7 @@ export class Graph extends React.Component {
       const { parents } = connections
       const json = {
         ...boolJSON,
-        transform: this.formatTransform(boolJSON.transform)
+        transform: this.formatTransform(boolJSON.transform),
       }
 
       return (
