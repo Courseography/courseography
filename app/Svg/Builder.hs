@@ -40,19 +40,17 @@ buildPath rects ellipses entity elementId
                   pathSource = "",
                   pathTarget = ""}
     | otherwise =
-          let trans = listToMatrix $ pathTransform entity
-              coords = pathPoints entity
+          let coords = pathPoints entity
               start = head coords
               end = last coords
               nodes = rects ++ ellipses
               sourceNode =
                   if T.null $ pathSource entity
-                      then getIntersectingShape (matrixPointMultiply trans start) nodes
+                      then getIntersectingShape start nodes
                       else pathSource entity
               targetNode =
                   if T.null $ pathTarget entity
-                      then getIntersectingShape (matrixPointMultiply trans end)
-                               (filter (\r -> shapeId_ r /= sourceNode) nodes)
+                      then getIntersectingShape end (filter (\r -> shapeId_ r /= sourceNode) nodes)
                       else pathTarget entity
           in
               entity {pathId_ = T.pack $ 'p' : show elementId,
@@ -66,19 +64,13 @@ buildRect :: [Text]  -- ^ A list of shapes that may intersect with the given nod
           -> Integer -- ^ An integer to uniquely identify the shape
           -> Shape
 buildRect texts entity elementId =
-    let rectTexts = filter 
+    let rectTexts = filter
                 (\text -> intersects
                     (shapeWidth entity)
                     (shapeHeight entity)
-                    (shapePos entity)
+                    (matrixPointMultiply (listToMatrix $ shapeTransform entity) (shapePos entity))
                     0  -- no tolerance for text intersection
-                    (matrixPointMultiply 
-                        (invertMatrix3x3 (listToMatrix $ shapeTransform entity))
-                        (matrixPointMultiply
-                            (listToMatrix $ textTransform text)
-                            (textPos text)
-                        )
-                    )
+                    (matrixPointMultiply (listToMatrix $ textTransform text) (textPos text))
                 ) texts
         textString = T.concat $ map textText rectTexts
         id_ = case shapeType_ entity of
@@ -104,15 +96,12 @@ buildEllipses texts entity elementId =
                     (\text -> intersectsEllipse
                         (shapeWidth entity / 2)
                         (shapeHeight entity / 2)
-                        (fst (shapePos entity) - shapeWidth entity / 2,
-                        snd (shapePos entity) - shapeHeight entity / 2)
-                        (matrixPointMultiply 
-                            (invertMatrix3x3 (listToMatrix $ shapeTransform entity))
-                            (matrixPointMultiply
-                                (listToMatrix $ textTransform text)
-                                (textPos text)
-                            )
+                        (matrixPointMultiply
+                            (listToMatrix $ shapeTransform entity)
+                            (fst (shapePos entity) - shapeWidth entity / 2,
+                            snd (shapePos entity) - shapeHeight entity / 2)
                         )
+                        (matrixPointMultiply (listToMatrix $ textTransform text) (textPos text))
                     ) texts
     in
         entity {
