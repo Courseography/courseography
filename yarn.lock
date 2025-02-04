@@ -4347,7 +4347,7 @@ __metadata:
     bootstrap: ^5.3.3
     core-js: ^3.39.0
     css-loader: ^7.1.2
-    cypress: 13.16.0
+    cypress: 14.0.1
     eslint: ^8.46.0
     eslint-config-prettier: ^9.1.0
     eslint-plugin-prettier: 5
@@ -4496,9 +4496,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:13.16.0":
-  version: 13.16.0
-  resolution: "cypress@npm:13.16.0"
+"cypress@npm:14.0.1":
+  version: 14.0.1
+  resolution: "cypress@npm:14.0.1"
   dependencies:
     "@cypress/request": ^3.0.6
     "@cypress/xvfb": ^1.2.4
@@ -4545,7 +4545,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 1c9beb259998336aaf27fb8548d9880d603db0d4b935be068acbc5545a2537554ae01f928ee28559323cc42213cd2e4c0730c796a682bbcadb82e4a95b370954
+  checksum: c1c1d3b913961868307f33afe716e1cbf26c91f5ad71a6b5f2f162172115c73ba83ea68cb49c295b49e643ffa223fafc624c397c1962fcc07cbdb4be588f5f14
   languageName: node
   linkType: hard
 
