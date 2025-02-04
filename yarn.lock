@@ -1566,12 +1566,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.24.4, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.8.4":
   version: 7.24.4
   resolution: "@babel/runtime@npm:7.24.4"
   dependencies:
     regenerator-runtime: ^0.14.0
   checksum: 2f27d4c0ffac7ae7999ac0385e1106f2a06992a8bdcbf3da06adcac7413863cd08c198c2e4e970041bbea849e17f02e1df18875539b6afba76c781b6b59a07c3
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.26.7":
+  version: 7.26.7
+  resolution: "@babel/runtime@npm:7.26.7"
+  dependencies:
+    regenerator-runtime: ^0.14.0
+  checksum: a1664a08f3f4854b895b540cca2f5f5c6c1993b5fb788c9615d70fc201e16bb254df8e0550c83eaf2749a14d87775e11a7c9ded6161203e9da7a4a323d546925
   languageName: node
   linkType: hard
 
@@ -4365,7 +4374,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": ^7.18.6
     "@babel/preset-env": ^7.26.0
     "@babel/preset-react": ^7.26.3
-    "@babel/runtime": ^7.24.4
+    "@babel/runtime": ^7.26.7
     "@testing-library/dom": ^10.4.0
     "@testing-library/react": ^16.0.1
     "@testing-library/user-event": ^14.5.2
