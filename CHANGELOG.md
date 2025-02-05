@@ -43,6 +43,7 @@
 - Fixed CSS issues: modal padding, "and/or" centering, and FCE Count arrow alignment
 - ⁠Fixed issue with "Info" popup disappearing when hovering over it and reduced the delay before it disappears
 - ⁠Fixed issue where scrolling in the course modal triggered graph zoom
+- Added a Haskell specific debugging guide
 
 ## [0.6.0] - 2024-06-24
 
