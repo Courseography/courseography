@@ -40,7 +40,6 @@
 - Reorganized `.cabal` file
 - Added coverage report to test suite
 - Added test cases for the retrieveCourse function in `Controllers/Course`
-- Added a Haskell debugging guide for developers
 
 ## [0.6.0] - 2024-06-24
 
