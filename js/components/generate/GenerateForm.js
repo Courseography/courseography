@@ -1,4 +1,5 @@
 import React from "react"
+import { Field, Form, Formik } from "formik"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
 import { ErrorMessage } from "../common/react_modal.js.jsx"
@@ -7,13 +8,6 @@ export default class GenerateForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      courses: "",
-      taken: "",
-      departments: "CSC, MAT, STA",
-      maxDepth: 0,
-      location: ["utsg"],
-      includeRaws: false,
-      includeGrades: false,
       fceCount: 0,
       showWarning: false,
       invalidCourses: [],
@@ -49,21 +43,19 @@ export default class GenerateForm extends React.Component {
     })
   }
 
-  handleSubmit = event => {
-    event.preventDefault()
-
-    if (!this.state.courses.trim().length) {
+  handleSubmit = values => {
+    if (!values.courses.trim().length) {
       this.setState({ showWarning: true, invalidCourses: [] })
       return
     }
 
     const data = {}
 
-    for (const key in this.state) {
+    for (const key in values) {
       if (["courses", "taken", "departments"].includes(key)) {
-        data[key] = this.state[key].split(",").map(s => s.trim())
+        data[key] = values[key].split(",").map(s => s.trim())
       } else {
-        data[key] = this.state[key]
+        data[key] = values[key]
       }
     }
 
@@ -297,93 +289,95 @@ export default class GenerateForm extends React.Component {
           }}
         >
           <h1 id="header-title">Search for courses</h1>
-          <form id="generateForm">
-            <input
-              id="courses"
-              name="courses"
-              type="text"
-              placeholder="e.g., CSC207H1, CSC324H1"
-              value={this.state.courses}
-              onChange={this.handleInputChange}
-            />
+          <Formik
+            initialValues={{
+              courses: "",
+              taken: "",
+              departments: "CSC, MAT, STA",
+              maxDepth: 0,
+              location: ["utsg"],
+              includeRaws: false,
+              includeGrades: false,
+            }}
+            onSubmit={this.handleSubmit}
+          >
+            <Form id="generateForm">
+              <Field
+                id="courses"
+                name="courses"
+                type="text"
+                placeholder="e.g., CSC207H1, CSC324H1"
+              />
 
-            <h2 id="filter-title">Optional filters</h2>
+              <h2 id="filter-title">Optional filters</h2>
 
-            <label htmlFor="departments">Only include courses these departments</label>
-            <input
-              id="departments"
-              name="departments"
-              type="text"
-              placeholder="Enter 3-letter department codes separated by commas"
-              value={this.state.departments}
-              onChange={this.handleInputChange}
-              style={{ marginBottom: "1em" }}
-            />
-
-            <label htmlFor="taken">Do not show these courses</label>
-            <input
-              id="taken"
-              name="taken"
-              type="text"
-              value={this.state.taken}
-              onChange={this.handleInputChange}
-              style={{ marginBottom: "1em" }}
-              placeholder="E.g., CSC207H1, CSC236H1"
-            />
-
-            <label htmlFor="maxDepth">
-              Depth of prerequisite chain (0 shows all prerequisites)
-            </label>
-            <p>
-              <input
-                id="maxDepth"
-                name="maxDepth"
-                type="number"
-                min="0"
-                step="1"
-                value={this.state.maxDepth}
-                onChange={this.handleInputChange}
+              <label htmlFor="departments">
+                Only include courses these departments
+              </label>
+              <Field
+                id="departments"
+                name="departments"
+                type="text"
+                placeholder="Enter 3-letter department codes separated by commas"
                 style={{ marginBottom: "1em" }}
               />
-            </p>
 
-            {/* <label htmlFor="location">Campus</label>
-          <select id="location" name="location" multiple
-            value={this.state.location}
-            onChange={this.handleInputChange}
-            style={{'vertical-align': 'text-top', 'margin-left': '1em', 'margin-bottom': '1em', 'color': 'black'}} >
-            <option value="utsg">St. George</option>
-            <option value="utm">Mississauga</option>
-            <option value="utsc">Scarborough</option>
-          </select>
+              <label htmlFor="taken">Do not show these courses</label>
+              <Field
+                id="taken"
+                name="taken"
+                type="text"
+                style={{ marginBottom: "1em" }}
+                placeholder="E.g., CSC207H1, CSC236H1"
+              />
 
-          <p>
-          <label htmlFor="includeRaws">Include non-course prerequisites</label>
-          <input id="includeRaws" name="includeRaws" type="checkbox"
-                  value={this.state.includeRaws}
-                  onChange={this.handleInputChange}
-                  style={{'margin-left': '1em', 'vertical-align': 'middle'}} />
-          </p>
+              <label htmlFor="maxDepth">
+                Depth of prerequisite chain (0 shows all prerequisites)
+              </label>
+              <p>
+                <Field
+                  id="maxDepth"
+                  name="maxDepth"
+                  type="number"
+                  min="0"
+                  step="1"
+                  style={{ marginBottom: "1em" }}
+                />
+              </p>
 
-          <label htmlFor="includeGrades">Include grade-based prerequisites</label>
-          <input id="includeGrades" name="includeGrades" type="checkbox"
-                  value={this.state.includeGrades}
-                  onChange={this.handleInputChange}
-                  style={{'margin-left': '1em', 'vertical-align': 'middle'}} /> */}
+              {/* <label htmlFor="location">Campus</label>
+              <Field id="location" name="location" as="select" multiple
+                style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
+                <option value="utsg">St. George</option>
+                <option value="utm">Mississauga</option>
+                <option value="utsc">Scarborough</option>
+              </Field>
 
-            <div
-              style={{
-                marginTop: "1em",
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <button id="submit" onClick={this.handleSubmit}>
-                Generate Graph
-              </button>
-            </div>
-          </form>
+              <p>
+                <label htmlFor="includeRaws">Include non-course prerequisites</label>
+                <Field id="includeRaws" name="includeRaws" type="checkbox"
+                  style={{ marginLeft: '1em', verticalAlign: 'middle' }}
+                />
+              </p>
+
+              <label htmlFor="includeGrades">Include grade-based prerequisites</label>
+              <Field id="includeGrades" name="includeGrades" type="checkbox"
+                style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
+
+              <div
+                style={{
+                  marginTop: "1em",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <button id="submit" type="submit">
+                  Generate Graph
+                </button>
+              </div>
+            </Form>
+          </Formik>
         </div>
 
         <Graph
