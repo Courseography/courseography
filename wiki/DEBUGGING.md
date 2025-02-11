@@ -2,94 +2,129 @@
 
 ## Introduction
 
-There is a general purpose debugging guide available [here](https://wiki.haskell.org/Debugging), but it
-is outdated and lacks information on how to navigate a modern debugger like gdb. This guide will look two main
-cases for debugging a program in Haskell. The first being printing in the code using
-[Debug.Trace](https://hackage.haskell.org/package/base-4.21.0.0/docs/Debug-Trace.html), a built-in package that great
-for working through smaller problems. The second will focus on tracing through the code using the
-[GHCi debugger](https://downloads.haskell.org/~ghc/8.10.3/docs/html/users_guide/ghci.html#the-ghci-debugger), which
-is very closely related in function to gdb, the debugger used in C in courses like CSC209 and CSC369. **Note:** If
-there are any issues or if any new commands, tools or features end up being useful, please update this guide
-accordingly!
+There is a general purpose debugging guide available [here](https://wiki.haskell.org/Debugging), but it is outdated and lacks information on how to navigate a modern debugger like gdb.
+This guide will cover two main techniques for debugging a program in Haskell.
+The first method involves inserting print statements using [Debug.Trace](https://hackage.haskell.org/package/base-4.21.0.0/docs/Debug-Trace.html), a built-in package that is great for debugging smaller problems.
+The second will focus on tracing through the code using the [GHCi debugger](https://downloads.haskell.org/ghc/latest/docs/users_guide/ghci.html#the-ghci-debugger), which is very closely related in function to gdb, the debugger used in C in courses like CSC209 and CSC369.
+**Note:** If any issues arise or new commands, tools, or features become useful, please update this guide accordingly!
 
 ## Debug.Trace
 
-This library is a quick and effective way to print values of objects in your Haskell Program. Please refer to the
-documentation about which specific functions to use for your use case. To be more specific, a different function will
-be called if you want to print a monad type object, a primitive type object or an algebraic datatype object. First you
-need to `import Debug.Trace` at the top of your file. The following example below shows usage for a monadic type, since
-Courseography is packed with Monads!
+This library is a quick and effective way to print values of objects in your Haskell Program.
+We will look at `trace` and `traceM`.
+If you want to explore more with this library, please refer to the [documentation](https://hackage.haskell.org/package/base-4.21.0.0/docs/Debug-Trace.html).
 
-### Example
+`trace :: String -> a -> a`, takes in two inputs: the message and an expression.
+An effective way to utilize `trace` is with the `let` keyword.
+For example, in `Svg.Parser.dotProduct`:
 
-First we add `traceM` after the monad we want to view:
+```haskell
+-- | Computes the dot product of two vectors.
+dotProduct :: Vector -> Vector -> Double
+dotProduct v1 v2 =
+    let result = zipWith (*) v1 v2
+    in trace ("Intermediate Products: " ++ show result) (sum result)
 
-![Image](images/debugTrace.png)
+ghci> dotProduct [1, 2, 3] [3, 6, 7]
+Intermediate Products: [3.0, 12.0, 21.0]
+```
 
-Then after running the program in the terminal, we get to see our monad's value!:
+`traceM :: Applicative f => String -> f ()` is similar to `trace` except the only input is the message, and it returns within any [Applicative Context](https://learnyouahaskell.github.io/functors-applicative-functors-and-monoids.html#applicative-functors).
+This is quite handy to use in do-notation.
+For example, in `Database.CourseQueries.queryCourse`:
 
-![Image](images/debugTraceOutput.png)
+```haskell
+-- | Queries the database for all information about @course@, and returns a JSON
+-- object representing the course.
+queryCourse :: T.Text -> IO Value
+queryCourse str = do
+    courseJSON <- returnCourse str
+    traceM ("The course: " ++ show courseJSON)
+    return $ toJSON courseJSON
+
+ghci> queryCourse "CSC324"
+The course: Just (Course {breadth = Just "The Physical and Mathematical...)
+```
+
+**Warning:** One important consideration is how trace is used.
+Haskell has lazy evaluation, so if Debug.Trace's functions are used in a place that does not need to be executed, the output will not be visible.
+Here is an example in `Svg.Parser.dotProduct` that illustrates such a case:
+
+```haskell
+-- | Computes the dot product of two vectors.
+dotProduct :: Vector -> Vector -> Double
+dotProduct v1 v2 =
+    let result = zipWith (*) v1 v2
+        _ = trace ("Intermediate Products: " ++ show result)
+    in (sum result)
+```
 
 ## GHCi Debugger
 
 ### Setup
 
-After setting Courseography as the root in terminal, type in `stack ghci`. This will set up the environment for
-debugger. Note this will not work if your program has compilation errors. Courseography has a lot of files already
-embedded in a package, which stack automatically recognizes. If there is a case where a module `module0` is not imported,
-you can load in `module0` by typing `:l module0` into the GHCi environment. This command can also load multiple files
-at the same time: `:l module1 module2 module3 ...`. One more thing to note is that dependencies have to be imported at
-the same time, or in order of dependency; meaning that if I am importing `module4` in `module5`, I have to import
-both at the same time, or `module4` first.
+Run `stack ghci` to start GHCi.
+This is the [Haskell tool stack](https://downloads.haskell.org/ghc/latest/docs/users_guide/ghci.html#) and there are more features than just this debugger.
+Start by loading the relevant modules using `:l Module`.
 
-### Breakpoints
+### Useful Commands
 
-Setting up breakpoints is done by the command `:break ModuleA.my_func` in the case you want to set the breakpoint at
-a specific function in the module or `:break ModuleA line_number` if you want to set the breakpoint at a specific line.
-In order to see the breakpoints set, use the command `:show breaks`. Breakpoints can be enabled/disabled with the
-command `:enable/:disable breakpoint_number`. To enable/disable all breakpoints at the same time use
-`:enable/:disable *`. Finally, to delete breakpoints use the command `:delete breakpoint_number` or to delete all use
-`:delete *`.
+| **Category**            | **Command**                  | **Description**                                                         |
+| ----------------------- | ---------------------------- | ----------------------------------------------------------------------- |
+| **Setting Up GHCi**     | `stack ghci`                 | Launch the GHCi environment                                             |
+|                         | `:l Module`                  | Load `Module` into GHCi.                                                |
+|                         |                              |                                                                         |
+| **Breakpoints**         | `:break ModuleA.my_func`     | Set a breakpoint at function `my_func` in `ModuleA`.                    |
+|                         | `:break ModuleA line_number` | Set a breakpoint at a specific line in `ModuleA`.                       |
+|                         | `:show breaks`               | Display all active breakpoints.                                         |
+|                         | `:enable breakpoint_number`  | Enable a specific breakpoint.                                           |
+|                         | `:disable breakpoint_number` | Disable a specific breakpoint.                                          |
+|                         | `:enable *` / `:disable *`   | Enable/disable all breakpoints.                                         |
+|                         | `:delete breakpoint_number`  | Delete a specific breakpoint.                                           |
+|                         | `:delete *`                  | Delete all breakpoints.                                                 |
+|                         |                              |                                                                         |
+| **Step Debugging**      | `:step`                      | Step through the program until the next breakpoint.                     |
+|                         | `:steplocal`                 | Step through the program, limiting breakpoints to the current function. |
+|                         | `:stepmodule`                | Step through the program, limiting breakpoints to the current module.   |
+|                         | `:force expression`          | Forces the given expression to be evaluated                             |
+|                         | `main`                       | Run the program until the first breakpoint is hit.                      |
+|                         |                              |                                                                         |
+| **Variable Inspection** | `:info var_name`             | Show the type of `var_name`.                                            |
+|                         | `:print var_name`            | Display the current value of `var_name` if it has typeclass `Show`.     |
 
-### Program Trace
+### Important Notes
 
-Once you have your breakpoints set, you can start running the program through the main entrypoint `main`. After, the
-debugger will stop wherever you set your breakpoint. From this point the relevant variables and functions the program
-is using should be viewable. Use the command `:info var_name` to see the object's type and `:print var_name` to see its
-value. **Note that you can only use the main entry point once, i.e. you will have to restart the debugger**.
+- You can only run main once per session.
+  If `main` is run a second time, the debugger environment will not be available.
+  To restart debugging, exit GHCi and restart `stack ghci`.
 
-Stepping through the program can be done using `:step`. This will step through the program until the next breakpoint.
-There are two variants `:steplocal` and `:stepmodule`, where the former limits the breakpoints that are enabled to the
-scope of the current function and the latter restricts the scope of the breakpoints to the current module. **To reiterate
-the point about the main entry point in the last paragraph, the first time `main` is called it will trace step by step
-until the result of the entire program is printed, but if main is called again in the same session, it will be evaluated
-and the stepper environment will not be available**.
+- If you call a function in GHCi with breakpoints set, you won’t see actual values—only the algebraic data type placeholders (\_).
+  This happens due to Haskell’s lazy evaluation.
+  When execution stops at a breakpoint, the function hasn’t been evaluated yet, so arguments remain unevaluated.
+  To see variable values, use `:force variable_name`.
+  This forces evaluation and displays the computed result.
+  You can still see the values of your variables by using `:force variables`.
+  GHCi binds the current expression to `_result`, which holds the unevaluated computation.
+  Using `:force _result` will fully evaluate the function but skip all remaining breakpoints.
 
-Functions can also be called. Type the function and its input parameters directly into the debugger: `function inputs`.
-The downside about doing this is that information is lost with respect to specific input values if this is done during
-debugging with breakpoints. To be more specific, the debugger will tell you the algebraic types of the variables,
-but it won't tell you what the actual values are.
-
-You can also see an entire trace of debugging a function with `:trace`. Set the breakpoint at the function's base case/
-step before evaluation. Then use `:hist` to see the previous steps. Use the command `:back` to backtrack steps. This
-can be useful if you want to revisit one of the steps during the debug process, especially in recursive functions.
+- For additional tools please check out the [official documentation](https://downloads.haskell.org/ghc/latest/docs/users_guide/ghci.html#the-ghci-debugger).
 
 ### Example
 
 Here we use a toy project with modules `Main` and `Functions.Extra1`:
 
-Main:
+Main.hs:
 
-```aiignore
-import Functions.Extra1(add2, sumList, foldList)
+```haskell
+import Functions.Extra1(add2, sumList)
 
 main :: IO ()
-main = print (add2 1 2 + sumList [3, 4, 5, 6] + foldList [7, 8, 9, 10])
+main = print (add2 1 2 + sumList [3, 4, 5, 6])
 ```
 
-Functions.Extra1:
+Functions.Extra1.hs:
 
-```aiignore
+```haskell
 module Functions.Extra1 where
 
 add2 ::(Num a) => a -> a -> a
@@ -98,31 +133,71 @@ add2 x y = x + y
 sumList :: (Num a) => [a] -> a
 sumList []     = 0
 sumList (x:xs) = x + sumList xs
-
-foldList :: (Num a) => [a] -> a
-foldList x = foldl (+) 1 x
 ```
 
-Now we start off by loading the files in the terminal:
+Now we start off by setting up the environment:
 
-![Image](images/load.png)
+```
+CourseographyDeveloper % stack ghci
+ghci> :l Main
+[1 of 2] Compiling Functions.Extra1 ( Functions/Extra1.hs, interpreted )
+[2 of 2] Compiling Main             ( Main.hs, interpreted )
+```
 
 Next we can set some breakpoints:
 
-![Image](images/breakpoints.png)
+```
+ghci> :break Functions.Extra1.add2
+Breakpoint 0 activated at Functions/Extra1.hs:6:12-16
+```
 
 Now run through the entire program:
 
-![Image](images/trace.png)
+```
+ghci> main
+Stopped in Functions.Extra1.add2, Functions/Extra1.hs:6:12-16
+_result :: Integer = _
+x :: Integer = 1
+y :: Integer = 2
+[Functions/Extra1.hs:6:12-16] ghci> :step
+21
+```
 
 Unfortunately, we can't trace through the entire program unless we restart the debugger:
 
-![Image](images/noRetrace.png)
+```
+ghci> main
+21
+```
 
-We can also try functions and inputs in isolation:
+Now we can illustrate calling `:force _result`:
 
-![Image](images/isolatedFunction.png)
+```
+[Functions/Extra1.hs:6:12-16] ghci> :break Functions.Extra1.sumList
+Breakpoint 1 activated at Functions/Extra1.hs:9:14
+Breakpoint 2 activated at Functions/Extra1.hs:10:18-31
+[Functions/Extra1.hs:6:12-16] ghci> :delete 1
+[Functions/Extra1.hs:6:12-16] ghci> sumList [1, 2, 3, 4]
+Stopped in Functions.Extra1.sumList, Functions/Extra1.hs:10:18-31
+_result :: a = _
+x :: a = _
+xs :: [a] = [_,_,_]
+... [Functions/Extra1.hs:10:18-31] ghci> :force _result
+*** Ignoring breakpoint [Functions/Extra1.hs:10:18-31]
+*** Ignoring breakpoint [Functions/Extra1.hs:10:18-31]
+*** Ignoring breakpoint [Functions/Extra1.hs:10:18-31]
+*** Ignoring breakpoint [Functions/Extra1.hs:10:18-31]
+_result = 10
+```
 
-Finally, we back track through a trace and see old code:
+Instead, we can look at intermediate values:
 
-![Image](images/backtrack.png)
+```
+ghci> sumList [1, 2, 3, 4]
+Stopped in Functions.Extra1.sumList, Functions/Extra1.hs:10:18-31
+_result :: a = _
+x :: a = _
+xs :: [a] = [_,_,_]
+[Functions/Extra1.hs:10:18-31] ghci> :force x
+x = 1
+```
