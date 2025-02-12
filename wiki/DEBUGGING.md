@@ -27,9 +27,10 @@ dotProduct v1 v2 =
 
 ghci> dotProduct [1, 2, 3] [3, 6, 7]
 Intermediate Products: [3.0, 12.0, 21.0]
+36.0
 ```
 
-`traceM :: Applicative f => String -> f ()` is similar to `trace` except the only input is the message, and it returns within any [Applicative Context](https://learnyouahaskell.github.io/functors-applicative-functors-and-monoids.html#applicative-functors).
+`traceM :: Applicative f => String -> f ()` is similar to `trace` except the only input is the message, and it returns within any [Applicative context](https://learnyouahaskell.github.io/functors-applicative-functors-and-monoids.html#applicative-functors).
 This is quite handy to use in do-notation.
 For example, in `Database.CourseQueries.queryCourse`:
 
@@ -39,11 +40,12 @@ For example, in `Database.CourseQueries.queryCourse`:
 queryCourse :: T.Text -> IO Value
 queryCourse str = do
     courseJSON <- returnCourse str
-    traceM ("The course: " ++ show courseJSON)
+    traceM $ "The course: " ++ show courseJSON
     return $ toJSON courseJSON
 
 ghci> queryCourse "CSC324"
-The course: Just (Course {breadth = Just "The Physical and Mathematical...)
+The course: Just (Course {breadth = Just "The Physical and Mathematical "...)
+Object (fromList [("allMeetingTimes",Array []),("breadth",String "The " ...)
 ```
 
 **Warning:** One important consideration is how trace is used.
@@ -55,7 +57,7 @@ Here is an example in `Svg.Parser.dotProduct` that illustrates such a case:
 dotProduct :: Vector -> Vector -> Double
 dotProduct v1 v2 =
     let result = zipWith (*) v1 v2
-        _ = trace ("Intermediate Products: " ++ show result)
+        _ = trace ("Intermediate Products: " ++ show result) --| This string will not be printed
     in (sum result)
 ```
 
@@ -71,15 +73,15 @@ Start by loading the relevant modules using `:l Module`.
 
 | **Category**            | **Command**                  | **Description**                                                         |
 | ----------------------- | ---------------------------- | ----------------------------------------------------------------------- |
-| **Setting Up GHCi**     | `stack ghci`                 | Launch the GHCi environment                                             |
-|                         | `:l Module`                  | Load `Module` into GHCi.                                                |
+| **Setting Up GHCi**     | `:l Module`                  | Load `Module` into GHCi.                                                |
 |                         |                              |                                                                         |
 | **Breakpoints**         | `:break ModuleA.my_func`     | Set a breakpoint at function `my_func` in `ModuleA`.                    |
 |                         | `:break ModuleA line_number` | Set a breakpoint at a specific line in `ModuleA`.                       |
 |                         | `:show breaks`               | Display all active breakpoints.                                         |
 |                         | `:enable breakpoint_number`  | Enable a specific breakpoint.                                           |
 |                         | `:disable breakpoint_number` | Disable a specific breakpoint.                                          |
-|                         | `:enable *` / `:disable *`   | Enable/disable all breakpoints.                                         |
+|                         | `:enable *`                  | Enable all breakpoints.                                                 |
+|                         | `:disable *`                 | Disable all breakpoints                                                 |
 |                         | `:delete breakpoint_number`  | Delete a specific breakpoint.                                           |
 |                         | `:delete *`                  | Delete all breakpoints.                                                 |
 |                         |                              |                                                                         |
