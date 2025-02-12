@@ -24,25 +24,6 @@ export default class GenerateForm extends React.Component {
     this.setState({ fceCount: this.state.fceCount + credits })
   }
 
-  handleInputChange = event => {
-    const target = event.target
-    let value
-    if (target.type === "checkbox") {
-      value = target.checked
-    } else if (target.type === "select-multiple") {
-      value = Array.from(target.selectedOptions, option => option.value)
-    } else if (target.type === "number") {
-      value = parseInt(target.value)
-    } else {
-      value = target.value
-    }
-    const name = target.name
-
-    this.setState({
-      [name]: value,
-    })
-  }
-
   handleSubmit = values => {
     if (!values.courses.trim().length) {
       this.setState({ showWarning: true, invalidCourses: [] })
