@@ -13604,10 +13604,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["serialize-javascript", [\
-        ["npm:6.0.1", {\
-          "packageLocation": "./.yarn/cache/serialize-javascript-npm-6.0.1-fac87289ed-3c4f4cb61d.zip/node_modules/serialize-javascript/",\
+        ["npm:6.0.2", {\
+          "packageLocation": "./.yarn/cache/serialize-javascript-npm-6.0.2-cc09461d45-c4839c6206.zip/node_modules/serialize-javascript/",\
           "packageDependencies": [\
-            ["serialize-javascript", "npm:6.0.1"],\
+            ["serialize-javascript", "npm:6.0.2"],\
             ["randombytes", "npm:2.1.0"]\
           ],\
           "linkType": "HARD"\
@@ -14502,7 +14502,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["esbuild", null],\
             ["jest-worker", "npm:27.5.1"],\
             ["schema-utils", "npm:3.3.0"],\
-            ["serialize-javascript", "npm:6.0.1"],\
+            ["serialize-javascript", "npm:6.0.2"],\
             ["terser", "npm:5.36.0"],\
             ["uglify-js", null],\
             ["webpack", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.96.1"]\
