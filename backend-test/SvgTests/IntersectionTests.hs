@@ -24,28 +24,32 @@ textMocks = [
         Text { textGraph = toSqlKey 1, textRId = "", textPos = (201.92939, 90.8812), textText = "CSC111", textAlign = "", textFill = ""}
     ]
 
+rectMocks :: [Shape]
+rectMocks = [
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack  "", shapePos = (0.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack  "", shapePos = (50.0, 80.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (45.9998, 90.0), shapeWidth = 30, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (80.0, 101.56), shapeWidth = 20, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (80.0, 101.56), shapeWidth = 20, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (199.8863, 88.1213), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 202, shapeHeight = 202, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid}
+    ]
+
 
 -- * Test Cases
 
 -- Test cases for buildRect. The first element in the tuple is the inputs, the second is the expected ouput.
 buildRectInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildRectInputs = [
-        ((textMocks, 1, Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node}),
-          (T.pack "csc108", [head textMocks])), -- one Text intersecting at corner
-        ((textMocks, 2, Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack  "", shapePos = (0.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid}),
-          (T.pack "h2", [head textMocks])), -- one Text intersecting at border x
-        ((textMocks, 3, Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack  "", shapePos = (50.0, 80.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node}),
-          (T.pack "csc108", [head textMocks])), -- one Text intersecting at border y
-        ((textMocks, 4, Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (45.9998, 90.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node}),
-          (T.pack "csc108", [head textMocks])), -- one Text intersecting within shape area
-        ((textMocks, 5, Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (51.0, 101.56), shapeWidth = 20, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node}),
-          (T.pack "", [])), -- no intersection for node
-        ((textMocks, 6, Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (51.0, 101.56), shapeWidth = 20, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid}),
-          (T.pack "h6", [])), -- no intersection for hybrid
-        ((textMocks, 7, Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (199.8863, 88.1213), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node}),
-          (T.pack "csc148csc111", [textMocks !! 1, textMocks !! 2])) ,-- multiple text intersections for node
-        ((textMocks, 8, Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 202, shapeHeight = 202, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid}),
-          (T.pack "h8", [head textMocks, textMocks !! 1, textMocks !! 2])) -- multiple text intersections for hybrid
+        ((textMocks, 1, head rectMocks), (T.pack "csc108", [head textMocks])), -- one Text intersecting at corner
+        ((textMocks, 2, rectMocks !! 1), (T.pack "h2", [head textMocks])), -- one Text intersecting at border x
+        ((textMocks, 3, rectMocks !! 2), (T.pack "csc108", [head textMocks])), -- one Text intersecting at border y
+        ((textMocks, 4, rectMocks !! 3), (T.pack "csc108", [head textMocks])), -- one Text intersecting within shape area
+        ((textMocks, 5, rectMocks !! 4), (T.pack "", [])), -- no intersection for node
+        ((textMocks, 6, rectMocks !! 5), (T.pack "h6", [])), -- no intersection for hybrid
+        ((textMocks, 7, rectMocks !! 6), (T.pack "csc148csc111", [textMocks !! 1, textMocks !! 2])) ,-- multiple text intersections for node
+        ((textMocks, 8, rectMocks !! 7), (T.pack "h8", [head textMocks, textMocks !! 1, textMocks !! 2])) -- multiple text intersections for hybrid
     ]
 
 
