@@ -78,6 +78,8 @@ library
 test-suite Tests
   main-is: Main.hs
   other-modules:
+    SvgTests.SvgTests,
+    SvgTests.IntersectionTests,
     Controllers.ControllerTests,
     Controllers.CourseControllerTests,
     RequirementTests.ModifierTests,
