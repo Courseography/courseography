@@ -24,6 +24,7 @@ textMocks = [
         Text { textGraph = toSqlKey 1, textRId = "", textPos = (201.92939, 90.8812), textText = "CSC111", textAlign = "", textFill = ""}
     ]
 
+-- A list of mocked rects (type Node and Hybrid)
 rectMocks :: [Shape]
 rectMocks = [
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node},
@@ -70,7 +71,7 @@ compareTexts expected actual
 
 -- * Test Runners
 
--- function for testing a build rect test case
+-- Function for testing a build rect test case
 testBuildRect :: String -> (([Text], Integer, Shape), (T.Text, [Text])) -> Test
 testBuildRect label input =
     TestLabel label $ TestCase $ do
@@ -79,8 +80,10 @@ testBuildRect label input =
         assertEqual ("Check id_ for rect " ++ show elementId) expectedId_ $ shapeId_ result
         assertBool ("Check texts for rect " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
 
+-- Run all test cases for buildRect
 runBuildRectTests :: [Test]
 runBuildRectTests = map (testBuildRect "Test buildRect") buildRectInputs
 
+-- Test suite for intersection checks
 intersectionTestSuite :: Test
 intersectionTestSuite = TestLabel "Intersection tests" $ TestList runBuildRectTests
