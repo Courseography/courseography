@@ -31,10 +31,14 @@ rectMocks = [
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid, shapeTransform = [1,0,0,1,0,0]},
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 80.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (45.9998, 90.0), shapeWidth = 30, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (80.0, 101.56), shapeWidth = 20, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (80.0, 101.56), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (80.0, 101.56), shapeWidth = 20, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid, shapeTransform = [1,0,0,1,0,0]},
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (199.8863, 88.1213), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 202, shapeHeight = 202, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid, shapeTransform = [1,0,0,1,0,0]}
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 202, shapeHeight = 202, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid, shapeTransform = [1,0,0,1,0,0]},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 1.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (1.0, 100.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (1.0, 1.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]}
     ]
 
 
@@ -62,6 +66,20 @@ buildRectTranslationInputs = [
         ((textMocks, 3, setTransformation (rectMocks !! 2) [1,0,0,1,-40,15]), (T.pack "csc108", [head textMocks])), -- translate xy
         ((textMocks, 4, setTransformation (head rectMocks) [1,0,0,1,1,1]), (T.pack "", [])), -- no intersection
         ((textMocks, 5, setTransformation (rectMocks !! 7) [1,0,0,1,200,89]), (T.pack "h5", [textMocks !! 1, textMocks !! 2])) -- multiple texts
+    ]
+
+-- Test cases for buildRect with scaling.
+buildRectScaleInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildRectScaleInputs = [
+        ((textMocks, 1, setTransformation (rectMocks !! 9) [50,0,0,1,0,0]), (T.pack "csc108", [head textMocks])), -- scale x
+        ((textMocks, 2, setTransformation (rectMocks !! 8) [1,0,0,100,0,0]), (T.pack "csc108", [head textMocks])), -- scale y
+        ((textMocks, 3, setTransformation (rectMocks !! 10) [49,0,0,99,0,0]), (T.pack "csc108", [head textMocks])), -- scale xy
+        ((textMocks, 4, setTransformation (head rectMocks) [-1,0,0,1,0,0]), (T.pack "", [])), -- reflect x, no intersection
+        ((textMocks, 5, setTransformation (head rectMocks) [0,0,0,-1,0,0]), (T.pack "", [])), -- reflect y, no intersection
+        ((textMocks, 6, setTransformation (rectMocks !! 4) [-0.1,0,0,0.9,0,0]), (T.pack "csc108", [head textMocks])), -- reflect xy
+        ((textMocks, 7, setTransformation (head rectMocks) [0.1,0,0,1.5,0,0]), (T.pack "", [])), -- no intersection
+        ((textMocks, 8, setTransformation (rectMocks !! 10) [199,0,0,88,0,0]), (T.pack "csc148csc111", [textMocks !! 1, textMocks !! 2])), -- multiple texts
+        ((textMocks, 9, setTransformation (rectMocks !! 11) [100,0,0,100,0,0]), (T.pack "", [])) -- on (0,0)
     ]
 
 
@@ -101,8 +119,9 @@ testBuildRect label input =
 -- Run all test cases for buildRect
 runBuildRectTests :: [Test]
 runBuildRectTests =
-    map (testBuildRect "Test buildRect no transforma") buildRectNoTransformInputs ++
-    map (testBuildRect "Test buildRect translation") buildRectTranslationInputs
+    map (testBuildRect "Test buildRect no transformation") buildRectNoTransformInputs ++
+    map (testBuildRect "Test buildRect translation") buildRectTranslationInputs ++
+    map (testBuildRect "Test buildRect scaling") buildRectScaleInputs
 
 -- Test suite for intersection checks
 intersectionTestSuite :: Test
