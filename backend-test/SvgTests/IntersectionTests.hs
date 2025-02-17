@@ -82,6 +82,15 @@ buildRectScaleInputs = [
         ((textMocks, 9, setTransformation (rectMocks !! 11) [100,0,0,100,0,0]), (T.pack "", [])) -- on (0,0)
     ]
 
+-- Test cases for buildRect with a mixture of different transformations.
+buildRectMixedInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildRectMixedInputs = [
+        ((textMocks, 1, setTransformation (head rectMocks) [1.5,0,0,1.5,-30,-60]), (T.pack "csc108", [head textMocks])),
+        ((textMocks, 2, setTransformation (rectMocks !! 2) [-1,0,0,1.2,50,-20]), (T.pack "csc108", [head textMocks])),
+        ((textMocks, 3, setTransformation (head rectMocks) [1,0,0,-0.8,100,158]), (T.pack "csc148csc111", [textMocks !! 1, textMocks !! 2])),
+        ((textMocks, 4, setTransformation (rectMocks !! 4) [2.5,0,0,3.5,5,5]), (T.pack "", []))
+    ]
+
 
 -- * Helpers
 
@@ -121,7 +130,8 @@ runBuildRectTests :: [Test]
 runBuildRectTests =
     map (testBuildRect "Test buildRect no transformation") buildRectNoTransformInputs ++
     map (testBuildRect "Test buildRect translation") buildRectTranslationInputs ++
-    map (testBuildRect "Test buildRect scaling") buildRectScaleInputs
+    map (testBuildRect "Test buildRect scaling") buildRectScaleInputs ++
+    map (testBuildRect "Test buildRect scaling") buildRectMixedInputs
 
 -- Test suite for intersection checks
 intersectionTestSuite :: Test
