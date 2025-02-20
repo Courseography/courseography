@@ -11,7 +11,7 @@ export default class GenerateForm extends React.Component {
       fceCount: 0,
       showWarning: false,
       invalidCourses: [],
-      errorTitle: "Error",
+      errorTitle: "",
     }
 
     this.graph = React.createRef()
@@ -309,10 +309,12 @@ export default class GenerateForm extends React.Component {
    * @returns {string} The warning message string.
    */
   computeMessage(invalidCourses) {
-    if (invalidCourses.length === 1) {
+    if (this.state.errorTitle) {
       return invalidCourses[0]
+    } else if (invalidCourses.length === 1) {
+      return `The course ${invalidCourses} was invalid! Please check your input.`
     } else {
-      return `The inputs [${invalidCourses}] were invalid! Please check your input.`
+      return `The courses [${invalidCourses}] were invalid! Please check your input.`
     }
   }
 
@@ -320,7 +322,7 @@ export default class GenerateForm extends React.Component {
     return (
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
         <ErrorMessage
-          title={this.state.errorTitle}
+          title={this.state.errorTitle || "Invalid Course Input"}
           message={this.computeMessage(
             this.state.invalidCourses.filter(str => !!/\S/.test(str))
           )}
