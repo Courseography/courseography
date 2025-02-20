@@ -236,6 +236,7 @@ export default class GenerateForm extends React.Component {
       errors.courses = "No courses entered"
       this.setState({
         showWarning: true,
+        errorTitle: "Invalid Course Input",
         invalidCourses: ["Cannot generate graph – no courses entered!"],
       })
       return errors
@@ -259,7 +260,7 @@ export default class GenerateForm extends React.Component {
       }
     }
 
-    if (values.departments && values.departments.trim() !== "") {
+    if (values.departments && values.departments.trim()) {
       const departments = values.departments.split(",").map(dept => dept.trim())
       const invalidDepartments = departments.filter(dept => !deptPattern.test(dept))
 
@@ -279,7 +280,7 @@ export default class GenerateForm extends React.Component {
       }
     }
 
-    if (values.taken && values.taken.trim() !== "") {
+    if (values.taken && values.taken.trim()) {
       const takenCourses = values.taken.split(",").map(course => course.trim())
       const invalidTaken = takenCourses.filter(course => !coursePattern.test(course))
 
