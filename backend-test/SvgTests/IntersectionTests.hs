@@ -16,7 +16,7 @@ import Database.Persist.Sqlite (toSqlKey)
 
 -- * Mocks
 
--- A list of mocked tests
+-- A list of tests
 textMocks :: [Text]
 textMocks = [
         Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (50.0, 100.0), textText = T.pack "CSC108", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
@@ -24,7 +24,17 @@ textMocks = [
         Text { textGraph = toSqlKey 1, textRId = "", textPos = (201.92939, 90.8812), textText = "CSC111", textAlign = "", textFill = "", textTransform = [1,0,0,1,0,0]}
     ]
 
--- A list of mocked rects (type Node and Hybrid)
+-- A list of texts for ellipses
+boolTextMocks :: [Text]
+boolTextMocks = [
+        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (0.0, 0.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
+        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (98.0, 90.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
+        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (210.0, 201.99), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
+        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (300.0, 300.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
+        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (301.0, 301.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
+    ]
+
+-- A list of rects (type Node and Hybrid)
 rectMocks :: [Shape]
 rectMocks = [
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
@@ -39,6 +49,15 @@ rectMocks = [
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (1.0, 100.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (1.0, 1.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]}
+    ]
+
+-- A list of ellipses
+ellipseMocks :: [Shape]
+ellipseMocks = [
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (100.0, 100.0), shapeWidth = 24, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (200.5, 200.5), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (300.99, 300.51), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]}
     ]
 
 
@@ -91,6 +110,14 @@ buildRectMixedInputs = [
         ((textMocks, 4, setTransformation (rectMocks !! 4) [2.5,0,0,3.5,5,5]), (T.pack "", []))
     ]
 
+-- Test cases for buildEllipses with no transformations.
+buildEllipsesNoTransformationInputs :: [(([Text], Integer, Shape), (T.Text, [Shape]))]
+buildEllipsesNoTransformationInputs = [
+        ((boolTextMocks, 1, head ellipseMocks), (T.pack "bool1", [head ellipseMocks])), -- within the region, i.e. calulation in intersectsEllipse < 1
+        ((boolTextMocks, 2, ellipseMocks !! 1), (T.pack "", [])), -- on the border, i.e. calculation in intersectsEllipse = 1
+        ((boolTextMocks, 3, ellipseMocks !! 2), (T.pack "", [])), -- outside the region, i.e. calculation in intersectsEllipse > 1
+        ((boolTextMocks, 4, ellipseMocks !! 3), (T.pack "bool4", [ellipseMocks !! 3, ellipseMocks !! 4])) -- multiple texts within the region
+    ]
 
 -- * Helpers
 
