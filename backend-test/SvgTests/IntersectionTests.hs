@@ -121,6 +121,14 @@ buildEllipsesNoTransformationInputs = [
         ((boolTextMocks, 5, ellipseMocks !! 4), (T.pack "bool5", [])) -- no text intersections
     ]
 
+-- Test cases for buildEllipses with no translation.
+buildEllipsesTranslationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildEllipsesTranslationInputs = [
+        ((boolTextMocks, 1, setTransformation (head ellipseMocks) [1,0,0,1,10,0]), (T.pack "bool1", [head boolTextMocks])), -- translate x
+        ((boolTextMocks, 2, setTransformation (head ellipseMocks) [1,0,0,1,0,-10]), (T.pack "bool2", [])), -- translate y, no intersection
+        ((boolTextMocks, 3, setTransformation (head ellipseMocks) [1,0,0,1,300,300]), (T.pack "bool3", [boolTextMocks !! 3, boolTextMocks !! 4])) -- translate xy, multiple texts
+    ]
+
 
 -- TODO: add tests for text transformations on either buildRect or buildEllipse
 
@@ -173,7 +181,8 @@ runBuildRectTests =
 -- Run all test cases for buildEllipses
 runBuildEllipsesTests :: [Test]
 runBuildEllipsesTests =
-    map (testShapeBuilder buildEllipses "Test buildEllipses no transformation" "ellipse") buildEllipsesNoTransformationInputs
+    map (testShapeBuilder buildEllipses "Test buildEllipses no transformation" "ellipse") buildEllipsesNoTransformationInputs ++
+    map (testShapeBuilder buildEllipses "Test build Ellipses translation" "ellipse") buildEllipsesTranslationInputs
 
 
 -- Test suite for intersection checks
