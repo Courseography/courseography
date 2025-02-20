@@ -229,8 +229,8 @@ export default class GenerateForm extends React.Component {
   validateForm = values => {
     const errors = {}
 
-    const coursePattern = /^[A-Za-z]{3}\d{3}[HY]\d$/
-    const deptPattern = /^[A-Za-z]{3}$/
+    const coursePattern = /^[A-Z]{3}\d{3}[HY]\d$/
+    const deptPattern = /^[A-Z]{3}$/
 
     if (!values.courses.trim().length) {
       errors.courses = "No courses entered"
