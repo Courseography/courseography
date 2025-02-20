@@ -121,6 +121,10 @@ buildEllipsesNoTransformationInputs = [
         ((boolTextMocks, 5, ellipseMocks !! 4), (T.pack "bool5", [])) -- no text intersections
     ]
 
+
+-- TODO: add tests for text transformations on either buildRect or buildEllipse
+
+
 -- * Helpers
 
 -- Helper to modify tranformation for a shape
@@ -145,36 +149,31 @@ compareTexts expected actual
 
 -- * Test Runners
 
--- Function for testing a buildRect test case
-testBuildRect :: String -> (([Text], Integer, Shape), (T.Text, [Text])) -> Test
-testBuildRect label input =
+-- Function for testing a shape builder's (buildRect or buildEllipses) test case
+testShapeBuilder :: ([Text] -> Shape -> Integer -> Shape)
+                  -> String
+                  -> String
+                  -> (([Text], Integer, Shape), (T.Text, [Text]))
+                  -> Test
+testShapeBuilder fn label shapeLabel input =
     TestLabel label $ TestCase $ do
         let ((texts, elementId, rect), (expectedId_, expectedTexts)) = input
-            result = buildRect texts rect elementId
-        assertEqual ("Check id_ for rect " ++ show elementId) expectedId_ $ shapeId_ result
-        assertBool ("Check texts for rect " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
+            result = fn texts rect elementId
+        assertEqual ("Check id_ for " ++ shapeLabel ++ " " ++ show elementId) expectedId_ $ shapeId_ result
+        assertBool ("Check texts for rect " ++ shapeLabel ++ " " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
 
 -- Run all test cases for buildRect
 runBuildRectTests :: [Test]
 runBuildRectTests =
-    map (testBuildRect "Test buildRect no transformation") buildRectNoTransformInputs ++
-    map (testBuildRect "Test buildRect translation") buildRectTranslationInputs ++
-    map (testBuildRect "Test buildRect scaling") buildRectScaleInputs ++
-    map (testBuildRect "Test buildRect scaling") buildRectMixedInputs
-
--- Function for testing a buildEllipses test case
-testBuildEllipses :: String -> (([Text], Integer, Shape), (T.Text, [Text])) -> Test
-testBuildEllipses label input =
-    TestLabel label $ TestCase $ do
-    let ((texts, elementId, rect), (expectedId_, expectedTexts)) = input
-        result = buildEllipses texts rect elementId
-    assertEqual ("Check id_ for ellipse " ++ show elementId) expectedId_ $ shapeId_ result
-    assertBool ("Check texts for ellipse " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
+    map (testShapeBuilder buildRect "Test buildRect no transformation" "rect") buildRectNoTransformInputs ++
+    map (testShapeBuilder buildRect "Test buildRect translation" "rect") buildRectTranslationInputs ++
+    map (testShapeBuilder buildRect "Test buildRect scaling" "rect") buildRectScaleInputs ++
+    map (testShapeBuilder buildRect "Test buildRect scaling" "rect") buildRectMixedInputs
 
 -- Run all test cases for buildEllipses
 runBuildEllipsesTests :: [Test]
 runBuildEllipsesTests =
-    map (testBuildEllipses "Test buildEllipses no transformation") buildEllipsesNoTransformationInputs
+    map (testShapeBuilder buildEllipses "Test buildEllipses no transformation" "ellipse") buildEllipsesNoTransformationInputs
 
 
 -- Test suite for intersection checks
