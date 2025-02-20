@@ -11,6 +11,7 @@ export default class GenerateForm extends React.Component {
       fceCount: 0,
       showWarning: false,
       invalidCourses: [],
+      errorTitle: "Error",
     }
 
     this.graph = React.createRef()
@@ -25,11 +26,6 @@ export default class GenerateForm extends React.Component {
   }
 
   handleSubmit = values => {
-    if (!values.courses.trim().length) {
-      this.setState({ showWarning: true, invalidCourses: [] })
-      return
-    }
-
     const data = {}
 
     for (const key in values) {
@@ -230,19 +226,92 @@ export default class GenerateForm extends React.Component {
       })
   }
 
+  validateForm = values => {
+    const errors = {}
+
+    const coursePattern = /^[A-Za-z]{3}\d{3}[HY]\d$/
+    const deptPattern = /^[A-Za-z]{3}$/
+
+    if (!values.courses.trim().length) {
+      errors.courses = "No courses entered"
+      this.setState({
+        showWarning: true,
+        invalidCourses: ["Cannot generate graph – no courses entered!"],
+      })
+      return errors
+    } else {
+      const courses = values.courses.split(",").map(course => course.trim())
+      const invalidCourses = courses.filter(course => !coursePattern.test(course))
+
+      if (invalidCourses.length > 0) {
+        errors.courses = "Invalid course format"
+        this.setState({ showWarning: true, errorTitle: "Invalid Course Input" })
+
+        this.setState({
+          invalidCourses: [
+            invalidCourses.length === 1
+              ? `The course ${invalidCourses} was invalid! Please check your input.`
+              : `The courses [${invalidCourses}] were invalid! Please check your input.`,
+          ],
+        })
+
+        return errors
+      }
+    }
+
+    if (values.departments && values.departments.trim() !== "") {
+      const departments = values.departments.split(",").map(dept => dept.trim())
+      const invalidDepartments = departments.filter(dept => !deptPattern.test(dept))
+
+      if (invalidDepartments.length > 0) {
+        errors.departments = "Invalid department format"
+        this.setState({ showWarning: true, errorTitle: "Invalid Department Input" })
+
+        this.setState({
+          invalidCourses: [
+            invalidDepartments.length === 1
+              ? `The department ${invalidDepartments} was invalid! Please check your input.`
+              : `The departments [${invalidDepartments}] were invalid! Please check your input.`,
+          ],
+        })
+
+        return errors
+      }
+    }
+
+    if (values.taken && values.taken.trim() !== "") {
+      const takenCourses = values.taken.split(",").map(course => course.trim())
+      const invalidTaken = takenCourses.filter(course => !coursePattern.test(course))
+
+      if (invalidTaken.length > 0) {
+        errors.taken = "Invalid courses format"
+        this.setState({ showWarning: true, errorTitle: "Invalid Course Input" })
+
+        this.setState({
+          invalidCourses: [
+            invalidTaken.length === 1
+              ? `The course ${invalidTaken} was invalid! Please check your input.`
+              : `The courses [${invalidTaken}] were invalid! Please check your input.`,
+          ],
+        })
+
+        return errors
+      }
+    }
+
+    return errors
+  }
+
   /**
-   * Produce an appropriate warning message string in the case that no courses have been entered
-   * or that one or more invalid courses have been entered.
+   * Produce an appropriate warning message string in case of invalid course/department inputs.
    * @param {string[]} invalidCourses - The array of invalid course codes
    * @returns {string} The warning message string.
    */
   computeMessage(invalidCourses) {
-    if (invalidCourses.length === 0) {
-      return "Cannot generate graph – no courses entered!"
-    } else if (invalidCourses.length === 1) {
-      return `The course ${invalidCourses} was invalid! Please check your input.`
+    if (invalidCourses.length === 1) {
+      return invalidCourses[0]
     } else {
-      return `The courses [${invalidCourses}] were invalid! Please check your input.`
+      return `The inputs [${invalidCourses}] were invalid! Please check your input.`
     }
   }
 
@@ -250,7 +319,7 @@ export default class GenerateForm extends React.Component {
     return (
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
         <ErrorMessage
-          title="Invalid Course Input"
+          title={this.state.errorTitle}
           message={this.computeMessage(
             this.state.invalidCourses.filter(str => !!/\S/.test(str))
           )}
@@ -280,6 +349,9 @@ export default class GenerateForm extends React.Component {
               includeRaws: false,
               includeGrades: false,
             }}
+            validate={this.validateForm}
+            validateOnChange={false}
+            validateOnBlur={false}
             onSubmit={this.handleSubmit}
           >
             <Form id="generateForm">
