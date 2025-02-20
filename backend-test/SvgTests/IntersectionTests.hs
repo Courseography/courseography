@@ -29,7 +29,7 @@ boolTextMocks :: [Text]
 boolTextMocks = [
         Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (0.0, 0.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
         Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (98.0, 90.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (210.0, 201.99), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
+        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (210.0, 205.99), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
         Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (300.0, 300.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
         Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (301.0, 301.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
     ]
@@ -57,7 +57,8 @@ ellipseMocks = [
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (100.0, 100.0), shapeWidth = 24, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
         Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (200.5, 200.5), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (300.99, 300.51), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]}
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (300.99, 300.51), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
+        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (400.99, 400.51), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]}
     ]
 
 
@@ -111,12 +112,13 @@ buildRectMixedInputs = [
     ]
 
 -- Test cases for buildEllipses with no transformations.
-buildEllipsesNoTransformationInputs :: [(([Text], Integer, Shape), (T.Text, [Shape]))]
+buildEllipsesNoTransformationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildEllipsesNoTransformationInputs = [
-        ((boolTextMocks, 1, head ellipseMocks), (T.pack "bool1", [head ellipseMocks])), -- within the region, i.e. calulation in intersectsEllipse < 1
-        ((boolTextMocks, 2, ellipseMocks !! 1), (T.pack "", [])), -- on the border, i.e. calculation in intersectsEllipse = 1
-        ((boolTextMocks, 3, ellipseMocks !! 2), (T.pack "", [])), -- outside the region, i.e. calculation in intersectsEllipse > 1
-        ((boolTextMocks, 4, ellipseMocks !! 3), (T.pack "bool4", [ellipseMocks !! 3, ellipseMocks !! 4])) -- multiple texts within the region
+        ((boolTextMocks, 1, head ellipseMocks), (T.pack "bool1", [head boolTextMocks])), -- within the region, i.e. calulation in intersectsEllipse < 1
+        ((boolTextMocks, 2, ellipseMocks !! 1), (T.pack "bool2", [])), -- on the border, i.e. calculation in intersectsEllipse = 1
+        ((boolTextMocks, 3, ellipseMocks !! 2), (T.pack "bool3", [])), -- outside the region, i.e. calculation in intersectsEllipse > 1
+        ((boolTextMocks, 4, ellipseMocks !! 3), (T.pack "bool4", [boolTextMocks !! 3, boolTextMocks !! 4])), -- multiple texts within the region
+        ((boolTextMocks, 5, ellipseMocks !! 4), (T.pack "bool5", [])) -- no text intersections
     ]
 
 -- * Helpers
@@ -143,7 +145,7 @@ compareTexts expected actual
 
 -- * Test Runners
 
--- Function for testing a build rect test case
+-- Function for testing a buildRect test case
 testBuildRect :: String -> (([Text], Integer, Shape), (T.Text, [Text])) -> Test
 testBuildRect label input =
     TestLabel label $ TestCase $ do
@@ -160,6 +162,22 @@ runBuildRectTests =
     map (testBuildRect "Test buildRect scaling") buildRectScaleInputs ++
     map (testBuildRect "Test buildRect scaling") buildRectMixedInputs
 
+-- Function for testing a buildEllipses test case
+testBuildEllipses :: String -> (([Text], Integer, Shape), (T.Text, [Text])) -> Test
+testBuildEllipses label input =
+    TestLabel label $ TestCase $ do
+    let ((texts, elementId, rect), (expectedId_, expectedTexts)) = input
+        result = buildEllipses texts rect elementId
+    assertEqual ("Check id_ for ellipse " ++ show elementId) expectedId_ $ shapeId_ result
+    assertBool ("Check texts for ellipse " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
+
+-- Run all test cases for buildEllipses
+runBuildEllipsesTests :: [Test]
+runBuildEllipsesTests =
+    map (testBuildEllipses "Test buildEllipses no transformation") buildEllipsesNoTransformationInputs
+
+
 -- Test suite for intersection checks
 intersectionTestSuite :: Test
-intersectionTestSuite = TestLabel "Intersection tests" $ TestList runBuildRectTests
+intersectionTestSuite = TestLabel "Intersection tests" $
+    TestList $ runBuildRectTests ++ runBuildEllipsesTests
