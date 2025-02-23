@@ -1,6 +1,6 @@
 import React from "react"
 import GenerateForm from "../GenerateForm.js"
-import { screen, render, within } from "@testing-library/react"
+import { screen, render, waitFor, within } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 
 describe("Handle invalid course inputs appropriately", () => {
@@ -142,6 +142,41 @@ describe("Handle invalid taken courses inputs appropriately", () => {
     const warningMessage = within(warningModal).queryByText(expectedWarning)
 
     expect(warningMessage).not.toBeNull()
+  })
+})
+
+describe("Exiting the Warning Modal works", () => {
+  let user
+  beforeEach(async () => {
+    user = userEvent.setup()
+    render(<GenerateForm />)
+    const coursesInputText = "MAT777H1"
+    const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+    await user.keyboard(coursesInputText)
+    expect(screen.queryByText("Invalid Course Input")).toBeNull()
+    const genButton = screen.getByText("Generate Graph")
+    await user.click(genButton)
+    let warningModal = (await screen.findByText("Invalid Course Input")).parentElement
+    expect(warningModal).not.toBeNull()
+  })
+
+  it("`Okay` button works", async () => {
+    const okayButton = screen.getByText("Okay")
+    expect(okayButton).toBeDefined()
+    await user.click(okayButton)
+    await waitFor(() => {
+      expect(screen.queryByText("Invalid Course Input")).toBeNull()
+    })
+  })
+  it("`X` button works", async () => {
+    const XButton = screen.getByText("X")
+    expect(XButton).toBeDefined()
+    await user.click(XButton)
+    await waitFor(() => {
+      expect(screen.queryByText("Invalid Course Input")).toBeNull()
+    })
   })
 })
 
