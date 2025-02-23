@@ -327,7 +327,7 @@ export default class GenerateForm extends React.Component {
             this.state.invalidCourses.filter(str => !!/\S/.test(str))
           )}
           onClose={() => {
-            this.setState({ showWarning: false })
+            this.setState({ showWarning: false, invalidCourses: [], errorTitle: "" })
           }}
           isOpen={this.state.showWarning}
         />
