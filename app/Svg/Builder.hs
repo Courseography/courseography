@@ -192,7 +192,7 @@ shapeTolerance s =
 -- Invert a 3x3 matrix. Assumes that the matrix is invertible
 invertMatrix3x3 :: Matrix -> Matrix
 invertMatrix3x3 m =
-    map (map (* (1 / determinantMatrix3x3 m))) (transposeMatrix3x3 (cofactorMatrix3x3 m))
+    transposeMatrix3x3 $ map (map (* (1 / determinantMatrix3x3 m))) (transposeMatrix3x3 (cofactorMatrix3x3 m))
 
 -- Calculate the determinant of a 3x3 matrix
 determinantMatrix3x3 :: Matrix -> Double
@@ -216,5 +216,5 @@ transposeMatrix3x3 _ = error "Matrix must be 3x3"
 
 -- Parse transform back from the format stored in the database
 listToMatrix :: [Double] -> Matrix
-listToMatrix [a, b, c, d, e, f] = [[a, c, e], [b, d, f], [0, 0, 1]]
+listToMatrix [a, b, c, d, e, f] = [[a, b, e], [c, d, f], [0, 0, 1]]
 listToMatrix _ = error "Expecting 6 values to fully specify a transformation"
