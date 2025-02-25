@@ -31,7 +31,8 @@ boolTextMocks = [
         Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (98.0, 90.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
         Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (210.0, 205.99), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
         Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (300.0, 300.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (301.0, 301.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
+        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (301.0, 301.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
+        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (410.0, 410.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
     ]
 
 -- A list of rects (type Node and Hybrid)
@@ -88,7 +89,7 @@ buildRectTranslationInputs = [
         ((textMocks, 5, setTransformation (rectMocks !! 7) [1,0,0,1,200,89]), (T.pack "h5", [textMocks !! 1, textMocks !! 2])) -- multiple texts
     ]
 
--- Test cases for buildRect with scaling.
+-- Test cases for buildRect with scaling (scale origin at bottom left corner of the rect).
 buildRectScaleInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildRectScaleInputs = [
         ((textMocks, 1, setTransformation (rectMocks !! 9) [50,0,0,1,0,0]), (T.pack "csc108", [head textMocks])), -- scale x
@@ -117,16 +118,28 @@ buildEllipsesNoTransformationInputs = [
         ((boolTextMocks, 1, head ellipseMocks), (T.pack "bool1", [head boolTextMocks])), -- within the region, i.e. calulation in intersectsEllipse < 1
         ((boolTextMocks, 2, ellipseMocks !! 1), (T.pack "bool2", [])), -- on the border, i.e. calculation in intersectsEllipse = 1
         ((boolTextMocks, 3, ellipseMocks !! 2), (T.pack "bool3", [])), -- outside the region, i.e. calculation in intersectsEllipse > 1
-        ((boolTextMocks, 4, ellipseMocks !! 3), (T.pack "bool4", [boolTextMocks !! 3, boolTextMocks !! 4])), -- multiple texts within the region
-        ((boolTextMocks, 5, ellipseMocks !! 4), (T.pack "bool5", [])) -- no text intersections
+        ((boolTextMocks, 4, ellipseMocks !! 3), (T.pack "bool4", [boolTextMocks !! 3, boolTextMocks !! 4])) -- multiple texts within the region
     ]
 
--- Test cases for buildEllipses with no translation.
+-- Test cases for buildEllipses with translation.
 buildEllipsesTranslationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildEllipsesTranslationInputs = [
         ((boolTextMocks, 1, setTransformation (head ellipseMocks) [1,0,0,1,10,0]), (T.pack "bool1", [head boolTextMocks])), -- translate x
         ((boolTextMocks, 2, setTransformation (head ellipseMocks) [1,0,0,1,0,-10]), (T.pack "bool2", [])), -- translate y, no intersection
         ((boolTextMocks, 3, setTransformation (head ellipseMocks) [1,0,0,1,300,300]), (T.pack "bool3", [boolTextMocks !! 3, boolTextMocks !! 4])) -- translate xy, multiple texts
+    ]
+
+
+-- Test cases for buildEllipses with scaling (scale origin at center of ellipse).
+buildEllipsesScaleInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildEllipsesScaleInputs = [
+        ((boolTextMocks, 1, setTransformation (ellipseMocks !! 2) [1.1,0,0,1,0,0]), (T.pack "bool1", [boolTextMocks !! 2])), -- scale x
+        ((boolTextMocks, 2, setTransformation (ellipseMocks !! 2) [1,0,0,1.02,0,0]), (T.pack "bool2", [boolTextMocks !! 2])), -- scale y
+        ((boolTextMocks, 3, setTransformation (ellipseMocks !! 3) [1.39,0,0,1.39,0,0]), (T.pack "bool3", [boolTextMocks !! 5])), -- scale xy
+        ((boolTextMocks, 4, setTransformation (ellipseMocks !! 3) [-1,0,0,1,0,0]), (T.pack "bool4", [])), -- reflect x
+        ((boolTextMocks, 5, setTransformation (ellipseMocks !! 3) [1,0,0,-0.01,0,0]), (T.pack "bool5", [])), -- reflect y
+        ((boolTextMocks, 6, setTransformation (ellipseMocks !! 3) [-0.2,0,0,-200,0,0]), (T.pack "bool6", [])), -- reflect xy
+        ((boolTextMocks, 7, setTransformation (head ellipseMocks) [1000,0,0,1000,0,0]), (T.pack "bool7", boolTextMocks)) -- big scale
     ]
 
 
@@ -157,12 +170,12 @@ compareTexts expected actual
 
 -- * Test Runners
 
--- Function for testing a shape builder's (buildRect or buildEllipses) test case
+-- Function for testing a shape builder's (buildRect and buildEllipses) test case
 testShapeBuilder :: ([Text] -> Shape -> Integer -> Shape)
-                  -> String
-                  -> String
-                  -> (([Text], Integer, Shape), (T.Text, [Text]))
-                  -> Test
+                 -> String
+                 -> String
+                 -> (([Text], Integer, Shape), (T.Text, [Text]))
+                 -> Test
 testShapeBuilder fn label shapeLabel input =
     TestLabel label $ TestCase $ do
         let ((texts, elementId, rect), (expectedId_, expectedTexts)) = input
@@ -182,7 +195,8 @@ runBuildRectTests =
 runBuildEllipsesTests :: [Test]
 runBuildEllipsesTests =
     map (testShapeBuilder buildEllipses "Test buildEllipses no transformation" "ellipse") buildEllipsesNoTransformationInputs ++
-    map (testShapeBuilder buildEllipses "Test build Ellipses translation" "ellipse") buildEllipsesTranslationInputs
+    map (testShapeBuilder buildEllipses "Test buildEllipses translation" "ellipse") buildEllipsesTranslationInputs ++
+    map (testShapeBuilder buildEllipses "Test buildEllipses scale" "ellipse") buildEllipsesScaleInputs
 
 
 -- Test suite for intersection checks
