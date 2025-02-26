@@ -23,30 +23,19 @@ defaultRectText = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = 
 defaultRectText2 :: Text
 defaultRectText2 = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (201.92939, 90.8812), textText = T.pack "CSC148", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
 
--- A list of texts for ellipses
-boolTextMocks :: [Text]
-boolTextMocks = [
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (0.0, 0.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (98.0, 90.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (210.0, 205.99), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (300.0, 300.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (301.0, 301.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (410.0, 410.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
-    ]
+defaultEllipseText :: Text
+defaultEllipseText = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (0.0, 0.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
+
+defaultEllipseText2 :: Text
+defaultEllipseText2 = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (301.0, 301.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
+
 
 -- Shape mocks
 defaultRect :: Shape
 defaultRect = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]}
 
--- A list of ellipses
-ellipseMocks :: [Shape]
-ellipseMocks = [
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (100.0, 100.0), shapeWidth = 24, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (200.5, 200.5), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (300.99, 300.51), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (400.99, 400.51), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]}
-    ]
+defaultEllipse :: Shape
+defaultEllipse = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]}
 
 
 -- * Test Cases
@@ -135,34 +124,48 @@ buildRectMixedInputs = [
         -- ((textMocks, 4, setTransformation (rectMocks !! 4) [2.5,0,0,3.5,5,5]), (T.pack "", []))
     ]
 
+
 -- Test cases for buildEllipses with no transformations.
 buildEllipsesNoTransformationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildEllipsesNoTransformationInputs = [
-        ((boolTextMocks, 1, head ellipseMocks), (T.pack "bool1", [head boolTextMocks])), -- within the region, i.e. calulation in intersectsEllipse < 1
-        ((boolTextMocks, 2, ellipseMocks !! 1), (T.pack "bool2", [])), -- on the border, i.e. calculation in intersectsEllipse = 1
-        ((boolTextMocks, 3, ellipseMocks !! 2), (T.pack "bool3", [])), -- outside the region, i.e. calculation in intersectsEllipse > 1
-        ((boolTextMocks, 4, ellipseMocks !! 3), (T.pack "bool4", [boolTextMocks !! 3, boolTextMocks !! 4])) -- multiple texts within the region
+        (([defaultEllipseText, defaultEllipseText2], 1, defaultEllipse),
+         (T.pack "bool1", [defaultEllipseText])), -- within the region, i.e. calulation in intersectsEllipse < 1
+        (([defaultEllipseText { textPos = (98.0, 90.0) }, defaultEllipseText2], 2, defaultEllipse { shapePos = (100.0, 100.0), shapeWidth = 24 }),
+         (T.pack "bool2", [])), -- on the border, i.e. calculation in intersectsEllipse = 1
+        (([defaultEllipseText { textPos = (210.0, 205.99) }, defaultEllipseText2], 3,  defaultEllipse { shapePos = (200.5, 200.5) }),
+         (T.pack "bool3", [])), -- outside the region, i.e. calculation in intersectsEllipse > 1
+        (([defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2], 4, defaultEllipse { shapePos = (300.99, 300.51) }),
+         (T.pack "bool4", [defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2])) -- multiple texts within the region
     ]
 
 -- Test cases for buildEllipses with translation.
 buildEllipsesTranslationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildEllipsesTranslationInputs = [
-        ((boolTextMocks, 1, setTransformation (head ellipseMocks) [1,0,0,1,10,0]), (T.pack "bool1", [head boolTextMocks])), -- translate x
-        ((boolTextMocks, 2, setTransformation (head ellipseMocks) [1,0,0,1,0,-10]), (T.pack "bool2", [])), -- translate y, no intersection
-        ((boolTextMocks, 3, setTransformation (head ellipseMocks) [1,0,0,1,300,300]), (T.pack "bool3", [boolTextMocks !! 3, boolTextMocks !! 4])) -- translate xy, multiple texts
+        (([defaultEllipseText, defaultEllipseText2], 1, defaultEllipse { shapeTransform = [1,0,0,1,10,0] }),
+         (T.pack "bool1", [defaultEllipseText])), -- translate x
+        (([defaultEllipseText, defaultEllipseText2], 2, defaultEllipse { shapeTransform = [1,0,0,1,0,-10] }),
+         (T.pack "bool2", [])), -- translate y, no intersection
+        (([defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2], 3, defaultEllipse { shapeTransform = [1,0,0,1,300,300] }),
+         (T.pack "bool3", [defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2])) -- translate xy, multiple texts
     ]
-
 
 -- Test cases for buildEllipses with scaling (scale origin at center of ellipse).
 buildEllipsesScaleInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildEllipsesScaleInputs = [
-        ((boolTextMocks, 1, setTransformation (ellipseMocks !! 2) [1.1,0,0,1,0,0]), (T.pack "bool1", [boolTextMocks !! 2])), -- scale x
-        ((boolTextMocks, 2, setTransformation (ellipseMocks !! 2) [1,0,0,1.02,0,0]), (T.pack "bool2", [boolTextMocks !! 2])), -- scale y
-        ((boolTextMocks, 3, setTransformation (ellipseMocks !! 3) [1.39,0,0,1.39,0,0]), (T.pack "bool3", [boolTextMocks !! 5])), -- scale xy
-        ((boolTextMocks, 4, setTransformation (ellipseMocks !! 3) [-1,0,0,1,0,0]), (T.pack "bool4", [])), -- reflect x
-        ((boolTextMocks, 5, setTransformation (ellipseMocks !! 3) [1,0,0,-0.01,0,0]), (T.pack "bool5", [])), -- reflect y
-        ((boolTextMocks, 6, setTransformation (ellipseMocks !! 3) [-0.2,0,0,-200,0,0]), (T.pack "bool6", [])), -- reflect xy
-        ((boolTextMocks, 7, setTransformation (head ellipseMocks) [1000,0,0,1000,0,0]), (T.pack "bool7", boolTextMocks)) -- big scale
+        (([defaultEllipseText { textPos = (210.0, 205.99) }], 1, defaultEllipse { shapePos = (200.5, 200.5), shapeTransform = [1.1,0,0,1,0,0] }),
+         (T.pack "bool1", [defaultEllipseText { textPos = (210.0, 205.99) }])), -- scale x
+        (([defaultEllipseText { textPos = (210.0, 205.99) }], 2, defaultEllipse { shapePos = (200.5, 200.5), shapeTransform = [1.1,0,0,1,0,0] }),
+         (T.pack "bool2", [defaultEllipseText { textPos = (210.0, 205.99) }])), -- scale y
+        (([defaultEllipseText { textPos = (410.0, 410.0) }], 3, defaultEllipse { shapePos = (300.99, 300.51), shapeTransform = [1.39,0,0,1.39,0,0] }),
+         (T.pack "bool3", [defaultEllipseText { textPos = (410.0, 410.0) }])), -- scale xy
+        (([defaultEllipseText { textPos = (300.0, 300.0) }], 4, defaultEllipse { shapePos = (300.99, 300.51), shapeTransform = [-1,0,0,1,0,0] }),
+         (T.pack "bool4", [])), -- reflect x
+        (([defaultEllipseText, defaultEllipseText2], 5, defaultEllipse { shapePos = (300.99, 300.51), shapeTransform = [1,0,0,-0.01,0,0] }),
+         (T.pack "bool5", [])), -- reflect y
+        (([defaultEllipseText, defaultEllipseText2], 6, defaultEllipse { shapePos = (300.99, 300.51), shapeTransform = [-0.2,0,0,-200,0,0] }),
+         (T.pack "bool6", [])), -- reflect xy
+        (([defaultEllipseText, defaultEllipseText2], 7, defaultEllipse { shapeTransform = [1000,0,0,1000,0,0] }),
+         (T.pack "bool7", [defaultEllipseText, defaultEllipseText2])) -- big scale
     ]
 
 
@@ -170,10 +173,6 @@ buildEllipsesScaleInputs = [
 
 
 -- * Helpers
-
--- Helper to modify tranformation for a shape
-setTransformation :: Shape -> [Double] -> Shape
-setTransformation entity transformation = entity {shapeTransform = transformation}
 
 -- Helper to compare if two Text types
 compareTexts :: [Text] -> [Text] -> Bool
