@@ -120,7 +120,9 @@ buildRectMixedInputs = [
         ((1, [defaultRectText { textTransform = [-15.5, 0.3, -0.2, 12, 500, 3000] }, defaultRectText2], defaultRect { shapeTransform = [-15.5, 0.3, -0.2, 12, 500, 3000] }),
          (T.pack "csc108", [defaultRectText { textTransform = [-15.5, 0.3, -0.2, 12, 500, 3000] }]), "complex transformation where texts and shape has the same matrices"),
         ((2, [defaultRectText { textTransform = [1.5, 0.1, 0.1, 1.5, -3.33, 3.33] }, defaultRectText2], defaultRect { shapeTransform = [1.5, 0.1, 0.11, 1.49, -4, 0] }),
-         (T.pack "csc108", [defaultRectText { textTransform = [1.5, 0.1, 0.1, 1.5, -3.33, 3.33] }]), "complex transformation where texts and shape has different matrices")
+         (T.pack "csc108", [defaultRectText { textTransform = [1.5, 0.1, 0.1, 1.5, -3.33, 3.33] }]), "complex transformation where texts and shape has different matrices"),
+        ((2, [defaultRectText { textTransform = [1.3, 0.1, 0.1, 1.3, 10, 10] }, defaultRectText2 { textPos = (60.0, 110.0), textTransform = [1.27, 0.1, 0.1, 1.31, 5, 8] }], defaultRect { shapeTransform = [1.27, 0.1, 0.1, 1.31, 5, 8] }),
+         (T.pack "csc108csc148", [defaultRectText { textTransform = [1.3, 0.1, 0.1, 1.3, 10, 10] }, defaultRectText2 { textPos = (60.0, 110.0), textTransform = [1.27, 0.1, 0.1, 1.31, 5, 8] }]), "complex transformation with multiple text intersections")
     ]
 
 
@@ -191,8 +193,8 @@ buildEllipsesMixedInputs = [
          (T.pack "bool1", [defaultEllipseText { textTransform = [900, -0.000001, 38, 2.1, 500.5, 20.09] }]), "complex transformation where texts and shape has the same matrices"),
         ((2, [defaultEllipseText { textTransform = [0.3, 0.05, 3, 0.2, 0, 0] }, defaultEllipseText2], defaultEllipse { shapeTransform = [0.29, 0.04, 3, 0.2, -0.01, -0.01] }),
          (T.pack "bool2", [defaultEllipseText { textTransform = [0.3, 0.05, 3, 0.2, 0, 0] }]), "complex transformation where texts and shape has different matrices"),
-        ((3, [defaultEllipseText { textTransform = [0.3, 0.05, 3, 0.2, 0, 0] }, defaultEllipseText2 { textPos = (1.1, 1.1), textTransform = [0.29, 0.04, 3, 0.2, -0.01, -0.01] }], defaultEllipse { shapeTransform = [0.29, 0.04, 3, 0.2, -0.01, -0.01] }),
-         (T.pack "bool3", [defaultEllipseText { textTransform = [0.3, 0.05, 3, 0.2, 0, 0] }, defaultEllipseText2 { textPos = (1.1, 1.1), textTransform = [0.29, 0.04, 3, 0.2, -0.01, -0.01] }]), "complex transformation with multiple texts")
+        ((3, [defaultEllipseText { textTransform = [0.1, 0.99, 3, 0.2, 2, 5] }, defaultEllipseText2 { textPos = (1.1, 1.1), textTransform = [0.12, 1, 3, 0.19, 1, 0] }], defaultEllipse { shapeTransform = [0.12, 1, 3, 0.19, 1, 0] }),
+         (T.pack "bool3", [defaultEllipseText { textTransform = [0.1, 0.99, 3, 0.2, 2, 5] }, defaultEllipseText2 { textPos = (1.1, 1.1), textTransform = [0.12, 1, 3, 0.19, 1, 0] }]), "complex transformation with multiple text intersections")
     ]
 
 
