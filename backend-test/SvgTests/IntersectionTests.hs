@@ -16,23 +16,12 @@ import Database.Persist.Sqlite (toSqlKey)
 
 -- * Mocks
 
--- A list of texts for rects
-rectTextMocks :: [Text]
-rectTextMocks = [
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (50.0, 100.0), textText = T.pack "CSC108", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = "", textPos = (200.9999, 89.99997), textText = "CSC148/", textAlign = "", textFill = "", textTransform = [1,0,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = "", textPos = (201.92939, 90.8812), textText = "CSC111", textAlign = "", textFill = "", textTransform = [1,0,0,1,0,0]}
-    ]
+-- Text mocks
+defaultRectText :: Text
+defaultRectText = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (50.0, 100.0), textText = T.pack "CSC108", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
 
--- A list of texts for rects to test rotation/skewing transformations
-rectShearTextMocks :: [Text]
-rectShearTextMocks = [
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (1000.0, 1000.0), textText = T.pack "CSC110", textAlign = T.pack "", textFill = T.pack "", textTransform = [0,1,-1,0,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (1000.0, 1000.0), textText = T.pack "CSC110", textAlign = T.pack "", textFill = T.pack "", textTransform = [0,-1,1,0,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (1000.0, 1000.0), textText = T.pack "CSC110", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0.5,0,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (1000.0, 1000.0), textText = T.pack "CSC110", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,-1.2,1,0,0]},
-        Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (1000.0, 1000.0), textText = T.pack "CSC110", textAlign = T.pack "", textFill = T.pack "", textTransform = [1.1,0.5,1.2,1.1,0,0]}
-    ]
+defaultRectText2 :: Text
+defaultRectText2 = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (201.92939, 90.8812), textText = T.pack "CSC148", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
 
 -- A list of texts for ellipses
 boolTextMocks :: [Text]
@@ -45,23 +34,9 @@ boolTextMocks = [
         Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (410.0, 410.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
     ]
 
--- A list of rects (type Node and Hybrid)
-rectMocks :: [Shape]
-rectMocks = [
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 80.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (45.9998, 90.0), shapeWidth = 30, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (80.0, 101.56), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (80.0, 101.56), shapeWidth = 20, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (199.8863, 88.1213), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 202, shapeHeight = 202, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Hybrid, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 1.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (1.0, 100.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (1.0, 1.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 10, shapeHeight = 10, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]},
-        Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (990.0, 990.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]}
-    ]
+-- Shape mocks
+defaultRect :: Shape
+defaultRect = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]}
 
 -- A list of ellipses
 ellipseMocks :: [Shape]
@@ -80,48 +55,75 @@ ellipseMocks = [
 -- Test cases for buildRect with no transformations.
 buildRectNoTransformInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildRectNoTransformInputs = [
-        ((rectTextMocks, 1, head rectMocks), (T.pack "csc108", [head rectTextMocks])), -- one Text intersecting at corner
-        ((rectTextMocks, 2, rectMocks !! 1), (T.pack "h2", [head rectTextMocks])), -- one Text intersecting at border x
-        ((rectTextMocks, 3, rectMocks !! 2), (T.pack "csc108", [head rectTextMocks])), -- one Text intersecting at border
-        ((rectTextMocks, 4, rectMocks !! 3), (T.pack "csc108", [head rectTextMocks])), -- one Text intersecting within shape area
-        ((rectTextMocks, 5, rectMocks !! 4), (T.pack "", [])), -- no intersection for node
-        ((rectTextMocks, 6, rectMocks !! 5), (T.pack "h6", [])), -- no intersection for hybrid
-        ((rectTextMocks, 7, rectMocks !! 6), (T.pack "csc148csc111", [rectTextMocks !! 1, rectTextMocks !! 2])), -- multiple text intersections for node
-        ((rectTextMocks, 8, rectMocks !! 7), (T.pack "h8", [head rectTextMocks, rectTextMocks !! 1, rectTextMocks !! 2])) -- multiple text intersections for hybrid
+        (([defaultRectText, defaultRectText2], 1, defaultRect),
+         (T.pack "csc108", [defaultRectText])), -- one Text intersecting at corner
+        (([defaultRectText, defaultRectText2], 2, defaultRect { shapePos = (0.0, 100.0), shapeType_ = Hybrid }),
+         (T.pack "h2", [defaultRectText])), -- one Text intersecting at border x
+        (([defaultRectText, defaultRectText2], 3, defaultRect { shapePos = (50.0, 80.0) }),
+         (T.pack "csc108", [defaultRectText])), -- one Text intersecting at border
+        (([defaultRectText, defaultRectText2], 4, defaultRect { shapePos = (45.9998, 90.0), shapeWidth = 30, shapeHeight = 30 }),
+         (T.pack "csc108", [defaultRectText])), -- one Text intersecting within shape area
+        (([defaultRectText, defaultRectText2], 5, defaultRect { shapePos = (80.0, 101.56) }),
+         (T.pack "", [])), -- no intersection for node
+        (([defaultRectText, defaultRectText2], 6, defaultRect { shapePos = (80.0, 101.56), shapeType_ = Hybrid, shapeWidth = 20, shapeHeight = 10 }),
+         (T.pack "h6", [])), -- no intersection for hybrid
+        (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 7, defaultRect { shapePos = (199.8863, 88.1213)}),
+         (T.pack "csc108csc148", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])), -- multiple text intersections for node
+        (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 8, defaultRect { shapePos = (0, 0), shapeType_ = Hybrid, shapeWidth = 202, shapeHeight = 202 }),
+         (T.pack "h8", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])) -- multiple text intersections for hybrid
     ]
 
 -- Test cases for buildRect with translation.
 buildRectTranslationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildRectTranslationInputs = [
-        ((rectTextMocks, 1, setTransformation (rectMocks !! 1) [1,0,0,1,50,0]), (T.pack "h1", [head rectTextMocks])), -- translate x
-        ((rectTextMocks, 2, setTransformation (head rectMocks) [1,0,0,1,0,-30]), (T.pack "csc108", [head rectTextMocks])), -- translate y
-        ((rectTextMocks, 3, setTransformation (rectMocks !! 2) [1,0,0,1,-40,15]), (T.pack "csc108", [head rectTextMocks])), -- translate xy
-        ((rectTextMocks, 4, setTransformation (head rectMocks) [1,0,0,1,1,1]), (T.pack "", [])), -- no intersection
-        ((rectTextMocks, 5, setTransformation (rectMocks !! 7) [1,0,0,1,200,89]), (T.pack "h5", [rectTextMocks !! 1, rectTextMocks !! 2])) -- multiple texts
+        (([defaultRectText, defaultRectText2], 1, defaultRect { shapePos = (0.0, 100.0), shapeTransform = [1,0,0,1,50,0], shapeType_ = Hybrid }),
+         (T.pack "h1", [defaultRectText])), -- translate x
+        (([defaultRectText, defaultRectText2], 2, defaultRect { shapeTransform = [1,0,0,1,0,-30] }),
+         (T.pack "csc108", [defaultRectText])), -- translate y
+        (([defaultRectText, defaultRectText2], 3, defaultRect { shapePos = (50.0, 80.0), shapeTransform = [1,0,0,1,-40,15] }),
+         (T.pack "csc108", [defaultRectText])), -- translate xy
+        (([defaultRectText, defaultRectText2], 4, defaultRect { shapeTransform = [1,0,0,1,1,1] }),
+         (T.pack "", [])), -- no intersection
+        (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 5, defaultRect { shapePos = (0.0, 0.0), shapeTransform = [1,0,0,1,200,89], shapeWidth = 202, shapeHeight = 202, shapeType_ = Hybrid }),
+         (T.pack "h5", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])) -- multiple texts
     ]
 
 -- Test cases for buildRect with scaling.
 buildRectScaleInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildRectScaleInputs = [
-        ((rectTextMocks, 1, setTransformation (rectMocks !! 9) [50,0,0,1,0,0]), (T.pack "csc108", [head rectTextMocks])), -- scale x
-        ((rectTextMocks, 2, setTransformation (rectMocks !! 8) [1,0,0,100,0,0]), (T.pack "csc108", [head rectTextMocks])), -- scale y
-        ((rectTextMocks, 3, setTransformation (rectMocks !! 10) [49,0,0,99,0,0]), (T.pack "csc108", [head rectTextMocks])), -- scale xy
-        ((rectTextMocks, 4, setTransformation (head rectMocks) [-1,0,0,1,0,0]), (T.pack "", [])), -- reflect x, no intersection
-        ((rectTextMocks, 5, setTransformation (head rectMocks) [0,0,0,-1,0,0]), (T.pack "", [])), -- reflect y, no intersection
-        ((rectTextMocks, 6, setTransformation (rectMocks !! 4) [-0.1,0,0,0.9,0,0]), (T.pack "", [])), -- reflect xy
-        ((rectTextMocks, 7, setTransformation (head rectMocks) [0.1,0,0,1.5,0,0]), (T.pack "", [])), -- no intersection
-        ((rectTextMocks, 8, setTransformation (rectMocks !! 10) [199,0,0,88,0,0]), (T.pack "csc148csc111", [rectTextMocks !! 1, rectTextMocks !! 2])), -- multiple texts
-        ((rectTextMocks, 9, setTransformation (rectMocks !! 11) [100,0,0,100,0,0]), (T.pack "csc108csc148csc111", [head rectTextMocks, rectTextMocks !! 1, rectTextMocks !! 2])) -- on (0,0)
+        (([defaultRectText, defaultRectText2], 1, defaultRect { shapePos = (1.0, 100.0), shapeTransform = [50,0,0,1,0,0], shapeWidth = 10, shapeHeight = 10 }),
+         (T.pack "csc108", [defaultRectText])), -- scale x
+        (([defaultRectText, defaultRectText2], 2, defaultRect { shapePos = (50.0, 1.0), shapeTransform = [1,0,0,100,0,0], shapeWidth = 10, shapeHeight = 10 }),
+         (T.pack "csc108", [defaultRectText])), -- scale y
+        (([defaultRectText, defaultRectText2], 3, defaultRect { shapePos = (1.0, 1.0), shapeTransform = [49,0,0,99,0,0], shapeWidth = 10, shapeHeight = 10 }),
+         (T.pack "csc108", [defaultRectText])), -- scale xy
+        (([defaultRectText, defaultRectText2], 4, defaultRect { shapeTransform = [-1,0,0,1,0,0] }),
+         (T.pack "", [])), -- reflect x, no intersection
+        (([defaultRectText, defaultRectText2], 5, defaultRect { shapeTransform = [0,0,0,-1,0,0] }),
+         (T.pack "", [])), -- reflect y, no intersection
+        (([defaultRectText, defaultRectText2], 6, defaultRect { shapePos = (80.0, 101.56), shapeTransform = [-0.1,0,0,0.9,0,0] }),
+         (T.pack "", [])), -- reflect xy
+        (([defaultRectText, defaultRectText2], 7, defaultRect { shapeTransform = [0.1,0,0,1.5,0,0] }),
+         (T.pack "", [])), -- no intersection
+        (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 8, defaultRect { shapePos = (1.0, 1.0), shapeTransform = [199,0,0,88,0,0], shapeWidth = 10, shapeHeight = 10 }),
+         (T.pack "csc108csc148", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])), -- multiple texts
+        (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 9, defaultRect { shapePos = (0.0, 0.0), shapeTransform = [100,0,0,100,0,0], shapeWidth = 10, shapeHeight = 10 }),
+         (T.pack "csc108csc148", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])) -- on (0,0)
     ]
 
 -- Test cases for buildRect with rotation/skewing.
 buildRectShearInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
 buildRectShearInputs = [
-        (([head rectShearTextMocks], 1, setTransformation (rectMocks !! 12) [0,1,-1,0,0,0]), (T.pack "csc110", [head rectShearTextMocks])), -- CW rotation
-        (([rectShearTextMocks !! 1], 2, setTransformation (rectMocks !! 12) [0,-1,1,0,0,0]), (T.pack "csc110", [rectShearTextMocks !! 1])), -- CWW rotation
-        (([rectShearTextMocks !! 2], 3, setTransformation (rectMocks !! 12) [1,0.5,0,1,0,0]), (T.pack "csc110", [rectShearTextMocks !! 2])), -- skew x
-        (([rectShearTextMocks !! 3], 4, setTransformation (rectMocks !! 12) [1,0,-1.2,1,0,0]), (T.pack "csc110", [rectShearTextMocks !! 3])), -- skew y
-        (([rectShearTextMocks !! 4], 5, setTransformation (rectMocks !! 12) [1.1,0.5,1.2,1.1,0,0]), (T.pack "csc110", [rectShearTextMocks !! 4])) -- skew xy
+        (([defaultRectText { textTransform = [0,1,-1,0,0,0] }], 1, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [0,1,-1,0,0,0] }),
+         (T.pack "csc108", [defaultRectText { textTransform = [0,1,-1,0,0,0] }])), -- CW rotation
+        (([defaultRectText { textTransform = [0,-1,1,0,0,0] }], 2, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [0,-1,1,0,0,0] }),
+         (T.pack "csc108", [defaultRectText { textTransform = [0,-1,1,0,0,0] }])), -- CWW rotation
+        (([defaultRectText { textTransform = [1,0.5,0,1,0,0] }], 3, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1,0.6,0,1,0,0] }),
+         (T.pack "csc108", [defaultRectText { textTransform = [1,0.5,0,1,0,0] }])), -- skew x
+        (([defaultRectText { textTransform = [1,0,-1.2,1,0,0] }], 4, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1,0,-1.2,1,0,0] }),
+         (T.pack "csc108", [defaultRectText { textTransform = [1,0,-1.2,1,0,0] }])), -- skew y
+        (([defaultRectText { textTransform = [1.1,0.5,1.2,1.1,0,0] }], 5, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1.1,0.5,1.2,1.05,0,0] }),
+         (T.pack "csc108", [defaultRectText { textTransform = [1.1,0.5,1.2,1.1,0,0] }])) -- skew xy
     ]
 
 -- Test cases for buildRect with a mixture of different transformations.
@@ -202,7 +204,7 @@ testShapeBuilder fn label shapeLabel input =
         let ((texts, elementId, rect), (expectedId_, expectedTexts)) = input
             result = fn texts rect elementId
         assertEqual ("Check id_ for " ++ shapeLabel ++ " " ++ show elementId) expectedId_ $ shapeId_ result
-        assertBool ("Check texts for rect " ++ shapeLabel ++ " " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
+        assertBool ("Check texts for " ++ shapeLabel ++ " " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
 
 -- Run all test cases for buildRect
 runBuildRectTests :: [Test]
