@@ -39,7 +39,7 @@ defaultEllipse = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos
 
 
 -- * Test Cases
--- * The first element in the tuple is the inputs, the second is the expected ouput.
+-- * The first element in the tuple is the inputs, the second is the expected ouput, last is the test case description.
 
 -- Test cases for buildRect with no transformations.
 buildRectNoTransformInputs :: [((Integer, [Text], Shape), (T.Text, [Text]), String)]
@@ -106,7 +106,7 @@ buildRectShearInputs = [
         ((1, [defaultRectText { textTransform = [0,1,-1,0,0,0] }], defaultRect { shapePos = (40.0, 90.0), shapeTransform = [0,1,-1,0,0,0] }),
          (T.pack "csc108", [defaultRectText { textTransform = [0,1,-1,0,0,0] }]), "CW rotation"),
         ((2, [defaultRectText { textTransform = [0,-1,1,0,0,0] }], defaultRect { shapePos = (40.0, 90.0), shapeTransform = [0,-1,1,0,0,0] }),
-         (T.pack "csc108", [defaultRectText { textTransform = [0,-1,1,0,0,0] }]), "CWW rotation"),
+         (T.pack "csc108", [defaultRectText { textTransform = [0,-1,1,0,0,0] }]), "CCW rotation"),
         ((3, [defaultRectText { textTransform = [1,0.5,0,1,0,0] }], defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1,0.6,0,1,0,0] }),
          (T.pack "csc108", [defaultRectText { textTransform = [1,0.5,0,1,0,0] }]), "skew x"),
         ((4, [defaultRectText { textTransform = [1,0,-1.2,1,0,0] }], defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1,0,-1.2,1,0,0] }),
@@ -167,6 +167,34 @@ buildEllipsesScaleInputs = [
         ((7, [defaultEllipseText, defaultEllipseText2], defaultEllipse { shapeTransform = [1000,0,0,1000,0,0] }),
          (T.pack "bool7", [defaultEllipseText, defaultEllipseText2]), "big scale")
     ]
+-- -- Test cases for buildRect with rotation/skewing.
+-- buildRectShearInputs :: [(([Text], Integer, Shape), (T.Text, [Text]), String)]
+-- buildRectShearInputs = [
+--         (([defaultRectText { textTransform = [0,1,-1,0,0,0] }], 1, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [0,1,-1,0,0,0] }),
+--          (T.pack "csc108", [defaultRectText { textTransform = [0,1,-1,0,0,0] }]), "CW rotation"),
+--         (([defaultRectText { textTransform = [0,-1,1,0,0,0] }], 2, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [0,-1,1,0,0,0] }),
+--          (T.pack "csc108", [defaultRectText { textTransform = [0,-1,1,0,0,0] }]), "CWW rotation"),
+--         (([defaultRectText { textTransform = [1,0.5,0,1,0,0] }], 3, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1,0.6,0,1,0,0] }),
+--          (T.pack "csc108", [defaultRectText { textTransform = [1,0.5,0,1,0,0] }]), "skew x"),
+--         (([defaultRectText { textTransform = [1,0,-1.2,1,0,0] }], 4, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1,0,-1.2,1,0,0] }),
+--          (T.pack "csc108", [defaultRectText { textTransform = [1,0,-1.2,1,0,0] }]), "skew y"),
+--         (([defaultRectText { textTransform = [1.1,0.5,1.2,1.1,0,0] }], 5, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1.1,0.5,1.2,1.05,0,0] }),
+--          (T.pack "csc108", [defaultRectText { textTransform = [1.1,0.5,1.2,1.1,0,0] }]), "skew xy")
+--     ]
+
+buildEllipsesShearInputs :: [((Integer, [Text], Shape), (T.Text, [Text]), String)]
+buildEllipsesShearInputs = [
+        ((1, [defaultEllipseText { textTransform = [0.707, 0.707, -0.707, 0.707, 0, 0] }], defaultEllipse { shapeTransform = [0.707, 0.707, -0.707, 0.707, 0, 0] }),
+         (T.pack "bool1", [defaultEllipseText { textTransform = [0.707, 0.707, -0.707, 0.707, 0, 0] }]), "CW rotation"),
+        ((2, [defaultEllipseText { textTransform = [0.707, -0.707, -0.707, 0.707, 0, 0] }], defaultEllipse { shapeTransform = [0.707, -0.707, 0.72, 0.707, 0, 0] }),
+         (T.pack "bool2", [defaultEllipseText { textTransform = [0.707, -0.707, -0.707, 0.707, 0, 0] }]), "CCW rotation"),
+        ((3, [defaultEllipseText { textTransform = [1,0.5,0,1,0,0] }], defaultEllipse { shapeTransform = [1,0.5,0,1,0,0] }),
+         (T.pack "bool3", [defaultEllipseText { textTransform = [1,0.5,0,1,0,0] }]), "skew x"),
+        ((4, [defaultEllipseText { textTransform = [1,0,4.5,1,0,0] }], defaultEllipse { shapeTransform = [1,0,4.5,1,0,0] }),
+         (T.pack "bool4", [defaultEllipseText { textTransform = [1,0,4.5,1,0,0] }]), "skew y"),
+        ((5, [defaultEllipseText { textTransform = [1,-1.5,2.3,1,0,0] }], defaultEllipse { shapeTransform = [1,-1.5,2.3,1,0,0] }),
+         (T.pack "bool5", [defaultEllipseText { textTransform = [1,-1.5,2.3,1,0,0] }]), "skew xy")
+    ]
 
 
 -- TODO: add tests for text transformations on either buildRect or buildEllipse
@@ -219,7 +247,8 @@ runBuildEllipsesTests :: [Test]
 runBuildEllipsesTests =
     map (testShapeBuilder buildEllipses "Test buildEllipses no transformation: " "ellipse") buildEllipsesNoTransformationInputs ++
     map (testShapeBuilder buildEllipses "Test buildEllipses translation: " "ellipse") buildEllipsesTranslationInputs ++
-    map (testShapeBuilder buildEllipses "Test buildEllipses scaling: " "ellipse") buildEllipsesScaleInputs
+    map (testShapeBuilder buildEllipses "Test buildEllipses scaling: " "ellipse") buildEllipsesScaleInputs ++
+    map (testShapeBuilder buildEllipses "Test buildEllipses rotation/skewing: " "ellipse") buildEllipsesShearInputs
 
 
 -- Test suite for intersection checks
