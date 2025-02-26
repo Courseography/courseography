@@ -1,17 +1,21 @@
 import React from "react"
-import { Field, Form, Formik } from "formik"
+import { ErrorMessage, Field, Form, Formik } from "formik"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
-import { ErrorMessage } from "../common/react_modal.js.jsx"
+
+const errorMessageStyle = {
+  color: "#DC143C",
+  marginTop: "0.5em",
+  marginBottom: "0.2em",
+  fontSize: "0.9rem",
+  fontWeight: "500",
+}
 
 export default class GenerateForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       fceCount: 0,
-      showWarning: false,
-      invalidCourses: [],
-      errorTitle: "",
     }
 
     this.graph = React.createRef()
@@ -25,7 +29,7 @@ export default class GenerateForm extends React.Component {
     this.setState({ fceCount: this.state.fceCount + credits })
   }
 
-  handleSubmit = values => {
+  handleSubmit = (values, { setErrors }) => {
     const data = {}
 
     for (const key in values) {
@@ -63,7 +67,12 @@ export default class GenerateForm extends React.Component {
         )
 
         if (missingCourses.length !== 0) {
-          this.setState({ showWarning: true, invalidCourses: missingCourses })
+          setErrors({
+            courses:
+              missingCourses.length === 1
+                ? `The course ${missingCourses} was invalid! Please check your input.`
+                : `The courses [${missingCourses}] were invalid! Please check your input.`,
+          })
         }
 
         const labelsJSON = {}
@@ -233,30 +242,16 @@ export default class GenerateForm extends React.Component {
     const deptPattern = /^[A-Z]{3}$/
 
     if (!values.courses.trim().length) {
-      errors.courses = "No courses entered"
-      this.setState({
-        showWarning: true,
-        errorTitle: "Invalid Course Input",
-        invalidCourses: ["Cannot generate graph – no courses entered!"],
-      })
-      return errors
+      errors.courses = "Cannot generate graph – no courses entered!"
     } else {
       const courses = values.courses.split(",").map(course => course.trim())
       const invalidCourses = courses.filter(course => !coursePattern.test(course))
 
       if (invalidCourses.length > 0) {
-        errors.courses = "Invalid course format"
-        this.setState({ showWarning: true, errorTitle: "Invalid Course Input" })
-
-        this.setState({
-          invalidCourses: [
-            invalidCourses.length === 1
-              ? `The course ${invalidCourses} was invalid! Please check your input.`
-              : `The courses [${invalidCourses}] were invalid! Please check your input.`,
-          ],
-        })
-
-        return errors
+        errors.courses =
+          invalidCourses.length === 1
+            ? `The course ${invalidCourses} was invalid! Please check your input.`
+            : `The courses [${invalidCourses}] were invalid! Please check your input.`
       }
     }
 
@@ -265,18 +260,10 @@ export default class GenerateForm extends React.Component {
       const invalidDepartments = departments.filter(dept => !deptPattern.test(dept))
 
       if (invalidDepartments.length > 0) {
-        errors.departments = "Invalid department format"
-        this.setState({ showWarning: true, errorTitle: "Invalid Department Input" })
-
-        this.setState({
-          invalidCourses: [
-            invalidDepartments.length === 1
-              ? `The department ${invalidDepartments} was invalid! Please check your input.`
-              : `The departments [${invalidDepartments}] were invalid! Please check your input.`,
-          ],
-        })
-
-        return errors
+        errors.departments =
+          invalidDepartments.length === 1
+            ? `The department ${invalidDepartments} was invalid! Please check your input.`
+            : `The departments [${invalidDepartments}] were invalid! Please check your input.`
       }
     }
 
@@ -285,52 +272,19 @@ export default class GenerateForm extends React.Component {
       const invalidTaken = takenCourses.filter(course => !coursePattern.test(course))
 
       if (invalidTaken.length > 0) {
-        errors.taken = "Invalid courses format"
-        this.setState({ showWarning: true, errorTitle: "Invalid Course Input" })
-
-        this.setState({
-          invalidCourses: [
-            invalidTaken.length === 1
-              ? `The course ${invalidTaken} was invalid! Please check your input.`
-              : `The courses [${invalidTaken}] were invalid! Please check your input.`,
-          ],
-        })
-
-        return errors
+        errors.taken =
+          invalidTaken.length === 1
+            ? `The course ${invalidTaken} was invalid! Please check your input.`
+            : `The courses [${invalidTaken}] were invalid! Please check your input.`
       }
     }
 
     return errors
   }
 
-  /**
-   * Produce an appropriate warning message string in case of invalid course/department inputs.
-   * @param {string[]} invalidCourses - The array of invalid course codes
-   * @returns {string} The warning message string.
-   */
-  computeMessage(invalidCourses) {
-    if (this.state.errorTitle) {
-      return invalidCourses[0]
-    } else if (invalidCourses.length === 1) {
-      return `The course ${invalidCourses} was invalid! Please check your input.`
-    } else {
-      return `The courses [${invalidCourses}] were invalid! Please check your input.`
-    }
-  }
-
   render() {
     return (
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-        <ErrorMessage
-          title={this.state.errorTitle || "Invalid Course Input"}
-          message={this.computeMessage(
-            this.state.invalidCourses.filter(str => !!/\S/.test(str))
-          )}
-          onClose={() => {
-            this.setState({ showWarning: false, invalidCourses: [], errorTitle: "" })
-          }}
-          isOpen={this.state.showWarning}
-        />
         <Disclaimer />
         <div
           id="generateDiv"
@@ -357,82 +311,95 @@ export default class GenerateForm extends React.Component {
             validateOnBlur={false}
             onSubmit={this.handleSubmit}
           >
-            <Form id="generateForm">
-              <Field
-                id="courses"
-                name="courses"
-                type="text"
-                placeholder="e.g., CSC207H1, CSC324H1"
-              />
-
-              <h2 id="filter-title">Optional filters</h2>
-
-              <label htmlFor="departments">
-                Only include courses these departments
-              </label>
-              <Field
-                id="departments"
-                name="departments"
-                type="text"
-                placeholder="Enter 3-letter department codes separated by commas"
-                style={{ marginBottom: "1em" }}
-              />
-
-              <label htmlFor="taken">Do not show these courses</label>
-              <Field
-                id="taken"
-                name="taken"
-                type="text"
-                style={{ marginBottom: "1em" }}
-                placeholder="E.g., CSC207H1, CSC236H1"
-              />
-
-              <label htmlFor="maxDepth">
-                Depth of prerequisite chain (0 shows all prerequisites)
-              </label>
-              <p>
+            {({ errors }) => (
+              <Form id="generateForm">
                 <Field
-                  id="maxDepth"
-                  name="maxDepth"
-                  type="number"
-                  min="0"
-                  step="1"
-                  style={{ marginBottom: "1em" }}
+                  id="courses"
+                  name="courses"
+                  type="text"
+                  placeholder="e.g., CSC207H1, CSC324H1"
                 />
-              </p>
-
-              {/* <label htmlFor="location">Campus</label>
-              <Field id="location" name="location" as="select" multiple
-                style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
-                <option value="utsg">St. George</option>
-                <option value="utm">Mississauga</option>
-                <option value="utsc">Scarborough</option>
-              </Field>
-
-              <p>
-                <label htmlFor="includeRaws">Include non-course prerequisites</label>
-                <Field id="includeRaws" name="includeRaws" type="checkbox"
-                  style={{ marginLeft: '1em', verticalAlign: 'middle' }}
+                <ErrorMessage
+                  name="courses"
+                  component="div"
+                  style={errorMessageStyle}
                 />
-              </p>
 
-              <label htmlFor="includeGrades">Include grade-based prerequisites</label>
-              <Field id="includeGrades" name="includeGrades" type="checkbox"
-                style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
+                <h2 id="filter-title">Optional filters</h2>
 
-              <div
-                style={{
-                  marginTop: "1em",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <button id="submit" type="submit">
-                  Generate Graph
-                </button>
-              </div>
-            </Form>
+                <label htmlFor="departments">
+                  Only include courses these departments
+                </label>
+                <Field
+                  id="departments"
+                  name="departments"
+                  type="text"
+                  placeholder="Enter 3-letter department codes separated by commas"
+                  style={{ marginBottom: errors.departments ? "0" : "1em" }}
+                />
+                <ErrorMessage
+                  name="departments"
+                  component="div"
+                  style={errorMessageStyle}
+                />
+
+                <label htmlFor="taken">Do not show these courses</label>
+                <Field
+                  id="taken"
+                  name="taken"
+                  type="text"
+                  placeholder="E.g., CSC207H1, CSC236H1"
+                  style={{ marginBottom: errors.taken ? "0" : "1em" }}
+                />
+                <ErrorMessage name="taken" component="div" style={errorMessageStyle} />
+
+                <label htmlFor="maxDepth">
+                  Depth of prerequisite chain (0 shows all prerequisites)
+                </label>
+                <p>
+                  <Field
+                    id="maxDepth"
+                    name="maxDepth"
+                    type="number"
+                    min="0"
+                    step="1"
+                    style={{ marginBottom: "1em" }}
+                  />
+                </p>
+
+                {/* <label htmlFor="location">Campus</label>
+                <Field id="location" name="location" as="select" multiple
+                  style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
+                  <option value="utsg">St. George</option>
+                  <option value="utm">Mississauga</option>
+                  <option value="utsc">Scarborough</option>
+                </Field>
+
+                <p>
+                  <label htmlFor="includeRaws">Include non-course prerequisites</label>
+                  <Field id="includeRaws" name="includeRaws" type="checkbox"
+                    style={{ marginLeft: '1em', verticalAlign: 'middle' }}
+                  />
+                </p>
+
+                <label htmlFor="includeGrades">Include grade-based prerequisites</label>
+                <Field id="includeGrades" name="includeGrades" type="checkbox"
+                  style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
+
+                <div
+                  style={{
+                    marginTop: "1em",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <button id="submit" type="submit">
+                    Generate Graph
+                  </button>
+                </div>
+              </Form>
+            )}
           </Formik>
         </div>
 
