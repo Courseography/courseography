@@ -118,10 +118,10 @@ buildRectShearInputs = [
 -- Test cases for buildRect with a mixture of different transformations.
 buildRectMixedInputs :: [((Integer, [Text], Shape), (T.Text, [Text]), String)]
 buildRectMixedInputs = [
-        -- ((textMocks, 1, setTransformation (head rectMocks) [1.5,0,0,1.5,-30,-60]), (T.pack "csc108", [head textMocks])),
-        -- ((textMocks, 2, setTransformation (rectMocks !! 2) [-1,0,0,1.2,50,-20]), (T.pack "csc108", [head textMocks])),
-        -- ((textMocks, 3, setTransformation (head rectMocks) [1,0,0,-0.8,100,158]), (T.pack "csc148csc111", [textMocks !! 1, textMocks !! 2])),
-        -- ((textMocks, 4, setTransformation (rectMocks !! 4) [2.5,0,0,3.5,5,5]), (T.pack "", []))
+        ((1, [defaultRectText { textTransform = [-15.5, 0.3, -0.2, 12, 500, 3000] }, defaultRectText2], defaultRect { shapeTransform = [-15.5, 0.3, -0.2, 12, 500, 3000] }),
+         (T.pack "csc108", [defaultRectText { textTransform = [-15.5, 0.3, -0.2, 12, 500, 3000] }]), "complex transformation where texts and shape has the same matrices"),
+        ((2, [defaultRectText { textTransform = [1.5, 0.1, 0.1, 1.5, -3.33, 3.33] }, defaultRectText2], defaultRect { shapeTransform = [1.5, 0.1, 0.11, 1.49, -4, 0] }),
+         (T.pack "csc108", [defaultRectText { textTransform = [1.5, 0.1, 0.1, 1.5, -3.33, 3.33] }]), "complex transformation where texts and shape has different matrices")
     ]
 
 
