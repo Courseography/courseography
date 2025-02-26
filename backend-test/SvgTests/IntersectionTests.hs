@@ -16,7 +16,6 @@ import Database.Persist.Sqlite (toSqlKey)
 
 -- * Mocks
 
--- Text mocks
 defaultRectText :: Text
 defaultRectText = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (50.0, 100.0), textText = T.pack "CSC108", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
 
@@ -29,8 +28,6 @@ defaultEllipseText = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos
 defaultEllipseText2 :: Text
 defaultEllipseText2 = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (301.0, 301.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
 
-
--- Shape mocks
 defaultRect :: Shape
 defaultRect = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]}
 
@@ -40,6 +37,8 @@ defaultEllipse = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos
 
 -- * Test Cases
 -- * The first element in the tuple is the inputs, the second is the expected ouput, last is the test case description.
+
+-- * buildRect tests
 
 -- Test cases for buildRect with no transformations.
 buildRectNoTransformInputs :: [((Integer, [Text], Shape), (T.Text, [Text]), String)]
@@ -125,6 +124,8 @@ buildRectMixedInputs = [
     ]
 
 
+-- * buildEllipses tests
+
 -- Test cases for buildEllipses with no transformations.
 buildEllipsesNoTransformationInputs :: [((Integer, [Text], Shape), (T.Text, [Text]), String)]
 buildEllipsesNoTransformationInputs = [
@@ -183,8 +184,16 @@ buildEllipsesShearInputs = [
          (T.pack "bool5", [defaultEllipseText { textTransform = [1,-1.5,2.3,1,0,0] }]), "skew xy")
     ]
 
-
--- TODO: add tests for text transformations on either buildRect or buildEllipse
+-- Test cases for buildRect with a mixture of different transformations.
+buildEllipsesMixedInputs :: [((Integer, [Text], Shape), (T.Text, [Text]), String)]
+buildEllipsesMixedInputs = [
+        ((1, [defaultEllipseText { textTransform = [900, -0.000001, 38, 2.1, 500.5, 20.09] }, defaultEllipseText2], defaultEllipse { shapeTransform = [900, -0.000001, 38, 2.1, 500.5, 20.09] }),
+         (T.pack "bool1", [defaultEllipseText { textTransform = [900, -0.000001, 38, 2.1, 500.5, 20.09] }]), "complex transformation where texts and shape has the same matrices"),
+        ((2, [defaultEllipseText { textTransform = [0.3, 0.05, 3, 0.2, 0, 0] }, defaultEllipseText2], defaultEllipse { shapeTransform = [0.29, 0.04, 3, 0.2, -0.01, -0.01] }),
+         (T.pack "bool2", [defaultEllipseText { textTransform = [0.3, 0.05, 3, 0.2, 0, 0] }]), "complex transformation where texts and shape has different matrices"),
+        ((3, [defaultEllipseText { textTransform = [0.3, 0.05, 3, 0.2, 0, 0] }, defaultEllipseText2 { textPos = (1.1, 1.1), textTransform = [0.29, 0.04, 3, 0.2, -0.01, -0.01] }], defaultEllipse { shapeTransform = [0.29, 0.04, 3, 0.2, -0.01, -0.01] }),
+         (T.pack "bool3", [defaultEllipseText { textTransform = [0.3, 0.05, 3, 0.2, 0, 0] }, defaultEllipseText2 { textPos = (1.1, 1.1), textTransform = [0.29, 0.04, 3, 0.2, -0.01, -0.01] }]), "complex transformation with multiple texts")
+    ]
 
 
 -- * Helpers
@@ -235,7 +244,8 @@ runBuildEllipsesTests =
     map (testShapeBuilder buildEllipses "Test buildEllipses no transformation: " "ellipse") buildEllipsesNoTransformationInputs ++
     map (testShapeBuilder buildEllipses "Test buildEllipses translation: " "ellipse") buildEllipsesTranslationInputs ++
     map (testShapeBuilder buildEllipses "Test buildEllipses scaling: " "ellipse") buildEllipsesScaleInputs ++
-    map (testShapeBuilder buildEllipses "Test buildEllipses rotation/skewing: " "ellipse") buildEllipsesShearInputs
+    map (testShapeBuilder buildEllipses "Test buildEllipses rotation/skewing: " "ellipse") buildEllipsesShearInputs ++
+    map (testShapeBuilder buildEllipses "Test buildEllipses mixed transformations: " "ellipse") buildEllipsesMixedInputs
 
 
 -- Test suite for intersection checks
