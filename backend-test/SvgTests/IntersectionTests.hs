@@ -121,7 +121,7 @@ buildRectMixedInputs = [
          (T.pack "csc108", [defaultRectText { textTransform = [-15.5, 0.3, -0.2, 12, 500, 3000] }]), "complex transformation where texts and shape has the same matrices"),
         ((2, [defaultRectText { textTransform = [1.5, 0.1, 0.1, 1.5, -3.33, 3.33] }, defaultRectText2], defaultRect { shapeTransform = [1.5, 0.1, 0.11, 1.49, -4, 0] }),
          (T.pack "csc108", [defaultRectText { textTransform = [1.5, 0.1, 0.1, 1.5, -3.33, 3.33] }]), "complex transformation where texts and shape has different matrices"),
-        ((2, [defaultRectText { textTransform = [1.3, 0.1, 0.1, 1.3, 10, 10] }, defaultRectText2 { textPos = (60.0, 110.0), textTransform = [1.27, 0.1, 0.1, 1.31, 5, 8] }], defaultRect { shapeTransform = [1.27, 0.1, 0.1, 1.31, 5, 8] }),
+        ((3, [defaultRectText { textTransform = [1.3, 0.1, 0.1, 1.3, 10, 10] }, defaultRectText2 { textPos = (60.0, 110.0), textTransform = [1.27, 0.1, 0.1, 1.31, 5, 8] }], defaultRect { shapeTransform = [1.27, 0.1, 0.1, 1.31, 5, 8] }),
          (T.pack "csc108csc148", [defaultRectText { textTransform = [1.3, 0.1, 0.1, 1.3, 10, 10] }, defaultRectText2 { textPos = (60.0, 110.0), textTransform = [1.27, 0.1, 0.1, 1.31, 5, 8] }]), "complex transformation with multiple text intersections")
     ]
 
