@@ -42,81 +42,81 @@ defaultEllipse = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos
 -- * The first element in the tuple is the inputs, the second is the expected ouput.
 
 -- Test cases for buildRect with no transformations.
-buildRectNoTransformInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildRectNoTransformInputs :: [(([Text], Integer, Shape), (T.Text, [Text]), String)]
 buildRectNoTransformInputs = [
         (([defaultRectText, defaultRectText2], 1, defaultRect),
-         (T.pack "csc108", [defaultRectText])), -- one Text intersecting at corner
+         (T.pack "csc108", [defaultRectText]), "one Text intersecting at corner"),
         (([defaultRectText, defaultRectText2], 2, defaultRect { shapePos = (0.0, 100.0), shapeType_ = Hybrid }),
-         (T.pack "h2", [defaultRectText])), -- one Text intersecting at border x
+         (T.pack "h2", [defaultRectText]), "one Text intersecting at border x"),
         (([defaultRectText, defaultRectText2], 3, defaultRect { shapePos = (50.0, 80.0) }),
-         (T.pack "csc108", [defaultRectText])), -- one Text intersecting at border
+         (T.pack "csc108", [defaultRectText]), "one Text intersecting at border"),
         (([defaultRectText, defaultRectText2], 4, defaultRect { shapePos = (45.9998, 90.0), shapeWidth = 30, shapeHeight = 30 }),
-         (T.pack "csc108", [defaultRectText])), -- one Text intersecting within shape area
+         (T.pack "csc108", [defaultRectText]), "one Text intersecting within shape area"),
         (([defaultRectText, defaultRectText2], 5, defaultRect { shapePos = (80.0, 101.56) }),
-         (T.pack "", [])), -- no intersection for node
+         (T.pack "", []), "no intersection for node"),
         (([defaultRectText, defaultRectText2], 6, defaultRect { shapePos = (80.0, 101.56), shapeType_ = Hybrid, shapeWidth = 20, shapeHeight = 10 }),
-         (T.pack "h6", [])), -- no intersection for hybrid
+         (T.pack "h6", []), "no intersection for hybrid"),
         (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 7, defaultRect { shapePos = (199.8863, 88.1213)}),
-         (T.pack "csc108csc148", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])), -- multiple text intersections for node
+         (T.pack "csc108csc148", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2]), "multiple text intersections for node"),
         (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 8, defaultRect { shapePos = (0, 0), shapeType_ = Hybrid, shapeWidth = 202, shapeHeight = 202 }),
-         (T.pack "h8", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])) -- multiple text intersections for hybrid
+         (T.pack "h8", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2]), "multiple text intersections for hybrid")
     ]
 
 -- Test cases for buildRect with translation.
-buildRectTranslationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildRectTranslationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]), String)]
 buildRectTranslationInputs = [
         (([defaultRectText, defaultRectText2], 1, defaultRect { shapePos = (0.0, 100.0), shapeTransform = [1,0,0,1,50,0], shapeType_ = Hybrid }),
-         (T.pack "h1", [defaultRectText])), -- translate x
+         (T.pack "h1", [defaultRectText]), "translate x"),
         (([defaultRectText, defaultRectText2], 2, defaultRect { shapeTransform = [1,0,0,1,0,-30] }),
-         (T.pack "csc108", [defaultRectText])), -- translate y
+         (T.pack "csc108", [defaultRectText]), "translate y"),
         (([defaultRectText, defaultRectText2], 3, defaultRect { shapePos = (50.0, 80.0), shapeTransform = [1,0,0,1,-40,15] }),
-         (T.pack "csc108", [defaultRectText])), -- translate xy
+         (T.pack "csc108", [defaultRectText]), "translate xy"),
         (([defaultRectText, defaultRectText2], 4, defaultRect { shapeTransform = [1,0,0,1,1,1] }),
-         (T.pack "", [])), -- no intersection
+         (T.pack "", []), "no intersection"),
         (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 5, defaultRect { shapePos = (0.0, 0.0), shapeTransform = [1,0,0,1,200,89], shapeWidth = 202, shapeHeight = 202, shapeType_ = Hybrid }),
-         (T.pack "h5", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])) -- multiple texts
+         (T.pack "h5", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2]), "multiple texts")
     ]
 
 -- Test cases for buildRect with scaling.
-buildRectScaleInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildRectScaleInputs :: [(([Text], Integer, Shape), (T.Text, [Text]), String)]
 buildRectScaleInputs = [
         (([defaultRectText, defaultRectText2], 1, defaultRect { shapePos = (1.0, 100.0), shapeTransform = [50,0,0,1,0,0], shapeWidth = 10, shapeHeight = 10 }),
-         (T.pack "csc108", [defaultRectText])), -- scale x
+         (T.pack "csc108", [defaultRectText]), "scale x"),
         (([defaultRectText, defaultRectText2], 2, defaultRect { shapePos = (50.0, 1.0), shapeTransform = [1,0,0,100,0,0], shapeWidth = 10, shapeHeight = 10 }),
-         (T.pack "csc108", [defaultRectText])), -- scale y
+         (T.pack "csc108", [defaultRectText]), "scale y"),
         (([defaultRectText, defaultRectText2], 3, defaultRect { shapePos = (1.0, 1.0), shapeTransform = [49,0,0,99,0,0], shapeWidth = 10, shapeHeight = 10 }),
-         (T.pack "csc108", [defaultRectText])), -- scale xy
+         (T.pack "csc108", [defaultRectText]), "scale xy"),
         (([defaultRectText, defaultRectText2], 4, defaultRect { shapeTransform = [-1,0,0,1,0,0] }),
-         (T.pack "", [])), -- reflect x, no intersection
+         (T.pack "", []), "reflect x, no intersection"),
         (([defaultRectText, defaultRectText2], 5, defaultRect { shapeTransform = [0,0,0,-1,0,0] }),
-         (T.pack "", [])), -- reflect y, no intersection
+         (T.pack "", []), "reflect y, no intersection"),
         (([defaultRectText, defaultRectText2], 6, defaultRect { shapePos = (80.0, 101.56), shapeTransform = [-0.1,0,0,0.9,0,0] }),
-         (T.pack "", [])), -- reflect xy
+         (T.pack "", []), "reflect xy"),
         (([defaultRectText, defaultRectText2], 7, defaultRect { shapeTransform = [0.1,0,0,1.5,0,0] }),
-         (T.pack "", [])), -- no intersection
+         (T.pack "", []), "no intersection"),
         (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 8, defaultRect { shapePos = (1.0, 1.0), shapeTransform = [199,0,0,88,0,0], shapeWidth = 10, shapeHeight = 10 }),
-         (T.pack "csc108csc148", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])), -- multiple texts
+         (T.pack "csc108csc148", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2]), "multiple texts"),
         (([defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2], 9, defaultRect { shapePos = (0.0, 0.0), shapeTransform = [100,0,0,100,0,0], shapeWidth = 10, shapeHeight = 10 }),
-         (T.pack "csc108csc148", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2])) -- on (0,0)
+         (T.pack "csc108csc148", [defaultRectText { textPos = (200.9999, 89.99997) }, defaultRectText2]), "on (0,0)")
     ]
 
 -- Test cases for buildRect with rotation/skewing.
-buildRectShearInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildRectShearInputs :: [(([Text], Integer, Shape), (T.Text, [Text]), String)]
 buildRectShearInputs = [
         (([defaultRectText { textTransform = [0,1,-1,0,0,0] }], 1, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [0,1,-1,0,0,0] }),
-         (T.pack "csc108", [defaultRectText { textTransform = [0,1,-1,0,0,0] }])), -- CW rotation
+         (T.pack "csc108", [defaultRectText { textTransform = [0,1,-1,0,0,0] }]), "CW rotation"),
         (([defaultRectText { textTransform = [0,-1,1,0,0,0] }], 2, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [0,-1,1,0,0,0] }),
-         (T.pack "csc108", [defaultRectText { textTransform = [0,-1,1,0,0,0] }])), -- CWW rotation
+         (T.pack "csc108", [defaultRectText { textTransform = [0,-1,1,0,0,0] }]), "CWW rotation"),
         (([defaultRectText { textTransform = [1,0.5,0,1,0,0] }], 3, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1,0.6,0,1,0,0] }),
-         (T.pack "csc108", [defaultRectText { textTransform = [1,0.5,0,1,0,0] }])), -- skew x
+         (T.pack "csc108", [defaultRectText { textTransform = [1,0.5,0,1,0,0] }]), "skew x"),
         (([defaultRectText { textTransform = [1,0,-1.2,1,0,0] }], 4, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1,0,-1.2,1,0,0] }),
-         (T.pack "csc108", [defaultRectText { textTransform = [1,0,-1.2,1,0,0] }])), -- skew y
+         (T.pack "csc108", [defaultRectText { textTransform = [1,0,-1.2,1,0,0] }]), "skew y"),
         (([defaultRectText { textTransform = [1.1,0.5,1.2,1.1,0,0] }], 5, defaultRect { shapePos = (40.0, 90.0), shapeTransform = [1.1,0.5,1.2,1.05,0,0] }),
-         (T.pack "csc108", [defaultRectText { textTransform = [1.1,0.5,1.2,1.1,0,0] }])) -- skew xy
+         (T.pack "csc108", [defaultRectText { textTransform = [1.1,0.5,1.2,1.1,0,0] }]), "skew xy")
     ]
 
 -- Test cases for buildRect with a mixture of different transformations.
-buildRectMixedInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildRectMixedInputs :: [(([Text], Integer, Shape), (T.Text, [Text]), String)]
 buildRectMixedInputs = [
         -- ((textMocks, 1, setTransformation (head rectMocks) [1.5,0,0,1.5,-30,-60]), (T.pack "csc108", [head textMocks])),
         -- ((textMocks, 2, setTransformation (rectMocks !! 2) [-1,0,0,1.2,50,-20]), (T.pack "csc108", [head textMocks])),
@@ -126,46 +126,46 @@ buildRectMixedInputs = [
 
 
 -- Test cases for buildEllipses with no transformations.
-buildEllipsesNoTransformationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildEllipsesNoTransformationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]), String)]
 buildEllipsesNoTransformationInputs = [
         (([defaultEllipseText, defaultEllipseText2], 1, defaultEllipse),
-         (T.pack "bool1", [defaultEllipseText])), -- within the region, i.e. calulation in intersectsEllipse < 1
+         (T.pack "bool1", [defaultEllipseText]), "within the region, i.e. calulation in intersectsEllipse < 1"),
         (([defaultEllipseText { textPos = (98.0, 90.0) }, defaultEllipseText2], 2, defaultEllipse { shapePos = (100.0, 100.0), shapeWidth = 24 }),
-         (T.pack "bool2", [])), -- on the border, i.e. calculation in intersectsEllipse = 1
+         (T.pack "bool2", []), "on the border, i.e. calculation in intersectsEllipse == 1"),
         (([defaultEllipseText { textPos = (210.0, 205.99) }, defaultEllipseText2], 3,  defaultEllipse { shapePos = (200.5, 200.5) }),
-         (T.pack "bool3", [])), -- outside the region, i.e. calculation in intersectsEllipse > 1
+         (T.pack "bool3", []), "outside the region, i.e. calculation in intersectsEllipse > 1"),
         (([defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2], 4, defaultEllipse { shapePos = (300.99, 300.51) }),
-         (T.pack "bool4", [defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2])) -- multiple texts within the region
+         (T.pack "bool4", [defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2]), "multiple texts within the region")
     ]
 
 -- Test cases for buildEllipses with translation.
-buildEllipsesTranslationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildEllipsesTranslationInputs :: [(([Text], Integer, Shape), (T.Text, [Text]), String)]
 buildEllipsesTranslationInputs = [
         (([defaultEllipseText, defaultEllipseText2], 1, defaultEllipse { shapeTransform = [1,0,0,1,10,0] }),
-         (T.pack "bool1", [defaultEllipseText])), -- translate x
+         (T.pack "bool1", [defaultEllipseText]), "translate x"),
         (([defaultEllipseText, defaultEllipseText2], 2, defaultEllipse { shapeTransform = [1,0,0,1,0,-10] }),
-         (T.pack "bool2", [])), -- translate y, no intersection
+         (T.pack "bool2", []), "translate y, no intersection"),
         (([defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2], 3, defaultEllipse { shapeTransform = [1,0,0,1,300,300] }),
-         (T.pack "bool3", [defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2])) -- translate xy, multiple texts
+         (T.pack "bool3", [defaultEllipseText { textPos = (300.0, 300.0) }, defaultEllipseText2]), "translate xy, multiple texts")
     ]
 
 -- Test cases for buildEllipses with scaling (scale origin at center of ellipse).
-buildEllipsesScaleInputs :: [(([Text], Integer, Shape), (T.Text, [Text]))]
+buildEllipsesScaleInputs :: [(([Text], Integer, Shape), (T.Text, [Text]), String)]
 buildEllipsesScaleInputs = [
         (([defaultEllipseText { textPos = (210.0, 205.99) }], 1, defaultEllipse { shapePos = (200.5, 200.5), shapeTransform = [1.1,0,0,1,0,0] }),
-         (T.pack "bool1", [defaultEllipseText { textPos = (210.0, 205.99) }])), -- scale x
+         (T.pack "bool1", [defaultEllipseText { textPos = (210.0, 205.99) }]), "scale x"),
         (([defaultEllipseText { textPos = (210.0, 205.99) }], 2, defaultEllipse { shapePos = (200.5, 200.5), shapeTransform = [1.1,0,0,1,0,0] }),
-         (T.pack "bool2", [defaultEllipseText { textPos = (210.0, 205.99) }])), -- scale y
+         (T.pack "bool2", [defaultEllipseText { textPos = (210.0, 205.99) }]), "scale y"),
         (([defaultEllipseText { textPos = (410.0, 410.0) }], 3, defaultEllipse { shapePos = (300.99, 300.51), shapeTransform = [1.39,0,0,1.39,0,0] }),
-         (T.pack "bool3", [defaultEllipseText { textPos = (410.0, 410.0) }])), -- scale xy
+         (T.pack "bool3", [defaultEllipseText { textPos = (410.0, 410.0) }]), "scale xy"),
         (([defaultEllipseText { textPos = (300.0, 300.0) }], 4, defaultEllipse { shapePos = (300.99, 300.51), shapeTransform = [-1,0,0,1,0,0] }),
-         (T.pack "bool4", [])), -- reflect x
+         (T.pack "bool4", []), "reflect x"),
         (([defaultEllipseText, defaultEllipseText2], 5, defaultEllipse { shapePos = (300.99, 300.51), shapeTransform = [1,0,0,-0.01,0,0] }),
-         (T.pack "bool5", [])), -- reflect y
+         (T.pack "bool5", []), "reflect y"),
         (([defaultEllipseText, defaultEllipseText2], 6, defaultEllipse { shapePos = (300.99, 300.51), shapeTransform = [-0.2,0,0,-200,0,0] }),
-         (T.pack "bool6", [])), -- reflect xy
+         (T.pack "bool6", []), "reflect xy"),
         (([defaultEllipseText, defaultEllipseText2], 7, defaultEllipse { shapeTransform = [1000,0,0,1000,0,0] }),
-         (T.pack "bool7", [defaultEllipseText, defaultEllipseText2])) -- big scale
+         (T.pack "bool7", [defaultEllipseText, defaultEllipseText2]), "big scale")
     ]
 
 
@@ -196,30 +196,30 @@ compareTexts expected actual
 testShapeBuilder :: ([Text] -> Shape -> Integer -> Shape)
                  -> String
                  -> String
-                 -> (([Text], Integer, Shape), (T.Text, [Text]))
+                 -> (([Text], Integer, Shape), (T.Text, [Text]), String)
                  -> Test
 testShapeBuilder fn label shapeLabel input =
-    TestLabel label $ TestCase $ do
-        let ((texts, elementId, rect), (expectedId_, expectedTexts)) = input
-            result = fn texts rect elementId
-        assertEqual ("Check id_ for " ++ shapeLabel ++ " " ++ show elementId) expectedId_ $ shapeId_ result
-        assertBool ("Check texts for " ++ shapeLabel ++ " " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
+    let ((texts, elementId, rect), (expectedId_, expectedTexts), testLabel) = input
+        result = fn texts rect elementId
+    in TestLabel (label ++ testLabel) $ TestCase $ do
+        assertEqual ("Check id_ failed for " ++ shapeLabel ++ " " ++ show elementId) expectedId_ $ shapeId_ result
+        assertBool ("Check texts failed for " ++ shapeLabel ++ " " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
 
 -- Run all test cases for buildRect
 runBuildRectTests :: [Test]
 runBuildRectTests =
-    map (testShapeBuilder buildRect "Test buildRect no transformation" "rect") buildRectNoTransformInputs ++
-    map (testShapeBuilder buildRect "Test buildRect translation" "rect") buildRectTranslationInputs ++
-    map (testShapeBuilder buildRect "Test buildRect scaling" "rect") buildRectScaleInputs ++
-    map (testShapeBuilder buildRect "Test buildRect rotation/skewing" "rect") buildRectShearInputs ++
-    map (testShapeBuilder buildRect "Test buildRect mixed transformations" "rect") buildRectMixedInputs
+    map (testShapeBuilder buildRect "Test buildRect no transformation: " "rect") buildRectNoTransformInputs ++
+    map (testShapeBuilder buildRect "Test buildRect translation: " "rect") buildRectTranslationInputs ++
+    map (testShapeBuilder buildRect "Test buildRect scaling: " "rect") buildRectScaleInputs ++
+    map (testShapeBuilder buildRect "Test buildRect rotation/skewing: " "rect") buildRectShearInputs ++
+    map (testShapeBuilder buildRect "Test buildRect mixed transformations: " "rect") buildRectMixedInputs
 
 -- Run all test cases for buildEllipses
 runBuildEllipsesTests :: [Test]
 runBuildEllipsesTests =
-    map (testShapeBuilder buildEllipses "Test buildEllipses no transformation" "ellipse") buildEllipsesNoTransformationInputs ++
-    map (testShapeBuilder buildEllipses "Test buildEllipses translation" "ellipse") buildEllipsesTranslationInputs ++
-    map (testShapeBuilder buildEllipses "Test buildEllipses scale" "ellipse") buildEllipsesScaleInputs
+    map (testShapeBuilder buildEllipses "Test buildEllipses no transformation: " "ellipse") buildEllipsesNoTransformationInputs ++
+    map (testShapeBuilder buildEllipses "Test buildEllipses translation: " "ellipse") buildEllipsesTranslationInputs ++
+    map (testShapeBuilder buildEllipses "Test buildEllipses scaling: " "ellipse") buildEllipsesScaleInputs
 
 
 -- Test suite for intersection checks
