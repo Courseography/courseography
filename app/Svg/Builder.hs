@@ -46,11 +46,15 @@ buildPath rects ellipses entity elementId
               nodes = rects ++ ellipses
               sourceNode =
                   if T.null $ pathSource entity
-                      then getIntersectingShape start nodes
+                      then getIntersectingShape
+                          (matrixPointMultiply (listToMatrix $ pathTransform entity) start)
+                          nodes
                       else pathSource entity
               targetNode =
                   if T.null $ pathTarget entity
-                      then getIntersectingShape end (filter (\r -> shapeId_ r /= sourceNode) nodes)
+                      then getIntersectingShape
+                          (matrixPointMultiply (listToMatrix $ pathTransform entity) end)
+                          (filter (\r -> shapeId_ r /= sourceNode) nodes)
                       else pathTarget entity
           in
               entity {pathId_ = T.pack $ 'p' : show elementId,
