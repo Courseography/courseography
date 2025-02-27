@@ -201,6 +201,13 @@ buildEllipsesMixedInputs = [
     ]
 
 
+-- * intersectsWithShape
+intersectsWithShapeNoTransformationInputs :: [((Integer, Text, [Shape]), Bool, String)]
+intersectsWithShapeNoTransformationInputs = [
+        ((1, defaultRectText, []), False, "test set up")
+    ]
+
+
 -- * buildPath tests
 
 -- Test cases for buildPath with no transformations.
@@ -251,6 +258,16 @@ testShapeBuilder fn label shapeLabel input =
         assertEqual ("Check id_ failed for " ++ shapeLabel ++ " " ++ show elementId) expectedId_ $ shapeId_ result
         assertBool ("Check texts failed for " ++ shapeLabel ++ " " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
 
+-- Function for testing a intersectsWithShape test case
+testIntersectsWithShape :: String
+                        -> ((Integer, Text, [Shape]), Bool, String)
+                        -> Test
+testIntersectsWithShape label input =
+    let ((testId, text, shapes), expected, testLabel) = input
+        actual = intersectsWithShape shapes text
+    in TestLabel (label ++ testLabel) $ TestCase $ do
+        assertEqual ("Check intersection failed for case " ++ show testId) expected actual
+
 -- Function for testing a buildPath test case
 testBuildPath :: String
               -> ((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)
@@ -283,6 +300,11 @@ runBuildEllipsesTests =
     map (testShapeBuilder buildEllipses "Test buildEllipses mixed transformations: " "ellipse") buildEllipsesMixedInputs
 
 -- Run all test cases for buildPath
+runIntersectsWithShape :: [Test]
+runIntersectsWithShape =
+    map (testIntersectsWithShape "Test intersectsWithShape: ") intersectsWithShapeNoTransformationInputs
+
+-- Run all test cases for buildPath
 runBuildPathTests :: [Test]
 runBuildPathTests =
     map (testBuildPath "Test buildPath no transformation: ") buildPathNoTransformationInputs
@@ -291,4 +313,4 @@ runBuildPathTests =
 -- Test suite for intersection checks
 intersectionTestSuite :: Test
 intersectionTestSuite = TestLabel "Intersection tests" $
-    TestList $ runBuildRectTests ++ runBuildEllipsesTests ++ runBuildPathTests
+    TestList $ runBuildRectTests ++ runBuildEllipsesTests ++ runIntersectsWithShape ++ runBuildPathTests
