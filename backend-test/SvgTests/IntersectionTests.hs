@@ -201,7 +201,9 @@ buildEllipsesMixedInputs = [
     ]
 
 
--- * intersectsWithShape
+-- * intersectsWithShape tests
+
+-- Test cases for intersectsWithShape with no transformations.
 intersectsWithShapeNoTransformationInputs :: [((Integer, Text, [Shape]), Bool, String)]
 intersectsWithShapeNoTransformationInputs = [
         ((1, defaultRectText { textPos = (1.1, 1.1) },
@@ -228,6 +230,29 @@ intersectsWithShapeNoTransformationInputs = [
         ((8, defaultEllipseText { textPos = (450.0, 400.0) },
          [defaultEllipse { shapePos = (0.0, 0.0) }, defaultEllipse { shapePos = (29.09, 300.23) }]),
          False, "not intersecting with ellipse")
+    ]
+
+-- Test cases for buildEllipses with translation.
+intersectsWithShapeTranslationInputs :: [((Integer, Text, [Shape]), Bool, String)]
+intersectsWithShapeTranslationInputs = [
+        ((1, defaultRectText { textPos = (100.0, 0.0) },
+         [defaultRect { shapePos = (0.0, 0.0), shapeTransform = [1,0,0,1,100,0] }]),
+         True, "translate x for rect"),
+        ((2, defaultRectText { textPos = (0.0, 0.0) },
+         [defaultRect { shapePos = (0.0, 200.0), shapeTransform = [1,0,0,1,100,-100] }]),
+         False, "translate x for rect"),
+        ((3, defaultRectText { textPos = (100.0, 0.0), textTransform = [1,0,0,1,-100,10] },
+         [defaultRect { shapePos = (0.0, 0.0) , shapeTransform = [1,0,0,1,100,100] }, defaultRect { shapePos = (0.0, 0.0) }]),
+         True, "translate xy for rect"),
+        ((4, defaultEllipseText { textPos = (50.0, 50.0) },
+         [defaultEllipse { shapePos = (0.0, 50.0), shapeTransform = [1,0,0,1,30,0] }]),
+         True, "translate xy for ellipse"),
+        ((5, defaultEllipseText { textPos = (20.99, 10.0), textTransform = [1,0,0,1,0,-10.0]},
+         [defaultEllipse { shapePos = (0.0, 0.0) }]),
+         True, "translate y for ellipse"),
+        ((6, defaultEllipseText { textPos = (45.1, 40.1) },
+         [defaultEllipse { shapePos = (0.0, 0.0), shapeTransform = [1,0,0,1,12.5,10.0] }, defaultEllipse { shapePos = (1000, 1000) }]),
+         False, "translate xy for ellipse")
     ]
 
 
@@ -325,7 +350,8 @@ runBuildEllipsesTests =
 -- Run all test cases for buildPath
 runIntersectsWithShape :: [Test]
 runIntersectsWithShape =
-    map (testIntersectsWithShape "Test intersectsWithShape: ") intersectsWithShapeNoTransformationInputs
+    map (testIntersectsWithShape "Test intersectsWithShape no transformation: ") intersectsWithShapeNoTransformationInputs ++
+    map (testIntersectsWithShape "Test intersectsWithShape translation: ") intersectsWithShapeTranslationInputs
 
 -- Run all test cases for buildPath
 runBuildPathTests :: [Test]
