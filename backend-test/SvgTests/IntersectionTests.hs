@@ -174,7 +174,7 @@ buildEllipsesScaleInputs = [
          (T.pack "bool7", [defaultEllipseText, defaultEllipseText2]), "big scale")
     ]
 
--- Test cases for buildEllipses with rotation/skewing
+-- Test cases for buildEllipses with rotation/skewing.
 buildEllipsesShearInputs :: [((Integer, [Text], Shape), (T.Text, [Text]), String)]
 buildEllipsesShearInputs = [
         ((1, [defaultEllipseText { textTransform = [0.707, 0.707, -0.707, 0.707, 0, 0] }], defaultEllipse { shapeTransform = [0.707, 0.707, -0.707, 0.707, 0, 0] }),
@@ -189,7 +189,7 @@ buildEllipsesShearInputs = [
          (T.pack "bool5", [defaultEllipseText { textTransform = [1,-1.5,2.3,1,0,0] }]), "skew xy")
     ]
 
--- Test cases for buildRect with a mixture of different transformations.
+-- Test cases for buildEllipses with a mixture of different transformations.
 buildEllipsesMixedInputs :: [((Integer, [Text], Shape), (T.Text, [Text]), String)]
 buildEllipsesMixedInputs = [
         ((1, [defaultEllipseText { textTransform = [900, -0.000001, 38, 2.1, 500.5, 20.09] }, defaultEllipseText2], defaultEllipse { shapeTransform = [900, -0.000001, 38, 2.1, 500.5, 20.09] }),
@@ -202,11 +202,21 @@ buildEllipsesMixedInputs = [
 
 
 -- * buildPath tests
+
+-- Test cases for buildPath with no transformations.
 buildPathNoTransformationInputs :: [((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)]
 buildPathNoTransformationInputs = [
         ((1, defaultPath, [], []), (T.pack "p1", T.pack "", T.pack ""), "test set up")
     ]
 
+-- TODO test cases for buildPath
+-- no need to consider shape tolerance/corner/border cases, covered in tests for intersectsWithShape
+-- no need to consider shape type, covered in tests for intersectsWithShape
+-- path intersects with node normally
+-- no intersections
+-- only one intersection (only one shape vs more than one shapes)
+-- more than one shape intersects at point
+-- diff transformation with shape
 
 -- * Helpers
 
