@@ -8,7 +8,7 @@ Module that contains the tests for intersection checks in the SVG Builder module
 module SvgTests.IntersectionTests (intersectionTestSuite) where
 
 import Svg.Builder (buildRect, buildEllipses, buildPath, intersectsWithShape)
-import Database.Tables (Text(..), Shape(..))
+import Database.Tables (Text(..), Shape(..), Path(..))
 import Database.DataType (ShapeType(..))
 import qualified Data.Text as T
 import Test.HUnit (Test(..), assertEqual, assertBool)
@@ -17,22 +17,25 @@ import Database.Persist.Sqlite (toSqlKey)
 -- * Mocks
 
 defaultRectText :: Text
-defaultRectText = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (50.0, 100.0), textText = T.pack "CSC108", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
+defaultRectText = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (50.0, 100.0), textText = T.pack "CSC108", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0] }
 
 defaultRectText2 :: Text
-defaultRectText2 = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (201.92939, 90.8812), textText = T.pack "CSC148", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
+defaultRectText2 = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (201.92939, 90.8812), textText = T.pack "CSC148", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0] }
 
 defaultEllipseText :: Text
-defaultEllipseText = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (0.0, 0.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
+defaultEllipseText = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (0.0, 0.0), textText = T.pack "and", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0] }
 
 defaultEllipseText2 :: Text
-defaultEllipseText2 = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (301.0, 301.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0]}
+defaultEllipseText2 = Text { textGraph = toSqlKey 1, textRId = T.pack "", textPos = (301.0, 301.0), textText = T.pack "or", textAlign = T.pack "", textFill = T.pack "", textTransform = [1,0,0,1,0,0] }
 
 defaultRect :: Shape
-defaultRect = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0]}
+defaultRect = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (50.0, 100.0), shapeWidth = 85, shapeHeight = 30, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = Node, shapeTransform = [1,0,0,1,0,0] }
 
 defaultEllipse :: Shape
-defaultEllipse = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0]}
+defaultEllipse = Shape { shapeGraph = toSqlKey 1, shapeId_ = T.pack "", shapePos = (0.0, 0.0), shapeWidth = 25, shapeHeight = 20, shapeFill = T.pack "", shapeStroke = T.pack "", shapeText = [], shapeType_ = BoolNode, shapeTransform = [1,0,0,1,0,0] }
+
+defaultPath :: Path
+defaultPath = Path { pathGraph = toSqlKey 1, pathId_ = T.pack "", pathPoints = [(0.0, 0.0), (100.0, 100.0)], pathFill = T.pack "", pathStroke = T.pack "", pathIsRegion = False, pathSource = T.pack "", pathTarget = T.pack "", pathTransform = [1,0,0,1,0,0] }
 
 
 -- * Test Cases
@@ -198,6 +201,13 @@ buildEllipsesMixedInputs = [
     ]
 
 
+-- * buildPath tests
+buildPathNoTransformationInputs :: [((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)]
+buildPathNoTransformationInputs = [
+        ((1, defaultPath, [], []), (T.pack "p1", T.pack "", T.pack ""), "test set up")
+    ]
+
+
 -- * Helpers
 
 -- Helper to compare if two Text types
@@ -231,6 +241,19 @@ testShapeBuilder fn label shapeLabel input =
         assertEqual ("Check id_ failed for " ++ shapeLabel ++ " " ++ show elementId) expectedId_ $ shapeId_ result
         assertBool ("Check texts failed for " ++ shapeLabel ++ " " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
 
+-- Function for testing a buildPath test case
+testBuildPath :: String
+              -> ((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)
+              -> Test
+testBuildPath label input =
+    let ((elementId, path, rects, ellipses), (expectedId_, expectedSource, expectedTarget), testLabel) = input
+        result = buildPath rects ellipses path elementId
+    in TestLabel (label ++ testLabel) $ TestCase $ do
+        assertEqual ("Check id_ failed for path " ++ show elementId) expectedId_ $ pathId_ result
+        assertEqual ("Check source node failed for path " ++ show elementId) expectedSource $ pathSource result
+        assertEqual ("Check target node failed for path " ++ show elementId) expectedTarget $ pathTarget result
+
+
 -- Run all test cases for buildRect
 runBuildRectTests :: [Test]
 runBuildRectTests =
@@ -249,8 +272,13 @@ runBuildEllipsesTests =
     map (testShapeBuilder buildEllipses "Test buildEllipses rotation/skewing: " "ellipse") buildEllipsesShearInputs ++
     map (testShapeBuilder buildEllipses "Test buildEllipses mixed transformations: " "ellipse") buildEllipsesMixedInputs
 
+-- Run all test cases for buildPath
+runBuildPathTests :: [Test]
+runBuildPathTests =
+    map (testBuildPath "Test buildPath no transformation: ") buildPathNoTransformationInputs
+
 
 -- Test suite for intersection checks
 intersectionTestSuite :: Test
 intersectionTestSuite = TestLabel "Intersection tests" $
-    TestList $ runBuildRectTests ++ runBuildEllipsesTests
+    TestList $ runBuildRectTests ++ runBuildEllipsesTests ++ runBuildPathTests
