@@ -204,7 +204,30 @@ buildEllipsesMixedInputs = [
 -- * intersectsWithShape
 intersectsWithShapeNoTransformationInputs :: [((Integer, Text, [Shape]), Bool, String)]
 intersectsWithShapeNoTransformationInputs = [
-        ((1, defaultRectText, []), False, "test set up")
+        ((1, defaultRectText { textPos = (1.1, 1.1) },
+         [defaultRect { shapePos = (0.0, 0.0) }]),
+          True, "within rect"),
+        ((2, defaultRectText { textPos = (90.0, 25.0) },
+         [defaultRect { shapePos = (0.0, 0.0) } ]),
+         True, "within rect shape tolerance (9.0)"),
+        ((3, defaultRectText { textPos = (94.0, 39.0) },
+         [defaultRect { shapePos = (0.0, 0.0)}]),
+         True, "on border of shape tolerance (9.0)"),
+        ((4, defaultRectText { textPos = (1000.0, 1000.78) },
+         [defaultRect { shapePos = (0.0, 0.0) }, defaultRect { shapePos = (500.0, 500.0) }]),
+         False, "not intersecting with rect"),
+        ((5, defaultEllipseText { textPos = (2.0, 2.0) },
+         [defaultEllipse { shapePos = (0.0, 0.0) }]),
+         True, "within ellipse"),
+        ((6, defaultEllipseText { textPos = (30.0, 30.0) },
+         [defaultEllipse { shapePos = (0.0, 0.0) }]),
+         True, "within shape tolerance (20.0)"),
+        ((7, defaultEllipseText { textPos = (45.0, 40.0) },
+         [defaultEllipse { shapePos = (12.5, 10.0) }]),
+         True, "on border of shape tolerance (20.0)"),
+        ((8, defaultEllipseText { textPos = (450.0, 400.0) },
+         [defaultEllipse { shapePos = (0.0, 0.0) }, defaultEllipse { shapePos = (29.09, 300.23) }]),
+         False, "not intersecting with ellipse")
     ]
 
 
