@@ -372,7 +372,7 @@ buildPathTranslationInputs = [
          [defaultRect { shapePos = (0.0, 0.0), shapeId_ = T.pack "csc108" }], [defaultEllipse { shapePos = (100.0, 120.0), shapeTransform = [1,0,0,1,0,-10], shapeId_ = T.pack "ellipse1" }]),
          (T.pack "p2", T.pack "csc108", T.pack "ellipse1"), "translate y for path"),
         ((3, defaultPath { pathTransform = [1,0,0,1,20,20] },
-         [defaultRect { shapePos = (0.0, 0.0), shapeId_ = T.pack "csc108" }, defaultRect { shapePos = (100.0, 100.0), shapeId_ = T.pack "csc148" }], [defaultEllipse]),
+         [defaultRect { shapePos = (0.0, 0.0), shapeId_ = T.pack "csc108" }, defaultRect { shapePos = (100.0, 100.0), shapeTransform = [1,0,0,1,-5,6.7], shapeId_ = T.pack "csc148" }], [defaultEllipse]),
          (T.pack "p3", T.pack "csc108", T.pack "csc148"), "translate xy for path")
     ]
 
