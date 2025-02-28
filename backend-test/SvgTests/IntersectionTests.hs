@@ -342,7 +342,24 @@ intersectsWithShapeMixedInputs = [
 -- Test cases for buildPath with no transformations.
 buildPathNoTransformationInputs :: [((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)]
 buildPathNoTransformationInputs = [
-        ((1, defaultPath, [], []), (T.pack "p1", T.pack "", T.pack ""), "test set up")
+        ((1, defaultPath,
+         [defaultRect { shapePos = (0.0, 0.0), shapeId_ = T.pack "csc108" }, defaultRect { shapePos = (100.0, 100.0), shapeId_ = T.pack "csc148" }], [defaultEllipse]),
+         (T.pack "p1", T.pack "csc108", T.pack "csc148"), "path intersects two rects at source and target"),
+        ((2, defaultPath,
+         [defaultRect { shapePos = (0.0, 0.0), shapeId_ = T.pack "csc108" } ], [defaultEllipse { shapePos = (90.0, 90.0), shapeId_ = T.pack "ellipse1" }]),
+         (T.pack "p2", T.pack "csc108", T.pack "ellipse1"), "path intersects rect at source and ellipse at target"),
+        ((3, defaultPath,
+         [defaultRect { shapePos = (110.0, 110.0), shapeId_ = T.pack "csc108" } ], [defaultEllipse { shapePos = (1.0, 1.0), shapeId_ = T.pack "ellipse1" }]),
+         (T.pack "p3", T.pack "ellipse1", T.pack ""), "path only intersects with ellipse at source"),
+        ((4, defaultPath,
+         [defaultRect { shapePos = (70.0, 70.0), shapeId_ = T.pack "csc108" } ], [defaultEllipse { shapePos = (50.99, 50.19), shapeId_ = T.pack "ellipse1" }]),
+         (T.pack "p4", T.pack "", T.pack "csc108"), "path only intersects with rect at target"),
+        ((5, defaultPath,
+         [defaultRect { shapePos = (50.0, 50.0) }], [defaultEllipse { shapePos = (50.0, 50.0) }]),
+         (T.pack "p5", T.pack "", T.pack ""), "path doesn't intersect with any shape"),
+        ((6, defaultPath,
+         [defaultRect { shapePos = (0.0, 0.0), shapeId_ = T.pack "csc108" }], [defaultEllipse { shapePos = (0.0, 0.0), shapeId_ = "ellipse1" }]),
+         (T.pack "p6", T.pack "csc108", T.pack ""), "path intersects with multiple shapes")
     ]
 
 -- TODO test cases for buildPath
