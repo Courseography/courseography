@@ -419,6 +419,17 @@ buildPathShearInputs = [
          (T.pack "p5", T.pack "ellipse1", T.pack "ellipse2"), "skew xy")
     ]
 
+-- Test cases for intersectsWithShape with a mixture of different transformations.
+buildPathMixedInputs :: [((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)]
+buildPathMixedInputs = [
+        ((1, defaultPath { pathPoints = [(100.0, 100.0), (500.0, 500.0)], pathTransform = [1.5,0.4,-0.6,-0.8,20,-35] },
+         [defaultRect { shapePos = (80.993, 80.28), shapeTransform = [1.5,0.4,-0.6,-0.8,20,-35], shapeId_ = T.pack "csc108"}], [defaultEllipse { shapePos = (498.213, 489.092), shapeTransform = [1.5,0.4,-0.6,-0.8,20,-35], shapeId_ = T.pack "ellipse1"}]),
+         (T.pack "p1", T.pack "csc108", T.pack "ellipse1"), "complex transformation where all entities has the same transformation"),
+        ((2, defaultPath { pathPoints = [(100.0, 100.0), (500.0, 500.0)], pathTransform = [-1.2,-0.3,0.7,0.9,-15,50] },
+         [defaultRect { shapePos = (498.063, 470.32), shapeTransform = [-1.2,-0.22,0.9,0.7,-15,30], shapeId_ = T.pack "csc108"}], [defaultEllipse { shapePos = (82.492, 111.0), shapeTransform = [-1.3,-0.39,0.68,0.91,-10,50], shapeId_ = T.pack "ellipse1"}]),
+         (T.pack "p2", T.pack "ellipse1", T.pack "csc108"), "complex transformation where entities have different transformations")
+    ]
+
 
 -- * Helpers
 
@@ -509,7 +520,8 @@ runBuildPathTests =
     map (testBuildPath "Test buildPath no transformation: ") buildPathNoTransformationInputs ++
     map (testBuildPath "Test buildPath translation: ") buildPathTranslationInputs ++
     map (testBuildPath "Test buildPath scaling: ") buildPathScaleInputs ++
-    map (testBuildPath "Test buildPath rotation.skewing: ") buildPathShearInputs
+    map (testBuildPath "Test buildPath rotation/skewing: ") buildPathShearInputs ++
+    map (testBuildPath "Test buildPath mixed transformations: ") buildPathMixedInputs
 
 
 -- Test suite for intersection checks
