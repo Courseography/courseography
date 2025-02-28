@@ -311,7 +311,7 @@ export default class GenerateForm extends React.Component {
                   type="text"
                   placeholder="e.g., CSC207H1, CSC324H1"
                 />
-                <ErrorMessage name="courses" component="div" id="error-message" />
+                <ErrorMessage id="error-message" name="courses" component="div" />
 
                 <h2 id="filter-title">Optional filters</h2>
 
@@ -325,7 +325,7 @@ export default class GenerateForm extends React.Component {
                   placeholder="Enter 3-letter department codes separated by commas"
                   style={{ marginBottom: errors.departments ? "0" : "1em" }}
                 />
-                <ErrorMessage name="departments" component="div" id="error-message" />
+                <ErrorMessage id="error-message" name="departments" component="div" />
 
                 <label htmlFor="taken">Do not show these courses</label>
                 <Field
@@ -335,7 +335,7 @@ export default class GenerateForm extends React.Component {
                   placeholder="E.g., CSC207H1, CSC236H1"
                   style={{ marginBottom: errors.taken ? "0" : "1em" }}
                 />
-                <ErrorMessage name="taken" component="div" id="error-message" />
+                <ErrorMessage id="error-message" name="taken" component="div" />
 
                 <label htmlFor="maxDepth">
                   Depth of prerequisite chain (0 shows all prerequisites)
