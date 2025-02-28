@@ -362,6 +362,20 @@ buildPathNoTransformationInputs = [
          (T.pack "p6", T.pack "csc108", T.pack ""), "path intersects with multiple shapes")
     ]
 
+-- Test cases for buildPath with translation.
+buildPathTranslationInputs :: [((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)]
+buildPathTranslationInputs = [
+        ((1, defaultPath { pathTransform = [1,0,0,1,50,0] },
+         [defaultRect { shapePos = (0.0, 0.0), shapeId_ = T.pack "csc108", shapeWidth = 10 }, defaultRect { shapePos = (100.0, 100.0), shapeId_ = T.pack "csc148", shapeWidth = 10 }], []),
+         (T.pack "p1", T.pack "", T.pack ""), "translate x for path"),
+        ((2, defaultPath { pathTransform = [1,0,0,1,0,20] },
+         [defaultRect { shapePos = (0.0, 0.0), shapeId_ = T.pack "csc108" }], [defaultEllipse { shapePos = (100.0, 120.0), shapeTransform = [1,0,0,1,0,-10], shapeId_ = T.pack "ellipse1" }]),
+         (T.pack "p2", T.pack "csc108", T.pack "ellipse1"), "translate y for path"),
+        ((3, defaultPath { pathTransform = [1,0,0,1,20,20] },
+         [defaultRect { shapePos = (0.0, 0.0), shapeId_ = T.pack "csc108" }, defaultRect { shapePos = (100.0, 100.0), shapeId_ = T.pack "csc148" }], [defaultEllipse]),
+         (T.pack "p3", T.pack "csc108", T.pack "csc148"), "translate xy for path")
+    ]
+
 -- TODO test cases for buildPath
 -- no need to consider shape tolerance/corner/border cases, covered in tests for intersectsWithShape
 -- no need to consider shape type, covered in tests for intersectsWithShape
@@ -457,7 +471,8 @@ runIntersectsWithShape =
 -- Run all test cases for buildPath
 runBuildPathTests :: [Test]
 runBuildPathTests =
-    map (testBuildPath "Test buildPath no transformation: ") buildPathNoTransformationInputs
+    map (testBuildPath "Test buildPath no transformation: ") buildPathNoTransformationInputs ++
+    map (testBuildPath "Test buildPath translation: ") buildPathTranslationInputs
 
 
 -- Test suite for intersection checks
