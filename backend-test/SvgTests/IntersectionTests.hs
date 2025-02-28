@@ -376,6 +376,29 @@ buildPathTranslationInputs = [
          (T.pack "p3", T.pack "csc108", T.pack "csc148"), "translate xy for path")
     ]
 
+-- Test cases for intersectsWithShape with scaling.
+buildPathScaleInputs :: [((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)]
+buildPathScaleInputs = [
+        ((1, defaultPath { pathTransform = [1.1,0,0,1,0,0] },
+         [defaultRect { shapePos = (100.0, 100.0), shapeId_ = T.pack "csc108"}], [defaultEllipse { shapePos = (0.0, 0.0), shapeId_ = "ellipse1" }]),
+         (T.pack "p1", T.pack "ellipse1", T.pack "csc108"), "scale x for path"),
+        ((2, defaultPath { pathTransform = [1,0,0,0.75,0,0] },
+         [], [defaultEllipse { shapePos = (100.0, 60.0), shapeTransform = [1,0,0,1.1,0,0], shapeId_ = T.pack "ellipse1" }]),
+         (T.pack "p2", T.pack "", T.pack "ellipse1"), "scale y for path and shape"),
+        ((3, defaultPath { pathPoints = [(1.0, 1.0), (100.0, 100.0)], pathTransform = [0.7,0,0,2,0,0] },
+         [defaultRect { shapePos = (1.0, 1.0), shapeId_ = "csc108", shapeTransform = [1000,0,0,1,0,0] }], [defaultEllipse { shapePos = (77.11, 180.976), shapeTransform = [0.9,0,0,1.1,0,0], shapeId_ = T.pack "ellipse1" }]),
+         (T.pack "p3", T.pack "csc108", T.pack "ellipse1"), "scale xy for path and shape"),
+        ((4, defaultPath { pathTransform = [-1,0,0,1,0,0] },
+         [defaultRect { shapePos = (100.0, 100.0), shapeId_ = T.pack "csc108"}], [defaultEllipse { shapePos = (0.0, 0.0), shapeId_ = "ellipse1" }]),
+         (T.pack "p4", T.pack "ellipse1", T.pack ""), "reflect x for path"),
+        ((5, defaultPath { pathTransform = [1,0,0,-0.75,0,0] },
+         [defaultRect { shapePos = (100.0, 70.0), shapeTransform = [1,0,0,-1,0,0], shapeId_ = T.pack "csc108" }], []),
+         (T.pack "p5", T.pack "", T.pack "csc108"), "reflect y for path and shape"),
+        ((6, defaultPath { pathPoints = [(1.0, 1.0), (100.0, 100.0)], pathTransform = [-0.2,0,0,-0.8,0,0] },
+         [defaultRect { shapePos = (1.0, 1.0), shapeId_ = "csc108", shapeTransform = [-0.2,0,0,-0.8,0,0] }], [defaultEllipse { shapePos = (100.0, 100.0), shapeTransform = [-0.2,0,0,-0.8,0,0], shapeId_ = T.pack "ellipse1" }]),
+         (T.pack "p6", T.pack "csc108", T.pack "ellipse1"), "reflect xy for path and shape")
+    ]
+
 -- TODO test cases for buildPath
 -- no need to consider shape tolerance/corner/border cases, covered in tests for intersectsWithShape
 -- no need to consider shape type, covered in tests for intersectsWithShape
@@ -472,7 +495,8 @@ runIntersectsWithShape =
 runBuildPathTests :: [Test]
 runBuildPathTests =
     map (testBuildPath "Test buildPath no transformation: ") buildPathNoTransformationInputs ++
-    map (testBuildPath "Test buildPath translation: ") buildPathTranslationInputs
+    map (testBuildPath "Test buildPath translation: ") buildPathTranslationInputs ++
+    map (testBuildPath "Test buildPath scaling: ") buildPathScaleInputs
 
 
 -- Test suite for intersection checks
