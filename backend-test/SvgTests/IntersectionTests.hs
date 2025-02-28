@@ -313,6 +313,29 @@ intersectsWithShapeShearInputs = [
          True, "skew xy for ellipse")
     ]
 
+-- Test cases for intersectsWithShape with a mixture of different transformations.
+intersectsWithShapeMixedInputs :: [((Integer, Text, [Shape]), Bool, String)]
+intersectsWithShapeMixedInputs = [
+        ((1, defaultEllipseText { textPos = (100.0, 100.0), textTransform = [9.8, -23, 0.11, -3.2, 1333, -302] },
+         [defaultEllipse { shapePos = (101.0, 101.0), shapeTransform = [9.8, -23, 0.11, -3.2, 1333, -302] }, defaultRect { shapePos = (102.0, 102.0), shapeTransform = [9.8, -23, 0.11, -3.2, 1333, -302] }]),
+         True, "complex transformation for both rects and ellipses, same transformation for all entities"),
+        ((2, defaultRectText { textPos = (100.0, 100.0), textTransform = [1, 0.1, 0.1, 2, 50, 50] },
+         [defaultEllipse { shapePos = (100.0, 100.0), shapeTransform = [1, 0.1, 0.1, 2, 50, 50] }, defaultRect { shapePos = (100.0, 100.0), shapeTransform = [1, 0.1, 0.1, 2, 50, 50] }]),
+         True, "complex transformation for both rects and ellipses, different transformation for all entities"),
+        ((3, defaultEllipseText { textPos = (50.11, 49.11) },
+         [defaultEllipse { shapePos = (50.11, 49.11), shapeTransform = [2, 0.9, -1.2, 1.5, 15, 9.45] }]),
+         False, "complex transformation, intersects at raw point but not when transformed"),
+        ((4, defaultRectText { textPos = (100.0, 100.0) },
+         [defaultEllipse, defaultRect { shapePos = (104.5, 182.99), shapeTransform = [-0.53, 0.85, -2.45, 1.91, -0.15, 5.29] }]),
+         True, "complex transformation, doesn't intersect at raw point but do intersect when transformed"),
+        ((5, defaultRectText { textPos = (100.0, 100.0) },
+         [defaultRect { shapePos = (5.0, 5.0), shapeTransform = [-1, -0.2, -2, 0.5, -2, 20] }, defaultEllipse]),
+         False, "complex transformation, doesn't intersect at raw point and after transformed"),
+        ((6, defaultRectText,
+         []),
+         False, "no shapes to check")
+    ]
+
 
 -- * buildPath tests
 
@@ -411,7 +434,8 @@ runIntersectsWithShape =
     map (testIntersectsWithShape "Test intersectsWithShape no transformation: ") intersectsWithShapeNoTransformationInputs ++
     map (testIntersectsWithShape "Test intersectsWithShape translation: ") intersectsWithShapeTranslationInputs ++
     map (testIntersectsWithShape "Test intersectsWithShape scaling: ") intersectsWithShapeScaleInputs ++
-    map (testIntersectsWithShape "Test intersectsWithShape rotation/skewing: ") intersectsWithShapeShearInputs
+    map (testIntersectsWithShape "Test intersectsWithShape rotation/skewing: ") intersectsWithShapeShearInputs ++
+    map (testIntersectsWithShape "Test intersectsWithShape mixed transformations: ") intersectsWithShapeMixedInputs
 
 -- Run all test cases for buildPath
 runBuildPathTests :: [Test]
