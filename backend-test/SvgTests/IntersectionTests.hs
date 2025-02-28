@@ -232,7 +232,7 @@ intersectsWithShapeNoTransformationInputs = [
          False, "not intersecting with ellipse")
     ]
 
--- Test cases for buildEllipses with translation.
+-- Test cases for intersectsWithShape with translation.
 intersectsWithShapeTranslationInputs :: [((Integer, Text, [Shape]), Bool, String)]
 intersectsWithShapeTranslationInputs = [
         ((1, defaultRectText { textPos = (100.0, 0.0) },
@@ -277,6 +277,42 @@ intersectsWithShapeScaleInputs = [
          [defaultEllipse { shapePos = (1.0, 1.0), shapeTransform = [2,0,0,1.1,0,0] }]),
          True, "reflect x for ellipse where text pos is (0,0)")
     ]
+
+-- Test cases for intersectsWithShape with rotation/skewing.
+intersectsWithShapeShearInputs :: [((Integer, Text, [Shape]), Bool, String)]
+intersectsWithShapeShearInputs = [
+        ((1, defaultRectText { textTransform = [0,1,-1,0,0,0] },
+         [defaultRect { shapeTransform = [0,1,-1,0,0,0] }]),
+         True, "CW rotation for rect"),
+        ((2, defaultRectText,
+         [defaultRect { shapeTransform = [0,-1,1,0,0,0] }]),
+         False, "CCW rotation for rect"),
+        ((3, defaultEllipseText { textPos = (1.0, 10.0) },
+         [defaultEllipse { shapeTransform = [0,0.5,-0.5,0,0,0] }]),
+         True, "CW rotation for ellipse"),
+        ((4, defaultEllipseText { textPos = (50.0, 50.0) },
+         [defaultEllipse { shapePos = (40.0, 40.0), shapeTransform = [0,-0.5,0.5,0,0,0] }]),
+         False, "CWW rotation for ellipse"),
+        ((5, defaultRectText { textPos = (35.0, 30.98) },
+         [defaultRect { shapePos = (0, 29.64), shapeTransform = [1,1,0,1,0,0]}]),
+         True, "skew x for rect"),
+        ((6, defaultRectText { textPos = (100.0, 100.0) },
+         [defaultRect { shapePos = (100.0, 176.0), shapeTransform = [1,0,-0.76,1,0,0]}]),
+         True, "skew y for rect"),
+        ((7, defaultRectText { textPos = (100.0, 100.0) },
+         [defaultRect { shapePos = (72.0, 24.0), shapeTransform = [6.35,-14.82,1.85,-1.4,0,0]}]),
+         True, "skew xy for rect"),
+        ((8, defaultEllipseText { textPos = (100.0, 100.0) },
+         [defaultEllipse { shapePos = (100.0, 100.0), shapeTransform = [1,-0.1,0,1,0,0] }]),
+         True, "skew x for ellipse"),
+        ((9, defaultEllipseText { textPos = (100.0, 100.0) },
+         [defaultEllipse { shapePos = (100.0, 100.0), shapeTransform = [1,0,10,1,0,0] }]),
+         False, "skew y for ellipse"),
+        ((10, defaultEllipseText { textPos = (40.0, 40.0) },
+         [defaultEllipse { shapePos = (13.87, 43.22), shapeTransform = [1.2,0.5,-1,1.2,0,0] }]),
+         True, "skew xy for ellipse")
+    ]
+
 
 -- * buildPath tests
 
@@ -374,7 +410,8 @@ runIntersectsWithShape :: [Test]
 runIntersectsWithShape =
     map (testIntersectsWithShape "Test intersectsWithShape no transformation: ") intersectsWithShapeNoTransformationInputs ++
     map (testIntersectsWithShape "Test intersectsWithShape translation: ") intersectsWithShapeTranslationInputs ++
-    map (testIntersectsWithShape "Test intersectsWithShape scaling: ") intersectsWithShapeScaleInputs
+    map (testIntersectsWithShape "Test intersectsWithShape scaling: ") intersectsWithShapeScaleInputs ++
+    map (testIntersectsWithShape "Test intersectsWithShape rotation/skewing: ") intersectsWithShapeShearInputs
 
 -- Run all test cases for buildPath
 runBuildPathTests :: [Test]
