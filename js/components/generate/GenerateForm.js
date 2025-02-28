@@ -3,14 +3,6 @@ import { ErrorMessage, Field, Form, Formik } from "formik"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
 
-const errorMessageStyle = {
-  color: "#DC143C",
-  marginTop: "0.5em",
-  marginBottom: "0.2em",
-  fontSize: "0.9rem",
-  fontWeight: "500",
-}
-
 export default class GenerateForm extends React.Component {
   constructor(props) {
     super(props)
@@ -71,7 +63,7 @@ export default class GenerateForm extends React.Component {
             courses:
               missingCourses.length === 1
                 ? `The course ${missingCourses} was invalid! Please check your input.`
-                : `The courses [${missingCourses}] were invalid! Please check your input.`,
+                : `The courses [${missingCourses.join(", ")}] were invalid! Please check your input.`,
           })
         }
 
@@ -251,7 +243,7 @@ export default class GenerateForm extends React.Component {
         errors.courses =
           invalidCourses.length === 1
             ? `The course ${invalidCourses} was invalid! Please check your input.`
-            : `The courses [${invalidCourses}] were invalid! Please check your input.`
+            : `The courses [${invalidCourses.join(", ")}] were invalid! Please check your input.`
       }
     }
 
@@ -263,7 +255,7 @@ export default class GenerateForm extends React.Component {
         errors.departments =
           invalidDepartments.length === 1
             ? `The department ${invalidDepartments} was invalid! Please check your input.`
-            : `The departments [${invalidDepartments}] were invalid! Please check your input.`
+            : `The departments [${invalidDepartments.join(", ")}] were invalid! Please check your input.`
       }
     }
 
@@ -275,7 +267,7 @@ export default class GenerateForm extends React.Component {
         errors.taken =
           invalidTaken.length === 1
             ? `The course ${invalidTaken} was invalid! Please check your input.`
-            : `The courses [${invalidTaken}] were invalid! Please check your input.`
+            : `The courses [${invalidTaken.join(", ")}] were invalid! Please check your input.`
       }
     }
 
@@ -319,11 +311,7 @@ export default class GenerateForm extends React.Component {
                   type="text"
                   placeholder="e.g., CSC207H1, CSC324H1"
                 />
-                <ErrorMessage
-                  name="courses"
-                  component="div"
-                  style={errorMessageStyle}
-                />
+                <ErrorMessage name="courses" component="div" id="error-message" />
 
                 <h2 id="filter-title">Optional filters</h2>
 
@@ -337,11 +325,7 @@ export default class GenerateForm extends React.Component {
                   placeholder="Enter 3-letter department codes separated by commas"
                   style={{ marginBottom: errors.departments ? "0" : "1em" }}
                 />
-                <ErrorMessage
-                  name="departments"
-                  component="div"
-                  style={errorMessageStyle}
-                />
+                <ErrorMessage name="departments" component="div" id="error-message" />
 
                 <label htmlFor="taken">Do not show these courses</label>
                 <Field
@@ -351,7 +335,7 @@ export default class GenerateForm extends React.Component {
                   placeholder="E.g., CSC207H1, CSC236H1"
                   style={{ marginBottom: errors.taken ? "0" : "1em" }}
                 />
-                <ErrorMessage name="taken" component="div" style={errorMessageStyle} />
+                <ErrorMessage name="taken" component="div" id="error-message" />
 
                 <label htmlFor="maxDepth">
                   Depth of prerequisite chain (0 shows all prerequisites)

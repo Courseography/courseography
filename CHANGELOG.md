@@ -7,6 +7,7 @@
 ### ✨ New features/enhancements
 
 - Added text warning when there's no timetable information available to display
+- Added text warnings and validations for each field in `GenerateForm`
 
 ### 🐛 Bug fixes
 
@@ -44,7 +45,6 @@
 - ⁠Fixed issue with "Info" popup disappearing when hovering over it and reduced the delay before it disappears
 - ⁠Fixed issue where scrolling in the course modal triggered graph zoom
 - Added dependency `formik` and replaced standard React forms with Formik in `GenerateForm`
-- Added front-end validations for Generate form
 
 ## [0.6.0] - 2024-06-24
 
