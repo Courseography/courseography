@@ -266,7 +266,7 @@ intersectsWithShapeScaleInputs = [
          True, "scale y for ellipse"),
         ((3, defaultRectText { textPos = (0.0, 99.99) },
          [defaultRect { shapePos = (0.0, 40.0), shapeTransform = [100000,0,0,2.5,0,0] }]),
-         True, "scale y for rect"),
+         True, "scale xy for rect where shape pos is (0,0)"),
         ((4, defaultEllipseText { textPos = (0.0, 0.0), textTransform = [-1,0,0,1,0,0] },
          [defaultEllipse { shapePos = (0.0, 50.0) }]),
          False, "reflect x for ellipse"),
@@ -275,7 +275,7 @@ intersectsWithShapeScaleInputs = [
          True, "reflect y for rect"),
         ((6, defaultEllipseText { textPos = (0.0, 0.0), textTransform = [-10,0,0,-10,0,0] },
          [defaultEllipse { shapePos = (1.0, 1.0), shapeTransform = [2,0,0,1.1,0,0] }]),
-         True, "reflect x for ellipse")
+         True, "reflect x for ellipse where text pos is (0,0)")
     ]
 
 -- * buildPath tests
