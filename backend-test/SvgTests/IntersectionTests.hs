@@ -399,14 +399,26 @@ buildPathScaleInputs = [
          (T.pack "p6", T.pack "csc108", T.pack "ellipse1"), "reflect xy for path and shape")
     ]
 
--- TODO test cases for buildPath
--- no need to consider shape tolerance/corner/border cases, covered in tests for intersectsWithShape
--- no need to consider shape type, covered in tests for intersectsWithShape
--- path intersects with node normally
--- no intersections
--- only one intersection (only one shape vs more than one shapes)
--- more than one shape intersects at point
--- diff transformation with shape
+-- Test cases for intersectsWithShape with rotation/skewing.
+buildPathShearInputs :: [((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)]
+buildPathShearInputs = [
+        ((1, defaultPath { pathPoints = [(100.0, 100.0), (500.0, 500.0)], pathTransform = [0.5,0.866,-0.866,0.5,0,0] },
+         [defaultRect { shapePos = (101.0, 98.23), shapeTransform = [0.5,0.866,-0.866,0.5,0,0], shapeId_ = T.pack "csc108" }], [defaultEllipse { shapePos = (494.112, 500.54), shapeTransform = [0.5,0.866,-0.866,0.5,0,0], shapeId_ = T.pack "ellipse1"}]),
+         (T.pack "p1", T.pack "csc108", T.pack "ellipse1"), "CW rotation"),
+        ((2, defaultPath { pathPoints = [(100.0, 100.0), (500.0, 500.0)], pathTransform = [0.5,-0.866,0.866,0.5,0,0] },
+         [defaultRect { shapePos = (101.0, 98.23), shapeTransform = [0.5,0.866,-0.866,0.5,0,0], shapeId_ = T.pack "csc108" }], [defaultEllipse { shapePos = (494.112, 500.54), shapeTransform = [0.5,-0.866,0.866,0.5,0,0], shapeId_ = T.pack "ellipse1"}]),
+         (T.pack "p2", T.pack "", T.pack "ellipse1"), "CCW rotation"),
+        ((3, defaultPath { pathTransform = [1,0.577,0,1,0,0] },
+         [defaultRect { shapePos = (101.0, 98.23), shapeTransform = [1,0.577,0,1,0,0], shapeId_ = T.pack "csc108" }], [defaultEllipse]),
+         (T.pack "p3", T.pack "", T.pack "csc108"), "skew x"),
+        ((4, defaultPath { pathTransform = [1,0,0.688,1,0,0] },
+         [defaultRect { shapePos = (1.0, 1.23), shapeTransform = [1,0,0.6,1,0,0], shapeId_ = T.pack "csc108" }], [defaultEllipse]),
+         (T.pack "p4", T.pack "csc108", T.pack ""), "skew y"),
+        ((5, defaultPath { pathPoints = [(100.0, 100.0), (500.0, 500.0)], pathTransform = [1,0.577,-0.364,1,0,0] },
+         [defaultRect], [defaultEllipse { shapePos = (100.0, 100.23), shapeTransform = [1,0.577,-0.364,1,0,0], shapeId_ = T.pack "ellipse1" }, defaultEllipse { shapePos = (488.0, 499.23), shapeTransform = [1,0.53,-0.332,0.95,0,0], shapeId_ = T.pack "ellipse2" }]),
+         (T.pack "p5", T.pack "ellipse1", T.pack "ellipse2"), "skew xy")
+    ]
+
 
 -- * Helpers
 
@@ -496,7 +508,8 @@ runBuildPathTests :: [Test]
 runBuildPathTests =
     map (testBuildPath "Test buildPath no transformation: ") buildPathNoTransformationInputs ++
     map (testBuildPath "Test buildPath translation: ") buildPathTranslationInputs ++
-    map (testBuildPath "Test buildPath scaling: ") buildPathScaleInputs
+    map (testBuildPath "Test buildPath scaling: ") buildPathScaleInputs ++
+    map (testBuildPath "Test buildPath rotation.skewing: ") buildPathShearInputs
 
 
 -- Test suite for intersection checks
