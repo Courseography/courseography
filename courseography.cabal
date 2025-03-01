@@ -78,8 +78,6 @@ library
 test-suite Tests
   main-is: Main.hs
   other-modules:
-    SvgTests.SvgTests,
-    SvgTests.IntersectionTests,
     Controllers.ControllerTests,
     Controllers.CourseControllerTests,
     RequirementTests.ModifierTests,
@@ -87,6 +85,8 @@ test-suite Tests
     RequirementTests.PreProcessingTests,
     RequirementTests.ReqParserTests,
     RequirementTests.RequirementTests,
+    SvgTests.SvgTests,
+    SvgTests.IntersectionTests,
     TestHelpers
   Type: exitcode-stdio-1.0
   build-depends:
