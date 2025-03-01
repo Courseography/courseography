@@ -209,7 +209,7 @@ shapeTolerance s =
 -- Invert a 3x3 matrix. Assumes that the matrix is invertible
 invertMatrix3x3 :: Matrix -> Matrix
 invertMatrix3x3 m =
-    transposeMatrix3x3 $ map (map (* (1 / determinantMatrix3x3 m))) (transposeMatrix3x3 (cofactorMatrix3x3 m))
+    map (map (* (1 / determinantMatrix3x3 m))) (adjointMatrix m)
 
 -- Calculate the determinant of a 3x3 matrix
 determinantMatrix3x3 :: Matrix -> Double
@@ -217,19 +217,13 @@ determinantMatrix3x3 [[a, b, c], [d, e, f], [g, h, i]] =
     a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g)
 determinantMatrix3x3 _ = error "Matrix must be 3x3"
 
--- Caculate the cofactor matrix
-cofactorMatrix3x3 :: Matrix -> Matrix
-cofactorMatrix3x3 [[a, b, c], [d, e, f], [g, h, i]] =
+-- Caculate the adjoint matrix
+adjointMatrix :: Matrix -> Matrix
+adjointMatrix [[a, b, c], [d, e, f], [g, h, i]] =
     [[ e * i - f * h, -(b * i - c * h),  b * f - c * e],
      [-(d * i - f * g),  a * i - c * g, -(a * f - c * d)],
      [ d * h - e * g, -(a * h - b * g),  a * e - b * d]]
-cofactorMatrix3x3 _ = error "Matrix must be 3x3"
-
--- Transpose a 3x3 matrix
-transposeMatrix3x3 :: Matrix -> Matrix
-transposeMatrix3x3 [[a, b, c], [d, e, f], [g, h, i]] =
-    [[a, d, g], [b, e, h], [c, f, i]]
-transposeMatrix3x3 _ = error "Matrix must be 3x3"
+adjointMatrix _ = error "Matrix must be 3x3"
 
 -- Parse transform back from the format stored in the database
 listToMatrix :: [Double] -> Matrix
