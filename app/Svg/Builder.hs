@@ -199,7 +199,7 @@ shapeTolerance s =
 -- Invert a 3x3 matrix. Assumes that the matrix is invertible
 invertMatrix3x3 :: Matrix -> Matrix
 invertMatrix3x3 m =
-    map (map (* (1 / determinantMatrix3x3 m))) (adjointMatrix m)
+    map (map (* (1 / determinantMatrix3x3 m))) (adjointMatrix3x3 m)
 
 -- Calculate the determinant of a 3x3 matrix
 determinantMatrix3x3 :: Matrix -> Double
@@ -208,12 +208,12 @@ determinantMatrix3x3 [[a, b, c], [d, e, f], [g, h, i]] =
 determinantMatrix3x3 _ = error "Matrix must be 3x3"
 
 -- Caculate the adjoint matrix
-adjointMatrix :: Matrix -> Matrix
-adjointMatrix [[a, b, c], [d, e, f], [g, h, i]] =
+adjointMatrix3x3 :: Matrix -> Matrix
+adjointMatrix3x3 [[a, b, c], [d, e, f], [g, h, i]] =
     [[ e * i - f * h, -(b * i - c * h),  b * f - c * e],
      [-(d * i - f * g),  a * i - c * g, -(a * f - c * d)],
      [ d * h - e * g, -(a * h - b * g),  a * e - b * d]]
-adjointMatrix _ = error "Matrix must be 3x3"
+adjointMatrix3x3 _ = error "Matrix must be 3x3"
 
 -- Parse transform back from the format stored in the database
 listToMatrix :: [Double] -> Matrix
