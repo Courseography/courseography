@@ -68,19 +68,15 @@ buildRect :: [Text]  -- ^ A list of shapes that may intersect with the given nod
           -> Integer -- ^ An integer to uniquely identify the shape
           -> Shape
 buildRect texts entity elementId =
-    let shapeInverseTransformation = invertMatrix3x3 $ listToMatrix $ shapeTransform entity
-        rectTexts = filter
+    let rectTexts = filter
                 (\text -> intersects
                     (shapeWidth entity)
                     (shapeHeight entity)
-                    (matrixPointMultiply
-                        shapeInverseTransformation $
-                        matrixPointMultiply (listToMatrix $ shapeTransform entity) (shapePos entity)
-                    )
+                    (shapePos entity)
                     0  -- no tolerance for text intersection
                     (matrixPointMultiply
-                        shapeInverseTransformation $
-                        matrixPointMultiply (listToMatrix $ textTransform text) (textPos text)
+                        (invertMatrix3x3 (listToMatrix $ shapeTransform entity))
+                        (matrixPointMultiply (listToMatrix $ textTransform text) (textPos text))
                     )
                 ) texts
         textString = T.concat $ map textText rectTexts
@@ -103,21 +99,15 @@ buildEllipses :: [Text]  -- ^ A list of Text elements that may or may not inters
               -> Integer -- ^ A number to use in the ID of the ellipse.
               -> Shape
 buildEllipses texts entity elementId =
-    let shapeInverseTransformation = invertMatrix3x3 $ listToMatrix $ shapeTransform entity
-        ellipseText = filter
+    let ellipseText = filter
                     (\text -> intersectsEllipse
                         (shapeWidth entity / 2)
                         (shapeHeight entity / 2)
+                        (fst (shapePos entity) - shapeWidth entity / 2,
+                         snd (shapePos entity) - shapeHeight entity / 2)
                         (matrixPointMultiply
-                            shapeInverseTransformation $
-                            matrixPointMultiply
-                                (listToMatrix $ shapeTransform entity)
-                                (fst (shapePos entity) - shapeWidth entity / 2,
-                                snd (shapePos entity) - shapeHeight entity / 2)
-                        )
-                        (matrixPointMultiply
-                            shapeInverseTransformation $
-                            matrixPointMultiply (listToMatrix $ textTransform text) (textPos text)
+                            (invertMatrix3x3 (listToMatrix $ shapeTransform entity))
+                            (matrixPointMultiply (listToMatrix $ textTransform text) (textPos text))
                         )
                     ) texts
     in
