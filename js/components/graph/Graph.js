@@ -459,15 +459,16 @@ export class Graph extends React.Component {
 
   /**
    * Transforms <x> and <y> with the given transformation.
-   * Assumes that transformation is a valid list of length 6 that represents matrix(a, b, c, d, e, f)
+   * Assumes that transformation is a valid list [a,b,c,d,e,f] of length 6 that represents the
+   * transformation matrix [[a, c, e], [b, d, f], [0, 0, 1]]
    * @param {list} transformation - a list that represents a matrix transformation
    * @param {float} x - the x coordinate to be transformed
    * @param {float} y - the y coordinate to be transformed
    */
   transformPoint = (transformation, x, y) => {
     const [a, b, c, d, e, f] = transformation
-    const newX = a * x + b * y + e
-    const newY = c * x + d * y + f
+    const newX = a * x + c * y + e
+    const newY = b * x + d * y + f
     return [newX, newY]
   }
 

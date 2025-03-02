@@ -85,6 +85,8 @@ test-suite Tests
     RequirementTests.PreProcessingTests,
     RequirementTests.ReqParserTests,
     RequirementTests.RequirementTests,
+    SvgTests.IntersectionTests,
+    SvgTests.SvgTests,
     TestHelpers
   Type: exitcode-stdio-1.0
   build-depends:
