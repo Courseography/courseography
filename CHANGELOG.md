@@ -7,6 +7,7 @@
 ### ✨ New features/enhancements
 
 - Added text warning when there's no timetable information available to display
+- Added text warnings and validations for each field in `GenerateForm`
 
 ### 🐛 Bug fixes
 

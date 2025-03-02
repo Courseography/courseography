@@ -1,16 +1,13 @@
 import React from "react"
-import { Field, Form, Formik } from "formik"
+import { ErrorMessage, Field, Form, Formik } from "formik"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
-import { ErrorMessage } from "../common/react_modal.js.jsx"
 
 export default class GenerateForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       fceCount: 0,
-      showWarning: false,
-      invalidCourses: [],
     }
 
     this.graph = React.createRef()
@@ -24,12 +21,7 @@ export default class GenerateForm extends React.Component {
     this.setState({ fceCount: this.state.fceCount + credits })
   }
 
-  handleSubmit = values => {
-    if (!values.courses.trim().length) {
-      this.setState({ showWarning: true, invalidCourses: [] })
-      return
-    }
-
+  handleSubmit = (values, { setErrors }) => {
     const data = {}
 
     for (const key in values) {
@@ -67,7 +59,12 @@ export default class GenerateForm extends React.Component {
         )
 
         if (missingCourses.length !== 0) {
-          this.setState({ showWarning: true, invalidCourses: missingCourses })
+          setErrors({
+            courses:
+              missingCourses.length === 1
+                ? `The course ${missingCourses} was invalid! Please check your input.`
+                : `The courses [${missingCourses.join(", ")}] were invalid! Please check your input.`,
+          })
         }
 
         const labelsJSON = {}
@@ -230,35 +227,56 @@ export default class GenerateForm extends React.Component {
       })
   }
 
-  /**
-   * Produce an appropriate warning message string in the case that no courses have been entered
-   * or that one or more invalid courses have been entered.
-   * @param {string[]} invalidCourses - The array of invalid course codes
-   * @returns {string} The warning message string.
-   */
-  computeMessage(invalidCourses) {
-    if (invalidCourses.length === 0) {
-      return "Cannot generate graph – no courses entered!"
-    } else if (invalidCourses.length === 1) {
-      return `The course ${invalidCourses} was invalid! Please check your input.`
+  validateForm = values => {
+    const errors = {}
+
+    const coursePattern = /^[A-Z]{3}\d{3}[HY]\d$/
+    const deptPattern = /^[A-Z]{3}$/
+
+    if (!values.courses.trim().length) {
+      errors.courses = "Cannot generate graph – no courses entered!"
     } else {
-      return `The courses [${invalidCourses}] were invalid! Please check your input.`
+      const courses = values.courses.split(",").map(course => course.trim())
+      const invalidCourses = courses.filter(course => !coursePattern.test(course))
+
+      if (invalidCourses.length > 0) {
+        errors.courses =
+          invalidCourses.length === 1
+            ? `The course ${invalidCourses} was invalid! Please check your input.`
+            : `The courses [${invalidCourses.join(", ")}] were invalid! Please check your input.`
+      }
     }
+
+    if (values.departments && values.departments.trim()) {
+      const departments = values.departments.split(",").map(dept => dept.trim())
+      const invalidDepartments = departments.filter(dept => !deptPattern.test(dept))
+
+      if (invalidDepartments.length > 0) {
+        errors.departments =
+          invalidDepartments.length === 1
+            ? `The department ${invalidDepartments} was invalid! Please check your input.`
+            : `The departments [${invalidDepartments.join(", ")}] were invalid! Please check your input.`
+      }
+    }
+
+    if (values.taken && values.taken.trim()) {
+      const takenCourses = values.taken.split(",").map(course => course.trim())
+      const invalidTaken = takenCourses.filter(course => !coursePattern.test(course))
+
+      if (invalidTaken.length > 0) {
+        errors.taken =
+          invalidTaken.length === 1
+            ? `The course ${invalidTaken} was invalid! Please check your input.`
+            : `The courses [${invalidTaken.join(", ")}] were invalid! Please check your input.`
+      }
+    }
+
+    return errors
   }
 
   render() {
     return (
       <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-        <ErrorMessage
-          title="Invalid Course Input"
-          message={this.computeMessage(
-            this.state.invalidCourses.filter(str => !!/\S/.test(str))
-          )}
-          onClose={() => {
-            this.setState({ showWarning: false })
-          }}
-          isOpen={this.state.showWarning}
-        />
         <Disclaimer />
         <div
           id="generateDiv"
@@ -280,84 +298,100 @@ export default class GenerateForm extends React.Component {
               includeRaws: false,
               includeGrades: false,
             }}
+            validate={this.validateForm}
+            validateOnChange={false}
+            validateOnBlur={false}
             onSubmit={this.handleSubmit}
           >
-            <Form id="generateForm">
-              <Field
-                id="courses"
-                name="courses"
-                type="text"
-                placeholder="e.g., CSC207H1, CSC324H1"
-              />
-
-              <h2 id="filter-title">Optional filters</h2>
-
-              <label htmlFor="departments">
-                Only include courses these departments
-              </label>
-              <Field
-                id="departments"
-                name="departments"
-                type="text"
-                placeholder="Enter 3-letter department codes separated by commas"
-                style={{ marginBottom: "1em" }}
-              />
-
-              <label htmlFor="taken">Do not show these courses</label>
-              <Field
-                id="taken"
-                name="taken"
-                type="text"
-                style={{ marginBottom: "1em" }}
-                placeholder="E.g., CSC207H1, CSC236H1"
-              />
-
-              <label htmlFor="maxDepth">
-                Depth of prerequisite chain (0 shows all prerequisites)
-              </label>
-              <p>
+            {({ errors }) => (
+              <Form id="generateForm">
                 <Field
-                  id="maxDepth"
-                  name="maxDepth"
-                  type="number"
-                  min="0"
-                  step="1"
-                  style={{ marginBottom: "1em" }}
+                  id="courses"
+                  name="courses"
+                  type="text"
+                  placeholder="e.g., CSC207H1, CSC324H1"
                 />
-              </p>
-
-              {/* <label htmlFor="location">Campus</label>
-              <Field id="location" name="location" as="select" multiple
-                style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
-                <option value="utsg">St. George</option>
-                <option value="utm">Mississauga</option>
-                <option value="utsc">Scarborough</option>
-              </Field>
-
-              <p>
-                <label htmlFor="includeRaws">Include non-course prerequisites</label>
-                <Field id="includeRaws" name="includeRaws" type="checkbox"
-                  style={{ marginLeft: '1em', verticalAlign: 'middle' }}
+                <ErrorMessage
+                  className="error-message"
+                  name="courses"
+                  component="div"
                 />
-              </p>
 
-              <label htmlFor="includeGrades">Include grade-based prerequisites</label>
-              <Field id="includeGrades" name="includeGrades" type="checkbox"
-                style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
+                <h2 id="filter-title">Optional filters</h2>
 
-              <div
-                style={{
-                  marginTop: "1em",
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <button id="submit" type="submit">
-                  Generate Graph
-                </button>
-              </div>
-            </Form>
+                <label htmlFor="departments">
+                  Only include courses these departments
+                </label>
+                <Field
+                  id="departments"
+                  name="departments"
+                  type="text"
+                  placeholder="Enter 3-letter department codes separated by commas"
+                  style={{ marginBottom: errors.departments ? "0" : "1em" }}
+                />
+                <ErrorMessage
+                  className="error-message"
+                  name="departments"
+                  component="div"
+                />
+
+                <label htmlFor="taken">Do not show these courses</label>
+                <Field
+                  id="taken"
+                  name="taken"
+                  type="text"
+                  placeholder="E.g., CSC207H1, CSC236H1"
+                  style={{ marginBottom: errors.taken ? "0" : "1em" }}
+                />
+                <ErrorMessage className="error-message" name="taken" component="div" />
+
+                <label htmlFor="maxDepth">
+                  Depth of prerequisite chain (0 shows all prerequisites)
+                </label>
+                <p>
+                  <Field
+                    id="maxDepth"
+                    name="maxDepth"
+                    type="number"
+                    min="0"
+                    step="1"
+                    style={{ marginBottom: "1em" }}
+                  />
+                </p>
+
+                {/* <label htmlFor="location">Campus</label>
+                <Field id="location" name="location" as="select" multiple
+                  style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
+                  <option value="utsg">St. George</option>
+                  <option value="utm">Mississauga</option>
+                  <option value="utsc">Scarborough</option>
+                </Field>
+
+                <p>
+                  <label htmlFor="includeRaws">Include non-course prerequisites</label>
+                  <Field id="includeRaws" name="includeRaws" type="checkbox"
+                    style={{ marginLeft: '1em', verticalAlign: 'middle' }}
+                  />
+                </p>
+
+                <label htmlFor="includeGrades">Include grade-based prerequisites</label>
+                <Field id="includeGrades" name="includeGrades" type="checkbox"
+                  style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
+
+                <div
+                  style={{
+                    marginTop: "1em",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <button id="submit" type="submit">
+                    Generate Graph
+                  </button>
+                </div>
+              </Form>
+            )}
           </Formik>
         </div>
 
