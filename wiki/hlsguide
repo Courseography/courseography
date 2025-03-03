@@ -37,7 +37,6 @@ The extension will automatically download and configure Haskell Language Server.
 |                         | **Go to Definition**           | Jump to the definition of a function or type.                       |
 |                         | **Find References**            | Locate all occurrences of a function, type, or variable.            |
 |                         | **Jump to Type Definition**    | Navigate to the definition of a type used in the code.              |
-|                         | **Show Fixity**                | Displays fixity information for operators.                          |
 | **Refactoring**         | **Rename Symbol**              | Allows renaming functions and variables project-wide.               |
 |                         | **Extract Function**           | Extracts selected code into a separate function.                    |
 |                         | **Jump to Implementation**     | Navigate to function implementations.                               |
