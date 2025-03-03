@@ -7,6 +7,7 @@
 ### ✨ New features/enhancements
 
 - Added text warning when there's no timetable information available to display
+- Added text warnings and validations for each field in `GenerateForm`
 
 ### 🐛 Bug fixes
 
@@ -45,6 +46,7 @@
 - Fixed CSS issues: modal padding, "and/or" centering, and FCE Count arrow alignment
 - ⁠Fixed issue with "Info" popup disappearing when hovering over it and reduced the delay before it disappears
 - ⁠Fixed issue where scrolling in the course modal triggered graph zoom
+- Added dependency `formik` and replaced standard React forms with Formik in `GenerateForm`
 - Added parsers for all SVG transformations in `App/Svg/Parser`
 - Added intersection tests for buildRect, buildEllipse, intersectsWithPoint and buildPath
 

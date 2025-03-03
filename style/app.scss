@@ -2037,6 +2037,14 @@ main-filter input {
   font-size: 20px;
 }
 
+.error-message {
+  color: #dc143c;
+  margin-top: 0.5em;
+  margin-bottom: 0.2em;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
 #submit {
   color: #5c497e;
 }
@@ -2119,53 +2127,6 @@ main-filter input {
 
 #nav-generate {
   white-space: nowrap;
-}
-
-.error-modal-class {
-  @extend %modal-class;
-
-  background-color: #ffeded;
-  height: 150px;
-  width: 800px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -100%);
-}
-
-.error-overlay {
-  @extend %overlay;
-
-  background-color: rgb(0 0 0 / 60%);
-}
-
-.error-close-button-x {
-  @extend %info-modal-button;
-
-  font-size: 20px;
-  width: 75px;
-  font-weight: bold;
-}
-
-.error-close-button-x:hover {
-  background-color: #feb7b7;
-}
-
-.error-close-button {
-  @extend %info-modal-button;
-
-  display: block;
-  margin: 0 auto;
-  font-size: 22px;
-  width: 90px;
-  height: 35px;
-  background-color: #d77546;
-  color: #fefff6;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.error-close-button:hover {
-  background-color: #c36132;
 }
 
 .timetable-unavailable {
