@@ -45,6 +45,8 @@
 - ⁠Fixed issue with "Info" popup disappearing when hovering over it and reduced the delay before it disappears
 - ⁠Fixed issue where scrolling in the course modal triggered graph zoom
 - Added dependency `formik` and replaced standard React forms with Formik in `GenerateForm`
+- Added Debugging Guide
+- Added Haskell Language Server (HLS) Guide
 
 ## [0.6.0] - 2024-06-24
 
