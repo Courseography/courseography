@@ -13,6 +13,7 @@ export default function Edge(props) {
   return (
     <path
       d={pathDescription}
+      transform={props.transform}
       className={props.className + " " + props.status}
       data-testid={`${props.source}->${props.target}`}
       markerEnd="url(#arrowHead)"
@@ -30,4 +31,6 @@ Edge.propTypes = {
   target: PropTypes.string,
   /** Status of this edge */
   status: PropTypes.string,
+  /** Transform of this edge */
+  transform: PropTypes.string,
 }
