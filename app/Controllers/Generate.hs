@@ -44,5 +44,4 @@ findAndSavePrereqsResponse = do
                 , departments = map TL.toUpper (departments (graphOptions coursesOptions))
                 }
             }
-    liftIO $ print updatedCoursesOptions
     liftIO $ generateAndSavePrereqResponse updatedCoursesOptions
