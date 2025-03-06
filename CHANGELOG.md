@@ -16,6 +16,8 @@
 - Fixed bug to count FCE correctly
 - Fixed parsing of graph transformations
 - Fixed choppiness of the graphs generated in the export modal
+- Fixed matrix transformation and intersection checking bug when sending graph data to front end
+- Fixed inverse matrix storage from column-major to row-major order
 
 ### 🔧 Internal changes
 
@@ -45,6 +47,8 @@
 - ⁠Fixed issue with "Info" popup disappearing when hovering over it and reduced the delay before it disappears
 - ⁠Fixed issue where scrolling in the course modal triggered graph zoom
 - Added dependency `formik` and replaced standard React forms with Formik in `GenerateForm`
+- Added parsers for all SVG transformations in `App/Svg/Parser`
+- Added intersection tests for buildRect, buildEllipse, intersectsWithPoint and buildPath
 - Allowed lower case courses and departments on the Generate page
 
 ## [0.6.0] - 2024-06-24

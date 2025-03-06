@@ -22,6 +22,7 @@ import Data.List (find)
 import qualified Data.Text as T
 import Database.DataType
 import Database.Tables hiding (shapes, texts)
+import Svg.Parser (matrixPointMultiply)
 
 -- * Builder functions
 
@@ -45,12 +46,15 @@ buildPath rects ellipses entity elementId
               nodes = rects ++ ellipses
               sourceNode =
                   if T.null $ pathSource entity
-                      then getIntersectingShape start nodes
+                      then getIntersectingShape
+                          (matrixPointMultiply (listToMatrix $ pathTransform entity) start)
+                          nodes
                       else pathSource entity
               targetNode =
                   if T.null $ pathTarget entity
-                      then getIntersectingShape end
-                               (filter (\r -> shapeId_ r /= sourceNode) nodes)
+                      then getIntersectingShape
+                          (matrixPointMultiply (listToMatrix $ pathTransform entity) end)
+                          (filter (\r -> shapeId_ r /= sourceNode) nodes)
                       else pathTarget entity
           in
               entity {pathId_ = T.pack $ 'p' : show elementId,
@@ -64,13 +68,17 @@ buildRect :: [Text]  -- ^ A list of shapes that may intersect with the given nod
           -> Integer -- ^ An integer to uniquely identify the shape
           -> Shape
 buildRect texts entity elementId =
-    let rectTexts = filter (intersects
-                            (shapeWidth entity)
-                            (shapeHeight entity)
-                            (shapePos entity)
-                            0  -- no tolerance for text intersection
-                            . textPos
-                            ) texts
+    let rectTexts = filter
+                (\text -> intersects
+                    (shapeWidth entity)
+                    (shapeHeight entity)
+                    (shapePos entity)
+                    0  -- no tolerance for text intersection
+                    (matrixPointMultiply
+                        (invertMatrix3x3 (listToMatrix $ shapeTransform entity))
+                        (matrixPointMultiply (listToMatrix $ textTransform text) (textPos text))
+                    )
+                ) texts
         textString = T.concat $ map textText rectTexts
         id_ = case shapeType_ entity of
               Hybrid -> T.pack $ 'h' : show elementId
@@ -91,13 +99,17 @@ buildEllipses :: [Text]  -- ^ A list of Text elements that may or may not inters
               -> Integer -- ^ A number to use in the ID of the ellipse.
               -> Shape
 buildEllipses texts entity elementId =
-    let ellipseText = filter (intersectsEllipse
-                              (shapeWidth entity / 2)
-                              (shapeHeight entity / 2)
-                              (fst (shapePos entity) - shapeWidth entity / 2,
-                               snd (shapePos entity) - shapeHeight entity / 2)
-                              . textPos
-                              ) texts
+    let ellipseText = filter
+                    (\text -> intersectsEllipse
+                        (shapeWidth entity / 2)
+                        (shapeHeight entity / 2)
+                        (fst (shapePos entity) - shapeWidth entity / 2,
+                         snd (shapePos entity) - shapeHeight entity / 2)
+                        (matrixPointMultiply
+                            (invertMatrix3x3 (listToMatrix $ shapeTransform entity))
+                            (matrixPointMultiply (listToMatrix $ textTransform text) (textPos text))
+                        )
+                    ) texts
     in
         entity {
             shapeId_ =
@@ -138,6 +150,8 @@ intersects width height (rx, ry) offset (px, py) =
         dy <= height + offset;
 
 -- | Determines if a point is contained in a shape.
+-- Assumes that the point's transformation has already been applied to point
+-- Applies the inverse transformation of the shape to the point before checking for intersection
 intersectsWithPoint :: Point -> Shape -> Bool
 intersectsWithPoint point shape
     | shapeType_ shape == BoolNode =
@@ -146,13 +160,13 @@ intersectsWithPoint point shape
                    (fst (shapePos shape) - shapeWidth shape / 2,
                     snd (shapePos shape) - shapeHeight shape / 2)
                    (shapeTolerance shape)
-                   point
+                   (matrixPointMultiply (invertMatrix3x3 (listToMatrix $ shapeTransform shape)) point)
     | otherwise =
         intersects (shapeWidth shape)
                      (shapeHeight shape)
                      (shapePos shape)
                      (shapeTolerance shape)
-                     point
+                     (matrixPointMultiply (invertMatrix3x3 (listToMatrix $ shapeTransform shape)) point)
 
 -- | Returns the ID of the first shape in a list that intersects
 -- with the given point.
@@ -163,7 +177,7 @@ getIntersectingShape point shapes =
 -- | Determines if a text intersects with any shape in a list.
 intersectsWithShape :: [Shape] -> Text -> Bool
 intersectsWithShape shapes text =
-    any (intersectsWithPoint (textPos text)) shapes
+    any (intersectsWithPoint $ matrixPointMultiply (listToMatrix $ textTransform text) (textPos text)) shapes
 
 -- ** Other helpers
 
@@ -178,3 +192,30 @@ shapeTolerance s =
   case shapeType_ s of
     BoolNode -> 20.0
     _ -> 9.0
+
+
+-- * Helpers for matrix inversion
+
+-- Invert a 3x3 matrix. Assumes that the matrix is invertible
+invertMatrix3x3 :: Matrix -> Matrix
+invertMatrix3x3 m =
+    map (map (* (1 / determinantMatrix3x3 m))) (adjointMatrix3x3 m)
+
+-- Calculate the determinant of a 3x3 matrix
+determinantMatrix3x3 :: Matrix -> Double
+determinantMatrix3x3 [[a, b, c], [d, e, f], [g, h, i]] =
+    a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g)
+determinantMatrix3x3 _ = error "Matrix must be 3x3"
+
+-- Caculate the adjoint matrix
+adjointMatrix3x3 :: Matrix -> Matrix
+adjointMatrix3x3 [[a, b, c], [d, e, f], [g, h, i]] =
+    [[ e * i - f * h, -(b * i - c * h),  b * f - c * e],
+     [-(d * i - f * g),  a * i - c * g, -(a * f - c * d)],
+     [ d * h - e * g, -(a * h - b * g),  a * e - b * d]]
+adjointMatrix3x3 _ = error "Matrix must be 3x3"
+
+-- Parse transform back from the format stored in the database
+listToMatrix :: [Double] -> Matrix
+listToMatrix [a, b, c, d, e, f] = [[a, c, e], [b, d, f], [0, 0, 1]]
+listToMatrix _ = error "Expecting 6 values to fully specify a transformation"
