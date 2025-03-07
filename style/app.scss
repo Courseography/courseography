@@ -2017,6 +2017,8 @@ div[id*="_inq"] .code::after {
 
 #generateDiv label {
   font-weight: normal;
+  font-size: 0.8rem;
+  margin-bottom: 0.2em;
 }
 
 main-filter {
@@ -2038,11 +2040,6 @@ main-filter input {
 
 .section-title {
   font-size: 1.6rem;
-}
-
-#generateDiv label {
-  font-size: 0.8rem;
-  margin-bottom: 0.2em;
 }
 
 .error-message {
