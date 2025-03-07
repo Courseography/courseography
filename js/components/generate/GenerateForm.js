@@ -305,7 +305,7 @@ export default class GenerateForm extends React.Component {
             {({ errors }) => (
               <Form id="generateForm">
                 <div className="form-section">
-                  <h2 id="header-title" className="section-title">Search course</h2>
+                  <h2 id="header-title" className="section-title">Search Course</h2>
 
                   <Field
                     id="courses"
@@ -321,10 +321,10 @@ export default class GenerateForm extends React.Component {
                 </div>
 
                 <div className="form-section">
-                  <h2 id="filter-title" className="section-title">Optional filters</h2>
+                  <h2 id="filter-title" className="section-title">Filters</h2>
 
                   <label htmlFor="departments">
-                    Only include courses these departments
+                    Departments
                   </label>
                   <Field
                     id="departments"
@@ -339,7 +339,7 @@ export default class GenerateForm extends React.Component {
                     component="div"
                   />
 
-                  <label htmlFor="taken">Do not show these courses</label>
+                  <label htmlFor="taken">Hide courses</label>
                   <Field
                     id="taken"
                     name="taken"
@@ -350,7 +350,7 @@ export default class GenerateForm extends React.Component {
                   <ErrorMessage className="error-message" name="taken" component="div" />
 
                   <label htmlFor="maxDepth">
-                    Depth of prerequisite chain (0 shows all prerequisites)
+                    Prereq chain depth (0 shows all)
                   </label>
                   <p>
                     <Field
