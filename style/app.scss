@@ -2019,10 +2019,6 @@ div[id*="_inq"] .code::after {
   font-weight: normal;
 }
 
-#header-title {
-  font-size: 1.2em;
-}
-
 main-filter {
   margin-top: 30px;
   text-align: center;
@@ -2032,9 +2028,16 @@ main-filter input {
   border: solid 5px #5c497e;
 }
 
-#filter-title {
-  color: #d9e4ee;
-  font-size: 20px;
+.form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+
+.section-title {
+  font-size: 1.4rem;
 }
 
 .error-message {

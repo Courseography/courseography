@@ -287,7 +287,6 @@ export default class GenerateForm extends React.Component {
             fontSize: "12pt",
           }}
         >
-          <h1 id="header-title">Search for courses</h1>
           <Formik
             initialValues={{
               courses: "",
@@ -305,82 +304,87 @@ export default class GenerateForm extends React.Component {
           >
             {({ errors }) => (
               <Form id="generateForm">
-                <Field
-                  id="courses"
-                  name="courses"
-                  type="text"
-                  placeholder="e.g., CSC207H1, CSC324H1"
-                />
-                <ErrorMessage
-                  className="error-message"
-                  name="courses"
-                  component="div"
-                />
+                <div className="form-section">
+                  <h2 id="header-title" className="section-title">Search course</h2>
 
-                <h2 id="filter-title">Optional filters</h2>
-
-                <label htmlFor="departments">
-                  Only include courses these departments
-                </label>
-                <Field
-                  id="departments"
-                  name="departments"
-                  type="text"
-                  placeholder="Enter 3-letter department codes separated by commas"
-                  style={{ marginBottom: errors.departments ? "0" : "1em" }}
-                />
-                <ErrorMessage
-                  className="error-message"
-                  name="departments"
-                  component="div"
-                />
-
-                <label htmlFor="taken">Do not show these courses</label>
-                <Field
-                  id="taken"
-                  name="taken"
-                  type="text"
-                  placeholder="E.g., CSC207H1, CSC236H1"
-                  style={{ marginBottom: errors.taken ? "0" : "1em" }}
-                />
-                <ErrorMessage className="error-message" name="taken" component="div" />
-
-                <label htmlFor="maxDepth">
-                  Depth of prerequisite chain (0 shows all prerequisites)
-                </label>
-                <p>
                   <Field
-                    id="maxDepth"
-                    name="maxDepth"
-                    type="number"
-                    min="0"
-                    step="1"
-                    style={{ marginBottom: "1em" }}
+                    id="courses"
+                    name="courses"
+                    type="text"
+                    placeholder="e.g., CSC207H1, CSC324H1"
                   />
-                </p>
-
-                {/* <label htmlFor="location">Campus</label>
-                <Field id="location" name="location" as="select" multiple
-                  style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
-                  <option value="utsg">St. George</option>
-                  <option value="utm">Mississauga</option>
-                  <option value="utsc">Scarborough</option>
-                </Field>
-
-                <p>
-                  <label htmlFor="includeRaws">Include non-course prerequisites</label>
-                  <Field id="includeRaws" name="includeRaws" type="checkbox"
-                    style={{ marginLeft: '1em', verticalAlign: 'middle' }}
+                  <ErrorMessage
+                    className="error-message"
+                    name="courses"
+                    component="div"
                   />
-                </p>
+                </div>
 
-                <label htmlFor="includeGrades">Include grade-based prerequisites</label>
-                <Field id="includeGrades" name="includeGrades" type="checkbox"
-                  style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
+                <div className="form-section">
+                  <h2 id="filter-title" className="section-title">Optional filters</h2>
+
+                  <label htmlFor="departments">
+                    Only include courses these departments
+                  </label>
+                  <Field
+                    id="departments"
+                    name="departments"
+                    type="text"
+                    placeholder="Enter 3-letter department codes separated by commas"
+                    style={{ marginBottom: errors.departments ? "0" : "1em" }}
+                  />
+                  <ErrorMessage
+                    className="error-message"
+                    name="departments"
+                    component="div"
+                  />
+
+                  <label htmlFor="taken">Do not show these courses</label>
+                  <Field
+                    id="taken"
+                    name="taken"
+                    type="text"
+                    placeholder="E.g., CSC207H1, CSC236H1"
+                    style={{ marginBottom: errors.taken ? "0" : "1em" }}
+                  />
+                  <ErrorMessage className="error-message" name="taken" component="div" />
+
+                  <label htmlFor="maxDepth">
+                    Depth of prerequisite chain (0 shows all prerequisites)
+                  </label>
+                  <p>
+                    <Field
+                      id="maxDepth"
+                      name="maxDepth"
+                      type="number"
+                      min="0"
+                      step="1"
+                      style={{ marginBottom: "1em" }}
+                    />
+                  </p>
+
+                  {/* <label htmlFor="location">Campus</label>
+                  <Field id="location" name="location" as="select" multiple
+                    style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
+                    <option value="utsg">St. George</option>
+                    <option value="utm">Mississauga</option>
+                    <option value="utsc">Scarborough</option>
+                  </Field>
+
+                  <p>
+                    <label htmlFor="includeRaws">Include non-course prerequisites</label>
+                    <Field id="includeRaws" name="includeRaws" type="checkbox"
+                      style={{ marginLeft: '1em', verticalAlign: 'middle' }}
+                    />
+                  </p>
+
+                  <label htmlFor="includeGrades">Include grade-based prerequisites</label>
+                  <Field id="includeGrades" name="includeGrades" type="checkbox"
+                    style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
+                </div>
 
                 <div
                   style={{
-                    marginTop: "1em",
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
