@@ -2006,13 +2006,13 @@ div[id*="_inq"] .code::after {
 }
 
 #generateDiv input {
-  background-color: #d9e4ee;
+  background-color: #ffffff;
   color: #5c497e;
   margin: 0;
-}
-
-#generateDiv input[type="text"] {
+  font-size: 0.9rem;
   width: 100%;
+  border: none;
+  border-radius: 5px;
 }
 
 #generateDiv label {
@@ -2039,7 +2039,7 @@ main-filter input {
 }
 
 .section-title {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
 }
 
 .error-message {

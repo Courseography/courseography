@@ -352,16 +352,14 @@ export default class GenerateForm extends React.Component {
                   <label htmlFor="maxDepth">
                     Prereq chain depth (0 shows all)
                   </label>
-                  <p>
-                    <Field
-                      id="maxDepth"
-                      name="maxDepth"
-                      type="number"
-                      min="0"
-                      step="1"
-                      style={{ marginBottom: "1em" }}
-                    />
-                  </p>
+                  <Field
+                    id="maxDepth"
+                    name="maxDepth"
+                    type="number"
+                    min="0"
+                    step="1"
+                    style={{ marginBottom: "1em" }}
+                  />
 
                   {/* <label htmlFor="location">Campus</label>
                   <Field id="location" name="location" as="select" multiple
