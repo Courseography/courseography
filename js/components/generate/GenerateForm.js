@@ -317,6 +317,7 @@ export default class GenerateForm extends React.Component {
                     className="error-message"
                     name="courses"
                     component="div"
+                    style={{ marginBottom: 0 }}
                   />
                 </div>
 
