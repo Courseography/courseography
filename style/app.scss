@@ -1989,7 +1989,7 @@ div[id*="_inq"] .code::after {
 #generateDiv {
   background-color: #ffffff;
   height: 100%;
-  width: 400px;
+  width: 450px;
   box-shadow:  4px -1px 4px rgb(0, 0, 0, 0.3);
 }
 
@@ -2063,15 +2063,15 @@ main-filter input {
 }
 
 #submit {
-  background-color: #ffffff;
-  color: #5c497e;
+  background-color: #856DB0;
+  color: #ffffff;
   border-radius: 30px;
   padding: 6px 18px;
-  border: none;
+  border: solid 1px #ffffff;
 }
 
 #submit:hover {
-  background-color: lightgray;
+  background-color: #5c497c;
 }
 
 .spinner {
