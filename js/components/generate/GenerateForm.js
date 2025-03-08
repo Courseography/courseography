@@ -242,8 +242,8 @@ export default class GenerateForm extends React.Component {
       if (invalidCourses.length > 0) {
         errors.courses =
           invalidCourses.length === 1
-            ? `The course ${invalidCourses} was invalid! Please check your input.`
-            : `The courses [${invalidCourses.join(", ")}] were invalid! Please check your input.`
+            ? `The course ${invalidCourses} was invalid!`
+            : `The courses [${invalidCourses.join(", ")}] were invalid!`
       }
     }
 
@@ -254,8 +254,8 @@ export default class GenerateForm extends React.Component {
       if (invalidDepartments.length > 0) {
         errors.departments =
           invalidDepartments.length === 1
-            ? `The department ${invalidDepartments} was invalid! Please check your input.`
-            : `The departments [${invalidDepartments.join(", ")}] were invalid! Please check your input.`
+            ? `The department ${invalidDepartments} was invalid!`
+            : `The departments [${invalidDepartments.join(", ")}] were invalid!`
       }
     }
 
@@ -266,8 +266,8 @@ export default class GenerateForm extends React.Component {
       if (invalidTaken.length > 0) {
         errors.taken =
           invalidTaken.length === 1
-            ? `The course ${invalidTaken} was invalid! Please check your input.`
-            : `The courses [${invalidTaken.join(", ")}] were invalid! Please check your input.`
+            ? `The course ${invalidTaken} was invalid!`
+            : `The courses [${invalidTaken.join(", ")}] were invalid!`
       }
     }
 
@@ -335,7 +335,7 @@ export default class GenerateForm extends React.Component {
                     id="departments"
                     name="departments"
                     type="text"
-                    placeholder="Enter 3-letter department codes separated by commas"
+                    placeholder="Enter 3 letter dept. codes, sep. by commas"
                     style={{ marginBottom: errors.departments ? "0" : "1em" }}
                   />
                   <ErrorMessage
