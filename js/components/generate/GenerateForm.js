@@ -394,7 +394,7 @@ export default class GenerateForm extends React.Component {
                   }}
                 >
                   <button id="submit" type="submit">
-                    Generate Graph
+                    Generate
                   </button>
                 </div>
               </Form>

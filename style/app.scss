@@ -2057,7 +2057,15 @@ main-filter input {
 }
 
 #submit {
+  background-color: #ffffff;
   color: #5c497e;
+  border-radius: 30px;
+  padding: 6px 18px;
+  border: none;
+}
+
+#submit:hover {
+  background-color: lightgray;
 }
 
 .spinner {
