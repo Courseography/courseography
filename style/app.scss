@@ -1987,10 +1987,9 @@ div[id*="_inq"] .code::after {
 }
 
 #generateDiv {
-  background-color: #5c497e;
-  color: #ffffff;
+  background-color: #ffffff;
   height: 100%;
-  width: 550px;
+  width: 400px;
   box-shadow:  4px -1px 4px rgb(0, 0, 0, 0.3);
 }
 
@@ -2000,7 +1999,7 @@ div[id*="_inq"] .code::after {
 }
 
 #generateDiv ul li {
-  color: #d9e4ee;
+  color: #ffffff;
   font-size: 12pt;
   padding-left: 23px;
   padding-right: 10px;
@@ -2017,14 +2016,19 @@ div[id*="_inq"] .code::after {
   font-size: 0.9rem;
   width: 100%;
   height: 2.5em;
-  border: none;
+  border: solid 2px #c0c0c0;
   border-radius: 5px;
+}
+
+#generateDiv input:focus {
+  box-shadow: 0 0 3px 2px #d7cbec;
 }
 
 #generateDiv label {
   font-weight: normal;
   font-size: 0.8rem;
   margin-bottom: 0.2em;
+  color: #9d8abe;
 }
 
 main-filter {
@@ -2045,6 +2049,7 @@ main-filter input {
 }
 
 .section-title {
+  color: #5c497e;
   font-size: 1.3rem;
 }
 
