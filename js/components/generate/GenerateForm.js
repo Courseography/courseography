@@ -317,12 +317,16 @@ export default class GenerateForm extends React.Component {
                     className="error-message"
                     name="courses"
                     component="div"
-                    style={{ marginBottom: 0 }}
                   />
                 </div>
 
                 <div className="form-section">
-                  <h2 id="filter-title" className="section-title">Filters</h2>
+                  <h2
+                    id="filter-title"
+                    className="section-title"
+                    style={{ marginTop: errors.courses ? "-1em" : "0em" }}>
+                      Filters
+                  </h2>
 
                   <label htmlFor="departments">
                     Departments
