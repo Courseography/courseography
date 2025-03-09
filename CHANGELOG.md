@@ -49,6 +49,7 @@
 - Added dependency `formik` and replaced standard React forms with Formik in `GenerateForm`
 - Added parsers for all SVG transformations in `App/Svg/Parser`
 - Added intersection tests for buildRect, buildEllipse, intersectsWithPoint and buildPath
+- Allowed lowercase courses and departments on the Generate page
 
 ## [0.6.0] - 2024-06-24
 

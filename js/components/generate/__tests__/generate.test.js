@@ -64,9 +64,9 @@ describe("Handle invalid department inputs appropriately", () => {
       expectedWarning: "The department PHYS was invalid! Please check your input.",
     },
     {
-      departmentInputText: "CSC, abc, SDS, MAT, PHYS, BIO",
+      departmentInputText: "csc, abcd, SDS, MAT, PHYS, BIO",
       expectedWarning:
-        "The departments [abc, PHYS] were invalid! Please check your input.",
+        "The departments [abcd, PHYS] were invalid! Please check your input.",
     },
     {
       departmentInputText: "CSC, MAT STA",
