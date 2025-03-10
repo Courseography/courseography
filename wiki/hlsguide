@@ -13,43 +13,43 @@ The specific steps for installing HLS in VS Code is under the **Developers** Sec
 
 ## Features of Haskell Language Server for Courseography
 
-| **Category**            | **Feature**                | **Description**                                                     |
-| ----------------------- | -------------------------- | ------------------------------------------------------------------- |
-| **Diagnostics**         | GHC Compiler Errors        | Displays errors and warnings from GHC.                              |
-|                         | HLint Hints                | Provides style and refactoring suggestions from HLint.              |
-|                         | Cabal Parse Errors         | Reports errors from Cabal configuration files.                      |
-| **Code Assistance**     | Auto-completion            | Provides intelligent code suggestions as you type.                  |
-|                         | Hover Documentation        | Displays type signatures and documentation on hover.                |
-|                         | Go to Definition           | Jump to the definition of a function or type.                       |
-|                         | Find References            | Locate all occurrences of a function, type, or variable.            |
-|                         | Jump to Type Definition    | Navigate to the definition of a type used in the code.              |
-| **Refactoring**         | Rename Symbol              | Allows renaming functions and variables project-wide.               |
-|                         | Extract Function           | Extracts selected code into a separate function.                    |
-|                         | Jump to Implementation     | Navigate to function implementations.                               |
-| **Code Navigation**     | Workspace Symbols          | Search for symbols across the project.                              |
-|                         | Document Symbols           | Lists symbols defined in a module.                                  |
-|                         | Call Hierarchy             | Displays call relationships between functions.                      |
-|                         | Highlight References       | Highlights occurrences of variables across the code.                |
-| **Formatting & Style**  | Automatic Code Formatting  | Uses `ormolu` or `fourmolu` for consistent code formatting.         |
-|                         | Organize Imports           | Automatically sorts and removes unused imports.                     |
-|                         | Fix Module Names           | Corrects mismatched module names to match file paths.               |
-|                         | Selection Range            | Supports incremental code selection.                                |
-|                         | Folding Range              | Enables code folding for large sections.                            |
+| **Category**            | **Feature**                    | **Description**                                                     |
+| ----------------------- | --------------------------     | ------------------------------------------------------------------- |
+| **Diagnostics**         | **GHC Compiler Errors**        | Displays errors and warnings from GHC.                              |
+|                         | **HLint Hints**                | Provides style and refactoring suggestions from HLint.              |
+|                         | **Cabal Parse Errors**         | Reports errors from Cabal configuration files.                      |
+| **Code Assistance**     | **Auto-completion**            | Provides intelligent code suggestions as you type.                  |
+|                         | **Hover Documentation**        | Displays type signatures and documentation on hover.                |
+|                         | **Go to Definition**           | Jump to the definition of a function or type.                       |
+|                         | **Find References**            | Locate all occurrences of a function, type, or variable.            |
+|                         | **Jump to Type Definition**    | Navigate to the definition of a type used in the code.              |
+| **Refactoring**         | **Rename Symbol**              | Allows renaming functions and variables project-wide.               |
+|                         | **Extract Function**           | Extracts selected code into a separate function.                    |
+|                         | **Jump to Implementation**     | Navigate to function implementations.                               |
+| **Code Navigation**     | **Workspace Symbols**          | Search for symbols across the project.                              |
+|                         | **Document Symbols**           | Lists symbols defined in a module.                                  |
+|                         | **Call Hierarchy**             | Displays call relationships between functions.                      |
+|                         | **Highlight References**       | Highlights occurrences of variables across the code.                |
+| **Formatting & Style**  | **Automatic Code Formatting**  | Uses `ormolu` or `fourmolu` for consistent code formatting.         |
+|                         | **Organize Imports**           | Automatically sorts and removes unused imports.                     |
+|                         | **Fix Module Names**           | Corrects mismatched module names to match file paths.               |
+|                         | **Selection Range**            | Supports incremental code selection.                                |
+|                         | **Folding Range**              | Enables code folding for large sections.                            |
 
 ## Detailed Feature Walkthrough
 
-### **GHC Compiler Errors**
+### GHC Compiler Errors
 
 HLS continuously checks your code for errors and warnings. 
 Issues appear in the **Problems** tab (`Cmd+Shift+M` / `Ctrl+Shift+M`). 
 Hovering over red underlined code also provides error descriptions. 
 To quickly jump between errors, use `F8`.
 
-### **HLint Hints**
+### HLint Hints
 
 HLint suggests improvements to your code style. These appear as yellow warnings, and you can apply fixes by clicking the **lightbulb icon** or using `Quick Fix` (`Cmd+.` / `Ctrl+.`).
 
-### **Rename Symbol**
+### Rename Symbol
 
 To rename a function or variable across the project:
 
@@ -60,7 +60,7 @@ To rename a function or variable across the project:
 **Limitations:**
 - Cross-module renaming requires indexing all project components.
 
-### **Extract Function**
+### Extract Function
 
 To extract a block of code into a separate function:
 
@@ -68,7 +68,7 @@ To extract a block of code into a separate function:
 2. Right-click → **Refactor…** → **Extract Function**.
 3. Name the function and apply changes.
 
-### **Jump to Definition & Type Definition**
+### Jump to Definition & Type Definition
 
 - **Go to Definition:** Right-click on a function/type and select **Go to Definition** to navigate to its source.
 - **Jump to Type Definition:** Works similarly but navigates to the type declaration instead.
@@ -76,7 +76,7 @@ To extract a block of code into a separate function:
 **Limitations:**
 - Only works for local definitions.
 
-### **Call Hierarchy**
+### Call Hierarchy
 
 Displays incoming and outgoing function calls:
 
@@ -84,28 +84,28 @@ Displays incoming and outgoing function calls:
 2. Select **Show Call Hierarchy**.
 3. Expand nodes to see relationships between functions.
 
-### **Fix Module Names**
+### Fix Module Names
 
 Ensures that module names match file paths:
 
 1. Right-click the module declaration.
 2. Select **Fix Module Name**.
 
-### **Highlight References**
+### Highlight References
 
 To highlight all occurrences of a variable:
 
 1. Click on a variable or function name.
 2. All references in the file will be highlighted automatically.
 
-### **Automatic Code Formatting**
+### Automatic Code Formatting
 
 To format Haskell code:
 
 1. Right-click → **Format Document** (`Shift+Alt+F`).
 2. Ensure `ormolu` or `fourmolu` is installed (`stack install ormolu`).
 
-### **Selection and Folding Range**
+### Selection and Folding Range
 
 - **Selection Range:** Supports incremental selection of expressions or blocks.
 - **Folding Range:** Allows collapsing and expanding large sections of code.
