@@ -8,50 +8,33 @@ This guide covers setting up HLS in VS Code specifically for Courseography and h
 
 ## Installation
 
-### Prerequisites
 Make sure to have all the dependencies stated in the project's README.
-
-### Installing HLS in VS Code
-
-Installation is straightforward:
-
-1. Open VS Code.
-2. Navigate to the **Extensions** marketplace (`Cmd+Shift+X` on macOS, `Ctrl+Shift+X` on Windows/Linux).
-3. Search for **"Haskell"**.
-4. Click **Install** on the extension provided by "Haskell (haskell.haskell)".
-
-The extension will automatically download and configure Haskell Language Server.
-
-**Note:** VS Code is the easiest way to to use HLS, but you can look at this [installation guide](https://haskell-language-server.readthedocs.io/en/latest/installation.html) if you want to use a different text editor.
+The specific steps for installing HLS in VS Code is under the **Developers** Section.
 
 ## Features of Haskell Language Server for Courseography
 
-| **Category**            | **Feature**                    | **Description**                                                     |
-| ----------------------- | ------------------------------ | ------------------------------------------------------------------- |
-| **Diagnostics**         | **GHC Compiler Errors**        | Displays errors and warnings from GHC.                             |
-|                         | **HLint Hints**                | Provides style and refactoring suggestions from HLint.              |
-|                         | **Stan Hints**                 | Displays additional linting hints via Stan.                         |
-|                         | **Cabal Parse Errors**         | Reports errors from Cabal configuration files.                      |
-| **Code Assistance**     | **Auto-completion**            | Provides intelligent code suggestions as you type.                  |
-|                         | **Hover Documentation**        | Displays type signatures and documentation on hover.                |
-|                         | **Go to Definition**           | Jump to the definition of a function or type.                       |
-|                         | **Find References**            | Locate all occurrences of a function, type, or variable.            |
-|                         | **Jump to Type Definition**    | Navigate to the definition of a type used in the code.              |
-| **Refactoring**         | **Rename Symbol**              | Allows renaming functions and variables project-wide.               |
-|                         | **Extract Function**           | Extracts selected code into a separate function.                    |
-|                         | **Jump to Implementation**     | Navigate to function implementations.                               |
-|                         | **Jump to Note Definition**    | Jump to GHC-style notes in the code.                                |
-|                         | **Convert to GADT Syntax**     | Converts a datatype to GADT syntax.                                |
-|                         | **Expand Record Wildcards**    | Expands record wildcards by listing all fields explicitly.          |
-| **Code Navigation**     | **Workspace Symbols**          | Search for symbols across the project.                              |
-|                         | **Document Symbols**           | Lists symbols defined in a module.                                  |
-|                         | **Call Hierarchy**             | Displays call relationships between functions.                      |
-|                         | **Highlight References**       | Highlights occurrences of variables across the code.                |
-| **Formatting & Style**  | **Automatic Code Formatting**  | Uses `ormolu` or `fourmolu` for consistent code formatting.         |
-|                         | **Organize Imports**           | Automatically sorts and removes unused imports.                     |
-|                         | **Fix Module Names**           | Corrects mismatched module names to match file paths.               |
-|                         | **Selection Range**            | Supports incremental code selection.                                |
-|                         | **Folding Range**              | Enables code folding for large sections.                           |
+| **Category**            | **Feature**                | **Description**                                                     |
+| ----------------------- | -------------------------- | ------------------------------------------------------------------- |
+| **Diagnostics**         | GHC Compiler Errors        | Displays errors and warnings from GHC.                              |
+|                         | HLint Hints                | Provides style and refactoring suggestions from HLint.              |
+|                         | Cabal Parse Errors         | Reports errors from Cabal configuration files.                      |
+| **Code Assistance**     | Auto-completion            | Provides intelligent code suggestions as you type.                  |
+|                         | Hover Documentation        | Displays type signatures and documentation on hover.                |
+|                         | Go to Definition           | Jump to the definition of a function or type.                       |
+|                         | Find References            | Locate all occurrences of a function, type, or variable.            |
+|                         | Jump to Type Definition    | Navigate to the definition of a type used in the code.              |
+| **Refactoring**         | Rename Symbol              | Allows renaming functions and variables project-wide.               |
+|                         | Extract Function           | Extracts selected code into a separate function.                    |
+|                         | Jump to Implementation     | Navigate to function implementations.                               |
+| **Code Navigation**     | Workspace Symbols          | Search for symbols across the project.                              |
+|                         | Document Symbols           | Lists symbols defined in a module.                                  |
+|                         | Call Hierarchy             | Displays call relationships between functions.                      |
+|                         | Highlight References       | Highlights occurrences of variables across the code.                |
+| **Formatting & Style**  | Automatic Code Formatting  | Uses `ormolu` or `fourmolu` for consistent code formatting.         |
+|                         | Organize Imports           | Automatically sorts and removes unused imports.                     |
+|                         | Fix Module Names           | Corrects mismatched module names to match file paths.               |
+|                         | Selection Range            | Supports incremental code selection.                                |
+|                         | Folding Range              | Enables code folding for large sections.                            |
 
 ## Detailed Feature Walkthrough
 
@@ -101,26 +84,12 @@ Displays incoming and outgoing function calls:
 2. Select **Show Call Hierarchy**.
 3. Expand nodes to see relationships between functions.
 
-### **Expand Record Wildcards**
-
-Automatically expands `{..}` wildcards to explicitly list all fields:
-
-1. Right-click the wildcard.
-2. Select **Expand Record Wildcards**.
-
 ### **Fix Module Names**
 
 Ensures that module names match file paths:
 
 1. Right-click the module declaration.
 2. Select **Fix Module Name**.
-
-### **Convert to GADT Syntax**
-
-Converts a standard datatype to Generalized Algebraic Data Type (GADT) syntax:
-
-1. Right-click the datatype.
-2. Select **Convert to GADT Syntax**.
 
 ### **Highlight References**
 
@@ -144,4 +113,3 @@ To format Haskell code:
 ## Additional Notes
 This does not exhaust all features of HLS, just the most relevant/useful ones for Courseography. 
 If you want to look at other features please refer to the [documentation](https://haskell-language-server.readthedocs.io/en/latest/features.html) and update this guide if anything not listed here becomes very useful.
-
