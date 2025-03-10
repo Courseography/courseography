@@ -225,12 +225,12 @@ export class Graph extends React.Component {
         })
 
         Object.values(edgesJSON).forEach(edge => {
-          if (edge.target in parentsObj) {
+          if (edge.target in parentsObj && edge.target in inEdgesObj) {
             parentsObj[edge.target].push(edge.source)
             inEdgesObj[edge.target].push(edge.id_)
           }
 
-          if (edge.source in childrenObj) {
+          if (edge.source in childrenObj && edge.source in outEdgesObj) {
             childrenObj[edge.source].push(edge.target)
             outEdgesObj[edge.source].push(edge.id_)
           }
@@ -458,6 +458,21 @@ export class Graph extends React.Component {
   }
 
   /**
+   * Transforms <x> and <y> with the given transformation.
+   * Assumes that transformation is a valid list [a,b,c,d,e,f] of length 6 that represents the
+   * transformation matrix [[a, c, e], [b, d, f], [0, 0, 1]]
+   * @param {list} transformation - a list that represents a matrix transformation
+   * @param {float} x - the x coordinate to be transformed
+   * @param {float} y - the y coordinate to be transformed
+   */
+  transformPoint = (transformation, x, y) => {
+    const [a, b, c, d, e, f] = transformation
+    const newX = a * x + c * y + e
+    const newY = b * x + d * y + f
+    return [newX, newY]
+  }
+
+  /**
    * Drawing mode is not implemented, meaning the onDraw defaults to false right now.
    */
   nodeMouseEnter = event => {
@@ -489,6 +504,10 @@ export class Graph extends React.Component {
     }
 
     yPos = parseFloat(yPos)
+
+    if (currentNode.transform) {
+      ;[xPos, yPos] = this.transformPoint(currentNode.transform, xPos, yPos)
+    }
 
     if (!this.state.onDraw) {
       this.setState({
@@ -1318,9 +1337,14 @@ export class Graph extends React.Component {
   renderBoolGroup = (boolsJSON, boolsStatus, connections) => {
     const generateBool = boolJSON => {
       const { parents } = connections
+      const json = {
+        ...boolJSON,
+        transform: this.formatTransform(boolJSON.transform),
+      }
+
       return (
         <Bool
-          JSON={boolJSON}
+          JSON={json}
           className="bool"
           key={boolJSON.id_}
           parents={parents[boolJSON.id_]}
@@ -1351,6 +1375,7 @@ export class Graph extends React.Component {
           target={edgeJSON.target}
           points={edgeJSON.points}
           status={edgesStatus[edgeJSON.id_]}
+          transform={this.formatTransform(edgeJSON.transform)}
         />
       )
     }
@@ -1418,6 +1443,7 @@ export class Graph extends React.Component {
               parents={connections.parents[entry.id_]}
               childs={connections.children[entry.id_]}
               status={nodesStatus[entry.id_].status}
+              transform={this.formatTransform(entry.transform)}
               onWheel={onWheel}
               onKeydown={onKeyDown}
               nodeDropshadowFilter={nodeDropshadowFilter}
@@ -1440,6 +1466,7 @@ export class Graph extends React.Component {
               hybrid={false}
               parents={connections.parents[entry.id_]}
               status={nodesStatus[entry.id_].status}
+              transform={this.formatTransform(entry.transform)}
               highlightDeps={highlightDeps}
               highlightFocus={highlightFocus}
               onClick={nodeClick}
@@ -1490,6 +1517,7 @@ export class Graph extends React.Component {
       )
     })
   }
+
   renderRegionsLabels(regionsJSON, labelsJSON) {
     return (
       <g id="regions">
@@ -1497,6 +1525,15 @@ export class Graph extends React.Component {
         {this.renderLabels(labelsJSON)}
       </g>
     )
+  }
+
+  /**
+   * Formats fransformation to a valid CSS transform value.
+   * Assumes that <transform> is a list of length 6 that represents a matrix transformation if it exists,
+   * that is, [a, b, c, d, e, f] => matrix(a, b, c, d, e, f)
+   */
+  formatTransform = transform => {
+    return transform ? `matrix(${transform.join(", ")})` : ""
   }
 
   render() {
