@@ -1984,13 +1984,15 @@ div[id*="_inq"] .code::after {
 
 #generateRoot #react-graph {
   position: static;
+  background-color: #f0f5f8;
 }
 
 #generateDiv {
   background-color: #ffffff;
   height: 100%;
   width: 450px;
-  box-shadow:  4px -1px 4px rgb(0, 0, 0, 0.3);
+  box-shadow:  4px -1px 4px rgb(0, 0, 0, 0.15);
+  z-index: 1;
 }
 
 #generateDiv ul {
