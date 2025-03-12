@@ -86,8 +86,6 @@ The extension will automatically download and configure Haskell Language Server.
 
 **Note:** VS Code is the easiest way to to use HLS, but you can look at this [installation guide](https://haskell-language-server.readthedocs.io/en/latest/installation.html) if you want to use a different text editor.
 
-There is a guide
-
 ## Contributors
 
 This project would not exist without the contributions of many students in the Department of Computer Science. In alphabetical order, our contributors are:
