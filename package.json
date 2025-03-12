@@ -22,7 +22,7 @@
     "*.hs": "stack exec hlint"
   },
   "dependencies": {
-    "@babel/runtime": "^7.26.7",
+    "@babel/runtime": "^7.26.10",
     "ag-grid-community": "^33.1.1",
     "ag-grid-react": "^33.1.1",
     "bootstrap": "^5.3.3",
