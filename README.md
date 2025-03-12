@@ -75,7 +75,7 @@ If you are contributing to Courseography, you should run the following to instal
 2. `stack install hlint`
 3. `npx lint-staged` (this will run the pre-commit hooks; make sure that it runs without errors)
 
-Also follow these steps to get IDE like support for Haskell through [Haskell Language Server (HLS)](https://github.com/Courseography/courseography/wiki/Haskell-Language-Server-%28HLS%29-Guide)
+Also follow these steps to get IDE like support for Haskell through [Haskell Language Server (HLS)](https://haskell-language-server.readthedocs.io/en/stable/)
 
 1. Open VS Code.
 2. Navigate to the **Extensions** marketplace (`Cmd+Shift+X` on macOS, `Ctrl+Shift+X` on Windows/Linux).
@@ -85,6 +85,8 @@ Also follow these steps to get IDE like support for Haskell through [Haskell Lan
 The extension will automatically download and configure Haskell Language Server.
 
 **Note:** VS Code is the easiest way to to use HLS, but you can look at this [installation guide](https://haskell-language-server.readthedocs.io/en/latest/installation.html) if you want to use a different text editor.
+
+There is a [wiki page](https://github.com/Courseography/courseography/wiki/Haskell-Language-Server-%28HLS%29-Guide) that has a guide on relevant features that might be useful for development.
 
 ## Contributors
 
