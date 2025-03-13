@@ -397,6 +397,7 @@ export default class GenerateForm extends React.Component {
                   }}
                 >
                   <button id="submit" type="submit">
+                    <img id="generate-icon" src="/static/res/ico/generate.png" />
                     Generate
                   </button>
                 </div>

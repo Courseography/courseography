@@ -2074,14 +2074,23 @@ main-filter input {
   background-color: #76609c;
   color: #ffffff;
   border-radius: 5px;
-  padding: 6px 18px;
+  padding: 6px 15px;
   margin-top: 1.5rem;
   border: none;
   box-shadow:  1px 1px 4px rgb(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem;
 }
 
 #submit:hover {
   background-color: #5c497e;
+}
+
+#generate-icon {
+  width: 1.3rem;
+  height: 1.3rem;
 }
 
 .spinner {
