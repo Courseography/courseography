@@ -2067,10 +2067,10 @@ main-filter input {
 #submit {
   background-color: #76609c;
   color: #ffffff;
-  border-radius: 30px;
+  border-radius: 5px;
   padding: 6px 18px;
-  border: solid 1px #ffffff;
-  box-shadow:  1px 1px 2px rgb(0, 0, 0, 0.2);
+  border: none;
+  box-shadow:  1px 1px 4px rgb(0, 0, 0, 0.2);
 }
 
 #submit:hover {
