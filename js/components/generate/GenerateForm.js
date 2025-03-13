@@ -313,18 +313,20 @@ export default class GenerateForm extends React.Component {
                     type="text"
                     placeholder="e.g., CSC207H1, CSC324H1"
                   />
-                  <ErrorMessage
-                    className="error-message"
-                    name="courses"
-                    component="div"
-                  />
+                  <div className="error-container">
+                    <ErrorMessage
+                      className="error-message"
+                      name="courses"
+                      component="div"
+                    />
+                  </div>
                 </div>
 
                 <div className="form-section">
                   <h2
                     id="filter-title"
                     className="section-title"
-                    style={{ marginTop: errors.courses ? "-1em" : "0em" }}>
+                  >
                       Filters
                   </h2>
 
@@ -336,13 +338,14 @@ export default class GenerateForm extends React.Component {
                     name="departments"
                     type="text"
                     placeholder="Enter 3 letter dept. codes, sep. by commas"
-                    style={{ marginBottom: errors.departments ? "0" : "1em" }}
                   />
-                  <ErrorMessage
-                    className="error-message"
-                    name="departments"
-                    component="div"
-                  />
+                  <div className="error-container">
+                    <ErrorMessage
+                      className="error-message"
+                      name="departments"
+                      component="div"
+                    />
+                  </div>
 
                   <label htmlFor="taken">Hide courses</label>
                   <Field
@@ -350,9 +353,10 @@ export default class GenerateForm extends React.Component {
                     name="taken"
                     type="text"
                     placeholder="E.g., CSC207H1, CSC236H1"
-                    style={{ marginBottom: errors.taken ? "0" : "1em" }}
                   />
-                  <ErrorMessage className="error-message" name="taken" component="div" />
+                  <div className="error-container">
+                    <ErrorMessage className="error-message" name="taken" component="div" />
+                  </div>
 
                   <label htmlFor="maxDepth">
                     Prereq chain depth (0 shows all)
@@ -363,7 +367,6 @@ export default class GenerateForm extends React.Component {
                     type="number"
                     min="0"
                     step="1"
-                    style={{ marginBottom: "1em" }}
                   />
 
                   {/* <label htmlFor="location">Campus</label>

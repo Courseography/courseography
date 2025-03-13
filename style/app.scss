@@ -2028,8 +2028,7 @@ div[id*="_inq"] .code::after {
 
 #generateDiv label {
   font-weight: normal;
-  font-size: 0.9rem;
-  margin-bottom: 0.2em;
+  font-size: 1rem;
   color: #9d8abe;
 }
 
@@ -2050,6 +2049,10 @@ main-filter input {
   margin-bottom: 2.2em;
 }
 
+#filter-title {
+  margin-top: -1.1em;
+}
+
 .section-title {
   color: #5c497e;
   font-size: 1.3rem;
@@ -2057,11 +2060,14 @@ main-filter input {
 
 .error-message {
   color: #dc143c;
-  margin-top: 0.3em;
-  margin-bottom: 0.8em;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
   font-style: italic;
+}
+
+.error-container {
+  height: auto;
+  min-height: 1.6rem;
 }
 
 #submit {
@@ -2069,6 +2075,7 @@ main-filter input {
   color: #ffffff;
   border-radius: 5px;
   padding: 6px 18px;
+  margin-top: 1.5rem;
   border: none;
   box-shadow:  1px 1px 4px rgb(0, 0, 0, 0.2);
 }
