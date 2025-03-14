@@ -101,6 +101,7 @@ Text json
     align T.Text
     fill T.Text
     deriving Show
+    transform [Double] default=[1,0,0,1,0,0]
 
 Shape json
     graph GraphId
@@ -113,6 +114,7 @@ Shape json
     text [Text]
     type_ ShapeType
     deriving Show
+    transform [Double] default=[1,0,0,1,0,0]
 
 Path json
     graph GraphId
@@ -124,6 +126,7 @@ Path json
     source T.Text
     target T.Text
     deriving Show
+    transform [Double] default=[1,0,0,1,0,0]
 
 Post
     name PostType

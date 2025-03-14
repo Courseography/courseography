@@ -48,14 +48,7 @@ export default class GenerateForm extends React.Component {
         const returnedCourses = data.texts.map(t => t.text)
 
         const missingCourses = submittedCourses.filter(
-          c =>
-            !(
-              returnedCourses.includes(c) ||
-              returnedCourses.includes(c + "H1") ||
-              returnedCourses.includes(c + "Y1") ||
-              returnedCourses.includes(c + "H0") ||
-              returnedCourses.includes(c + "Y0")
-            )
+          c => !returnedCourses.includes(c.toUpperCase())
         )
 
         if (missingCourses.length !== 0) {
@@ -230,8 +223,8 @@ export default class GenerateForm extends React.Component {
   validateForm = values => {
     const errors = {}
 
-    const coursePattern = /^[A-Z]{3}\d{3}[HY]\d$/
-    const deptPattern = /^[A-Z]{3}$/
+    const coursePattern = /^[A-Za-z]{3}\d{3}[HYhy]\d$/
+    const deptPattern = /^[A-Za-z]{3}$/
 
     if (!values.courses.trim().length) {
       errors.courses = "Cannot generate graph – no courses entered!"
