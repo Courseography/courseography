@@ -18,13 +18,11 @@ describe("Handle invalid course inputs appropriately", () => {
     },
     {
       coursesInputText: "CSC110Y1, SDS777H1, CSC343H1, MAT888Y1, MAT237Y1",
-      expectedWarning:
-        "The courses [SDS777H1, MAT888Y1] were invalid!",
+      expectedWarning: "The courses [SDS777H1, MAT888Y1] were invalid!",
     },
     {
       coursesInputText: "CSC110Y1 CSC343H1",
-      expectedWarning:
-        "The course CSC110Y1 CSC343H1 was invalid!",
+      expectedWarning: "The course CSC110Y1 CSC343H1 was invalid!",
     },
     {
       coursesInputText: "",
@@ -65,8 +63,7 @@ describe("Handle invalid department inputs appropriately", () => {
     },
     {
       departmentInputText: "csc, abcd, SDS, MAT, PHYS, BIO",
-      expectedWarning:
-        "The departments [abcd, PHYS] were invalid!",
+      expectedWarning: "The departments [abcd, PHYS] were invalid!",
     },
     {
       departmentInputText: "CSC, MAT STA",
@@ -109,13 +106,11 @@ describe("Handle invalid taken courses inputs appropriately", () => {
     },
     {
       takenCoursesInputText: "CSC110Y1 CSC343H1",
-      expectedWarning:
-        "The course CSC110Y1 CSC343H1 was invalid!",
+      expectedWarning: "The course CSC110Y1 CSC343H1 was invalid!",
     },
     {
       takenCoursesInputText: "MAT1234H1, CSC207H1, CSC1234Y1",
-      expectedWarning:
-        "The courses [MAT1234H1, CSC1234Y1] were invalid!",
+      expectedWarning: "The courses [MAT1234H1, CSC1234Y1] were invalid!",
     },
   ])(".$takenCoursesInputText", async ({ takenCoursesInputText, expectedWarning }) => {
     const user = userEvent.setup()

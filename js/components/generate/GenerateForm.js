@@ -295,7 +295,7 @@ export default class GenerateForm extends React.Component {
             validateOnBlur={false}
             onSubmit={this.handleSubmit}
           >
-            {({ errors }) => (
+            {() => (
               <Form id="generateForm">
                 <div className="form-section">
                   <h2 id="header-title" className="section-title">Search Course</h2>
@@ -316,16 +316,9 @@ export default class GenerateForm extends React.Component {
                 </div>
 
                 <div className="form-section">
-                  <h2
-                    id="filter-title"
-                    className="section-title"
-                  >
-                      Filters
-                  </h2>
+                  <h2 id="filter-title" className="section-title">Filters</h2>
 
-                  <label htmlFor="departments">
-                    Departments
-                  </label>
+                  <label htmlFor="departments">Departments</label>
                   <Field
                     id="departments"
                     name="departments"
@@ -348,19 +341,15 @@ export default class GenerateForm extends React.Component {
                     placeholder="E.g., CSC207H1, CSC236H1"
                   />
                   <div className="error-container">
-                    <ErrorMessage className="error-message" name="taken" component="div" />
+                    <ErrorMessage
+                      className="error-message"
+                      name="taken"
+                      component="div"
+                    />
                   </div>
 
-                  <label htmlFor="maxDepth">
-                    Prereq chain depth (0 shows all)
-                  </label>
-                  <Field
-                    id="maxDepth"
-                    name="maxDepth"
-                    type="number"
-                    min="0"
-                    step="1"
-                  />
+                  <label htmlFor="maxDepth">Prereq chain depth (0 shows all)</label>
+                  <Field id="maxDepth" name="maxDepth" type="number" min="0" step="1" />
 
                   {/* <label htmlFor="location">Campus</label>
                   <Field id="location" name="location" as="select" multiple
