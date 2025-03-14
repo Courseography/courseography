@@ -62,8 +62,8 @@ export default class GenerateForm extends React.Component {
           setErrors({
             courses:
               missingCourses.length === 1
-                ? `The course ${missingCourses} was invalid! Please check your input.`
-                : `The courses [${missingCourses.join(", ")}] were invalid! Please check your input.`,
+                ? `The course ${missingCourses} was invalid!`
+                : `The courses [${missingCourses.join(", ")}] were invalid!`,
           })
         }
 

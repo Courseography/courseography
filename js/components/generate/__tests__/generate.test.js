@@ -10,21 +10,21 @@ describe("Handle invalid course inputs appropriately", () => {
   it.each([
     {
       coursesInputText: "MAT777H1, asdasdasd, CSC876Y1",
-      expectedWarning: "The course asdasdasd was invalid! Please check your input.",
+      expectedWarning: "The course asdasdasd was invalid!",
     },
     {
       coursesInputText: "MAT777H1",
-      expectedWarning: "The course MAT777H1 was invalid! Please check your input.",
+      expectedWarning: "The course MAT777H1 was invalid!",
     },
     {
       coursesInputText: "CSC110Y1, SDS777H1, CSC343H1, MAT888Y1, MAT237Y1",
       expectedWarning:
-        "The courses [SDS777H1, MAT888Y1] were invalid! Please check your input.",
+        "The courses [SDS777H1, MAT888Y1] were invalid!",
     },
     {
       coursesInputText: "CSC110Y1 CSC343H1",
       expectedWarning:
-        "The course CSC110Y1 CSC343H1 was invalid! Please check your input.",
+        "The course CSC110Y1 CSC343H1 was invalid!",
     },
     {
       coursesInputText: "",
@@ -45,7 +45,7 @@ describe("Handle invalid course inputs appropriately", () => {
     await user.keyboard(coursesInputText)
 
     expect(screen.queryByText(expectedWarning)).toBeNull()
-    const genButton = screen.getByText("Generate Graph")
+    const genButton = screen.getByText("Generate")
     await user.click(genButton)
 
     const errorMessage = await screen.findByText(expectedWarning)
@@ -61,16 +61,16 @@ describe("Handle invalid department inputs appropriately", () => {
   it.each([
     {
       departmentInputText: "CSC, SDS, MAT, PHYS, BIO",
-      expectedWarning: "The department PHYS was invalid! Please check your input.",
+      expectedWarning: "The department PHYS was invalid!",
     },
     {
       departmentInputText: "CSC, abc, SDS, MAT, PHYS, BIO",
       expectedWarning:
-        "The departments [abc, PHYS] were invalid! Please check your input.",
+        "The departments [abc, PHYS] were invalid!",
     },
     {
       departmentInputText: "CSC, MAT STA",
-      expectedWarning: "The department MAT STA was invalid! Please check your input.",
+      expectedWarning: "The department MAT STA was invalid!",
     },
   ])(".$departmentInputText", async ({ departmentInputText, expectedWarning }) => {
     const user = userEvent.setup()
@@ -89,7 +89,7 @@ describe("Handle invalid department inputs appropriately", () => {
     await user.keyboard(coursesInputText)
 
     expect(screen.queryByText(expectedWarning)).toBeNull()
-    const genButton = screen.getByText("Generate Graph")
+    const genButton = screen.getByText("Generate")
     await user.click(genButton)
 
     const errorMessage = await screen.findByText(expectedWarning)
@@ -105,17 +105,17 @@ describe("Handle invalid taken courses inputs appropriately", () => {
   it.each([
     {
       takenCoursesInputText: "MAT777H1, asdasdasd, CSC876Y1",
-      expectedWarning: "The course asdasdasd was invalid! Please check your input.",
+      expectedWarning: "The course asdasdasd was invalid!",
     },
     {
       takenCoursesInputText: "CSC110Y1 CSC343H1",
       expectedWarning:
-        "The course CSC110Y1 CSC343H1 was invalid! Please check your input.",
+        "The course CSC110Y1 CSC343H1 was invalid!",
     },
     {
       takenCoursesInputText: "MAT1234H1, CSC207H1, CSC1234Y1",
       expectedWarning:
-        "The courses [MAT1234H1, CSC1234Y1] were invalid! Please check your input.",
+        "The courses [MAT1234H1, CSC1234Y1] were invalid!",
     },
   ])(".$takenCoursesInputText", async ({ takenCoursesInputText, expectedWarning }) => {
     const user = userEvent.setup()
@@ -136,7 +136,7 @@ describe("Handle invalid taken courses inputs appropriately", () => {
     await user.keyboard(coursesInputText)
 
     expect(screen.queryByText(expectedWarning)).toBeNull()
-    const genButton = screen.getByText("Generate Graph")
+    const genButton = screen.getByText("Generate")
     await user.click(genButton)
 
     const errorMessage = await screen.findByText(expectedWarning)
@@ -153,7 +153,7 @@ it("No warning for valid course input strings", async () => {
   await user.tripleClick(coursesInputField)
   await user.keyboard(coursesInputText)
   expect(screen.queryByText("Invalid Course Input")).toBeNull()
-  const genButton = screen.getByText("Generate Graph")
+  const genButton = screen.getByText("Generate")
   await user.click(genButton)
   await expect(screen.findByText(/invalid/i)).rejects.toThrow()
 })
@@ -167,7 +167,7 @@ it("Submitting with valid courses and then making them invalid correctly updates
   await user.tripleClick(coursesInputField)
   await user.keyboard(coursesInputText)
   expect(screen.queryByText("Invalid Course Input")).toBeNull()
-  let genButton = screen.getByText("Generate Graph")
+  let genButton = screen.getByText("Generate")
   await user.click(genButton)
   await expect(screen.findByText("Invalid Course Input")).rejects.toThrow()
   expect(screen.getByText("CSC443H1")).toBeDefined()
