@@ -298,7 +298,7 @@ export default class GenerateForm extends React.Component {
             {() => (
               <Form id="generateForm">
                 <div className="form-section">
-                  <h2 id="header-title" className="section-title">Search Course</h2>
+                  <h1 id="header-title" className="section-title">Search Course</h1>
 
                   <Field
                     id="courses"
