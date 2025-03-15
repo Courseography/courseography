@@ -298,7 +298,7 @@ export default class GenerateForm extends React.Component {
             {() => (
               <Form id="generateForm">
                 <div className="form-section">
-                  <h1 id="header-title" className="section-title">Search Course</h1>
+                  <h1 id="header-title" className="section-title">Search Course(s)</h1>
 
                   <Field
                     id="courses"
@@ -338,7 +338,7 @@ export default class GenerateForm extends React.Component {
                     id="taken"
                     name="taken"
                     type="text"
-                    placeholder="E.g., CSC207H1, CSC236H1"
+                    placeholder="e.g., CSC207H1, CSC236H1"
                   />
                   <div className="error-container">
                     <ErrorMessage
