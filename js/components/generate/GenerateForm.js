@@ -2,6 +2,7 @@ import React from "react"
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
+import { Tooltip } from "react-tooltip"
 
 export default class GenerateForm extends React.Component {
   constructor(props) {
@@ -318,7 +319,15 @@ export default class GenerateForm extends React.Component {
                 <div className="form-section">
                   <h2 id="filter-title" className="section-title">Filters</h2>
 
-                  <label htmlFor="departments">Departments</label>
+                  <div className="tooltip-container">
+                    <label htmlFor="departments">Departments</label>
+                    <a
+                      data-tooltip-id="departments-tooltip"
+                      data-tooltip-content="Only include courses from these departments"
+                      className="tooltip-icon">
+                    </a>
+                    <Tooltip id="departments-tooltip" place="right" />
+                  </div>
                   <Field
                     id="departments"
                     name="departments"
@@ -333,7 +342,15 @@ export default class GenerateForm extends React.Component {
                     />
                   </div>
 
-                  <label htmlFor="taken">Hide courses</label>
+                  <div className="tooltip-container">
+                    <label htmlFor="taken">Hide courses</label>
+                    <a
+                      data-tooltip-id="taken-tooltip"
+                      data-tooltip-content="Do not show these courses"
+                      className="tooltip-icon">
+                    </a>
+                    <Tooltip id="taken-tooltip" place="right" />
+                  </div>
                   <Field
                     id="taken"
                     name="taken"
@@ -348,7 +365,15 @@ export default class GenerateForm extends React.Component {
                     />
                   </div>
 
-                  <label htmlFor="maxDepth">Prereq chain depth (0 shows all)</label>
+                  <div className="tooltip-container">
+                    <label htmlFor="maxDepth">Prereq chain depth</label>
+                    <a
+                      data-tooltip-id="maxDepth-tooltip"
+                      data-tooltip-content="Depth of prerequisite chain (0 shows all prerequisites)"
+                      className="tooltip-icon">
+                    </a>
+                    <Tooltip id="maxDepth-tooltip" place="right" />
+                  </div>
                   <Field id="maxDepth" name="maxDepth" type="number" min="0" step="1" />
 
                   {/* <label htmlFor="location">Campus</label>
