@@ -2060,6 +2060,35 @@ main-filter input {
   font-size: 1.3rem;
 }
 
+.tooltip-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tooltip-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.6rem;
+  margin-left: 0.6rem;
+  background-color: #d2c7e2;
+  color: #ffffff;
+  border-radius: 50%;
+  min-width: 14px;
+  min-height: 14px;
+  cursor: default;
+}
+
+.tooltip-icon::after {
+  content: "?";
+}
+
+.tooltip-icon:hover {
+  color: #ffffff;
+  background-color: #9d8abe;
+}
+
 .error-message {
   color: #dc143c;
   font-size: 0.75rem;
