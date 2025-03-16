@@ -35,7 +35,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
-    "react-modal": "^3.16.1"
+    "react-modal": "^3.16.1",
+    "react-tooltip": "^5.28.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
