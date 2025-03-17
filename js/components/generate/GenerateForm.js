@@ -319,7 +319,7 @@ export default class GenerateForm extends React.Component {
                 <div className="form-section">
                   <h2 id="filter-title" className="section-title">Filters</h2>
 
-                  <div className="tooltip-container">
+                  <div className="title-container">
                     <label htmlFor="departments">Departments</label>
                     <a
                       data-tooltip-id="departments-tooltip"
@@ -342,7 +342,7 @@ export default class GenerateForm extends React.Component {
                     />
                   </div>
 
-                  <div className="tooltip-container">
+                  <div className="title-container">
                     <label htmlFor="taken">Hide courses</label>
                     <a
                       data-tooltip-id="taken-tooltip"
@@ -365,7 +365,7 @@ export default class GenerateForm extends React.Component {
                     />
                   </div>
 
-                  <div className="tooltip-container">
+                  <div className="title-container">
                     <label htmlFor="maxDepth">Prereq chain depth</label>
                     <a
                       data-tooltip-id="maxDepth-tooltip"
