@@ -1,10 +1,10 @@
 import React from "react"
 import { ErrorMessage, Field, Form, Formik } from "formik"
-import { Graph, populateHybridRelatives } from "../graph/Graph"
-import Disclaimer from "../common/Disclaimer"
-import { Tooltip } from "react-tooltip"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faWandSparkles } from "@fortawesome/free-solid-svg-icons"
+import { Tooltip } from "react-tooltip"
+import { Graph, populateHybridRelatives } from "../graph/Graph"
+import Disclaimer from "../common/Disclaimer"
 
 export default class GenerateForm extends React.Component {
   constructor(props) {
