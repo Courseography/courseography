@@ -368,7 +368,7 @@ export default class GenerateForm extends React.Component {
                   </div>
 
                   <div className="title-container">
-                    <label htmlFor="maxDepth">Prereq chain depth</label>
+                    <label htmlFor="maxDepth">Prerequisite depth</label>
                     <a
                       data-tooltip-id="maxDepth-tooltip"
                       data-tooltip-content="Depth of prerequisite chain (0 shows all prerequisites)"
