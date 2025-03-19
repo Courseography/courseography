@@ -325,7 +325,8 @@ export default class GenerateForm extends React.Component {
                     <label htmlFor="departments">Departments</label>
                     <a
                       data-tooltip-id="departments-tooltip"
-                      data-tooltip-content="Only include courses from these departments"
+                      data-tooltip-html="Only include courses from these departments.<br />
+                        Department codes must be 3 letters, seperated by commas."
                       className="tooltip-icon">
                     </a>
                     <Tooltip id="departments-tooltip" place="right" />
@@ -334,7 +335,7 @@ export default class GenerateForm extends React.Component {
                     id="departments"
                     name="departments"
                     type="text"
-                    placeholder="Enter 3 letter dept. codes, sep. by commas"
+                    placeholder="e.g., CSC, MAT, STA"
                   />
                   <div className="error-container">
                     <ErrorMessage
@@ -348,10 +349,12 @@ export default class GenerateForm extends React.Component {
                     <label htmlFor="taken">Hide courses</label>
                     <a
                       data-tooltip-id="taken-tooltip"
-                      data-tooltip-content="Do not show these courses"
+                      data-tooltip-html="Do not show these courses or their prerequisites.<br />
+                        Each course code must follow the format CSC108H1<br />
+                        (i.e. department + code + session)"
                       className="tooltip-icon">
                     </a>
-                    <Tooltip id="taken-tooltip" place="right" />
+                    <Tooltip id="taken-tooltip" className="tooltip-box" place="right" />
                   </div>
                   <Field
                     id="taken"
