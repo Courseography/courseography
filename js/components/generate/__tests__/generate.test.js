@@ -10,19 +10,19 @@ describe("Handle invalid course inputs appropriately", () => {
   it.each([
     {
       coursesInputText: "MAT777H1, asdasdasd, CSC876Y1",
-      expectedWarning: "Invalid course ID: asdasdasd",
+      expectedWarning: "Invalid course code: asdasdasd",
     },
     {
       coursesInputText: "MAT777H1",
-      expectedWarning: "Unrecognized course ID: MAT777H1",
+      expectedWarning: "Invalid course code: MAT777H1",
     },
     {
       coursesInputText: "CSC110Y1, SDS777H1, CSC343H1, MAT888Y1, MAT237Y1",
-      expectedWarning: "Unrecognized course IDs: SDS777H1, MAT888Y1",
+      expectedWarning: "Invalid course codes: SDS777H1, MAT888Y1",
     },
     {
       coursesInputText: "CSC110Y1 CSC343H1",
-      expectedWarning: "Invalid course ID: CSC110Y1 CSC343H1",
+      expectedWarning: "Invalid course code: CSC110Y1 CSC343H1",
     },
     {
       coursesInputText: "",
@@ -59,15 +59,15 @@ describe("Handle invalid department inputs appropriately", () => {
   it.each([
     {
       departmentInputText: "CSC, SDS, MAT, PHYS, BIO",
-      expectedWarning: "Invalid dept. code PHYS: use 3 letters!",
+      expectedWarning: "Invalid department: PHYS",
     },
     {
       departmentInputText: "csc, abcd, SDS, MAT, PHYS, BIO",
-      expectedWarning: "Invalid dept. codes abcd, PHYS: please use 3 letters for each code!",
+      expectedWarning: "Invalid departments: abcd, PHYS",
     },
     {
       departmentInputText: "CSC, MAT STA",
-      expectedWarning: "Invalid dept. code MAT STA: use 3 letters!",
+      expectedWarning: "Invalid department: MAT STA",
     },
   ])(".$departmentInputText", async ({ departmentInputText, expectedWarning }) => {
     const user = userEvent.setup()
@@ -102,15 +102,15 @@ describe("Handle invalid taken courses inputs appropriately", () => {
   it.each([
     {
       takenCoursesInputText: "MAT777H1, asdasdasd, CSC876Y1",
-      expectedWarning: "Invalid course ID: asdasdasd",
+      expectedWarning: "Invalid course code: asdasdasd",
     },
     {
       takenCoursesInputText: "CSC110Y1 CSC343H1",
-      expectedWarning: "Invalid course ID: CSC110Y1 CSC343H1",
+      expectedWarning: "Invalid course code: CSC110Y1 CSC343H1",
     },
     {
       takenCoursesInputText: "MAT1234H1, CSC207H1, CSC1234Y1",
-      expectedWarning: "Invalid course IDs: MAT1234H1, CSC1234Y1",
+      expectedWarning: "Invalid course codes: MAT1234H1, CSC1234Y1",
     },
   ])(".$takenCoursesInputText", async ({ takenCoursesInputText, expectedWarning }) => {
     const user = userEvent.setup()
@@ -174,7 +174,7 @@ it("Submitting with valid courses and then making them invalid correctly updates
   await user.keyboard(coursesInputTextBad)
   expect(screen.queryByText(/invalid/i)).toBeNull()
   await user.click(genButton)
-  const errorMessage = await screen.findByText(/Unrecognized course ID: CSC443H7/i)
+  const errorMessage = await screen.findByText(/Invalid course code: CSC443H7/i)
   expect(errorMessage).toBeDefined()
   expect(screen.queryByText("CSC443H1")).toBeNull()
 })
