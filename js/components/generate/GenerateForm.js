@@ -301,7 +301,19 @@ export default class GenerateForm extends React.Component {
             {() => (
               <Form id="generateForm">
                 <div className="form-section">
-                  <h1 id="header-title" className="section-title">Search Course(s)</h1>
+                  <h1 id="header-title" className="section-title">Search</h1>
+
+                  <div className="title-container">
+                    <label htmlFor="departments">Course(s)</label>
+                    <a
+                      data-tooltip-id="courses-tooltip"
+                      data-tooltip-html="Generate the prerequisites for the given course(s).<br />
+                        Each course code must follow the format ABC123H1<br />
+                        (i.e. department + code + session)"
+                      className="tooltip-icon">
+                    </a>
+                    <Tooltip id="courses-tooltip" place="right" />
+                  </div>
 
                   <Field
                     id="courses"
@@ -350,7 +362,7 @@ export default class GenerateForm extends React.Component {
                     <a
                       data-tooltip-id="taken-tooltip"
                       data-tooltip-html="Do not show these courses or their prerequisites.<br />
-                        Each course code must follow the format CSC108H1<br />
+                        Each course code must follow the format ABC123H1<br />
                         (i.e. department + code + session)"
                       className="tooltip-icon">
                     </a>
