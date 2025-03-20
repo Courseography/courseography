@@ -58,8 +58,8 @@ export default class GenerateForm extends React.Component {
           setErrors({
             courses:
               missingCourses.length === 1
-                ? `Unrecognized course ID: ${missingCourses}`
-                : `Unrecognized course IDs: ${missingCourses.join(", ")}`,
+                ? `Invalid course code: ${invalidCourses}`
+                : `Invalid course codes: ${invalidCourses.join(", ")}`
           })
         }
 
@@ -238,8 +238,8 @@ export default class GenerateForm extends React.Component {
       if (invalidCourses.length > 0) {
         errors.courses =
           invalidCourses.length === 1
-            ? `Invalid course ID: ${invalidCourses}`
-            : `Invalid course IDs: ${invalidCourses.join(", ")}`
+            ? `Invalid course code: ${invalidCourses}`
+            : `Invalid course codes: ${invalidCourses.join(", ")}`
       }
     }
 
@@ -250,8 +250,8 @@ export default class GenerateForm extends React.Component {
       if (invalidDepartments.length > 0) {
         errors.departments =
           invalidDepartments.length === 1
-            ? `Invalid dept. code ${invalidDepartments}: use 3 letters!`
-            : `Invalid dept. codes ${invalidDepartments.join(", ")}: please use 3 letters for each code!`
+            ? `Invalid department: ${invalidDepartments}`
+            : `Invalid department: ${invalidDepartments.join(", ")}`
       }
     }
 
@@ -262,8 +262,8 @@ export default class GenerateForm extends React.Component {
       if (invalidTaken.length > 0) {
         errors.taken =
           invalidTaken.length === 1
-            ? `Invalid course ID: ${invalidTaken}`
-            : `Invalid course IDs: ${invalidTaken.join(", ")}`
+            ? `Invalid course code: ${invalidTaken}`
+            : `Invalid course codes: ${invalidTaken.join(", ")}`
       }
     }
 
