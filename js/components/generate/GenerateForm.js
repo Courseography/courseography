@@ -308,7 +308,7 @@ export default class GenerateForm extends React.Component {
                     <a
                       data-tooltip-id="courses-tooltip"
                       data-tooltip-html="Generate the prerequisites for the given course(s).<br />
-                        Each course code must follow the format ABC123H1<br />
+                        Each course code must follow the format CSC108H1<br />
                         (i.e. department + code + session)"
                       className="tooltip-icon">
                     </a>
@@ -362,7 +362,7 @@ export default class GenerateForm extends React.Component {
                     <a
                       data-tooltip-id="taken-tooltip"
                       data-tooltip-html="Do not show these courses or their prerequisites.<br />
-                        Each course code must follow the format ABC123H1<br />
+                        Each course code must follow the format CSC108H1<br />
                         (i.e. department + code + session)"
                       className="tooltip-icon">
                     </a>
