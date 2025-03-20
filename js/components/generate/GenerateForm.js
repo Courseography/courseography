@@ -251,7 +251,7 @@ export default class GenerateForm extends React.Component {
         errors.departments =
           invalidDepartments.length === 1
             ? `Invalid department: ${invalidDepartments}`
-            : `Invalid department: ${invalidDepartments.join(", ")}`
+            : `Invalid departments: ${invalidDepartments.join(", ")}`
       }
     }
 
