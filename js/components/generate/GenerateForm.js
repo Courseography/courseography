@@ -25,7 +25,8 @@ export default class GenerateForm extends React.Component {
     const data = {}
 
     for (const key in values) {
-      if (["courses", "taken", "departments"].includes(key)) {
+      if (["courses", "programs", "taken", "departments"].includes(key)) {
+        // TODO change to programs
         data[key] = values[key].split(",").map(s => s.trim())
       } else {
         data[key] = values[key]
@@ -33,6 +34,7 @@ export default class GenerateForm extends React.Component {
     }
 
     let submittedCourses = data["courses"]
+    // let submittedPrograms = data["programs"]
 
     const putData = {
       method: "PUT",
@@ -45,6 +47,8 @@ export default class GenerateForm extends React.Component {
     fetch("/graph-generate", putData)
       .then(res => res.json())
       .then(data => {
+        console.log(data)
+        // TODO verify if program is valid by some return check in database
         const returnedCourses = data.texts.map(t => t.text)
 
         const missingCourses = submittedCourses.filter(
@@ -223,20 +227,41 @@ export default class GenerateForm extends React.Component {
   validateForm = values => {
     const errors = {}
 
-    const coursePattern = /^[A-Za-z]{3}\d{3}[HYhy]\d$/
+    const programPattern = /^[A-Za-z]{5}\d{4}[A-Za-z]?$/
     const deptPattern = /^[A-Za-z]{3}$/
+    const coursePattern = /^[A-Za-z]{3}\d{3}[HYhy]\d$/
 
-    if (!values.courses.trim().length) {
-      errors.courses = "Cannot generate graph – no courses entered!"
-    } else {
-      const courses = values.courses.split(",").map(course => course.trim())
-      const invalidCourses = courses.filter(course => !coursePattern.test(course))
+    if (values.category === "programs") {
+      if (!values.programs.trim().length) {
+        errors.programs = "Cannot generate graph – no programs entered!"
+      } else {
+        const programs = values.programs.split(",").map(program => program.trim())
+        const invalidPrograms = programs.filter(
+          program => !programPattern.test(program)
+        )
 
-      if (invalidCourses.length > 0) {
-        errors.courses =
-          invalidCourses.length === 1
-            ? `The course ${invalidCourses} was invalid! Please check your input.`
-            : `The courses [${invalidCourses.join(", ")}] were invalid! Please check your input.`
+        if (invalidPrograms.length > 0) {
+          errors.programs =
+            invalidPrograms.length === 1
+              ? `The program ${invalidPrograms} was invalid! Please check your input.`
+              : `The programs [${invalidPrograms.join(", ")}] were invalid! Please check your input.`
+        }
+      }
+    }
+
+    if (values.category === "courses") {
+      if (!values.courses.trim().length) {
+        errors.courses = "Cannot generate graph – no courses entered!"
+      } else {
+        const courses = values.courses.split(",").map(course => course.trim())
+        const invalidCourses = courses.filter(course => !coursePattern.test(course))
+
+        if (invalidCourses.length > 0) {
+          errors.courses =
+            invalidCourses.length === 1
+              ? `The course ${invalidCourses} was invalid! Please check your input.`
+              : `The courses [${invalidCourses.join(", ")}] were invalid! Please check your input.`
+        }
       }
     }
 
@@ -280,35 +305,64 @@ export default class GenerateForm extends React.Component {
             fontSize: "12pt",
           }}
         >
-          <h1 id="header-title">Search for courses</h1>
+          <h1 id="header-title">Select search option</h1>
           <Formik
             initialValues={{
               courses: "",
+              programs: "",
               taken: "",
               departments: "CSC, MAT, STA",
               maxDepth: 0,
               location: ["utsg"],
               includeRaws: false,
               includeGrades: false,
+              category: "programs",
             }}
             validate={this.validateForm}
             validateOnChange={false}
             validateOnBlur={false}
             onSubmit={this.handleSubmit}
           >
-            {({ errors }) => (
+            {({ errors, values }) => (
               <Form id="generateForm">
-                <Field
-                  id="courses"
-                  name="courses"
-                  type="text"
-                  placeholder="e.g., CSC207H1, CSC324H1"
-                />
-                <ErrorMessage
-                  className="error-message"
-                  name="courses"
-                  component="div"
-                />
+                <Field as="select" id="category" name="category">
+                  <option value="programs">Programs</option>
+                  <option value="courses">Courses</option>
+                </Field>
+
+                {values.category === "programs" && (
+                  <>
+                    <h1 id="header-title">Search for programs</h1>
+                    <Field
+                      id="programs"
+                      name="programs"
+                      type="text"
+                      placeholder="e.g., ASMAJ1689, ASFOC1689B"
+                    />
+                    <ErrorMessage
+                      className="error-message"
+                      name="programs"
+                      component="div"
+                    />
+                  </>
+                )}
+
+                {values.category === "courses" && (
+                  <>
+                    <h1 id="header-title">Search for courses</h1>
+                    <Field
+                      id="courses"
+                      name="courses"
+                      type="text"
+                      placeholder="e.g., CSC207H1, CSC324H1"
+                    />
+                    <ErrorMessage
+                      className="error-message"
+                      name="courses"
+                      component="div"
+                    />
+                  </>
+                )}
 
                 <h2 id="filter-title">Optional filters</h2>
 
