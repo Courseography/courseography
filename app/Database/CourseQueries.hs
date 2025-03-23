@@ -10,6 +10,7 @@ and serve the information back to the client.
 
 module Database.CourseQueries
     (retrievePost,
+     reqsForPost,
      returnCourse,
      prereqsForCourse,
      returnMeeting,
@@ -23,9 +24,10 @@ module Database.CourseQueries
 import Config (runDb)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Aeson (object, toJSON, Value)
-import Data.List (partition)
+import Data.Char (isAlphaNum, isPunctuation, isAlpha, isDigit)
+import Data.List (nub, partition)
 import Data.Maybe (fromJust, fromMaybe)
-import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, take)
+import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, take, unpack)
 import Database.DataType ( ShapeType( Node ) , ShapeType( Hybrid ), ShapeType( BoolNode ))
 import Database.Persist.Sqlite (Entity, PersistEntity, SqlPersistM, PersistValue( PersistInt64 ), selectList,
                                 entityKey, entityVal, selectFirst, (==.), (<-.), get, keyToValues, PersistValue( PersistText ),
@@ -89,6 +91,25 @@ returnPost code = runDb $ do
     case sqlPost of
         Nothing -> return Nothing
         Just post -> return $ Just $ entityVal post
+
+-- | Retrieves the course requirements for a Post (code) as a list of course codes
+reqsForPost :: T.Text -> IO [String]
+reqsForPost code = do
+    maybePost <- returnPost code
+    case maybePost of
+        Nothing -> return []
+        Just post -> do
+            let requirementsText = T.unpack $ postRequirements post
+                cleaned = filter (`notElem` ("<>" :: String)) $ filter (not . isPunctuation) requirementsText
+                potentialCodes = words cleaned
+                isCourseCode codeStr = 
+                    length codeStr == 8 && 
+                    all isAlphaNum codeStr &&
+                    all isAlpha (take 3 codeStr) &&
+                    all isDigit (take 3 (drop 3 codeStr)) &&
+                    isAlpha (codeStr !! 6) &&
+                    isDigit (codeStr !! 7)
+            return $ nub $ filter isCourseCode potentialCodes
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.

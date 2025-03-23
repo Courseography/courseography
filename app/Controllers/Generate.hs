@@ -9,9 +9,11 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import DynamicGraphs.WriteRunDot (getBody, generateAndSavePrereqResponse)
 import DynamicGraphs.GraphOptions (CourseGraphOptions (..), GraphOptions (..))
+import Data.List (nub)
 import Data.Maybe (fromJust)
 import Data.Aeson (decode)
 import qualified Data.Text.Lazy as TL
+import Database.CourseQueries (reqsForPost)
 import Control.Monad.IO.Class (liftIO)
 
 generateResponse :: ServerPart Response
@@ -37,8 +39,18 @@ findAndSavePrereqsResponse = do
     method PUT
     requestBody <- getBody
     let coursesOptions :: CourseGraphOptions = fromJust $ decode requestBody
+    liftIO $ print coursesOptions
+
+    allCourses <- if all (null . TL.unpack) (courses coursesOptions)
+        then liftIO $ do
+            let programCodes = map TL.toStrict (programs coursesOptions)
+            extractedCoursesList <- mapM reqsForPost programCodes
+            let allExtractedCourses = concat extractedCoursesList
+            return allExtractedCourses
+        else liftIO $ return (nub $ map TL.unpack (courses coursesOptions))
+
     let updatedCoursesOptions = coursesOptions 
-            { courses = map TL.toUpper (courses coursesOptions)
+            { courses = map (TL.toUpper . TL.pack) allCourses
             , graphOptions = (graphOptions coursesOptions) 
                 { taken = map TL.toUpper (taken (graphOptions coursesOptions))
                 , departments = map TL.toUpper (departments (graphOptions coursesOptions))

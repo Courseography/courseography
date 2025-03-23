@@ -8,6 +8,7 @@
 
 - Added text warning when there's no timetable information available to display
 - Added text warnings and validations for each field in `GenerateForm`
+- Redesigned generate form UI
 - Added search by program to create graphs on Generate Page
 
 ### 🐛 Bug fixes

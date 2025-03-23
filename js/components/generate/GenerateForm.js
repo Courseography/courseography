@@ -1,5 +1,8 @@
 import React from "react"
 import { ErrorMessage, Field, Form, Formik } from "formik"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faWandSparkles } from "@fortawesome/free-solid-svg-icons"
+import { Tooltip } from "react-tooltip"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
 
@@ -59,8 +62,8 @@ export default class GenerateForm extends React.Component {
           setErrors({
             courses:
               missingCourses.length === 1
-                ? `The course ${missingCourses} was invalid! Please check your input.`
-                : `The courses [${missingCourses.join(", ")}] were invalid! Please check your input.`,
+                ? `Invalid course code: ${missingCourses}`
+                : `Invalid course codes: ${missingCourses.join(", ")}`,
           })
         }
 
@@ -243,8 +246,8 @@ export default class GenerateForm extends React.Component {
         if (invalidPrograms.length > 0) {
           errors.programs =
             invalidPrograms.length === 1
-              ? `The program ${invalidPrograms} was invalid! Please check your input.`
-              : `The programs [${invalidPrograms.join(", ")}] were invalid! Please check your input.`
+              ? `Invalid program code: ${invalidPrograms}`
+              : `Invalid program codes: ${invalidPrograms.join(", ")}`
         }
       }
     }
@@ -259,8 +262,8 @@ export default class GenerateForm extends React.Component {
         if (invalidCourses.length > 0) {
           errors.courses =
             invalidCourses.length === 1
-              ? `The course ${invalidCourses} was invalid! Please check your input.`
-              : `The courses [${invalidCourses.join(", ")}] were invalid! Please check your input.`
+              ? `Invalid course code: ${invalidCourses}`
+              : `Invalid course codes: ${invalidCourses.join(", ")}`
         }
       }
     }
@@ -272,8 +275,8 @@ export default class GenerateForm extends React.Component {
       if (invalidDepartments.length > 0) {
         errors.departments =
           invalidDepartments.length === 1
-            ? `The department ${invalidDepartments} was invalid! Please check your input.`
-            : `The departments [${invalidDepartments.join(", ")}] were invalid! Please check your input.`
+            ? `Invalid department: ${invalidDepartments}`
+            : `Invalid departments: ${invalidDepartments.join(", ")}`
       }
     }
 
@@ -284,8 +287,8 @@ export default class GenerateForm extends React.Component {
       if (invalidTaken.length > 0) {
         errors.taken =
           invalidTaken.length === 1
-            ? `The course ${invalidTaken} was invalid! Please check your input.`
-            : `The courses [${invalidTaken.join(", ")}] were invalid! Please check your input.`
+            ? `Invalid course code: ${invalidTaken}`
+            : `Invalid course codes: ${invalidTaken.join(", ")}`
       }
     }
 
@@ -305,9 +308,9 @@ export default class GenerateForm extends React.Component {
             fontSize: "12pt",
           }}
         >
-          <h1 id="header-title">Select search option</h1>
           <Formik
             initialValues={{
+              category: "programs",
               courses: "",
               programs: "",
               taken: "",
@@ -316,125 +319,183 @@ export default class GenerateForm extends React.Component {
               location: ["utsg"],
               includeRaws: false,
               includeGrades: false,
-              category: "programs",
             }}
             validate={this.validateForm}
             validateOnChange={false}
             validateOnBlur={false}
             onSubmit={this.handleSubmit}
           >
-            {({ errors, values }) => (
+            {({ values }) => (
               <Form id="generateForm">
-                <Field as="select" id="category" name="category">
-                  <option value="programs">Programs</option>
-                  <option value="courses">Courses</option>
-                </Field>
+                <div className="form-section">
+                  <h1 id="header-title" className="section-title">
+                    Select Search Input
+                  </h1>
 
-                {values.category === "programs" && (
-                  <>
-                    <h1 id="header-title">Search for programs</h1>
-                    <Field
-                      id="programs"
-                      name="programs"
-                      type="text"
-                      placeholder="e.g., ASMAJ1689, ASFOC1689B"
-                    />
-                    <ErrorMessage
-                      className="error-message"
-                      name="programs"
-                      component="div"
-                    />
-                  </>
-                )}
+                  <Field as="select" id="category" name="category">
+                    <option value="programs">Programs</option>
+                    <option value="courses">Courses</option>
+                  </Field>
 
-                {values.category === "courses" && (
-                  <>
-                    <h1 id="header-title">Search for courses</h1>
-                    <Field
-                      id="courses"
-                      name="courses"
-                      type="text"
-                      placeholder="e.g., CSC207H1, CSC324H1"
-                    />
-                    <ErrorMessage
-                      className="error-message"
-                      name="courses"
-                      component="div"
-                    />
-                  </>
-                )}
+                  {values.category === "programs" && (
+                    <>
+                      <div className="title-container">
+                        <h1 id="header-title" className="section-title">
+                          Search Programs
+                        </h1>
+                        <a
+                          data-tooltip-id="programs-tooltip"
+                          data-tooltip-html="Generate the requirements for the given program(s).<br />
+                        Each program code must follow the format ASFOC1689B"
+                          className="tooltip-icon"
+                          style={{ marginTop: "-0.3rem" }}
+                        ></a>
+                        <Tooltip id="programs-tooltip" place="right" />
+                      </div>
+                      <Field
+                        id="programs"
+                        name="programs"
+                        type="text"
+                        placeholder="e.g., ASMAJ1689, ASFOC1689B"
+                      />
+                      <div className="error-container">
+                        <ErrorMessage
+                          className="error-message"
+                          name="programs"
+                          component="div"
+                        />
+                      </div>
+                    </>
+                  )}
 
-                <h2 id="filter-title">Optional filters</h2>
+                  {values.category === "courses" && (
+                    <>
+                      <div className="title-container">
+                        <h1 id="header-title" className="section-title">
+                          Search Courses
+                        </h1>
+                        <a
+                          data-tooltip-id="courses-tooltip"
+                          data-tooltip-html="Generate the prerequisites for the given course(s).<br />
+                        Each course code must follow the format CSC108H1<br />
+                        (i.e. department + code + session)"
+                          className="tooltip-icon"
+                          style={{ marginTop: "-0.3rem" }}
+                        ></a>
+                        <Tooltip id="courses-tooltip" place="right" />
+                      </div>
+                      <Field
+                        id="courses"
+                        name="courses"
+                        type="text"
+                        placeholder="e.g., CSC207H1, CSC324H1"
+                      />
+                      <div className="error-container">
+                        <ErrorMessage
+                          className="error-message"
+                          name="courses"
+                          component="div"
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
 
-                <label htmlFor="departments">
-                  Only include courses these departments
-                </label>
-                <Field
-                  id="departments"
-                  name="departments"
-                  type="text"
-                  placeholder="Enter 3-letter department codes separated by commas"
-                  style={{ marginBottom: errors.departments ? "0" : "1em" }}
-                />
-                <ErrorMessage
-                  className="error-message"
-                  name="departments"
-                  component="div"
-                />
+                <div className="form-section">
+                  <h2 id="filter-title" className="section-title">
+                    Filters
+                  </h2>
 
-                <label htmlFor="taken">Do not show these courses</label>
-                <Field
-                  id="taken"
-                  name="taken"
-                  type="text"
-                  placeholder="E.g., CSC207H1, CSC236H1"
-                  style={{ marginBottom: errors.taken ? "0" : "1em" }}
-                />
-                <ErrorMessage className="error-message" name="taken" component="div" />
-
-                <label htmlFor="maxDepth">
-                  Depth of prerequisite chain (0 shows all prerequisites)
-                </label>
-                <p>
+                  <div className="title-container">
+                    <label htmlFor="departments">Departments</label>
+                    <a
+                      data-tooltip-id="departments-tooltip"
+                      data-tooltip-html="Only include courses from these departments.<br />
+                        Department codes must be 3 letters, seperated by commas."
+                      className="tooltip-icon"
+                    ></a>
+                    <Tooltip id="departments-tooltip" place="right" />
+                  </div>
                   <Field
-                    id="maxDepth"
-                    name="maxDepth"
-                    type="number"
-                    min="0"
-                    step="1"
-                    style={{ marginBottom: "1em" }}
+                    id="departments"
+                    name="departments"
+                    type="text"
+                    placeholder="e.g., CSC, MAT, STA"
                   />
-                </p>
+                  <div className="error-container">
+                    <ErrorMessage
+                      className="error-message"
+                      name="departments"
+                      component="div"
+                    />
+                  </div>
 
-                {/* <label htmlFor="location">Campus</label>
-                <Field id="location" name="location" as="select" multiple
-                  style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
-                  <option value="utsg">St. George</option>
-                  <option value="utm">Mississauga</option>
-                  <option value="utsc">Scarborough</option>
-                </Field>
-
-                <p>
-                  <label htmlFor="includeRaws">Include non-course prerequisites</label>
-                  <Field id="includeRaws" name="includeRaws" type="checkbox"
-                    style={{ marginLeft: '1em', verticalAlign: 'middle' }}
+                  <div className="title-container">
+                    <label htmlFor="taken">Hide courses</label>
+                    <a
+                      data-tooltip-id="taken-tooltip"
+                      data-tooltip-html="Do not show these courses or their prerequisites.<br />
+                        Each course code must follow the format CSC108H1<br />
+                        (i.e. department + code + session)"
+                      className="tooltip-icon"
+                    ></a>
+                    <Tooltip id="taken-tooltip" className="tooltip-box" place="right" />
+                  </div>
+                  <Field
+                    id="taken"
+                    name="taken"
+                    type="text"
+                    placeholder="e.g., CSC207H1, CSC236H1"
                   />
-                </p>
+                  <div className="error-container">
+                    <ErrorMessage
+                      className="error-message"
+                      name="taken"
+                      component="div"
+                    />
+                  </div>
 
-                <label htmlFor="includeGrades">Include grade-based prerequisites</label>
-                <Field id="includeGrades" name="includeGrades" type="checkbox"
-                  style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
+                  <div className="title-container">
+                    <label htmlFor="maxDepth">Prerequisite depth</label>
+                    <a
+                      data-tooltip-id="maxDepth-tooltip"
+                      data-tooltip-content="Depth of prerequisite chain (0 shows all prerequisites)"
+                      className="tooltip-icon"
+                    ></a>
+                    <Tooltip id="maxDepth-tooltip" place="right" />
+                  </div>
+                  <Field id="maxDepth" name="maxDepth" type="number" min="0" step="1" />
+
+                  {/* <label htmlFor="location">Campus</label>
+                  <Field id="location" name="location" as="select" multiple
+                    style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
+                    <option value="utsg">St. George</option>
+                    <option value="utm">Mississauga</option>
+                    <option value="utsc">Scarborough</option>
+                  </Field>
+
+                  <p>
+                    <label htmlFor="includeRaws">Include non-course prerequisites</label>
+                    <Field id="includeRaws" name="includeRaws" type="checkbox"
+                      style={{ marginLeft: '1em', verticalAlign: 'middle' }}
+                    />
+                  </p>
+
+                  <label htmlFor="includeGrades">Include grade-based prerequisites</label>
+                  <Field id="includeGrades" name="includeGrades" type="checkbox"
+                    style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
+                </div>
 
                 <div
                   style={{
-                    marginTop: "1em",
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
                   }}
                 >
                   <button id="submit" type="submit">
-                    Generate Graph
+                    <FontAwesomeIcon icon={faWandSparkles} id="generate-icon" />
+                    Generate
                   </button>
                 </div>
               </Form>
