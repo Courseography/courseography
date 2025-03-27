@@ -29,7 +29,6 @@ export default class GenerateForm extends React.Component {
 
     for (const key in values) {
       if (["courses", "programs", "taken", "departments"].includes(key)) {
-        // TODO change to programs
         data[key] = values[key].split(",").map(s => s.trim())
       } else {
         data[key] = values[key]
@@ -37,7 +36,13 @@ export default class GenerateForm extends React.Component {
     }
 
     let submittedCourses = data["courses"]
-    // let submittedPrograms = data["programs"]
+    let submittedPrograms = data["programs"]
+
+    if (values.category === "programs") {
+      data["courses"] = []
+    } else {
+      data["programs"] = []
+    }
 
     const putData = {
       method: "PUT",
@@ -50,20 +55,31 @@ export default class GenerateForm extends React.Component {
     fetch("/graph-generate", putData)
       .then(res => res.json())
       .then(data => {
-        console.log(data)
-        // TODO verify if program is valid by some return check in database
-        const returnedCourses = data.texts.map(t => t.text)
+        const returnedTexts = data.texts.map(t => t.text)
 
         const missingCourses = submittedCourses.filter(
-          c => !returnedCourses.includes(c.toUpperCase())
+          c => !returnedTexts.includes(c.toUpperCase())
         )
 
-        if (missingCourses.length !== 0) {
+        if (missingCourses.length !== 0 && missingCourses[0] !== "") {
           setErrors({
             courses:
               missingCourses.length === 1
                 ? `Invalid course code: ${missingCourses}`
                 : `Invalid course codes: ${missingCourses.join(", ")}`,
+          })
+        }
+
+        const missingPrograms = submittedPrograms.filter(c =>
+          returnedTexts.includes(c.toUpperCase())
+        )
+
+        if (missingPrograms.length !== 0 && missingPrograms[0] !== "") {
+          setErrors({
+            programs:
+              missingPrograms.length === 1
+                ? `Invalid program code: ${missingPrograms}`
+                : `Invalid program codes: ${missingPrograms.join(", ")}`,
           })
         }
 
@@ -328,10 +344,18 @@ export default class GenerateForm extends React.Component {
             {({ values }) => (
               <Form id="generateForm">
                 <div className="form-section">
-                  <h1 id="header-title" className="section-title">
-                    Select Search Input
-                  </h1>
-
+                  <div className="title-container">
+                    <h1 id="header-title" className="section-title">
+                      Select Search Input
+                    </h1>
+                    <a
+                      data-tooltip-id="category-tooltip"
+                      data-tooltip-html="Select between courses and programs to search for"
+                      className="tooltip-icon"
+                      style={{ marginTop: "-0.3rem" }}
+                    ></a>
+                    <Tooltip id="category-tooltip" place="right" />
+                  </div>
                   <Field as="select" id="category" name="category">
                     <option value="programs">Programs</option>
                     <option value="courses">Courses</option>

@@ -2011,7 +2011,8 @@ div[id*="_inq"] .code::after {
   padding: 0.8em 0.6em;
 }
 
-#generateDiv input {
+#generateDiv input,
+#category {
   background-color: #fff;
   color: #5c497e;
   margin: 0;
@@ -2024,7 +2025,12 @@ div[id*="_inq"] .code::after {
   padding-left: 10px;
 }
 
-#generateDiv input:focus {
+#category {
+  margin-bottom: 2.2em;
+  cursor: pointer;
+}
+
+#generateDiv input:focus #category:focus {
   box-shadow: 0 0 3px 2px #d7cbec;
 }
 

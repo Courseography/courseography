@@ -10,6 +10,7 @@ and serve the information back to the client.
 
 module Database.CourseQueries
     (retrievePost,
+     returnPost,
      reqsForPost,
      returnCourse,
      prereqsForCourse,
@@ -25,7 +26,7 @@ import Config (runDb)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Aeson (object, toJSON, Value)
 import Data.Char (isAlphaNum, isPunctuation, isAlpha, isDigit)
-import Data.List (nub, partition)
+import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, take, unpack)
 import Database.DataType ( ShapeType( Node ) , ShapeType( Hybrid ), ShapeType( BoolNode ))
@@ -109,7 +110,7 @@ reqsForPost code = do
                     all isDigit (take 3 (drop 3 codeStr)) &&
                     isAlpha (codeStr !! 6) &&
                     isDigit (codeStr !! 7)
-            return $ nub $ filter isCourseCode potentialCodes
+            return $ filter isCourseCode potentialCodes
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.
