@@ -2030,8 +2030,11 @@ div[id*="_inq"] .code::after {
   cursor: pointer;
 }
 
-#generateDiv input:focus #category:focus {
-  box-shadow: 0 0 3px 2px #d7cbec;
+#generateDiv,
+#category {
+  &:focus {
+    box-shadow: 0 0 3px 2px #d7cbec;
+  }
 }
 
 #generateDiv label {
