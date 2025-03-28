@@ -17,11 +17,12 @@ import qualified System.Exit as Exit
 import Test.HUnit (Test (..), failures, runTestTT)
 import RequirementTests.RequirementTests (requirementTests)
 import Controllers.ControllerTests (controllerTests)
+import Database.DatabaseTests (databaseTests)
 import SvgTests.SvgTests (svgTests)
 
 tests :: IO Test
 tests = do
-    return $ TestList [requirementTests, controllerTests, svgTests]
+    return $ TestList [requirementTests, controllerTests, svgTests, databaseTests]
 
 main :: IO ()
 main = do
