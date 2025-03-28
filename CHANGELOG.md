@@ -19,6 +19,7 @@
 - Fixed choppiness of the graphs generated in the export modal
 - Fixed matrix transformation and intersection checking bug when sending graph data to front end
 - Fixed inverse matrix storage from column-major to row-major order
+- Fixed SVG Graph Creation (translation issue)
 
 ### 🔧 Internal changes
 
