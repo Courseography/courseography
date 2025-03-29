@@ -229,7 +229,9 @@ textToSVG styled type_ xPos' text =
                       then xPos
                       else xPos')
             ! A.y (stringValue $ show yPos)
-            ! A.transform (stringValue . show $ textTransform text)
+            ! (if type_ == Region
+                then A.transform (stringValue . formatTransform $ textTransform text)
+                else mempty)
             ! (if styled then allStyles else baseStyles)
             $ toMarkup $ textText text
     where
