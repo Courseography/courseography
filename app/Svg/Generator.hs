@@ -229,6 +229,11 @@ textToSVG styled type_ xPos' text =
                       then xPos
                       else xPos')
             ! A.y (stringValue $ show yPos)
+            -- When applying the transformation matrix for text attributes, the ones
+            -- that are connected to nodes and ellipses are positioned based the positioning
+            -- of the respective nodes and ellipses. On the other hand, the text for the regions
+            -- is positioned based on database values, so the transformation matrix still has to
+            -- be applied. TODO: This is poor design and probably needs to be updated in the future.
             ! (if type_ == Region
                 then A.transform (stringValue . formatTransform $ textTransform text)
                 else mempty)
