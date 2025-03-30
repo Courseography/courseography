@@ -52,6 +52,8 @@
 - Added parsers for all SVG transformations in `App/Svg/Parser`
 - Added intersection tests for buildRect, buildEllipse, intersectsWithPoint and buildPath
 - Allowed lowercase courses and departments on the Generate page
+- Added Debugging Guide
+- Added Haskell Language Server (HLS) Guide
 
 ## [0.6.0] - 2024-06-24
 

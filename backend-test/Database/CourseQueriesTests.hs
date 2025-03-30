@@ -28,7 +28,7 @@ reqsForPostTestCases =
     , ("Invalid program", "", "ABCDE1234", "[]")
     ]
 
--- | Run a test case (case, input, expected output) on the reqsForPost function.
+-- | Run a test case (case, requirements, input, expected output) on the reqsForPost function.
 runReqsForPostTest :: String -> T.Text -> T.Text -> String -> Test
 runReqsForPostTest label reqsToInsert program expected =
     TestLabel label $ TestCase $ do
