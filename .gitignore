@@ -69,3 +69,6 @@ coverage
 
 # Python virtual environment
 venv
+
+# Log file
+courseography.log
