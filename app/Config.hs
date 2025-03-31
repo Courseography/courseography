@@ -8,6 +8,7 @@ containing the production values.
 
 module Config (
     serverConf,
+    logToFile,
     databasePath,
     runDb,
     graphPath,
@@ -117,6 +118,9 @@ logMAccessShort host user _ requestLine responseCode _ referer _ = do
         show responseCode,
         referer
         ]
+
+logToFile :: IO Bool
+logToFile = enableFileLogging <$> loadConfig
 
 
 -- DATABASE CONNECTION STRINGS

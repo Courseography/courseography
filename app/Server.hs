@@ -9,7 +9,7 @@ responses.
 module Server
     (runServer) where
 
-import Config (serverConf, logFilePath)
+import Config (serverConf, logToFile, logFilePath)
 import Control.Concurrent (forkIO, killThread)
 import Data.String (fromString)
 import Filesystem.Path.CurrentOS as Path
@@ -45,7 +45,9 @@ runServer = do
         stdoutH <- streamHandler stdout INFO
         stderrH <- streamHandler stderr ERROR
         -- Set log level to INFO so requests are logged
-        updateGlobalLogger rootLoggerName $ setLevel INFO . setHandlers [fileH, stdoutH, stderrH]
+        enableFileLogging <- logToFile
+        updateGlobalLogger rootLoggerName $ setLevel INFO . setHandlers
+            (if enableFileLogging then [fileH, stdoutH, stderrH] else [stdoutH, stderrH])
 
 
     -- | Return the directory where all static files are stored.
