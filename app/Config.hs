@@ -41,8 +41,7 @@ import Database.Persist.Sqlite (SqlBackend, runSqlite)
 import Happstack.Server (Conf (..), LogAccess, nullConf)
 import Network.HTTP.Types.Header (RequestHeaders)
 import System.Environment (lookupEnv)
-import System.Log.Logger (Priority (INFO), logM, addHandler, getLogger, saveGlobalLogger)
-import System.Log.Handler.Simple (fileHandler)
+import System.Log.Logger (Priority (INFO), logM)
 
 -- Main configuration data type
 data Config = Config
@@ -149,6 +148,7 @@ genCssPath = genCssPathValue <$> loadConfig
 -- | The relative path to log server access to.
 logFilePath :: IO String
 logFilePath = logFile <$> loadConfig
+
 
 -- URLs
 

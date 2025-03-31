@@ -17,7 +17,7 @@ import Happstack.Server hiding (host)
 import Routes (routeResponses)
 import System.Directory (getCurrentDirectory)
 import System.IO (BufferMode (LineBuffering), hSetBuffering, stderr, stdout)
-import System.Log.Logger (Priority (INFO, ERROR), rootLoggerName, setLevel, updateGlobalLogger, saveGlobalLogger, addHandler, setHandlers)
+import System.Log.Logger (Priority (INFO, ERROR), rootLoggerName, setLevel, updateGlobalLogger, setHandlers)
 import System.Log.Handler.Simple (fileHandler, streamHandler)
 
 runServer :: IO ()
@@ -45,9 +45,9 @@ runServer = do
         stdoutH <- streamHandler stdout INFO
         stderrH <- streamHandler stderr ERROR
         -- Set log level to INFO so requests are logged
-        enableFileLogging <- logToFile
+        fileLogginEnabled <- logToFile
         updateGlobalLogger rootLoggerName $ setLevel INFO . setHandlers
-            (if enableFileLogging then [fileH, stdoutH, stderrH] else [stdoutH, stderrH])
+            (if fileLogginEnabled then [fileH, stdoutH, stderrH] else [stdoutH, stderrH])
 
 
     -- | Return the directory where all static files are stored.
