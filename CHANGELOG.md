@@ -9,6 +9,7 @@
 - Added text warning when there's no timetable information available to display
 - Added text warnings and validations for each field in `GenerateForm`
 - Redesigned generate form UI
+- Allow option to log server request accesses to a file
 
 ### 🐛 Bug fixes
 
