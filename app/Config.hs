@@ -12,6 +12,7 @@ module Config (
     runDb,
     graphPath,
     genCssPath,
+    logFilePath,
     timetableUrl,
     timetableApiUrl,
     fasCalendarUrl,
@@ -39,12 +40,15 @@ import Database.Persist.Sqlite (SqlBackend, runSqlite)
 import Happstack.Server (Conf (..), LogAccess, nullConf)
 import Network.HTTP.Types.Header (RequestHeaders)
 import System.Environment (lookupEnv)
-import System.Log.Logger (Priority (INFO), logM)
+import System.Log.Logger (Priority (INFO), logM, addHandler, getLogger, saveGlobalLogger)
+import System.Log.Handler.Simple (fileHandler)
 
 -- Main configuration data type
 data Config = Config
     { portValue             :: Int
     , logMessage            :: String
+    , enableFileLogging     :: Bool
+    , logFile               :: String
     , databasePathValue     :: Text
     , graphPathValue        :: String
     , genCssPathValue       :: String
@@ -64,6 +68,8 @@ instance FromJSON Config where
     parseJSON = withObject "Config" $ \obj -> Config
         <$> obj .: "port"
         <*> obj .: "logMessage"
+        <*> obj .: "enableFileLogging"
+        <*> obj .: "logFile"
         <*> obj .: "databasePath"
         <*> obj .: "graphPath"
         <*> obj .: "genCssPath"
@@ -135,6 +141,10 @@ graphPath = graphPathValue <$> loadConfig
 -- | The relative path to the directory containing all of the generated CSS files.
 genCssPath :: IO String
 genCssPath = genCssPathValue <$> loadConfig
+
+-- | TODO
+logFilePath :: IO String
+logFilePath = logFile <$> loadConfig
 
 -- URLs
 

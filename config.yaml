@@ -2,7 +2,7 @@
 port: 8000
 logMessage: "Happstack.Server.AccessLog.Combined"
 enableFileLogging: true
-logFilePath: "courseography.log"
+logFile: "courseography.log"
 
 # Database Path
 databasePath: "db/database.sqlite3"

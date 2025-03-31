@@ -9,7 +9,7 @@ responses.
 module Server
     (runServer) where
 
-import Config (serverConf)
+import Config (serverConf, logFilePath)
 import Control.Concurrent (forkIO, killThread)
 import Data.String (fromString)
 import Filesystem.Path.CurrentOS as Path
@@ -17,8 +17,8 @@ import Happstack.Server hiding (host)
 import Routes (routeResponses)
 import System.Directory (getCurrentDirectory)
 import System.IO (BufferMode (LineBuffering), hSetBuffering, stderr, stdout)
-import System.Log.Logger (Priority (INFO), rootLoggerName, setLevel, updateGlobalLogger)
-
+import System.Log.Logger (Priority (INFO), rootLoggerName, setLevel, updateGlobalLogger, saveGlobalLogger, addHandler, setHandlers)
+import System.Log.Handler.Simple (fileHandler)
 
 runServer :: IO ()
 runServer = do
@@ -39,8 +39,12 @@ runServer = do
         -- Use line buffering to ensure logging messages are printed correctly
         hSetBuffering stdout LineBuffering
         hSetBuffering stderr LineBuffering
-        -- Set log level to INFO so requests are logged to stdout
+        -- Set log level to INFO so requests are logged to stdout TODO update
+        -- filePath <- logFilePath
+        -- fileH <- fileHandler filePath INFO
+        -- updateGlobalLogger rootLoggerName $ setLevel INFO . setHandlers [fileH]
         updateGlobalLogger rootLoggerName $ setLevel INFO
+
 
     -- | Return the directory where all static files are stored.
     -- Note: the type here is System.IO.FilePath, not FileSystem.Path.FilePath.
