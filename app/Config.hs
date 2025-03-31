@@ -142,7 +142,7 @@ graphPath = graphPathValue <$> loadConfig
 genCssPath :: IO String
 genCssPath = genCssPathValue <$> loadConfig
 
--- | TODO
+-- | The relative path to log server access to.
 logFilePath :: IO String
 logFilePath = logFile <$> loadConfig
 
