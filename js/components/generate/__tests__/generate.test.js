@@ -1,533 +1,244 @@
 import React from "react"
-import { ErrorMessage, Field, Form, Formik } from "formik"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faWandSparkles } from "@fortawesome/free-solid-svg-icons"
-import { Tooltip } from "react-tooltip"
-import { Graph, populateHybridRelatives } from "../graph/Graph"
-import Disclaimer from "../common/Disclaimer"
+import GenerateForm from "../GenerateForm.js"
+import { screen, render } from "@testing-library/react"
+import { userEvent } from "@testing-library/user-event"
 
-export default class GenerateForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      fceCount: 0,
+describe("Handle invalid course inputs appropriately", () => {
+  beforeEach(() => {
+    render(<GenerateForm />)
+  })
+  it.each([
+    {
+      coursesInputText: "MAT777H1, asdasdasd, CSC876Y1",
+      expectedWarning: "Invalid course code: asdasdasd",
+    },
+    {
+      coursesInputText: "MAT777H1",
+      expectedWarning: "Invalid course code: MAT777H1",
+    },
+    {
+      coursesInputText: "CSC110Y1, SDS777H1, CSC343H1, MAT888Y1, MAT237Y1",
+      expectedWarning: "Invalid course codes: SDS777H1, MAT888Y1",
+    },
+    {
+      coursesInputText: "CSC110Y1 CSC343H1",
+      expectedWarning: "Invalid course code: CSC110Y1 CSC343H1",
+    },
+    {
+      coursesInputText: "",
+      expectedWarning: "Cannot generate graph – no courses entered!",
+    },
+    {
+      coursesInputText: "   ",
+      expectedWarning: "Cannot generate graph – no courses entered!",
+    },
+  ])(".$coursesInputText", async ({ coursesInputText, expectedWarning }) => {
+    const user = userEvent.setup()
+    const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+    if (coursesInputText === "") {
+      coursesInputText = "{Backspace}"
     }
+    await user.keyboard(coursesInputText)
 
-    this.graph = React.createRef()
-  }
+    expect(screen.queryByText(expectedWarning)).toBeNull()
+    const genButton = screen.getByText("Generate")
+    await user.click(genButton)
 
-  setFCECount = credits => {
-    this.setState({ fceCount: credits })
-  }
+    const errorMessage = await screen.findByText(expectedWarning)
+    expect(errorMessage).not.toBeNull()
+  })
+})
 
-  incrementFCECount = credits => {
-    this.setState({ fceCount: this.state.fceCount + credits })
-  }
+describe("Handle invalid department inputs appropriately", () => {
+  beforeEach(() => {
+    render(<GenerateForm />)
+  })
 
-  handleSubmit = (values, { setErrors }) => {
-    const data = {}
-
-    for (const key in values) {
-      if (["courses", "programs", "taken", "departments"].includes(key)) {
-        data[key] = values[key].split(",").map(s => s.trim())
-      } else {
-        data[key] = values[key]
-      }
+  it.each([
+    {
+      departmentInputText: "CSC, SDS, MAT, PHYS, BIO",
+      expectedWarning: "Invalid department: PHYS",
+    },
+    {
+      departmentInputText: "csc, abcd, SDS, MAT, PHYS, BIO",
+      expectedWarning: "Invalid departments: abcd, PHYS",
+    },
+    {
+      departmentInputText: "CSC, MAT STA",
+      expectedWarning: "Invalid department: MAT STA",
+    },
+  ])(".$departmentInputText", async ({ departmentInputText, expectedWarning }) => {
+    const user = userEvent.setup()
+    const departmentInputField = screen.getByDisplayValue("CSC, MAT, STA")
+    await user.click(departmentInputField)
+    await user.tripleClick(departmentInputField)
+    if (departmentInputText === "") {
+      departmentInputText = "{Backspace}"
     }
+    await user.keyboard(departmentInputText)
 
-    let submittedCourses = data["courses"]
+    const coursesInputText = "CSC443H1"
+    const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+    await user.keyboard(coursesInputText)
 
-    if (values.category === "programs") {
-      data["courses"] = []
-    } else {
-      data["programs"] = []
-    }
+    expect(screen.queryByText(expectedWarning)).toBeNull()
+    const genButton = screen.getByText("Generate")
+    await user.click(genButton)
 
-    const putData = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data), // We send data in JSON format
-    }
+    const errorMessage = await screen.findByText(expectedWarning)
+    expect(errorMessage).not.toBeNull()
+  })
+})
 
-    fetch("/graph-generate", putData)
-      .then(res => res.json())
-      .then(data => {
-        const returnedTexts = data.texts?.map(t => t.text) ?? []
+describe("Handle invalid taken courses inputs appropriately", () => {
+  beforeEach(() => {
+    render(<GenerateForm />)
+  })
 
-        const missingCourses = submittedCourses.filter(
-          c => !returnedTexts.includes(c.toUpperCase())
-        )
-
-        if (missingCourses.length !== 0 && missingCourses[0] !== "") {
-          setErrors({
-            courses:
-              missingCourses.length === 1
-                ? `Invalid course code: ${missingCourses}`
-                : `Invalid course codes: ${missingCourses.join(", ")}`,
-          })
-        }
-
-        const missingPrograms = data.error?.invalidPrograms ?? []
-
-        if (missingPrograms.length !== 0) {
-          setErrors({
-            programs:
-              missingPrograms.length === 1
-                ? `Invalid program code: ${missingPrograms}`
-                : `Invalid program codes: ${missingPrograms.join(", ")}`,
-          })
-        }
-
-        const labelsJSON = {}
-        const regionsJSON = {}
-        const nodesJSON = {}
-        const hybridsJSON = {}
-        const boolsJSON = {}
-        const edgesJSON = {}
-        const boolsStatus = {}
-        const nodesStatus = {}
-        const parentsObj = {}
-        const inEdgesObj = {}
-        const childrenObj = {}
-        const outEdgesObj = {}
-        const storedNodes = new Set()
-
-        data.texts.forEach(entry => {
-          // filter for mark percentages, allow preceding characters for potential geq
-          if (entry.text.match(/.*[0-9]*%/g)) {
-            labelsJSON[entry.rId] = entry
-          }
-        })
-
-        data.shapes.forEach(function (entry) {
-          if (entry.type_ === "Node") {
-            nodesJSON[entry.id_] = entry
-          } else if (entry.type_ === "Hybrid") {
-            hybridsJSON[entry.id_] = entry
-          } else if (entry.type_ === "BoolNode") {
-            boolsStatus[entry.id_] = "inactive"
-            boolsJSON[entry.id_] = entry
-          }
-        })
-
-        data.paths.forEach(function (entry) {
-          if (entry.isRegion) {
-            regionsJSON[entry.id_] = entry
-          } else {
-            edgesJSON[entry.id_] = entry
-          }
-        })
-
-        Object.values(nodesJSON).forEach(node => {
-          parentsObj[node.id_] = []
-          inEdgesObj[node.id_] = []
-          childrenObj[node.id_] = []
-          outEdgesObj[node.id_] = []
-          // Quickly adding any active nodes from local storage into the selected nodes
-          let state = localStorage.getItem(node.id_)
-          if (state === null) {
-            state = parentsObj[node.id_].length === 0 ? "takeable" : "inactive"
-          } else if (state === "active") {
-            storedNodes.add(node.text[node.text.length - 1].text)
-          }
-
-          nodesStatus[node.id_] = {
-            status: state,
-            selected: ["active", "overridden"].indexOf(state) >= 0,
-          }
-        })
-
-        Object.values(hybridsJSON).forEach(hybrid => {
-          childrenObj[hybrid.id_] = []
-          outEdgesObj[hybrid.id_] = []
-          const nodesList = Object.values(nodesJSON)
-          populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
-          let state = localStorage.getItem(hybrid.id_)
-          if (state === null) {
-            state = parentsObj[hybrid.id_].length === 0 ? "takeable" : "inactive"
-          }
-          nodesStatus[hybrid.id_] = {
-            status: state,
-            selected: ["active", "overridden"].indexOf(state) >= 0,
-          }
-        })
-
-        Object.values(edgesJSON).forEach(edge => {
-          if (edge.target in parentsObj) {
-            parentsObj[edge.target].push(edge.source)
-            inEdgesObj[edge.target].push(edge.id_)
-          }
-
-          if (edge.source in childrenObj) {
-            childrenObj[edge.source].push(edge.target)
-            outEdgesObj[edge.source].push(edge.id_)
-          }
-        })
-
-        Object.keys(boolsJSON).forEach(boolId => {
-          const parents = []
-          const childs = []
-          const outEdges = []
-          const inEdges = []
-          Object.values(edgesJSON).forEach(edge => {
-            if (boolId === edge.target) {
-              parents.push(edge.source)
-              inEdges.push(edge.id_)
-            } else if (boolId === edge.source) {
-              childs.push(edge.target)
-              outEdges.push(edge.id_)
-            }
-          })
-          parentsObj[boolId] = parents
-          childrenObj[boolId] = childs
-          outEdgesObj[boolId] = outEdges
-          inEdgesObj[boolId] = inEdges
-        })
-
-        const edgesStatus = Object.values(edgesJSON).reduce((acc, curr) => {
-          const source = curr.source
-          const target = curr.target
-          let status
-          const isSourceSelected =
-            nodesStatus[source]?.selected || boolsStatus[source] === "active"
-
-          const isTargetSelected =
-            nodesStatus[target]?.selected || boolsStatus[target] === "active"
-
-          const targetStatus = nodesStatus[target]?.status || boolsStatus[target]
-
-          if (!isSourceSelected && targetStatus === "missing") {
-            status = "missing"
-          } else if (!isSourceSelected) {
-            status = "inactive"
-          } else if (!isTargetSelected) {
-            status = "takeable"
-          } else {
-            status = "active"
-          }
-          acc[curr.id_] = status
-          return acc
-        }, {})
-
-        this.graph.current.setState({
-          labelsJSON: labelsJSON,
-          regionsJSON: regionsJSON,
-          nodesJSON: nodesJSON,
-          hybridsJSON: hybridsJSON,
-          boolsJSON: boolsJSON,
-          edgesJSON: edgesJSON,
-          nodesStatus: nodesStatus,
-          edgesStatus: edgesStatus,
-          boolsStatus: boolsStatus,
-          width: data.width,
-          height: data.height,
-          zoomFactor: 1,
-          horizontalPanFactor: 0,
-          verticalPanFactor: 0,
-          connections: {
-            parents: parentsObj,
-            inEdges: inEdgesObj,
-            children: childrenObj,
-            outEdges: outEdgesObj,
-          },
-          selectedNodes: storedNodes,
-        })
-      })
-      .catch(err => {
-        console.log("err :>> ", err)
-      })
-  }
-
-  validateForm = values => {
-    const errors = {}
-
-    const coursePattern = /^[A-Za-z]{3}\d{3}[HYhy]\d$/
-    const deptPattern = /^[A-Za-z]{3}$/
-    const programPattern = /^[A-Za-z]{5}\d{4}[A-Za-z]?$/
-
-    if (values.category === "courses") {
-      if (!values.courses.trim().length) {
-        errors.courses = "Cannot generate graph – no courses entered!"
-      } else {
-        const courses = values.courses.split(",").map(course => course.trim())
-        const invalidCourses = courses.filter(course => !coursePattern.test(course))
-
-        if (invalidCourses.length > 0) {
-          errors.courses =
-            invalidCourses.length === 1
-              ? `Invalid course code: ${invalidCourses}`
-              : `Invalid course codes: ${invalidCourses.join(", ")}`
-        }
-      }
-    }
-
-    if (values.category === "programs") {
-      if (!values.programs.trim().length) {
-        errors.programs = "Cannot generate graph – no programs entered!"
-      } else {
-        const programs = values.programs.split(",").map(program => program.trim())
-        const invalidPrograms = programs.filter(
-          program => !programPattern.test(program)
-        )
-
-        if (invalidPrograms.length > 0) {
-          errors.programs =
-            invalidPrograms.length === 1
-              ? `Invalid program code: ${invalidPrograms}`
-              : `Invalid program codes: ${invalidPrograms.join(", ")}`
-        }
-      }
-    }
-
-    if (values.departments && values.departments.trim()) {
-      const departments = values.departments.split(",").map(dept => dept.trim())
-      const invalidDepartments = departments.filter(dept => !deptPattern.test(dept))
-
-      if (invalidDepartments.length > 0) {
-        errors.departments =
-          invalidDepartments.length === 1
-            ? `Invalid department: ${invalidDepartments}`
-            : `Invalid departments: ${invalidDepartments.join(", ")}`
-      }
-    }
-
-    if (values.taken && values.taken.trim()) {
-      const takenCourses = values.taken.split(",").map(course => course.trim())
-      const invalidTaken = takenCourses.filter(course => !coursePattern.test(course))
-
-      if (invalidTaken.length > 0) {
-        errors.taken =
-          invalidTaken.length === 1
-            ? `Invalid course code: ${invalidTaken}`
-            : `Invalid course codes: ${invalidTaken.join(", ")}`
-      }
-    }
-
-    return errors
-  }
-
-  render() {
-    return (
-      <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-        <Disclaimer />
-        <div
-          id="generateDiv"
-          style={{
-            position: "initial",
-            padding: "0 0.5em",
-            height: "100%",
-            fontSize: "12pt",
-          }}
-        >
-          <Formik
-            initialValues={{
-              category: "courses",
-              courses: "",
-              programs: "",
-              taken: "",
-              departments: "CSC, MAT, STA",
-              maxDepth: 0,
-              location: ["utsg"],
-              includeRaws: false,
-              includeGrades: false,
-            }}
-            validate={this.validateForm}
-            validateOnChange={false}
-            validateOnBlur={false}
-            onSubmit={this.handleSubmit}
-          >
-            {({ values }) => (
-              <Form id="generateForm">
-                <div className="form-section">
-                  <div className="title-container">
-                    <h1 id="header-title" className="section-title">Select Search Input</h1>
-                    <a
-                      data-tooltip-id="category-tooltip"
-                      data-tooltip-html="Select between courses and programs to search for"
-                      className="tooltip-icon"
-                      style={{ marginTop: "-0.3rem" }}>
-                    </a>
-                    <Tooltip id="category-tooltip" place="right" />
-                  </div>
-                  <Field as="select" id="category" name="category">
-                    <option value="courses">Courses</option>
-                    <option value="programs">Programs</option>
-                  </Field>
-
-                  {values.category === "courses" && (
-                    <>
-                      <div className="title-container">
-                        <h1 id="header-title" className="section-title">
-                          Search Courses
-                        </h1>
-                        <a
-                          data-tooltip-id="courses-tooltip"
-                          data-tooltip-html="Generate the prerequisites for the given course(s).<br />
-                        Each course code must follow the format CSC108H1<br />
-                        (i.e. department + code + session)"
-                          className="tooltip-icon"
-                          style={{ marginTop: "-0.3rem" }}>
-                        </a>
-                        <Tooltip id="courses-tooltip" place="right" />
-                      </div>
-                      <Field
-                        id="courses"
-                        name="courses"
-                        type="text"
-                        placeholder="e.g., CSC207H1, CSC324H1"
-                      />
-                      <div className="error-container">
-                        <ErrorMessage
-                          className="error-message"
-                          name="courses"
-                          component="div"
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {values.category === "programs" && (
-                    <>
-                      <div className="title-container">
-                        <h1 id="header-title" className="section-title">
-                          Search Programs
-                        </h1>
-                        <a
-                          data-tooltip-id="programs-tooltip"
-                          data-tooltip-html="Generate the requirements for the given program(s).<br />
-                        Each program code must follow the format ASFOC1689B"
-                          className="tooltip-icon"
-                          style={{ marginTop: "-0.3rem" }}>
-                        </a>
-                        <Tooltip id="programs-tooltip" place="right" />
-                      </div>
-                      <Field
-                        id="programs"
-                        name="programs"
-                        type="text"
-                        placeholder="e.g., ASMAJ1689, ASFOC1689B"
-                      />
-                      <div className="error-container">
-                        <ErrorMessage
-                          className="error-message"
-                          name="programs"
-                          component="div"
-                        />
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                <div className="form-section">
-                  <h2 id="filter-title" className="section-title">Filters</h2>
-
-                  <div className="title-container">
-                    <label htmlFor="departments">Departments</label>
-                    <a
-                      data-tooltip-id="departments-tooltip"
-                      data-tooltip-html="Only include courses from these departments.<br />
-                        Department codes must be 3 letters, seperated by commas."
-                      className="tooltip-icon">
-                    </a>
-                    <Tooltip id="departments-tooltip" place="right" />
-                  </div>
-                  <Field
-                    id="departments"
-                    name="departments"
-                    type="text"
-                    placeholder="e.g., CSC, MAT, STA"
-                  />
-                  <div className="error-container">
-                    <ErrorMessage
-                      className="error-message"
-                      name="departments"
-                      component="div"
-                    />
-                  </div>
-
-                  <div className="title-container">
-                    <label htmlFor="taken">Hide courses</label>
-                    <a
-                      data-tooltip-id="taken-tooltip"
-                      data-tooltip-html="Do not show these courses or their prerequisites.<br />
-                        Each course code must follow the format CSC108H1<br />
-                        (i.e. department + code + session)"
-                      className="tooltip-icon">
-                    </a>
-                    <Tooltip id="taken-tooltip" className="tooltip-box" place="right" />
-                  </div>
-                  <Field
-                    id="taken"
-                    name="taken"
-                    type="text"
-                    placeholder="e.g., CSC207H1, CSC236H1"
-                  />
-                  <div className="error-container">
-                    <ErrorMessage
-                      className="error-message"
-                      name="taken"
-                      component="div"
-                    />
-                  </div>
-
-                  <div className="title-container">
-                    <label htmlFor="maxDepth">Prerequisite depth</label>
-                    <a
-                      data-tooltip-id="maxDepth-tooltip"
-                      data-tooltip-content="Depth of prerequisite chain (0 shows all prerequisites)"
-                      className="tooltip-icon">
-                    </a>
-                    <Tooltip id="maxDepth-tooltip" place="right" />
-                  </div>
-                  <Field id="maxDepth" name="maxDepth" type="number" min="0" step="1" />
-
-                  {/* <label htmlFor="location">Campus</label>
-                  <Field id="location" name="location" as="select" multiple
-                    style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
-                    <option value="utsg">St. George</option>
-                    <option value="utm">Mississauga</option>
-                    <option value="utsc">Scarborough</option>
-                  </Field>
-
-                  <p>
-                    <label htmlFor="includeRaws">Include non-course prerequisites</label>
-                    <Field id="includeRaws" name="includeRaws" type="checkbox"
-                      style={{ marginLeft: '1em', verticalAlign: 'middle' }}
-                    />
-                  </p>
-
-                  <label htmlFor="includeGrades">Include grade-based prerequisites</label>
-                  <Field id="includeGrades" name="includeGrades" type="checkbox"
-                    style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
-                </div>
-
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <button id="submit" type="submit">
-                    <FontAwesomeIcon icon={faWandSparkles} id="generate-icon" />
-                    Generate
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-
-        <Graph
-          ref={this.graph}
-          start_blank={true}
-          fceCount={this.state.fceCount}
-          incrementFCECount={this.incrementFCECount}
-          setFCECount={this.setFCECount}
-        />
-      </div>
+  it.each([
+    {
+      takenCoursesInputText: "MAT777H1, asdasdasd, CSC876Y1",
+      expectedWarning: "Invalid course code: asdasdasd",
+    },
+    {
+      takenCoursesInputText: "CSC110Y1 CSC343H1",
+      expectedWarning: "Invalid course code: CSC110Y1 CSC343H1",
+    },
+    {
+      takenCoursesInputText: "MAT1234H1, CSC207H1, CSC1234Y1",
+      expectedWarning: "Invalid course codes: MAT1234H1, CSC1234Y1",
+    },
+  ])(".$takenCoursesInputText", async ({ takenCoursesInputText, expectedWarning }) => {
+    const user = userEvent.setup()
+    const takenCoursesInputField = screen.getByPlaceholderText(
+      "e.g., CSC207H1, CSC236H1"
     )
-  }
-}
+    await user.click(takenCoursesInputField)
+    await user.tripleClick(takenCoursesInputField)
+    if (takenCoursesInputText === "") {
+      takenCoursesInputText = "{Backspace}"
+    }
+    await user.keyboard(takenCoursesInputText)
+
+    const coursesInputText = "CSC443H1"
+    const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+    await user.keyboard(coursesInputText)
+
+    expect(screen.queryByText(expectedWarning)).toBeNull()
+    const genButton = screen.getByText("Generate")
+    await user.click(genButton)
+
+    const errorMessage = await screen.findByText(expectedWarning)
+    expect(errorMessage).not.toBeNull()
+  })
+})
+
+it("No warning for valid course input strings", async () => {
+  const user = userEvent.setup()
+  render(<GenerateForm />)
+  const coursesInputText = "CSC443H1"
+  const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
+  await user.click(coursesInputField)
+  await user.tripleClick(coursesInputField)
+  await user.keyboard(coursesInputText)
+  expect(screen.queryByText("Invalid Course Input")).toBeNull()
+  const genButton = screen.getByText("Generate")
+  await user.click(genButton)
+  await expect(screen.findByText(/invalid/i)).rejects.toThrow()
+})
+
+it("Submitting with valid courses and then making them invalid correctly updates Graph", async () => {
+  const user = userEvent.setup()
+  render(<GenerateForm />)
+  const coursesInputText = "CSC443H1"
+  const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
+  await user.click(coursesInputField)
+  await user.tripleClick(coursesInputField)
+  await user.keyboard(coursesInputText)
+  expect(screen.queryByText("Invalid Course Input")).toBeNull()
+  let genButton = screen.getByText("Generate")
+  await user.click(genButton)
+  await expect(screen.findByText("Invalid Course Input")).rejects.toThrow()
+  expect(screen.getByText("CSC443H1")).toBeDefined()
+
+  // now submitting a bad input to see if the graph gets updated
+  const coursesInputTextBad = "CSC443H7"
+  await user.click(coursesInputField)
+  await user.tripleClick(coursesInputField)
+  await user.keyboard(coursesInputTextBad)
+  expect(screen.queryByText(/invalid/i)).toBeNull()
+  await user.click(genButton)
+  const errorMessage = await screen.findByText(/Invalid course code: CSC443H7/i)
+  expect(errorMessage).toBeDefined()
+  expect(screen.queryByText("CSC443H1")).toBeNull()
+})
+
+describe("Handle invalid program inputs appropriately", () => {
+  beforeEach(() => {
+    render(<GenerateForm />)
+  })
+  it.each([
+    {
+      programInputText: "ASMAJ1234, asdasdasd, ABCDE1234",
+      expectedWarning: "Invalid program code: asdasdasd",
+    },
+    {
+      programInputText: "ASMIN1689 ASFOC1689F",
+      expectedWarning: "Invalid program code: ASMIN1689 ASFOC1689F",
+    },
+    {
+      programInputText: "",
+      expectedWarning: "Cannot generate graph – no programs entered!",
+    },
+    {
+      programInputText: "   ",
+      expectedWarning: "Cannot generate graph – no programs entered!",
+    },
+  ])(".$programInputText", async ({ programInputText, expectedWarning }) => {
+    const user = userEvent.setup()
+
+    const categorySelect = screen.getByRole("combobox")
+    await user.selectOptions(categorySelect, "programs")
+
+    const programsInputField = screen.getByPlaceholderText(
+      "e.g., ASMAJ1689, ASFOC1689B"
+    )
+    await user.click(programsInputField)
+    await user.tripleClick(programsInputField)
+    if (programInputText === "") {
+      programInputText = "{Backspace}"
+    }
+    await user.keyboard(programInputText)
+
+    expect(screen.queryByText(expectedWarning)).toBeNull()
+    const genButton = screen.getByText("Generate")
+    await user.click(genButton)
+
+    const errorMessage = await screen.findByText(expectedWarning)
+    expect(errorMessage).not.toBeNull()
+  })
+})
+
+it("No warning for valid program input strings", async () => {
+  const user = userEvent.setup()
+  render(<GenerateForm />)
+
+  const categorySelect = screen.getByRole("combobox")
+  await user.selectOptions(categorySelect, "programs")
+
+  const programInputText = "ASFOC1689D"
+  const programsInputField = screen.getByPlaceholderText("e.g., ASMAJ1689, ASFOC1689B")
+  await user.click(programsInputField)
+  await user.tripleClick(programsInputField)
+  await user.keyboard(programInputText)
+  expect(screen.queryByText("Invalid Program Input")).toBeNull()
+  const genButton = screen.getByText("Generate")
+  await user.click(genButton)
+  await expect(screen.findByText(/invalid/i)).rejects.toThrow()
+})
