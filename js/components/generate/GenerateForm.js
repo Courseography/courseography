@@ -342,15 +342,13 @@ export default class GenerateForm extends React.Component {
               <Form id="generateForm">
                 <div className="form-section">
                   <div className="title-container">
-                    <h1 id="header-title" className="section-title">
-                      Select Search Input
-                    </h1>
+                    <h1 id="header-title" className="section-title">Select Search Input</h1>
                     <a
                       data-tooltip-id="category-tooltip"
                       data-tooltip-html="Select between courses and programs to search for"
                       className="tooltip-icon"
-                      style={{ marginTop: "-0.3rem" }}
-                    ></a>
+                      style={{ marginTop: "-0.3rem" }}>
+                    </a>
                     <Tooltip id="category-tooltip" place="right" />
                   </div>
                   <Field as="select" id="category" name="category">
@@ -370,8 +368,8 @@ export default class GenerateForm extends React.Component {
                         Each course code must follow the format CSC108H1<br />
                         (i.e. department + code + session)"
                           className="tooltip-icon"
-                          style={{ marginTop: "-0.3rem" }}
-                        ></a>
+                          style={{ marginTop: "-0.3rem" }}>
+                        </a>
                         <Tooltip id="courses-tooltip" place="right" />
                       </div>
                       <Field
@@ -401,8 +399,8 @@ export default class GenerateForm extends React.Component {
                           data-tooltip-html="Generate the requirements for the given program(s).<br />
                         Each program code must follow the format ASFOC1689B"
                           className="tooltip-icon"
-                          style={{ marginTop: "-0.3rem" }}
-                        ></a>
+                          style={{ marginTop: "-0.3rem" }}>
+                        </a>
                         <Tooltip id="programs-tooltip" place="right" />
                       </div>
                       <Field
@@ -423,9 +421,7 @@ export default class GenerateForm extends React.Component {
                 </div>
 
                 <div className="form-section">
-                  <h2 id="filter-title" className="section-title">
-                    Filters
-                  </h2>
+                  <h2 id="filter-title" className="section-title">Filters</h2>
 
                   <div className="title-container">
                     <label htmlFor="departments">Departments</label>
@@ -433,8 +429,8 @@ export default class GenerateForm extends React.Component {
                       data-tooltip-id="departments-tooltip"
                       data-tooltip-html="Only include courses from these departments.<br />
                         Department codes must be 3 letters, seperated by commas."
-                      className="tooltip-icon"
-                    ></a>
+                      className="tooltip-icon">
+                    </a>
                     <Tooltip id="departments-tooltip" place="right" />
                   </div>
                   <Field
@@ -458,8 +454,8 @@ export default class GenerateForm extends React.Component {
                       data-tooltip-html="Do not show these courses or their prerequisites.<br />
                         Each course code must follow the format CSC108H1<br />
                         (i.e. department + code + session)"
-                      className="tooltip-icon"
-                    ></a>
+                      className="tooltip-icon">
+                    </a>
                     <Tooltip id="taken-tooltip" className="tooltip-box" place="right" />
                   </div>
                   <Field
@@ -481,8 +477,8 @@ export default class GenerateForm extends React.Component {
                     <a
                       data-tooltip-id="maxDepth-tooltip"
                       data-tooltip-content="Depth of prerequisite chain (0 shows all prerequisites)"
-                      className="tooltip-icon"
-                    ></a>
+                      className="tooltip-icon">
+                    </a>
                     <Tooltip id="maxDepth-tooltip" place="right" />
                   </div>
                   <Field id="maxDepth" name="maxDepth" type="number" min="0" step="1" />
