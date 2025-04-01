@@ -93,24 +93,23 @@ returnPost code = runDb $ do
         Nothing -> return Nothing
         Just post -> return $ Just $ entityVal post
 
--- | Retrieves the course requirements for a Post (code) as a list of course codes
-reqsForPost :: T.Text -> IO [String]
-reqsForPost code = do
-    maybePost <- returnPost code
-    case maybePost of
-        Nothing -> return []
-        Just post -> do
-            let requirementsText = T.unpack $ postRequirements post
-                cleaned = filter (`notElem` ("<>" :: String)) $ filter (not . isPunctuation) requirementsText
-                potentialCodes = words cleaned
-                isCourseCode codeStr = 
-                    length codeStr == 8 && 
-                    all isAlphaNum codeStr &&
-                    all isAlpha (take 3 codeStr) &&
-                    all isDigit (take 3 (drop 3 codeStr)) &&
-                    isAlpha (codeStr !! 6) &&
-                    isDigit (codeStr !! 7)
-            return $ filter isCourseCode potentialCodes
+-- | Retrieves the course requirements for a Post as a list of course codes
+reqsForPost :: Post -> [String]
+reqsForPost post = do
+    let requirementsText = T.unpack $ postRequirements post
+        cleaned = filter (`notElem` ("<>" :: String)) $ filter (not . isPunctuation) requirementsText
+        potentialCodes = words cleaned
+    filter isCourseCode potentialCodes
+  where
+    -- | TODO: change function to use a regex
+    isCourseCode :: String -> Bool
+    isCourseCode codeStr = 
+        length codeStr == 8 && 
+        all isAlphaNum codeStr &&
+        all isAlpha (take 3 codeStr) &&
+        all isDigit (take 3 (drop 3 codeStr)) &&
+        isAlpha (codeStr !! 6) &&
+        isDigit (codeStr !! 7)
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.

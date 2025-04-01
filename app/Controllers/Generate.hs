@@ -7,11 +7,11 @@ import Scripts
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import Control.Monad (filterM)
+import Control.Monad()
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (decode, object, (.=))
 import Data.List (nub)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, isNothing, mapMaybe)
 import qualified Data.Text.Lazy as TL
 import Database.CourseQueries (returnPost, reqsForPost)
 import DynamicGraphs.WriteRunDot (getBody, generateAndSavePrereqResponse)
@@ -42,22 +42,27 @@ findAndSavePrereqsResponse = do
     requestBody <- getBody
     let coursesOptions :: CourseGraphOptions = fromJust $ decode requestBody
     
-    invalidPrograms <- liftIO $
-        filterM (fmap (== Nothing) . returnPost) (map TL.toStrict (programs coursesOptions))
+    postResults <- liftIO $ mapM (\code -> do
+                        post <- returnPost (TL.toStrict code)
+                        return (TL.toStrict code, post)) 
+                   (programs coursesOptions)
 
-    allCourses <- liftIO $
-        if all (null . TL.unpack) (courses coursesOptions)
-            then nub . concat <$> mapM (reqsForPost . TL.toStrict) (programs coursesOptions)
-            else return . nub . map TL.unpack $ courses coursesOptions
+    let invalidPrograms = map fst $ filter (isNothing . snd) postResults
+        validPrograms = mapMaybe snd postResults
+
+    allCourses <- liftIO $ nub <$>
+        if all (== TL.empty) (courses coursesOptions)
+            then return $ map TL.pack (concatMap reqsForPost validPrograms)
+            else return $ courses coursesOptions
 
     let updatedCoursesOptions = coursesOptions 
-            { courses = map (TL.toUpper . TL.pack) allCourses
+            { courses = map TL.toUpper allCourses
             , graphOptions = (graphOptions coursesOptions) 
                 { taken = map TL.toUpper (taken (graphOptions coursesOptions))
                 , departments = map TL.toUpper (departments (graphOptions coursesOptions))
                 }
             }
 
-    if all (null . TL.unpack) (courses coursesOptions) && not (null invalidPrograms)
-        then return $ createJSONResponse $ object ["texts" .= map (object . (:[]) . ("text" .=)) invalidPrograms]
+    if all (== TL.empty) (courses coursesOptions) && not (null invalidPrograms)
+        then return $ createJSONResponse $ object ["error" .= object ["invalidPrograms" .= invalidPrograms]]
         else liftIO $ generateAndSavePrereqResponse updatedCoursesOptions

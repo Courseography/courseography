@@ -35,9 +35,6 @@ describe("Handle invalid course inputs appropriately", () => {
   ])(".$coursesInputText", async ({ coursesInputText, expectedWarning }) => {
     const user = userEvent.setup()
 
-    const categorySelect = screen.getByRole("combobox")
-    await user.selectOptions(categorySelect, "courses")
-
     const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
     await user.click(coursesInputField)
     await user.tripleClick(coursesInputField)
@@ -75,9 +72,6 @@ describe("Handle invalid department inputs appropriately", () => {
     },
   ])(".$departmentInputText", async ({ departmentInputText, expectedWarning }) => {
     const user = userEvent.setup()
-
-    const categorySelect = screen.getByRole("combobox")
-    await user.selectOptions(categorySelect, "courses")
 
     const departmentInputField = screen.getByDisplayValue("CSC, MAT, STA")
     await user.click(departmentInputField)
@@ -123,9 +117,6 @@ describe("Handle invalid taken courses inputs appropriately", () => {
   ])(".$takenCoursesInputText", async ({ takenCoursesInputText, expectedWarning }) => {
     const user = userEvent.setup()
 
-    const categorySelect = screen.getByRole("combobox")
-    await user.selectOptions(categorySelect, "courses")
-
     const takenCoursesInputField = screen.getByPlaceholderText(
       "e.g., CSC207H1, CSC236H1"
     )
@@ -155,9 +146,6 @@ it("No warning for valid course input strings", async () => {
   const user = userEvent.setup()
   render(<GenerateForm />)
 
-  const categorySelect = screen.getByRole("combobox")
-  await user.selectOptions(categorySelect, "courses")
-
   const coursesInputText = "CSC443H1"
   const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
   await user.click(coursesInputField)
@@ -172,9 +160,6 @@ it("No warning for valid course input strings", async () => {
 it("Submitting with valid courses and then making them invalid correctly updates Graph", async () => {
   const user = userEvent.setup()
   render(<GenerateForm />)
-
-  const categorySelect = screen.getByRole("combobox")
-  await user.selectOptions(categorySelect, "courses")
 
   const coursesInputText = "CSC443H1"
   const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
@@ -223,6 +208,9 @@ describe("Handle invalid program inputs appropriately", () => {
   ])(".$programInputText", async ({ programInputText, expectedWarning }) => {
     const user = userEvent.setup()
 
+    const categorySelect = screen.getByRole("combobox")
+    await user.selectOptions(categorySelect, "programs")
+
     const programsInputField = screen.getByPlaceholderText(
       "e.g., ASMAJ1689, ASFOC1689B"
     )
@@ -245,6 +233,9 @@ describe("Handle invalid program inputs appropriately", () => {
 it("No warning for valid program input strings", async () => {
   const user = userEvent.setup()
   render(<GenerateForm />)
+
+  const categorySelect = screen.getByRole("combobox")
+  await user.selectOptions(categorySelect, "programs")
 
   const programInputText = "ASFOC1689D"
   const programsInputField = screen.getByPlaceholderText("e.g., ASMAJ1689, ASFOC1689B")

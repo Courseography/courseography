@@ -32,14 +32,15 @@ reqsForPostTestCases =
 runReqsForPostTest :: String -> T.Text -> T.Text -> String -> Test
 runReqsForPostTest label reqsToInsert program expected =
     TestLabel label $ TestCase $ do
+        currentTime <- liftIO getCurrentTime
+        let testPost = Post Major "Computer Science" program "Sample post description" reqsToInsert currentTime currentTime
+
         runDb $ do
             clearDatabase
-            currentTime <- liftIO getCurrentTime
-            insert_ (Post Major "Computer Science" program "Sample post description" reqsToInsert currentTime currentTime)
+            insert_ testPost
 
-        requirements <- reqsForPost program
+        let requirements = reqsForPost testPost
         let actual = show requirements
-        liftIO $ print actual
         assertEqual ("Unexpected response body for " ++ label) expected actual
 
 -- | Run all the reqsForPost test cases
