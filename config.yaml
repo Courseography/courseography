@@ -1,8 +1,7 @@
 # Server Configuration Settings
 port: 8000
 logMessage: "Happstack.Server.AccessLog.Combined"
-enableFileLogging: true
-logFile: "courseography.log"
+logFile: ""  # The file to log server access to, e.g. "courseography.log"
 
 # Database Path
 databasePath: "db/database.sqlite3"
