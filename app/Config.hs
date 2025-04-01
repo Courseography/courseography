@@ -8,7 +8,6 @@ containing the production values.
 
 module Config (
     serverConf,
-    logToFile,
     databasePath,
     runDb,
     graphPath,
@@ -47,7 +46,6 @@ import System.Log.Logger (Priority (INFO), logM)
 data Config = Config
     { portValue             :: Int
     , logMessage            :: String
-    , enableFileLogging     :: Bool
     , logFile               :: String
     , databasePathValue     :: Text
     , graphPathValue        :: String
@@ -68,7 +66,6 @@ instance FromJSON Config where
     parseJSON = withObject "Config" $ \obj -> Config
         <$> obj .: "port"
         <*> obj .: "logMessage"
-        <*> obj .: "enableFileLogging"
         <*> obj .: "logFile"
         <*> obj .: "databasePath"
         <*> obj .: "graphPath"
@@ -117,9 +114,6 @@ logMAccessShort host user _ requestLine responseCode _ referer _ = do
         show responseCode,
         referer
         ]
-
-logToFile :: IO Bool
-logToFile = enableFileLogging <$> loadConfig
 
 
 -- DATABASE CONNECTION STRINGS

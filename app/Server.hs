@@ -9,16 +9,17 @@ responses.
 module Server
     (runServer) where
 
-import Config (serverConf, logToFile, logFilePath)
+import Config (serverConf, logFilePath)
 import Control.Concurrent (forkIO, killThread)
+import Control.Monad (when)
 import Data.String (fromString)
 import Filesystem.Path.CurrentOS as Path
 import Happstack.Server hiding (host)
 import Routes (routeResponses)
 import System.Directory (getCurrentDirectory)
 import System.IO (BufferMode (LineBuffering), hSetBuffering, stderr, stdout)
-import System.Log.Logger (Priority (INFO, ERROR), rootLoggerName, setLevel, updateGlobalLogger, setHandlers)
-import System.Log.Handler.Simple (fileHandler, streamHandler)
+import System.Log.Logger (Priority (INFO), rootLoggerName, setLevel, updateGlobalLogger, setHandlers)
+import System.Log.Handler.Simple (fileHandler)
 
 runServer :: IO ()
 runServer = do
@@ -39,15 +40,13 @@ runServer = do
         -- Use line buffering to ensure logging messages are printed correctly
         hSetBuffering stdout LineBuffering
         hSetBuffering stderr LineBuffering
-        -- Setup handlers for logger
-        filePath <- logFilePath
-        fileH <- fileHandler filePath INFO
-        stdoutH <- streamHandler stdout INFO
-        stderrH <- streamHandler stderr ERROR
-        -- Set log level to INFO so requests are logged
-        fileLogginEnabled <- logToFile
-        updateGlobalLogger rootLoggerName $ setLevel INFO . setHandlers
-            (if fileLogginEnabled then [fileH, stdoutH, stderrH] else [stdoutH, stderrH])
+        -- Set log level to INFO so requests are logged to stdout
+        updateGlobalLogger rootLoggerName $ setLevel INFO
+        -- Log to file if a file path is provided
+        logFile <- logFilePath
+        when (logFile /= "") $ do
+            fileH <- fileHandler logFile INFO
+            updateGlobalLogger rootLoggerName $ setHandlers [fileH]
 
 
     -- | Return the directory where all static files are stored.
