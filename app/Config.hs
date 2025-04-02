@@ -12,6 +12,7 @@ module Config (
     runDb,
     graphPath,
     genCssPath,
+    logFilePath,
     timetableUrl,
     timetableApiUrl,
     fasCalendarUrl,
@@ -45,6 +46,7 @@ import System.Log.Logger (Priority (INFO), logM)
 data Config = Config
     { portValue             :: Int
     , logMessage            :: String
+    , logFile               :: String
     , databasePathValue     :: Text
     , graphPathValue        :: String
     , genCssPathValue       :: String
@@ -64,6 +66,7 @@ instance FromJSON Config where
     parseJSON = withObject "Config" $ \obj -> Config
         <$> obj .: "port"
         <*> obj .: "logMessage"
+        <*> obj .: "logFile"
         <*> obj .: "databasePath"
         <*> obj .: "graphPath"
         <*> obj .: "genCssPath"
@@ -135,6 +138,11 @@ graphPath = graphPathValue <$> loadConfig
 -- | The relative path to the directory containing all of the generated CSS files.
 genCssPath :: IO String
 genCssPath = genCssPathValue <$> loadConfig
+
+-- | The relative path to log server access to.
+logFilePath :: IO String
+logFilePath = logFile <$> loadConfig
+
 
 -- URLs
 
