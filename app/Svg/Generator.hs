@@ -177,7 +177,7 @@ rectToSVG styled courseMap rect
                          _ -> ""
 
         in S.g ! A.id_ (textValue $ sanitizeId $ shapeId_ rect)
-               ! A.transform (stringValue . show . formatTransform $ shapeTransform rect)
+               ! A.transform (stringValue . formatTransform $ shapeTransform rect)
                ! A.class_ (textValue class_)
                ! S.customAttribute "data-group" (textValue
                                                  (getArea (shapeId_ rect)))
@@ -207,7 +207,7 @@ rectToSVG styled courseMap rect
 ellipseToSVG :: Bool -> Shape -> S.Svg
 ellipseToSVG styled ellipse =
     S.g ! A.id_ (textValue (shapeId_ ellipse))
-        ! A.transform (stringValue . show . formatTransform $ shapeTransform ellipse)
+        ! A.transform (stringValue . formatTransform $ shapeTransform ellipse)
         ! A.class_ "bool" $ do
             S.ellipse ! A.cx (stringValue . show . fst $ shapePos ellipse)
                       ! A.cy (stringValue . show . snd $ shapePos ellipse)
@@ -229,7 +229,14 @@ textToSVG styled type_ xPos' text =
                       then xPos
                       else xPos')
             ! A.y (stringValue $ show yPos)
-            ! A.transform (stringValue . show . formatTransform $ textTransform text)
+            -- When applying the transformation matrix for text attributes, the ones
+            -- that are connected to nodes and ellipses are positioned based the positioning
+            -- of the respective nodes and ellipses. On the other hand, the text for the regions
+            -- is positioned based on database values, so the transformation matrix still has to
+            -- be applied. TODO: This is poor design and probably needs to be updated in the future.
+            ! (if type_ == Region
+                then A.transform (stringValue . formatTransform $ textTransform text)
+                else mempty)
             ! (if styled then allStyles else baseStyles)
             $ toMarkup $ textText text
     where
@@ -266,7 +273,7 @@ edgeToSVG styled path =
     S.path ! A.id_ (textValue . T.append "path" . pathId_ $ path)
            ! A.class_ "path"
            ! A.d (textValue . T.cons 'M' . buildPathString . pathPoints $ path)
-           ! A.transform (stringValue . show . formatTransform $ pathTransform path)
+           ! A.transform (stringValue . formatTransform $ pathTransform path)
            ! A.markerEnd "url(#arrow)"
            ! S.customAttribute "data-source-node" (textValue $ sanitizeId
                                                           $ pathSource path)
@@ -288,7 +295,7 @@ regionToSVG styled path =
     S.path ! A.id_ (textValue $ T.append "region" (pathId_ path))
            ! A.class_ "region"
            ! A.d (textValue . T.cons 'M' . buildPathString . pathPoints $ path)
-           ! A.transform (stringValue . show . formatTransform $ pathTransform path)
+           ! A.transform (stringValue . formatTransform $ pathTransform path)
            ! A.style (textValue $ T.concat ["fill:", pathFill path, ";",
                       if styled
                       then
