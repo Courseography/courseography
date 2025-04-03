@@ -397,7 +397,7 @@ export default class GenerateForm extends React.Component {
                         <a
                           data-tooltip-id="programs-tooltip"
                           data-tooltip-html="Generate the requirements for the given program(s).<br />
-                        Each program code must follow the format ASFOC1689B"
+                        Each program code must follow the format ASMAJ1689"
                           className="tooltip-icon"
                           style={{ marginTop: "-0.3rem" }}>
                         </a>
