@@ -28,7 +28,7 @@ export default class GenerateForm extends React.Component {
     const data = {}
 
     for (const key in values) {
-      if (["courses", "taken", "departments"].includes(key)) {
+      if (["courses", "programs", "taken", "departments"].includes(key)) {
         data[key] = values[key].split(",").map(s => s.trim())
       } else {
         data[key] = values[key]
@@ -36,6 +36,12 @@ export default class GenerateForm extends React.Component {
     }
 
     let submittedCourses = data["courses"]
+
+    if (values.category === "programs") {
+      data["courses"] = []
+    } else {
+      data["programs"] = []
+    }
 
     const putData = {
       method: "PUT",
@@ -48,18 +54,29 @@ export default class GenerateForm extends React.Component {
     fetch("/graph-generate", putData)
       .then(res => res.json())
       .then(data => {
-        const returnedCourses = data.texts.map(t => t.text)
+        const returnedTexts = data.texts?.map(t => t.text) ?? []
 
         const missingCourses = submittedCourses.filter(
-          c => !returnedCourses.includes(c.toUpperCase())
+          c => !returnedTexts.includes(c.toUpperCase())
         )
 
-        if (missingCourses.length !== 0) {
+        if (missingCourses.length !== 0 && missingCourses[0] !== "") {
           setErrors({
             courses:
               missingCourses.length === 1
                 ? `Invalid course code: ${missingCourses}`
-                : `Invalid course codes: ${missingCourses.join(", ")}`
+                : `Invalid course codes: ${missingCourses.join(", ")}`,
+          })
+        }
+
+        const missingPrograms = data.error?.invalidPrograms ?? []
+
+        if (missingPrograms.length !== 0) {
+          setErrors({
+            programs:
+              missingPrograms.length === 1
+                ? `Invalid program code: ${missingPrograms}`
+                : `Invalid program codes: ${missingPrograms.join(", ")}`,
           })
         }
 
@@ -228,18 +245,39 @@ export default class GenerateForm extends React.Component {
 
     const coursePattern = /^[A-Za-z]{3}\d{3}[HYhy]\d$/
     const deptPattern = /^[A-Za-z]{3}$/
+    const programPattern = /^[A-Za-z]{5}\d{4}[A-Za-z]?$/
 
-    if (!values.courses.trim().length) {
-      errors.courses = "Cannot generate graph – no courses entered!"
-    } else {
-      const courses = values.courses.split(",").map(course => course.trim())
-      const invalidCourses = courses.filter(course => !coursePattern.test(course))
+    if (values.category === "courses") {
+      if (!values.courses.trim().length) {
+        errors.courses = "Cannot generate graph – no courses entered!"
+      } else {
+        const courses = values.courses.split(",").map(course => course.trim())
+        const invalidCourses = courses.filter(course => !coursePattern.test(course))
 
-      if (invalidCourses.length > 0) {
-        errors.courses =
-          invalidCourses.length === 1
-            ? `Invalid course code: ${invalidCourses}`
-            : `Invalid course codes: ${invalidCourses.join(", ")}`
+        if (invalidCourses.length > 0) {
+          errors.courses =
+            invalidCourses.length === 1
+              ? `Invalid course code: ${invalidCourses}`
+              : `Invalid course codes: ${invalidCourses.join(", ")}`
+        }
+      }
+    }
+
+    if (values.category === "programs") {
+      if (!values.programs.trim().length) {
+        errors.programs = "Cannot generate graph – no programs entered!"
+      } else {
+        const programs = values.programs.split(",").map(program => program.trim())
+        const invalidPrograms = programs.filter(
+          program => !programPattern.test(program)
+        )
+
+        if (invalidPrograms.length > 0) {
+          errors.programs =
+            invalidPrograms.length === 1
+              ? `Invalid program code: ${invalidPrograms}`
+              : `Invalid program codes: ${invalidPrograms.join(", ")}`
+        }
       }
     }
 
@@ -285,7 +323,9 @@ export default class GenerateForm extends React.Component {
         >
           <Formik
             initialValues={{
+              category: "courses",
               courses: "",
+              programs: "",
               taken: "",
               departments: "CSC, MAT, STA",
               maxDepth: 0,
@@ -298,35 +338,86 @@ export default class GenerateForm extends React.Component {
             validateOnBlur={false}
             onSubmit={this.handleSubmit}
           >
-            {() => (
+            {({ values }) => (
               <Form id="generateForm">
                 <div className="form-section">
                   <div className="title-container">
-                   <h1 id="header-title" className="section-title">Search Courses</h1>
+                    <h1 id="header-title" className="section-title">Select Search Input</h1>
                     <a
-                      data-tooltip-id="courses-tooltip"
-                      data-tooltip-html="Generate the prerequisites for the given course(s).<br />
-                        Each course code must follow the format CSC108H1<br />
-                        (i.e. department + code + session)"
+                      data-tooltip-id="category-tooltip"
+                      data-tooltip-html="Select between courses and programs to search for"
                       className="tooltip-icon"
                       style={{ marginTop: "-0.3rem" }}>
                     </a>
-                    <Tooltip id="courses-tooltip" place="right" />
+                    <Tooltip id="category-tooltip" place="right" />
                   </div>
+                  <Field as="select" id="category" name="category">
+                    <option value="courses">Courses</option>
+                    <option value="programs">Programs</option>
+                  </Field>
 
-                  <Field
-                    id="courses"
-                    name="courses"
-                    type="text"
-                    placeholder="e.g., CSC207H1, CSC324H1"
-                  />
-                  <div className="error-container">
-                    <ErrorMessage
-                      className="error-message"
-                      name="courses"
-                      component="div"
-                    />
-                  </div>
+                  {values.category === "courses" && (
+                    <>
+                      <div className="title-container">
+                        <h1 id="header-title" className="section-title">
+                          Search Courses
+                        </h1>
+                        <a
+                          data-tooltip-id="courses-tooltip"
+                          data-tooltip-html="Generate the prerequisites for the given course(s).<br />
+                        Each course code must follow the format CSC108H1<br />
+                        (i.e. department + code + session)"
+                          className="tooltip-icon"
+                          style={{ marginTop: "-0.3rem" }}>
+                        </a>
+                        <Tooltip id="courses-tooltip" place="right" />
+                      </div>
+                      <Field
+                        id="courses"
+                        name="courses"
+                        type="text"
+                        placeholder="e.g., CSC207H1, CSC324H1"
+                      />
+                      <div className="error-container">
+                        <ErrorMessage
+                          className="error-message"
+                          name="courses"
+                          component="div"
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {values.category === "programs" && (
+                    <>
+                      <div className="title-container">
+                        <h1 id="header-title" className="section-title">
+                          Search Programs
+                        </h1>
+                        <a
+                          data-tooltip-id="programs-tooltip"
+                          data-tooltip-html="Generate the requirements for the given program(s).<br />
+                        Each program code must follow the format ASMAJ1689"
+                          className="tooltip-icon"
+                          style={{ marginTop: "-0.3rem" }}>
+                        </a>
+                        <Tooltip id="programs-tooltip" place="right" />
+                      </div>
+                      <Field
+                        id="programs"
+                        name="programs"
+                        type="text"
+                        placeholder="e.g., ASMAJ1689, ASFOC1689B"
+                      />
+                      <div className="error-container">
+                        <ErrorMessage
+                          className="error-message"
+                          name="programs"
+                          component="div"
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="form-section">

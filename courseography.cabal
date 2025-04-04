@@ -106,7 +106,8 @@ test-suite Tests
     test-framework,
     test-framework-hunit,
     test-framework-quickcheck2,
-    text
+    text,
+    time
   default-extensions:
     OverloadedStrings,
     ScopedTypeVariables

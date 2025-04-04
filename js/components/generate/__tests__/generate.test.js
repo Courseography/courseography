@@ -178,3 +178,67 @@ it("Submitting with valid courses and then making them invalid correctly updates
   expect(errorMessage).toBeDefined()
   expect(screen.queryByText("CSC443H1")).toBeNull()
 })
+
+describe("Handle invalid program inputs appropriately", () => {
+  beforeEach(() => {
+    render(<GenerateForm />)
+  })
+  it.each([
+    {
+      programInputText: "ASMAJ1234, asdasdasd, ABCDE1234",
+      expectedWarning: "Invalid program code: asdasdasd",
+    },
+    {
+      programInputText: "ASMIN1689 ASFOC1689F",
+      expectedWarning: "Invalid program code: ASMIN1689 ASFOC1689F",
+    },
+    {
+      programInputText: "",
+      expectedWarning: "Cannot generate graph – no programs entered!",
+    },
+    {
+      programInputText: "   ",
+      expectedWarning: "Cannot generate graph – no programs entered!",
+    },
+  ])(".$programInputText", async ({ programInputText, expectedWarning }) => {
+    const user = userEvent.setup()
+
+    const categorySelect = screen.getByRole("combobox")
+    await user.selectOptions(categorySelect, "programs")
+
+    const programsInputField = screen.getByPlaceholderText(
+      "e.g., ASMAJ1689, ASFOC1689B"
+    )
+    await user.click(programsInputField)
+    await user.tripleClick(programsInputField)
+    if (programInputText === "") {
+      programInputText = "{Backspace}"
+    }
+    await user.keyboard(programInputText)
+
+    expect(screen.queryByText(expectedWarning)).toBeNull()
+    const genButton = screen.getByText("Generate")
+    await user.click(genButton)
+
+    const errorMessage = await screen.findByText(expectedWarning)
+    expect(errorMessage).not.toBeNull()
+  })
+})
+
+it("No warning for valid program input strings", async () => {
+  const user = userEvent.setup()
+  render(<GenerateForm />)
+
+  const categorySelect = screen.getByRole("combobox")
+  await user.selectOptions(categorySelect, "programs")
+
+  const programInputText = "ASFOC1689D"
+  const programsInputField = screen.getByPlaceholderText("e.g., ASMAJ1689, ASFOC1689B")
+  await user.click(programsInputField)
+  await user.tripleClick(programsInputField)
+  await user.keyboard(programInputText)
+  expect(screen.queryByText("Invalid Program Input")).toBeNull()
+  const genButton = screen.getByText("Generate")
+  await user.click(genButton)
+  await expect(screen.findByText(/invalid/i)).rejects.toThrow()
+})

@@ -15,7 +15,7 @@ data GraphOptions =
                    includeGrades :: Bool     -- True to include grade nodes
                 } deriving (Show)
 
-data CourseGraphOptions = CourseGraphOptions { courses :: [T.Text], graphOptions :: GraphOptions }
+data CourseGraphOptions = CourseGraphOptions { courses :: [T.Text], programs :: [T.Text], graphOptions :: GraphOptions }
   deriving (Show)
 
 defaultGraphOptions :: GraphOptions
@@ -33,6 +33,7 @@ defaultGraphOptions =
 instance FromJSON CourseGraphOptions where
   parseJSON = withObject "Expected Object for GraphOptions" $ \o -> do
     rootCourses <- o .:? "courses" .!= []
+    rootPrograms <- o.:? "programs" .!= []
     takenCourses <- o .:? "taken" .!= []
     dept <- o .:? "departments" .!= []
     excludedCourseDepth <- o .:? "excludedDepth" .!= 0
@@ -51,4 +52,4 @@ instance FromJSON CourseGraphOptions where
                                includedLocation
                                incRaws
                                incGrades
-    return $ CourseGraphOptions rootCourses options
+    return $ CourseGraphOptions rootCourses rootPrograms options

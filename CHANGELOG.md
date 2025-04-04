@@ -10,6 +10,7 @@
 - Added text warnings and validations for each field in `GenerateForm`
 - Redesigned generate form UI
 - Allow option to log server request accesses to a file
+- Added search by program to create graphs on Generate Page
 
 ### 🐛 Bug fixes
 
