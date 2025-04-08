@@ -69,7 +69,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["precise-commits", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:1.0.2"],\
             ["prettier", "npm:3.2.5"],\
             ["prop-types", "npm:15.8.1"],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"],\
             ["react-leaflet", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:4.2.1"],\
             ["react-modal", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.16.1"],\
@@ -3486,7 +3486,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/fortawesome__fontawesome-svg-core", null],\
             ["@types/react", null],\
             ["prop-types", "npm:15.8.1"],\
-            ["react", "npm:18.3.1"]\
+            ["react", "npm:19.1.0"]\
           ],\
           "packagePeers": [\
             "@fortawesome/fontawesome-svg-core",\
@@ -4143,7 +4143,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", null],\
             ["@types/react-dom", null],\
             ["leaflet", "npm:1.9.4"],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
           ],\
           "packagePeers": [\
@@ -4220,7 +4220,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", null],\
             ["@types/react-dom", null],\
             ["@types/testing-library__dom", null],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
           ],\
           "packagePeers": [\
@@ -5077,7 +5077,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", null],\
             ["ag-grid-community", "npm:33.2.1"],\
             ["prop-types", "npm:15.8.1"],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
           ],\
           "packagePeers": [\
@@ -6781,7 +6781,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["precise-commits", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:1.0.2"],\
             ["prettier", "npm:3.2.5"],\
             ["prop-types", "npm:15.8.1"],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"],\
             ["react-leaflet", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:4.2.1"],\
             ["react-modal", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.16.1"],\
@@ -8651,7 +8651,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["hoist-non-react-statics", "npm:3.3.2"],\
             ["lodash", "npm:4.17.21"],\
             ["lodash-es", "npm:4.17.21"],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["react-fast-compare", "npm:2.0.4"],\
             ["tiny-warning", "npm:1.0.3"],\
             ["tslib", "npm:2.8.0"]\
@@ -12977,11 +12977,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["react", [\
-        ["npm:18.3.1", {\
-          "packageLocation": "./.yarn/cache/react-npm-18.3.1-af38f3c1ae-a27bcfa8ff.zip/node_modules/react/",\
+        ["npm:19.1.0", {\
+          "packageLocation": "./.yarn/cache/react-npm-19.1.0-9804a7da5b-c0905f8cfb.zip/node_modules/react/",\
           "packageDependencies": [\
-            ["react", "npm:18.3.1"],\
-            ["loose-envify", "npm:1.4.0"]\
+            ["react", "npm:19.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -13000,7 +12999,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"],\
             ["@types/react", null],\
             ["loose-envify", "npm:1.4.0"],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["scheduler", "npm:0.23.2"]\
           ],\
           "packagePeers": [\
@@ -13059,7 +13058,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", null],\
             ["@types/react-dom", null],\
             ["leaflet", "npm:1.9.4"],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
           ],\
           "packagePeers": [\
@@ -13098,7 +13097,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", null],\
             ["exenv", "npm:1.2.2"],\
             ["prop-types", "npm:15.8.1"],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"],\
             ["react-lifecycles-compat", "npm:3.0.4"],\
             ["warning", "npm:4.0.3"]\
@@ -13128,7 +13127,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", null],\
             ["@types/react-dom", null],\
             ["classnames", "npm:2.5.1"],\
-            ["react", "npm:18.3.1"],\
+            ["react", "npm:19.1.0"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
           ],\
           "packagePeers": [\
