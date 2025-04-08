@@ -40,8 +40,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/dom", "npm:10.4.0"],\
             ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.1"],\
             ["@testing-library/user-event", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:14.5.2"],\
-            ["ag-grid-community", "npm:33.1.1"],\
-            ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:33.1.1"],\
+            ["ag-grid-community", "npm:33.2.1"],\
+            ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:33.2.1"],\
             ["babel-jest", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.7.0"],\
             ["babel-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:9.1.3"],\
             ["bootstrap", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.3.3"],\
@@ -5043,39 +5043,39 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["ag-charts-types", [\
-        ["npm:11.1.1", {\
-          "packageLocation": "./.yarn/cache/ag-charts-types-npm-11.1.1-9bdf3e5632-3418ce9698.zip/node_modules/ag-charts-types/",\
+        ["npm:11.2.1", {\
+          "packageLocation": "./.yarn/cache/ag-charts-types-npm-11.2.1-b45576533e-47e73aca1e.zip/node_modules/ag-charts-types/",\
           "packageDependencies": [\
-            ["ag-charts-types", "npm:11.1.1"]\
+            ["ag-charts-types", "npm:11.2.1"]\
           ],\
           "linkType": "HARD"\
         }]\
       ]],\
       ["ag-grid-community", [\
-        ["npm:33.1.1", {\
-          "packageLocation": "./.yarn/cache/ag-grid-community-npm-33.1.1-ce0264189a-33813c1f35.zip/node_modules/ag-grid-community/",\
+        ["npm:33.2.1", {\
+          "packageLocation": "./.yarn/cache/ag-grid-community-npm-33.2.1-7cd69e9fd6-6e20f919ff.zip/node_modules/ag-grid-community/",\
           "packageDependencies": [\
-            ["ag-grid-community", "npm:33.1.1"],\
-            ["ag-charts-types", "npm:11.1.1"]\
+            ["ag-grid-community", "npm:33.2.1"],\
+            ["ag-charts-types", "npm:11.2.1"]\
           ],\
           "linkType": "HARD"\
         }]\
       ]],\
       ["ag-grid-react", [\
-        ["npm:33.1.1", {\
-          "packageLocation": "./.yarn/cache/ag-grid-react-npm-33.1.1-2d03c84b39-0687dee78b.zip/node_modules/ag-grid-react/",\
+        ["npm:33.2.1", {\
+          "packageLocation": "./.yarn/cache/ag-grid-react-npm-33.2.1-e8c5b871b5-ea3830c762.zip/node_modules/ag-grid-react/",\
           "packageDependencies": [\
-            ["ag-grid-react", "npm:33.1.1"]\
+            ["ag-grid-react", "npm:33.2.1"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:33.1.1", {\
-          "packageLocation": "./.yarn/__virtual__/ag-grid-react-virtual-e94bd65143/0/cache/ag-grid-react-npm-33.1.1-2d03c84b39-0687dee78b.zip/node_modules/ag-grid-react/",\
+        ["virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:33.2.1", {\
+          "packageLocation": "./.yarn/__virtual__/ag-grid-react-virtual-809ba12eac/0/cache/ag-grid-react-npm-33.2.1-e8c5b871b5-ea3830c762.zip/node_modules/ag-grid-react/",\
           "packageDependencies": [\
-            ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:33.1.1"],\
+            ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:33.2.1"],\
             ["@types/react", null],\
             ["@types/react-dom", null],\
-            ["ag-grid-community", "npm:33.1.1"],\
+            ["ag-grid-community", "npm:33.2.1"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:18.3.1"],\
             ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
@@ -6752,8 +6752,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/dom", "npm:10.4.0"],\
             ["@testing-library/react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:16.0.1"],\
             ["@testing-library/user-event", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:14.5.2"],\
-            ["ag-grid-community", "npm:33.1.1"],\
-            ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:33.1.1"],\
+            ["ag-grid-community", "npm:33.2.1"],\
+            ["ag-grid-react", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:33.2.1"],\
             ["babel-jest", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:29.7.0"],\
             ["babel-loader", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:9.1.3"],\
             ["bootstrap", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.3.3"],\
