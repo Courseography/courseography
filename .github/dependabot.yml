@@ -13,6 +13,10 @@ updates:
       ag-grid:
         patterns:
           - "ag-grid-*"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
       stylelint:
         patterns:
           - "stylelint*"
