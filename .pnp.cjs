@@ -70,7 +70,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:3.2.5"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:19.1.0"],\
-            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"],\
+            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0"],\
             ["react-leaflet", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:4.2.1"],\
             ["react-modal", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.16.1"],\
             ["react-tooltip", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.28.0"],\
@@ -4144,7 +4144,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", null],\
             ["leaflet", "npm:1.9.4"],\
             ["react", "npm:19.1.0"],\
-            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
+            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0"]\
           ],\
           "packagePeers": [\
             "@types/leaflet",\
@@ -4221,7 +4221,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", null],\
             ["@types/testing-library__dom", null],\
             ["react", "npm:19.1.0"],\
-            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
+            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0"]\
           ],\
           "packagePeers": [\
             "@testing-library/dom",\
@@ -5078,7 +5078,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ag-grid-community", "npm:33.2.1"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:19.1.0"],\
-            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
+            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0"]\
           ],\
           "packagePeers": [\
             "@types/react-dom",\
@@ -6782,7 +6782,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:3.2.5"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:19.1.0"],\
-            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"],\
+            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0"],\
             ["react-leaflet", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:4.2.1"],\
             ["react-modal", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:3.16.1"],\
             ["react-tooltip", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:5.28.0"],\
@@ -12986,21 +12986,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["react-dom", [\
-        ["npm:18.3.1", {\
-          "packageLocation": "./.yarn/cache/react-dom-npm-18.3.1-a805663f38-298954ecd8.zip/node_modules/react-dom/",\
+        ["npm:19.1.0", {\
+          "packageLocation": "./.yarn/cache/react-dom-npm-19.1.0-773f826e46-1d154b6543.zip/node_modules/react-dom/",\
           "packageDependencies": [\
-            ["react-dom", "npm:18.3.1"]\
+            ["react-dom", "npm:19.1.0"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1", {\
-          "packageLocation": "./.yarn/__virtual__/react-dom-virtual-4f7a30f7ec/0/cache/react-dom-npm-18.3.1-a805663f38-298954ecd8.zip/node_modules/react-dom/",\
+        ["virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0", {\
+          "packageLocation": "./.yarn/__virtual__/react-dom-virtual-d8d8a72927/0/cache/react-dom-npm-19.1.0-773f826e46-1d154b6543.zip/node_modules/react-dom/",\
           "packageDependencies": [\
-            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"],\
+            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0"],\
             ["@types/react", null],\
-            ["loose-envify", "npm:1.4.0"],\
             ["react", "npm:19.1.0"],\
-            ["scheduler", "npm:0.23.2"]\
+            ["scheduler", "npm:0.26.0"]\
           ],\
           "packagePeers": [\
             "@types/react",\
@@ -13059,7 +13058,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", null],\
             ["leaflet", "npm:1.9.4"],\
             ["react", "npm:19.1.0"],\
-            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
+            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0"]\
           ],\
           "packagePeers": [\
             "@types/leaflet",\
@@ -13098,7 +13097,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["exenv", "npm:1.2.2"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:19.1.0"],\
-            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"],\
+            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0"],\
             ["react-lifecycles-compat", "npm:3.0.4"],\
             ["warning", "npm:4.0.3"]\
           ],\
@@ -13128,7 +13127,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", null],\
             ["classnames", "npm:2.5.1"],\
             ["react", "npm:19.1.0"],\
-            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:18.3.1"]\
+            ["react-dom", "virtual:e17a6eb1a4c9d008910514c9fe497dc86dda65615c60e2de5a270820876afc6510106786ac8c1b71b25b89c0a0044c540eb9898165932509613c81ebf75ce107#npm:19.1.0"]\
           ],\
           "packagePeers": [\
             "@types/react-dom",\
@@ -13631,11 +13630,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["scheduler", [\
-        ["npm:0.23.2", {\
-          "packageLocation": "./.yarn/cache/scheduler-npm-0.23.2-6d1dd9c2b7-3e82d1f419.zip/node_modules/scheduler/",\
+        ["npm:0.26.0", {\
+          "packageLocation": "./.yarn/cache/scheduler-npm-0.26.0-980301a213-c63a9f1c0e.zip/node_modules/scheduler/",\
           "packageDependencies": [\
-            ["scheduler", "npm:0.23.2"],\
-            ["loose-envify", "npm:1.4.0"]\
+            ["scheduler", "npm:0.26.0"]\
           ],\
           "linkType": "HARD"\
         }]\
