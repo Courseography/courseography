@@ -12,7 +12,7 @@ workflows:
 jobs:
   build:
     docker:
-      - image: fpco/stack-build:lts-21
+      - image: fpco/stack-build:lts-23
     steps:
       - checkout
       - run: git remote add upstream https://github.com/Courseography/courseography.git
@@ -21,7 +21,7 @@ jobs:
       - restore_cache:
           name: Restore Cached Dependencies (Haskell)
           keys:
-            - v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}
+            - v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}-{{ checksum "stack.yaml.lock" }}
 
       - run:
           name: Install Package Dependencies

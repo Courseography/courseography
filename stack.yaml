@@ -7,10 +7,8 @@ extra-package-dbs: []
 packages:
   - .
 allow-newer: true
-extra-deps:
-  - stylish-haskell-0.14.6.0
 compiler-check: newer-minor
-resolver: lts-21.25
+resolver: lts-23.18
 dump-logs: all
 require-stack-version: ! ">= 1.6"
 ghc-options:
