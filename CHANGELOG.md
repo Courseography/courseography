@@ -56,6 +56,7 @@
 - Allowed lowercase courses and departments on the Generate page
 - Added Debugging Guide
 - Added Haskell Language Server (HLS) Guide
+- Upgraded to Stackage lts-23.18
 
 ## [0.6.0] - 2024-06-24
 
