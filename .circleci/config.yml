@@ -46,7 +46,7 @@ jobs:
           command: |
             stack --no-terminal setup
             rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
-            stack --no-terminal build --fast -j1 --ghc-options -Werror
+            stack --no-terminal build --fast -j1 --ghc-options -Werror --ghc-options -Wwarn=x-partial
             stack build hlint
             stack build hpc-lcov
             yarn install
