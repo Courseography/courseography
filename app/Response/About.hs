@@ -3,10 +3,10 @@ module Response.About
 
 import Happstack.Server
 import MasterTemplate
+import Scripts (aboutScripts)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import Scripts (aboutScripts)
 
 aboutResponse :: ServerPart Response
 aboutResponse =

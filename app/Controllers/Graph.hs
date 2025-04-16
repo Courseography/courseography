@@ -1,28 +1,22 @@
 module Controllers.Graph (graphResponse, index, getGraphJSON, graphImageResponse) where
 
-import Happstack.Server (ServerPart, Response, toResponse, ok, lookText', look)
-import MasterTemplate (masterTemplate, header)
+import Control.Monad.IO.Class (liftIO)
+import Data.Aeson (object, (.=))
+import Data.Maybe (fromMaybe)
+import Happstack.Server (Response, ServerPart, look, lookText', ok, toResponse)
+import MasterTemplate (header, masterTemplate)
 import Scripts (graphScripts)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (object, (.=))
-import Data.Maybe (fromMaybe)
 
-import Database.Tables as Tables
-    ( EntityField(GraphTitle, GraphDynamic), Text, Graph )
-import Database.CourseQueries (getGraph)
-import Database.Persist.Sqlite
-    ( Entity,
-      SelectOpt(Asc),
-      (==.),
-      selectList,
-      SqlPersistM )
 import Config (runDb)
-import Util.Happstack (createJSONResponse)
+import Database.CourseQueries (getGraph)
+import Database.Persist.Sqlite (Entity, SelectOpt (Asc), SqlPersistM, selectList, (==.))
+import Database.Tables as Tables (EntityField (GraphDynamic, GraphTitle), Graph, Text)
 import Export.GetImages (getActiveGraphImage)
 import Response.Image (returnImageData)
+import Util.Happstack (createJSONResponse)
 
 graphResponse :: ServerPart Response
 graphResponse =

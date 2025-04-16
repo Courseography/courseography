@@ -29,11 +29,11 @@ module Config (
 
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger (NoLoggingT)
-import Control.Monad.Trans.Resource (ResourceT, MonadUnliftIO)
 import Control.Monad.Trans.Reader (ReaderT)
-import Data.Aeson (FromJSON(..), object, (.=), Value, (.:), withObject)
-import qualified Data.Text as T
+import Control.Monad.Trans.Resource (MonadUnliftIO, ResourceT)
+import Data.Aeson (FromJSON (..), Value, object, withObject, (.:), (.=))
 import Data.Text (Text)
+import qualified Data.Text as T
 import Data.Time (Day)
 import Data.Yaml.Config (loadYamlSettings, useEnv)
 import Database.Persist.Sqlite (SqlBackend, runSqlite)

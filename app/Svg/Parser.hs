@@ -16,7 +16,7 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs, parseDynamicSvg, matrixPointMultiply) where
 
-import Config (runDb, graphPath)
+import Config (graphPath, runDb)
 import Control.Monad.IO.Class (liftIO)
 import Data.Char (isSpace)
 import Data.List as List
@@ -28,10 +28,10 @@ import Database.DataType
 import Database.Persist.Sqlite
 import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
 import Svg.Database (deleteGraph, insertElements, insertGraph)
-import Text.HTML.TagSoup (Tag)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
-import Text.Parsec ((<|>))
+import Text.HTML.TagSoup (Tag)
 import qualified Text.Parsec as P
+import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
 import Text.Read (readMaybe)
 
@@ -445,11 +445,11 @@ parseTransform "" = [[1, 0, 0],
 parseTransform transform =
     parseVal parser transform
     where
-        parser = P.try scale <|> 
-                  P.try rotate <|> 
-                  P.try translate <|> 
-                  P.try matrix <|> 
-                  P.try skewX <|> 
+        parser = P.try scale <|>
+                  P.try rotate <|>
+                  P.try translate <|>
+                  P.try matrix <|>
+                  P.try skewX <|>
                   P.try skewY
         scale = do
             _ <- P.string "scale("

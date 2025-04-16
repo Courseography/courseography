@@ -16,10 +16,9 @@ import Control.Monad.IO.Class (liftIO)
 import qualified Data.Aeson as Aeson
 import qualified Data.Text as T
 import Database.Persist.Class (selectKeysList)
-import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, selectFirst,
-                                (==.))
+import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, selectFirst, (==.))
 import Database.Tables hiding (breadth, distribution, paths, shapes, texts)
-import Happstack.Server (lookBS, lookText', ServerPart, Response, toResponse)
+import Happstack.Server (Response, ServerPart, lookBS, lookText', toResponse)
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: ServerPart Response

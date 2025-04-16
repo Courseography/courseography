@@ -9,7 +9,7 @@ responses.
 module Server
     (runServer) where
 
-import Config (serverConf, logFilePath)
+import Config (logFilePath, serverConf)
 import Control.Concurrent (forkIO, killThread)
 import Control.Monad (when)
 import Data.String (fromString)
@@ -18,8 +18,9 @@ import Happstack.Server hiding (host)
 import Routes (routeResponses)
 import System.Directory (getCurrentDirectory)
 import System.IO (BufferMode (LineBuffering), hSetBuffering, stderr, stdout)
-import System.Log.Logger (Priority (INFO), rootLoggerName, setLevel, updateGlobalLogger, setHandlers)
 import System.Log.Handler.Simple (fileHandler)
+import System.Log.Logger (Priority (INFO), rootLoggerName, setHandlers, setLevel,
+                          updateGlobalLogger)
 
 runServer :: IO ()
 runServer = do
