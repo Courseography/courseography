@@ -57,6 +57,7 @@
 - Added Debugging Guide
 - Added Haskell Language Server (HLS) Guide
 - Upgraded to Stackage lts-23.18
+- Added `stylish-haskell` dependency and ran it on `.hs` source files
 
 ## [0.6.0] - 2024-06-24
 
