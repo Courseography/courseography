@@ -37,5 +37,5 @@ generateScripts = do
     H.script ! A.src "/static/js/generate/app.js" $ ""
 
 aboutScripts :: H.Html
-aboutScripts = do 
+aboutScripts = do
     H.script ! A.src "/static/js/about/app.js" $ ""

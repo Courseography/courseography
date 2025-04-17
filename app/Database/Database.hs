@@ -9,8 +9,8 @@ inserting it into the database. Run when @cabal run database@ is executed.
 module Database.Database
     (populateCalendar, setupDatabase) where
 
-import Control.Monad.IO.Class (liftIO)
 import Config (databasePath, runDb)
+import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)

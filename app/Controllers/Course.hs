@@ -3,14 +3,14 @@ module Controllers.Course
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
+import Data.List (nub, sort)
 import qualified Data.Text as T (Text, unlines, unpack)
-import Data.List (sort, nub)
+import qualified Database.CourseQueries as CourseHelpers (getDeptCourses, queryCourse)
 import Database.Persist (Entity)
-import Database.Persist.Sqlite (SqlPersistM, selectList, entityVal)
+import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
 import Database.Tables as Tables (Courses, coursesCode)
-import Happstack.Server (lookText', ServerPart, Response, toResponse)
+import Happstack.Server (Response, ServerPart, lookText', toResponse)
 import Util.Happstack (createJSONResponse)
-import qualified Database.CourseQueries as CourseHelpers (queryCourse, getDeptCourses)
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.

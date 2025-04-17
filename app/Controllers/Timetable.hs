@@ -1,32 +1,31 @@
-module Controllers.Timetable 
-    (gridResponse, returnPDF, exportTimetableImageResponse, 
-     exportTimetablePDFResponse, calendarResponse) where 
+module Controllers.Timetable
+    (gridResponse, returnPDF, exportTimetableImageResponse,
+     exportTimetablePDFResponse, calendarResponse) where
 
-import Happstack.Server
-import MasterTemplate
-import Scripts
-import Text.Blaze ((!))
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as A
+import Config (fallEndDate, fallStartDate, holidays, outDay, runDb, winterEndDate, winterStartDate)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.ByteString as BS
 import Data.ByteString.Base64.Lazy as BEnc
 import qualified Data.ByteString.Lazy as L
-import qualified Data.Text as T
-import Export.GetImages
-import Export.LatexGenerator
-import Export.PdfGenerator
-import Response.Image (returnImageData)
-import System.Directory (removeFile)
-import Config (runDb, fallEndDate, fallStartDate, holidays, outDay, winterEndDate,
-               winterStartDate)
 import Data.List (groupBy, sort, sortOn)
 import Data.List.Split (splitOn)
+import qualified Data.Text as T
 import Data.Time (Day, defaultTimeLocale, formatTime, getCurrentTime, toGregorian)
 import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
 import Database.CourseQueries (returnMeeting)
 import Database.Persist.Sqlite (entityKey, entityVal, selectList, (==.))
 import Database.Tables
+import Export.GetImages
+import Export.LatexGenerator
+import Export.PdfGenerator
+import Happstack.Server
+import MasterTemplate
+import Response.Image (returnImageData)
+import Scripts
+import System.Directory (removeFile)
+import Text.Blaze ((!))
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as A
 import Text.Read (readMaybe)
 
 gridResponse :: ServerPart Response

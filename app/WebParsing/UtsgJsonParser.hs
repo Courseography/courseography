@@ -1,17 +1,18 @@
 module WebParsing.UtsgJsonParser
      (parseTimetable, insertAllMeetings) where
 
-import Config (runDb, timetableApiUrl, reqHeaders, createReqBody)
+import Config (createReqBody, reqHeaders, runDb, timetableApiUrl)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (FromJSON (parseJSON), withObject, encode, decode, (.!=), (.:?), (.:))
+import Data.Aeson (FromJSON (parseJSON), decode, encode, withObject, (.!=), (.:), (.:?))
 import Data.Aeson.Types (parseMaybe)
-import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, Update, entityKey, deleteWhere, upsert,
-                                insert, insertMany_, selectFirst, (==.), (=.))
-import Database.Tables (EntityField (..), MeetTime (..), Meeting (..), buildTimes)
-import Network.HTTP.Conduit (method, responseBody, requestHeaders, RequestBody(RequestBodyLBS), newManager,
-                             tlsManagerSettings, httpLbs, requestBody, parseRequest)
 import Data.ByteString.Lazy.Internal (ByteString)
+import qualified Data.Text as T
+import Database.Persist.Sqlite (SqlPersistM, Update, deleteWhere, entityKey, insert, insertMany_,
+                                selectFirst, upsert, (=.), (==.))
+import Database.Tables (EntityField (..), MeetTime (..), Meeting (..), buildTimes)
+import Network.HTTP.Conduit (RequestBody (RequestBodyLBS), httpLbs, method, newManager,
+                             parseRequest, requestBody, requestHeaders, responseBody,
+                             tlsManagerSettings)
 
 -- | Parse all timetable data.
 parseTimetable :: IO ()
@@ -20,7 +21,7 @@ parseTimetable = do
 
 -- Make a request and return the response as a serialized JSON representation
 makeRequest :: Int -> IO ByteString
-makeRequest pageNum = do 
+makeRequest pageNum = do
     -- set up the request
     let reqBody = createReqBody pageNum
     timetableApi <- liftIO timetableApiUrl
@@ -43,7 +44,7 @@ getPageInfo respBody = do
       pageSize <- pageableCourse .: "pageSize"
       totalCourses <- pageableCourse .: "total"
       return (page, pageSize, totalCourses)
-          
+
 -- Helper function to insert courses for a page of a HTTP response
 insertCourses :: ByteString -> SqlPersistM ()
 insertCourses respBody = do
@@ -62,19 +63,19 @@ insertAllMeetings :: Int -> SqlPersistM ()
 insertAllMeetings page = do
     respBody <- liftIO $ makeRequest page
     let pageInfo = getPageInfo respBody
-    case pageInfo of 
+    case pageInfo of
       Nothing -> return ()
       Just (_, pageSize, totalCourses) -> do
         liftIO $ print $ "Parsing results for page " ++ show page ++ " of " ++ show totalPages
-        insertCourses respBody 
+        insertCourses respBody
 
-        if page * pageSize >= totalCourses 
+        if page * pageSize >= totalCourses
           then liftIO $ print ("All courses have been parsed." :: String)
         else insertAllMeetings (page + 1)
         where
           totalPages :: Int
           totalPages = ceiling (fromIntegral totalCourses / fromIntegral pageSize :: Double)
-        
+
 
 -- | Insert or update a meeting and then delete
 --   and re-insert the corresponding Times into the database.

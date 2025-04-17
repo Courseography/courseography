@@ -2,31 +2,18 @@ module Routes
     (routeResponses) where
 
 import Control.Monad (MonadPlus (mplus), msum)
-import Controllers.Course as CoursesController (retrieveCourse, index, courseInfo, depts)
-import Controllers.Graph as GraphsController
-    ( graphResponse, index, getGraphJSON, graphImageResponse )
-import Controllers.Generate as GenerateController (generateResponse, findAndSavePrereqsResponse)
+import Controllers.Course as CoursesController (courseInfo, depts, index, retrieveCourse)
+import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, generateResponse)
+import Controllers.Graph as GraphsController (getGraphJSON, graphImageResponse, graphResponse,
+                                              index)
 import Controllers.Timetable as TimetableController
 import Database.CourseInsertion (saveGraphJSON)
 import Database.CourseQueries (retrievePost)
-import Happstack.Server
-    ( serveDirectory,
-      seeOther,
-      dir,
-      noTrailingSlash,
-      nullDir,
-      Browsing(DisableBrowsing),
-      ServerPart,
-      ServerPartT,
-      Response,
-      ToMessage(toResponse) )
-import Response
-    ( drawResponse,
-      aboutResponse,
-      notFoundResponse,
-      searchResponse,
-      postResponse,
-      loadingResponse)
+import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
+                         ToMessage (toResponse), dir, noTrailingSlash, nullDir, seeOther,
+                         serveDirectory)
+import Response (aboutResponse, drawResponse, loadingResponse, notFoundResponse, postResponse,
+                 searchResponse)
 
 routeResponses :: String -> ServerPartT IO Response
 routeResponses staticDir =
@@ -35,7 +22,7 @@ routeResponses staticDir =
           nullDir >> seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
           notFoundResponse])
 
-strictRoutes :: [(String, ServerPart Response)] 
+strictRoutes :: [(String, ServerPart Response)]
 strictRoutes = [
     ("grid", TimetableController.gridResponse),
     ("graph", GraphsController.graphResponse),

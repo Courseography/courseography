@@ -24,18 +24,20 @@ module Database.CourseQueries
 
 import Config (runDb)
 import Control.Monad.IO.Class (MonadIO, liftIO)
-import Data.Aeson (object, toJSON, Value)
-import Data.Char (isAlphaNum, isPunctuation, isAlpha, isDigit)
+import Data.Aeson (Value, object, toJSON)
+import Data.Char (isAlpha, isAlphaNum, isDigit, isPunctuation)
 import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
-import qualified Data.Text as T (Text, append, tail, isPrefixOf, toUpper, filter, snoc, take, unpack)
-import Database.DataType ( ShapeType( Node ) , ShapeType( Hybrid ), ShapeType( BoolNode ))
-import Database.Persist.Sqlite (Entity, PersistEntity, SqlPersistM, PersistValue( PersistInt64 ), selectList,
-                                entityKey, entityVal, selectFirst, (==.), (<-.), get, keyToValues, PersistValue( PersistText ),
-                                rawSql)
+import qualified Data.Text as T (Text, append, filter, isPrefixOf, snoc, tail, take, toUpper,
+                                 unpack)
+import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
+import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64, PersistText),
+                                SqlPersistM, entityKey, entityVal, get, keyToValues, rawSql,
+                                selectFirst, selectList, (<-.), (==.))
 import Database.Tables as Tables
-import Happstack.Server.SimpleHTTP (ServerPart, Response, Request, askRq, lookText', ifModifiedSince)
-import Svg.Builder (intersectsWithShape, buildPath, buildEllipses, buildRect)
+import Happstack.Server.SimpleHTTP (Request, Response, ServerPart, askRq, ifModifiedSince,
+                                    lookText')
+import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
 import Util.Happstack (createJSONResponse)
 
 -- | Queries the database for all matching lectures, tutorials,
@@ -103,8 +105,8 @@ reqsForPost post = do
   where
     -- | TODO: change function to use a regex
     isCourseCode :: String -> Bool
-    isCourseCode codeStr = 
-        length codeStr == 8 && 
+    isCourseCode codeStr =
+        length codeStr == 8 &&
         all isAlphaNum codeStr &&
         all isAlpha (take 3 codeStr) &&
         all isDigit (take 3 (drop 3 codeStr)) &&

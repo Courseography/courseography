@@ -1,7 +1,7 @@
 module WebParsing.ArtSciParser
     (parseCalendar, getDeptList) where
 
-import Config (runDb, fasCalendarUrl, programsUrl)
+import Config (fasCalendarUrl, programsUrl, runDb)
 import Control.Monad.IO.Class (liftIO)
 import Data.CSV
 import Data.List (findIndex, nubBy)
@@ -16,8 +16,8 @@ import Database.Tables (Building (..), Courses (..), Department (..))
 import Filesystem.Path.CurrentOS as Path
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
 import System.Directory (getCurrentDirectory)
-import Text.HTML.TagSoup (Tag)
 import qualified Text.HTML.TagSoup as TS
+import Text.HTML.TagSoup (Tag)
 import Text.HTML.TagSoup.Match (anyAttrValue, tagOpen, tagOpenAttrLit, tagOpenAttrNameLit)
 import Text.Parsec (count, many, parse)
 import qualified Text.Parsec.Char as P

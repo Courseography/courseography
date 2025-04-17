@@ -26,8 +26,8 @@ import Svg.Builder
 import Text.Blaze (toMarkup)
 import Text.Blaze.Internal (stringValue, textValue)
 import Text.Blaze.Svg.Renderer.String (renderSvg)
-import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11 as S
+import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11.Attributes as A
 
 

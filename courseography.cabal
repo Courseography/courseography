@@ -221,6 +221,7 @@ executable courseography
     regex-posix,
     resourcet,
     split,
+    stylish-haskell,
     system-filepath,
     tagsoup,
     text,
