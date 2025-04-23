@@ -38,8 +38,8 @@
     "jquery": "^3.7.1",
     "leaflet": "^1.9.3",
     "lodash": "^4.17.21",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.1.0",
+    "react-dom": "19.1.0",
     "react-leaflet": "^4.2.1",
     "react-modal": "^3.16.1",
     "react-tooltip": "^5.28.0"
@@ -83,5 +83,8 @@
     "webpack-dev-server": "^5.1.0",
     "webpack-merge": "^6.0.1"
   },
-  "packageManager": "yarn@3.3.1"
+  "packageManager": "yarn@3.3.1",
+  "resolutions": {
+    "pretty-format/react-is": "19.1.0"
+  }
 }

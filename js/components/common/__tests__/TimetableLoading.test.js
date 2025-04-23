@@ -5,7 +5,7 @@ import { Description } from "../react_modal.js.jsx"
 describe("Displays correct content based on timetable availability", () => {
   beforeEach(() => cleanup())
 
-  it("displays a timetable when there is only one session", () => {
+  it("displays a timetable when there is only one session", async () => {
     const courseInfo = {
       course: {
         name: "CSC108H1",
@@ -31,13 +31,13 @@ describe("Displays correct content based on timetable availability", () => {
     }
 
     render(<Description course={courseInfo.course} sessions={courseInfo.sessions} />)
-    expect(screen.getByText(/CSC108H1/)).not.toBeNull()
-    expect(screen.getByText(/LEC0101/)).not.toBeNull()
-    expect(screen.getByText("sample description")).not.toBeNull()
-    expect(screen.getByText("Beyonce")).not.toBeNull()
+    await screen.findByText(/CSC108H1/)
+    await screen.findByText(/LEC0101/)
+    await screen.findByText("sample description")
+    await screen.findByText("Beyonce")
   })
 
-  it("displays a timetable when there is more than one session", () => {
+  it("displays a timetable when there is more than one session", async () => {
     const courseInfo = {
       course: {
         name: "CSC108H1",
@@ -72,13 +72,13 @@ describe("Displays correct content based on timetable availability", () => {
     }
 
     render(<Description course={courseInfo.course} sessions={courseInfo.sessions} />)
-    expect(screen.getAllByText(/CSC108H1/)).not.toBeNull()
-    expect(screen.getByText(/LEC0101/)).not.toBeNull()
-    expect(screen.getByText(/LEC0202/)).not.toBeNull()
-    expect(screen.getByText("David. Liu")).not.toBeNull()
+    await screen.findAllByText(/CSC108H1/)
+    await screen.findByText(/LEC0101/)
+    await screen.findByText(/LEC0202/)
+    await screen.findByText("David. Liu")
   })
 
-  it("displays reminder when there's no timetable information", () => {
+  it("displays reminder when there's no timetable information", async () => {
     const courseInfo = {
       course: {
         name: "CSC108H1",
@@ -95,6 +95,6 @@ describe("Displays correct content based on timetable availability", () => {
     }
 
     render(<Description course={courseInfo.course} sessions={courseInfo.sessions} />)
-    expect(screen.getByText("No timetable information available")).not.toBeNull()
+    await screen.findByText("No timetable information available")
   })
 })
