@@ -12765,7 +12765,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["pretty-format", "npm:27.5.1"],\
             ["ansi-regex", "npm:5.0.1"],\
             ["ansi-styles", "npm:5.2.0"],\
-            ["react-is", "npm:17.0.2"]\
+            ["react-is", "npm:19.1.0"]\
           ],\
           "linkType": "HARD"\
         }],\
@@ -12775,7 +12775,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["pretty-format", "npm:29.7.0"],\
             ["@jest/schemas", "npm:29.6.3"],\
             ["ansi-styles", "npm:5.2.0"],\
-            ["react-is", "npm:18.2.0"]\
+            ["react-is", "npm:19.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -13025,17 +13025,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:17.0.2", {\
-          "packageLocation": "./.yarn/cache/react-is-npm-17.0.2-091bbb8db6-9d6d111d89.zip/node_modules/react-is/",\
+        ["npm:19.1.0", {\
+          "packageLocation": "./.yarn/cache/react-is-npm-19.1.0-969a96b5b0-3eb4eac7f0.zip/node_modules/react-is/",\
           "packageDependencies": [\
-            ["react-is", "npm:17.0.2"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:18.2.0", {\
-          "packageLocation": "./.yarn/cache/react-is-npm-18.2.0-0cc5edb910-e72d0ba81b.zip/node_modules/react-is/",\
-          "packageDependencies": [\
-            ["react-is", "npm:18.2.0"]\
+            ["react-is", "npm:19.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\

@@ -83,5 +83,8 @@
     "webpack-dev-server": "^5.1.0",
     "webpack-merge": "^6.0.1"
   },
-  "packageManager": "yarn@3.3.1"
+  "packageManager": "yarn@3.3.1",
+  "resolutions": {
+    "pretty-format/react-is": "19.1.0"
+  }
 }
