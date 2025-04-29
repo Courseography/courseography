@@ -60,6 +60,7 @@
 - Added `stylish-haskell` dependency and ran it on `.hs` source files
 - Upgraded to React v19
 - Added dependabot group for `react` and `react-dom`
+- Switched from Yarn PnP to node-modules to fix issues running tests with Node v20+
 
 ## [0.6.0] - 2024-06-24
 
