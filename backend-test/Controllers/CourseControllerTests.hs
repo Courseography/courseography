@@ -11,7 +11,7 @@ module Controllers.CourseControllerTests
 
 import Config (runDb)
 import Control.Monad (unless)
-import Controllers.Course (index, retrieveCourse)
+import Controllers.Course (depts, index, retrieveCourse)
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
