@@ -126,10 +126,10 @@ runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses e
 deptsTestCases :: [(String, [T.Text], String)]
 deptsTestCases =
     [
-        ("empty db", [], ""),
-        ("one course", ["MAT137"], "MAT\n"),
-        ("multiple, diff depts", ["STA237", "CSC236", "MAT237"], "CSC\nMAT\nSTA\n"),
-        ("multiple, same dept", ["CSC110", "CSC111", "CSC108"], "CSC\n")
+        ("empty db", [], "[]"),
+        ("one course", ["MAT137"], "[\"MAT\"]"),
+        ("multiple, diff depts", ["STA237", "CSC236", "MAT237"], "[\"CSC\",\"MAT\",\"STA\"]"),
+        ("multiple, same dept", ["CSC110", "CSC111", "CSC108"], "[\"CSC\"]")
     ]
 
 -- | Run a test case (args: case description/label, input, expected output) on the depts function
