@@ -124,7 +124,7 @@ runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses e
 
 -- | List of dept test cases; formatted as (test label, input db courses, expected output)
 deptsTestCases :: [(String, [T.Text], String)]
-deptsTestCases ::
+deptsTestCases =
     [
         ("empty db", [], ""),
         ("one course", ["MAT137"], "MAT\n"),
