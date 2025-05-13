@@ -17,23 +17,23 @@ import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Courses(..))
+import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
-import Test.HUnit (Test(..), assertEqual)
+import Test.HUnit (Test (..), assertEqual)
 import TestHelpers (clearDatabase, runServerPart, runServerPartWithQuery)
 
 -- | List of test cases as (input course name, course data, expected JSON output)
 retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, String)]
 retrieveCourseTestCases =
-    [ ("Course exists", 
-       "STA238", 
+    [ ("Course exists",
+       "STA238",
        Map.fromList [
         ("name", "STA238H1"),
         ("title", "Probability, Statistics and Data Analysis II"),
         ("description", "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."),
         ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
         ("exclusions", "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"),
-        ("breadth", "The Physical and Mathematical Universes (5)"), 
+        ("breadth", "The Physical and Mathematical Universes (5)"),
         ("distribution", "null"),
         ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
         ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."),
@@ -41,16 +41,16 @@ retrieveCourseTestCases =
         ],
         "{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
     ),
-    
-    ("Course does not exist", 
-       "STA238", 
-       Map.empty, 
+
+    ("Course does not exist",
+       "STA238",
+       Map.empty,
        "null"
     ),
-    
-    ("No course provided", 
-       "", 
-       Map.empty, 
+
+    ("No course provided",
+       "",
+       Map.empty,
        "null"
     )
     ]
@@ -60,12 +60,12 @@ runRetrieveCourseTest :: String -> T.Text -> Map.Map T.Text T.Text -> String -> 
 runRetrieveCourseTest label courseName courseData expected =
     TestLabel label $ TestCase $ do
         let currCourseName = fromMaybe "" $ Map.lookup "name" courseData
-        
+
         let videoUrls = case Map.lookup "videoUrls" courseData of
                 Just urlsText -> map T.strip (T.splitOn "," urlsText)
                 Nothing -> []
 
-        let courseToInsert = 
+        let courseToInsert =
                 Courses
                     { coursesCode = currCourseName
                     , coursesTitle = Map.lookup "title" courseData
@@ -98,7 +98,7 @@ insertCourses = mapM_ insertCourse
     where
         insertCourse code = insert_ (Courses code Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing [])
 
--- | List of test cases as (input courses, label, expected output)
+-- | List of test cases as (label, input courses, expected output)
 indexTestCases :: [(String, [T.Text], String)]
 indexTestCases =
     [ ("Empty database", [], "")
@@ -122,6 +122,31 @@ runIndexTest label courses expected =
 runIndexTests :: [Test]
 runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses expected) indexTestCases
 
+-- | List of dept test cases; formatted as (test label, input db courses, expected output)
+deptsTestCases :: [(String, [T.Text], String)]
+deptsTestCases ::
+    [
+        ("empty db", [], ""),
+        ("one course", ["MAT137"], "MAT\n"),
+        ("multiple, diff depts", ["STA237", "CSC236", "MAT237"], "CSC\nMAT\nSTA\n"),
+        ("multiple, same dept", ["CSC110", "CSC111", "CSC108"], "CSC\n")
+    ]
+
+-- | Run a test case (args: case description/label, input, expected output) on the depts function
+runDeptsTest :: String -> [T.Text] -> String -> Test
+runDeptsTest label courses expected =
+    TestLabel label $ TestCase $ do
+        runDb $ do
+            clearDatabase
+            insertCourses courses
+        response <- runServerPart Controllers.Course.depts
+        let actual = BL.unpack $ rsBody response
+        assertEqual ("Unexpected output for test: " ++ label) expected actual
+
+-- | Run all test cases for depts
+runDeptsTests :: [Test]
+runDeptsTests = map (\(label, courses, expected) -> runDeptsTest label courses expected) deptsTestCases
+
 -- | Test suite for Course Controller Module
 courseControllerTestSuite :: Test
-courseControllerTestSuite = TestLabel "Course Controller tests" $ TestList (runRetrieveCourseTests ++ runIndexTests)
+courseControllerTestSuite = TestLabel "Course Controller tests" $ TestList (runRetrieveCourseTests ++ runIndexTests ++ runDeptsTests)
