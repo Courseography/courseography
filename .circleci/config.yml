@@ -62,7 +62,7 @@ jobs:
 
       - save_cache:
           name: Cache Dependencies (Haskell)
-          key: v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}
+          key: v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}-{{ checksum "stack.yaml.lock" }}
           paths:
             - "/root/.stack"
             - ".stack-work"
