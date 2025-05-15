@@ -61,6 +61,7 @@
 - Upgraded to React v19
 - Added dependabot group for `react` and `react-dom`
 - Switched from Yarn PnP to node-modules to fix issues running tests with Node v20+
+- Switched connection for timetable parsing from `RequireEMS` to `AllowEMS`
 
 ## [0.6.0] - 2024-06-24
 

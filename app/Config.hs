@@ -183,7 +183,7 @@ createReqBody page = object [ "campuses" .= ([] :: [T.Text]),
                         "page" .= page,
                         "pageSize" .= (300 :: Int),
                         "requirementProps" .= ([] :: [T.Text]),
-                        "sessions" .= [T.pack "20249", T.pack "20251", T.pack "20249-20251"],
+                        "sessions" .= [T.pack "20255"],
                         "timePreferences" .= ([] :: [T.Text])
                      ]
 
