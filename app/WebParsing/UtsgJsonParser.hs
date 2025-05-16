@@ -6,13 +6,15 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON (parseJSON), decode, encode, withObject, (.!=), (.:), (.:?))
 import Data.Aeson.Types (parseMaybe)
 import Data.ByteString.Lazy.Internal (ByteString)
+import Data.Default.Class (def)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, Update, deleteWhere, entityKey, insert, insertMany_,
                                 selectFirst, upsert, (=.), (==.))
 import Database.Tables (EntityField (..), MeetTime (..), Meeting (..), buildTimes)
-import Network.HTTP.Conduit (RequestBody (RequestBodyLBS), httpLbs, method, newManager,
-                             parseRequest, requestBody, requestHeaders, responseBody,
-                             tlsManagerSettings)
+import Network.Connection (TLSSettings (TLSSettingsSimple))
+import Network.HTTP.Conduit (RequestBody (RequestBodyLBS), httpLbs, method, mkManagerSettings,
+                             newManager, parseRequest, requestBody, requestHeaders, responseBody)
+import Network.TLS (EMSMode (AllowEMS), Supported (..))
 
 -- | Parse all timetable data.
 parseTimetable :: IO ()
@@ -29,7 +31,7 @@ makeRequest pageNum = do
     let request' = request {method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
 
     -- make the request
-    manager <- liftIO $ newManager tlsManagerSettings
+    manager <- liftIO $ newManager $ mkManagerSettings (TLSSettingsSimple False False False (def { supportedExtendedMainSecret = AllowEMS })) Nothing
     response <- liftIO $ httpLbs request' manager
     return $ responseBody response
 
