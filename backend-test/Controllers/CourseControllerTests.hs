@@ -11,7 +11,7 @@ module Controllers.CourseControllerTests
 
 import Config (runDb)
 import Control.Monad (unless)
-import Controllers.Course (index, retrieveCourse)
+import Controllers.Course (depts, index, retrieveCourse)
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
@@ -124,12 +124,12 @@ runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses e
 
 -- | List of dept test cases; formatted as (test label, input db courses, expected output)
 deptsTestCases :: [(String, [T.Text], String)]
-deptsTestCases ::
+deptsTestCases =
     [
-        ("empty db", [], ""),
-        ("one course", ["MAT137"], "MAT\n"),
-        ("multiple, diff depts", ["STA237", "CSC236", "MAT237"], "CSC\nMAT\nSTA\n"),
-        ("multiple, same dept", ["CSC110", "CSC111", "CSC108"], "CSC\n")
+        ("empty db", [], "[]"),
+        ("one course", ["MAT137"], "[\"MAT\"]"),
+        ("multiple, diff depts", ["STA237", "CSC236", "MAT237"], "[\"CSC\",\"MAT\",\"STA\"]"),
+        ("multiple, same dept", ["CSC110", "CSC111", "CSC108"], "[\"CSC\"]")
     ]
 
 -- | Run a test case (args: case description/label, input, expected output) on the depts function
