@@ -67,6 +67,10 @@ This will take longer but results in smaller asset files.
 To run all tests, run `$ yarn run test`. However, if you need to run a specific file or folder of tests,
 run `$ yarn run test -- <path>`.
 
+#### Running back-end tests
+
+To run all tests, run `$ stack test`. If you want to run a specific test suite, instead run `$ stack test :<TEST_SUITE_NAME>`.
+
 #### Developers
 
 If you are contributing to Courseography, you should run the following to install and test our pre-commit hooks:
