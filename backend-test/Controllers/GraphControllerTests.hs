@@ -1,7 +1,7 @@
 {-|
-Description: Course Controller module tests.
+Description: Graph Controller module tests.
 
-Module that contains the tests for the functions in the Course Controller module.
+Module that contains the tests for the functions in the Graph Controller module.
 
 -}
 
@@ -27,12 +27,12 @@ indexTestCases =
         "[]"
     ),
 
-    ("One department",
+    ("One graph",
         ["Statistics"],
         "[{\"dynamic\":false,\"height\":0,\"id\":1,\"title\":\"Statistics\",\"width\":0}]"
     ),
 
-    ("Multiple departments",
+    ("Multiple graphs",
         ["Computer Science", "Statistics", "Physics"],
         "[{\"dynamic\":false,\"height\":0,\"id\":1,\"title\":\"Computer Science\",\"width\":0},{\"dynamic\":false,\"height\":0,\"id\":3,\"title\":\"Physics\",\"width\":0},{\"dynamic\":false,\"height\":0,\"id\":2,\"title\":\"Statistics\",\"width\":0}]"        )
     ]
@@ -58,6 +58,6 @@ runIndexTest label graphs expected =
 runIndexTests :: [Test]
 runIndexTests = map (\(label, graphs, expected) -> runIndexTest label graphs expected) indexTestCases
 
--- | Test suite for Course Controller Module
+-- | Test suite for Graph Controller Module
 graphControllerTestSuite :: Test
-graphControllerTestSuite = TestLabel "Course Controller tests" $ TestList runIndexTests
+graphControllerTestSuite = TestLabel "Graph Controller tests" $ TestList runIndexTests
