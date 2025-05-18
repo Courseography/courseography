@@ -63,6 +63,7 @@
 - Switched from Yarn PnP to node-modules to fix issues running tests with Node v20+
 - Switched connection for timetable parsing from `RequireEMS` to `AllowEMS`
 - Fixed dependency caching in CircleCI configuration
+- Added tests for the index function in `Controllers/Graph`
 
 ## [0.6.0] - 2024-06-24
 
