@@ -11,15 +11,15 @@ module Controllers.CourseControllerTests
 
 import Config (runDb)
 import Control.Monad (unless)
-import Controllers.Course (depts, index, retrieveCourse)
+import Controllers.Course (index, retrieveCourse)
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Courses(..))
+import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
-import Test.HUnit (Test(..), assertEqual)
+import Test.HUnit (Test (..), assertEqual)
 import TestHelpers (clearDatabase, runServerPart, runServerPartWithQuery)
 
 -- | List of test cases as (input course name, course data, expected JSON output)
@@ -122,31 +122,6 @@ runIndexTest label courses expected =
 runIndexTests :: [Test]
 runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses expected) indexTestCases
 
--- | List of dept test cases; formatted as (test label, input db courses, expected output)
-deptsTestCases :: [(String, [T.Text], String)]
-deptsTestCases =
-    [
-        ("empty db", [], "[]"),
-        ("one course", ["MAT137"], "[\"MAT\"]"),
-        ("multiple, diff depts", ["STA237", "CSC236", "MAT237"], "[\"CSC\",\"MAT\",\"STA\"]"),
-        ("multiple, same dept", ["CSC110", "CSC111", "CSC108"], "[\"CSC\"]")
-    ]
-
--- | Run a test case (args: case description/label, input, expected output) on the depts function
-runDeptsTest :: String -> [T.Text] -> String -> Test
-runDeptsTest label courses expected =
-    TestLabel label $ TestCase $ do
-        runDb $ do
-            clearDatabase
-            insertCourses courses
-        response <- runServerPart Controllers.Course.depts
-        let actual = BL.unpack $ rsBody response
-        assertEqual ("Unexpected output for test: " ++ label) expected actual
-
--- | Run all test cases for depts
-runDeptsTests :: [Test]
-runDeptsTests = map (\(label, courses, expected) -> runDeptsTest label courses expected) deptsTestCases
-
 -- | Test suite for Course Controller Module
 courseControllerTestSuite :: Test
-courseControllerTestSuite = TestLabel "Course Controller tests" $ TestList (runRetrieveCourseTests ++ runIndexTests ++ runDeptsTests)
+courseControllerTestSuite = TestLabel "Course Controller tests" $ TestList (runRetrieveCourseTests ++ runIndexTests)

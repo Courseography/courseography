@@ -41,7 +41,6 @@ strictRoutes = [
     ("course", CoursesController.retrieveCourse),
     ("courses", CoursesController.index),
     ("course-info", CoursesController.courseInfo),
-    ("depts", CoursesController.depts),
     ("calendar", TimetableController.calendarResponse),
     ("loading", loadingResponse),
     ("save-json", saveGraphJSON)

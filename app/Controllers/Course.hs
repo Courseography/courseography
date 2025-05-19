@@ -3,8 +3,7 @@ module Controllers.Course
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
-import Data.List (nub, sort)
-import qualified Data.Text as T (Text, unlines, unpack)
+import qualified Data.Text as T (Text, unlines)
 import qualified Database.CourseQueries as CourseHelpers (getDeptCourses, queryCourse)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
@@ -34,13 +33,3 @@ courseInfo :: ServerPart Response
 courseInfo = do
     dept <- lookText' "dept"
     fmap createJSONResponse (CourseHelpers.getDeptCourses dept)
-
--- | Return a list of all departments.
-depts :: ServerPart Response
-depts = do
-    deptList <- liftIO $ runDb $ do
-        coursesList :: [Entity Courses] <- selectList [] []
-        return $ sort . nub $ map g coursesList :: SqlPersistM [String]
-    return $ createJSONResponse deptList
-    where
-        g = take 3 . T.unpack . coursesCode . entityVal
