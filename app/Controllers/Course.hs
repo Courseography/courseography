@@ -1,5 +1,5 @@
 module Controllers.Course
-    (retrieveCourse, index, courseInfo, depts) where
+    (retrieveCourse, index, courseInfo) where
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
