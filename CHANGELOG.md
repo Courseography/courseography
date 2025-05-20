@@ -65,6 +65,7 @@
 - Switched connection for timetable parsing from `RequireEMS` to `AllowEMS`
 - Fixed dependency caching in CircleCI configuration
 - Added dependency groups to Dependabot configuration
+- Added tests for the index function in `Controllers/Graph`
 
 ## [0.6.0] - 2024-06-24
 
