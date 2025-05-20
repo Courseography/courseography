@@ -17,9 +17,9 @@ import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Courses (..))
+import Database.Tables (Courses(..))
 import Happstack.Server (rsBody)
-import Test.HUnit (Test (..), assertEqual)
+import Test.HUnit (Test(..), assertEqual)
 import TestHelpers (clearDatabase, runServerPart, runServerPartWithQuery)
 
 -- | List of test cases as (input course name, course data, expected JSON output)
