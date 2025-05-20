@@ -10,8 +10,8 @@ module Controllers.CourseControllerTests
 ) where
 
 import Config (runDb)
-import Control.Monad (unless)
-import Controllers.Course (depts, index, retrieveCourse)
+import Control.Monad (unless, when)
+import Controllers.Course (courseInfo, depts, index, retrieveCourse)
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
@@ -20,7 +20,7 @@ import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Courses(..))
 import Happstack.Server (rsBody)
 import Test.HUnit (Test(..), assertEqual)
-import TestHelpers (clearDatabase, runServerPart, runServerPartWithQuery)
+import TestHelpers (clearDatabase, runServerPart, runServerPartWithQuery, runServerPartWithCourseInfoQuery)
 
 -- | List of test cases as (input course name, course data, expected JSON output)
 retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, String)]
@@ -147,6 +147,88 @@ runDeptsTest label courses expected =
 runDeptsTests :: [Test]
 runDeptsTests = map (\(label, courses, expected) -> runDeptsTest label courses expected) deptsTestCases
 
+-- | List of test cases as (case, database state, input [dept], expected JSON output) for the courseInfo function
+courseInfoTestCases :: [(String, Int, T.Text, String)]
+courseInfoTestCases = 
+    [ ("Empty Database"
+    , 0
+    , "STA"
+    , "[]")
+    , ("Department with one course in database called"
+    , 1
+    , "CSC"
+    , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":null,\"description\":\"Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required.\",\"distribution\":null,\"exclusions\":\"CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3\",\"name\":\"CSC108H1\",\"prereqString\":null,\"title\":\"Introduction to Computer Programming\",\"videoUrls\":[]}]")
+    , ("Department with two courses in database called"
+    , 1
+    , "STA"
+    , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.\",\"distribution\":null,\"exclusions\":\"STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5\",\"name\":\"STA237H1\",\"prereqString\":\"(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)\",\"title\":\"Probability, Statistics and Data Analysis I\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"[https://example.com/video1\",\"https://example.com/video2]\"]}]")
+    , ("Department with no courses in database called"
+    , 1
+    , "MAT"
+    , "[]")
+    , ("Empty Department Called In a Non - Empty Database -- should return the entire database"
+    , 1
+    , ""
+    , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.\",\"distribution\":null,\"exclusions\":\"STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5\",\"name\":\"STA237H1\",\"prereqString\":\"(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)\",\"title\":\"Probability, Statistics and Data Analysis I\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"[https://example.com/video1\",\"https://example.com/video2]\"]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":null,\"description\":\"Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required.\",\"distribution\":null,\"exclusions\":\"CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3\",\"name\":\"CSC108H1\",\"prereqString\":null,\"title\":\"Introduction to Computer Programming\",\"videoUrls\":[]}]")
+    ]
+    
+-- | Run a test case (case, database state, input [dept], expected JSON output) on the courseInfo function
+runCourseInfoTest :: String -> Int -> T.Text -> String -> Test
+runCourseInfoTest label state dept expected =
+    TestLabel label $ TestCase $ do
+
+        let sta237 = Courses
+                { coursesCode = "STA237H1"
+                , coursesTitle = Just "Probability, Statistics and Data Analysis I"
+                , coursesDescription = Just "An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development."
+                , coursesPrereqs = Just "(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)"
+                , coursesExclusions = Just "STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5"
+                , coursesBreadth = Nothing
+                , coursesDistribution = Nothing
+                , coursesPrereqString = Just "(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)"
+                , coursesCoreqs = Just "(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."
+                , coursesVideoUrls = []
+                }
+            sta238 = Courses
+                { coursesCode = "STA238H1"
+                , coursesTitle = Just "Probability, Statistics and Data Analysis II"
+                , coursesDescription = Just "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."
+                , coursesPrereqs = Just "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"
+                , coursesExclusions = Just "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"
+                , coursesBreadth = Nothing
+                , coursesDistribution = Nothing
+                , coursesPrereqString = Just "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"
+                , coursesCoreqs = Just "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."
+                , coursesVideoUrls = [T.pack "[https://example.com/video1",T.pack "https://example.com/video2]"]
+                }
+            csc108 = Courses
+                { coursesCode = "CSC108H1"
+                , coursesTitle = Just "Introduction to Computer Programming"
+                , coursesDescription = Just "Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required."
+                , coursesPrereqs = Nothing
+                , coursesExclusions = Just "CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3"
+                , coursesBreadth = Nothing
+                , coursesDistribution = Nothing
+                , coursesPrereqString = Nothing
+                , coursesCoreqs = Nothing
+                , coursesVideoUrls = []
+                }
+
+        runDb $ do
+            clearDatabase
+            when (state == 1) $ do 
+                insert_ sta237
+                insert_ sta238
+                insert_ csc108
+        
+        response <- runServerPartWithCourseInfoQuery Controllers.Course.courseInfo (T.unpack dept)
+        let actual = BL.unpack $ rsBody response
+        assertEqual ("Unexpected response body for " ++ label) expected actual
+
+-- | Run all courseInfo test cases
+runCourseInfoTests :: [Test]
+runCourseInfoTests = map (\(label, state, dept, expected) -> runCourseInfoTest label state dept expected) courseInfoTestCases
+
 -- | Test suite for Course Controller Module
 courseControllerTestSuite :: Test
-courseControllerTestSuite = TestLabel "Course Controller tests" $ TestList (runRetrieveCourseTests ++ runIndexTests ++ runDeptsTests)
+courseControllerTestSuite = TestLabel "Course Controller tests" $ TestList (runRetrieveCourseTests ++ runIndexTests ++ runDeptsTests ++ runCourseInfoTests)

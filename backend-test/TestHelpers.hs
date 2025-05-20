@@ -6,7 +6,7 @@ Module that contains helper functions used in testing controller module function
 -}
 
 module TestHelpers
-    (mockRequest, runServerPart, clearDatabase, runServerPartWithQuery) where
+    (mockRequest, runServerPart, clearDatabase, runServerPartWithQuery, runServerPartWithCourseInfoQuery) where
 
 import Control.Concurrent.MVar (newMVar, newEmptyMVar)
 import qualified Data.ByteString.Lazy.Char8 as BSL
@@ -65,6 +65,30 @@ mockRequestWithQuery courseName = do
         , rqPeer            = ("127.0.0.1", 0)
         }
 
+-- | A mock request for running ServerPartWithQuery, specifically for retrieveCourse
+mockRequestWithCourseInfoQuery :: String -> IO Request
+mockRequestWithCourseInfoQuery dept = do
+    inputsBody <- newMVar []
+    requestBody <- newEmptyMVar
+    return Request
+        { rqSecure          = False
+        , rqMethod          = GET
+        , rqPaths           = ["course-info"]
+        , rqUri             = "/course-info"
+        , rqQuery           = ""
+        , rqInputsQuery     = [("dept", Input {
+            inputValue = Right (BSL.pack dept),
+            inputFilename = Nothing,
+            inputContentType = defaultContentType
+          })]
+        , rqInputsBody      = inputsBody
+        , rqCookies         = []
+        , rqVersion         = HttpVersion 1 1
+        , rqHeaders         = Map.empty
+        , rqBody            = requestBody
+        , rqPeer            = ("127.0.0.1", 0)
+        }
+
 -- | Default content type for the MockRequestWithQuery, specifically for retrieveCourse
 defaultContentType :: ContentType
 defaultContentType = ContentType
@@ -77,6 +101,12 @@ defaultContentType = ContentType
 runServerPartWithQuery :: ServerPart Response -> String -> IO Response
 runServerPartWithQuery sp courseName = do
     request <- mockRequestWithQuery courseName
+    simpleHTTP'' sp request
+
+-- | Helper function to run ServerPartWithQuery Response for courseInfo
+runServerPartWithCourseInfoQuery :: ServerPart Response -> String -> IO Response
+runServerPartWithCourseInfoQuery sp dept = do
+    request <- mockRequestWithCourseInfoQuery dept
     simpleHTTP'' sp request
 
 -- | Clear all the entries in the database
