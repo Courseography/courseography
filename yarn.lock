@@ -2188,12 +2188,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:^14.5.2":
-  version: 14.5.2
-  resolution: "@testing-library/user-event@npm:14.5.2"
+"@testing-library/user-event@npm:^14.6.1":
+  version: 14.6.1
+  resolution: "@testing-library/user-event@npm:14.6.1"
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
-  checksum: d76937dffcf0082fbf3bb89eb2b81a31bf5448048dd61c33928c5f10e33a58e035321d39145cefd469bb5a499c68a5b4086b22f1a44e3e7c7e817dc5f6782867
+  checksum: 4cb8a81fea1fea83a42619e9545137b51636bb7a3182c596bb468e5664f1e4699a275c2d0fb8b6dcc3fe2684f9d87b0637ab7cb4f566051539146872c9141fcb
   languageName: node
   linkType: hard
 
@@ -4081,10 +4081,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.0.0, core-js@npm:^3.39.0":
+"core-js@npm:^3.0.0":
   version: 3.39.0
   resolution: "core-js@npm:3.39.0"
   checksum: 7a3670e9a2a89e0a049daa288d742d09f6e16d27a8945c5e2ef6fc45dc57e5c4bc5db589da05947486f54ae978d14cf27bd3fb1db0b9907000a611e8af37355b
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.42.0":
+  version: 3.42.0
+  resolution: "core-js@npm:3.42.0"
+  checksum: 270b5532511e2e6cc8e6b10c1434306208dca377aba3850875941316ce605b008ddbdeca0b6dd6eb2a4b188899dab259c0aecd7dc265bc5e7df19563e4e284b7
   languageName: node
   linkType: hard
 
@@ -4134,13 +4141,13 @@ __metadata:
     "@fortawesome/react-fontawesome": ^0.2.2
     "@testing-library/dom": ^10.4.0
     "@testing-library/react": ^16.0.1
-    "@testing-library/user-event": ^14.5.2
+    "@testing-library/user-event": ^14.6.1
     ag-grid-community: ^33.2.1
     ag-grid-react: ^33.2.1
     babel-jest: ^29.5.0
     babel-loader: ^9.1.2
     bootstrap: ^5.3.3
-    core-js: ^3.39.0
+    core-js: ^3.42.0
     css-loader: ^7.1.2
     cypress: 14.0.1
     eslint: ^8.46.0
@@ -4172,7 +4179,7 @@ __metadata:
     sass: ^1.81.0
     sass-loader: ^16.0.5
     style-loader: ^4.0.0
-    stylelint: ^16.17.0
+    stylelint: ^16.19.1
     stylelint-config-standard-scss: ^14.0.0
     webpack: ^5.96.1
     webpack-cli: ^5.1.4
@@ -5534,12 +5541,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-entry-cache@npm:^10.0.7":
-  version: 10.0.7
-  resolution: "file-entry-cache@npm:10.0.7"
+"file-entry-cache@npm:^10.0.8":
+  version: 10.0.8
+  resolution: "file-entry-cache@npm:10.0.8"
   dependencies:
-    flat-cache: ^6.1.7
-  checksum: 0111ea743274f2527f3b943285fe88d73cd3e086b5905bb939da2d405b0733548ea17fa43d72b93e32fb88f076335ca8c36277152c1ba49cde540281f420d587
+    flat-cache: ^6.1.8
+  checksum: 832e9394c05b1484a38431a1061cbda6bef7597a0b3d9ddefd7ae9aa5f935cdb720e98066bd7e29cf2395b88d4ff42ce24860e808b74fb3a87dab07b8b98f04a
   languageName: node
   linkType: hard
 
@@ -5635,14 +5642,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flat-cache@npm:^6.1.7":
-  version: 6.1.7
-  resolution: "flat-cache@npm:6.1.7"
+"flat-cache@npm:^6.1.8":
+  version: 6.1.8
+  resolution: "flat-cache@npm:6.1.8"
   dependencies:
     cacheable: ^1.8.9
     flatted: ^3.3.3
-    hookified: ^1.7.1
-  checksum: 128c9fc95d5bc7c687c5799a8e8ceb53581ae0b1c3696d270c35359658afd9a34b76ea97bc51aea5f2ab3fb46b979cefeb0091b9cc306dfd6998e2b3b27444ef
+    hookified: ^1.8.1
+  checksum: 7c26d536f21249e487eed8f21829b13eb114d4e07de239ce7300c995c80c3e704f78e4a63d7e75a63c28dc47b02c05e670c3fc745bbfd2b238d4aea0e4e4b3d2
   languageName: node
   linkType: hard
 
@@ -6193,6 +6200,13 @@ __metadata:
   version: 1.8.1
   resolution: "hookified@npm:1.8.1"
   checksum: 4a8c4c5ef84ce0de22f1108e86403812a82359116fa2c689720193897d74dc1657f25a1b27a6e5840e4294f0034e7e3d3bb7446a28bfb63c2b514c33ca781325
+  languageName: node
+  linkType: hard
+
+"hookified@npm:^1.8.1":
+  version: 1.8.2
+  resolution: "hookified@npm:1.8.2"
+  checksum: b7415e94f742e7bd0da5f3653a0f10f2021e1b39f92f20a03f27027ca308f6bf84a958b296abd1e15ee9e0d589d887687ec16745b7a0cdb488ba5f38e3ff524d
   languageName: node
   linkType: hard
 
@@ -7764,6 +7778,13 @@ __metadata:
   version: 0.35.0
   resolution: "known-css-properties@npm:0.35.0"
   checksum: 8ab9550a605f9113cb6dc9059e86f109c1a4a3cb12107bd2a89855bd17472001459180a710b59cb8e097d1d55f36cb08980424a26a59e2b11422934f124ba944
+  languageName: node
+  linkType: hard
+
+"known-css-properties@npm:^0.36.0":
+  version: 0.36.0
+  resolution: "known-css-properties@npm:0.36.0"
+  checksum: 2b231ae0ef90a9825f3798a585077c6948c119e091df8900ae07f52e5928122835ac1ad0b50629fe1e2357a608b17428181d5c63d02a623ffe84de5204f5f4fa
   languageName: node
   linkType: hard
 
@@ -10611,9 +10632,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint@npm:^16.17.0":
-  version: 16.17.0
-  resolution: "stylelint@npm:16.17.0"
+"stylelint@npm:^16.19.1":
+  version: 16.19.1
+  resolution: "stylelint@npm:16.19.1"
   dependencies:
     "@csstools/css-parser-algorithms": ^3.0.4
     "@csstools/css-tokenizer": ^3.0.3
@@ -10628,7 +10649,7 @@ __metadata:
     debug: ^4.3.7
     fast-glob: ^3.3.3
     fastest-levenshtein: ^1.0.16
-    file-entry-cache: ^10.0.7
+    file-entry-cache: ^10.0.8
     global-modules: ^2.0.0
     globby: ^11.1.0
     globjoin: ^0.1.4
@@ -10636,7 +10657,7 @@ __metadata:
     ignore: ^7.0.3
     imurmurhash: ^0.1.4
     is-plain-object: ^5.0.0
-    known-css-properties: ^0.35.0
+    known-css-properties: ^0.36.0
     mathml-tag-names: ^2.1.3
     meow: ^13.2.0
     micromatch: ^4.0.8
@@ -10655,7 +10676,7 @@ __metadata:
     write-file-atomic: ^5.0.1
   bin:
     stylelint: bin/stylelint.mjs
-  checksum: 16bcb33273d968583a545c4bdd64661a5ff97bc4b39f4e07f21a1fdb460ad15f44e8ea06628cf19b24820dc6054afdbddf94c3ab272e0f083d87350bfa0a1f64
+  checksum: 5bb188187053592a481c19a4420d01cb50e78a6e68edac639a0316be1cf365df28826968345e10aaf1ec1c3ed672b91c749ca10b6e71d05ff5d181db188e50c6
   languageName: node
   linkType: hard
 
