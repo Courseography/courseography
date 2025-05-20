@@ -8,10 +8,9 @@ Module that contains the test suites for all the controllers.
 module Controllers.ControllerTests
 (  controllerTests  ) where
 
--- import statements
+import Controllers.CourseControllerTests (courseControllerTestSuite)
+import Controllers.GraphControllerTests (graphControllerTestSuite)
 import Test.HUnit (Test (..))
--- import Controllers.CourseControllerTests (courseControllerTestSuite)
--- import Controllers.GraphControllerTests (graphControllerTestSuite)
 
 -- Single test encompassing all controller test suites
 controllerTests :: Test
