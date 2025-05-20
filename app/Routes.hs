@@ -2,7 +2,7 @@ module Routes
     (routeResponses) where
 
 import Control.Monad (MonadPlus (mplus), msum)
-import Controllers.Course as CoursesController (courseInfo, depts, index, retrieveCourse)
+import Controllers.Course as CoursesController (courseInfo, index, retrieveCourse)
 import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, generateResponse)
 import Controllers.Graph as GraphsController (getGraphJSON, graphImageResponse, graphResponse,
                                               index)
