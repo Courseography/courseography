@@ -6,4 +6,3 @@ import Response.Image as X
 import Response.Loading as X
 import Response.NotFound as X
 import Response.Post as X
-import Response.Search as X

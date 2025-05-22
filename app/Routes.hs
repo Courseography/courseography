@@ -12,8 +12,7 @@ import Database.CourseQueries (retrievePost)
 import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
                          ToMessage (toResponse), dir, noTrailingSlash, nullDir, seeOther,
                          serveDirectory)
-import Response (aboutResponse, drawResponse, loadingResponse, notFoundResponse, postResponse,
-                 searchResponse)
+import Response (aboutResponse, drawResponse, loadingResponse, notFoundResponse, postResponse)
 
 routeResponses :: String -> ServerPartT IO Response
 routeResponses staticDir =
@@ -35,7 +34,6 @@ strictRoutes = [
     ("draw", drawResponse),
     ("about", aboutResponse),
     ("graphs", GraphsController.index),
-    ("timesearch", searchResponse),
     ("generate", generateResponse),
     ("get-json-data", getGraphJSON),
     ("course", CoursesController.retrieveCourse),
