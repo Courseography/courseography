@@ -34,9 +34,7 @@ import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt6
                                 SqlPersistM, entityKey, entityVal, get, keyToValues, rawSql,
                                 selectFirst, selectList, (<-.), (==.))
 import Database.Tables as Tables
-import Happstack.Server.SimpleHTTP (Request, Response, ServerPart, ifModifiedSince, lookText')
 import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
-import Util.Happstack (createJSONResponse)
 
 -- | Queries the database for all matching lectures, tutorials,
 meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
