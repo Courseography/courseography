@@ -171,7 +171,6 @@ executable courseography
     Response.Image,
     Response.Loading,
     Response.NotFound,
-    Response.Post,
     Response.Search,
     Routes,
     Scripts,
