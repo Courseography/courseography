@@ -13,6 +13,20 @@ updates:
       ag-grid:
         patterns:
           - "ag-grid-*"
+      babel:
+        patterns:
+          - "@babel/*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+      fort-awesome:
+        patterns:
+          - "@fortawesome/*"
+      jest:
+        patterns:
+          - "jest"
+          - "jest-*"
       react:
         patterns:
           - "react"
@@ -20,6 +34,11 @@ updates:
       stylelint:
         patterns:
           - "stylelint*"
+      webpack:
+        patterns:
+          - "webpack"
+          - "webpack-*"
+          - "*-loader"
 
   - package-ecosystem: "github-actions"
     directory: "/"
