@@ -126,7 +126,7 @@ runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses e
 insertFullCourses :: [Courses] -> SqlPersistM ()
 insertFullCourses = mapM_ insertFullCourse
     where
-        insertFullCourse course = insert_ course
+        insertFullCourse = insert_ 
 
 -- | List of test cases as (case, database state, input [dept], expected JSON output) for the courseInfo function
 courseInfoTestCases :: [(String, [Courses], T.Text, String)]
