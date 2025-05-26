@@ -1,8 +1,7 @@
 module Models.Course
-    (returnCourse, queryCourse) where
+    (returnCourse) where
 
 import Config (runDb)
-import Data.Aeson (Value, toJSON)
 import qualified Data.Text as T (Text, append, take, toUpper)
 import Database.CourseQueries (buildCourse, buildMeetTimes)
 import Database.Persist.Sqlite (Entity, SqlPersistM, entityVal, selectFirst, selectList, (<-.))
@@ -28,10 +27,3 @@ returnCourse lowerStr = runDb $ do
         meetings <- meetingQuery fullCodes
         Just <$> buildCourse meetings
                                 (entityVal course)
-
--- | Queries the database for all information about @course@, and returns a JSON
--- object representing the course.
-queryCourse :: T.Text -> IO Value
-queryCourse str = do
-    courseJSON <- returnCourse str
-    return $ toJSON courseJSON
