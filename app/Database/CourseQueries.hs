@@ -11,14 +11,14 @@ and serve the information back to the client.
 module Database.CourseQueries
     (returnPost,
      reqsForPost,
-     returnCourse,
      prereqsForCourse,
      returnMeeting,
      getGraph,
      getMeetingTime,
      buildTime,
-     queryCourse,
-     getDeptCourses
+     getDeptCourses,
+     buildCourse,
+     buildMeetTimes
      ) where
 
 import Config (runDb)
@@ -26,6 +26,7 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Aeson (Value, object, toJSON)
 import Data.Char (isAlpha, isAlphaNum, isDigit, isPunctuation)
 import Data.List (partition)
+import Data.List.Split.Internals (build)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, filter, isPrefixOf, snoc, tail, take, toUpper,
                                  unpack)
@@ -35,34 +36,6 @@ import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt6
                                 selectFirst, selectList, (<-.), (==.))
 import Database.Tables as Tables
 import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
-
--- | Queries the database for all matching lectures, tutorials,
-meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
-meetingQuery meetingCodes = do
-    allMeetings <- selectList [MeetingCode <-. map (T.take 6) meetingCodes] []
-    mapM buildMeetTimes allMeetings
-
--- | Queries the database for all information about @course@,
--- constructs and returns a Course value.
-returnCourse :: T.Text -> IO (Maybe Course)
-returnCourse lowerStr = runDb $ do
-    let courseStr = T.toUpper lowerStr
-    -- TODO: require the client to pass the full course code
-    let fullCodes = [courseStr, T.append courseStr "H1", T.append courseStr "Y1"]
-    sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode <-. fullCodes] []
-    case sqlCourse of
-      Nothing -> return Nothing
-      Just course -> do
-        meetings <- meetingQuery fullCodes
-        Just <$> buildCourse meetings
-                                (entityVal course)
-
--- | Queries the database for all information about @course@, and returns a JSON
--- object representing the course.
-queryCourse :: T.Text -> IO Value
-queryCourse str = do
-    courseJSON <- returnCourse str
-    return $ toJSON courseJSON
 
 -- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)
