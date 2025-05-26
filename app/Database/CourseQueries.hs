@@ -28,8 +28,7 @@ import Data.Aeson (Value, object, toJSON)
 import Data.Char (isAlpha, isAlphaNum, isDigit, isPunctuation)
 import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
-import qualified Data.Text as T (Text, append, filter, isPrefixOf, snoc, tail, take, toUpper,
-                                 unpack)
+import qualified Data.Text as T (Text, append, filter, isPrefixOf, snoc, tail, toUpper, unpack)
 import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
 import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64, PersistText),
                                 SqlPersistM, entityKey, entityVal, get, keyToValues, rawSql,
