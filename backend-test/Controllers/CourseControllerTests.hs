@@ -10,8 +10,8 @@ module Controllers.CourseControllerTests
 ) where
 
 import Config (runDb)
-import Control.Monad (unless, when)
-import Controllers.Course (courseInfo, depts, index, retrieveCourse)
+import Control.Monad (unless)
+import Controllers.Course (courseInfo, index, retrieveCourse)
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
@@ -122,31 +122,6 @@ runIndexTest label courses expected =
 runIndexTests :: [Test]
 runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses expected) indexTestCases
 
--- | List of dept test cases; formatted as (test label, input db courses, expected output)
-deptsTestCases :: [(String, [T.Text], String)]
-deptsTestCases =
-    [
-        ("empty db", [], "[]"),
-        ("one course", ["MAT137"], "[\"MAT\"]"),
-        ("multiple, diff depts", ["STA237", "CSC236", "MAT237"], "[\"CSC\",\"MAT\",\"STA\"]"),
-        ("multiple, same dept", ["CSC110", "CSC111", "CSC108"], "[\"CSC\"]")
-    ]
-
--- | Run a test case (args: case description/label, input, expected output) on the depts function
-runDeptsTest :: String -> [T.Text] -> String -> Test
-runDeptsTest label courses expected =
-    TestLabel label $ TestCase $ do
-        runDb $ do
-            clearDatabase
-            insertCourses courses
-        response <- runServerPart Controllers.Course.depts
-        let actual = BL.unpack $ rsBody response
-        assertEqual ("Unexpected output for test: " ++ label) expected actual
-
--- | Run all test cases for depts
-runDeptsTests :: [Test]
-runDeptsTests = map (\(label, courses, expected) -> runDeptsTest label courses expected) deptsTestCases
-
 -- | Helper function to insert full (predefined) courses into the database
 insertFullCourses :: [Courses] -> SqlPersistM ()
 insertFullCourses = mapM_ insertFullCourse
@@ -232,6 +207,7 @@ runCourseInfoTest label state dept expected =
 runCourseInfoTests :: [Test]
 runCourseInfoTests = map (\(label, state, dept, expected) -> runCourseInfoTest label state dept expected) courseInfoTestCases
 
+
 -- | Test suite for Course Controller Module
 courseControllerTestSuite :: Test
-courseControllerTestSuite = TestLabel "Course Controller tests" $ TestList (runRetrieveCourseTests ++ runIndexTests ++ runDeptsTests ++ runCourseInfoTests)
+courseControllerTestSuite = TestLabel "Course Controller tests" $ TestList (runRetrieveCourseTests ++ runIndexTests ++ runCourseInfoTests)

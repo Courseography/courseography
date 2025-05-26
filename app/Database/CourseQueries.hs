@@ -9,8 +9,7 @@ and serve the information back to the client.
 -}
 
 module Database.CourseQueries
-    (retrievePost,
-     returnPost,
+    (returnPost,
      reqsForPost,
      returnCourse,
      prereqsForCourse,
@@ -35,10 +34,7 @@ import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt6
                                 SqlPersistM, entityKey, entityVal, get, keyToValues, rawSql,
                                 selectFirst, selectList, (<-.), (==.))
 import Database.Tables as Tables
-import Happstack.Server.SimpleHTTP (Request, Response, ServerPart, askRq, ifModifiedSince,
-                                    lookText')
 import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
-import Util.Happstack (createJSONResponse)
 
 -- | Queries the database for all matching lectures, tutorials,
 meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
@@ -67,25 +63,6 @@ queryCourse :: T.Text -> IO Value
 queryCourse str = do
     courseJSON <- returnCourse str
     return $ toJSON courseJSON
-
--- | Takes a http request with a post code and sends a JSON response containing the post data
--- | if the post data has been modified since the timestamp in the request,
--- | or a 304 "Not Modified" response otherwise
-retrievePost :: ServerPart Response
-retrievePost = do
-    req <- askRq
-    code <- lookText' "code"
-    liftIO $ queryPost req code
-
--- | Queries the database for the post data then returns a JSON response of it
--- | if the post data has been modified since the timestamp in the request,
--- | or a 304 "Not Modified" response otherwise
-queryPost :: Request -> T.Text -> IO Response
-queryPost req code = do
-    postMaybe <- returnPost code
-    case postMaybe of
-        Nothing -> return $ createJSONResponse (Nothing :: Maybe Post)
-        Just post -> return $ ifModifiedSince (postModified post) req (createJSONResponse post)
 
 -- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)

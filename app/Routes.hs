@@ -2,18 +2,16 @@ module Routes
     (routeResponses) where
 
 import Control.Monad (MonadPlus (mplus), msum)
-import Controllers.Course as CoursesController (courseInfo, depts, index, retrieveCourse)
+import Controllers.Course as CoursesController (courseInfo, index, retrieveCourse)
 import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, generateResponse)
 import Controllers.Graph as GraphsController (getGraphJSON, graphImageResponse, graphResponse,
                                               index)
 import Controllers.Timetable as TimetableController
 import Database.CourseInsertion (saveGraphJSON)
-import Database.CourseQueries (retrievePost)
 import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
                          ToMessage (toResponse), dir, noTrailingSlash, nullDir, seeOther,
                          serveDirectory)
-import Response (aboutResponse, drawResponse, loadingResponse, notFoundResponse, postResponse,
-                 searchResponse)
+import Response (aboutResponse, drawResponse, loadingResponse, notFoundResponse)
 
 routeResponses :: String -> ServerPartT IO Response
 routeResponses staticDir =
@@ -30,18 +28,14 @@ strictRoutes = [
     ("image", graphImageResponse),
     ("timetable-image", TimetableController.exportTimetableImageResponse),
     ("timetable-pdf", TimetableController.exportTimetablePDFResponse),
-    ("post", retrievePost),
-    ("post-progress", postResponse),
     ("draw", drawResponse),
     ("about", aboutResponse),
     ("graphs", GraphsController.index),
-    ("timesearch", searchResponse),
     ("generate", generateResponse),
     ("get-json-data", getGraphJSON),
     ("course", CoursesController.retrieveCourse),
     ("courses", CoursesController.index),
     ("course-info", CoursesController.courseInfo),
-    ("depts", CoursesController.depts),
     ("calendar", TimetableController.calendarResponse),
     ("loading", loadingResponse),
     ("save-json", saveGraphJSON)

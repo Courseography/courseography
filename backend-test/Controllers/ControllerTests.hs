@@ -9,8 +9,10 @@ module Controllers.ControllerTests
 (  controllerTests  ) where
 
 import Test.HUnit (Test (..))
+
 import Controllers.CourseControllerTests (courseControllerTestSuite)
+import Controllers.GraphControllerTests (graphControllerTestSuite)
 
 -- Single test encompassing all controller test suites
 controllerTests :: Test
-controllerTests = TestList [courseControllerTestSuite]
+controllerTests = TestList [courseControllerTestSuite, graphControllerTestSuite]
