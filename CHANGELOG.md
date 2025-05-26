@@ -67,6 +67,7 @@
 - Fixed dependency caching in CircleCI configuration
 - Added dependency groups to Dependabot configuration
 - Added tests for the index function in `Controllers/Graph`
+- Updated eslint configuration for eslint v9
 
 ## [0.6.0] - 2024-06-24
 
