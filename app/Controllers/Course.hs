@@ -3,7 +3,8 @@ module Controllers.Course
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
-import qualified Data.Text as T (Text, unlines)
+import Data.List (nub, sort)
+import qualified Data.Text as T (Text, unlines, unpack)
 import qualified Database.CourseQueries as CourseHelpers (getDeptCourses)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
