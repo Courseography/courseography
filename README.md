@@ -105,7 +105,7 @@ Ching Chang,
 Christina Chen,
 Eugene Cheung,
 Mimis Chlympatsos,
-Matthew Dahlgren
+Matthew Dahlgren,
 Kael Deverell,
 Spencer Elliott,
 Lana El Sanyoura,

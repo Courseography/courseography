@@ -41,8 +41,7 @@
 - Improved general testing infrastructure
 - Added test cases for the index function in `Controllers/Course`
 - Added test cases for the depts function in `Controllers/Course`
-- Added test cases for the courseInfo function in `Contollers/Course`
-- Added a helper function for testing  the courseInfo function in `Controllers/Course` in `backend-test/TestHelpers.hs` to simulate a query for courseInfo
+- Added test cases for the courseInfo function in `Controllers/Course`
 - Refactored the class components in `/grid` folder to function components
 - Update stylelint integration with development environment and fix existing stylelint violations
 - Use `magick` command instead of `convert` when serving graph images

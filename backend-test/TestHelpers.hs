@@ -65,7 +65,7 @@ mockRequestWithQuery courseName = do
         , rqPeer            = ("127.0.0.1", 0)
         }
 
--- | A mock request for running ServerPartWithQuery, specifically for retrieveCourse
+-- | A mock request for running ServerPartWithCourseInfoQuery, specifically for courseInfo
 mockRequestWithCourseInfoQuery :: String -> IO Request
 mockRequestWithCourseInfoQuery dept = do
     inputsBody <- newMVar []
