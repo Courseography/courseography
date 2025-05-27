@@ -1,10 +1,12 @@
 module Models.Course
-    (returnCourse) where
+    (buildCourse,
+    buildMeetTimes,
+    returnCourse) where
 
 import Config (runDb)
-import qualified Data.Text as T (Text, append, take, toUpper)
-import Database.CourseQueries (buildCourse, buildMeetTimes)
-import Database.Persist.Sqlite (Entity, SqlPersistM, entityVal, selectFirst, selectList, (<-.))
+import qualified Data.Text as T (Text, append, filter, take, toUpper)
+import Database.Persist.Sqlite (Entity, SqlPersistM, entityKey, entityVal, get, selectFirst,
+                                selectList, (<-.), (==.))
 import Database.Tables as Tables
 
 -- | Queries the database for all matching lectures, tutorials,
@@ -27,3 +29,42 @@ returnCourse lowerStr = runDb $ do
         meetings <- meetingQuery fullCodes
         Just <$> buildCourse meetings
                                 (entityVal course)
+
+-- | Queries the database for the breadth description
+getDescriptionB :: Maybe (Key Breadth) -> SqlPersistM (Maybe T.Text)
+getDescriptionB Nothing = return Nothing
+getDescriptionB (Just key) = do
+    maybeBreadth <- get key
+    return $ fmap breadthDescription maybeBreadth
+
+-- | Queries the database for the distribution description
+getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe T.Text)
+getDescriptionD Nothing = return Nothing
+getDescriptionD (Just key) = do
+    maybeDistribution <- get key
+    return $ fmap distributionDescription maybeDistribution
+
+-- | Builds a Course structure from a tuple from the Courses table.
+-- Some fields still need to be added in.
+buildCourse :: [MeetTime'] -> Courses -> SqlPersistM Course
+buildCourse allMeetings course = do
+    cBreadth <- getDescriptionB (coursesBreadth course)
+    cDistribution <- getDescriptionD (coursesDistribution course)
+    return $ Course cBreadth
+           -- TODO: Remove the filter and allow double-quotes
+           (fmap (T.filter (/='\"')) (coursesDescription course))
+           (fmap (T.filter (/='\"')) (coursesTitle course))
+           (coursesPrereqString course)
+           (Just allMeetings)
+           (coursesCode course)
+           (coursesExclusions course)
+           cDistribution
+           (coursesCoreqs course)
+           (coursesVideoUrls course)
+
+-- | Queries the database for all times corresponding to a given meeting.
+buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime'
+buildMeetTimes meet = do
+    allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
+    parsedTime <- mapM (buildTime . entityVal) allTimes
+    return $ Tables.MeetTime' (entityVal meet) parsedTime

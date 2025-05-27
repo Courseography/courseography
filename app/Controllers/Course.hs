@@ -17,8 +17,8 @@ import Util.Happstack (createJSONResponse)
 retrieveCourse :: ServerPart Response
 retrieveCourse = do
     name <- lookText' "name"
-    courseJSON <- liftIO $ returnCourse name
-    return $ createJSONResponse courseJSON
+    courses <- liftIO $ returnCourse name
+    return $ createJSONResponse courses
 
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response
