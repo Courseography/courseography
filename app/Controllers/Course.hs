@@ -4,11 +4,12 @@ module Controllers.Course
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T (Text, unlines)
-import qualified Database.CourseQueries as CourseHelpers (getDeptCourses, queryCourse)
+import qualified Database.CourseQueries as CourseHelpers (getDeptCourses)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
 import Database.Tables as Tables (Courses, coursesCode)
 import Happstack.Server (Response, ServerPart, lookText', toResponse)
+import Models.Course (returnCourse)
 import Util.Happstack (createJSONResponse)
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
@@ -16,8 +17,8 @@ import Util.Happstack (createJSONResponse)
 retrieveCourse :: ServerPart Response
 retrieveCourse = do
     name <- lookText' "name"
-    courseJSON <- liftIO $ CourseHelpers.queryCourse name
-    return $ createJSONResponse courseJSON
+    courses <- liftIO $ returnCourse name
+    return $ createJSONResponse courses
 
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response
