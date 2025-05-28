@@ -41,8 +41,8 @@
 - Improved general testing infrastructure
 - Added test cases for the index function in `Controllers/Course`
 - Added test cases for the depts function in `Controllers/Course`
-- Removed unused components `Search` and `Post`, as well as backend routes/functions used exclusively by these components
 - Added test cases for the courseInfo function in `Controllers/Course`
+- Removed unused components `Search` and `Post`, backend routes/functions used exclusively by these components, and references to the components in the webpack files
 - Refactored the class components in `/grid` folder to function components
 - Update stylelint integration with development environment and fix existing stylelint violations
 - Use `magick` command instead of `convert` when serving graph images
@@ -68,6 +68,7 @@
 - Fixed dependency caching in CircleCI configuration
 - Added dependency groups to Dependabot configuration
 - Added tests for the index function in `Controllers/Graph`
+- Updated eslint configuration for eslint v9
 
 ## [0.6.0] - 2024-06-24
 

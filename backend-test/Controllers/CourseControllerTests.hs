@@ -122,12 +122,6 @@ runIndexTest label courses expected =
 runIndexTests :: [Test]
 runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses expected) indexTestCases
 
--- | Helper function to insert full (predefined) courses into the database
-insertFullCourses :: [Courses] -> SqlPersistM ()
-insertFullCourses = mapM_ insertFullCourse
-    where
-        insertFullCourse = insert_ 
-
 -- | List of test cases as (case, database state, input [dept], expected JSON output) for the courseInfo function
 courseInfoTestCases :: [(String, [Courses], T.Text, String)]
 courseInfoTestCases = 
@@ -147,7 +141,7 @@ courseInfoTestCases =
     , [csc108, sta237, sta238]
     , "MAT"
     , "[]")
-    , ("Empty Department Called In a Non - Empty Database -- should return the entire database"
+    , ("Empty department called In a non-empty database -- should return the entire database"
     , [csc108, sta237, sta238]
     , ""
     , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":null,\"description\":\"Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required.\",\"distribution\":null,\"exclusions\":\"CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3\",\"name\":\"CSC108H1\",\"prereqString\":null,\"title\":\"Introduction to Computer Programming\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.\",\"distribution\":null,\"exclusions\":\"STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5\",\"name\":\"STA237H1\",\"prereqString\":\"(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)\",\"title\":\"Probability, Statistics and Data Analysis I\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"[https://example.com/video1\",\"https://example.com/video2]\"]}]")
@@ -175,7 +169,7 @@ courseInfoTestCases =
             , coursesDistribution = Nothing
             , coursesPrereqString = Just "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"
             , coursesCoreqs = Just "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."
-            , coursesVideoUrls = [T.pack "[https://example.com/video1",T.pack "https://example.com/video2]"]
+            , coursesVideoUrls = [T.pack "[https://example.com/video1", T.pack "https://example.com/video2]"]
             }
         csc108 = Courses
             { coursesCode = "CSC108H1"
@@ -194,11 +188,9 @@ courseInfoTestCases =
 runCourseInfoTest :: String -> [Courses] -> T.Text -> String -> Test
 runCourseInfoTest label state dept expected =
     TestLabel label $ TestCase $ do
-
         runDb $ do
             clearDatabase
-            insertFullCourses state
-        
+            mapM_ insert_ state
         response <- runServerPartWithCourseInfoQuery Controllers.Course.courseInfo (T.unpack dept)
         let actual = BL.unpack $ rsBody response
         assertEqual ("Unexpected response body for " ++ label) expected actual
