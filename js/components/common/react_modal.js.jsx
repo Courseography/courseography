@@ -297,22 +297,50 @@ class Description extends React.Component {
       )
     }
 
+    // define boolean constants to determine whether to conditionally
+    // render fields within the course info modal
+    const breadthNotEmpty = this.props.course.breadth?.trim() !== ""
+    const coreqsNotEmpty = this.props.course.coreqs?.length > 0
+    const descriptionNotEmpty = this.props.course.description?.length > 0
+    const distributionNotEmpty = this.props.course.distribution?.length > 0
+    const exclusionsNotEmpty = this.props.course.exclusions?.length > 0
+    const prereqStringNotEmpty = this.props.course.prereqString?.length > 0
+
     //We want to use the Timetable component, but that component needs to be independent before using it here
     return (
       <div>
-        <p>{this.props.course.description}</p>
-        <p>
-          <strong>Prerequisite: </strong>
-          {this.props.course.prereqString}
-        </p>
-        <p>
-          <strong>Distribution Requirement Status: </strong>
-          {this.props.course.distribution}
-        </p>
-        <p>
-          <strong>Breadth Requirement: </strong>
-          {this.props.course.breadth}
-        </p>
+        {/* Render individual fields iff they are non-empty */}
+        {descriptionNotEmpty && <p>{this.props.course.description}</p>}
+        {prereqStringNotEmpty && (
+          <p>
+            <strong>Prerequisite: </strong>
+            {this.props.course.prereqString}
+          </p>
+        )}
+        {coreqsNotEmpty && (
+          <p>
+            <strong>Corequisite: </strong>
+            {this.props.course.coreqs}
+          </p>
+        )}
+        {exclusionsNotEmpty && (
+          <p>
+            <strong>Exclusion: </strong>
+            {this.props.course.exclusions}
+          </p>
+        )}
+        {distributionNotEmpty && (
+          <p>
+            <strong>Distribution Requirement Status: </strong>
+            {this.props.course.distribution}
+          </p>
+        )}
+        {breadthNotEmpty && (
+          <p>
+            <strong>Breadth Requirement: </strong>
+            {this.props.course.breadth}
+          </p>
+        )}
         <p>
           <strong>Timetable: </strong>
         </p>
