@@ -103,8 +103,10 @@ performParseFromMemory graphName graphSvg isDynamic = do
 -- and return them as a tuple.
 parseSizeFromSvg :: T.Text -> (Double, Double)
 parseSizeFromSvg graphSvg =
-    let tags = TS.parseTags graphSvg
-        svgRoot = head $ filter (TS.isTagOpenName "svg") tags
+    let tag = filter (TS.isTagOpenName "svg") $ TS.parseTags graphSvg
+        svgRoot = case tag of
+            [] -> TS.TagText T.empty
+            (tagHead:_) -> tagHead
     in (parseDouble "width" svgRoot, parseDouble "height" svgRoot)
     where parseDouble = parseAttr double
 
@@ -156,7 +158,10 @@ parseGraph key tags =
 -- helper function.
 parseText :: Matrix -> GraphId -> [Tag T.Text] -> [Text]
 parseText globalTrans key tags =
-    let trans = getTransform $ head tags
+    let tag = case tags of
+            [] -> TS.TagText T.empty
+            (tagHead:_) -> tagHead
+        trans = getTransform tag
         textTags = TS.partitions (TS.isTagOpenName "text") tags
         texts = concatMap (parseTextHelper key [] trans globalTrans) textTags
     in
