@@ -2897,32 +2897,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-charts-types@npm:11.2.1":
-  version: 11.2.1
-  resolution: "ag-charts-types@npm:11.2.1"
-  checksum: 47e73aca1e14d7daeee6463299ba3279b84fd9641e4cc8a33fa298671c1e4776f25d52de40371b6f622fef9805996bfc2506fd243ce433352f0447eecf8d6d9f
+"ag-charts-types@npm:11.3.1":
+  version: 11.3.1
+  resolution: "ag-charts-types@npm:11.3.1"
+  checksum: 31548fdf31b2838cc4dc41cff0fbd23029cfa31e523bff017eeceee7a47baeeb031d2219a1cc30b5c8d04352acf2d29c021d16228fc38ea9b4a56d7afb159e31
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:33.2.1, ag-grid-community@npm:^33.2.1":
-  version: 33.2.1
-  resolution: "ag-grid-community@npm:33.2.1"
+"ag-grid-community@npm:33.3.1, ag-grid-community@npm:^33.3.1":
+  version: 33.3.1
+  resolution: "ag-grid-community@npm:33.3.1"
   dependencies:
-    ag-charts-types: 11.2.1
-  checksum: 6e20f919ff3aa6093c77a42e1b833ca61f3b4b5ee93f5ef190c64c9564429205530ce7f2b965127082f87dae12582b73f95b33cf4c045fc46900f644d6ef6e8a
+    ag-charts-types: 11.3.1
+  checksum: 2d509ba41db88eac7d154c7630db913306916a8ea17626b0123f449fad7871ed4ab456ccbc08ddd61d89b53e69d8ff251d4eb5fff12fd2003e27192dcd0d214c
   languageName: node
   linkType: hard
 
-"ag-grid-react@npm:^33.2.1":
-  version: 33.2.1
-  resolution: "ag-grid-react@npm:33.2.1"
+"ag-grid-react@npm:^33.3.1":
+  version: 33.3.1
+  resolution: "ag-grid-react@npm:33.3.1"
   dependencies:
-    ag-grid-community: 33.2.1
+    ag-grid-community: 33.3.1
     prop-types: ^15.8.1
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: ea3830c76247d9e9a3defeb556c557bb727a732431d797c4cffaf710096969bb73591a300f32089292fedf1cf6df5c75d5b1feee5570030ed5c1967cbf552f68
+  checksum: 58779f23a8d148447786a8878ca421b7bd942547ad2a81adc4dfaddae3d1ef97278be534b4cbd35523f5292a95920320964a9dce4570887fc6e02f25c048a7c6
   languageName: node
   linkType: hard
 
@@ -4199,8 +4199,8 @@ __metadata:
     "@testing-library/dom": ^10.4.0
     "@testing-library/react": ^16.0.1
     "@testing-library/user-event": ^14.6.1
-    ag-grid-community: ^33.2.1
-    ag-grid-react: ^33.2.1
+    ag-grid-community: ^33.3.1
+    ag-grid-react: ^33.3.1
     babel-jest: ^29.5.0
     babel-loader: ^10.0.0
     bootstrap: ^5.3.3
