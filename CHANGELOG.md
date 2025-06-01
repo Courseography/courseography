@@ -41,6 +41,7 @@
 - Improved general testing infrastructure
 - Added test cases for the index function in `Controllers/Course`
 - Added test cases for the depts function in `Controllers/Course`
+- Added test cases for the courseInfo function in `Controllers/Course`
 - Removed unused components `Search` and `Post`, backend routes/functions used exclusively by these components, and references to the components in the webpack files
 - Refactored the class components in `/grid` folder to function components
 - Update stylelint integration with development environment and fix existing stylelint violations
