@@ -299,7 +299,7 @@ class Description extends React.Component {
 
     // define boolean constants to determine whether to conditionally
     // render fields within the course info modal
-    const breadthNotEmpty = this.props.course.breadth?.trim() !== ""
+    const breadthNotEmpty = this.props.course.breadth?.length > 0
     const coreqsNotEmpty = this.props.course.coreqs?.length > 0
     const descriptionNotEmpty = this.props.course.description?.length > 0
     const distributionNotEmpty = this.props.course.distribution?.length > 0
