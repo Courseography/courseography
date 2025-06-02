@@ -27,7 +27,7 @@ describe("Displays course information fields iff they are non-empty.", () => {
     await screen.findByText("The Physical and Mathematical Universes (5)") // check that breadth shows
   })
 
-  it("displays desc/prereq/coreq/excl/dist/breadth information if available", async () => {
+  it("do not display desc/prereq/coreq/excl/dist/breadth information if unavailable", async () => {
     const courseInfo = {
       course: {
         name: "ABC102H1",
