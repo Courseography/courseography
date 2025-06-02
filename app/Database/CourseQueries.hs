@@ -11,14 +11,12 @@ and serve the information back to the client.
 module Database.CourseQueries
     (returnPost,
      reqsForPost,
-     returnCourse,
      prereqsForCourse,
      returnMeeting,
      getGraph,
      getMeetingTime,
      buildTime,
-     queryCourse,
-     getDeptCourses
+     getDeptCourses,
      ) where
 
 import Config (runDb)
@@ -27,42 +25,14 @@ import Data.Aeson (Value, object, toJSON)
 import Data.Char (isAlpha, isAlphaNum, isDigit, isPunctuation)
 import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
-import qualified Data.Text as T (Text, append, filter, isPrefixOf, snoc, tail, take, toUpper,
-                                 unpack)
+import qualified Data.Text as T (Text, append, isPrefixOf, snoc, tail, toUpper, unpack)
 import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
 import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64, PersistText),
-                                SqlPersistM, entityKey, entityVal, get, keyToValues, rawSql,
-                                selectFirst, selectList, (<-.), (==.))
+                                SqlPersistM, entityKey, entityVal, keyToValues, rawSql, selectFirst,
+                                selectList, (<-.), (==.))
 import Database.Tables as Tables
+import Models.Course (buildCourse, buildMeetTimes)
 import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
-
--- | Queries the database for all matching lectures, tutorials,
-meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
-meetingQuery meetingCodes = do
-    allMeetings <- selectList [MeetingCode <-. map (T.take 6) meetingCodes] []
-    mapM buildMeetTimes allMeetings
-
--- | Queries the database for all information about @course@,
--- constructs and returns a Course value.
-returnCourse :: T.Text -> IO (Maybe Course)
-returnCourse lowerStr = runDb $ do
-    let courseStr = T.toUpper lowerStr
-    -- TODO: require the client to pass the full course code
-    let fullCodes = [courseStr, T.append courseStr "H1", T.append courseStr "Y1"]
-    sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode <-. fullCodes] []
-    case sqlCourse of
-      Nothing -> return Nothing
-      Just course -> do
-        meetings <- meetingQuery fullCodes
-        Just <$> buildCourse meetings
-                                (entityVal course)
-
--- | Queries the database for all information about @course@, and returns a JSON
--- object representing the course.
-queryCourse :: T.Text -> IO Value
-queryCourse str = do
-    courseJSON <- returnCourse str
-    return $ toJSON courseJSON
 
 -- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)
@@ -99,45 +69,6 @@ returnMeeting lowerStr sect session = do
                                   MeetingSession ==. session]
                                  []
     return $ head entityMeetings
-
--- | Builds a Course structure from a tuple from the Courses table.
--- Some fields still need to be added in.
-buildCourse :: [MeetTime'] -> Courses -> SqlPersistM Course
-buildCourse allMeetings course = do
-    cBreadth <- getDescriptionB (coursesBreadth course)
-    cDistribution <- getDescriptionD (coursesDistribution course)
-    return $ Course cBreadth
-           -- TODO: Remove the filter and allow double-quotes
-           (fmap (T.filter (/='\"')) (coursesDescription course))
-           (fmap (T.filter (/='\"')) (coursesTitle course))
-           (coursesPrereqString course)
-           (Just allMeetings)
-           (coursesCode course)
-           (coursesExclusions course)
-           cDistribution
-           (coursesCoreqs course)
-           (coursesVideoUrls course)
-
--- | Queries the database for the breadth description
-getDescriptionB :: Maybe (Key Breadth) -> SqlPersistM (Maybe T.Text)
-getDescriptionB Nothing = return Nothing
-getDescriptionB (Just key) = do
-    maybeBreadth <- get key
-    return $ fmap breadthDescription maybeBreadth
-
--- | Queries the database for the distribution description
-getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe T.Text)
-getDescriptionD Nothing = return Nothing
-getDescriptionD (Just key) = do
-    maybeDistribution <- get key
-    return $ fmap distributionDescription maybeDistribution
-
--- | Queries the database for all times corresponding to a given meeting.
-buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime'
-buildMeetTimes meet = do
-    allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
-    parsedTime <- mapM (buildTime . entityVal) allTimes
-    return $ Tables.MeetTime' (entityVal meet) parsedTime
 
 -- ** Other queries
 
