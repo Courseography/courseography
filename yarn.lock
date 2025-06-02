@@ -4336,7 +4336,7 @@ __metadata:
     react-leaflet: ^4.2.1
     react-modal: ^3.16.1
     react-tooltip: ^5.28.0
-    sass: ^1.81.0
+    sass: ^1.89.1
     sass-loader: ^16.0.5
     style-loader: ^4.0.0
     stylelint: ^16.19.1
@@ -10041,9 +10041,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.81.0":
-  version: 1.81.0
-  resolution: "sass@npm:1.81.0"
+"sass@npm:^1.89.1":
+  version: 1.89.1
+  resolution: "sass@npm:1.89.1"
   dependencies:
     "@parcel/watcher": ^2.4.1
     chokidar: ^4.0.0
@@ -10054,7 +10054,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 93db5b342c3b0449af2b08123ed4c0793643bd3a30f78e4e0686a1aa991ad640e0d9bc8da09aa5d7ff313bbd317b3be9c827cca60fb33b07d9f4b14b001eccfe
+  checksum: 06d31bffc5491e621011f0c68de7be1e3f26dedeb478498b826eae43d66eb714c1a5619fabc95a8b7cf5955abad82484d07b3c94d06386a96b562ed5d52090e9
   languageName: node
   linkType: hard
 
