@@ -10,7 +10,7 @@ import Data.List (sort)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.Encoding (decodeUtf8)
-import Database.CourseQueries (getGraph)
+import Models.Graph (getGraph)
 import DynamicGraphs.GraphGenerator (coursesToPrereqGraph, coursesToPrereqGraphExcluding,
                                      graphProfileHash)
 import DynamicGraphs.GraphOptions (CourseGraphOptions (..), GraphOptions (..))

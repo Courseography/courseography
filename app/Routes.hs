@@ -4,8 +4,8 @@ module Routes
 import Control.Monad (MonadPlus (mplus), msum)
 import Controllers.Course as CoursesController (courseInfo, index, retrieveCourse)
 import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, generateResponse)
-import Controllers.Graph as GraphsController (getGraphJSON, graphImageResponse, graphResponse,
-                                              index)
+import Controllers.Graph as GraphsController ( graphImageResponse, graphResponse, index)
+import Models.Graph as GraphsModel(getGraphJSON)
 import Controllers.Timetable as TimetableController
 import Database.CourseInsertion (saveGraphJSON)
 import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
