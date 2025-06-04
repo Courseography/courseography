@@ -7,10 +7,10 @@ import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, g
 import Controllers.Graph as GraphsController (getGraphJSON, graphImageResponse, graphResponse,
                                               index)
 import Controllers.Timetable as TimetableController
-import Database.CourseInsertion (saveGraphJSON)
 import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
                          ToMessage (toResponse), dir, noTrailingSlash, nullDir, seeOther,
                          serveDirectory)
+import Models.Graph (saveGraphJSON)
 import Response (aboutResponse, drawResponse, loadingResponse, notFoundResponse)
 
 routeResponses :: String -> ServerPartT IO Response
