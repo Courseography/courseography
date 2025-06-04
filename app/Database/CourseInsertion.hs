@@ -8,36 +8,14 @@ into the database. These functions are used as helpers for the WebParsing module
 -}
 
 module Database.CourseInsertion
-    (insertCourse,
-     saveGraphJSON) where
+    (insertCourse) where
 
-import Config (runDb)
-import Control.Monad.IO.Class (liftIO)
-import qualified Data.Aeson as Aeson
 import qualified Data.Text as T
 import Database.Persist.Class (selectKeysList)
-import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, selectFirst, (==.))
-import Database.Tables hiding (breadth, distribution, paths, shapes, texts)
-import Happstack.Server (Response, ServerPart, lookBS, lookText', toResponse)
+import Database.Persist.Sqlite (SqlPersistM, insert_, selectFirst, (==.))
+import Database.Tables hiding (breadth, distribution)
 
--- | Inserts SVG graph data into Texts, Shapes, and Paths tables
-saveGraphJSON :: ServerPart Response
-saveGraphJSON = do
-    jsonStr <- lookBS "jsonData"
-    nameStr <- lookText' "nameData"
-    let jsonObj = Aeson.decode jsonStr :: Maybe SvgJSON
-    case jsonObj of
-        Nothing -> return $ toResponse ("Error" :: String)
-        Just (SvgJSON texts shapes paths) -> do
-            _ <- liftIO $ runDb $ insertGraph nameStr texts shapes paths
-            return $ toResponse ("Success" :: String)
-    where
-        insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
-        insertGraph nameStr_ texts shapes paths = do
-            gId <- insert $ Graph nameStr_ 256 256 False
-            insertMany_ $ map (\text -> text {textGraph = gId}) texts
-            insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
-            insertMany_ $ map (\path -> path {pathGraph = gId}) paths
+-- Commented out function from before refactoring process to MVC
 
 --contains' :: PersistEntity m => T.Text -> SqlPersistM m
 --contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")
