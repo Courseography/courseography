@@ -20,18 +20,13 @@ module Database.CourseQueries
 
 import Config (runDb)
 import Control.Monad.IO.Class (MonadIO, liftIO)
-import Data.Aeson (Value, object, toJSON)
 import Data.Char (isAlpha, isAlphaNum, isDigit, isPunctuation)
-import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, isPrefixOf, snoc, tail, toUpper, unpack)
-import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
-import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64, PersistText),
-                                SqlPersistM, entityKey, entityVal, rawSql, selectFirst,
-                                selectList, (<-.), (==.))
+import Database.Persist.Sqlite (Entity, PersistValue (PersistText), SqlPersistM, entityKey,
+                                entityVal, rawSql, selectFirst, selectList, (<-.), (==.))
 import Database.Tables as Tables
 import Models.Course (buildCourse, buildMeetTimes)
-import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
 
 -- | Queries the database for information about the post then returns the post value
 returnPost :: T.Text -> IO (Maybe Post)

@@ -4,13 +4,13 @@ module Routes
 import Control.Monad (MonadPlus (mplus), msum)
 import Controllers.Course as CoursesController (courseInfo, index, retrieveCourse)
 import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, generateResponse)
-import Controllers.Graph as GraphsController ( graphImageResponse, graphResponse, index)
-import Models.Graph as GraphsModel(getGraphJSON)
+import Controllers.Graph as GraphsController (graphImageResponse, graphResponse, index)
 import Controllers.Timetable as TimetableController
 import Database.CourseInsertion (saveGraphJSON)
 import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
                          ToMessage (toResponse), dir, noTrailingSlash, nullDir, seeOther,
                          serveDirectory)
+import Models.Graph as GraphsModel (getGraphJSON)
 import Response (aboutResponse, drawResponse, loadingResponse, notFoundResponse)
 
 routeResponses :: String -> ServerPartT IO Response
@@ -32,7 +32,7 @@ strictRoutes = [
     ("about", aboutResponse),
     ("graphs", GraphsController.index),
     ("generate", generateResponse),
-    ("get-json-data", getGraphJSON),
+    ("get-json-data", GraphsModel.getGraphJSON),
     ("course", CoursesController.retrieveCourse),
     ("courses", CoursesController.index),
     ("course-info", CoursesController.courseInfo),
