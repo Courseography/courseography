@@ -10,7 +10,7 @@ import qualified Text.Blaze.Html5.Attributes as A
 
 import Config (runDb)
 import Database.Persist.Sqlite (Entity, SelectOpt (Asc), SqlPersistM, selectList, (==.))
-import Database.Tables as Tables (EntityField (GraphDynamic, GraphTitle), Graph, Text)
+import Database.Tables as Tables (EntityField (GraphDynamic, GraphTitle), Graph)
 import Export.GetImages (getActiveGraphImage)
 import Response.Image (returnImageData)
 import Util.Happstack (createJSONResponse)
