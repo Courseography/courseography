@@ -69,6 +69,7 @@
 - Added dependency groups to Dependabot configuration
 - Added tests for the index function in `Controllers/Graph`
 - Added `Models` folder and a new `Course.hs` module within it
+- Added a new `Graph.hs` module within `Models`, refactoring model related Graph methods into it
 - Updated eslint configuration for eslint v9
 
 ## [0.6.0] - 2024-06-24
