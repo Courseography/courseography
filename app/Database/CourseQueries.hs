@@ -21,7 +21,6 @@ module Database.CourseQueries
 import Config (runDb)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Char (isAlpha, isAlphaNum, isDigit, isPunctuation)
-import Data.List (partition)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, isPrefixOf, snoc, tail, toUpper, unpack)
 import Database.Persist.Sqlite (Entity, PersistValue (PersistText), SqlPersistM, entityKey,
