@@ -32,7 +32,7 @@ strictRoutes = [
     ("about", aboutResponse),
     ("graphs", GraphsController.index),
     ("generate", generateResponse),
-    ("get-json-data", GraphsModel.getGraphJSON),
+    ("get-json-data", getGraphJSON),
     ("course", CoursesController.retrieveCourse),
     ("courses", CoursesController.index),
     ("course-info", CoursesController.courseInfo),
