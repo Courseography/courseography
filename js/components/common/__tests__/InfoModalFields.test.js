@@ -7,18 +7,16 @@ describe("Displays course information fields iff they are non-empty.", () => {
 
   it("displays desc/prereq/coreq/excl/dist/breadth information if available", async () => {
     const courseInfo = {
-      course: {
-        name: "ABC102H1",
-        description: "test description",
-        prereqString: ["ABC101H1"],
-        coreqs: ["DEF101H1"],
-        exclusions: ["GHI101H1"],
-        distribution: "Sciences",
-        breadth: "The Physical and Mathematical Universes (5)",
-      },
+      name: "ABC102H1",
+      description: "test description",
+      prereqString: ["ABC101H1"],
+      coreqs: ["DEF101H1"],
+      exclusions: ["GHI101H1"],
+      distribution: "Sciences",
+      breadth: "The Physical and Mathematical Universes (5)",
     }
 
-    render(<Description course={courseInfo.course} sessions={{}} />)
+    render(<Description course={courseInfo} sessions={{}} />)
     await screen.findByText("test description") // check that description shows
     await screen.findByText("ABC101H1") // check that prereqs show
     await screen.findByText("DEF101H1") // check that coreqs show
@@ -29,18 +27,16 @@ describe("Displays course information fields iff they are non-empty.", () => {
 
   it("do not display desc/prereq/coreq/excl/dist/breadth information if unavailable", async () => {
     const courseInfo = {
-      course: {
-        name: "ABC102H1",
-        description: "",
-        prereqString: [],
-        coreqs: [],
-        exclusions: [],
-        distribution: "",
-        breadth: "",
-      },
+      name: "ABC102H1",
+      description: "",
+      prereqString: [],
+      coreqs: [],
+      exclusions: [],
+      distribution: "",
+      breadth: "",
     }
 
-    render(<Description course={courseInfo.course} sessions={{}} />)
+    render(<Description course={courseInfo} sessions={{}} />)
     expect(screen.queryByText("Prerequisite:")).toBeNull() // check prereq label does not render
     expect(screen.queryByText("Corequisite:")).toBeNull() // check coreq label does not render
     expect(screen.queryByText("Exclusion:")).toBeNull() // check exclusion label does not render
