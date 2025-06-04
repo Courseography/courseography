@@ -3,16 +3,15 @@ module Models.Graph
     saveGraphJSON) where
 
 import Config (runDb)
-import Control.Monad.IO.Class (MonadIO, liftIO)
+import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (Value, decode, object, toJSON)
 import Data.List (partition)
-import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text)
 import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
 import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64), SqlPersistM,
                                 entityKey, entityVal, insert, insertMany_, keyToValues, selectFirst,
                                 selectList, (<-.), (==.))
-import Database.Tables as Tables
+import Database.Tables hiding (paths, shapes, texts)
 import Happstack.Server (Response, ServerPart, lookBS, lookText', toResponse)
 import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
 
