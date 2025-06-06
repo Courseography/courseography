@@ -53,7 +53,9 @@ getBuildingsFromCSV buildingCSVFile = do
     case buildingCSVData of
         Left _ -> error "csv parse error"
         Right buildingData -> do
-            return $ map (\b -> Building (T.pack (head b))
+            return $ map (\b -> Building (T.pack (case b of
+                                                    [] -> []
+                                                    (x:_) -> x))
                                         (T.pack (b !! 1))
                                         (T.pack (b !! 2))
                                         (T.pack (b !! 3))
@@ -85,7 +87,12 @@ getDeptList tags =
         extractDepartments tableTags =
             -- Each aTag consists of a start tag, text, and end tag
             let aTags = TS.partitions (tagOpenAttrNameLit "a" "href" (const True)) tableTags
-                depts = map (\t -> (TS.fromAttrib "href" $ head t, T.strip $ TS.innerText t)) aTags
+                depts = map (\t -> (TS.fromAttrib "href" (case t of
+                                                            [] -> TS.TagOpen T.empty []
+                                                            (x:_) -> x
+                                                            ),
+                                    T.strip $ TS.innerText t)) aTags
+
             in
                 filter (\(a, b) -> not (T.null a) && not (T.null b)) depts
 

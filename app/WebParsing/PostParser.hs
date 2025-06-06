@@ -29,7 +29,10 @@ addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
 addPostToDatabase programElements = do
     let fullPostName = maybe "" (strip . fromTagText) $ find isTagText programElements
         postDescHtml = partitions isDescriptionSection programElements
-        descriptionText = if null postReqHtml then T.empty else renderTags $ head postDescHtml
+        descriptionText = if null postReqHtml then T.empty else renderTags
+            (case postDescHtml of
+                [] -> [TagOpen "" [],TagText T.empty,TagClose ""]   -- not sure about this
+                (x:_) -> x)
         postReqHtml = sections isRequirementSection programElements
         requirementLines = if null postReqHtml then [] else pruneHtml $ last postReqHtml
         requirements = concatMap parseRequirement $ reqHtmlToLines requirementLines

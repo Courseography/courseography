@@ -28,8 +28,11 @@ import Database.DataType
 import Database.Persist.Sqlite
 import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
 import Svg.Database (deleteGraph, insertElements, insertGraph)
+import Text.Blaze (textTag)
+import Text.Blaze.Svg11.Attributes (xmlSpace, y)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Text.HTML.TagSoup (Tag)
+import qualified Text.HTML.TagSoup.Match as TS
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
@@ -135,7 +138,10 @@ parseGraph ::  GraphId                 -- ^ The unique identifier of the graph.
            -> ([Path],[Shape],[Text])
 parseGraph key tags =
     let gTags = TS.partitions (TS.isTagOpenName "g") tags
-        globalTransform = getTransform $ head $ head gTags
+        globalTransform = getTransform (case gTags of
+                                            ((x:_):_) -> x
+                                            _ -> TS.TagText T.empty
+                                        )
         ellipses = concatMap (parseEllipse globalTransform key) gTags
         paths = concatMap (parsePath globalTransform key) gTags
         rects = concatMap (parseRect globalTransform key) gTags
@@ -158,10 +164,9 @@ parseGraph key tags =
 -- helper function.
 parseText :: Matrix -> GraphId -> [Tag T.Text] -> [Text]
 parseText globalTrans key tags =
-    let tag = case tags of
-            [] -> TS.TagText T.empty
-            (tagHead:_) -> tagHead
-        trans = getTransform tag
+    let trans = getTransform (case tags of
+            [] -> TS.TagOpen T.empty []
+            (tag:_) -> tag)
         textTags = TS.partitions (TS.isTagOpenName "text") tags
         texts = concatMap (parseTextHelper key [] trans globalTrans) textTags
     in
@@ -175,12 +180,14 @@ parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
                 -> [Tag T.Text]
                 -> [Text]
 parseTextHelper key styles' trans globalTrans textTags =
-    if not $ any (TS.isTagOpenName "tspan") (tail textTags)
+    if not $ any (TS.isTagOpenName "tspan") (case textTags of
+                                                [] -> []
+                                                (_:xs) -> xs)
     then
         let [[a, c, e], [b, d, f], _] = completeTrans
         in [Text key
-              (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
-              (readAttr "x" $ head textTags, readAttr "y" $ head textTags)
+              (fromAttrib "id" textTagsHead) -- TODO: Why are we setting an id?
+              (readAttr "x" textTagsHead, readAttr "y" textTagsHead)
               (TS.escapeHTML $ trim $ TS.innerText textTags)
               align
               fill
@@ -191,8 +198,11 @@ parseTextHelper key styles' trans globalTrans textTags =
         in
             concatMap (parseTextHelper key newStyle newTrans globalTrans) tspanTags
     where
-        newStyle = styles (head textTags) ++ styles'
-        currTrans = getTransform $ head textTags
+        textTagsHead = case textTags of
+              [] -> TS.TagText T.empty
+              (tagsHead:_) -> tagsHead
+        newStyle = styles textTagsHead ++ styles'
+        currTrans = getTransform textTagsHead
         newTrans = matrixMultiply trans currTrans
         completeTrans = matrixMultiply globalTrans newTrans
         alignAttr = styleVal "text-anchor" newStyle
@@ -213,11 +223,13 @@ parseRect globalTrans key tags =
     in
         map (\tag -> if TS.isTagOpenName "rect" tag then makeRect tag else makePoly tag) rectOpenTags
     where
-        gOpen = head tags
+        gOpen = case tags of
+            [] -> TS.TagOpen T.empty []
+            (tagHead:_) -> tagHead
         styles' = styles gOpen
         fill = styleVal "fill" styles'
         fill' = if T.null fill then fromAttrib "fill" gOpen else fill
-        trans = getTransform $ head tags
+        trans = getTransform gOpen
         completeTrans = matrixMultiply globalTrans trans
         makeRect rectOpenTag =
             let [[a, c, e], [b, d, f], _] = completeTrans
@@ -238,10 +250,14 @@ parseRect globalTrans key tags =
           in
             updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
-                (fromAttrib "id" $ head tags)
+                (fromAttrib "id" gOpen)
                 (points !! 1)
-                (fst (head points) - fst (points !! 1)) -- calculate width
-                (snd (points !! 2) - snd (points !! 1)) -- calculate height
+                (case points of
+                    (xw:yw:_) -> fst xw - fst yw
+                    _ -> 1.0) -- calculate width
+                (case points of
+                    (_:yh:zh:_) -> snd zh - snd yh
+                    _ -> 1.0) -- calculate height
                 fill
                 ""
                 []
@@ -257,12 +273,14 @@ parsePath :: Matrix
 parsePath globalTrans key tags =
     concatMap (parsePathHelper key trans globalTrans edgeInfo) (filter (TS.isTagOpenName "path") tags)
     where
-        trans = getTransform $ head tags
-        edgeInfo =
-            if length splitArr == 2
-                then (T.pack (head splitArr), T.pack (splitArr !! 1)) -- not super type-safe
-                else ("", "")
-            where splitArr = splitOn "|" (T.unpack (fromAttrib "id" $ head tags))
+        tagHead = case tags of
+            [] -> TS.TagOpen T.empty []
+            (tag:_) -> tag
+        trans = getTransform tagHead
+        edgeInfo = case splitArr of
+            [x, y] -> (T.pack x, T.pack y)
+            _ -> ("", "")
+            where splitArr = splitOn "|" (T.unpack (fromAttrib "id" tagHead))
 
 
 parsePathHelper :: GraphId -- ^ The Path's corresponding graph identifier.
@@ -298,10 +316,10 @@ parsePathHelper key trans globalTrans (src, dst) pathTag =
         removeDups :: Eq a => [a] -> [a]
         removeDups [] = []
         removeDups [p] = [p]
-        removeDups (x:xs) =
-            if x == head xs
-                then removeDups xs
-                else x : removeDups xs
+        removeDups (x:y:z) =
+            if x == y
+                then removeDups (y:z)
+                else x : removeDups (y:z)
 
 
 -- | Create an ellipse from an open ellipse tag.
@@ -319,7 +337,10 @@ parseEllipse globalTrans key tags =
             TS.partitions (TS.isTagOpenName "ellipse") $
             List.reverse tags
 
-        trans = getTransform $ head tags
+        tagHead = case tags of
+            [] -> TS.TagOpen T.empty []
+            (tag:_) -> tag
+        trans = getTransform tagHead
 
         getId (t, Nothing) = fromAttrib "id" t
         getId (t1, Just t2) =
@@ -396,11 +417,17 @@ double = do
     where
         wholeAndFractional = do
             whole <- digits <|> parseFractional
-            if head whole == '.' then
-                return $ '0' : whole
-            else do
-                fractional <- P.option "" parseFractional
-                return $ whole ++ fractional
+            fractional <- P.option "" parseFractional
+            return $ case whole of
+                [] -> []
+                ('.':xs) -> '0' : ('.':xs)
+                (x:xs) -> (x:xs) ++ fractional
+
+            -- if head whole == '.' then
+            --     return $ '0' : whole
+            -- else do
+            --     fractional <- P.option "" parseFractional
+            --     return $ whole ++ fractional
         parseFractional = do
             _ <- P.char '.'
             decimals <- digits
@@ -459,7 +486,9 @@ parseTransform transform =
         scale = do
             _ <- P.string "scale("
             args <- double `P.sepBy` (P.char ',' *> P.many (P.char ' ') <|> P.many1 (P.char ' '))
-            let xScale = head args
+            let xScale = case args of
+                    [] -> 1
+                    (argHead:_) -> argHead
                 yScale = if length args > 1 then args !! 1 else xScale
             return [[xScale, 0, 0],
                     [0, yScale, 0],
@@ -467,7 +496,9 @@ parseTransform transform =
         rotate = do
             _ <- P.string "rotate("
             args <- double `P.sepBy` (P.char ',' *> P.many (P.char ' ') <|> P.many1 (P.char ' '))
-            let angleDegrees = head args
+            let angleDegrees = case args of
+                    [] -> 0
+                    (argHead:_) -> argHead
                 xRot = if length args > 1 then args !! 1 else 0
                 yRot = if length args > 2 then args !! 2 else 0
             let angle = angleDegrees * pi / 180
@@ -477,7 +508,9 @@ parseTransform transform =
         translate = do
             _ <- P.string "translate("
             args <- double `P.sepBy` (P.char ',' *> P.many (P.char ' ') <|> P.many1 (P.char ' '))
-            let xPos = head args
+            let xPos = case args of
+                    [] -> 0
+                    (argHead:_) -> argHead
                 yPos = if length args > 1 then args !! 1 else 0
             return [[1, 0, xPos],
                     [0, 1, yPos],

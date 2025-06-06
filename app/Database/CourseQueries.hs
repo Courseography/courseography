@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 {-|
     Module: Database.CourseQueries
     Description: Respond to various requests involving database course
@@ -90,7 +91,7 @@ getGraph graphName = runDb $ do
 
             let
                 keyAsInt :: PersistEntity a => Entity a -> Integer
-                keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
+                keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . (\case {[] -> PersistInt64 0; (x:_) -> x}) . keyToValues . entityKey
 
                 graphtexts          = map entityVal sqlTexts
                 rects          = zipWith (buildRect graphtexts)
