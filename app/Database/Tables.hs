@@ -3,6 +3,7 @@
              QuasiQuotes, StandaloneDeriving, TemplateHaskell, TypeFamilies, TypeOperators,
              UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-name-shadowing #-}
+{-# LANGUAGE LambdaCase #-}
 
 {-|
     Module      : Database.Tables
@@ -225,7 +226,9 @@ instance FromJSON SvgJSON
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
-      (\field -> toLower (head field): tail field) .
+      (\case
+        [] -> []
+        (fieldHead:fieldTail) -> toLower fieldHead: fieldTail) .
       drop 7
   }
 

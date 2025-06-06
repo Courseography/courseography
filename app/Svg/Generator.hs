@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 {-|
 Description: Generate a new SVG file from the database graph representation.
 
@@ -46,7 +47,9 @@ buildSVG :: T.Text               -- ^ The name of the graph that is being built.
          -> IO ()
 buildSVG graphName courseMap filename styled = runDb $ do
         gIds        :: [Key Graph]    <- selectKeysList [GraphTitle ==. graphName] []
-        let gId = if null gIds then toSqlKey 1 else head gIds
+        let gId = case gIds of
+                [] -> toSqlKey 1
+                (x:_) -> x
 
         sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
@@ -75,8 +78,12 @@ buildSVG graphName courseMap filename styled = runDb $ do
             regionTexts    = filter (not .
                                      intersectsWithShape (rects ++ ellipses))
                                     texts
-            width          = graphWidth $ entityVal (head sqlGraph)
-            height         = graphHeight $ entityVal (head sqlGraph)
+            width          = case sqlGraph of
+                [] -> 1
+                (x:_) -> graphWidth $ entityVal x
+            height         = case sqlGraph of
+                [] -> 1
+                (x:_) -> graphHeight $ entityVal x
             stringSVG      = renderSvg $ makeSVGDoc courseStyleMap
                                                     rects
                                                     ellipses
@@ -89,7 +96,7 @@ buildSVG graphName courseMap filename styled = runDb $ do
         liftIO $ writeFile filename stringSVG :: SqlPersistM ()
     where
         keyAsInt :: PersistEntity a => Entity a -> Integer
-        keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
+        keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . (\case {[] -> PersistInt64 0; (x:_) -> x}) . keyToValues . entityKey
 
         convertSelectionToStyle :: T.Text -> T.Text
         convertSelectionToStyle courseStatus =

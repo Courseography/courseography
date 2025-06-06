@@ -49,7 +49,7 @@ getDistributionKey description_ = do
     -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] []
     return $ case keyListDistribution of
         [] -> Nothing
-        _ -> Just (head keyListDistribution)
+        (x:_) -> Just x
 
 getBreadthKey :: T.Text -> SqlPersistM (Maybe (Key Breadth))
 getBreadthKey description_ = do
@@ -57,7 +57,7 @@ getBreadthKey description_ = do
     -- option: selectKeysList [ BreadthDescription `contains'` description] []
     return $ case keyListBreadth of
         [] -> Nothing
-        _ -> Just (head keyListBreadth)
+        (x:_) -> Just x
 
 -- | Inserts course into the Courses table.
 insertCourse :: (Courses, T.Text, T.Text) -> SqlPersistM ()
