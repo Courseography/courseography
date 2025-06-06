@@ -31,7 +31,7 @@ addPostToDatabase programElements = do
         postDescHtml = partitions isDescriptionSection programElements
         descriptionText = if null postReqHtml then T.empty else renderTags
             (case postDescHtml of
-                [] -> [TagOpen "" [],TagText T.empty,TagClose ""]   -- not sure about this
+                [] -> [TagOpen "" [],TagText T.empty,TagClose ""]
                 (x:_) -> x)
         postReqHtml = sections isRequirementSection programElements
         requirementLines = if null postReqHtml then [] else pruneHtml $ last postReqHtml

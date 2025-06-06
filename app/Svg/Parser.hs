@@ -423,11 +423,6 @@ double = do
                 ('.':xs) -> '0' : ('.':xs)
                 (x:xs) -> (x:xs) ++ fractional
 
-            -- if head whole == '.' then
-            --     return $ '0' : whole
-            -- else do
-            --     fractional <- P.option "" parseFractional
-            --     return $ whole ++ fractional
         parseFractional = do
             _ <- P.char '.'
             decimals <- digits
