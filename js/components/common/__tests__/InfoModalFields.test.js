@@ -17,12 +17,12 @@ describe("Displays course information fields iff they are non-empty.", () => {
     }
 
     render(<Description course={courseInfo} sessions={{}} />)
-    await screen.findByText("test description") // check that description shows
-    await screen.findByText("ABC101H1") // check that prereqs show
-    await screen.findByText("DEF101H1") // check that coreqs show
-    await screen.findByText("GHI101H1") // check that exclusions show
-    await screen.findByText("Sciences") // check that distribution shows
-    await screen.findByText("The Physical and Mathematical Universes (5)") // check that breadth shows
+    await screen.findByText("test description")
+    await screen.findByText("ABC101H1")
+    await screen.findByText("DEF101H1")
+    await screen.findByText("GHI101H1")
+    await screen.findByText("Sciences")
+    await screen.findByText("The Physical and Mathematical Universes (5)")
   })
 
   it("do not display desc/prereq/coreq/excl/dist/breadth information if unavailable", async () => {
@@ -37,10 +37,10 @@ describe("Displays course information fields iff they are non-empty.", () => {
     }
 
     render(<Description course={courseInfo} sessions={{}} />)
-    expect(screen.queryByText("Prerequisite:")).toBeNull() // check prereq label does not render
-    expect(screen.queryByText("Corequisite:")).toBeNull() // check coreq label does not render
-    expect(screen.queryByText("Exclusion:")).toBeNull() // check exclusion label does not render
-    expect(screen.queryByText("Distribution Requirement Status:")).toBeNull() // check dist. label does not render
-    expect(screen.queryByText("Breadth Requirement:")).toBeNull() // check breadth label does not render
+    expect(screen.queryByText("Prerequisite:")).toBeNull()
+    expect(screen.queryByText("Corequisite:")).toBeNull()
+    expect(screen.queryByText("Exclusion:")).toBeNull()
+    expect(screen.queryByText("Distribution Requirement Status:")).toBeNull()
+    expect(screen.queryByText("Breadth Requirement:")).toBeNull()
   })
 })
