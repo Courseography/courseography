@@ -7,6 +7,8 @@
 ### ✨ New features/enhancements
 
 - Added text warning when there's no timetable information available to display
+- Updated course info modal to display field labels if and only if they are non-empty
+- Ensured corequisites and exclusions for courses are displayed in the course info modal, if available
 - Added text warnings and validations for each field in `GenerateForm`
 - Redesigned generate form UI
 - Allow option to log server request accesses to a file

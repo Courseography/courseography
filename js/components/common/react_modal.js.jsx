@@ -300,19 +300,40 @@ class Description extends React.Component {
     //We want to use the Timetable component, but that component needs to be independent before using it here
     return (
       <div>
-        <p>{this.props.course.description}</p>
-        <p>
-          <strong>Prerequisite: </strong>
-          {this.props.course.prereqString}
-        </p>
-        <p>
-          <strong>Distribution Requirement Status: </strong>
-          {this.props.course.distribution}
-        </p>
-        <p>
-          <strong>Breadth Requirement: </strong>
-          {this.props.course.breadth}
-        </p>
+        {/* Render individual fields iff they are non-empty */}
+        {this.props.course.description?.length > 0 && (
+          <p>{this.props.course.description}</p>
+        )}
+        {this.props.course.prereqString?.length > 0 && (
+          <p>
+            <strong>Prerequisite: </strong>
+            {this.props.course.prereqString}
+          </p>
+        )}
+        {this.props.course.coreqs?.length > 0 && (
+          <p>
+            <strong>Corequisite: </strong>
+            {this.props.course.coreqs}
+          </p>
+        )}
+        {this.props.course.exclusions?.length > 0 && (
+          <p>
+            <strong>Exclusion: </strong>
+            {this.props.course.exclusions}
+          </p>
+        )}
+        {this.props.course.distribution?.length > 0 && (
+          <p>
+            <strong>Distribution Requirement Status: </strong>
+            {this.props.course.distribution}
+          </p>
+        )}
+        {this.props.course.breadth?.length > 0 && (
+          <p>
+            <strong>Breadth Requirement: </strong>
+            {this.props.course.breadth}
+          </p>
+        )}
         <p>
           <strong>Timetable: </strong>
         </p>
