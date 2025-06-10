@@ -24,6 +24,7 @@ generateResponse =
         masterTemplate "Courseography - Generate"
                     []
                     (do
+                        -- TODO: replace with react navbar
                         header "generate-prerequisites"
                         generatePrerequisites
                     )

@@ -33,7 +33,9 @@ gridResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Grid"
             []
-            (do header "grid"
+            (do
+                -- TODO: replace with react navbar
+                header "grid"
                 H.div ! A.id "grid-body"! A.class_ "row main" $ ""
             )
             timetableScripts
