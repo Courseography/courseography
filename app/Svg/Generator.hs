@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
 {-|
 Description: Generate a new SVG file from the database graph representation.
 
@@ -24,6 +23,7 @@ import Database.DataType
 import Database.Persist.Sqlite
 import Database.Tables hiding (paths, texts)
 import Svg.Builder
+import Svg.Parser (safeHead)
 import Text.Blaze (toMarkup)
 import Text.Blaze.Internal (stringValue, textValue)
 import Text.Blaze.Svg.Renderer.String (renderSvg)
@@ -47,8 +47,7 @@ buildSVG :: T.Text               -- ^ The name of the graph that is being built.
          -> IO ()
 buildSVG graphName courseMap filename styled = runDb $ do
         maybeGraph  :: Maybe (Entity Graph) <- selectFirst [GraphTitle ==. graphName] []
-        let gId = fmap entityKey maybeGraph
-        case gId of
+        case fmap entityKey maybeGraph of
             Nothing -> return ()
             Just val -> do
                 sqlGraph :: Maybe (Entity Graph) <- selectFirst [GraphId ==. val] []
@@ -80,7 +79,6 @@ buildSVGHelper courseMap filename styled sqlGraph gId = runDb $ do
         sqlEllipses :: [Entity Shape] <- selectList
                                              [ShapeType_ ==. BoolNode,
                                               ShapeGraph ==. gId] []
-        -- sqlGraph    :: [Entity Graph] <- selectList [GraphId ==. gId] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
             -- TODO: Ideally, we would do these "build" steps *before*
@@ -113,7 +111,7 @@ buildSVGHelper courseMap filename styled sqlGraph gId = runDb $ do
         liftIO $ writeFile filename stringSVG :: SqlPersistM ()
     where
         keyAsInt :: PersistEntity a => Entity a -> Integer
-        keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . (\case {[] -> PersistInt64 0; (x:_) -> x}) . keyToValues . entityKey
+        keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . safeHead (PersistInt64 0) . keyToValues . entityKey
 
         convertSelectionToStyle :: T.Text -> T.Text
         convertSelectionToStyle courseStatus =

@@ -3,7 +3,6 @@
              QuasiQuotes, StandaloneDeriving, TemplateHaskell, TypeFamilies, TypeOperators,
              UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-name-shadowing #-}
-{-# LANGUAGE LambdaCase #-}
 
 {-|
     Module      : Database.Tables
