@@ -15,6 +15,7 @@ import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insertMany_)
 import Database.Tables (Building (..), Courses (..), Department (..))
 import Filesystem.Path.CurrentOS as Path
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
+import Svg.Parser (safeHead)
 import System.Directory (getCurrentDirectory)
 import qualified Text.HTML.TagSoup as TS
 import Text.HTML.TagSoup (Tag)
@@ -53,9 +54,7 @@ getBuildingsFromCSV buildingCSVFile = do
     case buildingCSVData of
         Left _ -> error "csv parse error"
         Right buildingData -> do
-            return $ map (\b -> Building (T.pack (case b of
-                                                    [] -> []
-                                                    (x:_) -> x))
+            return $ map (\b -> Building (T.pack $ safeHead [] b)
                                         (T.pack (b !! 1))
                                         (T.pack (b !! 2))
                                         (T.pack (b !! 3))
@@ -87,10 +86,7 @@ getDeptList tags =
         extractDepartments tableTags =
             -- Each aTag consists of a start tag, text, and end tag
             let aTags = TS.partitions (tagOpenAttrNameLit "a" "href" (const True)) tableTags
-                depts = map (\t -> (TS.fromAttrib "href" (case t of
-                                                            [] -> TS.TagOpen T.empty []
-                                                            (x:_) -> x
-                                                            ),
+                depts = map (\t -> (TS.fromAttrib "href" (safeHead (TS.TagOpen T.empty []) t),
                                     T.strip $ TS.innerText t)) aTags
 
             in
