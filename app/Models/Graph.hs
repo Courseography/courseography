@@ -1,10 +1,9 @@
 module Models.Graph
     (getGraph,
-    saveGraphJSON) where
+    insertGraph) where
 
 import Config (runDb)
-import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (Value, decode, object, toJSON)
+import Data.Aeson (Value, object, toJSON)
 import Data.List (partition)
 import qualified Data.Text as T (Text)
 import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
@@ -12,7 +11,6 @@ import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt6
                                 entityKey, entityVal, insert, insertMany_, keyToValues, selectFirst,
                                 selectList, (<-.), (==.))
 import Database.Tables hiding (paths, shapes, texts)
-import Happstack.Server (Response, ServerPart, lookBS, lookText', toResponse)
 import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
 
 getGraph :: T.Text -> IO (Maybe Value)
@@ -60,21 +58,9 @@ getGraph graphName = runDb $ do
 
             return (Just response)
 
--- | Inserts SVG graph data into Texts, Shapes, and Paths tables
-saveGraphJSON :: ServerPart Response
-saveGraphJSON = do
-    jsonStr <- lookBS "jsonData"
-    nameStr <- lookText' "nameData"
-    let jsonObj = decode jsonStr :: Maybe SvgJSON
-    case jsonObj of
-        Nothing -> return $ toResponse ("Error" :: String)
-        Just (SvgJSON texts shapes paths) -> do
-            _ <- liftIO $ runDb $ insertGraph nameStr texts shapes paths
-            return $ toResponse ("Success" :: String)
-    where
-        insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
-        insertGraph nameStr_ texts shapes paths = do
-            gId <- insert $ Graph nameStr_ 256 256 False
-            insertMany_ $ map (\text -> text {textGraph = gId}) texts
-            insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
-            insertMany_ $ map (\path -> path {pathGraph = gId}) paths
+insertGraph :: T.Text -> SvgJSON -> SqlPersistM ()
+insertGraph nameStr_ (SvgJSON texts shapes paths) = do
+    gId <- insert $ Graph nameStr_ 256 256 False
+    insertMany_ $ map (\text -> text {textGraph = gId}) texts
+    insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
+    insertMany_ $ map (\path -> path {pathGraph = gId}) paths
