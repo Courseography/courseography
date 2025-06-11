@@ -21,18 +21,15 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Char (isSpace)
 import Data.List as List
 import Data.List.Split (splitOn)
-import Data.Maybe (fromMaybe, listToMaybe)
+import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
 import Database.DataType
 import Database.Persist.Sqlite
 import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
 import Svg.Database (deleteGraph, insertElements, insertGraph)
-import Text.Blaze (textTag)
-import Text.Blaze.Svg11.Attributes (xmlSpace, y)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Text.HTML.TagSoup (Tag)
-import qualified Text.HTML.TagSoup.Match as TS
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
@@ -264,10 +261,6 @@ parsePath :: Matrix
 parsePath globalTrans key tags =
     concatMap (parsePathHelper key trans globalTrans edgeInfo) (filter (TS.isTagOpenName "path") tags)
     where
-        -- tagHead = case tags of
-        --     [] -> TS.TagOpen T.empty []
-        --     (tag:_) -> tag
-        -- trans = getTransform tagHead
         trans = case tags of
             [] -> [[1, 0, 0],
                     [0, 1, 0],

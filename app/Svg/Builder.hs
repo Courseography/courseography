@@ -22,7 +22,7 @@ import Data.List (find)
 import qualified Data.Text as T
 import Database.DataType
 import Database.Tables hiding (shapes, texts)
-import Svg.Parser (matrixPointMultiply)
+import Svg.Parser (matrixPointMultiply, safeHead)
 
 -- * Builder functions
 
@@ -41,9 +41,7 @@ buildPath rects ellipses entity elementId
                   pathTarget = ""}
     | otherwise =
           let coords = pathPoints entity
-              start = case coords of
-                [] -> (1.0, 1.0)
-                (x:_) -> x
+              start = safeHead (0.0, 0.0) coords
               end = last coords
               nodes = rects ++ ellipses
               sourceNode =

@@ -22,6 +22,7 @@ import Happstack.Server
 import MasterTemplate
 import Response.Image (returnImageData)
 import Scripts
+import Svg.Parser (safeHead)
 import System.Directory (removeFile)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -289,9 +290,7 @@ formatTimes fullTime =
     else hour ++ maybe "0000" formatMinutes minutes ++ "00"
     where
         hours = splitOn "." (show fullTime)
-        hour = case hours of
-            [] -> []
-            (hoursHead:_) -> hoursHead
+        hour = safeHead [] hours
         minutes = readMaybe $ hours !! 1
 
 -- | The string representaion for minutes.
