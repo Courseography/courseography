@@ -22,12 +22,12 @@ import Happstack.Server
 import MasterTemplate
 import Response.Image (returnImageData)
 import Scripts
-import Svg.Parser (safeHead)
 import System.Directory (removeFile)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Read (readMaybe)
+import Util.Helpers
 
 gridResponse :: ServerPart Response
 gridResponse =
@@ -132,12 +132,15 @@ getCoursesInfo courses = map courseInfo allCourses
         allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
-pullDatabase :: (Code, Section, Session) -> IO MeetTime'
+pullDatabase :: (Code, Section, Session) -> IO (Maybe MeetTime')
 pullDatabase (code, section, session) = runDb $ do
     meet <- returnMeeting code fullSection session
-    allTimes <- selectList [TimesMeeting ==. entityKey meet] []
-    parsedTime <- mapM (buildTime . entityVal) allTimes
-    return $ MeetTime' (entityVal meet) parsedTime
+    case meet of
+        Nothing -> return Nothing
+        Just x -> do
+            allTimes <- selectList [TimesMeeting ==. entityKey x] []
+            parsedTime <- mapM (buildTime . entityVal) allTimes
+            return $ Just (MeetTime' (entityVal x) parsedTime)
     where
     fullSection
         | T.isPrefixOf "L" section = T.append "LEC" sectCode
@@ -150,14 +153,17 @@ pullDatabase (code, section, session) = runDb $ do
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> MeetTime' -> IO [String]
+getEvents :: SystemTime -> Maybe MeetTime' -> IO [String]
 getEvents systemTime lect = do
-    courseInfo <- getCourseInfo lect  -- Get the course information
-    let startTimes = third courseInfo   -- Extract start times
-        endTimes = fourth courseInfo     -- Extract end times
-        dates = fifth courseInfo         -- Extract dates
-    events <- mapM (eventsByDate courseInfo) (zip' startTimes endTimes dates)
-    return (concat events)
+    case lect of
+        Nothing -> return []
+        Just x -> do
+            courseInfo <- getCourseInfo x  -- Get the course information
+            let startTimes = third courseInfo   -- Extract start times
+                endTimes = fourth courseInfo     -- Extract end times
+                dates = fifth courseInfo         -- Extract dates
+            events <- mapM (eventsByDate courseInfo) (zip' startTimes endTimes dates)
+            return (concat events)
     where
         eventsByDate :: (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay) -> ([String], [String], (String, String)) -> IO [String]
         eventsByDate courseInfo (start, end, dates) = do

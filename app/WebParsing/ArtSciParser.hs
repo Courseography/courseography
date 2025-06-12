@@ -15,7 +15,6 @@ import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insertMany_)
 import Database.Tables (Building (..), Courses (..), Department (..))
 import Filesystem.Path.CurrentOS as Path
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
-import Svg.Parser (safeHead)
 import System.Directory (getCurrentDirectory)
 import qualified Text.HTML.TagSoup as TS
 import Text.HTML.TagSoup (Tag)
@@ -24,6 +23,7 @@ import Text.Parsec (count, many, parse)
 import qualified Text.Parsec.Char as P
 import Text.Parsec.Text (Parser)
 import Text.ParserCombinators.Parsec (parseFromFile)
+import Util.Helpers
 import WebParsing.ParsecCombinators (text)
 import WebParsing.PostParser (addPostToDatabase)
 import WebParsing.ReqParser (parseReqs)

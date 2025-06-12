@@ -17,7 +17,6 @@ import Database.DataType (PostType (..))
 import Database.Persist (insertUnique)
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables
-import Svg.Parser (safeHead)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P

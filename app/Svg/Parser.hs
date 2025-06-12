@@ -14,7 +14,7 @@ directly to the client when viewing the @/graph@ page.
 -}
 
 module Svg.Parser
-    (parsePrebuiltSvgs, parseDynamicSvg, matrixPointMultiply, safeHead) where
+    (parsePrebuiltSvgs, parseDynamicSvg, matrixPointMultiply) where
 
 import Config (graphPath, runDb)
 import Control.Monad.IO.Class (liftIO)
@@ -34,6 +34,7 @@ import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
 import Text.Read (readMaybe)
+import Util.Helpers
 
 
 parsePrebuiltSvgs :: IO ()
@@ -662,12 +663,6 @@ updateShape fill r =
 -- | Adds two tuples together.
 addTuples :: Point -> Point -> Point
 addTuples (a,b) (c,d) = (a + c, b + d)
-
--- | Given a list and a default value, returns the head of the list, or the default value
--- if the list is empty.
-safeHead :: a -> [a] -> a
-safeHead x [] = x
-safeHead _ (x:_) = x
 
 -- | Apply a matrix transformation to a point.
 -- The matrix must have dimensions 3x3, representing a transformation for a two-dimensional point,

@@ -22,7 +22,8 @@ import Data.List (find)
 import qualified Data.Text as T
 import Database.DataType
 import Database.Tables hiding (shapes, texts)
-import Svg.Parser (matrixPointMultiply, safeHead)
+import Svg.Parser (matrixPointMultiply)
+import Util.Helpers
 
 -- * Builder functions
 

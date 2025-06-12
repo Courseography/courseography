@@ -23,13 +23,13 @@ import Database.DataType
 import Database.Persist.Sqlite
 import Database.Tables hiding (paths, texts)
 import Svg.Builder
-import Svg.Parser (safeHead)
 import Text.Blaze (toMarkup)
 import Text.Blaze.Internal (stringValue, textValue)
 import Text.Blaze.Svg.Renderer.String (renderSvg)
 import qualified Text.Blaze.Svg11 as S
 import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11.Attributes as A
+import Util.Helpers
 
 
 -- | This is the main function that retrieves a stored graph
