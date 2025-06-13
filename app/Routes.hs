@@ -5,9 +5,8 @@ import Control.Monad (MonadPlus (mplus), msum)
 import Controllers.Course as CoursesController (courseInfo, index, retrieveCourse)
 import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, generateResponse)
 import Controllers.Graph as GraphsController (getGraphJSON, graphImageResponse, graphResponse,
-                                              index)
+                                              index, saveGraphJSON)
 import Controllers.Timetable as TimetableController
-import Database.CourseInsertion (saveGraphJSON)
 import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
                          ToMessage (toResponse), dir, noTrailingSlash, nullDir, seeOther,
                          serveDirectory)
