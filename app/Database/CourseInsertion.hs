@@ -15,8 +15,6 @@ import Database.Persist.Class (selectKeysList)
 import Database.Persist.Sqlite (SqlPersistM, insert_, selectFirst, (==.))
 import Database.Tables hiding (breadth, distribution)
 
--- Commented out function from before refactoring process to MVC
-
 --contains' :: PersistEntity m => T.Text -> SqlPersistM m
 --contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")
 
