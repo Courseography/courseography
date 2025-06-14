@@ -334,11 +334,11 @@ getDatesByDay session dataByDay
     | session == "F" = do
         fallStart <- fallStartDate
         fallEnd <- fallEndDate
-        formatDates $ getDates fallStart fallEnd (weekDay $ head dataByDay)
+        formatDates $ getDates fallStart fallEnd (safeHeadApply weekDay 0.0 dataByDay)
     | otherwise = do
         winterStart <- winterStartDate
         winterEnd <- winterEndDate
-        formatDates $ getDates winterStart winterEnd (weekDay $ head dataByDay)
+        formatDates $ getDates winterStart winterEnd (safeHeadApply weekDay 0.0 dataByDay)
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.
