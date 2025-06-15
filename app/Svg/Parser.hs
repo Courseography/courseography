@@ -38,7 +38,7 @@ import Text.Read (readMaybe)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runDb $ do
-    performParse "Computer Science" "csc2024.svg"
+    performParse "Computer Science" "csc2025.svg"
     performParse "Statistics" "sta2022.svg"
     -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
     -- performParse "(unofficial) Biochemistry" "bch2015.svg"

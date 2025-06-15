@@ -13,6 +13,7 @@
 - Redesigned generate form UI
 - Allow option to log server request accesses to a file
 - Added search by program to create graphs on Generate Page
+- Updated Computer Science graph for 2025-26
 
 ### 🐛 Bug fixes
 
