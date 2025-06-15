@@ -23,6 +23,7 @@ import Text.Parsec (count, many, parse)
 import qualified Text.Parsec.Char as P
 import Text.Parsec.Text (Parser)
 import Text.ParserCombinators.Parsec (parseFromFile)
+import Util.Helpers
 import WebParsing.ParsecCombinators (text)
 import WebParsing.PostParser (addPostToDatabase)
 import WebParsing.ReqParser (parseReqs)
@@ -53,7 +54,7 @@ getBuildingsFromCSV buildingCSVFile = do
     case buildingCSVData of
         Left _ -> error "csv parse error"
         Right buildingData -> do
-            return $ map (\b -> Building (T.pack (head b))
+            return $ map (\b -> Building (T.pack $ safeHead [] b)
                                         (T.pack (b !! 1))
                                         (T.pack (b !! 2))
                                         (T.pack (b !! 3))
@@ -85,7 +86,9 @@ getDeptList tags =
         extractDepartments tableTags =
             -- Each aTag consists of a start tag, text, and end tag
             let aTags = TS.partitions (tagOpenAttrNameLit "a" "href" (const True)) tableTags
-                depts = map (\t -> (TS.fromAttrib "href" $ head t, T.strip $ TS.innerText t)) aTags
+                depts = map (\t -> (TS.fromAttrib "href" (safeHead (TS.TagOpen T.empty []) t),
+                                    T.strip $ TS.innerText t)) aTags
+
             in
                 filter (\(a, b) -> not (T.null a) && not (T.null b)) depts
 

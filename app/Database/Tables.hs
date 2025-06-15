@@ -225,7 +225,9 @@ instance FromJSON SvgJSON
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
-      (\field -> toLower (head field): tail field) .
+      (\case
+        [] -> []
+        (fieldHead:fieldTail) -> toLower fieldHead: fieldTail) .
       drop 7
   }
 
