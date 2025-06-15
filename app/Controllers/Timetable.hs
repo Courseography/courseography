@@ -2,7 +2,8 @@ module Controllers.Timetable
     (gridResponse, returnPDF, exportTimetableImageResponse,
      exportTimetablePDFResponse, calendarResponse) where
 
-import Config (fallEndDate, fallStartDate, holidays, outDay, runDb, winterEndDate, winterStartDate)
+import Config (databasePath, fallEndDate, fallStartDate, holidays, outDay, runDb, winterEndDate,
+               winterStartDate)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.ByteString as BS
 import Data.ByteString.Base64.Lazy as BEnc
@@ -334,11 +335,14 @@ getDatesByDay session dataByDay
     | session == "F" = do
         fallStart <- fallStartDate
         fallEnd <- fallEndDate
-        formatDates $ getDates fallStart fallEnd (safeHeadApply weekDay 0.0 dataByDay)
+        formatDates $ getDates fallStart fallEnd dayOfWeek
     | otherwise = do
         winterStart <- winterStartDate
         winterEnd <- winterEndDate
-        formatDates $ getDates winterStart winterEnd (safeHeadApply weekDay 0.0 dataByDay)
+        formatDates $ getDates winterStart winterEnd dayOfWeek
+    where dayOfWeek = weekDay (case dataByDay of
+            [] -> error "Failed to fetch dates"
+            (x:_) -> x)
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.
