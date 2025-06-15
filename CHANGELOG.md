@@ -6,6 +6,14 @@
 
 ### ✨ New features/enhancements
 
+### 🐛 Bug fixes
+
+### 🔧 Internal changes
+
+## [0.7.0] - 2025-06-15
+
+### ✨ New features/enhancements
+
 - Added text warning when there's no timetable information available to display
 - Updated course info modal to display field labels if and only if they are non-empty
 - Ensured corequisites and exclusions for courses are displayed in the course info modal, if available
