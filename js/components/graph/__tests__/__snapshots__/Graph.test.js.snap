@@ -32,6 +32,7 @@ exports[`Graph rendering RegionGroup should match shallow snapshot 1`] = `
         "fill": "#000000",
       }
     }
+    transform=""
     x={1088.1677413999998}
     y={201.36453113000002}
   >
