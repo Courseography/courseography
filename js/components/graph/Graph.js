@@ -1496,7 +1496,7 @@ export class Graph extends React.Component {
   }
 
   renderLabels = labelsJSON => {
-    return Object.values(labelsJSON).map(function (entry, value) {
+    return Object.values(labelsJSON).map((entry, value) => {
       const textAttrs = {
         x: entry.pos[0],
         y: entry.pos[1],
@@ -1511,6 +1511,7 @@ export class Graph extends React.Component {
           style={textStyle}
           className="region-label"
           textAnchor={entry["text-anchor"]}
+          transform={this.formatTransform(entry.transform)}
         >
           {entry["text"]}
         </text>

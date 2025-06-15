@@ -24,6 +24,7 @@
 - Fixed matrix transformation and intersection checking bug when sending graph data to front end
 - Fixed inverse matrix storage from column-major to row-major order
 - Fixed the issue with transformation matricies not being applied to SVG attributes when generating PDFs in the export modal
+- Fixed bug where region label transforms were not correctly applied
 
 ### 🔧 Internal changes
 
