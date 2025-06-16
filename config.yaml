@@ -17,22 +17,22 @@ fasCalendarUrl: "https://artsci.calendar.utoronto.ca/"
 programsUrl: "https://artsci.calendar.utoronto.ca/listing-program-subject-areas"
 
 # Term dates
-fallStartDate: 2024-09-03
-fallEndDate: 2024-12-03
-winterStartDate: 2025-01-06
-winterEndDate: 2025-04-04
-outDay: 2026-01-01
+fallStartDate: 2025-09-02
+fallEndDate: 2025-12-02
+winterStartDate: 2026-01-05
+winterEndDate: 2026-04-02
+outDay: 2027-01-01
 
 # Holidays
 holidaysList:
-  - 20241014T
-  - 20241028T
-  - 20241029T
-  - 20241030T
-  - 20241031T
-  - 20241101T
-  - 20250217T
-  - 20250218T
-  - 20240219T
-  - 20250220T
-  - 20250221T
+  - 20251013T
+  - 20251027T
+  - 20251028T
+  - 20251029T
+  - 20251030T
+  - 20251130T
+  - 20260216T
+  - 20260217T
+  - 20260218T
+  - 20260219T
+  - 20260220T

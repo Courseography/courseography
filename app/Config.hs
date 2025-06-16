@@ -183,7 +183,7 @@ createReqBody page = object [ "campuses" .= ([] :: [T.Text]),
                         "page" .= page,
                         "pageSize" .= (300 :: Int),
                         "requirementProps" .= ([] :: [T.Text]),
-                        "sessions" .= [T.pack "20255"],
+                        "sessions" .= (["20259", "20261"] :: [T.Text]),
                         "timePreferences" .= ([] :: [T.Text])
                      ]
 
@@ -216,4 +216,3 @@ outDay = outDayValue <$> loadConfig
 -- Holidays for the fall and winter term.
 holidays :: IO [String]
 holidays = holidaysList <$> loadConfig
-
