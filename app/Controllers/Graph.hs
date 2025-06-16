@@ -1,9 +1,9 @@
-module Controllers.Graph (graphResponse, index, getGraphJSON, graphImageResponse) where
+module Controllers.Graph (graphResponse, index, getGraphJSON, graphImageResponse, saveGraphJSON) where
 
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (object, (.=))
+import Data.Aeson (decode, object, (.=))
 import Data.Maybe (fromMaybe)
-import Happstack.Server (Response, ServerPart, look, lookText', ok, toResponse)
+import Happstack.Server (Response, ServerPart, look, lookBS, lookText', ok, toResponse)
 import MasterTemplate (header, masterTemplate)
 import Scripts (graphScripts)
 import Text.Blaze ((!))
@@ -11,10 +11,10 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
 import Config (runDb)
-import Database.CourseQueries (getGraph)
 import Database.Persist.Sqlite (Entity, SelectOpt (Asc), SqlPersistM, selectList, (==.))
-import Database.Tables as Tables (EntityField (GraphDynamic, GraphTitle), Graph, Text)
+import Database.Tables as Tables (EntityField (GraphDynamic, GraphTitle), Graph, SvgJSON, Text)
 import Export.GetImages (getActiveGraphImage)
+import Models.Graph (getGraph, insertGraph)
 import Response.Image (returnImageData)
 import Util.Happstack (createJSONResponse)
 
@@ -53,3 +53,15 @@ graphImageResponse = do
     graphInfo <- look "JsonLocalStorageObj"
     (svgFilename, imageFilename) <- liftIO $ getActiveGraphImage graphInfo
     liftIO $ returnImageData svgFilename imageFilename
+
+-- | Inserts SVG graph data into Texts, Shapes, and Paths tables
+saveGraphJSON :: ServerPart Response
+saveGraphJSON = do
+    jsonStr <- lookBS "jsonData"
+    nameStr <- lookText' "nameData"
+    let jsonObj = decode jsonStr :: Maybe SvgJSON
+    case jsonObj of
+        Nothing -> return $ toResponse ("Error" :: String)
+        Just svg -> do
+            _ <- liftIO $ runDb $ insertGraph nameStr svg
+            return $ toResponse ("Success" :: String)
