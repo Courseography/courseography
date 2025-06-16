@@ -6,6 +6,20 @@
 
 ### ✨ New features/enhancements
 
+### 🐛 Bug fixes
+
+### 🔧 Internal changes
+
+## [0.7.1] - 2025-06-16
+
+### ✨ New features/enhancements
+
+- Updated configuration for 2025-26
+
+## [0.7.0] - 2025-06-15
+
+### ✨ New features/enhancements
+
 - Added text warning when there's no timetable information available to display
 - Updated course info modal to display field labels if and only if they are non-empty
 - Ensured corequisites and exclusions for courses are displayed in the course info modal, if available
@@ -13,6 +27,7 @@
 - Redesigned generate form UI
 - Allow option to log server request accesses to a file
 - Added search by program to create graphs on Generate Page
+- Updated Computer Science graph for 2025-26
 
 ### 🐛 Bug fixes
 
@@ -24,6 +39,7 @@
 - Fixed matrix transformation and intersection checking bug when sending graph data to front end
 - Fixed inverse matrix storage from column-major to row-major order
 - Fixed the issue with transformation matricies not being applied to SVG attributes when generating PDFs in the export modal
+- Fixed bug where region label transforms were not correctly applied
 
 ### 🔧 Internal changes
 
