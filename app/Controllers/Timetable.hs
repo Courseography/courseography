@@ -2,8 +2,7 @@ module Controllers.Timetable
     (gridResponse, returnPDF, exportTimetableImageResponse,
      exportTimetablePDFResponse, calendarResponse) where
 
-import Config (databasePath, fallEndDate, fallStartDate, holidays, outDay, runDb, winterEndDate,
-               winterStartDate)
+import Config (fallEndDate, fallStartDate, holidays, outDay, runDb, winterEndDate, winterStartDate)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.ByteString as BS
 import Data.ByteString.Base64.Lazy as BEnc
