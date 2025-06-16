@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Updated configuration for 2025-26
+
 ### 🐛 Bug fixes
 
 ### 🔧 Internal changes
