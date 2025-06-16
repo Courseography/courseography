@@ -6,11 +6,15 @@
 
 ### ✨ New features/enhancements
 
-- Updated configuration for 2025-26
-
 ### 🐛 Bug fixes
 
 ### 🔧 Internal changes
+
+## [0.7.1] - 2025-06-16
+
+### ✨ New features/enhancements
+
+- Updated configuration for 2025-26
 
 ## [0.7.0] - 2025-06-15
 
