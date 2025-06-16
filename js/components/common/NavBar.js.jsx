@@ -1,73 +1,62 @@
-import { NavLink, useLocation } from "react-router-dom"
+import React from "react"
 
 /**
- * NavBar component; includes routing to home/graph page, grid page, generate page
- * and about page, additionally providing the option to export if currently on the
- * graph or grid page.
+ * NavBar component.
  */
 export function NavBar() {
-  const { pathname } = useLocation()
+  const pathname = window.location.pathname
 
-  const page = () => {
-    if (pathname.startsWith("/grid")) return "grid"
-    if (pathname.startsWith("/generate")) return "generate"
-    if (pathname.startsWith("/about")) return "about"
-    return "graph" // go to home (graph) page by default
-  }
+  const page = pathname.startsWith("/grid")
+    ? "grid"
+    : pathname.startsWith("/generate")
+      ? "generate"
+      : pathname.startsWith("/about")
+        ? "about"
+        : "graph" // default
+
+  const isActive = path => (pathname.startsWith(path) ? "selected-page" : undefined)
 
   return (
     <nav className="row header">
       {/* Courseography Logo (also functions as an additional link to graph page) */}
       <div className="nav-left">
-        <NavLink to="/graph">
+        <a href="/graph">
           <img
             id="courseography-header"
             src="/static/res/img/logo.png"
             alt="Courseography"
             data-context={page}
           />
-        </NavLink>
+        </a>
       </div>
 
-      {/* Links to graph, grid and generate pages */}
+      {/* Navigation links */}
       <div className="nav-middle">
         <ul id="nav-links">
           <li id="nav-graph">
-            <NavLink
-              to="/graph"
-              className={({ isActive }) => (isActive ? "selected-page" : undefined)}
-            >
+            <a href="/graph" className={isActive("/graph")}>
               Graph
-            </NavLink>
+            </a>
           </li>
           <li id="nav-grid">
-            <NavLink
-              to="/grid"
-              className={({ isActive }) => (isActive ? "selected-page" : undefined)}
-            >
+            <a href="/grid" className={isActive("/grid")}>
               Grid
-            </NavLink>
+            </a>
           </li>
           <li id="nav-generate">
-            <NavLink
-              to="/generate"
-              className={({ isActive }) => (isActive ? "selected-page" : undefined)}
-            >
+            <a href="/generate" className={isActive("/generate")}>
               Generate (beta)
-            </NavLink>
+            </a>
           </li>
           <li id="nav-about">
-            <NavLink
-              to="/about"
-              className={({ isActive }) => (isActive ? "selected-page" : undefined)}
-            >
+            <a href="/about" className={isActive("/about")}>
               About
-            </NavLink>
+            </a>
           </li>
         </ul>
       </div>
 
-      {/* Export button (available for graph/grid pages only)*/}
+      {/* Export button (graph/grid only) */}
       <div className="nav-right">
         {(page === "graph" || page === "grid") && (
           <button id="nav-export">

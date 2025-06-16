@@ -1,6 +1,7 @@
 import React from "react"
 import { createRoot } from "react-dom/client"
 import Container from "./Container"
+import { NavBar } from "../common/NavBar.js.jsx"
 
 import {
   AllCommunityModule,
@@ -16,6 +17,10 @@ provideGlobalGridOptions({ theme: "legacy" })
 
 // The "main"
 document.addEventListener("DOMContentLoaded", () => {
+  const navbar = document.getElementById("navbar")
+  const navbarRoot = createRoot(navbar)
+  navbarRoot.render(<NavBar />)
+
   const container = document.getElementById("container")
   const root = createRoot(container)
   root.render(<Container start_blank={false} edit={false} />)

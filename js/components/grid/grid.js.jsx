@@ -11,6 +11,7 @@ import {
   ModuleRegistry,
   provideGlobalGridOptions,
 } from "ag-grid-community"
+import { NavBar } from "../common/NavBar.js.jsx"
 
 // Register all community features
 ModuleRegistry.registerModules([AllCommunityModule])
@@ -178,6 +179,10 @@ function Grid(props) {
     </>
   )
 }
+
+const navbar = document.getElementById("navbar")
+const navbarRoot = createRoot(navbar)
+navbarRoot.render(<NavBar />)
 
 const container = document.getElementById("grid-body")
 const root = createRoot(container)

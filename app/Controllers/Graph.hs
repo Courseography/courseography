@@ -24,8 +24,7 @@ graphResponse =
     masterTemplate "Courseography - Graph"
                 []
                 (do
-                    -- TODO: replace with react navbar
-                    header "graph"
+                    H.div ! A.id "navbar" $ ""
                     H.div ! A.id "container" $ ""
                 )
                 graphScripts
