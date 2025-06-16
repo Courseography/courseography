@@ -93,9 +93,9 @@ library
     unordered-containers,
     yaml
   default-extensions:
+    LambdaCase,
     OverloadedStrings,
-    ScopedTypeVariables,
-    LambdaCase
+    ScopedTypeVariables
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app
@@ -136,9 +136,9 @@ test-suite Tests
     text,
     time
   default-extensions:
+    LambdaCase,
     OverloadedStrings,
-    ScopedTypeVariables,
-    LambdaCase
+    ScopedTypeVariables
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: backend-test
@@ -197,9 +197,9 @@ executable courseography
     WebParsing.UtsgJsonParser
   -- These are compiler extensions used for every module
   default-extensions:
+    LambdaCase,
     OverloadedStrings,
-    ScopedTypeVariables,
-    LambdaCase
+    ScopedTypeVariables
   other-extensions:
     DeriveGeneric,
     EmptyDataDecls,
