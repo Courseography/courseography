@@ -33,25 +33,17 @@ export function NavBar() {
       {/* Navigation links */}
       <div className="nav-middle">
         <ul id="nav-links">
-          <li id="nav-graph">
-            <a href="/graph" className={isActive("/graph")}>
-              Graph
-            </a>
+          <li id="nav-graph" className={isActive("/graph")}>
+            <a href="/graph">Graph</a>
           </li>
-          <li id="nav-grid">
-            <a href="/grid" className={isActive("/grid")}>
-              Grid
-            </a>
+          <li id="nav-grid" className={isActive("/grid")}>
+            <a href="/grid">Grid</a>
           </li>
-          <li id="nav-generate">
-            <a href="/generate" className={isActive("/generate")}>
-              Generate (beta)
-            </a>
+          <li id="nav-generate" className={isActive("/generate")}>
+            <a href="/generate">Generate (beta)</a>
           </li>
-          <li id="nav-about">
-            <a href="/about" className={isActive("/about")}>
-              About
-            </a>
+          <li id="nav-about" className={isActive("/about")}>
+            <a href="/about">About</a>
           </li>
         </ul>
       </div>
