@@ -145,9 +145,9 @@ intersects :: Double -- ^ The region's width.
 intersects width height (rx, ry) offset (px, py) =
     let dx = px - rx
         dy = py - ry
-    in  dx >= -(1 * offset) &&
+    in  dx >= -offset &&
         dx <= width + offset &&
-        dy >= -(1 * offset) &&
+        dy >= -offset &&
         dy <= height + offset;
 
 -- | Determines if a point is contained in a shape.

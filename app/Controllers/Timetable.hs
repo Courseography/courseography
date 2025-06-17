@@ -154,10 +154,9 @@ type SystemTime = String
 
 -- | Creates all the events for a course.
 getEvents :: SystemTime -> Maybe MeetTime' -> IO [String]
-getEvents systemTime lect = do
-    case lect of
-        Nothing -> return []
-        Just x -> do
+getEvents _ Nothing = do
+    return []
+getEvents systemTime (Just x) = do
             courseInfo <- getCourseInfo x  -- Get the course information
             let startTimes = third courseInfo   -- Extract start times
                 endTimes = fourth courseInfo     -- Extract end times

@@ -8,5 +8,5 @@ module Util.Helpers
 -- | Given a list and a default value, returns the head of the list, or the default value
 -- if the list is empty.
 safeHead :: a -> [a] -> a
-safeHead x [] = x
-safeHead _ (x:_) = x
+safeHead listHead [] = listHead
+safeHead _ (listHead:_) = listHead

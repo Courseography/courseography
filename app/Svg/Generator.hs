@@ -50,26 +50,24 @@ buildSVG graphName courseMap filename styled = runDb $ do
         case fmap entityKey maybeGraph of
             Nothing -> return ()
             Just val -> do
-                sqlGraph :: Maybe (Entity Graph) <- selectFirst [GraphId ==. val] []
-                case sqlGraph of
+                case fmap entityVal maybeGraph of
                     Nothing -> return ()
                     Just graph -> do
                         liftIO $ buildSVGHelper courseMap filename styled graph val
 
 
-buildSVGHelper :: M.Map T.Text T.Text  -- ^ A map of courses that holds the course
-                                 --   ID as a key, and the data-active
-                                 --   attribute as the course's value.
-                                 --   The data-active attribute is used in the
-                                 --   interactive graph to indicate which
-                                 --   courses the user has selected.
-         -> String               -- ^ The filename that this graph will be
-                                 --   written to.
-         -> Bool                 -- ^ Whether to include inline styles.
-         -> Entity Graph
+buildSVGHelper :: M.Map T.Text T.Text   -- ^ A map of courses that holds the course
+                                        --   ID as a key, and the data-active
+                                        --   attribute as the course's value.
+                                        --   The data-active attribute is used in the
+                                        --   interactive graph to indicate which
+                                        --   courses the user has selected.
+         -> String                      -- ^ The filename that this graph will be
+                                        --   written to.
+         -> Bool                        -- ^ Whether to include inline styles.
+         -> Graph
          -> Key Graph
          -> IO ()
-
 buildSVGHelper courseMap filename styled sqlGraph gId = runDb $ do
         sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
@@ -97,8 +95,8 @@ buildSVGHelper courseMap filename styled sqlGraph gId = runDb $ do
             regionTexts    = filter (not .
                                      intersectsWithShape (rects ++ ellipses))
                                     texts
-            width          = graphWidth $ entityVal sqlGraph
-            height         = graphHeight $ entityVal sqlGraph
+            width          = graphWidth sqlGraph
+            height         = graphHeight sqlGraph
             stringSVG      = renderSvg $ makeSVGDoc courseStyleMap
                                                     rects
                                                     ellipses

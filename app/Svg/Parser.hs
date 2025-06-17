@@ -104,8 +104,8 @@ performParseFromMemory graphName graphSvg isDynamic = do
 -- and return them as a tuple.
 parseSizeFromSvg :: T.Text -> (Double, Double)
 parseSizeFromSvg graphSvg =
-    let tag = filter (TS.isTagOpenName "svg") $ TS.parseTags graphSvg
-        svgRoot = safeHead (TS.TagText T.empty) tag
+    let tags = filter (TS.isTagOpenName "svg") $ TS.parseTags graphSvg
+        svgRoot = safeHead (TS.TagText T.empty) tags
     in (parseDouble "width" svgRoot, parseDouble "height" svgRoot)
     where parseDouble = parseAttr double
 
@@ -161,9 +161,11 @@ parseGraph key tags =
 -- helper function.
 parseText :: Matrix -> GraphId -> [Tag T.Text] -> [Text]
 parseText globalTrans key tags =
-    let trans = getTransform (case tags of
-            [] -> TS.TagOpen T.empty []
-            (tag:_) -> tag)
+    let trans = case tags of
+            [] -> [[1, 0, 0],
+                        [0, 1, 0],
+                        [0, 0, 1]]
+            (x:_) -> getTransform x
         textTags = TS.partitions (TS.isTagOpenName "text") tags
         texts = concatMap (parseTextHelper key [] trans globalTrans) textTags
     in
@@ -178,8 +180,8 @@ parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
                 -> [Text]
 parseTextHelper key styles' trans globalTrans [] =
     let tspanTags = TS.partitions (TS.isTagOpenName "tspan") []
-       in
-           concatMap (parseTextHelper key styles' trans globalTrans) tspanTags
+    in
+        concatMap (parseTextHelper key styles' trans globalTrans) tspanTags
 
 parseTextHelper key styles' trans globalTrans (headTag:restTags) =
     let [[a, c, e], [b, d, f], _] = completeTrans
