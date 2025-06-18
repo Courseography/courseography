@@ -223,12 +223,14 @@ instance ToJSON Location
 instance FromJSON SvgJSON
 
 instance ToJSON Meeting where
-  toJSON = genericToJSON defaultOptions {
-    fieldLabelModifier =
-      (\case
-        [] -> []
-        (fieldHead:fieldTail) -> toLower fieldHead: fieldTail) .
-      drop 7
+  toJSON =
+    let
+      lowerFirst [] = []
+      lowerFirst (fieldHead:fieldTail) = toLower fieldHead: fieldTail
+    in genericToJSON defaultOptions {
+      fieldLabelModifier =
+        lowerFirst .
+        drop 7
   }
 
 instance FromJSON Meeting where
