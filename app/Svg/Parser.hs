@@ -163,8 +163,8 @@ parseText :: Matrix -> GraphId -> [Tag T.Text] -> [Text]
 parseText globalTrans key tags =
     let trans = case tags of
             [] -> [[1, 0, 0],
-                        [0, 1, 0],
-                        [0, 0, 1]]
+                    [0, 1, 0],
+                    [0, 0, 1]]
             (x:_) -> getTransform x
         textTags = TS.partitions (TS.isTagOpenName "text") tags
         texts = concatMap (parseTextHelper key [] trans globalTrans) textTags
@@ -186,12 +186,12 @@ parseTextHelper key styles' trans globalTrans [] =
 parseTextHelper key styles' trans globalTrans (headTag:restTags) =
     let [[a, c, e], [b, d, f], _] = completeTrans
        in [Text key
-             (fromAttrib "id" headTag) -- TODO: Why are we setting an id?
-             (readAttr "x" headTag, readAttr "y" headTag)
-             (TS.escapeHTML $ trim $ TS.innerText (headTag:restTags))
-             align
-             fill
-             [a, b, c, d, e, f]
+            (fromAttrib "id" headTag) -- TODO: Why are we setting an id?
+            (readAttr "x" headTag, readAttr "y" headTag)
+            (TS.escapeHTML $ trim $ TS.innerText (headTag:restTags))
+            align
+            fill
+            [a, b, c, d, e, f]
        ]
     where
        newStyle = styles headTag ++ styles'
@@ -210,13 +210,14 @@ parseRect :: Matrix
           -> GraphId -- ^ The Rect's corresponding graph identifier.
           -> [Tag T.Text]
           -> [Shape]
-parseRect globalTrans key tags =
+parseRect _ _ [] = []
+parseRect globalTrans key (tagsHead:tagsTail) =
     let
-        rectOpenTags = filter (\tag -> TS.isTagOpenName "rect" tag || TS.isTagOpenName "polygon" tag) tags
+        rectOpenTags = filter (\tag -> TS.isTagOpenName "rect" tag || TS.isTagOpenName "polygon" tag) (tagsHead:tagsTail)
     in
         map (\tag -> if TS.isTagOpenName "rect" tag then makeRect tag else makePoly tag) rectOpenTags
     where
-        gOpen = safeHead (TS.TagOpen T.empty []) tags
+        gOpen = tagsHead
         styles' = styles gOpen
         fill = styleVal "fill" styles'
         fill' = if T.null fill then fromAttrib "fill" gOpen else fill

@@ -5,7 +5,7 @@ import Config (fasCalendarUrl, programsUrl, runDb)
 import Control.Monad.IO.Class (liftIO)
 import Data.CSV
 import Data.List (findIndex, nubBy)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
@@ -54,7 +54,7 @@ getBuildingsFromCSV buildingCSVFile = do
     case buildingCSVData of
         Left _ -> error "csv parse error"
         Right buildingData -> do
-            return $ map (\b -> Building (T.pack $ safeHead [] b)
+            return $ map (\b -> Building (T.pack $ safeHead "" b)
                                         (T.pack (b !! 1))
                                         (T.pack (b !! 2))
                                         (T.pack (b !! 3))
@@ -86,9 +86,11 @@ getDeptList tags =
         extractDepartments tableTags =
             -- Each aTag consists of a start tag, text, and end tag
             let aTags = TS.partitions (tagOpenAttrNameLit "a" "href" (const True)) tableTags
-                depts = map (\t -> (TS.fromAttrib "href" (safeHead (TS.TagOpen T.empty []) t),
-                                    T.strip $ TS.innerText t)) aTags
-
+                depts = mapMaybe getDept aTags
+                getDept tag =
+                    case tag of
+                        [] -> Nothing
+                        (x:xs) -> Just (TS.fromAttrib "href" x, T.strip $ TS.innerText (x:xs))
             in
                 filter (\(a, b) -> not (T.null a) && not (T.null b)) depts
 
