@@ -178,11 +178,7 @@ parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
                 -> Matrix
                 -> [Tag T.Text]
                 -> [Text]
-parseTextHelper key styles' trans globalTrans [] =
-    let tspanTags = TS.partitions (TS.isTagOpenName "tspan") []
-    in
-        concatMap (parseTextHelper key styles' trans globalTrans) tspanTags
-
+parseTextHelper _ _ _ _ [] = []
 parseTextHelper key styles' trans globalTrans (headTag:restTags) =
     let [[a, c, e], [b, d, f], _] = completeTrans
        in [Text key

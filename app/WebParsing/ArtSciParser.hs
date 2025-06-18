@@ -87,10 +87,8 @@ getDeptList tags =
             -- Each aTag consists of a start tag, text, and end tag
             let aTags = TS.partitions (tagOpenAttrNameLit "a" "href" (const True)) tableTags
                 depts = mapMaybe getDept aTags
-                getDept tag =
-                    case tag of
-                        [] -> Nothing
-                        (x:xs) -> Just (TS.fromAttrib "href" x, T.strip $ TS.innerText (x:xs))
+                getDept [] = Nothing
+                getDept (x:xs) = Just (TS.fromAttrib "href" x, T.strip $ TS.innerText (x:xs))
             in
                 filter (\(a, b) -> not (T.null a) && not (T.null b)) depts
 

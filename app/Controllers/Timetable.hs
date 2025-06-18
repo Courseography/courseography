@@ -295,7 +295,7 @@ formatTimes fullTime =
     else hour ++ maybe "0000" formatMinutes minutes ++ "00"
     where
         hours = splitOn "." (show fullTime)
-        hour = safeHead [] hours
+        hour = safeHead "" hours
         minutes = readMaybe $ hours !! 1
 
 -- | The string representaion for minutes.
