@@ -28,6 +28,7 @@
 - Allow option to log server request accesses to a file
 - Added search by program to create graphs on Generate Page
 - Updated Computer Science graph for 2025-26
+- Updated the Zoom In/Zoom Out buttons on the graph page to Awesome Icons from +/-
 
 ### 🐛 Bug fixes
 
