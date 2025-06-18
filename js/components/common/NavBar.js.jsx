@@ -3,18 +3,8 @@ import React from "react"
 /**
  * NavBar component.
  */
-export function NavBar() {
-  const pathname = window.location.pathname
-
-  const page = pathname.startsWith("/grid")
-    ? "grid"
-    : pathname.startsWith("/generate")
-      ? "generate"
-      : pathname.startsWith("/about")
-        ? "about"
-        : "graph" // default
-
-  const isActive = path => (pathname.startsWith(path) ? "selected-page" : undefined)
+export function NavBar({ page }) {
+  const isActive = this_page => (page === this_page ? "selected-page" : undefined)
 
   return (
     <nav className="row header">
@@ -33,16 +23,16 @@ export function NavBar() {
       {/* Navigation links */}
       <div className="nav-middle">
         <ul id="nav-links">
-          <li id="nav-graph" className={isActive("/graph")}>
+          <li id="nav-graph" className={isActive("graph")}>
             <a href="/graph">Graph</a>
           </li>
-          <li id="nav-grid" className={isActive("/grid")}>
+          <li id="nav-grid" className={isActive("grid")}>
             <a href="/grid">Grid</a>
           </li>
-          <li id="nav-generate" className={isActive("/generate")}>
+          <li id="nav-generate" className={isActive("generate")}>
             <a href="/generate">Generate (beta)</a>
           </li>
-          <li id="nav-about" className={isActive("/about")}>
+          <li id="nav-about" className={isActive("about")}>
             <a href="/about">About</a>
           </li>
         </ul>

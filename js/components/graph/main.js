@@ -19,7 +19,7 @@ provideGlobalGridOptions({ theme: "legacy" })
 document.addEventListener("DOMContentLoaded", () => {
   const navbar = document.getElementById("navbar")
   const navbarRoot = createRoot(navbar)
-  navbarRoot.render(<NavBar />)
+  navbarRoot.render(<NavBar page="graph" />)
 
   const container = document.getElementById("container")
   const root = createRoot(container)

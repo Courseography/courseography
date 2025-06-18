@@ -182,7 +182,7 @@ function Grid(props) {
 
 const navbar = document.getElementById("navbar")
 const navbarRoot = createRoot(navbar)
-navbarRoot.render(<NavBar />)
+navbarRoot.render(<NavBar page="grid" />)
 
 const container = document.getElementById("grid-body")
 const root = createRoot(container)
