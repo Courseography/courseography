@@ -4,7 +4,7 @@ import { NavBar } from "../common/NavBar.js.jsx"
 
 const navbar = document.getElementById("navbar")
 const navbarRoot = createRoot(navbar)
-navbarRoot.render(<NavBar page="generate" />)
+navbarRoot.render(<NavBar selected_page="generate" />)
 
 const container = document.getElementById("generateRoot")
 const root = createRoot(container)

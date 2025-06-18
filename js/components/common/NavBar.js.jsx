@@ -3,8 +3,8 @@ import React from "react"
 /**
  * NavBar component.
  */
-export function NavBar({ page }) {
-  const isActive = this_page => (page === this_page ? "selected-page" : undefined)
+export function NavBar({ selected_page }) {
+  const isActive = page => (page === selected_page ? "selected-page" : undefined)
 
   return (
     <nav className="row header">
@@ -15,7 +15,7 @@ export function NavBar({ page }) {
             id="courseography-header"
             src="/static/res/img/logo.png"
             alt="Courseography"
-            data-context={page}
+            data-context={selected_page}
           />
         </a>
       </div>
@@ -40,7 +40,7 @@ export function NavBar({ page }) {
 
       {/* Export button (graph/grid only) */}
       <div className="nav-right">
-        {(page === "graph" || page === "grid") && (
+        {(selected_page === "graph" || selected_page === "grid") && (
           <button id="nav-export">
             <img src="/static/res/ico/export.png" alt="Export" />
           </button>
