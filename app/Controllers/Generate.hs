@@ -24,7 +24,7 @@ generateResponse =
         masterTemplate "Courseography - Generate"
                     []
                     (do
-                        header "generate-prerequisites"
+                        H.div ! A.id "navbar" $ ""
                         generatePrerequisites
                     )
                     generateScripts

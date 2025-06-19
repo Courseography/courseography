@@ -10,6 +10,8 @@
 
 ### 🔧 Internal changes
 
+- Refactored navigation bar into a React component (for the graph, grid and generate pages only - the about page navigation bar is still rendered using Blaze)
+
 ## [0.7.1] - 2025-06-16
 
 ### ✨ New features/enhancements

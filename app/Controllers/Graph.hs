@@ -4,7 +4,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (decode, object, (.=))
 import Data.Maybe (fromMaybe)
 import Happstack.Server (Response, ServerPart, look, lookBS, lookText', ok, toResponse)
-import MasterTemplate (header, masterTemplate)
+import MasterTemplate (masterTemplate)
 import Scripts (graphScripts)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -24,7 +24,7 @@ graphResponse =
     masterTemplate "Courseography - Graph"
                 []
                 (do
-                    header "graph"
+                    H.div ! A.id "navbar" $ ""
                     H.div ! A.id "container" $ ""
                 )
                 graphScripts

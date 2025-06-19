@@ -33,7 +33,8 @@ gridResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Grid"
             []
-            (do header "grid"
+            (do
+                H.div ! A.id "navbar" $ ""
                 H.div ! A.id "grid-body"! A.class_ "row main" $ ""
             )
             timetableScripts
