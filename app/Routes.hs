@@ -7,6 +7,7 @@ import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, g
 import Controllers.Graph as GraphsController (getGraphJSON, graphImageResponse, graphResponse,
                                               index, saveGraphJSON)
 import Controllers.Timetable as TimetableController
+import Database.CourseQueries (retrievePost)
 import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
                          ToMessage (toResponse), dir, noTrailingSlash, nullDir, seeOther,
                          serveDirectory)
@@ -27,6 +28,7 @@ strictRoutes = [
     ("image", graphImageResponse),
     ("timetable-image", TimetableController.exportTimetableImageResponse),
     ("timetable-pdf", TimetableController.exportTimetablePDFResponse),
+    ("post", retrievePost),
     ("draw", drawResponse),
     ("about", aboutResponse),
     ("graphs", GraphsController.index),
