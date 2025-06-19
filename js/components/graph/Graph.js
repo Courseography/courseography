@@ -11,6 +11,11 @@ import InfoBox from "./InfoBox"
 import GraphDropdown from "./GraphDropdown"
 import Sidebar from "./Sidebar"
 import { parseAnd } from "../../util/util.js"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faMagnifyingGlassMinus,
+  faMagnifyingGlassPlus,
+} from "@fortawesome/free-solid-svg-icons"
 
 const ZOOM_INCREMENT = 0.01
 const KEYBOARD_PANNING_INCREMENT = 10
@@ -1659,17 +1664,19 @@ export class Graph extends React.Component {
           <div className="graph-button-group">
             <div className="button-group">
               <Button
-                text="+"
                 mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_IN)}
                 onMouseEnter={this.buttonMouseEnter}
                 onMouseLeave={this.buttonMouseLeave}
-              />
+              >
+                <FontAwesomeIcon icon={faMagnifyingGlassPlus} id="zoom-icon" />
+              </Button>
               <Button
-                text="&ndash;"
                 mouseDown={() => this.zoomViewbox(ZOOM_ENUM.ZOOM_OUT)}
                 onMouseEnter={this.buttonMouseEnter}
                 onMouseLeave={this.buttonMouseLeave}
-              />
+              >
+                <FontAwesomeIcon icon={faMagnifyingGlassMinus} id="zoom-icon" />
+              </Button>
             </div>
             <div className="button-group">
               <Button
