@@ -213,11 +213,10 @@ parseRect globalTrans key (tagsHead:tagsTail) =
     in
         map (\tag -> if TS.isTagOpenName "rect" tag then makeRect tag else makePoly tag) rectOpenTags
     where
-        gOpen = tagsHead
-        styles' = styles gOpen
+        styles' = styles tagsHead
         fill = styleVal "fill" styles'
-        fill' = if T.null fill then fromAttrib "fill" gOpen else fill
-        trans = getTransform gOpen
+        fill' = if T.null fill then fromAttrib "fill" tagsHead else fill
+        trans = getTransform tagsHead
         completeTrans = matrixMultiply globalTrans trans
         makeRect rectOpenTag =
             let [[a, c, e], [b, d, f], _] = completeTrans
@@ -238,7 +237,7 @@ parseRect globalTrans key (tagsHead:tagsTail) =
           in
             updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
-                (fromAttrib "id" gOpen)
+                (fromAttrib "id" tagsHead)
                 (points !! 1)
                 (case points of
                     (xw:yw:_) -> fst xw - fst yw
@@ -327,10 +326,10 @@ parseEllipse globalTrans key tags =
             List.reverse tags
 
         trans = case tags of
-            [] -> [[1, 0, 0],
-                     [0, 1, 0],
-                     [0, 0, 1]]
-            (x:_) -> getTransform x
+                [] -> [[1, 0, 0],
+                        [0, 1, 0],
+                        [0, 0, 1]]
+                (x:_) -> getTransform x
 
         getId (t, Nothing) = fromAttrib "id" t
         getId (t1, Just t2) =

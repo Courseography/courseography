@@ -47,14 +47,10 @@ buildSVG :: T.Text               -- ^ The name of the graph that is being built.
          -> IO ()
 buildSVG graphName courseMap filename styled = runDb $ do
         maybeGraph  :: Maybe (Entity Graph) <- selectFirst [GraphTitle ==. graphName] []
-        case fmap entityKey maybeGraph of
+        case maybeGraph of
             Nothing -> return ()
             Just val -> do
-                case fmap entityVal maybeGraph of
-                    Nothing -> return ()
-                    Just graph -> do
-                        liftIO $ buildSVGHelper courseMap filename styled graph val
-
+                liftIO $ buildSVGHelper courseMap filename styled (entityVal val) (entityKey val)
 
 buildSVGHelper :: M.Map T.Text T.Text   -- ^ A map of courses that holds the course
                                         --   ID as a key, and the data-active

@@ -87,10 +87,12 @@ getDeptList tags =
             -- Each aTag consists of a start tag, text, and end tag
             let aTags = TS.partitions (tagOpenAttrNameLit "a" "href" (const True)) tableTags
                 depts = mapMaybe getDept aTags
-                getDept [] = Nothing
-                getDept (x:xs) = Just (TS.fromAttrib "href" x, T.strip $ TS.innerText (x:xs))
             in
                 filter (\(a, b) -> not (T.null a) && not (T.null b)) depts
+            where
+                getDept :: [Tag T.Text] -> Maybe (T.Text, T.Text)
+                getDept [] = Nothing
+                getDept (x:xs) = Just (TS.fromAttrib "href" x, T.strip $ TS.innerText (x:xs))
 
 -- | Insert department names to database
 insertDepts :: [T.Text] -> SqlPersistM ()

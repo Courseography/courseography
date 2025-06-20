@@ -154,15 +154,14 @@ type SystemTime = String
 
 -- | Creates all the events for a course.
 getEvents :: SystemTime -> Maybe MeetTime' -> IO [String]
-getEvents _ Nothing = do
-    return []
-getEvents systemTime (Just x) = do
-            courseInfo <- getCourseInfo x  -- Get the course information
-            let startTimes = third courseInfo   -- Extract start times
-                endTimes = fourth courseInfo     -- Extract end times
-                dates = fifth courseInfo         -- Extract dates
-            events <- mapM (eventsByDate courseInfo) (zip' startTimes endTimes dates)
-            return (concat events)
+getEvents _ Nothing = return []
+getEvents systemTime (Just courseTime) = do
+    courseInfo <- getCourseInfo courseTime  -- Get the course information
+    let startTimes = third courseInfo   -- Extract start times
+        endTimes = fourth courseInfo     -- Extract end times
+        dates = fifth courseInfo         -- Extract dates
+    events <- mapM (eventsByDate courseInfo) (zip' startTimes endTimes dates)
+    return (concat events)
     where
         eventsByDate :: (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay) -> ([String], [String], (String, String)) -> IO [String]
         eventsByDate courseInfo (start, end, dates) = do
@@ -329,7 +328,8 @@ type EndDate = String
 -- | Gives the appropriate starting and ending dates for each day, in which the
 -- course takes place, depending on the course session.
 getDatesByDay :: Session -> [Time] -> IO (StartDate, EndDate)
-getDatesByDay session dataByDay
+getDatesByDay _ [] = error "Failed to fetch dates"
+getDatesByDay session (firstDate:_)
     | session == "F" = do
         fallStart <- fallStartDate
         fallEnd <- fallEndDate
@@ -338,9 +338,7 @@ getDatesByDay session dataByDay
         winterStart <- winterStartDate
         winterEnd <- winterEndDate
         formatDates $ getDates winterStart winterEnd dayOfWeek
-    where dayOfWeek = weekDay (case dataByDay of
-            [] -> error "Failed to fetch dates"
-            (x:_) -> x)
+    where dayOfWeek = weekDay firstDate
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.
