@@ -6,7 +6,7 @@ import { Tooltip } from "react-tooltip"
 /**
  * NavBar component.
  */
-export function NavBar({ selected_page }) {
+export function NavBar({ selected_page, open_modal }) {
   const isActive = page => (page === selected_page ? "selected-page" : undefined)
 
   return (
@@ -50,6 +50,7 @@ export function NavBar({ selected_page }) {
               aria-label="Export"
               data-tooltip-content="Export"
               data-tooltip-id="Export"
+              onclick={open_modal}
             >
               <FontAwesomeIcon icon={faDownload} />
             </button>
