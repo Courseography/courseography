@@ -18,6 +18,7 @@
 - Refactored navigation bar into a React component (for the graph, grid and generate pages only - the about page navigation bar is still rendered using Blaze)
 - Refactored backend tests to use `tasty` and `tasty-hunit` instead of `HUnit`
 - Modified CircleCI configuration so that Jest tests now emit coverage reports which are then uploaded to Coveralls
+- Refactored export modal behaviour such that it is handled entirely through React state, rather than through DOM manipulation with vanilla JS
 
 ## [0.7.1] - 2025-06-16
 
