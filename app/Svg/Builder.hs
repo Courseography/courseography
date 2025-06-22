@@ -23,6 +23,7 @@ import qualified Data.Text as T
 import Database.DataType
 import Database.Tables hiding (shapes, texts)
 import Svg.Parser (matrixPointMultiply)
+import Util.Helpers
 
 -- * Builder functions
 
@@ -41,7 +42,7 @@ buildPath rects ellipses entity elementId
                   pathTarget = ""}
     | otherwise =
           let coords = pathPoints entity
-              start = head coords
+              start = safeHead (0.0, 0.0) coords
               end = last coords
               nodes = rects ++ ellipses
               sourceNode =
@@ -144,9 +145,9 @@ intersects :: Double -- ^ The region's width.
 intersects width height (rx, ry) offset (px, py) =
     let dx = px - rx
         dy = py - ry
-    in  dx >= -1 * offset &&
+    in  dx >= -offset &&
         dx <= width + offset &&
-        dy >= -1 * offset &&
+        dy >= -offset &&
         dy <= height + offset;
 
 -- | Determines if a point is contained in a shape.

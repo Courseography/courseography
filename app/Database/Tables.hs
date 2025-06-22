@@ -224,10 +224,14 @@ instance FromJSON SvgJSON
 
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
-    fieldLabelModifier =
-      (\field -> toLower (head field): tail field) .
-      drop 7
-  }
+      fieldLabelModifier =
+        lowerFirst .
+        drop 7
+    }
+    where
+      lowerFirst :: [Char] -> String
+      lowerFirst [] = ""
+      lowerFirst (fieldHead: fieldTail) = toLower fieldHead: fieldTail
 
 instance FromJSON Meeting where
   parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do

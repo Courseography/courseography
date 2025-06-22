@@ -12,6 +12,7 @@ import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt6
                                 selectList, (<-.), (==.))
 import Database.Tables hiding (paths, shapes, texts)
 import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
+import Util.Helpers
 
 getGraph :: T.Text -> IO (Maybe Value)
 getGraph graphName = runDb $ do
@@ -31,7 +32,7 @@ getGraph graphName = runDb $ do
 
             let
                 keyAsInt :: PersistEntity a => Entity a -> Integer
-                keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
+                keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . safeHead (PersistInt64 0) . keyToValues . entityKey
 
                 graphtexts          = map entityVal sqlTexts
                 rects          = zipWith (buildRect graphtexts)
