@@ -5,6 +5,7 @@ import { faWandSparkles } from "@fortawesome/free-solid-svg-icons"
 import { Tooltip } from "react-tooltip"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
+import { NavBar } from "../common/NavBar.js.jsx"
 
 export default class GenerateForm extends React.Component {
   constructor(props) {
@@ -310,184 +311,196 @@ export default class GenerateForm extends React.Component {
 
   render() {
     return (
-      <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-        <Disclaimer />
-        <div
-          id="generateDiv"
-          style={{
-            position: "initial",
-            padding: "0 0.5em",
-            height: "100%",
-            fontSize: "12pt",
-          }}
-        >
-          <Formik
-            initialValues={{
-              category: "courses",
-              courses: "",
-              programs: "",
-              taken: "",
-              departments: "CSC, MAT, STA",
-              maxDepth: 0,
-              location: ["utsg"],
-              includeRaws: false,
-              includeGrades: false,
+      <>
+        <NavBar selected_page="generate" open_modal={undefined}></NavBar>
+        <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
+          <Disclaimer />
+          <div
+            id="generateDiv"
+            style={{
+              position: "initial",
+              padding: "0 0.5em",
+              height: "100%",
+              fontSize: "12pt",
             }}
-            validate={this.validateForm}
-            validateOnChange={false}
-            validateOnBlur={false}
-            onSubmit={this.handleSubmit}
           >
-            {({ values }) => (
-              <Form id="generateForm">
-                <div className="form-section">
-                  <div className="title-container">
-                    <h1 id="header-title" className="section-title">
-                      Select Search Input
-                    </h1>
-                    <a
-                      data-tooltip-id="category-tooltip"
-                      data-tooltip-html="Select between courses and programs to search for"
-                      className="tooltip-icon"
-                      style={{ marginTop: "-0.3rem" }}
-                    ></a>
-                    <Tooltip id="category-tooltip" place="right" />
-                  </div>
-                  <Field as="select" id="category" name="category">
-                    <option value="courses">Courses</option>
-                    <option value="programs">Programs</option>
-                  </Field>
+            <Formik
+              initialValues={{
+                category: "courses",
+                courses: "",
+                programs: "",
+                taken: "",
+                departments: "CSC, MAT, STA",
+                maxDepth: 0,
+                location: ["utsg"],
+                includeRaws: false,
+                includeGrades: false,
+              }}
+              validate={this.validateForm}
+              validateOnChange={false}
+              validateOnBlur={false}
+              onSubmit={this.handleSubmit}
+            >
+              {({ values }) => (
+                <Form id="generateForm">
+                  <div className="form-section">
+                    <div className="title-container">
+                      <h1 id="header-title" className="section-title">
+                        Select Search Input
+                      </h1>
+                      <a
+                        data-tooltip-id="category-tooltip"
+                        data-tooltip-html="Select between courses and programs to search for"
+                        className="tooltip-icon"
+                        style={{ marginTop: "-0.3rem" }}
+                      ></a>
+                      <Tooltip id="category-tooltip" place="right" />
+                    </div>
+                    <Field as="select" id="category" name="category">
+                      <option value="courses">Courses</option>
+                      <option value="programs">Programs</option>
+                    </Field>
 
-                  {values.category === "courses" && (
-                    <>
-                      <div className="title-container">
-                        <h1 id="header-title" className="section-title">
-                          Search Courses
-                        </h1>
-                        <a
-                          data-tooltip-id="courses-tooltip"
-                          data-tooltip-html="Generate the prerequisites for the given course(s).<br />
+                    {values.category === "courses" && (
+                      <>
+                        <div className="title-container">
+                          <h1 id="header-title" className="section-title">
+                            Search Courses
+                          </h1>
+                          <a
+                            data-tooltip-id="courses-tooltip"
+                            data-tooltip-html="Generate the prerequisites for the given course(s).<br />
                         Each course code must follow the format CSC108H1<br />
                         (i.e. department + code + session)"
-                          className="tooltip-icon"
-                          style={{ marginTop: "-0.3rem" }}
-                        ></a>
-                        <Tooltip id="courses-tooltip" place="right" />
-                      </div>
-                      <Field
-                        id="courses"
-                        name="courses"
-                        type="text"
-                        placeholder="e.g., CSC207H1, CSC324H1"
-                      />
-                      <div className="error-container">
-                        <ErrorMessage
-                          className="error-message"
+                            className="tooltip-icon"
+                            style={{ marginTop: "-0.3rem" }}
+                          ></a>
+                          <Tooltip id="courses-tooltip" place="right" />
+                        </div>
+                        <Field
+                          id="courses"
                           name="courses"
-                          component="div"
+                          type="text"
+                          placeholder="e.g., CSC207H1, CSC324H1"
                         />
-                      </div>
-                    </>
-                  )}
+                        <div className="error-container">
+                          <ErrorMessage
+                            className="error-message"
+                            name="courses"
+                            component="div"
+                          />
+                        </div>
+                      </>
+                    )}
 
-                  {values.category === "programs" && (
-                    <>
-                      <div className="title-container">
-                        <h1 id="header-title" className="section-title">
-                          Search Programs
-                        </h1>
-                        <a
-                          data-tooltip-id="programs-tooltip"
-                          data-tooltip-html="Generate the requirements for the given program(s).<br />
+                    {values.category === "programs" && (
+                      <>
+                        <div className="title-container">
+                          <h1 id="header-title" className="section-title">
+                            Search Programs
+                          </h1>
+                          <a
+                            data-tooltip-id="programs-tooltip"
+                            data-tooltip-html="Generate the requirements for the given program(s).<br />
                         Each program code must follow the format ASMAJ1689"
-                          className="tooltip-icon"
-                          style={{ marginTop: "-0.3rem" }}
-                        ></a>
-                        <Tooltip id="programs-tooltip" place="right" />
-                      </div>
-                      <Field
-                        id="programs"
-                        name="programs"
-                        type="text"
-                        placeholder="e.g., ASMAJ1689, ASFOC1689B"
-                      />
-                      <div className="error-container">
-                        <ErrorMessage
-                          className="error-message"
+                            className="tooltip-icon"
+                            style={{ marginTop: "-0.3rem" }}
+                          ></a>
+                          <Tooltip id="programs-tooltip" place="right" />
+                        </div>
+                        <Field
+                          id="programs"
                           name="programs"
-                          component="div"
+                          type="text"
+                          placeholder="e.g., ASMAJ1689, ASFOC1689B"
                         />
-                      </div>
-                    </>
-                  )}
-                </div>
+                        <div className="error-container">
+                          <ErrorMessage
+                            className="error-message"
+                            name="programs"
+                            component="div"
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
 
-                <div className="form-section">
-                  <h2 id="filter-title" className="section-title">
-                    Filters
-                  </h2>
+                  <div className="form-section">
+                    <h2 id="filter-title" className="section-title">
+                      Filters
+                    </h2>
 
-                  <div className="title-container">
-                    <label htmlFor="departments">Departments</label>
-                    <a
-                      data-tooltip-id="departments-tooltip"
-                      data-tooltip-html="Only include courses from these departments.<br />
+                    <div className="title-container">
+                      <label htmlFor="departments">Departments</label>
+                      <a
+                        data-tooltip-id="departments-tooltip"
+                        data-tooltip-html="Only include courses from these departments.<br />
                         Department codes must be 3 letters, seperated by commas."
-                      className="tooltip-icon"
-                    ></a>
-                    <Tooltip id="departments-tooltip" place="right" />
-                  </div>
-                  <Field
-                    id="departments"
-                    name="departments"
-                    type="text"
-                    placeholder="e.g., CSC, MAT, STA"
-                  />
-                  <div className="error-container">
-                    <ErrorMessage
-                      className="error-message"
+                        className="tooltip-icon"
+                      ></a>
+                      <Tooltip id="departments-tooltip" place="right" />
+                    </div>
+                    <Field
+                      id="departments"
                       name="departments"
-                      component="div"
+                      type="text"
+                      placeholder="e.g., CSC, MAT, STA"
                     />
-                  </div>
+                    <div className="error-container">
+                      <ErrorMessage
+                        className="error-message"
+                        name="departments"
+                        component="div"
+                      />
+                    </div>
 
-                  <div className="title-container">
-                    <label htmlFor="taken">Hide courses</label>
-                    <a
-                      data-tooltip-id="taken-tooltip"
-                      data-tooltip-html="Do not show these courses or their prerequisites.<br />
+                    <div className="title-container">
+                      <label htmlFor="taken">Hide courses</label>
+                      <a
+                        data-tooltip-id="taken-tooltip"
+                        data-tooltip-html="Do not show these courses or their prerequisites.<br />
                         Each course code must follow the format CSC108H1<br />
                         (i.e. department + code + session)"
-                      className="tooltip-icon"
-                    ></a>
-                    <Tooltip id="taken-tooltip" className="tooltip-box" place="right" />
-                  </div>
-                  <Field
-                    id="taken"
-                    name="taken"
-                    type="text"
-                    placeholder="e.g., CSC207H1, CSC236H1"
-                  />
-                  <div className="error-container">
-                    <ErrorMessage
-                      className="error-message"
+                        className="tooltip-icon"
+                      ></a>
+                      <Tooltip
+                        id="taken-tooltip"
+                        className="tooltip-box"
+                        place="right"
+                      />
+                    </div>
+                    <Field
+                      id="taken"
                       name="taken"
-                      component="div"
+                      type="text"
+                      placeholder="e.g., CSC207H1, CSC236H1"
                     />
-                  </div>
+                    <div className="error-container">
+                      <ErrorMessage
+                        className="error-message"
+                        name="taken"
+                        component="div"
+                      />
+                    </div>
 
-                  <div className="title-container">
-                    <label htmlFor="maxDepth">Prerequisite depth</label>
-                    <a
-                      data-tooltip-id="maxDepth-tooltip"
-                      data-tooltip-content="Depth of prerequisite chain (0 shows all prerequisites)"
-                      className="tooltip-icon"
-                    ></a>
-                    <Tooltip id="maxDepth-tooltip" place="right" />
-                  </div>
-                  <Field id="maxDepth" name="maxDepth" type="number" min="0" step="1" />
+                    <div className="title-container">
+                      <label htmlFor="maxDepth">Prerequisite depth</label>
+                      <a
+                        data-tooltip-id="maxDepth-tooltip"
+                        data-tooltip-content="Depth of prerequisite chain (0 shows all prerequisites)"
+                        className="tooltip-icon"
+                      ></a>
+                      <Tooltip id="maxDepth-tooltip" place="right" />
+                    </div>
+                    <Field
+                      id="maxDepth"
+                      name="maxDepth"
+                      type="number"
+                      min="0"
+                      step="1"
+                    />
 
-                  {/* <label htmlFor="location">Campus</label>
+                    {/* <label htmlFor="location">Campus</label>
                   <Field id="location" name="location" as="select" multiple
                     style={{ verticalAlign: 'text-top', marginLeft: '1em', marginBottom: '1em', color: 'black' }}>
                     <option value="utsg">St. George</option>
@@ -505,33 +518,34 @@ export default class GenerateForm extends React.Component {
                   <label htmlFor="includeGrades">Include grade-based prerequisites</label>
                   <Field id="includeGrades" name="includeGrades" type="checkbox"
                     style={{ 'margin-left': '1em', 'vertical-align': 'middle' }} /> */}
-                </div>
+                  </div>
 
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <button id="submit" type="submit">
-                    <FontAwesomeIcon icon={faWandSparkles} id="generate-icon" />
-                    Generate
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <button id="submit" type="submit">
+                      <FontAwesomeIcon icon={faWandSparkles} id="generate-icon" />
+                      Generate
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+
+          <Graph
+            ref={this.graph}
+            start_blank={true}
+            fceCount={this.state.fceCount}
+            incrementFCECount={this.incrementFCECount}
+            setFCECount={this.setFCECount}
+          />
         </div>
-
-        <Graph
-          ref={this.graph}
-          start_blank={true}
-          fceCount={this.state.fceCount}
-          incrementFCECount={this.incrementFCECount}
-          setFCECount={this.setFCECount}
-        />
-      </div>
+      </>
     )
   }
 }
