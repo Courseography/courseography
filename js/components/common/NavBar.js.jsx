@@ -3,7 +3,7 @@ import React from "react"
 /**
  * NavBar component.
  */
-export function NavBar({ selected_page }) {
+export function NavBar({ selected_page, open_modal }) {
   const isActive = page => (page === selected_page ? "selected-page" : undefined)
 
   return (
@@ -41,7 +41,7 @@ export function NavBar({ selected_page }) {
       {/* Export button (graph/grid only) */}
       <div className="nav-right">
         {(selected_page === "graph" || selected_page === "grid") && (
-          <button id="nav-export">
+          <button id="nav-export" onClick={open_modal}>
             <img src="/static/res/ico/export.png" alt="Export" />
           </button>
         )}
