@@ -10,6 +10,8 @@
 
 ### 🔧 Internal changes
 
+- Refactored navigation bar into a React component (for the graph, grid and generate pages only - the about page navigation bar is still rendered using Blaze)
+
 ## [0.7.1] - 2025-06-16
 
 ### ✨ New features/enhancements
@@ -90,6 +92,7 @@
 - Added `Models` folder and a new `Course.hs` module within it
 - Added the `Graph.hs` module in the `App/Models`
 - Updated eslint configuration for eslint v9
+- Removed calls to `head` and `tail`
 
 ## [0.6.0] - 2024-06-24
 

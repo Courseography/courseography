@@ -27,13 +27,15 @@ import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Read (readMaybe)
+import Util.Helpers
 
 gridResponse :: ServerPart Response
 gridResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Grid"
             []
-            (do header "grid"
+            (do
+                H.div ! A.id "navbar" $ ""
                 H.div ! A.id "grid-body"! A.class_ "row main" $ ""
             )
             timetableScripts
@@ -131,12 +133,15 @@ getCoursesInfo courses = map courseInfo allCourses
         allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
-pullDatabase :: (Code, Section, Session) -> IO MeetTime'
+pullDatabase :: (Code, Section, Session) -> IO (Maybe MeetTime')
 pullDatabase (code, section, session) = runDb $ do
     meet <- returnMeeting code fullSection session
-    allTimes <- selectList [TimesMeeting ==. entityKey meet] []
-    parsedTime <- mapM (buildTime . entityVal) allTimes
-    return $ MeetTime' (entityVal meet) parsedTime
+    case meet of
+        Nothing -> return Nothing
+        Just x -> do
+            allTimes <- selectList [TimesMeeting ==. entityKey x] []
+            parsedTime <- mapM (buildTime . entityVal) allTimes
+            return $ Just (MeetTime' (entityVal x) parsedTime)
     where
     fullSection
         | T.isPrefixOf "L" section = T.append "LEC" sectCode
@@ -149,9 +154,10 @@ pullDatabase (code, section, session) = runDb $ do
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> MeetTime' -> IO [String]
-getEvents systemTime lect = do
-    courseInfo <- getCourseInfo lect  -- Get the course information
+getEvents :: SystemTime -> Maybe MeetTime' -> IO [String]
+getEvents _ Nothing = return []
+getEvents systemTime (Just courseTime) = do
+    courseInfo <- getCourseInfo courseTime  -- Get the course information
     let startTimes = third courseInfo   -- Extract start times
         endTimes = fourth courseInfo     -- Extract end times
         dates = fifth courseInfo         -- Extract dates
@@ -289,7 +295,7 @@ formatTimes fullTime =
     else hour ++ maybe "0000" formatMinutes minutes ++ "00"
     where
         hours = splitOn "." (show fullTime)
-        hour = head hours
+        hour = safeHead "" hours
         minutes = readMaybe $ hours !! 1
 
 -- | The string representaion for minutes.
@@ -323,15 +329,17 @@ type EndDate = String
 -- | Gives the appropriate starting and ending dates for each day, in which the
 -- course takes place, depending on the course session.
 getDatesByDay :: Session -> [Time] -> IO (StartDate, EndDate)
-getDatesByDay session dataByDay
+getDatesByDay _ [] = error "Failed to fetch dates"
+getDatesByDay session (firstDate:_)
     | session == "F" = do
         fallStart <- fallStartDate
         fallEnd <- fallEndDate
-        formatDates $ getDates fallStart fallEnd (weekDay $ head dataByDay)
+        formatDates $ getDates fallStart fallEnd dayOfWeek
     | otherwise = do
         winterStart <- winterStartDate
         winterEnd <- winterEndDate
-        formatDates $ getDates winterStart winterEnd (weekDay $ head dataByDay)
+        formatDates $ getDates winterStart winterEnd dayOfWeek
+    where dayOfWeek = weekDay firstDate
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.
