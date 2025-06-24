@@ -30,6 +30,8 @@ describe("Graph Navigation", () => {
   it("Should pan down when the down arrow key is pressed", async () => {
     const user = userEvent.setup()
     await TestGraph.build()
+    const matches = document.querySelectorAll("svg")
+    console.log(matches)
     const svg = document.querySelector("svg")
     const initialY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
     await user.keyboard("{ArrowDown}")
