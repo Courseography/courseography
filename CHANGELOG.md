@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Updated the Zoom In/Zoom Out buttons on the graph page to Awesome Icons from +/-
+
 ### 🐛 Bug fixes
 
 ### 🔧 Internal changes

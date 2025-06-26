@@ -8,7 +8,7 @@ describe("Graph Navigation", () => {
   it("Should pan right when the right arrow key is pressed", async () => {
     const user = userEvent.setup()
     await TestGraph.build()
-    const svg = document.querySelector("svg")
+    const svg = document.querySelector("#main-graph")
     const initialX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
     await user.keyboard("{ArrowRight}")
     const newX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
@@ -19,7 +19,7 @@ describe("Graph Navigation", () => {
   it("Should pan left when the left arrow key is pressed", async () => {
     const user = userEvent.setup()
     await TestGraph.build()
-    const svg = document.querySelector("svg")
+    const svg = document.querySelector("#main-graph")
     const initialX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
     await user.keyboard("{ArrowLeft}")
     const newX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
@@ -30,7 +30,7 @@ describe("Graph Navigation", () => {
   it("Should pan down when the down arrow key is pressed", async () => {
     const user = userEvent.setup()
     await TestGraph.build()
-    const svg = document.querySelector("svg")
+    const svg = document.querySelector("#main-graph")
     const initialY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
     await user.keyboard("{ArrowDown}")
     const newY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
@@ -41,7 +41,7 @@ describe("Graph Navigation", () => {
   it("Should pan up when the up arrow key is pressed", async () => {
     const user = userEvent.setup()
     await TestGraph.build()
-    const svg = document.querySelector("svg")
+    const svg = document.querySelector("#main-graph")
     const initialY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
     await user.keyboard("{ArrowUp}")
     const newY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
@@ -52,7 +52,7 @@ describe("Graph Navigation", () => {
   it("Should zoom in when the user presses the + key", async () => {
     const user = userEvent.setup()
     await TestGraph.build()
-    const svg = document.querySelector("svg")
+    const svg = document.querySelector("#main-graph")
     const initialDims = svg
       .getAttribute("viewBox")
       .split(" ")
@@ -73,7 +73,7 @@ describe("Graph Navigation", () => {
   it("Should zoom out when the user presses the - key", async () => {
     const user = userEvent.setup()
     await TestGraph.build()
-    const svg = document.querySelector("svg")
+    const svg = document.querySelector("#main-graph")
     const initialDims = svg
       .getAttribute("viewBox")
       .split(" ")
@@ -94,7 +94,7 @@ describe("Graph Navigation", () => {
   it("Should pan when the user clicks and drags", async () => {
     const user = userEvent.setup()
     await TestGraph.build()
-    const svg = document.querySelector("svg")
+    const svg = document.querySelector("#main-graph")
     const initialX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
     const initialY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
 
@@ -115,7 +115,7 @@ describe("Graph Navigation", () => {
 
   it("Should zoom in when the mouse wheel is scrolled down", async () => {
     const graph = await TestGraph.build()
-    const svg = document.querySelector("svg")
+    const svg = document.querySelector("#main-graph")
     const initialDims = svg
       .getAttribute("viewBox")
       .split(" ")
@@ -135,7 +135,7 @@ describe("Graph Navigation", () => {
 
   it("Should zoom out when the mouse wheel is scrolled up", async () => {
     const graph = await TestGraph.build()
-    const svg = document.querySelector("svg")
+    const svg = document.querySelector("#main-graph")
     const initialDims = svg
       .getAttribute("viewBox")
       .split(" ")
