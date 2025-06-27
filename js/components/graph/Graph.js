@@ -83,13 +83,6 @@ export class Graph extends React.Component {
     // can't detect keydown event when adding event listener to react-graph
     document.body.addEventListener("keydown", this.onKeyDown)
 
-    // Enable "Export" link
-    if (document.getElementById("nav-export")) {
-      document
-        .getElementById("nav-export")
-        .addEventListener("click", this.exportModal.current.openModal)
-    }
-
     if (document.querySelector("#nav-graph > a")) {
       document
         .querySelector("#nav-graph > a")
