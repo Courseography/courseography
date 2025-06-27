@@ -130,6 +130,8 @@ test-suite Tests
     persistent-sqlite,
     QuickCheck,
     tagsoup,
+    tasty >=1.5.3,
+    tasty-hunit,
     test-framework,
     test-framework-hunit,
     test-framework-quickcheck2,

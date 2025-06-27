@@ -9,10 +9,13 @@ module Controllers.ControllerTests
 (  controllerTests  ) where
 
 import Test.HUnit (Test (..))
+import Test.Tasty
+import Test.Tasty.HUnit
 
 import Controllers.CourseControllerTests (courseControllerTestSuite)
 import Controllers.GraphControllerTests (graphControllerTestSuite)
 
 -- Single test encompassing all controller test suites
-controllerTests :: Test
-controllerTests = TestList [courseControllerTestSuite, graphControllerTestSuite]
+controllerTests :: TestTree
+-- controllerTests = TestList [courseControllerTestSuite, graphControllerTestSuite]
+controllerTests = testGroup "Controller tests" [graphControllerTestSuite]

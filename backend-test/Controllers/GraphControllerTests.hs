@@ -16,7 +16,9 @@ import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Graph (..))
 import Happstack.Server (rsBody)
-import Test.HUnit (Test (..), assertEqual)
+-- import Test.HUnit (Test (..), assertEqual)
+import Test.Tasty
+import Test.Tasty.HUnit
 import TestHelpers (clearDatabase, runServerPart)
 
 -- | List of test cases as (label, input graphs, expected output)
@@ -43,10 +45,20 @@ insertGraphs = mapM_ insertGraph
     where
         insertGraph title = insert_ (Graph title 0 0 False )
 
--- | Run a test case (case, input, expected output) on the index function.
-runIndexTest :: String -> [T.Text] -> String -> Test
+-- -- | Run a test case (case, input, expected output) on the index function.
+-- runIndexTest :: String -> [T.Text] -> String -> Test
+-- runIndexTest label graphs expected =
+--     TestLabel label $ TestCase $ do
+--         runDb $ do
+--             clearDatabase
+--             insertGraphs graphs
+--         response <- runServerPart Controllers.Graph.index
+--         let actual = BL.unpack $ rsBody response
+--         assertEqual ("Unexpected response body for " ++ label) expected actual
+
+runIndexTest :: String -> [T.Text] -> String -> TestTree
 runIndexTest label graphs expected =
-    TestLabel label $ TestCase $ do
+    testCase label $ do
         runDb $ do
             clearDatabase
             insertGraphs graphs
@@ -55,9 +67,9 @@ runIndexTest label graphs expected =
         assertEqual ("Unexpected response body for " ++ label) expected actual
 
 -- | Run all the index test cases
-runIndexTests :: [Test]
+runIndexTests :: [TestTree]
 runIndexTests = map (\(label, graphs, expected) -> runIndexTest label graphs expected) indexTestCases
 
 -- | Test suite for Graph Controller Module
-graphControllerTestSuite :: Test
-graphControllerTestSuite = TestLabel "Graph Controller tests" $ TestList runIndexTests
+graphControllerTestSuite :: TestTree
+graphControllerTestSuite = testGroup "Graph Controller tests" runIndexTests
