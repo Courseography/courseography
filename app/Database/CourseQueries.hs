@@ -10,8 +10,8 @@ and serve the information back to the client.
 
 module Database.CourseQueries
     (retrievePost,
-    returnPost,
-    reqsForPost,
+     returnPost,
+     reqsForPost,
      prereqsForCourse,
      returnMeeting,
      getMeetingTime,
