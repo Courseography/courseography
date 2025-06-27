@@ -16,4 +16,4 @@ import Controllers.GraphControllerTests (graphControllerTestSuite)
 
 -- Single test encompassing all controller test suites
 controllerTests :: TestTree
-controllerTests = testGroup "Controller tests" [courseControllerTestSuite, graphControllerTestSuite]
+controllerTests = testGroup "Controller" [courseControllerTestSuite, graphControllerTestSuite]

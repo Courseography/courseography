@@ -16,7 +16,6 @@ import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Graph (..))
 import Happstack.Server (rsBody)
--- import Test.HUnit (Test (..), assertEqual)
 import Test.Tasty
 import Test.Tasty.HUnit
 import TestHelpers (clearDatabase, runServerPart)
