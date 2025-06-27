@@ -9,7 +9,6 @@ module SvgTests.SvgTests (svgTests) where
 
 import SvgTests.IntersectionTests (intersectionTestSuite)
 import Test.Tasty
-import Test.Tasty.HUnit
 
 -- Single test encompassing all svg test suites
 svgTests :: TestTree
