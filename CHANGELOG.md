@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Updated the Zoom In/Zoom Out buttons on the graph page to Awesome Icons from +/-
+
 ### 🐛 Bug fixes
 
 - Fixed a bug that was causing the focus info popup to appear blank
@@ -93,6 +95,7 @@
 - Added `Models` folder and a new `Course.hs` module within it
 - Added the `Graph.hs` module in the `App/Models`
 - Updated eslint configuration for eslint v9
+- Removed calls to `head` and `tail`
 
 ## [0.6.0] - 2024-06-24
 

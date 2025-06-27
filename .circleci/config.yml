@@ -46,7 +46,7 @@ jobs:
           command: |
             stack --no-terminal setup
             rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
-            stack --no-terminal build --fast -j1 --ghc-options -Werror --ghc-options -Wwarn=x-partial
+            stack --no-terminal build --fast -j1 --ghc-options -Werror
             stack build hlint
             stack build hpc-lcov
             yarn install
@@ -75,7 +75,7 @@ jobs:
       - run:
           name: Generate documentation
           command: |
-            stack exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --ignore-all-exports app/Main.hs
+            stack exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --optghc=-XLambdaCase --ignore-all-exports app/Main.hs
 
       - store_artifacts:
           path: doc

@@ -79,13 +79,12 @@ reqsForPost post = do
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.
-returnMeeting :: T.Text -> T.Text -> T.Text -> SqlPersistM (Entity Meeting)
+returnMeeting :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe (Entity Meeting))
 returnMeeting lowerStr sect session = do
-    entityMeetings <- selectList [MeetingCode ==. T.toUpper lowerStr,
+    selectFirst [MeetingCode ==. T.toUpper lowerStr,
                                   MeetingSection ==. sect,
                                   MeetingSession ==. session]
                                  []
-    return $ head entityMeetings
 
 -- ** Other queries
 

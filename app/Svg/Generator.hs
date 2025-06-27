@@ -29,6 +29,7 @@ import Text.Blaze.Svg.Renderer.String (renderSvg)
 import qualified Text.Blaze.Svg11 as S
 import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11.Attributes as A
+import Util.Helpers
 
 
 -- | This is the main function that retrieves a stored graph
@@ -45,9 +46,25 @@ buildSVG :: T.Text               -- ^ The name of the graph that is being built.
          -> Bool                 -- ^ Whether to include inline styles.
          -> IO ()
 buildSVG graphName courseMap filename styled = runDb $ do
-        gIds        :: [Key Graph]    <- selectKeysList [GraphTitle ==. graphName] []
-        let gId = if null gIds then toSqlKey 1 else head gIds
+        maybeGraph  :: Maybe (Entity Graph) <- selectFirst [GraphTitle ==. graphName] []
+        case maybeGraph of
+            Nothing -> return ()
+            Just val -> do
+                liftIO $ buildSVGHelper courseMap filename styled (entityVal val) (entityKey val)
 
+buildSVGHelper :: M.Map T.Text T.Text   -- ^ A map of courses that holds the course
+                                        --   ID as a key, and the data-active
+                                        --   attribute as the course's value.
+                                        --   The data-active attribute is used in the
+                                        --   interactive graph to indicate which
+                                        --   courses the user has selected.
+         -> String                      -- ^ The filename that this graph will be
+                                        --   written to.
+         -> Bool                        -- ^ Whether to include inline styles.
+         -> Graph
+         -> Key Graph
+         -> IO ()
+buildSVGHelper courseMap filename styled sqlGraph gId = runDb $ do
         sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
                                               ShapeGraph ==. gId] []
@@ -56,7 +73,6 @@ buildSVG graphName courseMap filename styled = runDb $ do
         sqlEllipses :: [Entity Shape] <- selectList
                                              [ShapeType_ ==. BoolNode,
                                               ShapeGraph ==. gId] []
-        sqlGraph    :: [Entity Graph] <- selectList [GraphId ==. gId] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
             -- TODO: Ideally, we would do these "build" steps *before*
@@ -75,8 +91,8 @@ buildSVG graphName courseMap filename styled = runDb $ do
             regionTexts    = filter (not .
                                      intersectsWithShape (rects ++ ellipses))
                                     texts
-            width          = graphWidth $ entityVal (head sqlGraph)
-            height         = graphHeight $ entityVal (head sqlGraph)
+            width          = graphWidth sqlGraph
+            height         = graphHeight sqlGraph
             stringSVG      = renderSvg $ makeSVGDoc courseStyleMap
                                                     rects
                                                     ellipses
@@ -89,7 +105,7 @@ buildSVG graphName courseMap filename styled = runDb $ do
         liftIO $ writeFile filename stringSVG :: SqlPersistM ()
     where
         keyAsInt :: PersistEntity a => Entity a -> Integer
-        keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
+        keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . safeHead (PersistInt64 0) . keyToValues . entityKey
 
         convertSelectionToStyle :: T.Text -> T.Text
         convertSelectionToStyle courseStatus =
