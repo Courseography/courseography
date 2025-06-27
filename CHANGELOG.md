@@ -16,6 +16,7 @@
 
 - Refactored navigation bar into a React component (for the graph, grid and generate pages only - the about page navigation bar is still rendered using Blaze)
 - Refactored export modal behaviour such that it is handled entirely through React state, rather than through DOM manipulation with vanilla JS
+- Added test cases for the `ExportModal` component in `js/components/common`
 
 ## [0.7.1] - 2025-06-16
 
