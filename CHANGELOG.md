@@ -10,6 +10,8 @@
 
 ### 🐛 Bug fixes
 
+- Fixed a bug that was causing the focus info popup to appear blank
+
 ### 🔧 Internal changes
 
 - Refactored navigation bar into a React component (for the graph, grid and generate pages only - the about page navigation bar is still rendered using Blaze)
