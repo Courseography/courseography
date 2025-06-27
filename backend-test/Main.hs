@@ -22,10 +22,6 @@ import Test.HUnit (Test (..), failures, runTestTT)
 import Test.Tasty
 import Test.Tasty.HUnit
 
--- tests :: IO Test
--- tests = do
---     return $ TestList [requirementTests, controllerTests, svgTests, databaseTests]
-
 main :: IO ()
 main = do
     setEnv "APP_ENV" "test"

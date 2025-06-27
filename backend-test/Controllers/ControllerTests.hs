@@ -8,7 +8,6 @@ Module that contains the test suites for all the controllers.
 module Controllers.ControllerTests
 (  controllerTests  ) where
 
-import Test.HUnit (Test (..))
 import Test.Tasty
 import Test.Tasty.HUnit
 
@@ -17,5 +16,4 @@ import Controllers.GraphControllerTests (graphControllerTestSuite)
 
 -- Single test encompassing all controller test suites
 controllerTests :: TestTree
--- controllerTests = TestList [courseControllerTestSuite, graphControllerTestSuite]
-controllerTests = testGroup "Controller tests" [graphControllerTestSuite]
+controllerTests = testGroup "Controller tests" [courseControllerTestSuite, graphControllerTestSuite]

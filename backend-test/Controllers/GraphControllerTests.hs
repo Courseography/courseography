@@ -45,17 +45,7 @@ insertGraphs = mapM_ insertGraph
     where
         insertGraph title = insert_ (Graph title 0 0 False )
 
--- -- | Run a test case (case, input, expected output) on the index function.
--- runIndexTest :: String -> [T.Text] -> String -> Test
--- runIndexTest label graphs expected =
---     TestLabel label $ TestCase $ do
---         runDb $ do
---             clearDatabase
---             insertGraphs graphs
---         response <- runServerPart Controllers.Graph.index
---         let actual = BL.unpack $ rsBody response
---         assertEqual ("Unexpected response body for " ++ label) expected actual
-
+-- | Run a test case (case, input, expected output) on the index function.
 runIndexTest :: String -> [T.Text] -> String -> TestTree
 runIndexTest label graphs expected =
     testCase label $ do

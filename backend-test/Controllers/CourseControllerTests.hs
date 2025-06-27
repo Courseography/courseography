@@ -17,10 +17,12 @@ import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Courses(..))
+import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
-import Test.HUnit (Test(..), assertEqual)
-import TestHelpers (clearDatabase, runServerPart, runServerPartWithQuery, runServerPartWithCourseInfoQuery)
+import Test.Tasty
+import Test.Tasty.HUnit
+import TestHelpers (clearDatabase, runServerPart, runServerPartWithCourseInfoQuery,
+                    runServerPartWithQuery)
 
 -- | List of test cases as (input course name, course data, expected JSON output)
 retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, String)]
@@ -56,9 +58,9 @@ retrieveCourseTestCases =
     ]
 
 -- | Run a test case (case, input, expected output) on the retrieveCourse function.
-runRetrieveCourseTest :: String -> T.Text -> Map.Map T.Text T.Text -> String -> Test
+runRetrieveCourseTest :: String -> T.Text -> Map.Map T.Text T.Text -> String -> TestTree
 runRetrieveCourseTest label courseName courseData expected =
-    TestLabel label $ TestCase $ do
+    testCase label $ do
         let currCourseName = fromMaybe "" $ Map.lookup "name" courseData
 
         let videoUrls = case Map.lookup "videoUrls" courseData of
@@ -89,7 +91,7 @@ runRetrieveCourseTest label courseName courseData expected =
         assertEqual ("Unexpected response body for " ++ label) expected actual
 
 -- | Run all the retrieveCourse test cases
-runRetrieveCourseTests :: [Test]
+runRetrieveCourseTests :: [TestTree]
 runRetrieveCourseTests = map (\(label, courseName, courseData, expected) -> runRetrieveCourseTest label courseName courseData expected) retrieveCourseTestCases
 
 -- | Helper function to insert courses into the database
@@ -108,9 +110,9 @@ indexTestCases =
     ]
 
 -- | Run a test case (case, input, expected output) on the index function.
-runIndexTest :: String -> [T.Text] -> String -> Test
+runIndexTest :: String -> [T.Text] -> String -> TestTree
 runIndexTest label courses expected =
-    TestLabel label $ TestCase $ do
+    testCase label $ do
         runDb $ do
             clearDatabase
             insertCourses courses
@@ -119,12 +121,12 @@ runIndexTest label courses expected =
         assertEqual ("Unexpected response body for " ++ label) expected actual
 
 -- | Run all the index test cases
-runIndexTests :: [Test]
+runIndexTests :: [TestTree]
 runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses expected) indexTestCases
 
 -- | List of test cases as (case, database state, input [dept], expected JSON output) for the courseInfo function
 courseInfoTestCases :: [(String, [Courses], T.Text, String)]
-courseInfoTestCases = 
+courseInfoTestCases =
     [ ("Empty Database"
     , []
     , "STA"
@@ -183,11 +185,11 @@ courseInfoTestCases =
             , coursesCoreqs = Nothing
             , coursesVideoUrls = []
             }
-    
+
 -- | Run a test case (case, database state, input [dept], expected JSON output) on the courseInfo function
-runCourseInfoTest :: String -> [Courses] -> T.Text -> String -> Test
+runCourseInfoTest :: String -> [Courses] -> T.Text -> String -> TestTree
 runCourseInfoTest label state dept expected =
-    TestLabel label $ TestCase $ do
+    testCase label $ do
         runDb $ do
             clearDatabase
             mapM_ insert_ state
@@ -196,10 +198,10 @@ runCourseInfoTest label state dept expected =
         assertEqual ("Unexpected response body for " ++ label) expected actual
 
 -- | Run all courseInfo test cases
-runCourseInfoTests :: [Test]
+runCourseInfoTests :: [TestTree]
 runCourseInfoTests = map (\(label, state, dept, expected) -> runCourseInfoTest label state dept expected) courseInfoTestCases
 
 
 -- | Test suite for Course Controller Module
-courseControllerTestSuite :: Test
-courseControllerTestSuite = TestLabel "Course Controller tests" $ TestList (runRetrieveCourseTests ++ runIndexTests ++ runCourseInfoTests)
+courseControllerTestSuite :: TestTree
+courseControllerTestSuite = testGroup "Course Controller tests" (runRetrieveCourseTests ++ runIndexTests ++ runCourseInfoTests)
