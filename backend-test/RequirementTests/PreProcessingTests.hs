@@ -7,13 +7,14 @@ module RequirementTests.PreProcessingTests
 ( preProcTestSuite ) where
 
 import Data.Text as T hiding (map)
-import Test.HUnit (Test (..), assertEqual)
+import Test.Tasty
+import Test.Tasty.HUnit
 import Text.HTML.TagSoup (Tag (..))
 import WebParsing.PostParser (pruneHtml)
 
-createTest :: (Eq a, Show a, Eq b, Show b) => (a -> b) -> String -> [(a, b)] -> Test
-createTest function label input = TestLabel label $ TestList $ map (\(x, y) ->
-                                TestCase $ assertEqual ("for (" ++ show y ++ ")")
+createTest :: (Eq a, Show a, Eq b, Show b) => (a -> b) -> String -> [(a, b)] -> TestTree
+createTest function label input = testGroup label $ map (\(x, y) ->
+                                testCase "" $ assertEqual ("for (" ++ show y ++ ")")
                                 y (function x)) input
 
 
@@ -33,9 +34,9 @@ pruneHtmlInputs = [
     )
     ]
 
-pruneHtmlTests :: Test
+pruneHtmlTests :: TestTree
 pruneHtmlTests = createTest pruneHtml "filtering out html attributes" pruneHtmlInputs
 
 -- functions for running tests in REPL
-preProcTestSuite :: Test
-preProcTestSuite = TestLabel "Pre-processing tests" $ TestList [pruneHtmlTests]
+preProcTestSuite :: TestTree
+preProcTestSuite = testGroup "Pre-processing tests" [pruneHtmlTests]

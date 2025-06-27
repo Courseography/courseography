@@ -32,4 +32,4 @@ main = do
     unsetEnv "APP_ENV"
 
 tests :: TestTree
-tests = testGroup "Tests" [controllerTests, databaseTests]
+tests = testGroup "Tests" [controllerTests, databaseTests, requirementTests, svgTests]

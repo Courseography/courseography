@@ -10,12 +10,13 @@ module RequirementTests.ModifierTests
 
 import Database.Requirement
 import DynamicGraphs.GraphNodeUtils (concatModOr, stringifyModAnd)
-import Test.HUnit (Test (..), assertEqual)
+import Test.Tasty
+import Test.Tasty.HUnit
 
 -- Function to facilitate test case creation given a string, Req tuple
-createTest :: (Eq a, Show a) => (a -> String) -> String -> [(a, String)] -> Test
-createTest function label input = TestLabel label $ TestList $ map (\(x, y) ->
-                                TestCase $ assertEqual ("for (" ++ y ++ ")")
+createTest :: (Eq a, Show a) => (a -> String) -> String -> [(a, String)] -> TestTree
+createTest function label input = testGroup label $ map (\(x, y) ->
+                                testCase "" $ assertEqual ("for (" ++ y ++ ")")
                                 y (function x)) input
 
 -- Global FCEs value so the expected output has the same FCEs as the partial function in createTest
@@ -47,15 +48,15 @@ modandModOrInputs = [
     , ([ModOr [Level "300", Level "400"], ModOr [Department "CSC", Department "BCB"], Requirement (Raw "some raw text")], show globalFces ++ " CSC/BCB FCEs at the 300/400 level from some raw text")
     ]
 
-concatModOrTests :: Test
+concatModOrTests :: TestTree
 concatModOrTests = createTest concatModOr "joining ModOr with a delimiter" concatModOrInputs
 
-simpleModAndTests :: Test
+simpleModAndTests :: TestTree
 simpleModAndTests = createTest (stringifyModAnd globalFces) "ModAnd not containing ModOrs" simpleModAndInputs
 
-modandModOrTests :: Test
+modandModOrTests :: TestTree
 modandModOrTests = createTest (stringifyModAnd globalFces) "ModAnd containing ModOrs" modandModOrInputs
 
 -- functions for running tests in REPL
-modifierTestSuite :: Test
-modifierTestSuite = TestLabel "ReqParser tests" $ TestList [concatModOrTests, simpleModAndTests, modandModOrTests]
+modifierTestSuite :: TestTree
+modifierTestSuite = testGroup "ReqParser tests" [concatModOrTests, simpleModAndTests, modandModOrTests]

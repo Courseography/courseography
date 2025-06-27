@@ -11,14 +11,15 @@ module RequirementTests.PostParserTests
 import Data.Bifunctor (second)
 import qualified Data.Text as T
 import Database.DataType (PostType (..))
-import Test.HUnit (Test (..), assertEqual)
+import Test.Tasty
+import Test.Tasty.HUnit
 import qualified Text.Parsec as Parsec
 import WebParsing.PostParser (getPostType, postInfoParser)
 
 -- Function to facilitate test case creation given a string, Req tuple
-createTest :: (Show a, Eq a, Show b, Eq b) => (a -> b) -> String -> [(a, b)] -> Test
-createTest function label input = TestLabel label $ TestList $ map (\(x, y) ->
-                                TestCase $ assertEqual ("for (" ++ show x ++ "),")
+createTest :: (Show a, Eq a, Show b, Eq b) => (a -> b) -> String -> [(a, b)] -> TestTree
+createTest function label input = testGroup label $ map (\(x, y) ->
+                                testCase "" $ assertEqual ("for (" ++ show x ++ "),")
                                 y (function x)) input
 
 -- | Input and output pair of each post
@@ -69,12 +70,12 @@ getPostTypeInputs = [
     , (("", "Certificate in Business"), Certificate)
     ]
 
-postInfoTests :: Test
+postInfoTests :: TestTree
 postInfoTests = createTest (Parsec.parse postInfoParser "") "Post requirements" $ map (second Right) postInfoInputs
 
-getPostTypeTests :: Test
+getPostTypeTests :: TestTree
 getPostTypeTests = createTest (uncurry getPostType) "Post requirements" getPostTypeInputs
 
 -- functions for running tests in REPL
-postTestSuite :: Test
-postTestSuite = TestLabel "PostParser tests" $ TestList [postInfoTests, getPostTypeTests]
+postTestSuite :: TestTree
+postTestSuite = testGroup "PostParser tests" [postInfoTests, getPostTypeTests]
