@@ -9,7 +9,6 @@ module Controllers.ControllerTests
 (  controllerTests  ) where
 
 import Test.Tasty
-import Test.Tasty.HUnit
 
 import Controllers.CourseControllerTests (courseControllerTestSuite)
 import Controllers.GraphControllerTests (graphControllerTestSuite)
