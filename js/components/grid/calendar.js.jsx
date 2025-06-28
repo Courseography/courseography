@@ -1,3 +1,4 @@
+import React from "react"
 import { createRef, useCallback } from "react"
 import { MapModal } from "../common/react_modal.js.jsx"
 

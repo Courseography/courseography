@@ -1,3 +1,4 @@
+import React from "react"
 import { useCallback, useState, useEffect } from "react"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import { getCourse } from "../common/utils"

@@ -1,3 +1,4 @@
+import React from "react"
 import { useEffect, useState, useCallback, useRef } from "react"
 import { createRoot } from "react-dom/client"
 
@@ -23,7 +24,7 @@ provideGlobalGridOptions({ theme: "legacy" })
  * Renders the course panel, the Fall and Spring timetable grids and search panel.
  * Also keeps track of all the selected courses and lectures.
  */
-function Grid(props) {
+export default function Grid(props) {
   const [selectedLectures, setSelectedLectures] = useState([])
   const [selectedCourses, setSelectedCourses] = useState([])
   const [hoveredLecture, setHoveredLecture] = useState(null)
@@ -192,7 +193,3 @@ function Grid(props) {
     </>
   )
 }
-
-const container = document.getElementById("grid-body")
-const root = createRoot(container)
-root.render(<Grid />)
