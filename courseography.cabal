@@ -125,7 +125,6 @@ test-suite Tests
     courseography,
     directory,
     happstack-server,
-    HUnit,
     parsec,
     persistent-sqlite,
     QuickCheck,
