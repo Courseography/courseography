@@ -17,10 +17,7 @@ import RequirementTests.RequirementTests (requirementTests)
 import SvgTests.SvgTests (svgTests)
 import System.Directory (removeFile)
 import System.Environment (setEnv, unsetEnv)
-import qualified System.Exit as Exit
-import Test.HUnit (Test (..), failures, runTestTT)
 import Test.Tasty
-import Test.Tasty.HUnit
 
 main :: IO ()
 main = do

@@ -12,10 +12,10 @@ import Test.Tasty.HUnit
 import Text.HTML.TagSoup (Tag (..))
 import WebParsing.PostParser (pruneHtml)
 
-createTest :: (Eq a, Show a, Eq b, Show b) => (a -> b) -> String -> [(a, b)] -> TestTree
-createTest function label input = testGroup label $ map (\(x, y) ->
-                                testCase "" $ assertEqual ("for (" ++ show y ++ ")")
-                                y (function x)) input
+createTest :: (Eq a, Show a, Eq b, Show b) => (a -> b) -> String -> [(Int, (a, b))] -> TestTree
+createTest function label input = testGroup label $ map (\(x, (y, z)) ->
+                                testCase ("Test " ++ show x) $ assertEqual ("for (" ++ show z ++ ")")
+                                z (function y)) input
 
 
 pruneHtmlInputs :: [([Tag T.Text], [Tag T.Text])]
@@ -35,7 +35,7 @@ pruneHtmlInputs = [
     ]
 
 pruneHtmlTests :: TestTree
-pruneHtmlTests = createTest pruneHtml "filtering out html attributes" pruneHtmlInputs
+pruneHtmlTests = createTest pruneHtml "filtering out html attributes" $ Prelude.zip [0..] pruneHtmlInputs
 
 -- functions for running tests in REPL
 preProcTestSuite :: TestTree

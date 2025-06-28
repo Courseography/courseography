@@ -14,10 +14,10 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 -- Function to facilitate test case creation given a string, Req tuple
-createTest :: (Eq a, Show a) => (a -> String) -> String -> [(a, String)] -> TestTree
-createTest function label input = testGroup label $ map (\(x, y) ->
-                                testCase "" $ assertEqual ("for (" ++ y ++ ")")
-                                y (function x)) input
+createTest :: (Eq a, Show a) => (a -> String) -> String -> [(Int, (a, String))] -> TestTree
+createTest function label input = testGroup label $ map (\(x, (y, z)) ->
+                                testCase ("Test " ++ show x) $ assertEqual ("for (" ++ z ++ ")")
+                                z (function y)) input
 
 -- Global FCEs value so the expected output has the same FCEs as the partial function in createTest
 globalFces :: Float
@@ -49,13 +49,13 @@ modandModOrInputs = [
     ]
 
 concatModOrTests :: TestTree
-concatModOrTests = createTest concatModOr "joining ModOr with a delimiter" concatModOrInputs
+concatModOrTests = createTest concatModOr "joining ModOr with a delimiter" $ zip [0..] concatModOrInputs
 
 simpleModAndTests :: TestTree
-simpleModAndTests = createTest (stringifyModAnd globalFces) "ModAnd not containing ModOrs" simpleModAndInputs
+simpleModAndTests = createTest (stringifyModAnd globalFces) "ModAnd not containing ModOrs" $ zip [0..] simpleModAndInputs
 
 modandModOrTests :: TestTree
-modandModOrTests = createTest (stringifyModAnd globalFces) "ModAnd containing ModOrs" modandModOrInputs
+modandModOrTests = createTest (stringifyModAnd globalFces) "ModAnd containing ModOrs" $ zip [0..] modandModOrInputs
 
 -- functions for running tests in REPL
 modifierTestSuite :: TestTree
