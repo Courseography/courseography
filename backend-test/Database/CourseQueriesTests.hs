@@ -17,8 +17,8 @@ import Database.CourseQueries (reqsForPost)
 import Database.DataType (PostType (..))
 import Database.Persist.Sqlite (insert_)
 import Database.Tables (Post (..))
-import Test.Tasty
-import Test.Tasty.HUnit
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase)
 
 -- | List of test cases as (label, requirements to insert, input program, expected output)

@@ -12,7 +12,7 @@ import RequirementTests.ModifierTests (modifierTestSuite)
 import RequirementTests.PostParserTests (postTestSuite)
 import RequirementTests.PreProcessingTests (preProcTestSuite)
 import RequirementTests.ReqParserTests (reqTestSuite)
-import Test.Tasty
+import Test.Tasty (TestTree, testGroup)
 
 -- Single test encompassing all requirement test suites
 requirementTests :: TestTree

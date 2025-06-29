@@ -12,8 +12,8 @@ import Database.DataType (ShapeType (..))
 import Database.Persist.Sqlite (toSqlKey)
 import Database.Tables (Path (..), Shape (..), Text (..))
 import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
-import Test.Tasty
-import Test.Tasty.HUnit
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 -- * Mocks
 

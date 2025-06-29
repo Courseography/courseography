@@ -8,7 +8,7 @@ Module that contains the test suites for all the controllers.
 module Controllers.ControllerTests
 (  controllerTests  ) where
 
-import Test.Tasty
+import Test.Tasty (TestTree, testGroup)
 
 import Controllers.CourseControllerTests (courseControllerTestSuite)
 import Controllers.GraphControllerTests (graphControllerTestSuite)

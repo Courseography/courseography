@@ -16,8 +16,8 @@ import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Graph (..))
 import Happstack.Server (rsBody)
-import Test.Tasty
-import Test.Tasty.HUnit
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, runServerPart)
 
 -- | List of test cases as (label, input graphs, expected output)
