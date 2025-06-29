@@ -9,20 +9,22 @@ module RequirementTests.ReqParserTests
 ( reqTestSuite ) where
 
 import Database.Requirement
-import Test.HUnit (Test (..), assertEqual)
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.HUnit (assertEqual, testCase)
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 import WebParsing.ReqParser
 
 -- Function to facilitate test case creation given a string, Req tuple
-createTest :: (Eq a, Show a) => Parser a -> String -> [(String, a)] -> Test
-createTest parser label input = TestLabel label $ TestList $ map (\(x, y) ->
-                                TestCase $ assertEqual ("for (" ++ x ++ "),")
-                                (Right y) (Parsec.parse parser "" x)) input
+createTest :: (Eq a, Show a) => Parser a -> String -> [(String, a)] -> TestTree
+createTest parser label input = testGroup label $ zipWith (\(x :: Int) (y, z) ->
+                                testCase ("Test " ++ show x) $ assertEqual ("for (" ++ y ++ "),")
+                                (Right z) (Parsec.parse parser "" y)) [0..] input
 
-createReqParserTest :: String -> [(String, Req)] -> Test
-createReqParserTest label input = TestLabel label $ TestList $ map (\(x, y) ->
-                                  TestCase $ assertEqual ("for (" ++ x ++ "),") y (parseReqs x)) input
+createReqParserTest :: String -> [(String, Req)] -> TestTree
+createReqParserTest label input = testGroup label $ zipWith (\(x :: Int) (y, z) ->
+                                  testCase ("Test " ++ show x) $ assertEqual ("for (" ++ y ++ "),")
+                                  z (parseReqs y)) [0..] input
 
 orInputs :: [(String, Req)]
 orInputs = [
@@ -208,43 +210,43 @@ noPrereqInputs = [
     , ("no", None)
     ]
 
-orTests :: Test
+orTests :: TestTree
 orTests = createTest reqParser "Basic or Requirement" orInputs
 
-andTests :: Test
+andTests :: TestTree
 andTests = createTest reqParser "Basic and Requirement" andInputs
 
-andorTests :: Test
+andorTests :: TestTree
 andorTests = createTest reqParser "Basic and-or-mixed Requirement" andorInputs
 
-parTests :: Test
+parTests :: TestTree
 parTests = createTest reqParser "Basic and-or-parenthesized Requirement" parInputs
 
-fcesTests:: Test
+fcesTests:: TestTree
 fcesTests = createTest reqParser "Basic fces Requirement" fcesInputs
 
-cgpaTests :: Test
+cgpaTests :: TestTree
 cgpaTests = createTest reqParser "Minimum cGpa Requirement" cgpaInputs
 
 -- Outdated
 -- fromParTests :: Test
 -- fromParTests = createTest reqParser "Paranthesized From Requirements with integer or float fces" fromParInputs
 
-gradeBefTests :: Test
+gradeBefTests :: TestTree
 gradeBefTests = createTest reqParser "Basic grade requirements which come before." gradeBefInputs
 
-gradeAftTests :: Test
+gradeAftTests :: TestTree
 gradeAftTests = createTest reqParser "Basic grade requirements, where grades come after." gradeAftInputs
 
-artSciTests :: Test
+artSciTests :: TestTree
 artSciTests = createTest reqParser "Arts and Science requirements from Christine's output" artSciInputs
 
-programOrTests :: Test
+programOrTests :: TestTree
 programOrTests = createTest reqParser "program requirements" programOrInputs
 
-noPrereqTests :: Test
+noPrereqTests :: TestTree
 noPrereqTests = createReqParserTest "No prerequisites required" noPrereqInputs
 
 -- functions for running tests in REPL
-reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fcesTests, gradeBefTests, gradeAftTests, artSciTests, programOrTests, cgpaTests, noPrereqTests]
+reqTestSuite :: TestTree
+reqTestSuite = testGroup "ReqParser tests" [orTests, andTests, andorTests, parTests, fcesTests, gradeBefTests, gradeAftTests, artSciTests, programOrTests, cgpaTests, noPrereqTests]

@@ -14,10 +14,11 @@ import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Data.Time (getCurrentTime)
 import Database.CourseQueries (reqsForPost)
-import Database.DataType (PostType(..))
+import Database.DataType (PostType (..))
 import Database.Persist.Sqlite (insert_)
-import Database.Tables (Post(..))
-import Test.HUnit (Test(..), assertEqual)
+import Database.Tables (Post (..))
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase)
 
 -- | List of test cases as (label, requirements to insert, input program, expected output)
@@ -29,9 +30,9 @@ reqsForPostTestCases =
     ]
 
 -- | Run a test case (case, requirements, input, expected output) on the reqsForPost function.
-runReqsForPostTest :: String -> T.Text -> T.Text -> String -> Test
+runReqsForPostTest :: String -> T.Text -> T.Text -> String -> TestTree
 runReqsForPostTest label reqsToInsert program expected =
-    TestLabel label $ TestCase $ do
+    testCase label $ do
         currentTime <- liftIO getCurrentTime
         let testPost = Post Major "Computer Science" program "Sample post description" reqsToInsert currentTime currentTime
 
@@ -44,9 +45,9 @@ runReqsForPostTest label reqsToInsert program expected =
         assertEqual ("Unexpected response body for " ++ label) expected actual
 
 -- | Run all the reqsForPost test cases
-runReqsForPostTests :: [Test]
+runReqsForPostTests :: [TestTree]
 runReqsForPostTests = map (\(label, reqsToInsert, program, expected) -> runReqsForPostTest label reqsToInsert program expected) reqsForPostTestCases
 
 -- | Test suite for CourseQueries Module
-courseQueriesTestSuite :: Test
-courseQueriesTestSuite = TestLabel "Course Queries tests" $ TestList runReqsForPostTests
+courseQueriesTestSuite :: TestTree
+courseQueriesTestSuite = testGroup "Course Queries tests" runReqsForPostTests
