@@ -19,16 +19,16 @@ describe("test conditional rendering of the export button", () => {
 
   it("renders export button on the graph page", async () => {
     render(<NavBar selected_page="graph" />)
-    await screen.findByAltText("Export")
+    await screen.findByLabelText("Export")
   })
 
   it("renders export button on the grid page", async () => {
     render(<NavBar selected_page="grid" />)
-    await screen.findByAltText("Export")
+    await screen.findByLabelText("Export")
   })
 
   it("does not render export button on the generate page", () => {
     render(<NavBar selected_page="generate" />)
-    expect(screen.queryByAltText("Export")).toBeNull()
+    expect(screen.queryByLabelText("Export")).toBeNull()
   })
 })

@@ -43,7 +43,7 @@ export function NavBar({ selected_page }) {
       {/* Export button (graph/grid only) */}
       <div className="nav-right">
         {(selected_page === "graph" || selected_page === "grid") && (
-          <button id="nav-export">
+          <button id="nav-export" aria-label="Export">
             <FontAwesomeIcon icon={faDownload} />
           </button>
         )}
