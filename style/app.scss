@@ -137,12 +137,16 @@ body {
 #nav-export {
   background: transparent;
   border: 0;
-  padding: 15px 0 0;
+  padding: 10px 0 0;
   width: 40px;
 }
 
-#nav-export img {
-  width: 100%;
+#nav-export path {
+  fill: #fff;
+}
+
+#nav-export:hover path {
+  fill: #a9a9a9;
 }
 
 a,

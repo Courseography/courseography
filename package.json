@@ -10,6 +10,7 @@
     "build": "webpack --config webpack.prod.js --disable-interpret",
     "test": "jest",
     "prettier": "prettier --write .",
+    "stylelint": "stylelint",
     "eslint": "eslint --fix js",
     "prepare": "husky"
   },
