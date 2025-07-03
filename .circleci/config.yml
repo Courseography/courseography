@@ -63,16 +63,13 @@ jobs:
             stack --no-terminal test --coverage
             $(stack exec which hpc-lcov) -o coverage/backend.info
 
-      - coveralls/upload:
-          coverage_file: coverage/frontend.info
-          flag_name: frontend
-          parallel: true
+      - run:
+          name: Merge Coverage Files
+          command: |
+            cat coverage/frontend.info coverage/backend.info > coverage/merged.info
 
       - coveralls/upload:
-          coverage_file: coverage/backend.info
-          flag_name: backend
-          parallel: true
-          parallel_finished: true
+          coverage_file: coverage/merged.info
 
       - save_cache:
           name: Cache Dependencies (Haskell)
