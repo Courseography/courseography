@@ -65,10 +65,13 @@ jobs:
 
       - coveralls/upload:
           coverage_file: coverage/frontend.info
+          flag_name: frontend
           parallel: true
 
       - coveralls/upload:
           coverage_file: coverage/backend.info
+          flag_name: backend
+          parallel: true
           parallel_finished: true
 
       - save_cache:
