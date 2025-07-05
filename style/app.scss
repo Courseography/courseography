@@ -137,12 +137,21 @@ body {
 #nav-export {
   background: transparent;
   border: 0;
-  padding: 15px 0 0;
+  border-radius: 10px;
+  margin-top: 5px;
+  padding: 5px;
   width: 40px;
+  height: 40px;
+  transition: all 0.2s ease;
 }
 
-#nav-export img {
-  width: 100%;
+#nav-export:hover {
+  background: rgb(255 255 255 / 10%);
+  border-color: rgb(255 255 255 / 30%);
+}
+
+#nav-export path {
+  fill: #fff;
 }
 
 a,

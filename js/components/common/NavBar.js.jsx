@@ -1,4 +1,6 @@
 import React from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faDownload } from "@fortawesome/free-solid-svg-icons"
 
 /**
  * NavBar component.
@@ -41,8 +43,8 @@ export function NavBar({ selected_page }) {
       {/* Export button (graph/grid only) */}
       <div className="nav-right">
         {(selected_page === "graph" || selected_page === "grid") && (
-          <button id="nav-export">
-            <img src="/static/res/ico/export.png" alt="Export" />
+          <button id="nav-export" aria-label="Export">
+            <FontAwesomeIcon icon={faDownload} />
           </button>
         )}
       </div>
