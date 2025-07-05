@@ -135,16 +135,23 @@ body {
 }
 
 #nav-export {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
   border: 0;
-  padding: 10px 0 0;
+  border-radius: 10px;
+  margin-top: 5px;
+  padding: 5px;
   width: 40px;
+  height: 40px;
+  transition: all 0.2s ease;
 }
 
 #nav-export:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: rgb(255 255 255 / 10%);
+  border-color: rgb(255 255 255 / 30%);
+}
+
+#nav-export path {
+  fill: #fff;
 }
 
 a,
