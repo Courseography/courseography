@@ -135,18 +135,16 @@ body {
 }
 
 #nav-export {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border: 0;
   padding: 10px 0 0;
   width: 40px;
 }
 
-#nav-export path {
-  fill: #fff;
-}
-
-#nav-export:hover path {
-  fill: #a9a9a9;
+#nav-export:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 a,
