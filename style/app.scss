@@ -154,14 +154,6 @@ body {
   fill: #fff;
 }
 
-[data-tooltip-id="Export"] {
-  --react-tooltip-background: #fff;
-  --react-tooltip-colour: #5c497e;
-  --react-tooltip-font-size: 0.75rem;
-  --react-tooltip-padding: 4px 8px;
-  --rt-arrow-size: 6px;
-}
-
 a,
 a:hover,
 a:visited,
@@ -2114,6 +2106,13 @@ main-filter input {
 .tooltip-icon:hover {
   color: #fff;
   background-color: #9d8abe;
+}
+
+.export-tooltip {
+  color: #fff;
+  background-color: #9d8abe;
+  font-size: 0.8rem !important;
+  padding: 5px 10px !important;
 }
 
 .error-message {

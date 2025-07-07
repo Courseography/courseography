@@ -55,9 +55,9 @@ export function NavBar({ selected_page }) {
             </button>
             <Tooltip
               id="Export"
+              className="export-tooltip"
               place="left"
               variant="float"
-              style={{ backgroundColor: "black", color: "white" }}
             />
           </>
         )}
