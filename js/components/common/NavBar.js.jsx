@@ -50,7 +50,7 @@ export function NavBar({ selected_page, open_modal }) {
               aria-label="Export"
               data-tooltip-content="Export"
               data-tooltip-id="Export"
-              onclick={open_modal}
+              onClick={open_modal}
             >
               <FontAwesomeIcon icon={faDownload} />
             </button>
