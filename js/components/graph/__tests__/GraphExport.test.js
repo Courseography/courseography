@@ -7,7 +7,7 @@ describe("test export modal functionality on graph page", () => {
 
   it("test that export modal for graph pops up when export button clicked", async () => {
     render(<Container></Container>)
-    const exportButton = screen.getByAltText("Export")
+    const exportButton = screen.getByLabelText("Export")
     // check that export modal is not visible before button clicked, but is visible after
     expect(screen.queryByText("Export")).toBeNull()
     fireEvent.click(exportButton)
