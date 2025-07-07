@@ -155,8 +155,11 @@ body {
 }
 
 [data-tooltip-id="Export"] {
-  --react-tooltip-background: black;
-  --react-tooltip-colour: white;
+  --react-tooltip-background: #fff;
+  --react-tooltip-colour: #5c497e;
+  --react-tooltip-font-size: 0.75rem;
+  --react-tooltip-padding: 4px 8px;
+  --rt-arrow-size: 6px;
 }
 
 a,
