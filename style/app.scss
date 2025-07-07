@@ -154,6 +154,11 @@ body {
   fill: #fff;
 }
 
+[data-tooltip-id="Export"] {
+  --react-tooltip-background: black;
+  --react-tooltip-colour: white;
+}
+
 a,
 a:hover,
 a:visited,
