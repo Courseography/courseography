@@ -1,4 +1,7 @@
 import React from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faDownload } from "@fortawesome/free-solid-svg-icons"
+import { Tooltip } from "react-tooltip"
 
 /**
  * NavBar component.
@@ -41,9 +44,22 @@ export function NavBar({ selected_page }) {
       {/* Export button (graph/grid only) */}
       <div className="nav-right">
         {(selected_page === "graph" || selected_page === "grid") && (
-          <button id="nav-export">
-            <img src="/static/res/ico/export.png" alt="Export" />
-          </button>
+          <>
+            <button
+              id="nav-export"
+              aria-label="Export"
+              data-tooltip-content="Export"
+              data-tooltip-id="Export"
+            >
+              <FontAwesomeIcon icon={faDownload} />
+            </button>
+            <Tooltip
+              id="Export"
+              className="export-tooltip"
+              place="left"
+              variant="float"
+            />
+          </>
         )}
       </div>
     </nav>
