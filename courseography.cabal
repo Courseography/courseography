@@ -102,7 +102,7 @@ library
 
 
 test-suite Tests
-  main-is: Driver.hs
+  main-is: Main.hs
   other-modules:
     Controllers.CourseControllerTests,
     Controllers.GraphControllerTests,

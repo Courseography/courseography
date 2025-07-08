@@ -18,7 +18,6 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Courses (..))
-import GHC.IO.FD (release)
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree, testGroup, withResource)
 import Test.Tasty.HUnit (assertEqual, testCase)
