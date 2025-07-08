@@ -6,14 +6,28 @@ Module that contains helper functions used in testing controller module function
 -}
 
 module TestHelpers
-    (mockRequest, runServerPart, clearDatabase, runServerPartWithQuery, runServerPartWithCourseInfoQuery) where
+    (acquireDatabase,
+    mockRequest,
+    runServerPart,
+    clearDatabase,
+    releaseDatabase,
+    runServerPartWithQuery,
+    runServerPartWithCourseInfoQuery)
+    where
 
-import Control.Concurrent.MVar (newMVar, newEmptyMVar)
+import Config (databasePath)
+import Control.Concurrent.MVar (newEmptyMVar, newMVar)
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.Map as Map
-import Database.Persist.Sqlite (deleteWhere, Filter, SqlPersistM)
+import Data.Text (unpack)
+import Database.Database (setupDatabase)
+import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere)
 import Database.Tables
-import Happstack.Server (HttpVersion(..), Request(..), Input(..), Response, ServerPart, Method(GET), ContentType(..), simpleHTTP'', inputContentType, inputFilename, inputValue)
+import Happstack.Server (ContentType (..), HttpVersion (..), Input (..), Method (GET), Request (..),
+                         Response, ServerPart, inputContentType, inputFilename, inputValue,
+                         simpleHTTP'')
+import System.Directory (removeFile)
+import System.Environment (setEnv, unsetEnv)
 
 -- | A minimal mock request for running a ServerPart
 mockRequest :: IO Request
@@ -125,3 +139,14 @@ clearDatabase = do
     deleteWhere ([] :: [Filter Post])
     deleteWhere ([] :: [Filter PostCategory])
     deleteWhere ([] :: [Filter Building])
+
+acquireDatabase :: IO ()
+acquireDatabase = do
+    setEnv "APP_ENV" "test"
+    setupDatabase
+
+releaseDatabase :: () -> IO ()
+releaseDatabase _ = do
+    path <- databasePath
+    removeFile $ unpack path
+    unsetEnv "APP_ENV"

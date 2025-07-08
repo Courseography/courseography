@@ -4,7 +4,7 @@ Description: Test some pre-processing functions that clean up the text before ru
 -}
 
 module RequirementTests.PreProcessingTests
-( preProcTestSuite ) where
+( test_preProcessing ) where
 
 import Data.Text as T hiding (map)
 import Test.Tasty (TestTree, testGroup)
@@ -38,5 +38,5 @@ pruneHtmlTests :: TestTree
 pruneHtmlTests = createTest pruneHtml "filtering out html attributes" pruneHtmlInputs
 
 -- functions for running tests in REPL
-preProcTestSuite :: TestTree
-preProcTestSuite = testGroup "Pre-processing tests" [pruneHtmlTests]
+test_preProcessing :: TestTree
+test_preProcessing = testGroup "Pre-processing tests" [pruneHtmlTests]

@@ -5,7 +5,7 @@ Module that contains the tests for intersection checks in the SVG Builder module
 
 -}
 
-module SvgTests.IntersectionTests (intersectionTestSuite) where
+module SvgTests.IntersectionTests (test_intersections) where
 
 import qualified Data.Text as T
 import Database.DataType (ShapeType (..))
@@ -526,6 +526,6 @@ runBuildPathTests =
 
 
 -- Test suite for intersection checks
-intersectionTestSuite :: TestTree
-intersectionTestSuite = testGroup "Intersection tests" $
+test_intersections :: TestTree
+test_intersections = testGroup "Intersection tests" $
     runBuildRectTests ++ runBuildEllipsesTests ++ runIntersectsWithShape ++ runBuildPathTests

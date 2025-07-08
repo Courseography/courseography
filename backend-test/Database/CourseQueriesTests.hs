@@ -6,7 +6,7 @@ Module that contains the tests for the functions in the CourseQueries module.
 -}
 
 module Database.CourseQueriesTests
-( courseQueriesTestSuite
+( test_courseQueries
 ) where
 
 import Config (runDb)
@@ -17,9 +17,9 @@ import Database.CourseQueries (reqsForPost)
 import Database.DataType (PostType (..))
 import Database.Persist.Sqlite (insert_)
 import Database.Tables (Post (..))
-import Test.Tasty (TestTree, testGroup)
+import Test.Tasty (TestTree, testGroup, withResource)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (clearDatabase)
+import TestHelpers (acquireDatabase, clearDatabase, releaseDatabase)
 
 -- | List of test cases as (label, requirements to insert, input program, expected output)
 reqsForPostTestCases :: [(String, T.Text, T.Text, String)]
@@ -49,5 +49,7 @@ runReqsForPostTests :: [TestTree]
 runReqsForPostTests = map (\(label, reqsToInsert, program, expected) -> runReqsForPostTest label reqsToInsert program expected) reqsForPostTestCases
 
 -- | Test suite for CourseQueries Module
-courseQueriesTestSuite :: TestTree
-courseQueriesTestSuite = testGroup "Course Queries tests" runReqsForPostTests
+test_courseQueries :: TestTree
+test_courseQueries =
+    withResource (do acquireDatabase) releaseDatabase $ \_ ->
+    testGroup "Course Queries tests" runReqsForPostTests

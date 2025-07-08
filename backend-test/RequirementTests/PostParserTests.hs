@@ -6,7 +6,7 @@ Module containing test cases for Post Parsers.
 -}
 
 module RequirementTests.PostParserTests
-( postTestSuite ) where
+( test_postParser ) where
 
 import Data.Bifunctor (second)
 import qualified Data.Text as T
@@ -77,5 +77,5 @@ getPostTypeTests :: TestTree
 getPostTypeTests = createTest (uncurry getPostType) "Post requirements" getPostTypeInputs
 
 -- functions for running tests in REPL
-postTestSuite :: TestTree
-postTestSuite = testGroup "PostParser tests" [postInfoTests, getPostTypeTests]
+test_postParser :: TestTree
+test_postParser = testGroup "PostParser tests" [postInfoTests, getPostTypeTests]

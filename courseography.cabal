@@ -102,18 +102,15 @@ library
 
 
 test-suite Tests
-  main-is: Main.hs
+  main-is: Driver.hs
   other-modules:
-    Controllers.ControllerTests,
     Controllers.CourseControllerTests,
     Controllers.GraphControllerTests,
     RequirementTests.ModifierTests,
     RequirementTests.PostParserTests,
     RequirementTests.PreProcessingTests,
     RequirementTests.ReqParserTests,
-    RequirementTests.RequirementTests,
     SvgTests.IntersectionTests,
-    SvgTests.SvgTests,
     TestHelpers
   Type: exitcode-stdio-1.0
   build-depends:
@@ -130,12 +127,15 @@ test-suite Tests
     QuickCheck,
     tagsoup,
     tasty >=1.5.3,
+    tasty-discover,
     tasty-hunit,
     test-framework,
     test-framework-hunit,
     test-framework-quickcheck2,
     text,
     time
+  build-tool-depends:
+    tasty-discover:tasty-discover
   default-extensions:
     LambdaCase,
     OverloadedStrings,
