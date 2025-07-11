@@ -69,7 +69,7 @@ run `$ yarn run test -- <path>`.
 
 #### Running back-end tests
 
-To run all tests, run `$ stack test`, or equivalently `$ stack test :Tests`.
+To run all tests, run `$ stack test`. To run a specific test group or test case, run `stack test --ta '-p "<group/case label>"'`.
 
 #### Developers
 
