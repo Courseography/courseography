@@ -3,6 +3,8 @@ import PropTypes from "prop-types"
 import Disclaimer from "../common/Disclaimer"
 import { Graph } from "./Graph"
 import FocusBar from "./FocusBar"
+import GraphFallback from "./GraphFallback"
+import { ErrorBoundary } from "react-error-boundary"
 
 export default class Container extends React.Component {
   constructor(props) {
@@ -88,20 +90,22 @@ export default class Container extends React.Component {
     return (
       <div>
         <Disclaimer />
-        <Graph
-          ref={this.graph}
-          currFocus={this.state.currFocus}
-          edit={this.props.edit}
-          fceCount={this.state.fceCount}
-          getLocalGraph={this.getLocalGraph}
-          graphName={this.state.graphName}
-          incrementFCECount={this.incrementFCECount}
-          initialDrawMode="draw-node"
-          setFCECount={this.setFCECount}
-          start_blank={this.props.start_blank}
-          graphs={this.state.graphs}
-          updateGraph={this.updateGraph}
-        />
+        <ErrorBoundary FallbackComponent={GraphFallback}>
+          <Graph
+            ref={this.graph}
+            currFocus={this.state.currFocus}
+            edit={this.props.edit}
+            fceCount={this.state.fceCount}
+            getLocalGraph={this.getLocalGraph}
+            graphName={this.state.graphName}
+            incrementFCECount={this.incrementFCECount}
+            initialDrawMode="draw-node"
+            setFCECount={this.setFCECount}
+            start_blank={this.props.start_blank}
+            graphs={this.state.graphs}
+            updateGraph={this.updateGraph}
+          />
+        </ErrorBoundary>
         <FocusBar
           focusBarEnabled={this.state.graphName === "Computer Science"}
           highlightFocus={this.highlightFocus}

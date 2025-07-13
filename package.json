@@ -39,7 +39,8 @@
     "leaflet": "^1.9.3",
     "lodash": "^4.17.21",
     "react": "^19.1.0",
-    "react-dom": "19.1.0",
+    "react-dom": "^19.1.0",
+    "react-error-boundary": "^5.0.0",
     "react-leaflet": "^4.2.1",
     "react-modal": "^3.16.1",
     "react-tooltip": "^5.28.0"
