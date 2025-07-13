@@ -7,6 +7,7 @@
 ### ✨ New features/enhancements
 
 - Updated the Zoom In/Zoom Out buttons on the graph page to Awesome Icons from +/-
+- Added the React ErrorBoundary library and implemented an ErrorBoundary for the Graph Component in the Container and `js/components/draw/main.js`
 
 ### 🐛 Bug fixes
 
