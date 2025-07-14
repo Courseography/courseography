@@ -143,7 +143,7 @@ clearDatabase = do
 acquireDatabase :: IO ()
 acquireDatabase = do
     setEnv "APP_ENV" "test"
-    setupDatabase
+    setupDatabase True
 
 releaseDatabase :: () -> IO ()
 releaseDatabase _ = do

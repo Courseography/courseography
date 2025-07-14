@@ -34,7 +34,7 @@ taskMap = Map.fromList [
     ("database-graphs", const parsePrebuiltSvgs),
     ("docs", const generateDocs),
     ("generate", generate),
-    ("database-setup", const setupDatabase)]
+    ("database-setup", const (setupDatabase False))]
 
 -- | Courseography entry point.
 main :: IO ()
