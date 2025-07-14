@@ -23,10 +23,11 @@ provideGlobalGridOptions({ theme: "legacy" })
  * Renders the course panel, the Fall and Spring timetable grids and search panel.
  * Also keeps track of all the selected courses and lectures.
  */
-function Grid(props) {
+export default function Grid(props) {
   const [selectedLectures, setSelectedLectures] = useState([])
   const [selectedCourses, setSelectedCourses] = useState([])
   const [hoveredLecture, setHoveredLecture] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
 
   const exportModal = useRef(null)
 
@@ -59,11 +60,6 @@ function Grid(props) {
       })
       setSelectedCourses(selectedCourses)
     }
-
-    // Enable "Export" link
-    document.getElementById("nav-export")?.addEventListener("click", () => {
-      exportModal.current.openModal()
-    })
   }, [])
 
   useEffect(() => {
@@ -158,11 +154,28 @@ function Grid(props) {
     setHoveredLecture(null)
   })
 
+  // Method passed to child component NavBar to open the export modal when the button is clicked
+  const openExportModal = useCallback(() => {
+    setModalOpen(true)
+  })
+
+  // Method passed to child component ExportModal to close the export modal when esc is clicked,
+  // or a click outside the modal is detected
+  const closeExportModal = useCallback(() => {
+    setModalOpen(false)
+  })
+
   const updatedList = hoveredLecture
     ? selectedLectures.concat(hoveredLecture)
     : selectedLectures
   return (
     <>
+      <NavBar selected_page="grid" open_modal={openExportModal}></NavBar>
+      <ExportModal
+        page="grid"
+        open={modalOpen}
+        onRequestClose={closeExportModal}
+      ></ExportModal>
       <Disclaimer />
       <CoursePanel
         selectedCourses={selectedCourses}
@@ -179,11 +192,3 @@ function Grid(props) {
     </>
   )
 }
-
-const navbar = document.getElementById("navbar")
-const navbarRoot = createRoot(navbar)
-navbarRoot.render(<NavBar selected_page="grid" />)
-
-const container = document.getElementById("grid-body")
-const root = createRoot(container)
-root.render(<Grid />)

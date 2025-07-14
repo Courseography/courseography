@@ -7,13 +7,20 @@
 ### ✨ New features/enhancements
 
 - Updated the Zoom In/Zoom Out buttons on the graph page to Awesome Icons from +/-
+- Updated the export button on the graph and grid pages to Awesome Icons; also added highlight effect and tooltip popup on hover
 - Added the React ErrorBoundary library and implemented an ErrorBoundary for the Graph Component in the Container and `js/components/draw/main.js`
 
 ### 🐛 Bug fixes
 
+- Fixed a bug that was causing the focus info popup to appear blank
+
 ### 🔧 Internal changes
 
 - Refactored navigation bar into a React component (for the graph, grid and generate pages only - the about page navigation bar is still rendered using Blaze)
+- Refactored backend tests to use `tasty` and `tasty-hunit` instead of `HUnit`
+- Modified CircleCI configuration so that Jest tests now emit coverage reports which are then uploaded to Coveralls
+- Refactored export modal behaviour such that it is handled entirely through React state, rather than through DOM manipulation with vanilla JS
+- Added test cases for the `ExportModal` component in `js/components/common`
 
 ## [0.7.1] - 2025-06-16
 

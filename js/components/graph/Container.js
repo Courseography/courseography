@@ -3,6 +3,8 @@ import PropTypes from "prop-types"
 import Disclaimer from "../common/Disclaimer"
 import { Graph } from "./Graph"
 import FocusBar from "./FocusBar"
+import { NavBar } from "../common/NavBar.js.jsx"
+import { ExportModal } from "../common/export.js.jsx"
 import GraphFallback from "./GraphFallback"
 import { ErrorBoundary } from "react-error-boundary"
 
@@ -14,6 +16,7 @@ export default class Container extends React.Component {
       fceCount: 0,
       graphName: "",
       graphs: [],
+      modalOpen: false,
     }
     this.graph = React.createRef()
   }
@@ -35,11 +38,14 @@ export default class Container extends React.Component {
           throw "No graphs in database"
         }
       )
+  }
 
-    // Enable "Export" link
-    document.getElementById("nav-export")?.addEventListener("click", () => {
-      this.graph.current.openExportModal()
-    })
+  openExportModal = () => {
+    this.setState({ modalOpen: true })
+  }
+
+  closeExportModal = () => {
+    this.setState({ modalOpen: false })
   }
 
   updateGraph = graphName => {
@@ -89,6 +95,12 @@ export default class Container extends React.Component {
   render() {
     return (
       <div>
+        <NavBar selected_page="graph" open_modal={this.openExportModal}></NavBar>
+        <ExportModal
+          page="graph"
+          open={this.state.modalOpen}
+          onRequestClose={this.closeExportModal}
+        ></ExportModal>
         <Disclaimer />
         <ErrorBoundary FallbackComponent={GraphFallback}>
           <Graph

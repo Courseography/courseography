@@ -140,10 +140,7 @@ const config = {
   setupFiles: ["<rootDir>/js/setupTests.js"],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: [
-    "<rootDir>/js/setupTestsAfterEnv.js",
-    "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js",
-  ],
+  setupFilesAfterEnv: ["<rootDir>/js/components/graph/__tests__/cleanup-after-each.js"],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,

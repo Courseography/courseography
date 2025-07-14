@@ -52,13 +52,19 @@ jobs:
             yarn install
 
       - run:
-          name: Run Tests and Generate Coverage
+          name: Run Frontend Tests and Generate Coverage
           command: |
-            yarn test --maxWorkers=4
-            stack --no-terminal test --coverage
-            $(stack exec which hpc-lcov)
+            yarn test --coverage --maxWorkers=4
+            mv coverage/lcov.info coverage/frontend.info
 
-      - coveralls/upload
+      - run:
+          name: Run Backend Tests and Generate Coverage
+          command: |
+            stack --no-terminal test --coverage
+            $(stack exec which hpc-lcov) -o coverage/backend.info
+
+      - coveralls/upload:
+          coverage_files: coverage/frontend.info coverage/backend.info
 
       - save_cache:
           name: Cache Dependencies (Haskell)
