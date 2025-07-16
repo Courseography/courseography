@@ -12,7 +12,8 @@ module TestHelpers
     clearDatabase,
     releaseDatabase,
     runServerPartWithQuery,
-    runServerPartWithCourseInfoQuery)
+    runServerPartWithCourseInfoQuery,
+    withDatabase)
     where
 
 import Config (databasePath)
@@ -28,6 +29,7 @@ import Happstack.Server (ContentType (..), HttpVersion (..), Input (..), Method 
                          simpleHTTP'')
 import System.Directory (removeFile)
 import System.Environment (setEnv, unsetEnv)
+import Test.Tasty (TestTree, testGroup, withResource)
 
 -- | A minimal mock request for running a ServerPart
 mockRequest :: IO Request
@@ -150,3 +152,8 @@ releaseDatabase _ = do
     path <- databasePath
     removeFile $ unpack path
     unsetEnv "APP_ENV"
+
+withDatabase ::  String -> [TestTree] -> TestTree
+withDatabase label tests =
+    withResource acquireDatabase releaseDatabase $ \_ ->
+    testGroup label tests

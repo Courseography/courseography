@@ -6,7 +6,7 @@ Module that contains the tests for the functions in the Graph Controller module.
 -}
 
 module Controllers.GraphControllerTests
-( test_graphControllers
+( test_graphController
 ) where
 
 import Config (runDb)
@@ -16,9 +16,9 @@ import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Graph (..))
 import Happstack.Server (rsBody)
-import Test.Tasty (TestTree, testGroup, withResource)
+import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (acquireDatabase, clearDatabase, releaseDatabase, runServerPart)
+import TestHelpers (clearDatabase, runServerPart, withDatabase)
 
 -- | List of test cases as (label, input graphs, expected output)
 indexTestCases :: [(String, [T.Text], String)]
@@ -60,7 +60,5 @@ runIndexTests :: [TestTree]
 runIndexTests = map (\(label, graphs, expected) -> runIndexTest label graphs expected) indexTestCases
 
 -- | Test suite for Graph Controller Module
-test_graphControllers :: TestTree
-test_graphControllers =
-    withResource (do acquireDatabase) releaseDatabase $ \_ ->
-    testGroup "Graph Controller tests" runIndexTests
+test_graphController :: TestTree
+test_graphController = withDatabase "Graph Controller tests" runIndexTests

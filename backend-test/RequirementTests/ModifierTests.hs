@@ -6,7 +6,7 @@ Module containing test cases for Modifier string formatters.
 -}
 
 module RequirementTests.ModifierTests
-( test_modifiers ) where
+( test_modifier ) where
 
 import Database.Requirement
 import DynamicGraphs.GraphNodeUtils (concatModOr, stringifyModAnd)
@@ -58,5 +58,5 @@ modandModOrTests :: TestTree
 modandModOrTests = createTest (stringifyModAnd globalFces) "ModAnd containing ModOrs" modandModOrInputs
 
 -- functions for running tests in REPL
-test_modifiers :: TestTree
-test_modifiers = testGroup "ReqParser tests" [concatModOrTests, simpleModAndTests, modandModOrTests]
+test_modifier :: TestTree
+test_modifier = testGroup "ReqParser tests" [concatModOrTests, simpleModAndTests, modandModOrTests]

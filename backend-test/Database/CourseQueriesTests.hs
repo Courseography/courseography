@@ -17,9 +17,9 @@ import Database.CourseQueries (reqsForPost)
 import Database.DataType (PostType (..))
 import Database.Persist.Sqlite (insert_)
 import Database.Tables (Post (..))
-import Test.Tasty (TestTree, testGroup, withResource)
+import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (acquireDatabase, clearDatabase, releaseDatabase)
+import TestHelpers (clearDatabase, withDatabase)
 
 -- | List of test cases as (label, requirements to insert, input program, expected output)
 reqsForPostTestCases :: [(String, T.Text, T.Text, String)]
@@ -51,5 +51,4 @@ runReqsForPostTests = map (\(label, reqsToInsert, program, expected) -> runReqsF
 -- | Test suite for CourseQueries Module
 test_courseQueries :: TestTree
 test_courseQueries =
-    withResource (do acquireDatabase) releaseDatabase $ \_ ->
-    testGroup "Course Queries tests" runReqsForPostTests
+    withDatabase "Course Queries tests" runReqsForPostTests
