@@ -69,7 +69,9 @@ run `$ yarn run test -- <path>`.
 
 #### Running back-end tests
 
-To run all tests, run `$ stack test`, or equivalently `$ stack test :Tests`.
+To run all tests, run `$ stack test`. To run a specific test group or test case, run `stack test --ta '-p "<name of test group/case>"'`.
+
+_For more information on the `-p` argument, see https://github.com/UnkindPartition/tasty?tab=readme-ov-file#patterns._
 
 #### Developers
 
