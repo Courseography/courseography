@@ -106,6 +106,7 @@ test-suite Tests
   other-modules:
     Controllers.CourseControllerTests,
     Controllers.GraphControllerTests,
+    Database.CourseQueriesTests,
     RequirementTests.ModifierTests,
     RequirementTests.PostParserTests,
     RequirementTests.PreProcessingTests,
