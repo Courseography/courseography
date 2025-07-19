@@ -6,7 +6,7 @@ Module that contains the tests for the functions in the Course Controller module
 -}
 
 module Controllers.CourseControllerTests
-( courseControllerTestSuite
+( test_courseController
 ) where
 
 import Config (runDb)
@@ -19,10 +19,10 @@ import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
-import Test.Tasty (TestTree, testGroup)
+import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, runServerPart, runServerPartWithCourseInfoQuery,
-                    runServerPartWithQuery)
+                    runServerPartWithQuery, withDatabase)
 
 -- | List of test cases as (input course name, course data, expected JSON output)
 retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, String)]
@@ -201,7 +201,7 @@ runCourseInfoTest label state dept expected =
 runCourseInfoTests :: [TestTree]
 runCourseInfoTests = map (\(label, state, dept, expected) -> runCourseInfoTest label state dept expected) courseInfoTestCases
 
-
 -- | Test suite for Course Controller Module
-courseControllerTestSuite :: TestTree
-courseControllerTestSuite = testGroup "Course Controller tests" (runRetrieveCourseTests ++ runIndexTests ++ runCourseInfoTests)
+test_courseController :: TestTree
+test_courseController = withDatabase "Course Controller tests" (runRetrieveCourseTests ++
+    runIndexTests ++ runCourseInfoTests)

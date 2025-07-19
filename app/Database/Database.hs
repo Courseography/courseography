@@ -10,11 +10,12 @@ module Database.Database
     (populateCalendar, setupDatabase) where
 
 import Config (databasePath, runDb)
+import Control.Monad (void)
 import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
-import Database.Persist.Sqlite (insert_, runMigration)
+import Database.Persist.Sqlite (insert_, runMigration, runMigrationQuiet)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
 import WebParsing.ArtSciParser (parseCalendar)
@@ -27,14 +28,18 @@ breathTableSetUpStr = "breadth table set up"
 
 
 -- | Creates the database if it doesn't exist and runs migrations.
-setupDatabase :: IO ()
-setupDatabase = do
-      -- Create db folder if it doesn't exist
-      dbPath <- liftIO databasePath
-      let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
-          db = T.unpack $ T.take ind dbPath
-      createDirectoryIfMissing True db
-      runDb $ runMigration migrateAll
+setupDatabase :: Bool -> IO ()
+setupDatabase quiet = do
+    -- Create db folder if it doesn't exist
+    dbPath <- liftIO databasePath
+    let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
+        db = T.unpack $ T.take ind dbPath
+    createDirectoryIfMissing True db
+    runDb (
+        if quiet
+            then void $ runMigrationQuiet migrateAll
+            else runMigration migrateAll
+        )
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()
