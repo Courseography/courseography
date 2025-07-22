@@ -21,6 +21,8 @@
 - Modified CircleCI configuration so that Jest tests now emit coverage reports which are then uploaded to Coveralls
 - Refactored export modal behaviour such that it is handled entirely through React state, rather than through DOM manipulation with vanilla JS
 - Added test cases for the `ExportModal` component in `js/components/common`
+- Updated backend tests to use `tasty-discover`
+- Added documentation for running a subset of the backend tests
 
 ## [0.7.1] - 2025-06-16
 

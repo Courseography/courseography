@@ -6,7 +6,7 @@ Module containing test cases for Requirement Parsers.
 -}
 
 module RequirementTests.ReqParserTests
-( reqTestSuite ) where
+( test_requirements ) where
 
 import Database.Requirement
 import Test.Tasty (TestTree, testGroup)
@@ -248,5 +248,5 @@ noPrereqTests :: TestTree
 noPrereqTests = createReqParserTest "No prerequisites required" noPrereqInputs
 
 -- functions for running tests in REPL
-reqTestSuite :: TestTree
-reqTestSuite = testGroup "ReqParser tests" [orTests, andTests, andorTests, parTests, fcesTests, gradeBefTests, gradeAftTests, artSciTests, programOrTests, cgpaTests, noPrereqTests]
+test_requirements :: TestTree
+test_requirements = testGroup "ReqParser tests" [orTests, andTests, andorTests, parTests, fcesTests, gradeBefTests, gradeAftTests, artSciTests, programOrTests, cgpaTests, noPrereqTests]
