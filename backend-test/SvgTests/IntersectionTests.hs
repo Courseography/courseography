@@ -7,12 +7,13 @@ Module that contains the tests for intersection checks in the SVG Builder module
 
 module SvgTests.IntersectionTests (intersectionTestSuite) where
 
-import Svg.Builder (buildRect, buildEllipses, buildPath, intersectsWithShape)
-import Database.Tables (Text(..), Shape(..), Path(..))
-import Database.DataType (ShapeType(..))
 import qualified Data.Text as T
-import Test.HUnit (Test(..), assertEqual, assertBool)
+import Database.DataType (ShapeType (..))
 import Database.Persist.Sqlite (toSqlKey)
+import Database.Tables (Path (..), Shape (..), Text (..))
+import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 -- * Mocks
 
@@ -456,39 +457,39 @@ testShapeBuilder :: ([Text] -> Shape -> Integer -> Shape)
                  -> String
                  -> String
                  -> ((Integer, [Text], Shape), (T.Text, [Text]), String)
-                 -> Test
+                 -> TestTree
 testShapeBuilder fn label shapeLabel input =
     let ((elementId, texts, rect), (expectedId_, expectedTexts), testLabel) = input
         result = fn texts rect elementId
-    in TestLabel (label ++ testLabel) $ TestCase $ do
+    in testCase (label ++ testLabel) $ do
         assertEqual ("Check id_ failed for " ++ shapeLabel ++ " " ++ show elementId) expectedId_ $ shapeId_ result
         assertBool ("Check texts failed for " ++ shapeLabel ++ " " ++ show elementId) $ compareTexts expectedTexts $ shapeText result
 
 -- Function for testing a intersectsWithShape test case
 testIntersectsWithShape :: String
                         -> ((Integer, Text, [Shape]), Bool, String)
-                        -> Test
+                        -> TestTree
 testIntersectsWithShape label input =
     let ((testId, text, shapes), expected, testLabel) = input
         actual = intersectsWithShape shapes text
-    in TestLabel (label ++ testLabel) $ TestCase $ do
+    in testCase (label ++ testLabel) $ do
         assertEqual ("Check intersection failed for case " ++ show testId) expected actual
 
 -- Function for testing a buildPath test case
 testBuildPath :: String
               -> ((Integer, Path, [Shape], [Shape]), (T.Text, T.Text, T.Text), String)
-              -> Test
+              -> TestTree
 testBuildPath label input =
     let ((elementId, path, rects, ellipses), (expectedId_, expectedSource, expectedTarget), testLabel) = input
         result = buildPath rects ellipses path elementId
-    in TestLabel (label ++ testLabel) $ TestCase $ do
+    in testCase (label ++ testLabel) $ do
         assertEqual ("Check id_ failed for path " ++ show elementId) expectedId_ $ pathId_ result
         assertEqual ("Check source node failed for path " ++ show elementId) expectedSource $ pathSource result
         assertEqual ("Check target node failed for path " ++ show elementId) expectedTarget $ pathTarget result
 
 
 -- Run all test cases for buildRect
-runBuildRectTests :: [Test]
+runBuildRectTests :: [TestTree]
 runBuildRectTests =
     map (testShapeBuilder buildRect "Test buildRect no transformation: " "rect") buildRectNoTransformInputs ++
     map (testShapeBuilder buildRect "Test buildRect translation: " "rect") buildRectTranslationInputs ++
@@ -497,7 +498,7 @@ runBuildRectTests =
     map (testShapeBuilder buildRect "Test buildRect mixed transformations: " "rect") buildRectMixedInputs
 
 -- Run all test cases for buildEllipses
-runBuildEllipsesTests :: [Test]
+runBuildEllipsesTests :: [TestTree]
 runBuildEllipsesTests =
     map (testShapeBuilder buildEllipses "Test buildEllipses no transformation: " "ellipse") buildEllipsesNoTransformationInputs ++
     map (testShapeBuilder buildEllipses "Test buildEllipses translation: " "ellipse") buildEllipsesTranslationInputs ++
@@ -506,7 +507,7 @@ runBuildEllipsesTests =
     map (testShapeBuilder buildEllipses "Test buildEllipses mixed transformations: " "ellipse") buildEllipsesMixedInputs
 
 -- Run all test cases for buildPath
-runIntersectsWithShape :: [Test]
+runIntersectsWithShape :: [TestTree]
 runIntersectsWithShape =
     map (testIntersectsWithShape "Test intersectsWithShape no transformation: ") intersectsWithShapeNoTransformationInputs ++
     map (testIntersectsWithShape "Test intersectsWithShape translation: ") intersectsWithShapeTranslationInputs ++
@@ -515,7 +516,7 @@ runIntersectsWithShape =
     map (testIntersectsWithShape "Test intersectsWithShape mixed transformations: ") intersectsWithShapeMixedInputs
 
 -- Run all test cases for buildPath
-runBuildPathTests :: [Test]
+runBuildPathTests :: [TestTree]
 runBuildPathTests =
     map (testBuildPath "Test buildPath no transformation: ") buildPathNoTransformationInputs ++
     map (testBuildPath "Test buildPath translation: ") buildPathTranslationInputs ++
@@ -525,6 +526,6 @@ runBuildPathTests =
 
 
 -- Test suite for intersection checks
-intersectionTestSuite :: Test
-intersectionTestSuite = TestLabel "Intersection tests" $
-    TestList $ runBuildRectTests ++ runBuildEllipsesTests ++ runIntersectsWithShape ++ runBuildPathTests
+intersectionTestSuite :: TestTree
+intersectionTestSuite = testGroup "Intersection tests" $
+    runBuildRectTests ++ runBuildEllipsesTests ++ runIntersectsWithShape ++ runBuildPathTests

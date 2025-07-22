@@ -4,11 +4,6 @@ import { Graph } from "../graph/Graph"
 import { ErrorBoundary } from "react-error-boundary"
 import GraphFallback from "../graph/GraphFallback"
 
-function sendEmail() {
-  const email = "david@cs.toronto.edu";
-  window.location.href = `mailto:${email}`
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("react-graph")
   const root = createRoot(container)

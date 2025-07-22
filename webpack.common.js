@@ -12,7 +12,7 @@ const isDevelopment = process.env.NODE_ENV !== "production"
 module.exports = {
   mode: isDevelopment ? "development" : "production",
   entry: {
-    "js/grid/app": "./js/components/grid/grid.js.jsx",
+    "js/grid/app": "./js/components/grid/main.js",
     "js/graph/app": "./js/components/graph/main.js",
     "js/draw/app": "./js/components/draw/main.js",
     "js/generate/app": "./js/components/generate/generate.jsx",

@@ -137,12 +137,21 @@ body {
 #nav-export {
   background: transparent;
   border: 0;
-  padding: 15px 0 0;
+  border-radius: 10px;
+  margin-top: 5px;
+  padding: 5px;
   width: 40px;
+  height: 40px;
+  transition: all 0.2s ease;
 }
 
-#nav-export img {
-  width: 100%;
+#nav-export:hover {
+  background: rgb(255 255 255 / 10%);
+  border-color: rgb(255 255 255 / 30%);
+}
+
+#nav-export path {
+  fill: #fff;
 }
 
 a,
@@ -2099,6 +2108,13 @@ main-filter input {
   background-color: #9d8abe;
 }
 
+.export-tooltip {
+  color: #fff;
+  background-color: #9d8abe;
+  font-size: 0.8rem !important;
+  padding: 5px 10px !important;
+}
+
 .error-message {
   color: #dc143c;
   font-size: 0.75rem;
@@ -2251,6 +2267,21 @@ main-filter input {
 .error-boundary-text {
   color: #76609c;
   margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.graph-fallback-email {
+  color: #76609c;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.graph-fallback-email:hover {
+  text-decoration: underline;
+}
+
+.graph-fallback-error {
+  font-size: 20px;
 }
 
 #error-svg {

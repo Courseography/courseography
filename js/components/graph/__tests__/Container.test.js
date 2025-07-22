@@ -1,18 +1,24 @@
 import React from "react"
-import { render } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import Container from "../Container"
-
-jest.mock("../Graph", () => ({
-  __esModule: true,
-  default: () => {
-    throw new Error("Test Fallback Error Boundary")
-  },
-}))
+import { Graph } from "../Graph"
 
 describe("Verify that the Error Fallback component is only rendered on a Graph render error", () => {
-  it("Should render the Fallback component when the Graph fails to render", () => {
-    const result = render(<Container />)
-    const foundFallback = result.container.querySelector("#graph-fallback")
-    expect(foundFallback).not.toBeNull()
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  it("Should render the Fallback component when the Graph fails to render", async () => {
+    jest.spyOn(Graph.prototype, "getGraph").mockImplementation(() => {
+      throw new Error("Test Error Boundary Thrown")
+    })
+    render(<Container />)
+    expect(screen.queryByText(/Test Error Boundary Thrown/))
+  })
+
+  it("Should not render the Fallback component when the Graph does not fail to render", async () => {
+    render(<Container />)
+    const foundText = screen.queryByText(/Your graph has failed to render/)
+    expect(foundText).toBeNull()
   })
 })

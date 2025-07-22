@@ -15,13 +15,11 @@ export class ExportModal extends React.Component {
     this.getImage = this.getImage.bind(this)
     this.getGraphImage = this.getGraphImage.bind(this)
     this.getGridImage = this.getGridImage.bind(this)
-    this.openModal = this.openModal.bind(this)
-    this.closeModal = this.closeModal.bind(this)
     this.toggleSession = this.toggleSession.bind(this)
   }
 
   getImage() {
-    if (this.props.context === "graph") {
+    if (this.props.page === "graph") {
       this.getGraphImage()
     } else {
       this.getGridImage(this.props.session)
@@ -81,26 +79,18 @@ export class ExportModal extends React.Component {
     })
   }
 
-  openModal() {
-    this.setState({ modalIsOpen: true }, this.getImage)
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false })
-  }
-
   toggleSession() {
     this.getGridImage(this.state.otherSession)
   }
 
   render() {
-    if (this.props.context === "graph") {
+    if (this.props.page === "graph") {
       return (
         <ReactModal
           className="modal-class"
           overlayClassName="overlay"
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}
+          isOpen={this.props.open}
+          onRequestClose={this.props.onRequestClose}
         >
           <GraphImage data={this.state.data} />
         </ReactModal>
@@ -110,8 +100,8 @@ export class ExportModal extends React.Component {
         <ReactModal
           className="modal-class"
           overlayClassName="overlay"
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}
+          isOpen={this.props.open}
+          onRequestClose={this.props.onRequestClose}
         >
           <GridImage data={this.state.data} toggleSession={this.toggleSession} />
         </ReactModal>
