@@ -7,7 +7,6 @@ import Bool from "./Bool"
 import Edge from "./Edge"
 import Node from "./Node"
 import Button from "./Button"
-import InfoBox from "./InfoBox"
 import GraphDropdown from "./GraphDropdown"
 import Sidebar from "./Sidebar"
 import { parseAnd } from "../../util/util.js"
@@ -1735,16 +1734,6 @@ export class Graph extends React.Component {
             this.state.connections,
             this.nodeDropshadowFilter
           )}
-
-          <InfoBox
-            onClick={this.infoBoxMouseClick}
-            onMouseEnter={this.infoBoxMouseEnter}
-            onMouseLeave={this.infoBoxMouseLeave}
-            showInfoBox={this.state.showInfoBox}
-            xPos={this.state.infoBoxXPos}
-            yPos={this.state.infoBoxYPos}
-            nodeId={this.state.infoBoxNodeId}
-          />
         </svg>
       </div>
     )
