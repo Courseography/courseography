@@ -9,7 +9,7 @@ describe("Verify that the Error Fallback component is only rendered on a Graph r
   })
 
   it("Should render the Fallback component when the Graph fails to render", async () => {
-    jest.spyOn(Graph.prototype, "getGraph").mockImplementation(() => {
+    jest.spyOn(Graph.prototype, "componentDidMount").mockImplementation(() => {
       throw new Error("Test Error Boundary Thrown")
     })
     render(<Container />)

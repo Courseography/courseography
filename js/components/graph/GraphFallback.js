@@ -10,7 +10,7 @@ export default class GraphFallback extends React.Component {
     return (
       <div className="error-boundary-container">
         <div className="error-boundary-box">
-          <FontAwesomeIcon icon={faTriangleExclamation} id="error-svg" />
+          <FontAwesomeIcon icon={faTriangleExclamation} className="error-svg" />
           <div className="error-boundary-text">
             Your graph has failed to render. Please reload this page or report this
             issue to David Liu at {""}

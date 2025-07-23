@@ -11,8 +11,7 @@
     "test": "jest",
     "prettier": "prettier --write .",
     "eslint": "eslint --fix js",
-    "prepare": "husky",
-    "stylelint": "stylelint '**/*.scss'"
+    "prepare": "husky"
   },
   "private": true,
   "lint-staged": {

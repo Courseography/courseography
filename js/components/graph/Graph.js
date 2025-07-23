@@ -126,7 +126,7 @@ export class Graph extends React.Component {
     }
   }
 
-  getGraph() {
+  getGraph = () => {
     const graphName = this.props.graphName.replace("-", " ")
     const url = new URL("/get-json-data", document.location)
     const params = { graphName: graphName }
