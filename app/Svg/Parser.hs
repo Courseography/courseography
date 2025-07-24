@@ -151,7 +151,7 @@ parseGraph key tags =
         small shape = shapeWidth shape < 300
         removeRedundant shapes =
             filter (not . \s -> shapePos s `elem` map shapePos shapes &&
-                                (T.null (shapeFill s) || shapeFill s == "#000000") &&
+                                (T.null (shapeFill s) || shapeFill s == "black") &&
                                 elem (shapeType_ s) [Node, Hybrid]) shapes
 
 

@@ -103,9 +103,6 @@ export default class GenerateForm extends React.Component {
         })
 
         data.shapes.forEach(function (entry) {
-          if (entry.id_.includes("|")) {
-            return
-          }
           if (entry.type_ === "Node") {
             nodesJSON[entry.id_] = entry
           } else if (entry.type_ === "Hybrid") {
