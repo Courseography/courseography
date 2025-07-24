@@ -1538,7 +1538,6 @@ export class Graph extends React.Component {
   render() {
     let containerWidth = 0
     let containerHeight = 0
-
     if (document.getElementById("react-graph") !== null) {
       const reactGraph = document.getElementById("react-graph")
       containerWidth = reactGraph.clientWidth
