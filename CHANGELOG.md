@@ -13,6 +13,7 @@
 ### 🐛 Bug fixes
 
 - Fixed a bug that was causing the focus info popup to appear blank
+- Removed extraneous InfoBox popup from top left corner of graph/generate view
 
 ### 🔧 Internal changes
 
