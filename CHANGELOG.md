@@ -126,6 +126,7 @@
 - Correctly handle `'l'` directives in svg path attributes
 - Fixed bug that prevented timetable information from loading in Grid page
 - Fixed bug that prevented the course info modal from displaying in Grid page
+- Fixed bug that led code to crash when parsing graphs from svg
 
 ### 🔧 Internal changes
 
