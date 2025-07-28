@@ -4328,7 +4328,8 @@ __metadata:
     prettier: ^3.2.5
     prop-types: 15.8.1
     react: ^19.1.0
-    react-dom: 19.1.0
+    react-dom: ^19.1.0
+    react-error-boundary: ^5.0.0
     react-leaflet: ^4.2.1
     react-modal: ^3.16.1
     react-tooltip: ^5.28.0
@@ -9582,7 +9583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.1.0":
+"react-dom@npm:^19.1.0":
   version: 19.1.0
   resolution: "react-dom@npm:19.1.0"
   dependencies:
@@ -9590,6 +9591,17 @@ __metadata:
   peerDependencies:
     react: ^19.1.0
   checksum: 1d154b6543467095ac269e61ca59db546f34ef76bcdeb90f2dad41d682cd210aae492e70c85010ed5d0a2caea225e9a55139ebc1a615ee85bf197d7f99678cdf
+  languageName: node
+  linkType: hard
+
+"react-error-boundary@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "react-error-boundary@npm:5.0.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 4fa78890bb254fe1f0ee1eed893ac161a27482c4567f7667ef83a8339432eb99e323ee69757f01f4864e0037b01a9b6822735ea122f02e749d0bf7a781d9ea53
   languageName: node
   linkType: hard
 
