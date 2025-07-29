@@ -180,26 +180,31 @@ parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
                 -> [Text]
 parseTextHelper _ _ _ _ [] = []
 parseTextHelper key styles' trans globalTrans (headTag:restTags) =
-    let [[a, c, e], [b, d, f], _] = completeTrans
-       in [Text key
-            (fromAttrib "id" headTag) -- TODO: Why are we setting an id?
-            (readAttr "x" headTag, readAttr "y" headTag)
-            (TS.escapeHTML $ trim $ TS.innerText (headTag:restTags))
-            align
-            fill
-            [a, b, c, d, e, f]
-       ]
+    if not $ any (TS.isTagOpenName "tspan") restTags
+    then
+        let [[a, c, e], [b, d, f], _] = completeTrans
+        in [Text key
+                (fromAttrib "id" headTag) -- TODO: Why are we setting an id?
+                (readAttr "x" headTag, readAttr "y" headTag)
+                (TS.escapeHTML $ trim $ TS.innerText (headTag:restTags))
+                align
+                fill
+                [a, b, c, d, e, f]
+        ]
+    else
+        let tspanTags = TS.partitions (TS.isTagOpenName "tspan") (headTag:restTags)
+        in
+            concatMap (parseTextHelper key newStyle newTrans globalTrans) tspanTags
     where
-       newStyle = styles headTag ++ styles'
-       currTrans = getTransform headTag
-       newTrans = matrixMultiply trans currTrans
-       completeTrans = matrixMultiply globalTrans newTrans
-       alignAttr = styleVal "text-anchor" newStyle
-       align = if T.null alignAttr
-               then "start"
-               else alignAttr
-       fill = styleVal "fill" newStyle
-
+        newStyle = styles headTag ++ styles'
+        currTrans = getTransform headTag
+        newTrans = matrixMultiply trans currTrans
+        completeTrans = matrixMultiply globalTrans newTrans
+        alignAttr = styleVal "text-anchor" newStyle
+        align = if T.null alignAttr
+                then "start"
+                else alignAttr
+        fill = styleVal "fill" newStyle
 
 -- | Create a rectangle from a list of attributes.
 parseRect :: Matrix
