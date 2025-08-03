@@ -2246,3 +2246,51 @@ main-filter input {
   font-size: medium;
   font-style: italic;
 }
+
+.error-boundary-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 8px;
+}
+
+.error-boundary-box {
+  border: 4px solid #76609c;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  margin: 0;
+}
+
+.error-boundary-text {
+  color: #76609c;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.graph-fallback-email {
+  color: #76609c;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.graph-fallback-email:hover {
+  text-decoration: underline;
+}
+
+.graph-fallback-error {
+  font-size: 20px;
+}
+
+.error-svg {
+  width: 2rem;
+  height: 2rem;
+  padding-right: 0.2rem;
+  margin-right: 8px;
+}
+
+.error-svg path {
+  fill: #76609c;
+}
