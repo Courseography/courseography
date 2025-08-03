@@ -151,10 +151,12 @@ parseGraph key tags =
         small shape = shapeWidth shape < 300
         removeRedundant shapes =
             filter (not . \s -> shapePos s `elem` map shapePos shapes &&
-                                (T.null (shapeFill s) || shapeFill s == "black") &&
+                                isEdge s &&
                                 elem (shapeType_ s) [Node, Hybrid]) shapes
 
-
+-- | Determine if a shape is an edge.
+isEdge :: Shape -> Bool
+isEdge shape = T.null (shapeFill shape) || shapeFill shape == "black" || shapeFill shape == "#000000"
 
 -- | Create text values from g tags.
 -- This searches for nested tspan tags inside text tags using a recursive
