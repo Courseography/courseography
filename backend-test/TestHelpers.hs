@@ -25,9 +25,9 @@ import Data.Text (unpack)
 import Database.Database (setupDatabase)
 import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere)
 import Database.Tables
-import Happstack.Server (ContentType (..), HttpVersion (..), Input (..), Method (GET), Request (..),
-                         Response, ServerPart, inputContentType, inputFilename, inputValue,
-                         simpleHTTP'')
+import Happstack.Server (ContentType (..), HttpVersion (..), Input (..), Method (GET, PUT),
+                         Request (..), Response, ServerPart, inputContentType, inputFilename,
+                         inputValue, simpleHTTP'')
 import System.Directory (removeFile)
 import System.Environment (setEnv, unsetEnv)
 import Test.Tasty (TestTree, testGroup, withResource)
@@ -111,7 +111,7 @@ mockRequestWithGraphGenerate :: BSL.ByteString -> IO Request
 mockRequestWithGraphGenerate payload = do
     inputsBody <- newMVar []
     requestBody <- newEmptyMVar
-    putMVar requestBody (Right (RqBody payload))
+    putMVar requestBody (Right (rqBody payload))
 
     return Request
         { rqSecure          = False
