@@ -24,6 +24,7 @@ library
   exposed-modules:
     Config,
     Controllers.Course,
+    Controllers.Generate,
     Controllers.Graph,
     Css.Constants,
     Database.CourseInsertion,

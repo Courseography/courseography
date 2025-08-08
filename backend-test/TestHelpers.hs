@@ -111,7 +111,7 @@ mockRequestWithGraphGenerate :: BSL.ByteString -> IO Request
 mockRequestWithGraphGenerate payload = do
     inputsBody <- newMVar []
     requestBody <- newEmptyMVar
-    putMVar requestBody (RqBody payload)
+    putMVar requestBody (Body payload)
 
     return Request
         { rqSecure          = False
