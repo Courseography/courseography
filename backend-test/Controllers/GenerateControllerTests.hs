@@ -5,7 +5,7 @@ Module that contains the tests for the functions in the Course Controller module
 
 -}
 
-module Controllers.CourseControllerTests
+module Controllers.GenerateControllerTests
 ( test_generateController
 ) where
 
