@@ -149,7 +149,7 @@ runServerPartWithCourseInfoQuery sp dept = do
     request <- mockRequestWithCourseInfoQuery dept
     simpleHTTP'' sp request
 
--- | Helper function to run  for findAndSavePrereqsResponse
+-- | Helper function to run ServerPartWithGraphGenerate for findAndSavePrereqsResponse
 runServerPartWithGraphGenerate :: ServerPart Response -> BSL.ByteString -> IO Response
 runServerPartWithGraphGenerate sp payload = do
     request <- mockRequestWithGraphGenerate payload
