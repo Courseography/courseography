@@ -19,6 +19,7 @@ module TestHelpers
 import Config (databasePath)
 import Control.Concurrent.MVar (newEmptyMVar, newMVar, putMVar)
 import qualified Data.ByteString.Lazy as BSL
+import qualified Data.ByteString.Lazy.Char8 as BSL8
 import qualified Data.Map as Map
 import Data.Text (unpack)
 import Database.Database (setupDatabase)
@@ -69,7 +70,7 @@ mockRequestWithQuery courseName = do
         , rqUri             = "/course"
         , rqQuery           = ""
         , rqInputsQuery     = [("name", Input {
-            inputValue = Right (BSL.Char8.pack courseName),
+            inputValue = Right (BSL8.pack courseName),
             inputFilename = Nothing,
             inputContentType = defaultContentType
           })]
@@ -93,7 +94,7 @@ mockRequestWithCourseInfoQuery dept = do
         , rqUri             = "/course-info"
         , rqQuery           = ""
         , rqInputsQuery     = [("dept", Input {
-            inputValue = Right (BSL.Char8.pack dept),
+            inputValue = Right (BSL8.pack dept),
             inputFilename = Nothing,
             inputContentType = defaultContentType
           })]
