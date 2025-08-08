@@ -1,7 +1,7 @@
 {-|
-Description: Course Controller module tests.
+Description: Generate Controller module tests.
 
-Module that contains the tests for the functions in the Course Controller module.
+Module that contains the tests for the functions in the Generate Controller module.
 
 -}
 
@@ -10,7 +10,7 @@ module Controllers.GenerateControllerTests
 ) where
 
 import Config (runDb)
-import Control.Monad (unless)
+import Control.Monad (mapM_, unless)
 import Controllers.Generate (findAndSavePrereqsResponse)
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
@@ -21,54 +21,34 @@ import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (testCase)
 import TestHelpers (clearDatabase, withDatabase)
 
--- | List of test cases as (input course, course data, expected # of nodes in prereq graph)
-findAndSavePrereqsResponseTestCases :: [(String, Map.Map T.Text T.Text, Integer)]
+-- | Helper function to insert courses into the database
+insertCoursesWithPrerequisites :: [(T.Text, T.Text)] -> SqlPersistM ()
+insertCoursesWithPrerequisites = mapM_ insertCourse
+    where
+        insertCourse (code, prereqString) = insert_ (Courses code Nothing Nothing Nothing prereqString Nothing Nothing Nothing Nothing [])
+
+-- | List of test cases as (input course, course and prereq structure, JSON payload, expected # of nodes in prereq graph)
+findAndSavePrereqsResponseTestCases :: [(String, (T.Text, T.Text), BSL.ByteString, Integer)]
 findAndSavePrereqsResponseTestCases =
-    [("CSC148",
-    Map.fromList [
-        ("name", "CSC148H1"),
-        ("title", "Introduction to Computer Science"),
-        ("description", "Abstract data types and data structures for implementing them. Linked data structures. Encapsulation and information-hiding. Object-oriented programming. Specifications. Analyzing the efficiency of programs. Recursion. This course assumes programming experience as provided by CSC108H1. Students who already have this background may consult the Computer Science Undergraduate Office for advice about skipping CSC108H1. Practical (P) sections consist of supervised work in the computing laboratory. These sections are offered when facilities are available, and attendance is required. Note: Students may request to move from CSC148H1 to CSC108H1 after the last day to add classes and before a deadline set by the course instructors, if space is available in CSC108H1 at the time of the request."),
-        ("prereqs", "CSC108H1"),
-        ("exclusions", ""),
-        ("breadth", "null"),
-        ("distribution", "null"),
-        ("prereqString", "CSC108H1"),
-        ("coreqs", "null"),
-        ("videoUrls", "null")
-        ],
+    [("CSC148H1",
+    [("CSC108H1", ""), ("CSC148H1", "CSC108H1")],
+    "{\"courses\":[\"CSC148H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}}",
     2
     )]
 
 -- | Run a test case (input course, expected # of nodes) on the findAndSavePrereqsResponse function.
-runfindAndSavePrereqsResponseTest :: String -> Map.Map T.Text T.Text -> Integer -> TestTree
-runfindAndSavePrereqsResponseTest course courseData expected =
+runfindAndSavePrereqsResponseTest :: String -> [(T.Text, T.Text)] -> BSL.ByteString -> Integer -> TestTree
+runfindAndSavePrereqsResponseTest course graphStructure payload expected =
     testCase course $ do
-        let currCourseName = fromMaybe "" $ Map.lookup "name" courseData
-
-        let courseToInsert =
-                Courses
-                    { coursesCode = currCourseName
-                    , coursesTitle = Map.lookup "title" courseData
-                    , coursesDescription = Map.lookup "description" courseData
-                    , coursesPrereqs = Map.lookup "prereqs" courseData
-                    , coursesExclusions = Nothing
-                    , coursesBreadth = Nothing
-                    , coursesDistribution = Nothing
-                    , coursesPrereqString = Map.lookup "prereqString" courseData
-                    , coursesCoreqs = Nothing
-                    , coursesVideoUrls = []
-                    }
-
         runDb $ do
             clearDatabase
-            unless (T.null currCourseName) $
-                insert_ courseToInsert
+            insertCoursesWithPrerequisites graphStructure
 
         -- Run the function and check that generated graph only has the expected number of nodes.
-        -- response <- runServerPartWithGraphGenerate Controllers.Generate.findAndSavePrereqsResponse (payload)
+        response <- runServerPartWithGraphGenerate Controllers.Generate.findAndSavePrereqsResponse payload
 
-        -- TODO: take the response and extract the number of nodes within the generated graph, then assert that it is equal to the expected value.
+        -- Take the response and extract the number of nodes within the generated graph, then assert that it is equal to the expected value.
+
 
         -- let actual =
         -- assertEqual ("Unexpected response for " ++ label) expected actual

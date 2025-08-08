@@ -13,6 +13,7 @@ module TestHelpers
     releaseDatabase,
     runServerPartWithQuery,
     runServerPartWithCourseInfoQuery,
+    runServerPartWithGraphGenerate,
     withDatabase)
     where
 
