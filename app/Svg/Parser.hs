@@ -154,7 +154,7 @@ parseGraph key tags =
                                 isEdge s &&
                                 elem (shapeType_ s) [Node, Hybrid]) shapes
 
--- | Determine if a shape is an edge.
+-- | Determine if the input shape is an edge.
 isEdge :: Shape -> Bool
 isEdge shape = T.null (shapeFill shape) || shapeFill shape == "black" || shapeFill shape == "#000000"
 

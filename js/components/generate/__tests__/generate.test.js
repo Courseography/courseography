@@ -242,37 +242,3 @@ it("No warning for valid program input strings", async () => {
   await user.click(genButton)
   await expect(screen.findByText(/invalid/i)).rejects.toThrow()
 })
-
-describe("Ensure extraneous edge artifacts are being filtered out during graph generation.", () => {
-  beforeEach(() => {
-    render(<GenerateForm />)
-  })
-
-  it.each([
-    {
-      courseInputText: "CSC148H1",
-    },
-    {
-      courseInputText: "CSC324H1",
-    },
-    {
-      courseInputText: "CSC311H1",
-    },
-  ])(".$courseInputText", async ({ courseInputText }) => {
-    const user = userEvent.setup()
-
-    const coursesInputField = screen.getByPlaceholderText("e.g., CSC207H1, CSC324H1")
-    await user.click(coursesInputField)
-    await user.tripleClick(coursesInputField)
-    await user.keyboard(courseInputText)
-
-    let genButton = screen.getByText("Generate")
-    await user.click(genButton)
-
-    // make sure edges aren't nodes in the generated SVG
-    const nodes = document.getElementById("nodes").children
-    for (const node of nodes) {
-      expect(node.id).not.toContain("|")
-    }
-  })
-})

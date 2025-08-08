@@ -17,8 +17,8 @@ module TestHelpers
     where
 
 import Config (databasePath)
-import Control.Concurrent.MVar (newEmptyMVar, newMVar)
-import qualified Data.ByteString.Lazy.Char8 as BSL
+import Control.Concurrent.MVar (newEmptyMVar, newMVar, putMVar)
+import qualified Data.ByteString.Lazy as BSL
 import qualified Data.Map as Map
 import Data.Text (unpack)
 import Database.Database (setupDatabase)
@@ -69,7 +69,7 @@ mockRequestWithQuery courseName = do
         , rqUri             = "/course"
         , rqQuery           = ""
         , rqInputsQuery     = [("name", Input {
-            inputValue = Right (BSL.pack courseName),
+            inputValue = Right (BSL.Char8.pack courseName),
             inputFilename = Nothing,
             inputContentType = defaultContentType
           })]
@@ -93,10 +93,32 @@ mockRequestWithCourseInfoQuery dept = do
         , rqUri             = "/course-info"
         , rqQuery           = ""
         , rqInputsQuery     = [("dept", Input {
-            inputValue = Right (BSL.pack dept),
+            inputValue = Right (BSL.Char8.pack dept),
             inputFilename = Nothing,
             inputContentType = defaultContentType
           })]
+        , rqInputsBody      = inputsBody
+        , rqCookies         = []
+        , rqVersion         = HttpVersion 1 1
+        , rqHeaders         = Map.empty
+        , rqBody            = requestBody
+        , rqPeer            = ("127.0.0.1", 0)
+        }
+
+-- | A mock request for the graph generate route, specifically for findAndSavePrereqsResponse
+mockRequestWithGraphGenerate :: BSL.ByteString -> IO Request
+mockRequestWithGraphGenerate payload = do
+    inputsBody <- newMVar []
+    requestBody <- newEmptyMVar
+    putMVar requestBody (Right (RqBody payload))
+
+    return Request
+        { rqSecure          = False
+        , rqMethod          = PUT
+        , rqPaths           = ["graph-generate"]
+        , rqUri             = "/graph-generate"
+        , rqQuery           = ""
+        , rqInputsQuery     = []
         , rqInputsBody      = inputsBody
         , rqCookies         = []
         , rqVersion         = HttpVersion 1 1
@@ -123,6 +145,12 @@ runServerPartWithQuery sp courseName = do
 runServerPartWithCourseInfoQuery :: ServerPart Response -> String -> IO Response
 runServerPartWithCourseInfoQuery sp dept = do
     request <- mockRequestWithCourseInfoQuery dept
+    simpleHTTP'' sp request
+
+-- | Helper function to run  for findAndSavePrereqsResponse
+runServerPartWithGraphGenerate :: ServerPart Response -> BSL.ByteString -> IO Response
+runServerPartWithGraphGenerate sp payload = do
+    request <- mockRequestWithGraphGenerate payload
     simpleHTTP'' sp request
 
 -- | Clear all the entries in the database
