@@ -54,7 +54,7 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expected =
             actual =
                 fromIntegral . length $ filter isNode (toList shapes)
 
-        assertEqual ("Unexpected response for" ++ course) expected actual
+        assertEqual ("Unexpected response for " ++ course) expected actual
 
     where
         isNode (Object object) =
