@@ -11,7 +11,7 @@ describe("InfoBox", () => {
       onClick: jest.fn(),
       onMouseDown: jest.fn(),
       onMouseLeave: jest.fn(),
-      nodeId: "",
+      nodeId: "aaa100",
       showInfoBox: false,
       xPos: 0,
       yPos: 0,
@@ -26,9 +26,8 @@ describe("InfoBox", () => {
     const graph = await TestGraph.build()
     const aaa100 = graph.getByTestId("aaa100")
 
-    const infoBox = graph.getNodeByText("Info")
-    expect(infoBox.classList.contains("tooltip-group-hidden")).toBe(true)
     await user.hover(aaa100)
+    const infoBox = graph.getNodeByText("Info")
     expect(infoBox.classList.contains("tooltip-group-display")).toBe(true)
   })
 
@@ -75,5 +74,10 @@ describe("InfoBox", () => {
     await waitFor(() => {
       expect(graph.textExists(/AAA Thinking/)).toBe(true)
     })
+  })
+
+  it("should not render when no course is active (infoBoxNodeId is empty)", async () => {
+    const graph = await TestGraph.build()
+    expect(graph.rtlGraph.queryByText("Info")).toBeNull()
   })
 })
