@@ -3,6 +3,11 @@ import PropTypes from "prop-types"
 
 export default class InfoBox extends React.Component {
   render() {
+    // guard against rendering with no course
+    if (!this.props.nodeId) {
+      return null
+    }
+
     const className = this.props.showInfoBox
       ? "tooltip-group-display"
       : "tooltip-group-hidden"

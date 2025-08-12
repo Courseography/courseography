@@ -8,7 +8,7 @@ exports[`InfoBox should match snapshot 1`] = `
   <rect
     fill="white"
     height="30"
-    id="-tooltip-rect"
+    id="aaa100-tooltip-rect"
     rx="4"
     ry="4"
     stroke="black"
@@ -18,7 +18,7 @@ exports[`InfoBox should match snapshot 1`] = `
     y="0"
   />
   <text
-    id="-tooltip-text"
+    id="aaa100-tooltip-text"
     x="12"
     y="21"
   >
