@@ -26,9 +26,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.28.2",
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@fortawesome/fontawesome-svg-core": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^0.2.3",
     "ag-grid-community": "^34.1.0",
     "ag-grid-react": "^34.1.0",
     "bootstrap": "^5.3.3",
