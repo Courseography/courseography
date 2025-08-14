@@ -28,20 +28,34 @@ import TestHelpers (clearDatabase, runServerPartWithGraphGenerate, withDatabase)
 insertCoursesWithPrerequisites :: [(T.Text, Maybe T.Text)] -> SqlPersistM ()
 insertCoursesWithPrerequisites = mapM_ insertCourse
     where
-        insertCourse (code, prereqString) = insert_ (Courses code Nothing Nothing Nothing prereqString Nothing Nothing Nothing Nothing [])
+        insertCourse (code, prereqString) = insert_ (Courses { coursesCode = code, coursesTitle = Nothing, coursesDescription = Nothing, coursesPrereqs = Nothing, coursesExclusions = prereqString, coursesBreadth = Nothing, coursesDistribution = Nothing, coursesPrereqString = Nothing, coursesCoreqs = Nothing, coursesVideoUrls = [] })
 
--- | List of test cases as (input course, course/prereq structure, JSON payload, expected # of nodes in prereq graph)
-findAndSavePrereqsResponseTestCases :: [(String, [(T.Text, Maybe T.Text)], BSL.ByteString, Integer)]
+-- | List of test cases as
+-- (input course, course/prereq structure, JSON payload, expected # of nodes in prereq graph, expected # of boolean nodes in prereq graph)
+findAndSavePrereqsResponseTestCases :: [(String, [(T.Text, Maybe T.Text)], BSL.ByteString, Integer, Integer)]
 findAndSavePrereqsResponseTestCases =
     [("CSC148H1",
     [("CSC108H1", Nothing), ("CSC148H1", Just "CSC108H1")],
     "{\"courses\":[\"CSC148H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}}",
+    2,
+    0
+    ),
+    ("CSC148H12",
+    [("CSC108H1", Nothing), ("CSC148H1", Just "CSC108H1")],
+    "{\"courses\":[\"CSC148H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}}",
+    2,
+    0
+    ),
+    ("CSC368H1",
+    [("CSC209H1", Nothing), ("CSC258H1", Nothing), ("CSC368H1", Just "CSC209H1,  CSC258H1"), ("CSC369H1", Just "CSC209H1, CSC258H1")],
+    "{\"courses\":[\"CSC368H1\", \"CSC369H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}}",
+    4,
     2
     )]
 
 -- | Run a test case (input course, course/prereq structure, JSON payload, expected # of nodes) on the findAndSavePrereqsResponse function.
-runfindAndSavePrereqsResponseTest :: String -> [(T.Text, Maybe T.Text)] -> BSL.ByteString -> Integer -> TestTree
-runfindAndSavePrereqsResponseTest course graphStructure payload expected =
+runfindAndSavePrereqsResponseTest :: String -> [(T.Text, Maybe T.Text)] -> BSL.ByteString -> Integer -> Integer -> TestTree
+runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes expectedBoolNodes =
     testCase course $ do
         runDb $ do
             clearDatabase
@@ -51,19 +65,25 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expected =
         let body = rsBody response
             Just (Object object) = decode body
             Just (Array shapes)  = KM.lookup (K.fromString "shapes") object
-            actual =
+            actualNodes =
                 fromIntegral . length $ filter isNode (toList shapes)
+            actualBoolNodes =
+                fromIntegral . length $ filter isBoolNode (toList shapes)
 
-        assertEqual ("Unexpected response for " ++ course) expected actual
+        assertEqual ("Unexpected response for " ++ course) expectedNodes actualNodes
+        assertEqual ("Unexpected response for " ++ course) expectedBoolNodes actualBoolNodes
 
     where
         isNode (Object object) =
             KM.lookup (K.fromString "type_") object == Just (String "Node")
         isNode _ = False
+        isBoolNode (Object object) =
+            KM.lookup (K.fromString "type_") object == Just (String "BoolNode")
+        isBoolNode _ = False
 
 -- | Run all the findAndSavePrereqsResponse test cases
 runfindAndSavePrereqsResponseTests :: [TestTree]
-runfindAndSavePrereqsResponseTests = map (\(course, courseStructure, payload, expectedNodes) -> runfindAndSavePrereqsResponseTest course courseStructure payload expectedNodes) findAndSavePrereqsResponseTestCases
+runfindAndSavePrereqsResponseTests = map (\(course, courseStructure, payload, expectedNodes, expectedBoolNodes) -> runfindAndSavePrereqsResponseTest course courseStructure payload expectedNodes expectedBoolNodes) findAndSavePrereqsResponseTestCases
 
 -- | Test suite for Generate Controller Module
 test_generateController :: TestTree

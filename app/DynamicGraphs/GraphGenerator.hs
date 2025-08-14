@@ -23,7 +23,7 @@ import Data.List (elemIndex)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Sequence as Seq
-import Data.Text.Lazy (Text, isInfixOf, isPrefixOf, last, pack, take)
+import Data.Text.Lazy (Text, isInfixOf, isPrefixOf, last, pack, take, unpack)
 import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.CourseFinder (lookupCourses)
 import DynamicGraphs.GraphNodeUtils (formatModOr, maybeHead, paddingSpaces, stringifyModAnd)
@@ -129,7 +129,7 @@ reqToStmtsTree options parentID (J name2 _) = do
         return (Node [] [])
 -- Two or more required prerequisites.
 reqToStmtsTree options parentID (ReqAnd reqs) = do
-    andNode <- makeBool "and"
+    andNode <- makeBool "and" reqs
     edge <- makeEdge (nodeID andNode) parentID Nothing
     prereqStmts <- mapM (reqToStmtsTree options (nodeID andNode)) reqs
     let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
@@ -142,7 +142,7 @@ reqToStmtsTree options parentID (ReqAnd reqs) = do
         _ -> return $ Node [DN andNode, DE edge] filteredStmts
 -- A choice from two or more prerequisites.
 reqToStmtsTree options parentID (ReqOr reqs) = do
-    orNode <- makeBool "or"
+    orNode <- makeBool "or" reqs
     edge <- makeEdge (nodeID orNode) parentID Nothing
     prereqStmts <- mapM (reqToStmtsTree options (nodeID orNode)) reqs
     let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
@@ -275,13 +275,23 @@ makeNode name nodeCol = do
             return node
         Just node -> return node
 
-makeBool :: Text -> State GeneratorState (DotNode Text)
-makeBool text1 = do
-    GeneratorState i nodesMap <- State.get
-    State.put (GeneratorState (i + 1) nodesMap)
-    let nodeId = mappendTextWithCounter text1 i
-    return $ DotNode nodeId
+makeBool :: Text -> [Req] -> State GeneratorState (DotNode Text)
+makeBool text1 reqs = do
+    GeneratorState i boolsMap <- State.get
+    reqsList <- mapM generateBoolKey reqs
+    let sortedList = toList (sort $ fromList reqsList)
+    let boolKey = pack $ unpack text1 ++ mconcat (map (fromMaybe "") sortedList)
+    case Map.lookup boolKey boolsMap of
+        Nothing -> do
+            let nodeId = mappendTextWithCounter text1 i
+            let boolNode = DotNode boolKey
                      ([AC.Label (toLabelValue text1), ID nodeId] ++ ellipseAttrs)
+                boolsMap' = Map.insert boolKey boolNode boolsMap
+            State.put (GeneratorState (i + 1) boolsMap')
+
+            return boolNode
+        Just node -> do
+            return node
 
 -- | Create edge from two node ids. Also allow for potential edge label
 makeEdge :: Text -> Text -> Maybe Text -> State GeneratorState (DotEdge Text)
@@ -295,6 +305,21 @@ makeEdge id1 id2 description =
 
 mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` pack (show counter)
+
+-- Generates a unique key for each boolean node
+-- May generate lower level nodes that make up the boolean node
+generateBoolKey :: Req -> State GeneratorState (Maybe String)
+generateBoolKey (J s1 _) = do
+    return $ Just ("_" ++ s1)
+generateBoolKey (Grade _ req) = do
+    generateBoolKey req
+generateBoolKey (ReqAnd reqs) = do
+    boolNode <- makeBool "and" reqs
+    return $ Just $ "_[" ++ unpack (nodeID boolNode) ++ "]"
+generateBoolKey (ReqOr reqs) = do
+    boolNode <- makeBool "or" reqs
+    return $ Just $ "_[" ++ unpack (nodeID boolNode) ++ "]"
+generateBoolKey _ = return Nothing
 
 -- ** Graphviz configuration
 
