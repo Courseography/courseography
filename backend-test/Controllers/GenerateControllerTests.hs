@@ -52,7 +52,6 @@ runfindAndSavePrereqsResponseTest :: String -> [(T.Text, Maybe T.Text)] -> BSL.B
 runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes expectedBoolNodes =
     testCase course $ do
         runDb $ do
-            -- return ()
             clearDatabase
             insertCoursesWithPrerequisites graphStructure
         response <- runServerPartWithGraphGenerate Controllers.Generate.findAndSavePrereqsResponse payload
