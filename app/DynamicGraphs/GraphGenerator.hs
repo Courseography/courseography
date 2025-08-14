@@ -129,7 +129,7 @@ reqToStmtsTree options parentID (J name2 _) = do
         return (Node [] [])
 -- Two or more required prerequisites.
 reqToStmtsTree options parentID (ReqAnd reqs) = do
-    andNode <- makeBool "and" reqs
+    (andNode, _) <- makeBool "and" reqs
     edge <- makeEdge (nodeID andNode) parentID Nothing
     prereqStmts <- mapM (reqToStmtsTree options (nodeID andNode)) reqs
     let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
@@ -142,7 +142,7 @@ reqToStmtsTree options parentID (ReqAnd reqs) = do
         _ -> return $ Node [DN andNode, DE edge] filteredStmts
 -- A choice from two or more prerequisites.
 reqToStmtsTree options parentID (ReqOr reqs) = do
-    orNode <- makeBool "or" reqs
+    (orNode, _) <- makeBool "or" reqs
     edge <- makeEdge (nodeID orNode) parentID Nothing
     prereqStmts <- mapM (reqToStmtsTree options (nodeID orNode)) reqs
     let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
@@ -275,7 +275,7 @@ makeNode name nodeCol = do
             return node
         Just node -> return node
 
-makeBool :: Text -> [Req] -> State GeneratorState (DotNode Text)
+makeBool :: Text -> [Req] -> State GeneratorState (DotNode Text, Text)
 makeBool text1 reqs = do
     GeneratorState i boolsMap <- State.get
     reqsList <- mapM generateBoolKey reqs
@@ -284,14 +284,14 @@ makeBool text1 reqs = do
     case Map.lookup boolKey boolsMap of
         Nothing -> do
             let nodeId = mappendTextWithCounter text1 i
-            let boolNode = DotNode boolKey
+            let boolNode = DotNode nodeId
                      ([AC.Label (toLabelValue text1), ID nodeId] ++ ellipseAttrs)
                 boolsMap' = Map.insert boolKey boolNode boolsMap
             State.put (GeneratorState (i + 1) boolsMap')
 
-            return boolNode
+            return (boolNode, boolKey)
         Just node -> do
-            return node
+            return (node, boolKey)
 
 -- | Create edge from two node ids. Also allow for potential edge label
 makeEdge :: Text -> Text -> Maybe Text -> State GeneratorState (DotEdge Text)
@@ -314,11 +314,11 @@ generateBoolKey (J s1 _) = do
 generateBoolKey (Grade _ req) = do
     generateBoolKey req
 generateBoolKey (ReqAnd reqs) = do
-    boolNode <- makeBool "and" reqs
-    return $ Just $ "_[" ++ unpack (nodeID boolNode) ++ "]"
+    (_, boolKey)<- makeBool "and" reqs
+    return $ Just $ "_[" ++ unpack boolKey ++ "]"
 generateBoolKey (ReqOr reqs) = do
-    boolNode <- makeBool "or" reqs
-    return $ Just $ "_[" ++ unpack (nodeID boolNode) ++ "]"
+    (_, boolKey) <- makeBool "or" reqs
+    return $ Just $ "_[" ++ unpack boolKey ++ "]"
 generateBoolKey _ = return Nothing
 
 -- ** Graphviz configuration

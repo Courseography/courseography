@@ -164,13 +164,13 @@ clearDatabase = do
     deleteWhere ([] :: [Filter Times])
     deleteWhere ([] :: [Filter Breadth])
     deleteWhere ([] :: [Filter Distribution])
-    deleteWhere ([] :: [Filter Graph])
     deleteWhere ([] :: [Filter Database.Tables.Text])
     deleteWhere ([] :: [Filter Shape])
     deleteWhere ([] :: [Filter Path])
     deleteWhere ([] :: [Filter Post])
     deleteWhere ([] :: [Filter PostCategory])
     deleteWhere ([] :: [Filter Building])
+    deleteWhere ([] :: [Filter Graph])
 
 acquireDatabase :: IO ()
 acquireDatabase = do
