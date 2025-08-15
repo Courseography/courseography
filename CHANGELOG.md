@@ -13,6 +13,8 @@
 ### 🐛 Bug fixes
 
 - Fixed a bug that was causing the focus info popup to appear blank
+- Fixed a bug on the generate page causing extraneous ellipses to appear when hovering over a course to highlight its prerequisites
+- Fixed a bug on the generate page where an extraneous info popup would appear when hovering over the top left corner of the graph viewing window
 
 ### 🔧 Internal changes
 
