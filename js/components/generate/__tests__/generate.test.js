@@ -2,9 +2,14 @@ import React from "react"
 import GenerateForm from "../GenerateForm.js"
 import { screen, render } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
+import fetchMock from "fetch-mock"
+import { cleanup } from "@testing-library/react"
 
 describe("Handle invalid course inputs appropriately", () => {
   beforeEach(() => {
+    cleanup()
+    fetchMock.restore()
+    fetchMock.get("/courses", [])
     render(<GenerateForm />)
   })
   it.each([
@@ -48,6 +53,9 @@ describe("Handle invalid course inputs appropriately", () => {
 
     const errorMessage = await screen.findByText(expectedWarning)
     expect(errorMessage).not.toBeNull()
+  })
+  afterEach(() => {
+    fetchMock.restore()
   })
 })
 

@@ -6,6 +6,7 @@ import { Tooltip } from "react-tooltip"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
 import { NavBar } from "../common/NavBar.js.jsx"
+import AutocompleteDropdown from "./AutocompleteDropdown.js"
 
 export default class GenerateForm extends React.Component {
   constructor(props) {
@@ -377,10 +378,9 @@ export default class GenerateForm extends React.Component {
                           ></a>
                           <Tooltip id="courses-tooltip" place="right" />
                         </div>
-                        <Field
+                        <AutocompleteDropdown
                           id="courses"
                           name="courses"
-                          type="text"
                           placeholder="e.g., CSC207H1, CSC324H1"
                         />
                         <div className="error-container">
