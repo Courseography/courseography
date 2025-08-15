@@ -15,6 +15,7 @@
 - Fixed a bug that was causing the focus info popup to appear blank
 - Fixed a bug on the generate page causing extraneous ellipses to appear when hovering over a course to highlight its prerequisites
 - Fixed a bug on the generate page where an extraneous info popup would appear when hovering over the top left corner of the graph viewing window
+- Fixed a bug that led code to crash when parsing all pre-generated graphs from svg (i.e., program graphs)
 
 ### 🔧 Internal changes
 
@@ -129,7 +130,6 @@
 - Correctly handle `'l'` directives in svg path attributes
 - Fixed bug that prevented timetable information from loading in Grid page
 - Fixed bug that prevented the course info modal from displaying in Grid page
-- Fixed bug that led code to crash when parsing graphs from svg
 
 ### 🔧 Internal changes
 
