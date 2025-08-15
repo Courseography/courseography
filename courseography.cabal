@@ -24,6 +24,7 @@ library
   exposed-modules:
     Config,
     Controllers.Course,
+    Controllers.Generate,
     Controllers.Graph,
     Css.Constants,
     Database.CourseInsertion,
@@ -33,7 +34,11 @@ library
     Database.DataType,
     Database.Requirement,
     Database.Tables,
+    DynamicGraphs.CourseFinder,
+    DynamicGraphs.GraphGenerator,
     DynamicGraphs.GraphNodeUtils,
+    DynamicGraphs.GraphOptions,
+    DynamicGraphs.WriteRunDot,
     Export.GetImages,
     Export.ImageConversion,
     Export.TimetableImageCreator,
@@ -68,6 +73,8 @@ library
     directory,
     diagrams-lib,
     diagrams-svg,
+    filepath,
+    graphviz,
     happstack-server,
     hlint,
     hslogger,
@@ -105,6 +112,7 @@ test-suite Tests
   main-is: Main.hs
   other-modules:
     Controllers.CourseControllerTests,
+    Controllers.GenerateControllerTests,
     Controllers.GraphControllerTests,
     Database.CourseQueriesTests,
     RequirementTests.ModifierTests,
