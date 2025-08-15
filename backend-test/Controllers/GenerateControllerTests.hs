@@ -64,6 +64,8 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes ex
             actualBoolNodes =
                 fromIntegral . length $ filter isBoolNode (toList shapes)
 
+        -- TODO: currently, one extra node is being generated, so we subtract 1 from expectedNodes
+        -- This should be changed once the bug is fixed!
         assertEqual ("Unexpected response for " ++ course) expectedNodes (actualNodes - 1)
         assertEqual ("Unexpected response for " ++ course) expectedBoolNodes actualBoolNodes
 
