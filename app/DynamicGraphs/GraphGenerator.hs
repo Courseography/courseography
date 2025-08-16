@@ -23,7 +23,7 @@ import Data.List (elemIndex)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Sequence as Seq
-import Data.Text.Lazy (Text, isInfixOf, isPrefixOf, last, pack, take, unpack)
+import Data.Text.Lazy (Text, concat, isInfixOf, isPrefixOf, last, pack, take, unpack)
 import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.CourseFinder (lookupCourses)
 import DynamicGraphs.GraphNodeUtils (formatModOr, maybeHead, paddingSpaces, stringifyModAnd)
@@ -67,7 +67,7 @@ reqsToGraph options reqs = do
     allStmts <- concatUnique <$> mapM (reqToStmts options) reqs
     return $ buildGraph allStmts
     where
-        concatUnique = nubOrd . concat
+        concatUnique = nubOrd . Prelude.concat
 
 data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
@@ -111,7 +111,7 @@ reqToStmts options (name, req) = do
         then do
             node <- makeNode name $ Just (nodeColor options name)
             stmts <- reqToStmtsTree options (nodeID node) req
-            return $ DN node:concat (toList stmts)
+            return $ DN node:Prelude.concat (toList stmts)
         else return []
 
 reqToStmtsTree :: GraphOptions -- ^ Options to toggle dynamic graph
@@ -280,12 +280,13 @@ makeBool text1 reqs = do
     GeneratorState i boolsMap <- State.get
     reqsList <- mapM generateBoolKey reqs
     let sortedList = toList (sort $ fromList reqsList)
-    let boolKey = pack $ unpack text1 ++ mconcat (map (fromMaybe "") sortedList)
+    -- let boolKey = pack $ unpack text1 ++ mconcat (map (fromMaybe "") sortedList)
+    let boolKey = Data.Text.Lazy.concat $ text1 : sortedList
     case Map.lookup boolKey boolsMap of
         Nothing -> do
             let nodeId = mappendTextWithCounter text1 i
             let boolNode = DotNode nodeId
-                     ([AC.Label (toLabelValue text1), ID nodeId] ++ ellipseAttrs)
+                                    ([AC.Label (toLabelValue text1), ID nodeId] ++ ellipseAttrs)
                 boolsMap' = Map.insert boolKey boolNode boolsMap
             State.put (GeneratorState (i + 1) boolsMap')
 
@@ -306,20 +307,19 @@ makeEdge id1 id2 description =
 mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` pack (show counter)
 
--- Generates a unique key for each boolean node
+-- | Generates a unique key for each boolean node
 -- May generate lower level nodes that make up the boolean node
-generateBoolKey :: Req -> State GeneratorState (Maybe String)
-generateBoolKey (J s1 _) = do
-    return $ Just ("_" ++ s1)
+generateBoolKey :: Req -> State GeneratorState Text
+generateBoolKey (J s1 _) = return $ pack ("_" ++ s1)
 generateBoolKey (Grade _ req) = do
     generateBoolKey req
 generateBoolKey (ReqAnd reqs) = do
     (_, boolKey)<- makeBool "and" reqs
-    return $ Just $ "_[" ++ unpack boolKey ++ "]"
+    return $ pack ("_[" ++ unpack boolKey ++ "]")
 generateBoolKey (ReqOr reqs) = do
     (_, boolKey) <- makeBool "or" reqs
-    return $ Just $ "_[" ++ unpack boolKey ++ "]"
-generateBoolKey _ = return Nothing
+    return $ pack ("_[" ++ unpack boolKey ++ "]")
+generateBoolKey _ = return ""
 
 -- ** Graphviz configuration
 
