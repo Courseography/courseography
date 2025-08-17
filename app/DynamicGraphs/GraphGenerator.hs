@@ -280,7 +280,6 @@ makeBool text1 reqs = do
     GeneratorState i boolsMap <- State.get
     reqsList <- mapM generateBoolKey reqs
     let sortedList = toList (sort $ fromList reqsList)
-    -- let boolKey = pack $ unpack text1 ++ mconcat (map (fromMaybe "") sortedList)
     let boolKey = Data.Text.Lazy.concat $ text1 : sortedList
     case Map.lookup boolKey boolsMap of
         Nothing -> do
