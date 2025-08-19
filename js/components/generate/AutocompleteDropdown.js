@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react"
 import Autocomplete from "@mui/material/Autocomplete"
+import Chip from "@mui/material/Chip"
 import { useField } from "formik"
 import PropTypes from "prop-types"
 
 export default function AutocompleteDropdown({ name, placeholder, id, ...props }) {
   const [field, helpers] = useField(name)
-  const { setValue, setTouched } = helpers
+  const { setValue } = helpers
   const [courseList, setCourseList] = useState([])
 
   useEffect(() => {
@@ -24,15 +25,21 @@ export default function AutocompleteDropdown({ name, placeholder, id, ...props }
   return (
     <Autocomplete
       freeSolo
+      multiple
+      value={Array.isArray(field.value) ? field.value : []}
+      onChange={(event, newValue) => setValue(newValue)}
+      defaultValue={[]}
       options={courseList}
-      value={field.value || ""}
-      onChange={(event, value) => setValue(value)}
-      onInputChange={(event, newInputValue) => setValue(newInputValue)}
-      onBlur={() => setTouched(true)}
       includeInputInList
       disableClearable
       popupIcon={null}
       sx={{ width: "100%" }}
+      renderValue={(value, getItemProps) =>
+        value.map((option, index) => {
+          const { key, ...itemProps } = getItemProps({ index })
+          return <Chip variant="outlined" label={option} key={key} {...itemProps} />
+        })
+      }
       renderInput={params => (
         <div ref={params.InputProps.ref}>
           <input

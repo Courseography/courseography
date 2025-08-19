@@ -31,6 +31,7 @@ export default class GenerateForm extends React.Component {
 
     for (const key in values) {
       if (["courses", "programs", "taken", "departments"].includes(key)) {
+        console.log(values[key])
         data[key] = values[key].split(",").map(s => s.trim())
       } else {
         data[key] = values[key]
@@ -250,11 +251,14 @@ export default class GenerateForm extends React.Component {
     const programPattern = /^[A-Za-z]{5}\d{4}[A-Za-z]?$/
 
     if (values.category === "courses") {
-      if (!values.courses.trim().length) {
+      if (!values.courses.length) {
         errors.courses = "Cannot generate graph – no courses entered!"
       } else {
-        const courses = values.courses.split(",").map(course => course.trim())
-        const invalidCourses = courses.filter(course => !coursePattern.test(course))
+        // const courses = values.courses.split(",").map(course => course.trim())
+        const invalidCourses = values.courses.filter(
+          course => !coursePattern.test(course)
+        )
+        console.log(values.courses)
 
         if (invalidCourses.length > 0) {
           errors.courses =
@@ -328,7 +332,7 @@ export default class GenerateForm extends React.Component {
             <Formik
               initialValues={{
                 category: "courses",
-                courses: "",
+                courses: [],
                 programs: "",
                 taken: "",
                 departments: "CSC, MAT, STA",
@@ -387,6 +391,7 @@ export default class GenerateForm extends React.Component {
                           <ErrorMessage
                             className="error-message"
                             name="courses"
+                            type="text"
                             component="div"
                           />
                         </div>
