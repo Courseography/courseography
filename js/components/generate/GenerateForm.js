@@ -6,12 +6,14 @@ import { Tooltip } from "react-tooltip"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
 import { NavBar } from "../common/NavBar.js.jsx"
+import AutocompleteDropdown from "./AutocompleteDropdown.js"
 
 export default class GenerateForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       fceCount: 0,
+      selectedCourses: [],
     }
 
     this.graph = React.createRef()
@@ -23,6 +25,10 @@ export default class GenerateForm extends React.Component {
 
   incrementFCECount = credits => {
     this.setState({ fceCount: this.state.fceCount + credits })
+  }
+
+  handleCoursesChange = newCourse => {
+    this.setState({ selectedCourses: newCourse })
   }
 
   handleSubmit = (values, { setErrors }) => {
@@ -377,19 +383,24 @@ export default class GenerateForm extends React.Component {
                           ></a>
                           <Tooltip id="courses-tooltip" place="right" />
                         </div>
-                        <Field
+                        <AutocompleteDropdown
                           id="courses"
                           name="courses"
-                          type="text"
                           placeholder="e.g., CSC207H1, CSC324H1"
+                          onSelectedChange={this.handleCoursesChange}
+                          style={{ marginBottom: "-0.3rem" }}
                         />
                         <div className="error-container">
                           <ErrorMessage
                             className="error-message"
                             name="courses"
+                            type="text"
                             component="div"
                           />
                         </div>
+                        <h1 className="chosen-courses">
+                          Selected Courses: {this.state.selectedCourses.join(", ")}
+                        </h1>
                       </>
                     )}
 
