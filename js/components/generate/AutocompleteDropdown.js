@@ -4,10 +4,16 @@ import Chip from "@mui/material/Chip"
 import { useField } from "formik"
 import PropTypes from "prop-types"
 
-export default function AutocompleteDropdown({ name, placeholder, id, ...props }) {
-  const [field, helpers] = useField(name)
+export default function AutocompleteDropdown({
+  name,
+  placeholder,
+  id,
+  onSelectedChange,
+  ...props
+}) {
+  const [, , helpers] = useField(name)
   const { setValue } = helpers
-  const [courseList, setCourseList] = useState([])
+  const [optionList, setOptionList] = useState([])
 
   useEffect(() => {
     fetch("/courses")
@@ -18,7 +24,7 @@ export default function AutocompleteDropdown({ name, placeholder, id, ...props }
           .split("\n")
           .map(course => course.substring(0, 8))
           .filter(course => depts.some(prefix => course.startsWith(prefix)))
-        setCourseList(courses)
+        setOptionList(courses)
       })
   }, [])
 
@@ -26,12 +32,16 @@ export default function AutocompleteDropdown({ name, placeholder, id, ...props }
     <Autocomplete
       freeSolo
       multiple
-      value={Array.isArray(field.value) ? field.value : []}
-      onChange={(event, newValue) => setValue(newValue)}
-      defaultValue={[]}
-      options={courseList}
+      onChange={(event, newValues) => {
+        {
+          onSelectedChange(newValues)
+        }
+        setValue(newValues.join(", "))
+      }}
+      options={optionList}
       includeInputInList
       disableClearable
+      disableCloseOnSelect
       popupIcon={null}
       sx={{ width: "100%" }}
       renderValue={(value, getItemProps) =>
@@ -60,4 +70,5 @@ AutocompleteDropdown.propTypes = {
   name: PropTypes.string,
   placeholder: PropTypes.string,
   id: PropTypes.string,
+  onSelectedChange: PropTypes.func,
 }
