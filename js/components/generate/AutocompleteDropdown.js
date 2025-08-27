@@ -19,11 +19,7 @@ export default function AutocompleteDropdown({
     fetch("/courses")
       .then(response => response.text())
       .then(data => {
-        const depts = ["CSC", "MAT", "STA"]
-        const courses = data
-          .split("\n")
-          .map(course => course.substring(0, 8))
-          .filter(course => depts.some(prefix => course.startsWith(prefix)))
+        const courses = data.split("\n").map(course => course.substring(0, 8))
         setOptionList(courses)
       })
   }, [])

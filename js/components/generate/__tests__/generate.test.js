@@ -1,6 +1,6 @@
 import React from "react"
 import GenerateForm from "../GenerateForm.js"
-import { screen, render } from "@testing-library/react"
+import { screen, render, fireEvent } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import fetchMock from "fetch-mock"
 import { cleanup } from "@testing-library/react"
@@ -48,6 +48,9 @@ describe("Handle invalid course inputs appropriately", () => {
     await user.keyboard(coursesInputText)
 
     expect(screen.queryByText(expectedWarning)).toBeNull()
+
+    fireEvent.change(coursesInputField, { target: { value: coursesInputText } })
+
     const genButton = screen.getByText("Generate")
     await user.click(genButton)
 
