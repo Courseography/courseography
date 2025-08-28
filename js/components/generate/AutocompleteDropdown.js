@@ -26,7 +26,6 @@ export default function AutocompleteDropdown({
 
   return (
     <Autocomplete
-      freeSolo
       multiple
       onChange={(event, newValues) => {
         {
@@ -49,6 +48,7 @@ export default function AutocompleteDropdown({
       renderInput={params => (
         <div ref={params.InputProps.ref}>
           <input
+            aria-label={name}
             color="#76609c"
             type="text"
             {...params.inputProps}

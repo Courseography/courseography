@@ -385,6 +385,7 @@ export default class GenerateForm extends React.Component {
                         </div>
                         <AutocompleteDropdown
                           id="courses"
+                          aria-label="courses"
                           name="courses"
                           placeholder="e.g., CSC207H1, CSC324H1"
                           onSelectedChange={this.handleCoursesChange}
