@@ -217,14 +217,12 @@ describe("Handle invalid department inputs appropriately", () => {
     await user.tripleClick(coursesInputField)
     await user.keyboard(coursesInputText)
 
-    console.log(coursesInputField.value)
-
     await user.keyboard("{ArrowDown}{enter}")
 
     expect(screen.queryByText("Invalid Course Input")).toBeNull()
     let genButton = screen.getByText("Generate")
     await user.click(genButton)
-    console.log(coursesInputField.value)
+
     await expect(screen.findByText("Invalid Course Input")).rejects.toThrow()
 
     await expect(screen.findByText("Selected Courses: CSC443H1")).toBeDefined()
