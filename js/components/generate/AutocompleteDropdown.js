@@ -55,10 +55,6 @@ export default function AutocompleteDropdown({
             {...params.inputProps}
             placeholder={placeholder}
             id={id}
-            // onChange={e => {
-            //     const newValue = e.target.value.slice(0, 8) // in tests otherwise a value would be double what is typed
-            //     params.inputProps.onChange({ ...e, target: { ...e.target, value: newValue } })
-            //   }}
           />
         </div>
       )}
