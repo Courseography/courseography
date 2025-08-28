@@ -28,10 +28,11 @@ export default function AutocompleteDropdown({
     <Autocomplete
       multiple
       onChange={(event, newValues) => {
+        const trunc = newValues.map(v => v.slice(0, 8))
         {
-          onSelectedChange(newValues)
+          onSelectedChange(trunc)
         }
-        setValue(newValues.join(", "))
+        setValue(trunc.join(", "))
       }}
       options={optionList}
       includeInputInList
@@ -54,6 +55,10 @@ export default function AutocompleteDropdown({
             {...params.inputProps}
             placeholder={placeholder}
             id={id}
+            // onChange={e => {
+            //     const newValue = e.target.value.slice(0, 8) // in tests otherwise a value would be double what is typed
+            //     params.inputProps.onChange({ ...e, target: { ...e.target, value: newValue } })
+            //   }}
           />
         </div>
       )}

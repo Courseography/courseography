@@ -336,7 +336,7 @@ export default class GenerateForm extends React.Component {
                 courses: "",
                 programs: "",
                 taken: "",
-                departments: "CSC, MAT, STA",
+                departments: "",
                 maxDepth: 0,
                 location: ["utsg"],
                 includeRaws: false,

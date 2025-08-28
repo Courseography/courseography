@@ -9,7 +9,7 @@ describe("Handle an incorrect course input appropriately", () => {
   beforeEach(() => {
     cleanup()
     fetchMock.restore()
-    fetchMock.get("/courses", [])
+    fetchMock.get("/courses", "")
     render(<GenerateForm />)
   })
 
@@ -94,7 +94,7 @@ describe("Handle invalid department inputs appropriately", () => {
     },
   ])(".$departmentInputText", async ({ departmentInputText, expectedWarning }) => {
     const user = userEvent.setup()
-    const departmentInputField = screen.getByDisplayValue("CSC, MAT, STA")
+    const departmentInputField = screen.getByPlaceholderText("e.g., CSC, MAT, STA")
     await user.click(departmentInputField)
     await user.tripleClick(departmentInputField)
     if (departmentInputText === "") {
@@ -129,36 +129,122 @@ it("No warning for valid course input strings", async () => {
   await expect(screen.findByText(/invalid/i)).rejects.toThrow()
 })
 
-// it("Submitting with valid courses and then making them invalid correctly updates Graph", async () => {
-//   const user = userEvent.setup()
-//   render(<GenerateForm />)
-//   const coursesInputText = "CSC443H1"
-//   const coursesInputField = screen.getByRole("combobox", { name: "courses" })
-//   await user.click(coursesInputField)
-//   await user.tripleClick(coursesInputField)
-//   await user.keyboard(coursesInputText)
-//   await user.type(coursesInputField, coursesInputText)
-//   await user.click(coursesInputField)
-//   await waitFor(() => expect(coursesInputField.value === "CSC443H1"))
-//   console.log(coursesInputField.value)
-//   expect(screen.queryByText("Invalid Course Input")).toBeNull()
-//   let genButton = screen.getByText("Generate")
-//   await user.click(genButton)
-//   await expect(screen.findByText("Invalid Course Input")).rejects.toThrow()
+describe("Handle an incorrect course input appropriately", () => {
+  beforeEach(() => {
+    cleanup()
+    fetchMock.restore()
+    fetchMock.get("/courses", "")
+    render(<GenerateForm />)
+  })
 
-//   await expect(screen.getByText("CSC443H1")).toBeDefined()
+  it("Entering no text should return an error", async () => {
+    const user = userEvent.setup()
+    const genButton = screen.getByText("Generate")
+    await user.click(genButton)
+    const errorMessage = await screen.findByText(
+      "Cannot generate graph – no courses entered!"
+    )
+    expect(errorMessage).not.toBeNull()
+  })
 
-//   // now submitting a bad input to see if the graph gets updated
-//   const coursesInputTextBad = "LIN229{ArrowDown}{enter}"
-//   await user.click(coursesInputField)
-//   await user.tripleClick(coursesInputField)
-//   await user.keyboard(coursesInputTextBad)
-//   expect(screen.queryByText(/invalid/i)).toBeNull()
-//   await user.click(genButton)
-//   const errorMessage = await screen.findByText(/Invalid course code: LIN229H1/i)
-//   expect(errorMessage).toBeDefined()
-//   expect(screen.queryByText("CSC443H1")).toBeNull()
-// })
+  it("Entering blank text should return an error", async () => {
+    const user = userEvent.setup()
+    const coursesInputField = screen.getByRole("combobox", { name: "courses" })
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+
+    await user.keyboard("  ")
+
+    expect(screen.queryByText("Cannot generate graph – no courses entered!")).toBeNull()
+
+    const genButton = screen.getByText("Generate")
+    await user.click(genButton)
+    const errorMessage = await screen.findByText(
+      "Cannot generate graph – no courses entered!"
+    )
+    expect(errorMessage).not.toBeNull()
+  })
+
+  it("Entering a course but not pressing it in the selection should return an error", async () => {
+    const user = userEvent.setup()
+    const coursesInputField = screen.getByRole("combobox", { name: "courses" })
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+
+    await user.keyboard("CSC343H1")
+
+    expect(screen.queryByText("Cannot generate graph – no courses entered!")).toBeNull()
+
+    const genButton = screen.getByText("Generate")
+    await user.click(genButton)
+    const errorMessage = await screen.findByText(
+      "Cannot generate graph – no courses entered!"
+    )
+    expect(errorMessage).not.toBeNull()
+  })
+
+  it("Pressing enter after an invalid course should return an empty error not an incorrect course error", async () => {
+    const user = userEvent.setup()
+    const coursesInputField = screen.getByRole("combobox", { name: "courses" })
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+
+    await user.keyboard("CSC898H1{enter}")
+
+    const errorMessage = await screen.findByText(
+      "Cannot generate graph – no courses entered!"
+    )
+    expect(errorMessage).not.toBeNull()
+  })
+})
+
+describe("Handle invalid department inputs appropriately", () => {
+  beforeEach(() => {
+    fetchMock.restore()
+    fetchMock.get("/courses", "CSC443H1\nLIN229H1")
+    render(<GenerateForm />)
+  })
+
+  it("Submitting with valid courses and then making them invalid correctly updates Graph", async () => {
+    const user = userEvent.setup()
+    const coursesInputText = "CSC443H1"
+    const coursesInputField = screen.getByRole("combobox", { name: "courses" })
+    const departmentInputField = screen.getByPlaceholderText("e.g., CSC, MAT, STA")
+    await user.click(departmentInputField)
+    // limit generated courses to only CSC courses
+    await user.keyboard("CSC")
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+    await user.keyboard(coursesInputText)
+
+    console.log(coursesInputField.value)
+
+    await user.keyboard("{ArrowDown}{enter}")
+
+    expect(screen.queryByText("Invalid Course Input")).toBeNull()
+    let genButton = screen.getByText("Generate")
+    await user.click(genButton)
+    console.log(coursesInputField.value)
+    await expect(screen.findByText("Invalid Course Input")).rejects.toThrow()
+
+    await expect(screen.findByText("Selected Courses: CSC443H1")).toBeDefined()
+
+    // now submitting a bad input to see if the graph gets updated
+    const coursesInputTextBad = "LIN229H1"
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+    await user.keyboard(coursesInputTextBad)
+    await user.keyboard("{ArrowDown}{enter}")
+    expect(screen.queryByText(/invalid/i)).toBeNull()
+    await user.click(genButton)
+    const errorMessage = screen.queryByText(/Invalid course code: LIN229H1/i)
+    const twoSelectedMessage = screen.queryByText(
+      "Selected Courses: CSC443H1, LIN229H1"
+    )
+    expect(twoSelectedMessage).toBeDefined
+    expect(errorMessage).toBeDefined()
+  })
+})
 
 describe("Handle invalid program inputs appropriately", () => {
   beforeEach(() => {
