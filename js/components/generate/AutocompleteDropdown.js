@@ -28,11 +28,8 @@ export default function AutocompleteDropdown({
     <Autocomplete
       multiple
       onChange={(event, newValues) => {
-        const trunc = newValues.map(v => v.slice(0, 8))
-        {
-          onSelectedChange(trunc)
-        }
-        setValue(trunc.join(", "))
+        onSelectedChange(newValues)
+        setValue(newValues.join(", "))
       }}
       options={optionList}
       includeInputInList
@@ -50,7 +47,7 @@ export default function AutocompleteDropdown({
         <div ref={params.InputProps.ref}>
           <input
             aria-label={name}
-            color="#76609c"
+            className="autocomplete-input"
             type="text"
             {...params.inputProps}
             placeholder={placeholder}

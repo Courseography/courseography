@@ -389,7 +389,7 @@ export default class GenerateForm extends React.Component {
                           name="courses"
                           placeholder="e.g., CSC207H1, CSC324H1"
                           onSelectedChange={this.handleCoursesChange}
-                          style={{ marginBottom: "-0.3rem" }}
+                          className="autocomplete"
                         />
                         <div className="error-container">
                           <ErrorMessage
