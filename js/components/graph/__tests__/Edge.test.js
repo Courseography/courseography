@@ -298,11 +298,14 @@ describe("Edge", () => {
     })
   })
   describe("Edge status is restored on reload", () => {
+    let reload
     beforeAll(() => {
-      Object.defineProperty(window, "location", {
-        writable: true,
-        value: { reload: jest.fn() },
-      })
+      const implSymbol = Reflect.ownKeys(window.location).find(
+        i => typeof i === "symbol"
+      )
+      reload = jest
+        .spyOn(window.location[implSymbol], "reload")
+        .mockImplementation(() => {})
     })
     it("should restore edge status", async () => {
       const user = userEvent.setup()
@@ -324,7 +327,7 @@ describe("Edge", () => {
       expect(aaa201_bool1.classList.contains("active")).toBe(true)
       expect(bool1_aaa303.classList.contains("takeable")).toBe(true)
       window.location.reload()
-      expect(window.location.reload).toHaveBeenCalledTimes(1)
+      expect(reload).toHaveBeenCalledTimes(1)
       expect(aaa102_bool2.classList.contains("active")).toBe(true)
       expect(aaa102_bool1.classList.contains("active")).toBe(true)
       expect(bool2_aaa202.classList.contains("takeable")).toBe(true)
