@@ -244,11 +244,14 @@ describe("OR Bool", () => {
     expect(orBool.classList.contains("inactive")).toBe(true)
   })
   describe("Bool status", () => {
+    let reload
     beforeAll(() => {
-      Object.defineProperty(window, "location", {
-        writable: true,
-        value: { reload: jest.fn() },
-      })
+      const implSymbol = Reflect.ownKeys(window.location).find(
+        i => typeof i === "symbol"
+      )
+      reload = jest
+        .spyOn(window.location[implSymbol], "reload")
+        .mockImplementation(() => {})
     })
     it("should store status on page reload", async () => {
       const user = userEvent.setup()
@@ -262,7 +265,7 @@ describe("OR Bool", () => {
       expect(bool1.classList.contains("active")).toBe(true)
       expect(bool2.classList.contains("active")).toBe(true)
       window.location.reload()
-      expect(window.location.reload).toHaveBeenCalledTimes(1)
+      expect(reload).toHaveBeenCalledTimes(1)
       expect(bool1.classList.contains("active")).toBe(true)
       expect(bool2.classList.contains("active")).toBe(true)
     })
