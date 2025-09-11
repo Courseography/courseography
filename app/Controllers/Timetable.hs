@@ -20,7 +20,6 @@ import Export.LatexGenerator
 import Export.PdfGenerator
 import Happstack.Server
 import MasterTemplate
-import Response.Image (returnImageData)
 import Scripts
 import System.Directory (removeFile)
 import Text.Blaze ((!))
