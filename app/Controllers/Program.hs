@@ -2,7 +2,7 @@ module Controllers.Program(index) where
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
-import qualified Data.Text as T (Text, null, unlines)
+import qualified Data.Text as T (Text, unlines)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
 import Database.Tables as Tables (Post, postCode)
@@ -13,7 +13,6 @@ index :: ServerPart Response
 index = do
     response <- liftIO $ runDb $ do
         programsList :: [Entity Post] <- selectList [] []
-        let codes = filter (not . T.null) $
-                map (postCode . entityVal) programsList
+        let codes = map (postCode . entityVal) programsList
         return $ T.unlines codes :: SqlPersistM T.Text
     return $ toResponse response
