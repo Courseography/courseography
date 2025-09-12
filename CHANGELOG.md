@@ -30,6 +30,7 @@
 - Added test cases for the `ExportModal` component in `js/components/common`
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
+- Added a route to access all POST codes stored in the database with test coverage
 
 ## [0.7.1] - 2025-06-16
 
