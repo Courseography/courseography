@@ -29,7 +29,8 @@ import Database.Persist.Sqlite (Entity, PersistValue (PersistText), SqlPersistM,
 import Database.Tables as Tables
 import Happstack.Server.SimpleHTTP (Request, Response, ServerPart, askRq, ifModifiedSince,
                                     lookText')
-import Models.Course (buildCourse, buildMeetTimes)
+import Models.Course (buildCourse)
+import Models.Meeting (buildMeetTimes)
 import Util.Happstack (createJSONResponse)
 
 -- | Takes a http request with a post code and sends a JSON response containing the post data
