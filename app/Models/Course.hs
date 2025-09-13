@@ -2,15 +2,17 @@ module Models.Course
     (buildCourse,
     returnCourse,
     prereqsForCourse,
-    getDeptCourses) where
+    getDeptCourses,
+    insertCourse) where
 
 import Config (runDb)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, filter, snoc, take, toUpper)
-import Database.Persist.Sqlite (Entity, SqlPersistM, entityVal, get, rawSql, selectFirst,
+import Database.Persist.Class (selectKeysList)
+import Database.Persist.Sqlite (Entity, SqlPersistM, entityVal, get, insert_, rawSql, selectFirst,
                                 selectList, (<-.), (==.))
-import Database.Tables as Tables
+import Database.Tables hiding (breadth, distribution)
 import Meeting (meetingQuery)
 
 -- | Queries the database for all information about @course@,
@@ -86,3 +88,34 @@ getDeptCourses dept = liftIO $ runDb $ do
             let courseMeetings = filter (\m -> meetingCode (entityVal m) == coursesCode course) allMeetings
             allTimes <- mapM buildMeetTimes courseMeetings
             buildCourse allTimes course
+
+--contains' :: PersistEntity m => T.Text -> SqlPersistM m
+--contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")
+
+-- Get Key of correspondig record in Distribution column
+getDistributionKey :: T.Text -> SqlPersistM (Maybe (Key Distribution))
+getDistributionKey description_ = do
+    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. description_ ] []
+    -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] []
+    return $ case keyListDistribution of
+        [] -> Nothing
+        (x:_) -> Just x
+
+getBreadthKey :: T.Text -> SqlPersistM (Maybe (Key Breadth))
+getBreadthKey description_ = do
+    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. description_ ] []
+    -- option: selectKeysList [ BreadthDescription `contains'` description] []
+    return $ case keyListBreadth of
+        [] -> Nothing
+        (x:_) -> Just x
+
+-- | Inserts course into the Courses table.
+insertCourse :: (Courses, T.Text, T.Text) -> SqlPersistM ()
+insertCourse (course, breadth, distribution) = do
+    maybeCourse <- selectFirst [CoursesCode ==. coursesCode course] []
+    breadthKey <- getBreadthKey breadth
+    distributionKey <- getDistributionKey distribution
+    case maybeCourse of
+        Nothing -> insert_ $ course {coursesBreadth = breadthKey,
+                                     coursesDistribution = distributionKey}
+        Just _ -> return ()

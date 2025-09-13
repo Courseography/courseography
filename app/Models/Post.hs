@@ -8,6 +8,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Char (isAlpha, isAlphaNum, isDigit, isPunctuation)
 import qualified Data.Text as T (Text, unpack)
 import Database.Persist.Sqlite (entityVal, selectFirst, (==.))
+import Database.Tables
 import Happstack.Server.SimpleHTTP (Request, Response, ServerPart, askRq, ifModifiedSince,
                                     lookText')
 import Util.Happstack (createJSONResponse)
