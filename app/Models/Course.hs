@@ -13,7 +13,7 @@ import Database.Persist.Class (selectKeysList)
 import Database.Persist.Sqlite (Entity, SqlPersistM, entityVal, get, insert_, rawSql, selectFirst,
                                 selectList, (<-.), (==.))
 import Database.Tables hiding (breadth, distribution)
-import Meeting (meetingQuery)
+import Models.Meeting (meetingQuery)
 
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.

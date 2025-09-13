@@ -9,7 +9,6 @@ import qualified Data.Text as T (Text, append, isPrefixOf, tail, take, toUpper)
 import Database.Persist.Sqlite (Entity, SqlPersistM, entityKey, entityVal, selectFirst, selectList,
                                 (<-.), (==.))
 import Database.Tables as Tables
-import Models.Course (buildMeetTimes)
 
 -- | Queries the database for all matching lectures, tutorials,
 meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
