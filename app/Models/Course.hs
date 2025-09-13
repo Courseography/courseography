@@ -10,8 +10,8 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, filter, snoc, take, toUpper)
 import Database.Persist.Class (selectKeysList)
-import Database.Persist.Sqlite (Entity, PersistText, SqlPersistM, entityVal, get, insert_, rawSql,
-                                selectFirst, selectList, (<-.), (==.))
+import Database.Persist.Sqlite (Entity, PersistValue (PersistText), SqlPersistM, entityVal, get,
+                                insert_, rawSql, selectFirst, selectList, (<-.), (==.))
 import Database.Tables hiding (breadth, distribution)
 import Models.Meeting (buildMeetTimes, meetingQuery)
 
