@@ -1,6 +1,5 @@
 module Models.Course
     (buildCourse,
-    buildMeetTimes,
     returnCourse) where
 
 import Config (runDb)
