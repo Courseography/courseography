@@ -9,11 +9,11 @@ import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
-import Database.CourseInsertion (insertCourse)
 import Database.Persist (insertUnique)
 import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insertMany_)
 import Database.Tables (Building (..), Courses (..), Department (..))
 import Filesystem.Path.CurrentOS as Path
+import Models.Course (insertCourse)
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
 import System.Directory (getCurrentDirectory)
 import qualified Text.HTML.TagSoup as TS

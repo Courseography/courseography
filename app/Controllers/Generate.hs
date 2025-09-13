@@ -7,11 +7,11 @@ import Data.Aeson (decode, object, (.=))
 import Data.List (nub)
 import Data.Maybe (fromJust, isNothing, mapMaybe)
 import qualified Data.Text.Lazy as TL
-import Database.CourseQueries (reqsForPost, returnPost)
 import DynamicGraphs.GraphOptions (CourseGraphOptions (..), GraphOptions (..))
 import DynamicGraphs.WriteRunDot (generateAndSavePrereqResponse, getBody)
 import Happstack.Server
 import MasterTemplate
+import Models.Post (reqsForPost, returnPost)
 import Scripts
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H

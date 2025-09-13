@@ -4,12 +4,11 @@ module Controllers.Course
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T (Text, unlines)
-import qualified Database.CourseQueries as CourseHelpers (getDeptCourses)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
 import Database.Tables as Tables (Courses, coursesCode)
 import Happstack.Server (Response, ServerPart, lookText', toResponse)
-import Models.Course (returnCourse)
+import Models.Course (getDeptCourses, returnCourse)
 import Util.Happstack (createJSONResponse)
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
@@ -33,4 +32,4 @@ index = do
 courseInfo :: ServerPart Response
 courseInfo = do
     dept <- lookText' "dept"
-    fmap createJSONResponse (CourseHelpers.getDeptCourses dept)
+    fmap createJSONResponse (getDeptCourses dept)
