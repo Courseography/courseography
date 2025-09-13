@@ -8,12 +8,7 @@ import qualified Data.Text as T (Text, append, filter, take, toUpper)
 import Database.Persist.Sqlite (Entity, SqlPersistM, entityKey, entityVal, get, selectFirst,
                                 selectList, (<-.), (==.))
 import Database.Tables as Tables
-
--- | Queries the database for all matching lectures, tutorials,
-meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
-meetingQuery meetingCodes = do
-    allMeetings <- selectList [MeetingCode <-. map (T.take 6) meetingCodes] []
-    mapM buildMeetTimes allMeetings
+import Meeting (meetingQuery)
 
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.
@@ -61,10 +56,3 @@ buildCourse allMeetings course = do
            cDistribution
            (coursesCoreqs course)
            (coursesVideoUrls course)
-
--- | Queries the database for all times corresponding to a given meeting.
-buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime'
-buildMeetTimes meet = do
-    allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
-    parsedTime <- mapM (buildTime . entityVal) allTimes
-    return $ Tables.MeetTime' (entityVal meet) parsedTime
