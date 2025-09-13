@@ -1,10 +1,14 @@
 module Models.Course
     (buildCourse,
-    returnCourse) where
+    returnCourse,
+    prereqsForCourse,
+    getDeptCourses) where
 
 import Config (runDb)
-import qualified Data.Text as T (Text, append, filter, take, toUpper)
-import Database.Persist.Sqlite (Entity, SqlPersistM, entityKey, entityVal, get, selectFirst,
+import Control.Monad.IO.Class (MonadIO, liftIO)
+import Data.Maybe (fromJust, fromMaybe)
+import qualified Data.Text as T (Text, append, filter, snoc, take, toUpper)
+import Database.Persist.Sqlite (Entity, SqlPersistM, entityVal, get, rawSql, selectFirst,
                                 selectList, (<-.), (==.))
 import Database.Tables as Tables
 import Meeting (meetingQuery)
@@ -55,3 +59,30 @@ buildCourse allMeetings course = do
            cDistribution
            (coursesCoreqs course)
            (coursesVideoUrls course)
+
+-- | Retrieves the prerequisites for a course (code) as a string.
+-- Also retrieves the actual course code in the database in case
+-- the one the user inputs doesn't match it exactly
+prereqsForCourse :: T.Text -> IO (Either String (T.Text, T.Text))
+prereqsForCourse courseCode = runDb $ do
+    let upperCaseCourseCode = T.toUpper courseCode
+    course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
+    case course of
+        Nothing -> return (Left "Course not found")
+        Just courseEntity ->
+            return (Right
+                     (coursesCode $ entityVal courseEntity,
+                      fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
+                    ) :: SqlPersistM (Either String (T.Text, T.Text))
+
+getDeptCourses :: MonadIO m => T.Text -> m [Course]
+getDeptCourses dept = liftIO $ runDb $ do
+        courses :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
+        let deptCourses = map entityVal courses
+        meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map coursesCode deptCourses] []
+        mapM (processCourse meetings) deptCourses
+    where
+        processCourse allMeetings course = do
+            let courseMeetings = filter (\m -> meetingCode (entityVal m) == coursesCode course) allMeetings
+            allTimes <- mapM buildMeetTimes courseMeetings
+            buildCourse allTimes course
