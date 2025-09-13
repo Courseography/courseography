@@ -1,5 +1,6 @@
 module Models.Meeting
     (meetingQuery,
+    buildMeetTimes,
     returnMeeting,
     getMeetingTime,
     getMeetingSection) where

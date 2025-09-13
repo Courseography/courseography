@@ -10,10 +10,10 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Maybe (fromJust, fromMaybe)
 import qualified Data.Text as T (Text, append, filter, snoc, take, toUpper)
 import Database.Persist.Class (selectKeysList)
-import Database.Persist.Sqlite (Entity, SqlPersistM, entityVal, get, insert_, rawSql, selectFirst,
-                                selectList, (<-.), (==.))
+import Database.Persist.Sqlite (Entity, PersistText, SqlPersistM, entityVal, get, insert_, rawSql,
+                                selectFirst, selectList, (<-.), (==.))
 import Database.Tables hiding (breadth, distribution)
-import Models.Meeting (meetingQuery)
+import Models.Meeting (buildMeetTimes, meetingQuery)
 
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.
