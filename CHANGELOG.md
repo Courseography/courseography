@@ -10,6 +10,7 @@
 - Added the React ErrorBoundary library and implemented an ErrorBoundary for the Graph component in the Container component and `js/components/draw/main.js`
 - Updated the export button on the graph and grid pages to Awesome Icons; also added highlight effect and tooltip popup on hover
 - Added an autocomplete feature to the search bar `js/components/generate/GenerateForm`, also rewrote tests related to this feature
+- Added a route to access all POST codes stored in the database with test coverage
 
 ### 🐛 Bug fixes
 
@@ -30,7 +31,6 @@
 - Added test cases for the `ExportModal` component in `js/components/common`
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
-- Added a route to access all POST codes stored in the database with test coverage
 
 ## [0.7.1] - 2025-06-16
 
