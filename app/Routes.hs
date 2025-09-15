@@ -6,7 +6,7 @@ import Controllers.Course as CoursesController (courseInfo, index, retrieveCours
 import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, generateResponse)
 import Controllers.Graph as GraphsController (getGraphJSON, graphImageResponse, graphResponse,
                                               index, saveGraphJSON)
-import Controllers.Post as PostController (retrievePost)
+import Controllers.Program as ProgramController (index)
 import Controllers.Timetable as TimetableController
 import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
                          ToMessage (toResponse), dir, noTrailingSlash, nullDir, seeOther,
@@ -39,7 +39,8 @@ strictRoutes = [
     ("course-info", CoursesController.courseInfo),
     ("calendar", TimetableController.calendarResponse),
     ("loading", loadingResponse),
-    ("save-json", saveGraphJSON)
+    ("save-json", saveGraphJSON),
+    ("programs", ProgramController.index)
     ]
 
 strictMatchDir :: (String, ServerPart Response) -> ServerPartT IO Response
