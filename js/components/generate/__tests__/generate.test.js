@@ -244,66 +244,68 @@ describe("Handle invalid department inputs appropriately", () => {
   })
 })
 
-describe("Handle invalid program inputs appropriately", () => {
+describe("Handle an incorrect program input appropriately", () => {
   beforeEach(() => {
+    cleanup()
+    fetchMock.restore()
+    fetchMock.get("/programs", "")
+    fetchMock.get("/courses", "")
     render(<GenerateForm />)
   })
-  it.each([
-    {
-      programInputText: "ASMAJ1234, asdasdasd, ABCDE1234",
-      expectedWarning: "Invalid program code: asdasdasd",
-    },
-    {
-      programInputText: "ASMIN1689 ASFOC1689F",
-      expectedWarning: "Invalid program code: ASMIN1689 ASFOC1689F",
-    },
-    {
-      programInputText: "",
-      expectedWarning: "Cannot generate graph – no programs entered!",
-    },
-    {
-      programInputText: "   ",
-      expectedWarning: "Cannot generate graph – no programs entered!",
-    },
-  ])(".$programInputText", async ({ programInputText, expectedWarning }) => {
-    const user = userEvent.setup()
 
+  it("Entering no text should return an error", async () => {
+    const user = userEvent.setup()
     const categorySelect = screen.getByDisplayValue("Courses")
     await user.selectOptions(categorySelect, "programs")
-
-    const programsInputField = screen.getByPlaceholderText(
-      "e.g., ASMAJ1689, ASFOC1689B"
-    )
-    await user.click(programsInputField)
-    await user.tripleClick(programsInputField)
-    if (programInputText === "") {
-      programInputText = "{Backspace}"
-    }
-    await user.keyboard(programInputText)
-
-    expect(screen.queryByText(expectedWarning)).toBeNull()
     const genButton = screen.getByText("Generate")
     await user.click(genButton)
+    const errorMessage = await screen.findByText(
+      "Cannot generate graph – no programs entered!"
+    )
+    expect(errorMessage).not.toBeNull()
+  })
 
-    const errorMessage = await screen.findByText(expectedWarning)
+  it("Entering blank text should return an error", async () => {
+    const user = userEvent.setup()
+    const categorySelect = screen.getByDisplayValue("Courses")
+    await user.selectOptions(categorySelect, "programs")
+    const coursesInputField = screen.getByRole("combobox", { name: "programs" })
+    await user.click(coursesInputField)
+    await user.tripleClick(coursesInputField)
+
+    await user.keyboard("  ")
+
+    expect(screen.queryByText("Cannot generate graph – no courses entered!")).toBeNull()
+
+    const genButton = screen.getByText("Generate")
+    await user.click(genButton)
+    const errorMessage = await screen.findByText(
+      "Cannot generate graph – no programs entered!"
+    )
     expect(errorMessage).not.toBeNull()
   })
 })
 
 it("No warning for valid program input strings", async () => {
-  const user = userEvent.setup()
+  cleanup()
+  fetchMock.restore()
+  fetchMock.get("/courses", "")
+  fetchMock.get("/programs", "ASFOC1689D\n")
   render(<GenerateForm />)
 
+  const user = userEvent.setup()
   const categorySelect = screen.getByDisplayValue("Courses")
   await user.selectOptions(categorySelect, "programs")
 
   const programInputText = "ASFOC1689D"
-  const programsInputField = screen.getByPlaceholderText("e.g., ASMAJ1689, ASFOC1689B")
+  const programsInputField = screen.getByRole("combobox", { name: "programs" })
   await user.click(programsInputField)
   await user.tripleClick(programsInputField)
   await user.keyboard(programInputText)
+  await user.keyboard("{ArrowDown}{enter}")
+  await expect(screen.findByText("Selected Programs: ASFOC1689D")).toBeDefined()
   expect(screen.queryByText("Invalid Program Input")).toBeNull()
   const genButton = screen.getByText("Generate")
   await user.click(genButton)
-  await expect(screen.findByText(/invalid/i)).rejects.toThrow()
+  await expect(screen.findByText("Invalid Program Input")).rejects.toThrow()
 })

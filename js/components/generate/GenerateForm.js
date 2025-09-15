@@ -14,6 +14,7 @@ export default class GenerateForm extends React.Component {
     this.state = {
       fceCount: 0,
       selectedCourses: [],
+      selectedPrograms: [],
     }
 
     this.graph = React.createRef()
@@ -29,6 +30,10 @@ export default class GenerateForm extends React.Component {
 
   handleCoursesChange = newCourse => {
     this.setState({ selectedCourses: newCourse })
+  }
+
+  handleProgramsChange = newProgram => {
+    this.setState({ selectedPrograms: newProgram })
   }
 
   handleSubmit = (values, { setErrors }) => {
@@ -399,7 +404,7 @@ export default class GenerateForm extends React.Component {
                             component="div"
                           />
                         </div>
-                        <h1 className="chosen-courses">
+                        <h1 className="dropdown-chosen">
                           Selected Courses: {this.state.selectedCourses.join(", ")}
                         </h1>
                       </>
@@ -420,11 +425,13 @@ export default class GenerateForm extends React.Component {
                           ></a>
                           <Tooltip id="programs-tooltip" place="right" />
                         </div>
-                        <Field
+                        <AutocompleteDropdown
                           id="programs"
+                          aria-label="programs"
                           name="programs"
-                          type="text"
                           placeholder="e.g., ASMAJ1689, ASFOC1689B"
+                          onSelectedChange={this.handleProgramsChange}
+                          className="autocomplete"
                         />
                         <div className="error-container">
                           <ErrorMessage
@@ -433,6 +440,9 @@ export default class GenerateForm extends React.Component {
                             component="div"
                           />
                         </div>
+                        <h1 className="dropdown-chosen">
+                          Selected Programs: {this.state.selectedPrograms.join(", ")}
+                        </h1>
                       </>
                     )}
                   </div>

@@ -16,12 +16,22 @@ export default function AutocompleteDropdown({
   const [optionList, setOptionList] = useState([])
 
   useEffect(() => {
-    fetch("/courses")
-      .then(response => response.text())
-      .then(data => {
-        const courses = data.split("\n").map(course => course.substring(0, 8))
-        setOptionList(courses)
-      })
+    if (id == "courses") {
+      fetch("/courses")
+        .then(response => response.text())
+        .then(data => {
+          const courses = data.split("\n").map(course => course.substring(0, 8))
+          setOptionList(courses)
+        })
+    } else if (id == "programs") {
+      fetch("/programs")
+        .then(response => response.text())
+        .then(data => {
+          const programs = data.split("\n").filter(course => course.trim() !== "")
+          const uniquePrograms = [...new Set(programs)]
+          setOptionList(uniquePrograms)
+        })
+    }
   }, [])
 
   return (
