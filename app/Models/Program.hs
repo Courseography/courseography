@@ -1,6 +1,6 @@
-module Models.Post
-    (returnPost,
-    reqsForPost) where
+module Models.Program
+    (returnProgram,
+    reqsForProgram) where
 
 import Config (runDb)
 import Data.Char (isAlpha, isAlphaNum, isDigit, isPunctuation)
@@ -8,18 +8,18 @@ import qualified Data.Text as T (Text, unpack)
 import Database.Persist.Sqlite (entityVal, selectFirst, (==.))
 import Database.Tables
 
--- | Queries the database for information about the post then returns the post value
-returnPost :: T.Text -> IO (Maybe Post)
-returnPost code = runDb $ do
-    sqlPost <- selectFirst [PostCode ==. code] []
-    case sqlPost of
+-- | Queries the database for information about the program then returns the post value
+returnProgram :: T.Text -> IO (Maybe Post)
+returnProgram code = runDb $ do
+    sqlProgram <- selectFirst [PostCode ==. code] []
+    case sqlProgram of
         Nothing -> return Nothing
-        Just post -> return $ Just $ entityVal post
+        Just program -> return $ Just $ entityVal program
 
--- | Retrieves the course requirements for a Post as a list of course codes
-reqsForPost :: Post -> [String]
-reqsForPost post = do
-    let requirementsText = T.unpack $ postRequirements post
+-- | Retrieves the course requirements for a Post (program) as a list of course codes
+reqsForProgram :: Post -> [String]
+reqsForProgram program = do
+    let requirementsText = T.unpack $ postRequirements program
         cleaned = filter (`notElem` ("<>" :: String)) $ filter (not . isPunctuation) requirementsText
         potentialCodes = words cleaned
     filter isCourseCode potentialCodes

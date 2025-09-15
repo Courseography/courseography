@@ -11,7 +11,7 @@ import DynamicGraphs.GraphOptions (CourseGraphOptions (..), GraphOptions (..))
 import DynamicGraphs.WriteRunDot (generateAndSavePrereqResponse, getBody)
 import Happstack.Server
 import MasterTemplate
-import Models.Post (reqsForPost, returnPost)
+import Models.Program (reqsForProgram, returnProgram)
 import Scripts
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -43,7 +43,7 @@ findAndSavePrereqsResponse = do
     let coursesOptions :: CourseGraphOptions = fromJust $ decode requestBody
 
     postResults <- liftIO $ mapM (\code -> do
-                        post <- returnPost (TL.toStrict code)
+                        post <- returnProgram (TL.toStrict code)
                         return (TL.toStrict code, post))
                    (programs coursesOptions)
 
@@ -52,7 +52,7 @@ findAndSavePrereqsResponse = do
 
     allCourses <- liftIO $ nub <$>
         if all (== TL.empty) (courses coursesOptions)
-            then return $ map TL.pack (concatMap reqsForPost validPrograms)
+            then return $ map TL.pack (concatMap reqsForProgram validPrograms)
             else return $ courses coursesOptions
 
     let updatedCoursesOptions = coursesOptions
