@@ -11,6 +11,7 @@
 - Updated the export button on the graph and grid pages to Awesome Icons; also added highlight effect and tooltip popup on hover
 - Added an autocomplete feature to the search bar `js/components/generate/GenerateForm`, also rewrote tests related to this feature
 - Added a route to access all POST codes stored in the database with test coverage
+- Added the `js/components/generate/AutocompleteDropdown.js` component to the program field of Generate
 
 ### 🐛 Bug fixes
 

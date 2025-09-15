@@ -275,7 +275,9 @@ describe("Handle an incorrect program input appropriately", () => {
 
     await user.keyboard("  ")
 
-    expect(screen.queryByText("Cannot generate graph – no courses entered!")).toBeNull()
+    expect(
+      screen.queryByText("Cannot generate graph – no programs entered!")
+    ).toBeNull()
 
     const genButton = screen.getByText("Generate")
     await user.click(genButton)
