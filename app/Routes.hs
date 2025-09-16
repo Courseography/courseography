@@ -6,9 +6,8 @@ import Controllers.Course as CoursesController (courseInfo, index, retrieveCours
 import Controllers.Generate as GenerateController (findAndSavePrereqsResponse, generateResponse)
 import Controllers.Graph as GraphsController (getGraphJSON, graphImageResponse, graphResponse,
                                               index, saveGraphJSON)
-import Controllers.Program as ProgramController (index)
+import Controllers.Program as ProgramController (index, retrieveProgram)
 import Controllers.Timetable as TimetableController
-import Database.CourseQueries (retrievePost)
 import Happstack.Server (Browsing (DisableBrowsing), Response, ServerPart, ServerPartT,
                          ToMessage (toResponse), dir, noTrailingSlash, nullDir, seeOther,
                          serveDirectory)
@@ -29,7 +28,7 @@ strictRoutes = [
     ("image", graphImageResponse),
     ("timetable-image", TimetableController.exportTimetableImageResponse),
     ("timetable-pdf", TimetableController.exportTimetablePDFResponse),
-    ("post", retrievePost),
+    ("post", ProgramController.retrieveProgram),
     ("draw", drawResponse),
     ("about", aboutResponse),
     ("graphs", GraphsController.index),

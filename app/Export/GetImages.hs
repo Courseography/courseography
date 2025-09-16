@@ -17,10 +17,10 @@ import Data.Fixed (mod')
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
-import Database.CourseQueries (getMeetingTime)
 import Database.Tables as Tables
 import Export.ImageConversion
 import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
+import Models.Meeting (getMeetingTime)
 import Svg.Generator
 import System.Random (genWord32, newStdGen)
 
