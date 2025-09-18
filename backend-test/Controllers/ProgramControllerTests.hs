@@ -22,7 +22,7 @@ indexTestCases =
     [ ("Empty database", [], "")
     , ("One program", ["ASMAJ1689"], "ASMAJ1689\n")
     , ("Multiple programs", ["ASMAJ1689", "ASSPE1376", "ASMAJ0506", "ASMIN1165", "ASMIN2289"],
-       "ASMAJ1689\nASSPE1376\nASMAJ0506\nASMIN1165\nASMIN2289\n")
+       "ASMAJ0506\nASMAJ1689\nASMIN1165\nASMIN2289\nASSPE1376\n")
     ]
 
 -- | Run a test case (case, input, expected output) on the index function.

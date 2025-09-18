@@ -27,9 +27,8 @@ export default function AutocompleteDropdown({
       fetch("/programs")
         .then(response => response.text())
         .then(data => {
-          const programs = data.split("\n").filter(course => course.trim() !== "")
-          const uniquePrograms = [...new Set(programs)]
-          setOptionList(uniquePrograms)
+          const programs = data.split("\n")
+          setOptionList(programs)
         })
     }
   }, [])
