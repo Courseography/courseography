@@ -10,6 +10,7 @@
 - Added the React ErrorBoundary library and implemented an ErrorBoundary for the Graph component in the Container component and `js/components/draw/main.js`
 - Updated the export button on the graph and grid pages to Awesome Icons; also added highlight effect and tooltip popup on hover
 - Added an autocomplete feature to the search bar `js/components/generate/GenerateForm`, also rewrote tests related to this feature
+- Added a route to access all POST codes stored in the database with test coverage
 
 ### 🐛 Bug fixes
 
@@ -25,6 +26,8 @@
 - Upgraded `jest-environment-jsdom` to v30
 - Refactored navigation bar into a React component (for the graph, grid and generate pages only - the about page navigation bar is still rendered using Blaze)
 - Refactored backend tests to use `tasty` and `tasty-hunit` instead of `HUnit`
+- Refactored course insertion and query functions to align with MVC architectural principles
+- Renamed functions that query the database for post/program information from post -> program
 - Modified CircleCI configuration so that Jest tests now emit coverage reports which are then uploaded to Coveralls
 - Refactored export modal behaviour such that it is handled entirely through React state, rather than through DOM manipulation with vanilla JS
 - Added test cases for the `ExportModal` component in `js/components/common`

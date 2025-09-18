@@ -12,9 +12,9 @@ import Control.Monad.Trans.State (StateT, execStateT, modify)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import qualified Data.Text.Lazy as T
-import Database.CourseQueries (prereqsForCourse)
 import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.GraphOptions (GraphOptions (..))
+import Models.Course (prereqsForCourse)
 import WebParsing.ReqParser (parseReqs)
 
 lookupCourses :: GraphOptions -> [T.Text] -> IO (Map.Map T.Text Req)

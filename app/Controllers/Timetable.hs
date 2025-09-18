@@ -12,7 +12,6 @@ import Data.List.Split (splitOn)
 import qualified Data.Text as T
 import Data.Time (Day, defaultTimeLocale, formatTime, getCurrentTime, toGregorian)
 import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
-import Database.CourseQueries (returnMeeting)
 import Database.Persist.Sqlite (entityKey, entityVal, selectList, (==.))
 import Database.Tables
 import Export.GetImages
@@ -20,6 +19,7 @@ import Export.LatexGenerator
 import Export.PdfGenerator
 import Happstack.Server
 import MasterTemplate
+import Models.Meeting (returnMeeting)
 import Scripts
 import System.Directory (removeFile)
 import Text.Blaze ((!))
