@@ -7,7 +7,7 @@ module Util.Helpers
 
 import qualified Data.ByteString as BS (readFile)
 import qualified Data.ByteString.Base64 as BEnc (encode)
-import Happstack.Server
+import Happstack.Server (Response, toResponse)
 import System.Directory (removeFile)
 
 -- | Given a list and a default value, returns the head of the list, or the default value
