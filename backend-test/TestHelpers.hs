@@ -167,8 +167,8 @@ clearDatabase = do
     deleteWhere ([] :: [Filter Database.Tables.Text])
     deleteWhere ([] :: [Filter Shape])
     deleteWhere ([] :: [Filter Path])
-    deleteWhere ([] :: [Filter Post])
-    deleteWhere ([] :: [Filter PostCategory])
+    deleteWhere ([] :: [Filter Program])
+    deleteWhere ([] :: [Filter ProgramCategory])
     deleteWhere ([] :: [Filter Building])
     deleteWhere ([] :: [Filter Graph])
 
