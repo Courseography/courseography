@@ -9,8 +9,8 @@ import Database.Tables (migrateAll)
 renamePostTables :: Migration
 renamePostTables = do
     addMigration True "ALTER TABLE post RENAME TO program;"
-    addMigration True "ALTER TABLE postcategory RENAME TO programcategory;"
-    addMigration True "ALTER TABLE programcategory RENAME COLUMN post_id TO program_id;"
+    addMigration True "ALTER TABLE post_category RENAME TO program_category;"
+    addMigration True "ALTER TABLE program_category RENAME COLUMN post TO program;"
 
 -- | Migrates the database
 migrateDatabase :: MonadIO m => ReaderT SqlBackend m ()
