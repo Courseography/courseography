@@ -49,9 +49,10 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 #### Parsing and Generation
 
 1. Create the database file `$ stack run database-setup`
-2. Parse prerequisite graphs `$ stack run database-graphs`
-3. Parse course information from Arts and Science Calendar `$ stack run database-calendar`
-4. Parse course information from Arts and Science Timetable `$ stack run database-timetable`
+2. Run necessary database migrations `$ stack run database-migrate`
+3. Parse prerequisite graphs `$ stack run database-graphs`
+4. Parse course information from Arts and Science Calendar `$ stack run database-calendar`
+5. Parse course information from Arts and Science Timetable `$ stack run database-timetable`
 
 #### Running
 

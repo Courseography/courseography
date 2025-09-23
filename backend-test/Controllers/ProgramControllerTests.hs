@@ -8,9 +8,9 @@ import Controllers.Program (index)
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
 import Data.Time (getCurrentTime)
-import Database.DataType (PostType (..))
+import Database.DataType (ProgramType (..))
 import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Post (..))
+import Database.Tables (Program (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
@@ -43,7 +43,7 @@ insertPrograms = mapM_ insertProgram
         insertProgram :: T.Text -> SqlPersistM ()
         insertProgram code = do
             curr <- liftIO getCurrentTime
-            insert_ (Post Other "test" code "test" "test" curr curr)
+            insert_ (Program Other "test" code "test" "test" curr curr)
 
 -- | Run all the index test cases
 runIndexTests :: [TestTree]
