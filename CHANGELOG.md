@@ -12,6 +12,7 @@
 - Added an autocomplete feature to the search bar `js/components/generate/GenerateForm`, also rewrote tests related to this feature
 - Added a route to access all POST codes stored in the database with test coverage
 - Added the `js/components/generate/AutocompleteDropdown.js` component to the program field of Generate
+- Added a `database-migrate` CLI option that runs safe & unsafe SQL migrations (safe migration logic was extracted out of `database-setup` script)
 
 ### 🐛 Bug fixes
 
@@ -34,6 +35,7 @@
 - Added test cases for the `ExportModal` component in `js/components/common`
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
+- Renamed `Post` and `PostCategory` database tables to `Program` and `ProgramCategory` respectively through a database migration
 
 ## [0.7.1] - 2025-06-16
 
