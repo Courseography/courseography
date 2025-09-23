@@ -6,7 +6,7 @@ import qualified Data.Set as S
 import qualified Data.Text as T (Text, null, strip, unlines)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
-import Database.Tables as Tables (Post, postCode, postModified)
+import Database.Tables as Tables (Program, programCode, programModified)
 import Happstack.Server (Request, Response, ServerPart, askRq, ifModifiedSince, lookText',
                          toResponse)
 import Models.Program (returnProgram)
@@ -16,8 +16,8 @@ import Util.Happstack (createJSONResponse)
 index :: ServerPart Response
 index = do
     response <- liftIO $ runDb $ do
-        programsList :: [Entity Post] <- selectList [] []
-        let codes = map (postCode . entityVal) programsList
+        programsList :: [Entity Program] <- selectList [] []
+        let codes = map (programCode . entityVal) programsList
             rmEmpty = filter (not . T.null . T.strip) codes
             rmDups = S.toList (S.fromList rmEmpty)
         return $ T.unlines rmDups :: SqlPersistM T.Text
@@ -39,5 +39,5 @@ queryProgram :: Request -> T.Text -> IO Response
 queryProgram req code = do
     programMaybe <- returnProgram code
     case programMaybe of
-        Nothing -> return $ createJSONResponse (Nothing :: Maybe Post)
-        Just program -> return $ ifModifiedSince (postModified program) req (createJSONResponse program)
+        Nothing -> return $ createJSONResponse (Nothing :: Maybe Program)
+        Just program -> return $ ifModifiedSince (programModified program) req (createJSONResponse program)

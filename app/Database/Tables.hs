@@ -128,11 +128,11 @@ Path json
     deriving Show
     transform [Double] default=[1,0,0,1,0,0]
 
-Post
-    name PostType
+Program
+    name ProgramType
     department T.Text
     code T.Text
-    --UniquePostCode code
+    --UniqueProgramCode code
     --Primary code
     description T.Text
     requirements T.Text
@@ -140,8 +140,8 @@ Post
     modified UTCTime
     deriving Show Eq Generic
 
-PostCategory
-    post PostId
+ProgramCategory
+    program ProgramId
     name T.Text
     deriving Show
 
@@ -216,7 +216,7 @@ data Course =
            } deriving (Show, Generic)
 
 instance ToJSON Course
-instance ToJSON Post
+instance ToJSON Program
 instance ToJSON Time
 instance ToJSON MeetTime'
 instance ToJSON Building

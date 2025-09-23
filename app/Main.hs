@@ -16,8 +16,9 @@ import System.Environment (getArgs)
 import System.IO (hPutStrLn, stderr)
 
 -- internal dependencies
+import Config (runDb)
 import Database.Database (populateCalendar, setupDatabase)
-import Database.Migrations (renamePostTable)
+import Database.Migrations (migrateDatabase)
 import Server (runServer)
 import Svg.Parser (parsePrebuiltSvgs)
 import Util.Documentation (generateDocs)
@@ -36,7 +37,7 @@ taskMap = Map.fromList [
     ("docs", const generateDocs),
     ("generate", generate),
     ("database-setup", const (setupDatabase False)),
-    ("database-migrate", const renamePostTable)]
+    ("database-migrate", const (runDb migrateDatabase))]
 
 -- | Courseography entry point.
 main :: IO ()
