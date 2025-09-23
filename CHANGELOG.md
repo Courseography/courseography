@@ -13,6 +13,7 @@
 - Added a route to access all POST codes stored in the database with test coverage
 - Added the `js/components/generate/AutocompleteDropdown.js` component to the program field of Generate
 - Updated the colour of the rendered options for the AutocompleteDropdown component
+- Added a `database-migrate` CLI option that runs SQL migrations
 
 ### 🐛 Bug fixes
 
@@ -39,6 +40,7 @@
 - Added test cases for the retrieveProgram function in `Controllers/Program`
 - Removed duplicate code from `mockRequest` and `runServerPartWith` in `backend-test/TestHelpers.hs`
 - Initialized a SchemaVersion table for the purposes of running robust database migrations
+- Renamed `Post` and `PostCategory` database tables to `Program` and `ProgramCategory` respectively through a database migration
 
 ## [0.7.1] - 2025-06-16
 
