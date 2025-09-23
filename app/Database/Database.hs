@@ -27,7 +27,7 @@ breathTableSetUpStr :: String
 breathTableSetUpStr = "breadth table set up"
 
 
--- | Creates the database if it doesn't exist.
+-- | Creates the database if it doesn't exist and runs migrations.
 setupDatabase :: Bool -> IO ()
 setupDatabase quiet = do
     -- Create db folder if it doesn't exist
@@ -35,6 +35,11 @@ setupDatabase quiet = do
     let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
         db = T.unpack $ T.take ind dbPath
     createDirectoryIfMissing True db
+    runDb (
+        if quiet
+            then void $ runMigrationQuiet migrateAll
+            else runMigration migrateAll
+        )
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()
