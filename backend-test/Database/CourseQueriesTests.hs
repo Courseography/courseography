@@ -13,9 +13,9 @@ import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Data.Time (getCurrentTime)
-import Database.DataType (PostType (..))
+import Database.DataType (ProgramType (..))
 import Database.Persist.Sqlite (insert_)
-import Database.Tables (Post (..))
+import Database.Tables (Program (..))
 import Models.Program (reqsForProgram)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
@@ -34,7 +34,7 @@ runReqsForProgramTest :: String -> T.Text -> T.Text -> String -> TestTree
 runReqsForProgramTest label reqsToInsert program expected =
     testCase label $ do
         currentTime <- liftIO getCurrentTime
-        let testProgram = Post Major "Computer Science" program "Sample post description" reqsToInsert currentTime currentTime
+        let testProgram = Program Major "Computer Science" program "Sample post description" reqsToInsert currentTime currentTime
 
         runDb $ do
             clearDatabase
