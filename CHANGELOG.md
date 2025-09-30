@@ -35,6 +35,7 @@
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
 - Deleted `app/Response/Image` file and refactored `app/Util/Helpers` to include `returnImageData`
+- Added test cases for the retrieveProgram function in `Controllers/Program`
 
 ## [0.7.1] - 2025-06-16
 

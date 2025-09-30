@@ -53,7 +53,6 @@ runRetrieveProgramTest label posts queryParam expected =
 
         response <- runServerPartWithProgramQuery Controllers.Program.retrieveProgram (T.unpack queryParam)
         let actual = BL.unpack $ rsBody response
-        putStrLn $ "\n[DEBUG] Response for '" ++ label ++ "':\n" ++ actual ++ "\n"
         case expected of
             "null" ->
                 assertEqual ("Unexpected body for " ++ label) "null" actual
