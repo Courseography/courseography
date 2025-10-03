@@ -9,37 +9,39 @@ module Controllers.ProgramControllerTests (
 ) where
 
 import Config (runDb)
-import Control.Monad.IO.Class (liftIO)
 import Controllers.Program (index, retrieveProgram)
 import qualified Data.ByteString.Lazy.Char8 as BL
-import Data.List (isInfixOf)
-import Data.Time.Clock (getCurrentTime)
 import qualified Data.Text as T
+import Data.Time (UTCTime)
 import Database.DataType (PostType (..))
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Post (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
-import Test.Tasty.HUnit (assertEqual, assertBool, testCase)
+import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, runServerPart, runServerPartWithProgramQuery, withDatabase)
+
+-- | Arbitrary timestamp for tests
+testTimestamp :: UTCTime
+testTimestamp = read "2025-10-01 17:47:27.910498 UTC"
  
 -- | List of test cases as (label, programs to insert, query params, expected output)
-retrieveprogramTestCases :: [(String, [T.Text], T.Text , String)]
+retrieveprogramTestCases :: [(String, [T.Text], T.Text, String)]
 retrieveprogramTestCases =
     [ ("Valid program code returns JSON"
       , ["ASMAJ1689"]
-      , T.pack "ASMAJ1689"
-      , "\"postCode\":\"ASMAJ1689\""
+      , "ASMAJ1689"
+      , "{\"postCode\":\"ASMAJ1689\",\"postCreated\":\"2025-10-01T17:47:27.910498Z\",\"postDepartment\":\"test\",\"postDescription\":\"test\",\"postModified\":\"2025-10-01T17:47:27.910498Z\",\"postName\":\"Other\",\"postRequirements\":\"test\"}"
       )
     , ("Invalid program code returns null JSON"
       , []
-      , T.pack "INVALID123"
+      , "INVALID123"
       , "null"
       )
-    , ("Empty code parameter returns error"
+    , ("Empty code parameter returns null"
       , []
-      , T.pack ""
-      , "ERROR"
+      , ""
+      , "null"
       )
     ]
 
@@ -53,14 +55,7 @@ runRetrieveProgramTest label posts queryParam expected =
 
         response <- runServerPartWithProgramQuery Controllers.Program.retrieveProgram (T.unpack queryParam)
         let actual = BL.unpack $ rsBody response
-        case expected of
-            "null" ->
-                assertEqual ("Unexpected body for " ++ label) "null" actual
-            "ERROR" ->
-                assertBool ("Expected error body for " ++ label) (not (null actual))
-            substr ->
-                assertBool ("Expected substring not found for " ++ label)
-                           (substr `isInfixOf` actual)
+        assertEqual ("Unexpected body for " ++ label) expected actual
 
 -- | Run all the retrieveProgram test cases
 runRetrieveProgramTests :: [TestTree]
@@ -91,9 +86,8 @@ insertPrograms :: [T.Text] -> SqlPersistM ()
 insertPrograms = mapM_ insertProgram
     where
         insertProgram :: T.Text -> SqlPersistM ()
-        insertProgram code = do
-            curr <- liftIO getCurrentTime
-            insert_ (Post Other "test" code "test" "test" curr curr)
+        insertProgram code =
+            insert_ (Post Other "test" code "test" "test" testTimestamp testTimestamp)
 
 -- | Run all the index test cases
 runIndexTests :: [TestTree]
