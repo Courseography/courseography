@@ -3,27 +3,6 @@ import Autocomplete from "@mui/material/Autocomplete"
 import Chip from "@mui/material/Chip"
 import { useField } from "formik"
 import PropTypes from "prop-types"
-import { ThemeProvider, createTheme } from "@mui/material/styles"
-
-const autocompleteTheme = createTheme({
-  components: {
-    MuiAutocomplete: {
-      defaultProps: {
-        renderOption: (props, option) => (
-          <li
-            {...props}
-            style={{
-              fontFamily: '"Trebuchet MS", Arial, sans-serif',
-              color: "#5c497e",
-            }}
-          >
-            {option}
-          </li>
-        ),
-      },
-    },
-  },
-})
 
 export default function AutocompleteDropdown({
   name,
@@ -55,39 +34,48 @@ export default function AutocompleteDropdown({
   }, [])
 
   return (
-    <ThemeProvider theme={autocompleteTheme}>
-      <Autocomplete
-        multiple
-        onChange={(event, newValues) => {
-          onSelectedChange(newValues)
-          setValue(newValues.join(", "))
-        }}
-        options={optionList}
-        includeInputInList
-        disableClearable
-        disableCloseOnSelect
-        popupIcon={null}
-        sx={{ width: "100%" }}
-        renderValue={(value, getItemProps) =>
-          value.map((option, index) => {
-            const { key, ...itemProps } = getItemProps({ index })
-            return <Chip variant="outlined" label={option} key={key} {...itemProps} />
-          })
-        }
-        renderInput={params => (
-          <div ref={params.InputProps.ref}>
-            <input
-              aria-label={name}
-              type="text"
-              {...params.inputProps}
-              placeholder={placeholder}
-              id={id}
-            />
-          </div>
-        )}
-        {...props}
-      />
-    </ThemeProvider>
+    <Autocomplete
+      multiple
+      onChange={(event, newValues) => {
+        onSelectedChange(newValues)
+        setValue(newValues.join(", "))
+      }}
+      options={optionList}
+      includeInputInList
+      disableClearable
+      disableCloseOnSelect
+      popupIcon={null}
+      sx={{ width: "100%" }}
+      renderValue={(value, getItemProps) =>
+        value.map((option, index) => {
+          const { key, ...itemProps } = getItemProps({ index })
+          return <Chip variant="outlined" label={option} key={key} {...itemProps} />
+        })
+      }
+      renderInput={params => (
+        <div ref={params.InputProps.ref}>
+          <input
+            aria-label={name}
+            type="text"
+            {...params.inputProps}
+            placeholder={placeholder}
+            id={id}
+          />
+        </div>
+      )}
+      renderOption={(props, option) => (
+        <li
+          {...props}
+          style={{
+            fontFamily: '"Trebuchet MS", Arial, sans-serif',
+            color: "#5c497e",
+          }}
+        >
+          {option}
+        </li>
+      )}
+      {...props}
+    />
   )
 }
 
