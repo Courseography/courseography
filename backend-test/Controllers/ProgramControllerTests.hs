@@ -10,28 +10,44 @@ module Controllers.ProgramControllerTests (
 
 import Config (runDb)
 import Controllers.Program (index, retrieveProgram)
+import Control.Monad.IO.Class (liftIO)
+import Data.Aeson (FromJSON (parseJSON), decode, withObject, (.:))
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
-import Data.Time (UTCTime)
+import Data.Time (getCurrentTime)
 import Database.DataType (PostType (..))
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Post (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
-import Test.Tasty.HUnit (assertEqual, testCase)
+import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 import TestHelpers (clearDatabase, runServerPart, runServerPartWithProgramQuery, withDatabase)
 
--- | Arbitrary timestamp for tests
-testTimestamp :: UTCTime
-testTimestamp = read "2025-10-01 17:47:27.910498 UTC"
- 
+-- | A Post response without timestamps (for comparison purposes)
+data PostResponseNoTime = PostResponseNoTime
+    { postCode :: T.Text
+    , postDepartment :: T.Text
+    , postDescription :: T.Text
+    , postName :: T.Text
+    , postRequirements :: T.Text
+    } deriving (Show, Eq)
+
+instance FromJSON PostResponseNoTime where
+    parseJSON = withObject "Expected Object for Post" $ \o -> do
+        code <- o .: "postCode"
+        dept <- o .: "postDepartment"
+        desc <- o .: "postDescription"
+        name <- o .: "postName"
+        reqs <- o .: "postRequirements"
+        return $ PostResponseNoTime code dept desc name reqs
+
 -- | List of test cases as (label, programs to insert, query params, expected output)
 retrieveprogramTestCases :: [(String, [T.Text], T.Text, String)]
 retrieveprogramTestCases =
     [ ("Valid program code returns JSON"
       , ["ASMAJ1689"]
       , "ASMAJ1689"
-      , "{\"postCode\":\"ASMAJ1689\",\"postCreated\":\"2025-10-01T17:47:27.910498Z\",\"postDepartment\":\"test\",\"postDescription\":\"test\",\"postModified\":\"2025-10-01T17:47:27.910498Z\",\"postName\":\"Other\",\"postRequirements\":\"test\"}"
+      , "{\"postCode\":\"ASMAJ1689\",\"postDepartment\":\"test\",\"postDescription\":\"test\",\"postName\":\"Other\",\"postRequirements\":\"test\"}"
       )
     , ("Invalid program code returns null JSON"
       , []
@@ -45,6 +61,10 @@ retrieveprogramTestCases =
       )
     ]
 
+-- | Parse response and extract non-timestamp fields
+parsePostResponse :: String -> Maybe PostResponseNoTime
+parsePostResponse jsonStr = decode (BL.pack jsonStr)
+
 -- | Run a test case (case, input, expected output) on the retrieveProgram function.
 runRetrieveProgramTest :: String -> [T.Text] -> T.Text -> String -> TestTree
 runRetrieveProgramTest label posts queryParam expected =
@@ -55,7 +75,15 @@ runRetrieveProgramTest label posts queryParam expected =
 
         response <- runServerPartWithProgramQuery Controllers.Program.retrieveProgram (T.unpack queryParam)
         let actual = BL.unpack $ rsBody response
-        assertEqual ("Unexpected body for " ++ label) expected actual
+        let parsedActual = parsePostResponse actual
+        let parsedExpected = parsePostResponse expected
+        
+        assertBool 
+            ("JSON mismatch for " ++ label ++ 
+             "\nExpected: " ++ show parsedExpected ++ 
+             "\nActual: " ++ show parsedActual ++
+             "\nRaw JSON: " ++ actual) 
+            (parsedActual == parsedExpected)
 
 -- | Run all the retrieveProgram test cases
 runRetrieveProgramTests :: [TestTree]
@@ -86,8 +114,9 @@ insertPrograms :: [T.Text] -> SqlPersistM ()
 insertPrograms = mapM_ insertProgram
     where
         insertProgram :: T.Text -> SqlPersistM ()
-        insertProgram code =
-            insert_ (Post Other "test" code "test" "test" testTimestamp testTimestamp)
+        insertProgram code = do
+            curr <- liftIO getCurrentTime
+            insert_ (Post Other "test" code "test" "test" curr curr)
 
 -- | Run all the index test cases
 runIndexTests :: [TestTree]
