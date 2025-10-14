@@ -20,7 +20,7 @@ import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Post (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
-import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
+import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, runServerPart, runServerPartWithProgramQuery, withDatabase)
 
 -- | A Post response without timestamps (for comparison purposes)
@@ -42,22 +42,22 @@ instance FromJSON PostResponseNoTime where
         return $ PostResponseNoTime code dept desc name reqs
 
 -- | List of test cases as (label, programs to insert, query params, expected output)
-retrieveprogramTestCases :: [(String, [T.Text], T.Text, String)]
+retrieveprogramTestCases :: [(String, [T.Text], T.Text, Maybe PostResponseNoTime)]
 retrieveprogramTestCases =
     [ ("Valid program code returns JSON"
       , ["ASMAJ1689"]
       , "ASMAJ1689"
-      , "{\"postCode\":\"ASMAJ1689\",\"postDepartment\":\"test\",\"postDescription\":\"test\",\"postName\":\"Other\",\"postRequirements\":\"test\"}"
+      , Just (PostResponseNoTime "ASMAJ1689" "test" "test" "Other" "test")
       )
     , ("Invalid program code returns null JSON"
       , []
       , "INVALID123"
-      , "null"
+      , Nothing
       )
     , ("Empty code parameter returns null"
       , []
       , ""
-      , "null"
+      , Nothing
       )
     ]
 
@@ -66,24 +66,16 @@ parsePostResponse :: String -> Maybe PostResponseNoTime
 parsePostResponse jsonStr = decode (BL.pack jsonStr)
 
 -- | Run a test case (case, input, expected output) on the retrieveProgram function.
-runRetrieveProgramTest :: String -> [T.Text] -> T.Text -> String -> TestTree
+runRetrieveProgramTest :: String -> [T.Text] -> T.Text -> Maybe PostResponseNoTime -> TestTree
 runRetrieveProgramTest label posts queryParam expected =
     testCase label $ do
         runDb $ do
             clearDatabase
             insertPrograms posts
-
         response <- runServerPartWithProgramQuery Controllers.Program.retrieveProgram (T.unpack queryParam)
         let actual = BL.unpack $ rsBody response
         let parsedActual = parsePostResponse actual
-        let parsedExpected = parsePostResponse expected
-        
-        assertBool 
-            ("JSON mismatch for " ++ label ++ 
-             "\nExpected: " ++ show parsedExpected ++ 
-             "\nActual: " ++ show parsedActual ++
-             "\nRaw JSON: " ++ actual) 
-            (parsedActual == parsedExpected)
+        assertEqual ("Unexpected JSON response body for" ++ label) expected parsedActual
 
 -- | Run all the retrieveProgram test cases
 runRetrieveProgramTests :: [TestTree]
