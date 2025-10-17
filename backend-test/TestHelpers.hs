@@ -13,6 +13,7 @@ module TestHelpers
     releaseDatabase,
     runServerPartWithQuery,
     runServerPartWithCourseInfoQuery,
+    runServerPartWithProgramQuery,
     runServerPartWithGraphGenerate,
     withDatabase)
     where
@@ -107,6 +108,30 @@ mockRequestWithCourseInfoQuery dept = do
         , rqPeer            = ("127.0.0.1", 0)
         }
 
+-- | A mock request for running ServerPartWithProgramQuery, specifically for retrieveProgram
+mockRequestWithProgramQuery :: String -> IO Request
+mockRequestWithProgramQuery programCode = do
+    inputsBody <- newMVar []
+    requestBody <- newEmptyMVar
+    return Request
+        { rqSecure          = False
+        , rqMethod          = GET
+        , rqPaths           = ["program"]
+        , rqUri             = "/program"
+        , rqQuery           = ""
+        , rqInputsQuery     = [("code", Input {
+            inputValue = Right (BSL8.pack programCode),
+            inputFilename = Nothing,
+            inputContentType = defaultContentType
+          })]
+        , rqInputsBody      = inputsBody
+        , rqCookies         = []
+        , rqVersion         = HttpVersion 1 1
+        , rqHeaders         = Map.empty
+        , rqBody            = requestBody
+        , rqPeer            = ("127.0.0.1", 0)
+        }
+
 -- | A mock request for the graph generate route, specifically for findAndSavePrereqsResponse
 mockRequestWithGraphGenerate :: BSL.ByteString -> IO Request
 mockRequestWithGraphGenerate payload = do
@@ -149,6 +174,12 @@ runServerPartWithCourseInfoQuery sp dept = do
     request <- mockRequestWithCourseInfoQuery dept
     simpleHTTP'' sp request
 
+-- | Helper function to run ServerPartWithQuery Response for retrieveProgram
+runServerPartWithProgramQuery :: ServerPart Response -> String -> IO Response
+runServerPartWithProgramQuery sp programCode = do
+    request <- mockRequestWithProgramQuery programCode
+    simpleHTTP'' sp request
+    
 -- | Helper function to run ServerPartWithGraphGenerate for findAndSavePrereqsResponse
 runServerPartWithGraphGenerate :: ServerPart Response -> BSL.ByteString -> IO Response
 runServerPartWithGraphGenerate sp payload = do

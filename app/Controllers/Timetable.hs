@@ -20,14 +20,13 @@ import Export.PdfGenerator
 import Happstack.Server
 import MasterTemplate
 import Models.Meeting (returnMeeting)
-import Response.Image (returnImageData)
 import Scripts
 import System.Directory (removeFile)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Read (readMaybe)
-import Util.Helpers
+import Util.Helpers (returnImageData, safeHead)
 
 gridResponse :: ServerPart Response
 gridResponse =

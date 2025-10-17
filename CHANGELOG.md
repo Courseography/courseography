@@ -12,6 +12,7 @@
 - Added an autocomplete feature to the search bar `js/components/generate/GenerateForm`, also rewrote tests related to this feature
 - Added a route to access all POST codes stored in the database with test coverage
 - Added the `js/components/generate/AutocompleteDropdown.js` component to the program field of Generate
+- Updated the colour of the rendered options for the AutocompleteDropdown component
 
 ### 🐛 Bug fixes
 
@@ -35,6 +36,8 @@
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
 - Initialized a SchemaVersion table for the purposes of running robust database migrations
+- Deleted `app/Response/Image` file and refactored `app/Util/Helpers` to include `returnImageData`
+- Added test cases for the retrieveProgram function in `Controllers/Program`
 
 ## [0.7.1] - 2025-06-16
 

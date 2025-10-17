@@ -1,10 +1,17 @@
+{-|
+Description: Program Controller module tests.
+
+Module that contains the tests for the functions in the Program Controller module.
+-}
+
 module Controllers.ProgramControllerTests (
     test_programController
 ) where
 
 import Config (runDb)
+import Controllers.Program (index, retrieveProgram)
 import Control.Monad.IO.Class (liftIO)
-import Controllers.Program (index)
+import Data.Aeson (FromJSON (parseJSON), decode, withObject, (.:))
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
 import Data.Time (getCurrentTime)
@@ -14,7 +21,65 @@ import Database.Tables (Post (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (clearDatabase, runServerPart, withDatabase)
+import TestHelpers (clearDatabase, runServerPart, runServerPartWithProgramQuery, withDatabase)
+
+-- | A Post response without timestamps (for comparison purposes)
+data PostResponseNoTime = PostResponseNoTime
+    { postCode :: T.Text
+    , postDepartment :: T.Text
+    , postDescription :: T.Text
+    , postName :: T.Text
+    , postRequirements :: T.Text
+    } deriving (Show, Eq)
+
+instance FromJSON PostResponseNoTime where
+    parseJSON = withObject "Expected Object for Post" $ \o -> do
+        code <- o .: "postCode"
+        dept <- o .: "postDepartment"
+        desc <- o .: "postDescription"
+        name <- o .: "postName"
+        reqs <- o .: "postRequirements"
+        return $ PostResponseNoTime code dept desc name reqs
+
+-- | List of test cases as (label, programs to insert, query params, expected output)
+retrieveprogramTestCases :: [(String, [T.Text], T.Text, Maybe PostResponseNoTime)]
+retrieveprogramTestCases =
+    [ ("Valid program code returns JSON"
+      , ["ASMAJ1689"]
+      , "ASMAJ1689"
+      , Just (PostResponseNoTime "ASMAJ1689" "test" "test" "Other" "test")
+      )
+    , ("Invalid program code returns null JSON"
+      , []
+      , "INVALID123"
+      , Nothing
+      )
+    , ("Empty code parameter returns null"
+      , []
+      , ""
+      , Nothing
+      )
+    ]
+
+-- | Parse response and extract non-timestamp fields
+parsePostResponse :: String -> Maybe PostResponseNoTime
+parsePostResponse jsonStr = decode (BL.pack jsonStr)
+
+-- | Run a test case (case, input, expected output) on the retrieveProgram function.
+runRetrieveProgramTest :: String -> [T.Text] -> T.Text -> Maybe PostResponseNoTime -> TestTree
+runRetrieveProgramTest label posts queryParam expected =
+    testCase label $ do
+        runDb $ do
+            clearDatabase
+            insertPrograms posts
+        response <- runServerPartWithProgramQuery Controllers.Program.retrieveProgram (T.unpack queryParam)
+        let actual = BL.unpack $ rsBody response
+        let parsedActual = parsePostResponse actual
+        assertEqual ("Unexpected JSON response body for" ++ label) expected parsedActual
+
+-- | Run all the retrieveProgram test cases
+runRetrieveProgramTests :: [TestTree]
+runRetrieveProgramTests = map (\(label, programs, params, expected) -> runRetrieveProgramTest label programs params expected) retrieveprogramTestCases
 
 -- | List of test cases as (label, input programs, expected output)
 indexTestCases :: [(String, [T.Text], String)]
@@ -51,4 +116,4 @@ runIndexTests = map (\(label, programs, expected) -> runIndexTest label programs
 
 -- | Test suite for Program Controller Module
 test_programController :: TestTree
-test_programController = withDatabase "Program Controller tests" runIndexTests
+test_programController = withDatabase "Program Controller tests" (runIndexTests ++ runRetrieveProgramTests)

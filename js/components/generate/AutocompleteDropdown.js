@@ -56,13 +56,23 @@ export default function AutocompleteDropdown({
         <div ref={params.InputProps.ref}>
           <input
             aria-label={name}
-            className="autocomplete-input"
             type="text"
             {...params.inputProps}
             placeholder={placeholder}
             id={id}
           />
         </div>
+      )}
+      renderOption={(props, option) => (
+        <li
+          {...props}
+          style={{
+            fontFamily: '"Trebuchet MS", Arial, sans-serif',
+            color: "#5c497e",
+          }}
+        >
+          {option}
+        </li>
       )}
       {...props}
     />
