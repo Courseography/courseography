@@ -34,6 +34,7 @@
 - Added test cases for the `ExportModal` component in `js/components/common`
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
+- Initialized a SchemaVersion table for the purposes of running robust database migrations
 
 ## [0.7.1] - 2025-06-16
 
