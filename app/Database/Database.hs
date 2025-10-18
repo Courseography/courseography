@@ -37,15 +37,12 @@ setupDatabase quiet = do
         db = T.unpack $ T.take ind dbPath
     createDirectoryIfMissing True db
 
-    -- 1. Ensure SQL schema matches ORM (in Tables.hs)
+    -- Ensure SQL schema matches ORM and initialize schema version table
     runDb (
         if quiet
-            then void $ runMigrationQuiet migrateAll
-            else runMigration migrateAll
+            then void (runMigrationQuiet migrateAll >> getDatabaseVersion)
+            else runMigration migrateAll >> getDatabaseVersion >> return ()
         )
-
-    -- 2. Initialize the SchemaVersion table.
-    void $ runDb getDatabaseVersion
 
 -- | Gets the current version of the database.
 -- If no version is defined, initialize the
@@ -56,8 +53,9 @@ getDatabaseVersion = do
     case result of
         Just entity -> pure $ schemaVersionVersion $ entityVal entity
         Nothing -> do
-            insert_ $ SchemaVersion 1
-            pure 1
+            let initialVersion = 1
+            insert_ $ SchemaVersion initialVersion
+            pure initialVersion
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()

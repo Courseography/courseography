@@ -35,16 +35,9 @@
 - Added test cases for the `ExportModal` component in `js/components/common`
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
-<<<<<<< HEAD
-- Initialized a SchemaVersion table for the purposes of running robust database migrations
-=======
-<<<<<<< HEAD
->>>>>>> 60c81a0a (initialized schema version table)
 - Deleted `app/Response/Image` file and refactored `app/Util/Helpers` to include `returnImageData`
 - Added test cases for the retrieveProgram function in `Controllers/Program`
-=======
 - Initialized a SchemaVersion table for the purposes of running robust database migrations
->>>>>>> 5bc0d0e9 (initialized schema version table)
 
 ## [0.7.1] - 2025-06-16
 
