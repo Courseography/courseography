@@ -28,6 +28,8 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install -y graphviz texlive-latex-base imagemagick
+            sudo cp /usr/bin/convert /usr/local/bin/magick
+            sudo chmod 777 /usr/local/bin/magick
             sudo dpkg --remove --force-remove-reinstreq nodejs
             stack update
 
