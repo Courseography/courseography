@@ -37,7 +37,7 @@ setupDatabase quiet = do
         db = T.unpack $ T.take ind dbPath
     createDirectoryIfMissing True db
 
-    -- Ensure SQL schema matches ORM, and initialize schema version table
+    -- Match SQL database with ORM, then initialize schema version table
     let migrateFunction = if quiet then void . runMigrationQuiet else runMigration
     runDb $ void $ migrateFunction migrateAll >> getDatabaseVersion
 
