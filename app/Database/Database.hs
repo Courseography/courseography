@@ -38,9 +38,8 @@ setupDatabase quiet = do
     createDirectoryIfMissing True db
 
     -- Ensure SQL schema matches ORM, and initialize schema version table
-    runDb (if quiet
-            then void $ runMigrationQuiet migrateAll >> getDatabaseVersion
-            else runMigration migrateAll >> getDatabaseVersion >> return ())
+    let migrateFunction = if quiet then void . runMigrationQuiet else runMigration
+    runDb $ void $ migrateFunction migrateAll >> getDatabaseVersion
 
 -- | Gets the current version of the database.
 -- If no version is defined, initialize the
