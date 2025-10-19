@@ -34,18 +34,26 @@ import System.Directory (removeFile)
 import System.Environment (setEnv, unsetEnv)
 import Test.Tasty (TestTree, testGroup, withResource)
 
--- | A minimal mock request for running a ServerPart
-mockRequest :: IO Request
-mockRequest = do
+-- | Helper to create a query input parameter
+createQueryInput :: String -> String -> Input
+createQueryInput _ paramValue = Input
+    { inputValue = Right (BSL8.pack paramValue)
+    , inputFilename = Nothing
+    , inputContentType = defaultContentType
+    }
+
+-- | Generalized function to create a mock request with query parameters
+createMockRequest :: Method -> [String] -> String -> [(String, Input)] -> IO Request
+createMockRequest method pathSegments uri queryInputs = do
     inputsBody <- newMVar []
     requestBody <- newEmptyMVar
     return Request
         { rqSecure          = False
-        , rqMethod          = GET
-        , rqPaths           = []
-        , rqUri             = "/"
+        , rqMethod          = method
+        , rqPaths           = pathSegments
+        , rqUri             = uri
         , rqQuery           = ""
-        , rqInputsQuery     = []
+        , rqInputsQuery     = queryInputs
         , rqInputsBody      = inputsBody
         , rqCookies         = []
         , rqVersion         = HttpVersion 1 1
@@ -54,96 +62,17 @@ mockRequest = do
         , rqPeer            = ("127.0.0.1", 0)
         }
 
--- | Helper function to run ServerPart Response
-runServerPart :: ServerPart Response -> IO Response
-runServerPart sp = do
-    request <- mockRequest
-    simpleHTTP'' sp request
-
--- | A mock request for running ServerPartWithQuery, specifically for retrieveCourse
-mockRequestWithQuery :: String -> IO Request
-mockRequestWithQuery courseName = do
-    inputsBody <- newMVar []
-    requestBody <- newEmptyMVar
-    return Request
-        { rqSecure          = False
-        , rqMethod          = GET
-        , rqPaths           = ["course"]
-        , rqUri             = "/course"
-        , rqQuery           = ""
-        , rqInputsQuery     = [("name", Input {
-            inputValue = Right (BSL8.pack courseName),
-            inputFilename = Nothing,
-            inputContentType = defaultContentType
-          })]
-        , rqInputsBody      = inputsBody
-        , rqCookies         = []
-        , rqVersion         = HttpVersion 1 1
-        , rqHeaders         = Map.empty
-        , rqBody            = requestBody
-        , rqPeer            = ("127.0.0.1", 0)
-        }
-
--- | A mock request for running ServerPartWithCourseInfoQuery, specifically for courseInfo
-mockRequestWithCourseInfoQuery :: String -> IO Request
-mockRequestWithCourseInfoQuery dept = do
-    inputsBody <- newMVar []
-    requestBody <- newEmptyMVar
-    return Request
-        { rqSecure          = False
-        , rqMethod          = GET
-        , rqPaths           = ["course-info"]
-        , rqUri             = "/course-info"
-        , rqQuery           = ""
-        , rqInputsQuery     = [("dept", Input {
-            inputValue = Right (BSL8.pack dept),
-            inputFilename = Nothing,
-            inputContentType = defaultContentType
-          })]
-        , rqInputsBody      = inputsBody
-        , rqCookies         = []
-        , rqVersion         = HttpVersion 1 1
-        , rqHeaders         = Map.empty
-        , rqBody            = requestBody
-        , rqPeer            = ("127.0.0.1", 0)
-        }
-
--- | A mock request for running ServerPartWithProgramQuery, specifically for retrieveProgram
-mockRequestWithProgramQuery :: String -> IO Request
-mockRequestWithProgramQuery programCode = do
-    inputsBody <- newMVar []
-    requestBody <- newEmptyMVar
-    return Request
-        { rqSecure          = False
-        , rqMethod          = GET
-        , rqPaths           = ["program"]
-        , rqUri             = "/program"
-        , rqQuery           = ""
-        , rqInputsQuery     = [("code", Input {
-            inputValue = Right (BSL8.pack programCode),
-            inputFilename = Nothing,
-            inputContentType = defaultContentType
-          })]
-        , rqInputsBody      = inputsBody
-        , rqCookies         = []
-        , rqVersion         = HttpVersion 1 1
-        , rqHeaders         = Map.empty
-        , rqBody            = requestBody
-        , rqPeer            = ("127.0.0.1", 0)
-        }
-
--- | A mock request for the graph generate route, specifically for findAndSavePrereqsResponse
-mockRequestWithGraphGenerate :: BSL.ByteString -> IO Request
-mockRequestWithGraphGenerate payload = do
+-- | Generalized function to create a mock request with a body payload
+createMockRequestWithBody :: Method -> [String] -> String -> BSL.ByteString -> IO Request
+createMockRequestWithBody method pathSegments uri payload = do
     inputsBody <- newMVar []
     requestBody <- newEmptyMVar
     putMVar requestBody (Body payload)
-
     return Request
         { rqSecure          = False
-        , rqMethod          = PUT
-        , rqPaths           = ["graph-generate"]
-        , rqUri             = "/graph-generate"
+        , rqMethod          = method
+        , rqPaths           = pathSegments
+        , rqUri             = uri
         , rqQuery           = ""
         , rqInputsQuery     = []
         , rqInputsBody      = inputsBody
@@ -153,6 +82,33 @@ mockRequestWithGraphGenerate payload = do
         , rqBody            = requestBody
         , rqPeer            = ("127.0.0.1", 0)
         }
+
+-- | A minimal mock request for running a ServerPart
+mockRequest :: IO Request
+mockRequest = createMockRequest GET [] "/" []
+
+-- | A mock request with a query parameter for retrieveCourse
+mockRequestWithQuery :: String -> IO Request
+mockRequestWithQuery courseName = 
+    createMockRequest GET ["course"] "/course" 
+        [("name", createQueryInput "name" courseName)]
+
+-- | A mock request with a query parameter for courseInfo
+mockRequestWithCourseInfoQuery :: String -> IO Request
+mockRequestWithCourseInfoQuery dept = 
+    createMockRequest GET ["course-info"] "/course-info" 
+        [("dept", createQueryInput "dept" dept)]
+
+-- | A mock request with a query parameter for retrieveProgram
+mockRequestWithProgramQuery :: String -> IO Request
+mockRequestWithProgramQuery programCode = 
+    createMockRequest GET ["program"] "/program" 
+        [("code", createQueryInput "code" programCode)]
+
+-- | A mock request with a body payload for the graph generate route
+mockRequestWithGraphGenerate :: BSL.ByteString -> IO Request
+mockRequestWithGraphGenerate payload = 
+    createMockRequestWithBody PUT ["graph-generate"] "/graph-generate" payload
 
 -- | Default content type for the MockRequestWithQuery, specifically for retrieveCourse
 defaultContentType :: ContentType
@@ -162,29 +118,35 @@ defaultContentType = ContentType
     , ctParameters = []
     }
 
--- | Helper function to run ServerPartWithQuery Response
+-- | Generalized helper function to run a ServerPart with a request
+runServerPartWith :: ServerPart Response -> IO Request -> IO Response
+runServerPartWith sp requestIO = do
+    request <- requestIO
+    simpleHTTP'' sp request
+
+-- | Helper function to run ServerPart Response
+runServerPart :: ServerPart Response -> IO Response
+runServerPart sp = runServerPartWith sp mockRequest
+
+-- | Helper function to run ServerPart Response with a query parameter for retrieveCourse
 runServerPartWithQuery :: ServerPart Response -> String -> IO Response
-runServerPartWithQuery sp courseName = do
-    request <- mockRequestWithQuery courseName
-    simpleHTTP'' sp request
+runServerPartWithQuery sp courseName = 
+    runServerPartWith sp (mockRequestWithQuery courseName)
 
--- | Helper function to run ServerPartWithQuery Response for courseInfo
+-- | Helper function to run ServerPart Response with a query parameter for courseInfo
 runServerPartWithCourseInfoQuery :: ServerPart Response -> String -> IO Response
-runServerPartWithCourseInfoQuery sp dept = do
-    request <- mockRequestWithCourseInfoQuery dept
-    simpleHTTP'' sp request
+runServerPartWithCourseInfoQuery sp dept = 
+    runServerPartWith sp (mockRequestWithCourseInfoQuery dept)
 
--- | Helper function to run ServerPartWithQuery Response for retrieveProgram
+-- | Helper function to run ServerPart Response with a query parameter for retrieveProgram
 runServerPartWithProgramQuery :: ServerPart Response -> String -> IO Response
-runServerPartWithProgramQuery sp programCode = do
-    request <- mockRequestWithProgramQuery programCode
-    simpleHTTP'' sp request
-    
--- | Helper function to run ServerPartWithGraphGenerate for findAndSavePrereqsResponse
+runServerPartWithProgramQuery sp programCode = 
+    runServerPartWith sp (mockRequestWithProgramQuery programCode)
+
+-- | Helper function to run ServerPart Response with a body payload for findAndSavePrereqsResponse
 runServerPartWithGraphGenerate :: ServerPart Response -> BSL.ByteString -> IO Response
-runServerPartWithGraphGenerate sp payload = do
-    request <- mockRequestWithGraphGenerate payload
-    simpleHTTP'' sp request
+runServerPartWithGraphGenerate sp payload = 
+    runServerPartWith sp (mockRequestWithGraphGenerate payload)
 
 -- | Clear all the entries in the database
 clearDatabase :: SqlPersistM ()
