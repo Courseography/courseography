@@ -37,6 +37,7 @@
 - Added documentation for running a subset of the backend tests
 - Deleted `app/Response/Image` file and refactored `app/Util/Helpers` to include `returnImageData`
 - Added test cases for the retrieveProgram function in `Controllers/Program`
+- Updated CI config to resolve issues with installing imagemagick
 
 ## [0.7.1] - 2025-06-16
 
