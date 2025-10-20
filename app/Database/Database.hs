@@ -11,11 +11,12 @@ module Database.Database
 
 import Config (databasePath, runDb)
 import Control.Monad (void)
-import Control.Monad.IO.Class (liftIO)
+import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
-import Database.Persist.Sqlite (insert_, runMigration, runMigrationQuiet)
+import Database.Persist.Sqlite (SqlPersistT, entityVal, insert_, runMigration, runMigrationQuiet,
+                                selectFirst)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
 import WebParsing.ArtSciParser (parseCalendar)
@@ -35,11 +36,23 @@ setupDatabase quiet = do
     let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
         db = T.unpack $ T.take ind dbPath
     createDirectoryIfMissing True db
-    runDb (
-        if quiet
-            then void $ runMigrationQuiet migrateAll
-            else runMigration migrateAll
-        )
+
+    -- Match SQL database with ORM, then initialize schema version table
+    let migrateFunction = if quiet then void . runMigrationQuiet else runMigration
+    runDb $ void $ migrateFunction migrateAll >> getDatabaseVersion
+
+-- | Gets the current version of the database.
+-- If no version is defined, initialize the
+-- version to 1 and return that.
+getDatabaseVersion :: MonadIO m => SqlPersistT m Int
+getDatabaseVersion = do
+    result <- selectFirst [] []
+    case result of
+        Just entity -> pure $ schemaVersionVersion $ entityVal entity
+        Nothing -> do
+            let initialVersion = 1
+            insert_ $ SchemaVersion initialVersion
+            pure initialVersion
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()
