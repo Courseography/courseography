@@ -15,8 +15,8 @@ import Database.Persist.Sqlite (Entity, SelectOpt (Asc), SqlPersistM, selectList
 import Database.Tables as Tables (EntityField (GraphDynamic, GraphTitle), Graph, SvgJSON, Text)
 import Export.GetImages (getActiveGraphImage)
 import Models.Graph (getGraph, insertGraph)
-import Response.Image (returnImageData)
 import Util.Happstack (createJSONResponse)
+import Util.Helpers (returnImageData)
 
 graphResponse :: ServerPart Response
 graphResponse =
