@@ -36,11 +36,11 @@
 - Added test cases for the `ExportModal` component in `js/components/common`
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
+- Renamed `Post` and `PostCategory` database tables to `Program` and `ProgramCategory` respectively through a database migration
 - Deleted `app/Response/Image` file and refactored `app/Util/Helpers` to include `returnImageData`
 - Added test cases for the retrieveProgram function in `Controllers/Program`
 - Removed duplicate code from `mockRequest` and `runServerPartWith` in `backend-test/TestHelpers.hs`
 - Initialized a SchemaVersion table for the purposes of running robust database migrations
-- Renamed `Post` and `PostCategory` database tables to `Program` and `ProgramCategory` respectively through a database migration
 
 ## [0.7.1] - 2025-06-16
 

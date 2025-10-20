@@ -7,7 +7,7 @@ inserting it into the database. Run when @cabal run database@ is executed.
 -}
 
 module Database.Database
-    (populateCalendar, setupDatabase) where
+    (populateCalendar, setupDatabase, getDatabaseVersion, setDatabaseVersion) where
 
 import Config (databasePath, runDb)
 import Control.Monad (void)
