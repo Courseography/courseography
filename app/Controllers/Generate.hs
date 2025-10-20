@@ -42,13 +42,13 @@ findAndSavePrereqsResponse = do
     requestBody <- getBody
     let coursesOptions :: CourseGraphOptions = fromJust $ decode requestBody
 
-    postResults <- liftIO $ mapM (\code -> do
-                        post <- returnProgram (TL.toStrict code)
-                        return (TL.toStrict code, post))
+    programResults <- liftIO $ mapM (\code -> do
+                        program <- returnProgram (TL.toStrict code)
+                        return (TL.toStrict code, program))
                    (programs coursesOptions)
 
-    let invalidPrograms = map fst $ filter (isNothing . snd) postResults
-        validPrograms = mapMaybe snd postResults
+    let invalidPrograms = map fst $ filter (isNothing . snd) programResults
+        validPrograms = mapMaybe snd programResults
 
     allCourses <- liftIO $ nub <$>
         if all (== TL.empty) (courses coursesOptions)
