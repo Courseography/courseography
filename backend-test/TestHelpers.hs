@@ -87,30 +87,6 @@ mockGetRequest reUri queryInputs = createMockRequest GET reUri queryInputs Nothi
 mockPutRequest :: String -> Maybe BSL8.ByteString -> IO Request
 mockPutRequest reUri = createMockRequest PUT reUri []
 
--- | A minimal mock request for running a ServerPart
-mockRequest :: IO Request
-mockRequest = mockGetRequest "/" []
-
--- | A mock request with a query parameter for retrieveCourse
-mockRequestWithQuery :: String -> IO Request
-mockRequestWithQuery courseName = 
-    mockGetRequest "/course" [("name", courseName)]
-
--- | A mock request with a query parameter for courseInfo
-mockRequestWithCourseInfoQuery :: String -> IO Request
-mockRequestWithCourseInfoQuery dept = 
-    mockGetRequest "/course-info" [("dept", dept)]
-
--- | A mock request with a query parameter for retrieveProgram
-mockRequestWithProgramQuery :: String -> IO Request
-mockRequestWithProgramQuery programCode = 
-    mockGetRequest "/program" [("code", programCode)]
-
--- | A mock request with a body payload for the graph generate route
-mockRequestWithGraphGenerate :: BSL.ByteString -> IO Request
-mockRequestWithGraphGenerate payload = 
-    mockPutRequest "/graph-generate" (Just payload)
-
 -- | Default content type for the MockRequestWithQuery, specifically for retrieveCourse
 defaultContentType :: ContentType
 defaultContentType = ContentType
@@ -119,35 +95,33 @@ defaultContentType = ContentType
     , ctParameters = []
     }
 
--- | Generalized helper function to run a ServerPart with a request
+-- | Run a 'ServerPart' with a custom request.
 runServerPartWith :: ServerPart Response -> IO Request -> IO Response
-runServerPartWith sp requestIO = do
-    request <- requestIO
-    simpleHTTP'' sp request
+runServerPartWith sp reqIO = simpleHTTP'' sp =<< reqIO
 
--- | Helper function to run ServerPart Response
+-- Run a 'ServerPart' with GET request for testing wihtout query parameters.
 runServerPart :: ServerPart Response -> IO Response
-runServerPart sp = runServerPartWith sp mockRequest
+runServerPart sp = runServerPartWith sp (mockGetRequest "/" [])
 
--- | Helper function to run ServerPart Response with a query parameter for retrieveCourse
+-- | Use @runServerPartWith sp (mockGetRequest "\/course" [("name", courseName)])
 runServerPartWithQuery :: ServerPart Response -> String -> IO Response
 runServerPartWithQuery sp courseName = 
-    runServerPartWith sp (mockRequestWithQuery courseName)
+    runServerPartWith sp (mockGetRequest "/course" [("name", courseName)])
 
--- | Helper function to run ServerPart Response with a query parameter for courseInfo
+-- | Use @runServerPartWith sp (mockGetRequest "\/course-info" [("dept", dept)])
 runServerPartWithCourseInfoQuery :: ServerPart Response -> String -> IO Response
 runServerPartWithCourseInfoQuery sp dept = 
-    runServerPartWith sp (mockRequestWithCourseInfoQuery dept)
+    runServerPartWith sp (mockGetRequest "/course-info" [("dept", dept)])
 
--- | Helper function to run ServerPart Response with a query parameter for retrieveProgram
+-- | Use @runServerPartWith sp (mockGetRequest "\/program" [("code", programCode)])
 runServerPartWithProgramQuery :: ServerPart Response -> String -> IO Response
 runServerPartWithProgramQuery sp programCode = 
-    runServerPartWith sp (mockRequestWithProgramQuery programCode)
+    runServerPartWith sp (mockGetRequest "/program" [("code", programCode)])
 
--- | Helper function to run ServerPart Response with a body payload for findAndSavePrereqsResponse
+-- | Use @runServerPartWith sp (mockPutRequest "\/graph-generate" (Just payload))
 runServerPartWithGraphGenerate :: ServerPart Response -> BSL.ByteString -> IO Response
 runServerPartWithGraphGenerate sp payload = 
-    runServerPartWith sp (mockRequestWithGraphGenerate payload)
+    runServerPartWith sp (mockPutRequest "/graph-generate" (Just payload))
 
 -- | Clear all the entries in the database
 clearDatabase :: SqlPersistM ()
