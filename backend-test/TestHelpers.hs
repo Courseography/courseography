@@ -7,7 +7,8 @@ Module that contains helper functions used in testing controller module function
 
 module TestHelpers
     (acquireDatabase,
-    mockRequest,
+    mockGetRequest,
+    mockPutRequest,
     runServerPart,
     clearDatabase,
     releaseDatabase,
@@ -20,6 +21,7 @@ module TestHelpers
 
 import Config (databasePath)
 import Control.Concurrent.MVar (newEmptyMVar, newMVar, putMVar)
+import Control.Monad (when)
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSL8
 import qualified Data.Map as Map
@@ -34,81 +36,80 @@ import System.Directory (removeFile)
 import System.Environment (setEnv, unsetEnv)
 import Test.Tasty (TestTree, testGroup, withResource)
 
--- | Helper to create a query input parameter
-createQueryInput :: String -> String -> Input
-createQueryInput _ paramValue = Input
-    { inputValue = Right (BSL8.pack paramValue)
-    , inputFilename = Nothing
-    , inputContentType = defaultContentType
-    }
+-- | Generalized function to create a mock request
+createMockRequest :: Method -> String -> [(String, String)] -> Maybe BSL8.ByteString -> IO Request
+createMockRequest reMethod reUri queryInputs maybeBody = do
+    reInputsBody <- newMVar []
+    reBody <- newEmptyMVar
 
--- | Generalized function to create a mock request with query parameters
-createMockRequest :: Method -> [String] -> String -> [(String, Input)] -> IO Request
-createMockRequest method pathSegments uri queryInputs = do
-    inputsBody <- newMVar []
-    requestBody <- newEmptyMVar
+    -- If a payload is provided, write it into the request body
+    when (maybeBody /= Nothing) $
+        putMVar reBody (Body (maybe BSL.empty id maybeBody))
     return Request
         { rqSecure          = False
-        , rqMethod          = method
-        , rqPaths           = pathSegments
-        , rqUri             = uri
+        , rqMethod          = reMethod
+        , rqPaths           = splitPath reUri
+        , rqUri             = reUri
         , rqQuery           = ""
-        , rqInputsQuery     = queryInputs
-        , rqInputsBody      = inputsBody
+        , rqInputsQuery     = map (fmap convertInput) queryInputs
+        , rqInputsBody      = reInputsBody
         , rqCookies         = []
         , rqVersion         = HttpVersion 1 1
         , rqHeaders         = Map.empty
-        , rqBody            = requestBody
+        , rqBody            = reBody
         , rqPeer            = ("127.0.0.1", 0)
+        }
+  where
+    -- | Helper to convert a String to a query input parameter
+    convertInput :: String -> Input
+    convertInput paramValue = Input
+        { inputValue = Right (BSL8.pack paramValue)
+        , inputFilename = Nothing
+        , inputContentType = defaultContentType
         }
 
--- | Generalized function to create a mock request with a body payload
-createMockRequestWithBody :: Method -> [String] -> String -> BSL.ByteString -> IO Request
-createMockRequestWithBody method pathSegments uri payload = do
-    inputsBody <- newMVar []
-    requestBody <- newEmptyMVar
-    putMVar requestBody (Body payload)
-    return Request
-        { rqSecure          = False
-        , rqMethod          = method
-        , rqPaths           = pathSegments
-        , rqUri             = uri
-        , rqQuery           = ""
-        , rqInputsQuery     = []
-        , rqInputsBody      = inputsBody
-        , rqCookies         = []
-        , rqVersion         = HttpVersion 1 1
-        , rqHeaders         = Map.empty
-        , rqBody            = requestBody
-        , rqPeer            = ("127.0.0.1", 0)
-        }
+    -- | Split a string when a predicate is true
+    wordsWhen :: (Char -> Bool) -> String -> [String]
+    wordsWhen p s = case dropWhile p s of
+        "" -> []
+        s' -> w : wordsWhen p s''
+            where (w, s'') = break p s'
+
+    -- | Split a URI into path segments
+    splitPath :: String -> [String]
+    splitPath uri = wordsWhen (== '/') uri
+
+-- | Curried version of createMockRequest for GET requests
+mockGetRequest :: String -> [(String, String)] -> IO Request
+mockGetRequest reUri queryInputs = createMockRequest GET reUri queryInputs Nothing
+
+-- | Curried version of createMockRequest for PUT requests
+mockPutRequest :: String -> Maybe BSL8.ByteString -> IO Request
+mockPutRequest reUri = createMockRequest PUT reUri []
 
 -- | A minimal mock request for running a ServerPart
 mockRequest :: IO Request
-mockRequest = createMockRequest GET [] "/" []
+mockRequest = mockGetRequest "/" []
 
 -- | A mock request with a query parameter for retrieveCourse
 mockRequestWithQuery :: String -> IO Request
 mockRequestWithQuery courseName = 
-    createMockRequest GET ["course"] "/course" 
-        [("name", createQueryInput "name" courseName)]
+    mockGetRequest "/course" [("name", courseName)]
 
 -- | A mock request with a query parameter for courseInfo
 mockRequestWithCourseInfoQuery :: String -> IO Request
 mockRequestWithCourseInfoQuery dept = 
-    createMockRequest GET ["course-info"] "/course-info" 
-        [("dept", createQueryInput "dept" dept)]
+    mockGetRequest "/course-info" [("dept", dept)]
 
 -- | A mock request with a query parameter for retrieveProgram
 mockRequestWithProgramQuery :: String -> IO Request
 mockRequestWithProgramQuery programCode = 
-    createMockRequest GET ["program"] "/program" 
-        [("code", createQueryInput "code" programCode)]
+    mockGetRequest "/program" [("code", programCode)]
 
 -- | A mock request with a body payload for the graph generate route
 mockRequestWithGraphGenerate :: BSL.ByteString -> IO Request
 mockRequestWithGraphGenerate payload = 
-    createMockRequestWithBody PUT ["graph-generate"] "/graph-generate" payload
+    mockPutRequest "/graph-generate" (Just payload)
 
 -- | Default content type for the MockRequestWithQuery, specifically for retrieveCourse
 defaultContentType :: ContentType
