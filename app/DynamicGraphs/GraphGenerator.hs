@@ -64,11 +64,11 @@ sampleGraph = fst $ State.runState (reqsToGraph
 --  multiple Reqs using the same Grade requirement
 reqsToGraph :: GraphOptions -> [(Text, Req)] -> State GeneratorState (DotGraph Text)
 reqsToGraph options reqs = do
-    allStmts <- concatUnique <$> mapM (reqToStmts options) reqs
+    allStmts <- concatUnique <$> mapM (reqToStmts options) filteredReqs
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . Prelude.concat
-        -- filteredReqs = [(t, filterReq options req) | (t, req) <- reqs]
+        filteredReqs = [(t, filterReq options req) | (t, req) <- reqs]
 
 -- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
 filterReq :: GraphOptions -> Req -> Req

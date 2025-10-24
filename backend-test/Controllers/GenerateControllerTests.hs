@@ -15,7 +15,7 @@ import Data.Aeson (Value (..), decode)
 import qualified Data.Aeson.Key as K
 import qualified Data.Aeson.KeyMap as KM
 import qualified Data.ByteString.Lazy as BSL
-import Data.Foldable (toList)
+import Data.Foldable (toList, forM_)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Courses (..))
@@ -23,6 +23,7 @@ import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, runServerPartWithGraphGenerate, withDatabase)
+import Control.Monad.IO.Class (liftIO)
 
 -- | Helper function to insert courses into the database
 insertCoursesWithPrerequisites :: [(T.Text, Maybe T.Text)] -> SqlPersistM ()
@@ -43,13 +44,13 @@ findAndSavePrereqsResponseTestCases =
     ("CSC368H1",
     [("CSC209H1", Nothing), ("CSC258H1", Nothing), ("CSC368H1", Just "CSC209H1,  CSC258H1"), ("CSC369H1", Just "CSC209H1, CSC258H1")],
     "{\"courses\":[\"CSC368H1\", \"CSC369H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}}",
-    4,
+    3,
     1
     ),
     ("CSC373H1",
     [("CSC236H1", Nothing), ("CSC165H1", Nothing), ("MAT237Y1", Nothing), ("CSC373H1", Just "CSC236H1,  CSC165H1, MAT237Y1")],
     "{\"courses\":[\"CSC373H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\"]}}",
-    3,
+    2,
     1
     )]
 
@@ -73,7 +74,17 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes ex
         -- TODO: currently, one extra node is being generated, so we subtract 1 from expectedNodes
         -- This should be changed once the bug is fixed!
         -- This has been changed (removed (actual Nodes - 1))
-        -- assertEqual ("Unexpected response for " ++ course) expectedNodes actualNodes
+        liftIO $ BSL.putStr body
+        liftIO $ do
+            putStrLn $ "\n=== " ++ course ++ " ==="
+            forM_ (toList shapes) $ \shape -> case shape of
+                Object obj -> do
+                    let typ = KM.lookup (K.fromString "type_") obj
+                        label = KM.lookup (K.fromString "label") obj
+                    putStrLn $ show typ ++ " - " ++ show label
+                _ -> return ()
+
+        assertEqual ("Unexpected response for " ++ course) expectedNodes actualNodes
         assertEqual ("Unexpected response for " ++ course) expectedBoolNodes actualBoolNodes
 
     where
