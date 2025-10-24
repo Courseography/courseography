@@ -44,13 +44,13 @@ findAndSavePrereqsResponseTestCases =
     ("CSC368H1",
     [("CSC209H1", Nothing), ("CSC258H1", Nothing), ("CSC368H1", Just "CSC209H1,  CSC258H1"), ("CSC369H1", Just "CSC209H1, CSC258H1")],
     "{\"courses\":[\"CSC368H1\", \"CSC369H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}}",
-    3,
+    4,
     1
     ),
     ("CSC373H1",
     [("CSC236H1", Nothing), ("CSC165H1", Nothing), ("MAT237Y1", Nothing), ("CSC373H1", Just "CSC236H1,  CSC165H1, MAT237Y1")],
     "{\"courses\":[\"CSC373H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\"]}}",
-    2,
+    3,
     1
     )]
 
