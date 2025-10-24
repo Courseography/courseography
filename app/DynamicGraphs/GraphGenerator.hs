@@ -68,7 +68,30 @@ reqsToGraph options reqs = do
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . Prelude.concat
+        -- filteredReqs = [(t, filterReq options req) | (t, req) <- reqs]
 
+-- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
+filterReq :: GraphOptions -> Req -> Req
+filterReq options None = None
+filterReq options (J course info)
+    | not (any (isPrefixOf (pack course)) (departments options)) = None
+    | pack course `elem` taken options = None
+    | otherwise = J course info
+filterReq options (ReqAnd reqs) =
+    case Prelude.filter (/= None) (map (filterReq options) reqs) of
+        [] -> None
+        reqs' -> ReqAnd reqs'
+
+filterReq options (ReqOr reqs) =
+    case Prelude.filter (/= None) (map (filterReq options) reqs) of
+        [] -> None
+        reqs' -> ReqOr reqs'
+filterReq options (Fces fl modifier) = Fces fl modifier
+filterReq options  (Grade str req) = Grade str (filterReq options req) 
+filterReq options (Gpa fl str) = Gpa fl str
+filterReq options (Program pro) = Program pro
+filterReq options (Raw s) = Raw s
+    
 data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
 pickCourse :: GraphOptions -> Text -> Bool
