@@ -22,7 +22,7 @@ import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (clearDatabase, runServerPartWithGraphGenerate, withDatabase)
+import TestHelpers (mockPutRequest, clearDatabase, runServerPart, runServerPartWith, withDatabase)
 
 -- | Helper function to insert courses into the database
 insertCoursesWithPrerequisites :: [(T.Text, Maybe T.Text)] -> SqlPersistM ()
@@ -54,7 +54,7 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes ex
         runDb $ do
             clearDatabase
             insertCoursesWithPrerequisites graphStructure
-        response <- runServerPartWithGraphGenerate Controllers.Generate.findAndSavePrereqsResponse payload
+        response <- runServerPartWith Controllers.Generate.findAndSavePrereqsResponse $ mockPutRequest "/graph-generate" [] payload
         -- Take the response and extract the number of nodes (courses) within the generated graph, then assert that it is equal to the expected value.
         let body = rsBody response
             Just (Object object) = decode body

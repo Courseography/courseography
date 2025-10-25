@@ -12,6 +12,7 @@ module Controllers.CourseControllerTests
 import Config (runDb)
 import Control.Monad (unless)
 import Controllers.Course (courseInfo, index, retrieveCourse)
+import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
@@ -21,8 +22,7 @@ import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (clearDatabase, runServerPart, runServerPartWithCourseInfoQuery,
-                    runServerPartWithQuery, withDatabase)
+import TestHelpers (mockGetRequest, clearDatabase, runServerPart, runServerPartWith, withDatabase)
 
 -- | List of test cases as (input course name, course data, expected JSON output)
 retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, String)]
@@ -86,7 +86,7 @@ runRetrieveCourseTest label courseName courseData expected =
             unless (T.null currCourseName) $
                 insert_ courseToInsert
 
-        response <- runServerPartWithQuery Controllers.Course.retrieveCourse (T.unpack courseName)
+        response <- runServerPartWith Controllers.Course.retrieveCourse $ mockGetRequest "/course" [("name", T.unpack courseName)] BSL.empty
         let actual = BL.unpack $ rsBody response
         assertEqual ("Unexpected response body for " ++ label) expected actual
 
@@ -193,7 +193,7 @@ runCourseInfoTest label state dept expected =
         runDb $ do
             clearDatabase
             mapM_ insert_ state
-        response <- runServerPartWithCourseInfoQuery Controllers.Course.courseInfo (T.unpack dept)
+        response <- runServerPartWith Controllers.Course.courseInfo $ mockGetRequest "/course-info" [("dept", T.unpack dept)] BSL.empty
         let actual = BL.unpack $ rsBody response
         assertEqual ("Unexpected response body for " ++ label) expected actual
 

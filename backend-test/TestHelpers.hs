@@ -9,13 +9,10 @@ module TestHelpers
     (acquireDatabase,
     mockGetRequest,
     mockPutRequest,
+    runServerPartWith,
     runServerPart,
     clearDatabase,
     releaseDatabase,
-    runServerPartWithQuery,
-    runServerPartWithCourseInfoQuery,
-    runServerPartWithProgramQuery,
-    runServerPartWithGraphGenerate,
     withDatabase)
     where
 
@@ -25,6 +22,7 @@ import Control.Monad (when)
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSL8
 import qualified Data.Map as Map
+import Data.List.Split (splitOn)
 import Data.Text (unpack)
 import Database.Database (setupDatabase)
 import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere)
@@ -37,14 +35,14 @@ import System.Environment (setEnv, unsetEnv)
 import Test.Tasty (TestTree, testGroup, withResource)
 
 -- | Generalized function to create a mock request
-createMockRequest :: Method -> String -> [(String, String)] -> Maybe BSL8.ByteString -> IO Request
-createMockRequest reMethod reUri queryInputs maybeBody = do
+createMockRequest :: Method -> String -> [(String, String)] -> BSL8.ByteString -> IO Request
+createMockRequest reMethod reUri queryInputs body = do
     reInputsBody <- newMVar []
     reBody <- newEmptyMVar
 
     -- If a payload is provided, write it into the request body
-    when (maybeBody /= Nothing) $
-        putMVar reBody (Body (maybe BSL.empty id maybeBody))
+    when (body /= BSL.empty) $
+        putMVar reBody (Body body)
     return Request
         { rqSecure          = False
         , rqMethod          = reMethod
@@ -68,24 +66,17 @@ createMockRequest reMethod reUri queryInputs maybeBody = do
         , inputContentType = defaultContentType
         }
 
-    -- | Split a string when a predicate is true
-    wordsWhen :: (Char -> Bool) -> String -> [String]
-    wordsWhen p s = case dropWhile p s of
-        "" -> []
-        s' -> w : wordsWhen p s''
-            where (w, s'') = break p s'
-
     -- | Split a URI into path segments
     splitPath :: String -> [String]
-    splitPath uri = wordsWhen (== '/') uri
+    splitPath uri = splitOn "/" uri
 
 -- | Curried version of createMockRequest for GET requests
-mockGetRequest :: String -> [(String, String)] -> IO Request
-mockGetRequest reUri queryInputs = createMockRequest GET reUri queryInputs Nothing
+mockGetRequest :: String -> [(String, String)] -> BSL8.ByteString -> IO Request
+mockGetRequest = createMockRequest GET
 
 -- | Curried version of createMockRequest for PUT requests
-mockPutRequest :: String -> Maybe BSL8.ByteString -> IO Request
-mockPutRequest reUri = createMockRequest PUT reUri []
+mockPutRequest :: String -> [(String, String)] -> BSL8.ByteString -> IO Request
+mockPutRequest = createMockRequest PUT
 
 -- | Default content type for the MockRequestWithQuery, specifically for retrieveCourse
 defaultContentType :: ContentType
@@ -101,27 +92,7 @@ runServerPartWith sp reqIO = simpleHTTP'' sp =<< reqIO
 
 -- Run a 'ServerPart' with GET request for testing wihtout query parameters.
 runServerPart :: ServerPart Response -> IO Response
-runServerPart sp = runServerPartWith sp (mockGetRequest "/" [])
-
--- | Use @runServerPartWith sp (mockGetRequest "\/course" [("name", courseName)])
-runServerPartWithQuery :: ServerPart Response -> String -> IO Response
-runServerPartWithQuery sp courseName = 
-    runServerPartWith sp (mockGetRequest "/course" [("name", courseName)])
-
--- | Use @runServerPartWith sp (mockGetRequest "\/course-info" [("dept", dept)])
-runServerPartWithCourseInfoQuery :: ServerPart Response -> String -> IO Response
-runServerPartWithCourseInfoQuery sp dept = 
-    runServerPartWith sp (mockGetRequest "/course-info" [("dept", dept)])
-
--- | Use @runServerPartWith sp (mockGetRequest "\/program" [("code", programCode)])
-runServerPartWithProgramQuery :: ServerPart Response -> String -> IO Response
-runServerPartWithProgramQuery sp programCode = 
-    runServerPartWith sp (mockGetRequest "/program" [("code", programCode)])
-
--- | Use @runServerPartWith sp (mockPutRequest "\/graph-generate" (Just payload))
-runServerPartWithGraphGenerate :: ServerPart Response -> BSL.ByteString -> IO Response
-runServerPartWithGraphGenerate sp payload = 
-    runServerPartWith sp (mockPutRequest "/graph-generate" (Just payload))
+runServerPart sp = runServerPartWith sp (mockGetRequest "/" [] BSL.empty)
 
 -- | Clear all the entries in the database
 clearDatabase :: SqlPersistM ()
