@@ -22,7 +22,7 @@ import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (mockPutRequest, clearDatabase, runServerPart, runServerPartWith, withDatabase)
+import TestHelpers (mockPutRequest, clearDatabase, runServerPartWith, withDatabase)
 
 -- | Helper function to insert courses into the database
 insertCoursesWithPrerequisites :: [(T.Text, Maybe T.Text)] -> SqlPersistM ()

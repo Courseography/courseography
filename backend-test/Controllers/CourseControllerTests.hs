@@ -12,7 +12,6 @@ module Controllers.CourseControllerTests
 import Config (runDb)
 import Control.Monad (unless)
 import Controllers.Course (courseInfo, index, retrieveCourse)
-import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
@@ -86,7 +85,7 @@ runRetrieveCourseTest label courseName courseData expected =
             unless (T.null currCourseName) $
                 insert_ courseToInsert
 
-        response <- runServerPartWith Controllers.Course.retrieveCourse $ mockGetRequest "/course" [("name", T.unpack courseName)] BSL.empty
+        response <- runServerPartWith Controllers.Course.retrieveCourse $ mockGetRequest "/course" [("name", T.unpack courseName)] ""
         let actual = BL.unpack $ rsBody response
         assertEqual ("Unexpected response body for " ++ label) expected actual
 
@@ -193,7 +192,7 @@ runCourseInfoTest label state dept expected =
         runDb $ do
             clearDatabase
             mapM_ insert_ state
-        response <- runServerPartWith Controllers.Course.courseInfo $ mockGetRequest "/course-info" [("dept", T.unpack dept)] BSL.empty
+        response <- runServerPartWith Controllers.Course.courseInfo $ mockGetRequest "/course-info" [("dept", T.unpack dept)] ""
         let actual = BL.unpack $ rsBody response
         assertEqual ("Unexpected response body for " ++ label) expected actual
 

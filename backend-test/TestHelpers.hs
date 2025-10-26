@@ -19,7 +19,6 @@ module TestHelpers
 import Config (databasePath)
 import Control.Concurrent.MVar (newEmptyMVar, newMVar, putMVar)
 import Control.Monad (when)
-import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSL8
 import qualified Data.Map as Map
 import Data.List.Split (splitOn)
@@ -36,25 +35,25 @@ import Test.Tasty (TestTree, testGroup, withResource)
 
 -- | Generalized function to create a mock request
 createMockRequest :: Method -> String -> [(String, String)] -> BSL8.ByteString -> IO Request
-createMockRequest reMethod reUri queryInputs body = do
-    reInputsBody <- newMVar []
-    reBody <- newEmptyMVar
+createMockRequest reqMethod reqUri queryInputs body = do
+    reqInputsBody <- newMVar []
+    reqBody <- newEmptyMVar
 
     -- If a payload is provided, write it into the request body
-    when (body /= BSL.empty) $
-        putMVar reBody (Body body)
+    when (body /= "") $
+        putMVar reqBody (Body body)
     return Request
         { rqSecure          = False
-        , rqMethod          = reMethod
-        , rqPaths           = splitPath reUri
-        , rqUri             = reUri
+        , rqMethod          = reqMethod
+        , rqPaths           = splitPath reqUri
+        , rqUri             = reqUri
         , rqQuery           = ""
         , rqInputsQuery     = map (fmap convertInput) queryInputs
-        , rqInputsBody      = reInputsBody
+        , rqInputsBody      = reqInputsBody
         , rqCookies         = []
         , rqVersion         = HttpVersion 1 1
         , rqHeaders         = Map.empty
-        , rqBody            = reBody
+        , rqBody            = reqBody
         , rqPeer            = ("127.0.0.1", 0)
         }
   where
@@ -92,7 +91,7 @@ runServerPartWith sp reqIO = simpleHTTP'' sp =<< reqIO
 
 -- Run a 'ServerPart' with GET request for testing wihtout query parameters.
 runServerPart :: ServerPart Response -> IO Response
-runServerPart sp = runServerPartWith sp (mockGetRequest "/" [] BSL.empty)
+runServerPart sp = runServerPartWith sp (mockGetRequest "/" [] "")
 
 -- | Clear all the entries in the database
 clearDatabase :: SqlPersistM ()

@@ -12,7 +12,6 @@ import Config (runDb)
 import Controllers.Program (index, retrieveProgram)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON (parseJSON), decode, withObject, (.:))
-import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
 import Data.Time (getCurrentTime)
@@ -73,7 +72,7 @@ runRetrieveProgramTest label posts queryParam expected =
         runDb $ do
             clearDatabase
             insertPrograms posts
-        response <- runServerPartWith Controllers.Program.retrieveProgram $ mockGetRequest "/code" [("code" ,T.unpack queryParam)] BSL.empty
+        response <- runServerPartWith Controllers.Program.retrieveProgram $ mockGetRequest "/code" [("code" ,T.unpack queryParam)] ""
         let actual = BL.unpack $ rsBody response
         let parsedActual = parsePostResponse actual
         assertEqual ("Unexpected JSON response body for" ++ label) expected parsedActual
