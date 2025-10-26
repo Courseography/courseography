@@ -153,6 +153,10 @@ Building
     lat Double
     lng Double
     deriving Generic Show
+
+SchemaVersion
+    version Int
+    deriving Show Eq
 |]
 
 -- ** TODO: Remove these extra types and class instances
