@@ -21,7 +21,7 @@ import Database.Tables (Post (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (clearDatabase, runServerPart, runServerPartWithProgramQuery, withDatabase)
+import TestHelpers (mockGetRequest, clearDatabase, runServerPart, runServerPartWith, withDatabase)
 
 -- | A Post response without timestamps (for comparison purposes)
 data PostResponseNoTime = PostResponseNoTime
@@ -72,7 +72,7 @@ runRetrieveProgramTest label posts queryParam expected =
         runDb $ do
             clearDatabase
             insertPrograms posts
-        response <- runServerPartWithProgramQuery Controllers.Program.retrieveProgram (T.unpack queryParam)
+        response <- runServerPartWith Controllers.Program.retrieveProgram $ mockGetRequest "/code" [("code" ,T.unpack queryParam)] ""
         let actual = BL.unpack $ rsBody response
         let parsedActual = parsePostResponse actual
         assertEqual ("Unexpected JSON response body for" ++ label) expected parsedActual
