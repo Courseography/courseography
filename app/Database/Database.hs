@@ -15,8 +15,8 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
-import Database.Persist.Sqlite (SqlPersistT, Entity(..), entityVal, insert_, runMigration, runMigrationQuiet,
-                                selectFirst, update, (=.))
+import Database.Persist.Sqlite (Entity (..), SqlPersistT, entityVal, insert_, runMigration,
+                                runMigrationQuiet, selectFirst, update, (=.))
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
 import WebParsing.ArtSciParser (parseCalendar)
@@ -63,7 +63,7 @@ getDatabaseVersion = do
 setDatabaseVersion :: MonadIO m => Int -> SqlPersistT m ()
 setDatabaseVersion newVersion = do
     result <- selectFirst [] []
-    case result of 
+    case result of
         Just (Entity key _) -> update key [SchemaVersionVersion =. newVersion]
         Nothing -> insert_ $ SchemaVersion newVersion
 

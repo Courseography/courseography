@@ -2,9 +2,9 @@ module Database.Migrations
     (migrateDatabase) where
 
 import Control.Monad.Reader (MonadIO)
-import Database.Database (getDatabaseVersion)
-import Database.Persist.Sql (Migration, SqlPersistT, addMigration, runMigration, runMigrationUnsafe)
-import Database.Tables (migrateAll)
+import Data.List (sortOn)
+import Database.Database (getDatabaseVersion, setDatabaseVersion)
+import Database.Persist.Sql (Migration, SqlPersistT, addMigration, runMigrationUnsafe)
 
 data MigrationWrapper = MigrationWrapper {
     version :: Int,
@@ -14,16 +14,19 @@ data MigrationWrapper = MigrationWrapper {
 -- | Migrates the database
 migrateDatabase :: MonadIO m => SqlPersistT m ()
 migrateDatabase = do
-    -- Run unsafe migrations
     currVersion <- getDatabaseVersion
     applyMigrations currVersion migrationList
-    -- Run safe migrations
-    runMigration migrateAll
 
 -- | Migrates the database by applying only migrations newer than the current version number
 applyMigrations :: MonadIO m => Int -> [MigrationWrapper] -> SqlPersistT m ()
 applyMigrations currVersion migrations = do
-    mapM_ (runMigrationUnsafe . script) $ filter (\migration -> version migration > currVersion) migrations
+    mapM_ (runMigrationUnsafe . script)
+        $ sortOn version
+        $ filter (\migration -> version migration > currVersion) migrations
+
+    case migrations of
+        [] -> return ()
+        _ -> setDatabaseVersion $ maximum $ map version migrations
 
 -- | List of migrations
 migrationList :: [MigrationWrapper]

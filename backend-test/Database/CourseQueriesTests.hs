@@ -34,7 +34,7 @@ runReqsForProgramTest :: String -> T.Text -> T.Text -> String -> TestTree
 runReqsForProgramTest label reqsToInsert program expected =
     testCase label $ do
         currentTime <- liftIO getCurrentTime
-        let testProgram = Program Major "Computer Science" program "Sample post description" reqsToInsert currentTime currentTime
+        let testProgram = Program Major "Computer Science" program "Sample program description" reqsToInsert currentTime currentTime
 
         runDb $ do
             clearDatabase
