@@ -118,7 +118,7 @@ class CourseModal extends React.Component {
         this.setState({
           course: newCourse,
           sessions: sessions,
-          courseTitle: `${this.state.courseId.toUpperCase()} ${course.title}`,
+          courseTitle: `${course.name} ${course.title}`,
         })
       })
     }
