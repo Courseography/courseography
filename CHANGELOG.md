@@ -41,6 +41,8 @@
 - Removed duplicate code from `mockRequest` and `runServerPartWith` in `backend-test/TestHelpers.hs`
 - Initialized a SchemaVersion table for the purposes of running robust database migrations
 - Updated CircleCI configuration to update `wget` version (to fix ImageMagick download error)
+- Reverted previous CircleCI configuration change
+- Switched CircleCI ImageMagick download to use http
 
 ## [0.7.1] - 2025-06-16
 
