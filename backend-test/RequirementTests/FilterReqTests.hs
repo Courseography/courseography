@@ -9,18 +9,18 @@ module RequirementTests.FilterReqTests
 ( test_filterReqs ) where
 
 import Database.Requirement (Req (..))
-import DynamicGraphs.GraphOptions (GraphOptions (..))
 import DynamicGraphs.GraphGenerator (filterReq)
+import DynamicGraphs.GraphOptions (GraphOptions (..))
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (assertEqual, testCase)
 
--- Test constants
+-- Test GraphOptions
 testGraphOptionsPopDept :: GraphOptions
-testGraphOptionsPopDept = 
+testGraphOptionsPopDept =
     GraphOptions { taken = ["CSC108H1"],
                 departments = ["CSC", "STA"],
                 excludedDepth = 0,
-                maxDepth = (-1),
+                maxDepth = -1,
                 courseNumPrefix = [],
                 distribution = [],
                 location = [],
@@ -29,11 +29,11 @@ testGraphOptionsPopDept =
                 }
 
 testGraphOptionsEmptyDept :: GraphOptions
-testGraphOptionsEmptyDept = 
+testGraphOptionsEmptyDept =
     GraphOptions { taken = ["CSC108H1"],
                 departments = [],
                 excludedDepth = 0,
-                maxDepth = (-1),
+                maxDepth = -1,
                 courseNumPrefix = [],
                 distribution = [],
                 location = [],
@@ -42,11 +42,11 @@ testGraphOptionsEmptyDept =
                 }
 
 testGraphOptionsEmptyAll :: GraphOptions
-testGraphOptionsEmptyAll = 
+testGraphOptionsEmptyAll =
     GraphOptions { taken = [],
                 departments = [],
                 excludedDepth = 0,
-                maxDepth = (-1),
+                maxDepth = -1,
                 courseNumPrefix = [],
                 distribution = [],
                 location = [],
@@ -54,6 +54,7 @@ testGraphOptionsEmptyAll =
                 includeGrades = True
                 }
 
+-- Test Reqs
 reqCSC108 :: Req
 reqCSC108 = J "CSC108H1" ""
 
@@ -100,13 +101,13 @@ filterReqTestCases =
   ),
   ("Handles None input",
   None,
-  testGraphOptionsPopDept, 
+  testGraphOptionsPopDept,
   None
   ),
   ("Returns None when both in an or should be removed",
   ReqOr [J "MAT137Y1" "", J "MAT237Y1" ""],
   testGraphOptionsPopDept,
-  None  
+  None
   ),
   ("Removes OR when only one req remains",
   ReqOr [J "MAT137Y1" "", reqCSC207],
