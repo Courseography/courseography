@@ -120,6 +120,7 @@ test-suite Tests
     RequirementTests.PostParserTests,
     RequirementTests.PreProcessingTests,
     RequirementTests.ReqParserTests,
+    RequirementTests.FilterReqTests,
     SvgTests.IntersectionTests,
     TestHelpers
   Type: exitcode-stdio-1.0

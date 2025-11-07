@@ -5,6 +5,7 @@ module DynamicGraphs.GraphGenerator
   , coursesToPrereqGraph
   , coursesToPrereqGraphExcluding
   , graphProfileHash
+  , filterReq
   )
   where
 
@@ -68,23 +69,27 @@ reqsToGraph options reqs = do
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . Prelude.concat
-        filteredReqs = [(t, filterReq options req) | (t, req) <- reqs]
+        filteredReqs = [(t, filteredReq) | (t, req) <- reqs,
+                                           let filteredReq = filterReq options req,
+                                           filteredReq /=None]
+                                           
 
 -- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
 filterReq :: GraphOptions -> Req -> Req
 filterReq options None = None
 filterReq options (J course info)
-    | not (any (isPrefixOf (pack course)) (departments options)) = None
+    | not (Prelude.null (departments options)) && not (any (`isPrefixOf` pack course) (departments options)) = None
     | pack course `elem` taken options = None
     | otherwise = J course info
 filterReq options (ReqAnd reqs) =
     case Prelude.filter (/= None) (map (filterReq options) reqs) of
         [] -> None
+        [r] -> r
         reqs' -> ReqAnd reqs'
-
 filterReq options (ReqOr reqs) =
     case Prelude.filter (/= None) (map (filterReq options) reqs) of
         [] -> None
+        [r] -> r
         reqs' -> ReqOr reqs'
 filterReq options (Fces fl modifier) = Fces fl modifier
 filterReq options  (Grade str req) = Grade str (filterReq options req) 
