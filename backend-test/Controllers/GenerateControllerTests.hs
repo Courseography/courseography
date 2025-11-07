@@ -73,7 +73,6 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes ex
 
         -- TODO: currently, one extra node is being generated, so we subtract 1 from expectedNodes
         -- This should be changed once the bug is fixed!
-
         -- only used for debugging remove before last push
         -- liftIO $ BSL.putStr body
 
