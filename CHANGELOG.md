@@ -21,6 +21,7 @@
 - Fixed a bug on the generate page where an extraneous info popup would appear when hovering over the top left corner of the graph viewing window
 - Fixed a bug that led code to crash when parsing all pre-generated graphs from svg (i.e., program graphs)
 - Fixed a bug where redundant boolean nodes were being generated
+- Fixed a bug where the course info modal title did not display the H1/Y1 suffix
 
 ### 🔧 Internal changes
 
@@ -39,6 +40,9 @@
 - Added test cases for the retrieveProgram function in `Controllers/Program`
 - Removed duplicate code from `mockRequest` and `runServerPartWith` in `backend-test/TestHelpers.hs`
 - Initialized a SchemaVersion table for the purposes of running robust database migrations
+- Updated CircleCI configuration to update `wget` version (to fix ImageMagick download error)
+- Reverted previous CircleCI configuration change
+- Switched CircleCI ImageMagick download to use http
 - Modified CI config to take advantage of partial dependency caching and exploit parallelism when resolving/updating dependencies
 
 ## [0.7.1] - 2025-06-16
