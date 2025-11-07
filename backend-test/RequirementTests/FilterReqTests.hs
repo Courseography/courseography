@@ -41,6 +41,19 @@ testGraphOptionsEmptyDept =
                 includeGrades = True
                 }
 
+testGraphOptionsEmptyAll :: GraphOptions
+testGraphOptionsEmptyAll = 
+    GraphOptions { taken = [],
+                departments = [],
+                excludedDepth = 0,
+                maxDepth = (-1),
+                courseNumPrefix = [],
+                distribution = [],
+                location = [],
+                includeRaws = True,
+                includeGrades = True
+                }
+
 reqCSC108 :: Req
 reqCSC108 = J "CSC108H1" ""
 
@@ -50,13 +63,25 @@ reqCSC148 = J "CSC148H1" ""
 reqCSC207 :: Req
 reqCSC207 = ReqAnd [J "CSC207H1" "", reqCSC148, reqCSC108]
 
+reqCSC209 :: Req
+reqCSC209 = ReqAnd [J "CSC209H1" "", reqCSC207, J "CSC236H1" ""]
+
+reqCSC369 :: Req
+reqCSC369 = ReqAnd [J "CSC369H1" "", reqCSC209]
+
+reqCSC207no108 :: Req
+reqCSC207no108 = ReqAnd [J "CSC207H1" "", reqCSC148]
+
+reqCSC209no108 :: Req
+reqCSC209no108 = ReqAnd [J "CSC209H1" "", reqCSC207no108, J "CSC236H1" ""]
+
 -- | List of (description, input requirements, input GraphOptions, expected filtered result)
 filterReqTestCases :: [(String, Req, GraphOptions, Req)]
 filterReqTestCases =
   [("Removes already taken courses",
   reqCSC207,
   testGraphOptionsPopDept,
-  ReqAnd [J "CSC207H1" "", reqCSC148]
+  reqCSC207no108
   ),
   ("Does not filer out valid departments",
   ReqAnd [J "CSC148H1" "", J "STA257H1" ""],
@@ -92,6 +117,16 @@ filterReqTestCases =
   ReqOr [J "MAT137Y1" "", J "MAT237Y1" ""],
   testGraphOptionsEmptyDept,
   ReqOr [J "MAT137Y1" "", J "MAT237Y1" ""]
+  ),
+  ("Removes nothing from a height of > 1 tree with no departments",
+  reqCSC369,
+  testGraphOptionsEmptyAll,
+  reqCSC369
+  ),
+  ("Removes only CSC108H1 at the bottom of a height > 1 tree and empty department",
+  reqCSC369,
+  testGraphOptionsEmptyDept,
+  ReqAnd [J "CSC369H1" "", reqCSC209no108]
   )
   ]
 
