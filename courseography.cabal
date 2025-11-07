@@ -136,6 +136,7 @@ test-suite Tests
     parsec,
     persistent-sqlite,
     QuickCheck,
+    split,
     tagsoup,
     tasty >=1.5.3,
     tasty-discover,

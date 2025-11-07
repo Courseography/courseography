@@ -22,8 +22,7 @@ import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (clearDatabase, runServerPartWithGraphGenerate, withDatabase)
-import Control.Monad.IO.Class (liftIO)
+import TestHelpers (mockPutRequest, clearDatabase, runServerPartWith, withDatabase)
 
 -- | Helper function to insert courses into the database
 insertCoursesWithPrerequisites :: [(T.Text, Maybe T.Text)] -> SqlPersistM ()
@@ -61,7 +60,8 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes ex
         runDb $ do
             clearDatabase
             insertCoursesWithPrerequisites graphStructure
-        response <- runServerPartWithGraphGenerate Controllers.Generate.findAndSavePrereqsResponse payload
+        
+        response <- runServerPartWith Controllers.Generate.findAndSavePrereqsResponse $ mockPutRequest "/graph-generate" [] payload
         -- Take the response and extract the number of nodes (courses) within the generated graph, then assert that it is equal to the expected value.
         let body = rsBody response
             Just (Object object) = decode body
@@ -73,7 +73,9 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes ex
 
         -- TODO: currently, one extra node is being generated, so we subtract 1 from expectedNodes
         -- This should be changed once the bug is fixed!
-        liftIO $ BSL.putStr body
+
+        -- only used for debugging remove before last push
+        -- liftIO $ BSL.putStr body
 
         assertEqual ("Unexpected response for " ++ course) expectedNodes (actualNodes - 1)
         assertEqual ("Unexpected response for " ++ course) expectedBoolNodes actualBoolNodes

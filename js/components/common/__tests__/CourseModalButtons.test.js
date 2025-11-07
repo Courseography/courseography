@@ -88,7 +88,7 @@ describe("CourseModal", () => {
     // click on the back button, and AAA100H1's modal appears
     const backButton = screen.getByText("<")
     await user.click(backButton)
-    modalHeader = screen.getByText("AAA100 Introduction to AAA Thinking")
+    modalHeader = screen.getByText("AAA100H1 Introduction to AAA Thinking")
     expect(modalHeader).toBeDefined()
 
     // click on the forward button, and BBB100's modal appears
@@ -114,7 +114,7 @@ describe("CourseModal", () => {
     // on AAA100
     const backButton = screen.getByText("<")
     await user.click(backButton)
-    modalHeader = screen.getByText("AAA100 Introduction to AAA Thinking")
+    modalHeader = screen.getByText("AAA100H1 Introduction to AAA Thinking")
     expect(modalHeader).toBeDefined()
 
     // click on the course link CCC100H1, and CCC100H1's modal opens. The user's
@@ -129,7 +129,7 @@ describe("CourseModal", () => {
     // history of courses looks like: [AAA100, CCC100], with the user currently
     // on AAA100
     await user.click(backButton)
-    modalHeader = screen.getByText("AAA100 Introduction to AAA Thinking")
+    modalHeader = screen.getByText("AAA100H1 Introduction to AAA Thinking")
     expect(modalHeader).toBeDefined()
 
     // click on the forward button, and CCC100's modal should open. The user's
