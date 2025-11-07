@@ -67,7 +67,7 @@ createMockRequest reqMethod reqUri queryInputs body = do
 
     -- | Split a URI into path segments
     splitPath :: String -> [String]
-    splitPath = splitOn "/" uri
+    splitPath = splitOn "/"
 
 -- | Curried version of createMockRequest for GET requests
 mockGetRequest :: String -> [(String, String)] -> BSL8.ByteString -> IO Request
