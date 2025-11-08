@@ -22,6 +22,9 @@ jobs:
           name: Restore Cached Dependencies (Haskell)
           keys:
             - v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}-{{ checksum "stack.yaml.lock" }}
+            - v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}
+            - v1.4-courseography-haskell-{{ checksum "stack.yaml.lock" }}
+            - v1.4-courseography-haskell-
 
       - run:
           name: Install Package Dependencies
@@ -47,7 +50,7 @@ jobs:
           command: |
             stack --no-terminal setup
             rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
-            stack --no-terminal build --fast -j1 --ghc-options -Werror
+            stack --no-terminal build --fast -j4 --ghc-options -Werror
             stack build hlint
             stack build hpc-lcov
             yarn install
@@ -87,5 +90,5 @@ jobs:
       - store_artifacts:
           path: doc
           destination: docs
-    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/reference/configuration-reference/#resourceclass
     resource_class: large
