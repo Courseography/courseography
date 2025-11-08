@@ -266,28 +266,32 @@ class Description extends React.Component {
       timetableDisplay = Object.keys(this.props.sessions).map(session =>
         this.props.sessions[session].length !== 0 ? (
           <div key={session}>
-            <strong>{this.props.course.name + "-" + session}</strong>
-            <div className="ag-theme-alpine" style={{ height: 500, width: 940 }}>
+            <strong className="semester-heading">
+              {session === 'F' ? 'Fall' : session === 'S' ? 'Winter' : 'Full Year'}
+            </strong>
+            <div className="ag-theme-alpine" style={{ width: 940 }}>
               <AgGridReact
                 rowData={this.props.sessions[session]}
                 columnDefs={[
                   { field: "activity", width: 130 },
-                  { field: "instructor", width: 170 },
-                  { field: "availability" },
-                  { field: "waitList", width: 120 },
+                  { field: "instructor", width: 190 },
+                  { field: "availability", width: 180 },
+                  { field: "waitList", width: 130 },
                   {
                     field: "time",
                     cellStyle: { whiteSpace: "pre" },
                     valueFormatter: col => col.data.time.join("\n"),
+                    width: 180,
+                    autoHeight: true,
                   },
                   {
                     field: "room",
                     cellStyle: { whiteSpace: "pre" },
                     valueFormatter: col => col.data.room.join("\n"),
-                    width: 140,
+                    width: 128,
                   },
                 ]}
-                rowHeight={100}
+                domLayout='autoHeight'
               ></AgGridReact>
             </div>
           </div>
