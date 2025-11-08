@@ -31,7 +31,7 @@ describe("Displays correct content based on timetable availability", () => {
     }
 
     render(<Description course={courseInfo.course} sessions={courseInfo.sessions} />)
-    await screen.findByText(/CSC108H1/)
+    await screen.findByText(/fall/i)
     await screen.findByText(/LEC0101/)
     await screen.findByText("sample description")
     await screen.findByText("Beyonce")
@@ -72,7 +72,7 @@ describe("Displays correct content based on timetable availability", () => {
     }
 
     render(<Description course={courseInfo.course} sessions={courseInfo.sessions} />)
-    await screen.findAllByText(/CSC108H1/)
+    await screen.findAllByText(/fall/i)
     await screen.findByText(/LEC0101/)
     await screen.findByText(/LEC0202/)
     await screen.findByText("David. Liu")
