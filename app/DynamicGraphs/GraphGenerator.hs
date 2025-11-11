@@ -70,10 +70,7 @@ reqsToGraph options reqs = do
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . Prelude.concat
-        filteredReqs = Prelude.filter (not . isNone . snd) [(n, filterReq options req) | (n, req) <- reqs]
-        isNone :: Req -> Bool
-        isNone None = True
-        isNone _ = False
+        filteredReqs = [(n, filterReq options req) | (n, req) <- reqs]
 
 -- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
 filterReq :: GraphOptions -> Req -> Req
