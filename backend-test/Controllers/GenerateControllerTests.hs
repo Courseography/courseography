@@ -10,6 +10,7 @@ module Controllers.GenerateControllerTests
 ) where
 
 import Config (runDb)
+import Control.Monad.IO.Class (liftIO)
 import Controllers.Generate (findAndSavePrereqsResponse)
 import Data.Aeson (Value (..), decode)
 import qualified Data.Aeson.Key as K
@@ -22,8 +23,7 @@ import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (mockPutRequest, clearDatabase, runServerPartWith, withDatabase)
-import Control.Monad.IO.Class (liftIO)
+import TestHelpers (clearDatabase, mockPutRequest, runServerPartWith, withDatabase)
 
 -- | Helper function to insert courses into the database
 insertCoursesWithPrerequisites :: [(T.Text, Maybe T.Text)] -> SqlPersistM ()
@@ -46,13 +46,13 @@ findAndSavePrereqsResponseTestCases =
     "{\"courses\":[\"CSC368H1\", \"CSC369H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[]}}",
     4,
     1
+    ),
+    ("CSC373H1",
+    [("CSC236H1", Nothing), ("CSC165H1", Nothing), ("MAT237Y1", Nothing), ("CSC373H1", Just "CSC236H1,  CSC165H1, MAT237Y1")],
+    "{\"courses\":[\"CSC373H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\"]}}",
+    3,
+    1
     )]
-    -- , ("CSC373H1",
-    -- [("CSC236H1", Nothing), ("CSC165H1", Nothing), ("MAT237Y1", Nothing), ("CSC373H1", Just "CSC236H1,  CSC165H1, MAT237Y1")],
-    -- "{\"courses\":[\"CSC373H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\"]}}",
-    -- 3,
-    -- 1
-    -- )]
 
 -- | Run a test case (input course, course/prereq structure, JSON payload, expected # of nodes) on the findAndSavePrereqsResponse function.
 runfindAndSavePrereqsResponseTest :: String -> [(T.Text, Maybe T.Text)] -> BSL.ByteString -> Integer -> Integer -> TestTree
@@ -61,7 +61,6 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes ex
         runDb $ do
             clearDatabase
             insertCoursesWithPrerequisites graphStructure
-        
         response <- runServerPartWith Controllers.Generate.findAndSavePrereqsResponse $ mockPutRequest "/graph-generate" [] payload
         -- Take the response and extract the number of nodes (courses) within the generated graph, then assert that it is equal to the expected value.
         let body = rsBody response

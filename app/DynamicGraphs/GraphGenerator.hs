@@ -12,6 +12,7 @@ module DynamicGraphs.GraphGenerator
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
 import Css.Constants (nodeFontSize)
+import Data.Aeson (Value (Bool))
 import Data.Containers.ListUtils (nubOrd)
 import Data.Foldable (toList)
 import Data.Graph (Tree (Node))
@@ -69,14 +70,14 @@ reqsToGraph options reqs = do
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . Prelude.concat
-        filteredReqs = [(t, filteredReq) | (t, req) <- reqs,
-                                           let filteredReq = filterReq options req,
-                                           filteredReq /=None]
-                                           
+        filteredReqs = Prelude.filter (not . isNone . snd) [(n, filterReq options req) | (n, req) <- reqs]
+        isNone :: Req -> Bool
+        isNone None = True
+        isNone _ = False
 
 -- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
 filterReq :: GraphOptions -> Req -> Req
-filterReq options None = None
+filterReq _ None = None
 filterReq options (J course info)
     | not (Prelude.null (departments options)) && not (any (`isPrefixOf` pack course) (departments options)) = None
     | pack course `elem` taken options = None
@@ -91,12 +92,12 @@ filterReq options (ReqOr reqs) =
         [] -> None
         [r] -> r
         reqs' -> ReqOr reqs'
-filterReq options (Fces fl modifier) = Fces fl modifier
-filterReq options  (Grade str req) = Grade str (filterReq options req) 
-filterReq options (Gpa fl str) = Gpa fl str
-filterReq options (Program pro) = Program pro
-filterReq options (Raw s) = Raw s
-    
+filterReq _ (Fces fl modifier) = Fces fl modifier
+filterReq options  (Grade str req) = Grade str (filterReq options req)
+filterReq _ (Gpa fl str) = Gpa fl str
+filterReq _ (Program pro) = Program pro
+filterReq _ (Raw s) = Raw s
+
 data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
 pickCourse :: GraphOptions -> Text -> Bool
