@@ -159,7 +159,7 @@ class CourseModal extends React.Component {
         occurrences.rooms.push(firstRoom + secondRoom)
         occurrences.times.push(
           DAY_TO_INT[occurrence.weekDay] +
-            "  " +
+            " " +
             occurrence.startHour +
             " - " +
             occurrence.endHour
@@ -279,16 +279,17 @@ class Description extends React.Component {
                   { field: "waitList", width: 130 },
                   {
                     field: "time",
-                    cellStyle: { whiteSpace: "pre" },
-                    valueFormatter: col => col.data.time.join("\n"),
+                    cellStyle: { whiteSpace: "pre", lineHeight: "1.8", paddingTop: '7px', paddingBottom: '6px'},
+                    valueFormatter: col => col.data.time.join("\n"), 
                     width: 180,
                     autoHeight: true,
                   },
                   {
                     field: "room",
-                    cellStyle: { whiteSpace: "pre" },
+                    cellStyle: { whiteSpace: "pre", lineHeight: "1.8", paddingTop: '7px', paddingBottom: '6px'},
                     valueFormatter: col => col.data.room.join("\n"),
                     width: 128,
+                    autoHeight: true,
                   },
                 ]}
                 domLayout='autoHeight'
