@@ -18,14 +18,6 @@ jobs:
       - run: git remote add upstream https://github.com/Courseography/courseography.git
       - run: git fetch upstream
 
-      - restore_cache:
-          name: Restore Cached Dependencies (Haskell)
-          keys:
-            - v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}-{{ checksum "stack.yaml.lock" }}
-            - v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}
-            - v1.4-courseography-haskell-{{ checksum "stack.yaml.lock" }}
-            - v1.4-courseography-haskell-
-
       - run:
           name: Install Package Dependencies
           command: |
