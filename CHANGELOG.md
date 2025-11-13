@@ -45,6 +45,7 @@
 - Updated CircleCI configuration to update `wget` version (to fix ImageMagick download error)
 - Reverted previous CircleCI configuration change
 - Switched CircleCI ImageMagick download to use http
+- Modified CI config to take advantage of partial dependency caching and exploit parallelism when resolving/updating dependencies
 
 ## [0.7.1] - 2025-06-16
 
