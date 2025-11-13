@@ -10,7 +10,7 @@ module RequirementTests.PostParserTests
 
 import Data.Bifunctor (second)
 import qualified Data.Text as T
-import Database.DataType (PostType (..))
+import Database.DataType (ProgramType (..))
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import qualified Text.Parsec as Parsec
@@ -56,7 +56,7 @@ postInfoInputs = [
         ("Biological Physics Specialist", ""))
     ]
 
-getPostTypeInputs :: [((T.Text, T.Text), PostType)]
+getPostTypeInputs :: [((T.Text, T.Text), ProgramType)]
 getPostTypeInputs = [
       (("ASSPE1958", "Psychology Specialist"), Specialist)
     , (("ASMAJ2276", "Music Major"), Major)
