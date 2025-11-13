@@ -14,6 +14,7 @@
 - Added the `js/components/generate/AutocompleteDropdown.js` component to the program field of Generate
 - Updated the colour of the rendered options for the AutocompleteDropdown component
 - Added a `database-migrate` CLI option that runs SQL migrations
+- Updated the course info modal timetable styling and layout
 
 ### 🐛 Bug fixes
 
