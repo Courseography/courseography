@@ -7,16 +7,16 @@ inserting it into the database. Run when @cabal run database@ is executed.
 -}
 
 module Database.Database
-    (populateCalendar, setupDatabase, getDatabaseVersion, setDatabaseVersion) where
+    (populateCalendar, setupDatabase) where
 
 import Config (databasePath, runDb)
 import Control.Monad (void)
-import Control.Monad.IO.Class (MonadIO, liftIO)
+import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
-import Database.Persist.Sqlite (Entity (..), SqlPersistT, entityVal, insert_, runMigration,
-                                runMigrationQuiet, selectFirst, update, (=.))
+import Database.Migrations (getDatabaseVersion)
+import Database.Persist.Sqlite (insert_, runMigration, runMigrationQuiet)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
 import WebParsing.ArtSciParser (parseCalendar)
@@ -36,36 +36,10 @@ setupDatabase quiet = do
     let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
         db = T.unpack $ T.take ind dbPath
     createDirectoryIfMissing True db
-    runDb (
-        if quiet
-            then void $ runMigrationQuiet migrateAll
-            else runMigration migrateAll
-        )
 
     -- Match SQL database with ORM, then initialize schema version table
     let migrateFunction = if quiet then void . runMigrationQuiet else runMigration
     runDb $ void $ migrateFunction migrateAll >> getDatabaseVersion
-
--- | Gets the current version of the database.
--- If no version is defined, initialize the
--- version to 1 and return that.
-getDatabaseVersion :: MonadIO m => SqlPersistT m Int
-getDatabaseVersion = do
-    result <- selectFirst [] []
-    case result of
-        Just entity -> pure $ schemaVersionVersion $ entityVal entity
-        Nothing -> do
-            let initialVersion = 1
-            setDatabaseVersion initialVersion
-            pure initialVersion
-
--- | Sets the database version number to newVersion
-setDatabaseVersion :: MonadIO m => Int -> SqlPersistT m ()
-setDatabaseVersion newVersion = do
-    result <- selectFirst [] []
-    case result of
-        Just (Entity key _) -> update key [SchemaVersionVersion =. newVersion]
-        Nothing -> insert_ $ SchemaVersion newVersion
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()
