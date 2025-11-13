@@ -5,6 +5,7 @@ module DynamicGraphs.GraphGenerator
   , coursesToPrereqGraph
   , coursesToPrereqGraphExcluding
   , graphProfileHash
+  , filterReq
   )
   where
 
@@ -64,11 +65,38 @@ sampleGraph = fst $ State.runState (reqsToGraph
 --  multiple Reqs using the same Grade requirement
 reqsToGraph :: GraphOptions -> [(Text, Req)] -> State GeneratorState (DotGraph Text)
 reqsToGraph options reqs = do
-    allStmts <- concatUnique <$> mapM (reqToStmts options) reqs
+    allStmts <- concatUnique <$> mapM (reqToStmts options) filteredReqs
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . Prelude.concat
+        filteredReqs = [(t, filteredReq) | (t, req) <- reqs,
+                                           let filteredReq = filterReq options req,
+                                           filteredReq /=None]
+                                           
 
+-- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
+filterReq :: GraphOptions -> Req -> Req
+filterReq options None = None
+filterReq options (J course info)
+    | not (Prelude.null (departments options)) && not (any (`isPrefixOf` pack course) (departments options)) = None
+    | pack course `elem` taken options = None
+    | otherwise = J course info
+filterReq options (ReqAnd reqs) =
+    case Prelude.filter (/= None) (map (filterReq options) reqs) of
+        [] -> None
+        [r] -> r
+        reqs' -> ReqAnd reqs'
+filterReq options (ReqOr reqs) =
+    case Prelude.filter (/= None) (map (filterReq options) reqs) of
+        [] -> None
+        [r] -> r
+        reqs' -> ReqOr reqs'
+filterReq options (Fces fl modifier) = Fces fl modifier
+filterReq options  (Grade str req) = Grade str (filterReq options req) 
+filterReq options (Gpa fl str) = Gpa fl str
+filterReq options (Program pro) = Program pro
+filterReq options (Raw s) = Raw s
+    
 data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
 pickCourse :: GraphOptions -> Text -> Bool
