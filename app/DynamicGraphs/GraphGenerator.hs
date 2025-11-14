@@ -12,7 +12,6 @@ module DynamicGraphs.GraphGenerator
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
 import Css.Constants (nodeFontSize)
-import Data.Aeson (Value (Bool))
 import Data.Containers.ListUtils (nubOrd)
 import Data.Foldable (toList)
 import Data.Graph (Tree (Node))
@@ -76,7 +75,8 @@ reqsToGraph options reqs = do
 filterReq :: GraphOptions -> Req -> Req
 filterReq _ None = None
 filterReq options (J course info)
-    | not (Prelude.null (departments options)) && not (any (`isPrefixOf` pack course) (departments options)) = None
+    -- | not (Prelude.null (departments options)) && not (any (`isPrefixOf` pack course) (departments options)) = None
+    | not (pickCourse options (pack course)) = None
     | pack course `elem` taken options = None
     | otherwise = J course info
 filterReq options (ReqAnd reqs) =
@@ -133,12 +133,9 @@ nodeColor options name = colors !! depIndex
 -- corresponding DotGraph objects.
 reqToStmts :: GraphOptions -> (Text, Req) -> State GeneratorState [DotStatement Text]
 reqToStmts options (name, req) = do
-    if pickCourse options name
-        then do
-            node <- makeNode name $ Just (nodeColor options name)
-            stmts <- reqToStmtsTree options (nodeID node) req
-            return $ DN node:Prelude.concat (toList stmts)
-        else return []
+    node <- makeNode name $ Just (nodeColor options name)
+    stmts <- reqToStmtsTree options (nodeID node) req
+    return $ DN node:Prelude.concat (toList stmts)
 
 reqToStmtsTree :: GraphOptions -- ^ Options to toggle dynamic graph
                -> Text -- ^ Name of parent course

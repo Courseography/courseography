@@ -47,6 +47,18 @@ findAndSavePrereqsResponseTestCases =
     4,
     1
     ),
+    ("CSC149H1",
+    [("CSC108H1", Nothing), ("CSC149H1", Just "CSC108H1")],
+    "{\"courses\":[\"CSC149H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[\"CSC108H1\"],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}}",
+    1,
+    0
+    ),
+    ("CSC150H1",
+    [("CSC108H1", Nothing), ("MAT135H1", Nothing), ("CSC150H1", Just "CSC108H1, MAT135H1")],
+    "{\"courses\":[\"CSC150H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[\"CSC108H1\"],\"departments\":[]}}",
+    2,
+    0
+    ),
     ("CSC373H1",
     [("CSC236H1", Nothing), ("CSC165H1", Nothing), ("MAT237Y1", Nothing), ("CSC373H1", Just "CSC236H1,  CSC165H1, MAT237Y1")],
     "{\"courses\":[\"CSC373H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\"]}}",
@@ -76,7 +88,7 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes ex
         -- only used for debugging remove before last push
         liftIO $ BSL.putStr body
 
-        assertEqual ("Unexpected response for " ++ course) expectedNodes (actualNodes - 1)
+        assertEqual ("Unexpected response for " ++ course) expectedNodes actualNodes
         assertEqual ("Unexpected response for " ++ course) expectedBoolNodes actualBoolNodes
 
     where
