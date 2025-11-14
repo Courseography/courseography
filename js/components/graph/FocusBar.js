@@ -15,31 +15,23 @@ const computerScienceFocusLabels = [
   ["ASFOC1689B", "Artificial Intelligence"],
 ]
 
-/**
- * React component representing the focus menu bar
- */
-export default class FocusBar extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      open: false,
-    }
-  }
+export default function FocusBar({focusBarEnabled, highlightFocus, currFocus}) {
+  const [open, setOpen] = React.useState(false)
 
   /**
    * Changes whether the focus bar is open or not
    */
-  toggleFocusBar = () => {
-    this.setState({ open: !this.state.open })
+  const toggleFocusBar = () => {
+    setOpen(!open)
   }
 
   /**
    * Creates the menu items of the focus bar using the FocusTab component
    * @returns an array of FocusTab components
    */
-  generateFocusTabs = () => {
+  const generateFocusTabs = () => {
     return computerScienceFocusLabels.map(([focusId, focusTitle]) => {
-      const selected = this.props.currFocus === focusId
+      const selected = currFocus === focusId
 
       return (
         <FocusTab
@@ -47,28 +39,26 @@ export default class FocusBar extends React.Component {
           pId={focusId}
           focusName={focusTitle}
           selected={selected}
-          highlightFocus={this.props.highlightFocus}
+          highlightFocus={highlightFocus}
         />
       )
     })
   }
 
-  render() {
-    if (!this.props.focusBarEnabled) {
-      return null
-    } else {
-      return (
-        <div className="focus-menu-bar">
-          <button className="focus-menu-toggle" onClick={this.toggleFocusBar}>
-            {this.state.open ? "⪡ Close" : "Focuses ⪢"}
-          </button>
-          <div className="focuses-list">
-            {this.state.open && this.generateFocusTabs()}
-          </div>
-        </div>
-      )
-    }
+  if (!focusBarEnabled) {
+    return null
   }
+
+  return (
+    <div className="focus-menu-bar">
+      <button className="focus-menu-toggle" onClick={toggleFocusBar}>
+        {open ? "⪡ Close" : "Focuses ⪢"}
+      </button>
+      <div className="focuses-list">
+        {open && generateFocusTabs()}
+      </div>
+    </div>
+  )
 }
 
 FocusBar.propTypes = {
