@@ -34,6 +34,7 @@
 - Added test cases for the `ExportModal` component in `js/components/common`
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
+- Migrate graph-related components (FocusBar, FocusTab, GraphDropdown, GraphFallback, Infobox, and Sidebar) from classes to functions
 
 ## [0.7.1] - 2025-06-16
 
