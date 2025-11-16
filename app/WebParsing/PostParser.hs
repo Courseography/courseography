@@ -13,7 +13,7 @@ import Data.List.Split (keepDelimsL, split, splitWhen, whenElt)
 import Data.Text (strip)
 import qualified Data.Text as T
 import Data.Time.Clock (getCurrentTime)
-import Database.DataType (PostType (..))
+import Database.DataType (ProgramType (..))
 import Database.Persist (insertUnique)
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables
@@ -41,18 +41,18 @@ addPostToDatabase programElements = do
         Left _ -> return ()
         Right (department, code) -> do
             currTime <- liftIO getCurrentTime
-            postExists <- insertUnique Post {
-                postName = getPostType code department,
-                postDepartment = department,
-                postCode = code,
-                postDescription = descriptionText,
-                postRequirements = renderTags requirementLines,
-                postCreated = currTime,
-                postModified = currTime
+            programExists <- insertUnique Program {
+                programName = getPostType code department,
+                programDepartment = department,
+                programCode = code,
+                programDescription = descriptionText,
+                programRequirements = renderTags requirementLines,
+                programCreated = currTime,
+                programModified = currTime
                 }
-            case postExists of
+            case programExists of
                 Just key ->
-                    mapM_ (insert_ . PostCategory key) requirements
+                    mapM_ (insert_ . ProgramCategory key) requirements
                 Nothing -> return ()
     where
         isDescriptionSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-body") tag || isRequirementSection tag
@@ -73,12 +73,12 @@ postInfoParser = do
 
 -- | Extracts the post type (eg. major) from a post code if it is non-empty,
 -- | or from a dept name otherwise
-getPostType :: T.Text -> T.Text -> PostType
+getPostType :: T.Text -> T.Text -> ProgramType
 getPostType "" deptName = getPostTypeFromName deptName
 getPostType code _ = getPostTypeFromCode code
 
 -- | Extracts the post type (eg. major) from a post name (eg. "Biology Specialist")
-getPostTypeFromName :: T.Text -> PostType
+getPostTypeFromName :: T.Text -> ProgramType
 getPostTypeFromName deptName
     | T.isInfixOf "Specialist" deptName = Specialist
     | T.isInfixOf "Major" deptName = Major
@@ -87,12 +87,12 @@ getPostTypeFromName deptName
     | T.isInfixOf "Certificate" deptName = Certificate
     | otherwise = Other
 
--- | Extracts the post type (eg. major) from a post code (eg. ASMAJ1689)
-getPostTypeFromCode :: T.Text -> PostType
+-- | Extracts the program type (eg. major) from a program code (eg. ASMAJ1689)
+getPostTypeFromCode :: T.Text -> ProgramType
 getPostTypeFromCode = abbrevToPost . T.take 3 . T.drop 2
 
--- | Maps the post type abbreviations to their corresponding PostType
-abbrevToPost :: T.Text -> PostType
+-- | Maps the post type abbreviations to their corresponding ProgramType
+abbrevToPost :: T.Text -> ProgramType
 abbrevToPost "SPE" = Specialist
 abbrevToPost "MAJ" = Major
 abbrevToPost "MIN" = Minor

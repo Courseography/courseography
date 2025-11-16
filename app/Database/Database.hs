@@ -15,6 +15,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
+import Database.Migrations (getDatabaseVersion)
 import Database.Persist.Sqlite (insert_, runMigration, runMigrationQuiet)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
@@ -35,11 +36,10 @@ setupDatabase quiet = do
     let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
         db = T.unpack $ T.take ind dbPath
     createDirectoryIfMissing True db
-    runDb (
-        if quiet
-            then void $ runMigrationQuiet migrateAll
-            else runMigration migrateAll
-        )
+
+    -- Match SQL database with ORM, then initialize schema version table
+    let migrateFunction = if quiet then void . runMigrationQuiet else runMigration
+    runDb $ void $ migrateFunction migrateAll >> getDatabaseVersion
 
 -- | Sets up the course information from Artsci Calendar
 populateCalendar :: IO ()
