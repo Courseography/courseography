@@ -47,6 +47,7 @@
 - Reverted previous CircleCI configuration change
 - Switched CircleCI ImageMagick download to use http
 - Modified CI config to take advantage of partial dependency caching and exploit parallelism when resolving/updating dependencies
+- Migrate graph-related components (FocusBar, FocusTab, GraphDropdown, GraphFallback, Infobox, and Sidebar) from classes to functions
 
 ## [0.7.1] - 2025-06-16
 
