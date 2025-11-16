@@ -15,6 +15,9 @@ const computerScienceFocusLabels = [
   ["ASFOC1689B", "Artificial Intelligence"],
 ]
 
+/**
+* React component representing the focus menu bar
+*/
 export default function FocusBar({focusBarEnabled, highlightFocus, currFocus}) {
   const [open, setOpen] = React.useState(false)
 
