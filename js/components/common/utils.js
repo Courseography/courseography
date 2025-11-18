@@ -34,10 +34,10 @@ export function getPost(postCode, lastModified) {
       const responseJson = await response.json()
 
       return {
-        title: responseJson.postDepartment,
-        description: responseJson.postDescription,
-        requirements: responseJson.postRequirements,
-        courseList: getCourseList(responseJson.postRequirements),
+        title: responseJson.programDepartment,
+        description: responseJson.programDescription,
+        requirements: responseJson.programRequirements,
+        courseList: getCourseList(responseJson.programRequirements),
         modified: true,
         modifiedTime: response.headers.get("Last-modified"),
       }

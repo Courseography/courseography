@@ -24,6 +24,7 @@
 - Fixed a bug that led code to crash when parsing all pre-generated graphs from svg (i.e., program graphs)
 - Fixed a bug where redundant boolean nodes were being generated
 - Fixed a bug where the course info modal title did not display the H1/Y1 suffix
+- Fixed a bug where the focus tab functionality was not working as intended
 
 ### 🔧 Internal changes
 
