@@ -1,11 +1,11 @@
 export default {
-  postCode: "ASFOC1689B",
-  postDepartment: "Focus in Artificial Intelligence (Specialist)",
-  postDescription:
+  programCode: "ASFOC1689B",
+  programDepartment: "Focus in Artificial Intelligence (Specialist)",
+  programDescription:
     "(3.5 credits) Artificial Intelligence (AI) is aimed at understanding " +
     "and replicating the computational processes underlying intelligent behaviour.",
-  postName: "Focus",
-  postRequirements: `
+  programName: "Focus",
+  programRequirements: `
 Completion Requirements:
 Required Courses:
 1.0 credit from the following:  CSC336H1,  MAT235Y1/ MAT237Y1/ MAT257Y1,  APM236H1,  MAT224H1/ MAT247H1,  STA238H1/  STA248H1/  STA261H1,  STA302H1,  STA347H1
