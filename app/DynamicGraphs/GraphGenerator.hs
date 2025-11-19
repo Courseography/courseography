@@ -12,6 +12,7 @@ module DynamicGraphs.GraphGenerator
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
 import Css.Constants (nodeFontSize)
+import Data.Char (ord)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Foldable (toList)
 import Data.Graph (Tree (Node))
@@ -26,6 +27,7 @@ import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Sequence as Seq
 import Data.Text.Lazy (Text, concat, isInfixOf, isPrefixOf, last, pack, take, unpack)
 import Database.Requirement (Modifier (..), Req (..))
+import Debug.Trace (trace, traceM, traceShowM)
 import DynamicGraphs.CourseFinder (lookupCourses)
 import DynamicGraphs.GraphNodeUtils (formatModOr, maybeHead, paddingSpaces, stringifyModAnd)
 import DynamicGraphs.GraphOptions (GraphOptions (..), defaultGraphOptions)
@@ -63,22 +65,45 @@ sampleGraph = fst $ State.runState (reqsToGraph
 -- | Convert a list of coursenames and requirements to a DotGraph object for
 --  drawing using Dot. Also prunes any repeated edges that arise from
 --  multiple Reqs using the same Grade requirement
+-- reqsToGraph :: GraphOptions -> [(Text, Req)] -> State GeneratorState (DotGraph Text)
+-- reqsToGraph options reqs = do
+--     allStmts <- concatUnique <$> mapM (reqToStmts options) filteredReqs
+--     return $ buildGraph allStmts
+--     where
+--         concatUnique = nubOrd . Prelude.concat
+--         filteredReqs = [(n, filterReq options req) | (n, req) <- reqs]
 reqsToGraph :: GraphOptions -> [(Text, Req)] -> State GeneratorState (DotGraph Text)
 reqsToGraph options reqs = do
+    let filteredReqs = [(n, filterReq options req) | (n, req) <- reqs]
+    -- traceShowM $ "filteredReqs = " ++ show filteredReqs
+    -- traceShowM $ "startingReqs = " ++ show reqs
+    -- traceShowM $ "prefixedByOneOf MAT237Y1 = " ++ show (prefixedByOneOf "MAT237Y1" ["CSC"])
+    -- traceShowM $ "pickCourse MAT237Y1 = " ++ show (pickCourse options "MAT237Y1")
+    traceShowM $ "depts = " ++ show (departments options)
+    traceShowM $ "taken = " ++ show (taken options)
+
     allStmts <- concatUnique <$> mapM (reqToStmts options) filteredReqs
     return $ buildGraph allStmts
-    where
-        concatUnique = nubOrd . Prelude.concat
-        filteredReqs = [(n, filterReq options req) | (n, req) <- reqs]
+  where
+    concatUnique = nubOrd . Prelude.concat
 
 -- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
 filterReq :: GraphOptions -> Req -> Req
 filterReq _ None = None
 filterReq options (J course info)
-    -- | not (Prelude.null (departments options)) && not (any (`isPrefixOf` pack course) (departments options)) = None
+    | not (Prelude.null (departments options)) && not (any (`isPrefixOf` pack course) (departments options)) = None
     | not (pickCourse options (pack course)) = None
     | pack course `elem` taken options = None
     | otherwise = J course info
+    -- | trace (debugOutput course) False = undefined
+    -- | not (pickCourse options (pack course)) =
+    --     trace ("Filtering out " ++ course ++ " because pickCourse=False") None
+    -- | pack course `elem` taken options =
+    --     trace ("Filtering out " ++ course ++ " because it's taken") None
+    -- | otherwise =
+    --     trace ("Keeping course: " ++ course) $ J course info
+    -- where
+    --     debugOutput s = s ++ " -> " ++ show (map ord s)
 filterReq options (ReqAnd reqs) =
     case Prelude.filter (/= None) (map (filterReq options) reqs) of
         [] -> None
