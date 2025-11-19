@@ -1,49 +1,46 @@
-import React from "react"
 import PropTypes from "prop-types"
 
-export default class InfoBox extends React.Component {
-  render() {
-    // guard against rendering with no course
-    if (!this.props.nodeId) {
-      return null
-    }
-
-    const className = this.props.showInfoBox
-      ? "tooltip-group-display"
-      : "tooltip-group-hidden"
-
-    const rectAttrs = {
-      id: this.props.nodeId + "-tooltip" + "-rect",
-      x: this.props.xPos,
-      y: this.props.yPos,
-      rx: "4",
-      ry: "4",
-      fill: "white",
-      stroke: "black",
-      strokeWidth: "2",
-      width: "60",
-      height: "30",
-    }
-
-    const textAttrs = {
-      id: this.props.nodeId + "-tooltip" + "-text",
-      x: this.props.xPos + 60 / 2 - 18,
-      y: this.props.yPos + 30 / 2 + 6,
-    }
-
-    return (
-      <g
-        id="infoBox"
-        className={className}
-        onClick={this.props.onClick}
-        onMouseEnter={this.props.onMouseEnter}
-        onMouseLeave={this.props.onMouseLeave}
-      >
-        <rect {...rectAttrs} />
-        <text {...textAttrs}>Info</text>
-      </g>
-    )
+export default function InfoBox({showInfoBox, nodeId, xPos, yPos, onClick, onMouseEnter, onMouseLeave}) {
+  // guard against rendering with no course
+  if (!nodeId) {
+    return null
   }
+
+  const className = showInfoBox
+    ? "tooltip-group-display"
+    : "tooltip-group-hidden"
+
+  const rectAttrs = {
+    id: nodeId + "-tooltip" + "-rect",
+    x: xPos,
+    y: yPos,
+    rx: "4",
+    ry: "4",
+    fill: "white",
+    stroke: "black",
+    strokeWidth: "2",
+    width: "60",
+    height: "30",
+  }
+
+  const textAttrs = {
+    id: nodeId + "-tooltip" + "-text",
+    x: xPos + 60 / 2 - 18,
+    y: yPos + 30 / 2 + 6,
+  }
+
+  return (
+    <g
+      id="infoBox"
+      className={className}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <rect {...rectAttrs} />
+      <text {...textAttrs}>Info</text>
+    </g>
+  )
 }
 
 InfoBox.propTypes = {
