@@ -14,16 +14,16 @@ export function getCourse(courseName) {
 }
 
 /**
- * Retrieves a post from the server.
- * @param {string} postCode The post code on the art&sci timetable.
+ * Retrieves a program from the server.
+ * @param {string} programCode The program code on the art&sci timetable.
  * @param {string} lastModified The last time the client called this function in UTC time
- * @returns {Promise} Promise object representing the JSON object containing post information and
+ * @returns {Promise} Promise object representing the JSON object containing program information and
  *                    a boolean of whether the data was modified since last time
  */
-export function getPost(postCode, lastModified) {
+export function getProgram(programCode, lastModified) {
   "use strict"
 
-  return fetch("post?code=" + postCode, {
+  return fetch("post?code=" + programCode, {
     headers: {
       "If-Modified-Since": lastModified,
     },
@@ -34,10 +34,10 @@ export function getPost(postCode, lastModified) {
       const responseJson = await response.json()
 
       return {
-        title: responseJson.postDepartment,
-        description: responseJson.postDescription,
-        requirements: responseJson.postRequirements,
-        courseList: getCourseList(responseJson.postRequirements),
+        title: responseJson.programDepartment,
+        description: responseJson.programDescription,
+        requirements: responseJson.programRequirements,
+        courseList: getCourseList(responseJson.programRequirements),
         modified: true,
         modifiedTime: response.headers.get("Last-modified"),
       }
