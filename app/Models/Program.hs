@@ -8,18 +8,18 @@ import qualified Data.Text as T (Text, unpack)
 import Database.Persist.Sqlite (entityVal, selectFirst, (==.))
 import Database.Tables
 
--- | Queries the database for information about the program then returns the post value
-returnProgram :: T.Text -> IO (Maybe Post)
+-- | Queries the database for information about the program then returns the program value
+returnProgram :: T.Text -> IO (Maybe Program)
 returnProgram code = runDb $ do
-    sqlProgram <- selectFirst [PostCode ==. code] []
+    sqlProgram <- selectFirst [ProgramCode ==. code] []
     case sqlProgram of
         Nothing -> return Nothing
         Just program -> return $ Just $ entityVal program
 
--- | Retrieves the course requirements for a Post (program) as a list of course codes
-reqsForProgram :: Post -> [String]
+-- | Retrieves the course requirements for a Program as a list of course codes
+reqsForProgram :: Program -> [String]
 reqsForProgram program = do
-    let requirementsText = T.unpack $ postRequirements program
+    let requirementsText = T.unpack $ programRequirements program
         cleaned = filter (`notElem` ("<>" :: String)) $ filter (not . isPunctuation) requirementsText
         potentialCodes = words cleaned
     filter isCourseCode potentialCodes

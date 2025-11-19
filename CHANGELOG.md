@@ -13,6 +13,8 @@
 - Added a route to access all POST codes stored in the database with test coverage
 - Added the `js/components/generate/AutocompleteDropdown.js` component to the program field of Generate
 - Updated the colour of the rendered options for the AutocompleteDropdown component
+- Added a `database-migrate` CLI option that runs SQL migrations
+- Updated the course info modal timetable styling and layout
 
 ### 🐛 Bug fixes
 
@@ -22,6 +24,7 @@
 - Fixed a bug that led code to crash when parsing all pre-generated graphs from svg (i.e., program graphs)
 - Fixed a bug where redundant boolean nodes were being generated
 - Fixed a bug where the course info modal title did not display the H1/Y1 suffix
+- Fixed a bug where the focus tab functionality was not working as intended
 
 ### 🔧 Internal changes
 
@@ -36,6 +39,7 @@
 - Added test cases for the `ExportModal` component in `js/components/common`
 - Updated backend tests to use `tasty-discover`
 - Added documentation for running a subset of the backend tests
+- Renamed `Post` and `PostCategory` database tables to `Program` and `ProgramCategory` respectively through a database migration
 - Deleted `app/Response/Image` file and refactored `app/Util/Helpers` to include `returnImageData`
 - Added test cases for the retrieveProgram function in `Controllers/Program`
 - Removed duplicate code from `mockRequest` and `runServerPartWith` in `backend-test/TestHelpers.hs`
@@ -43,6 +47,8 @@
 - Updated CircleCI configuration to update `wget` version (to fix ImageMagick download error)
 - Reverted previous CircleCI configuration change
 - Switched CircleCI ImageMagick download to use http
+- Modified CI config to take advantage of partial dependency caching and exploit parallelism when resolving/updating dependencies
+- Migrate graph-related components (FocusBar, FocusTab, GraphDropdown, GraphFallback, Infobox, and Sidebar) from classes to functions
 
 ## [0.7.1] - 2025-06-16
 

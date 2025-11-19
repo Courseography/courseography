@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { CourseModal } from "../common/react_modal.js.jsx"
 import { ExportModal } from "../common/export.js.jsx"
-import { getPost } from "../common/utils.js"
+import { getProgram } from "../common/utils.js"
 import Bool from "./Bool"
 import Edge from "./Edge"
 import Node from "./Node"
@@ -341,7 +341,7 @@ export class Graph extends React.Component {
       this.highlightFocuses([])
     } else if (this.props.currFocus !== prevProps.currFocus) {
       const currFocusCourses = this.state.focusCourses[this.props.currFocus]
-      getPost(
+      getProgram(
         this.props.currFocus,
         currFocusCourses?.modifiedTime || new Date(0).toUTCString()
       ).then(focusData => {

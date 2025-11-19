@@ -50,7 +50,7 @@ describe("getTable", () => {
           instructor: "A. Jacobson",
           availability: "31 of 69 available",
           waitList: "0 students",
-          time: ["Tuesday  15 - 17"],
+          time: ["Tuesday 15 - 17"],
           room: ["LM 158 "],
         },
       ]
@@ -115,7 +115,7 @@ describe("getTable", () => {
           instructor: "A. Jacobson",
           availability: "31 of 69 available",
           waitList: "0 students",
-          time: ["Tuesday  15 - 17", "Thursday  16 - 17"],
+          time: ["Tuesday 15 - 17", "Thursday 16 - 17"],
           room: ["LM 158 ", "UC 179 "],
         },
       ]
@@ -174,7 +174,7 @@ describe("getTable", () => {
           instructor: "A. Jacobson",
           availability: "31 of 69 available",
           waitList: "0 students",
-          time: ["Tuesday  15 - 17"],
+          time: ["Tuesday 15 - 17"],
           room: ["LM 158, UC 179"],
         },
       ]
@@ -253,7 +253,7 @@ describe("getTable", () => {
           instructor: "A. Jacobson",
           availability: "31 of 69 available",
           waitList: "0 students",
-          time: ["Tuesday  15 - 17"],
+          time: ["Tuesday 15 - 17"],
           room: ["LM 158 "],
         },
         {
@@ -261,7 +261,7 @@ describe("getTable", () => {
           instructor: "A. Jacobson",
           availability: "0 of 1 available",
           waitList: "0 students",
-          time: ["Tuesday  15 - 17"],
+          time: ["Tuesday 15 - 17"],
           room: ["LM 158 "],
         },
       ]
@@ -332,7 +332,7 @@ describe("getTable", () => {
           instructor: "A. Jacobson",
           availability: "31 of 69 available",
           waitList: "0 students",
-          time: ["Tuesday  15 - 17"],
+          time: ["Tuesday 15 - 17"],
           room: ["LM 158 "],
         },
         {
@@ -340,7 +340,7 @@ describe("getTable", () => {
           instructor: "Paul G.",
           availability: "2 of 166 available",
           waitList: "0 students",
-          time: ["Monday  14 - 16"],
+          time: ["Monday 14 - 16"],
           room: ["  "],
         },
       ]

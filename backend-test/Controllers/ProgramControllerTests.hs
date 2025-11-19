@@ -15,39 +15,39 @@ import Data.Aeson (FromJSON (parseJSON), decode, withObject, (.:))
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
 import Data.Time (getCurrentTime)
-import Database.DataType (PostType (..))
+import Database.DataType (ProgramType (..))
 import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Post (..))
+import Database.Tables (Program (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (mockGetRequest, clearDatabase, runServerPart, runServerPartWith, withDatabase)
 
--- | A Post response without timestamps (for comparison purposes)
-data PostResponseNoTime = PostResponseNoTime
-    { postCode :: T.Text
-    , postDepartment :: T.Text
-    , postDescription :: T.Text
-    , postName :: T.Text
-    , postRequirements :: T.Text
+-- | A Program response without timestamps (for comparison purposes)
+data ProgramResponseNoTime = ProgramResponseNoTime
+    { programCode :: T.Text
+    , programDepartment :: T.Text
+    , programDescription :: T.Text
+    , programName :: T.Text
+    , programRequirements :: T.Text
     } deriving (Show, Eq)
 
-instance FromJSON PostResponseNoTime where
-    parseJSON = withObject "Expected Object for Post" $ \o -> do
-        code <- o .: "postCode"
-        dept <- o .: "postDepartment"
-        desc <- o .: "postDescription"
-        name <- o .: "postName"
-        reqs <- o .: "postRequirements"
-        return $ PostResponseNoTime code dept desc name reqs
+instance FromJSON ProgramResponseNoTime where
+    parseJSON = withObject "Expected Object for Program" $ \o -> do
+        code <- o .: "programCode"
+        dept <- o .: "programDepartment"
+        desc <- o .: "programDescription"
+        name <- o .: "programName"
+        reqs <- o .: "programRequirements"
+        return $ ProgramResponseNoTime code dept desc name reqs
 
 -- | List of test cases as (label, programs to insert, query params, expected output)
-retrieveprogramTestCases :: [(String, [T.Text], T.Text, Maybe PostResponseNoTime)]
+retrieveprogramTestCases :: [(String, [T.Text], T.Text, Maybe ProgramResponseNoTime)]
 retrieveprogramTestCases =
     [ ("Valid program code returns JSON"
       , ["ASMAJ1689"]
       , "ASMAJ1689"
-      , Just (PostResponseNoTime "ASMAJ1689" "test" "test" "Other" "test")
+      , Just (ProgramResponseNoTime "ASMAJ1689" "test" "test" "Other" "test")
       )
     , ("Invalid program code returns null JSON"
       , []
@@ -62,19 +62,19 @@ retrieveprogramTestCases =
     ]
 
 -- | Parse response and extract non-timestamp fields
-parsePostResponse :: String -> Maybe PostResponseNoTime
-parsePostResponse jsonStr = decode (BL.pack jsonStr)
+parseProgramResponse :: String -> Maybe ProgramResponseNoTime
+parseProgramResponse jsonStr = decode (BL.pack jsonStr)
 
 -- | Run a test case (case, input, expected output) on the retrieveProgram function.
-runRetrieveProgramTest :: String -> [T.Text] -> T.Text -> Maybe PostResponseNoTime -> TestTree
-runRetrieveProgramTest label posts queryParam expected =
+runRetrieveProgramTest :: String -> [T.Text] -> T.Text -> Maybe ProgramResponseNoTime -> TestTree
+runRetrieveProgramTest label programs queryParam expected =
     testCase label $ do
         runDb $ do
             clearDatabase
-            insertPrograms posts
+            insertPrograms programs
         response <- runServerPartWith Controllers.Program.retrieveProgram $ mockGetRequest "/code" [("code" ,T.unpack queryParam)] ""
         let actual = BL.unpack $ rsBody response
-        let parsedActual = parsePostResponse actual
+        let parsedActual = parseProgramResponse actual
         assertEqual ("Unexpected JSON response body for" ++ label) expected parsedActual
 
 -- | Run all the retrieveProgram test cases
@@ -92,11 +92,11 @@ indexTestCases =
 
 -- | Run a test case (case, input, expected output) on the index function.
 runIndexTest :: String -> [T.Text] -> String -> TestTree
-runIndexTest label posts expected =
+runIndexTest label programs expected =
     testCase label $ do
         runDb $ do
             clearDatabase
-            insertPrograms posts
+            insertPrograms programs
         response <- runServerPart Controllers.Program.index
         let actual = BL.unpack $ rsBody response
         assertEqual ("Unexpected response body for " ++ label) expected actual
@@ -108,7 +108,7 @@ insertPrograms = mapM_ insertProgram
         insertProgram :: T.Text -> SqlPersistM ()
         insertProgram code = do
             curr <- liftIO getCurrentTime
-            insert_ (Post Other "test" code "test" "test" curr curr)
+            insert_ (Program Other "test" code "test" "test" curr curr)
 
 -- | Run all the index test cases
 runIndexTests :: [TestTree]

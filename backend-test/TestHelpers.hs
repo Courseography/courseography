@@ -20,8 +20,8 @@ import Config (databasePath)
 import Control.Concurrent.MVar (newEmptyMVar, newMVar, putMVar)
 import Control.Monad (when)
 import qualified Data.ByteString.Lazy.Char8 as BSL8
-import qualified Data.Map as Map
 import Data.List.Split (splitOn)
+import qualified Data.Map as Map
 import Data.Text (unpack)
 import Database.Database (setupDatabase)
 import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere)
@@ -67,7 +67,7 @@ createMockRequest reqMethod reqUri queryInputs body = do
 
     -- | Split a URI into path segments
     splitPath :: String -> [String]
-    splitPath uri = splitOn "/" uri
+    splitPath = splitOn "/"
 
 -- | Curried version of createMockRequest for GET requests
 mockGetRequest :: String -> [(String, String)] -> BSL8.ByteString -> IO Request
@@ -105,8 +105,8 @@ clearDatabase = do
     deleteWhere ([] :: [Filter Database.Tables.Text])
     deleteWhere ([] :: [Filter Shape])
     deleteWhere ([] :: [Filter Path])
-    deleteWhere ([] :: [Filter Post])
-    deleteWhere ([] :: [Filter PostCategory])
+    deleteWhere ([] :: [Filter Program])
+    deleteWhere ([] :: [Filter ProgramCategory])
     deleteWhere ([] :: [Filter Building])
     deleteWhere ([] :: [Filter Graph])
 
