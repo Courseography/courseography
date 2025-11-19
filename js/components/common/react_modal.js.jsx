@@ -2,7 +2,7 @@ import React, { createRef } from "react"
 import ReactModal from "react-modal"
 import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
 import L from "leaflet"
-import { getCourse, getPost } from "../common/utils"
+import { getCourse, getProgram } from "../common/utils"
 import { AgGridReact } from "ag-grid-react"
 
 const DAY_TO_INT = {
@@ -267,7 +267,7 @@ class Description extends React.Component {
         this.props.sessions[session].length !== 0 ? (
           <div key={session}>
             <strong className="semester-heading">
-              {session === 'F' ? 'Fall' : session === 'S' ? 'Winter' : 'Full Year'}
+              {session === "F" ? "Fall" : session === "S" ? "Winter" : "Full Year"}
             </strong>
             <div className="ag-theme-alpine" style={{ width: 940 }}>
               <AgGridReact
@@ -279,20 +279,30 @@ class Description extends React.Component {
                   { field: "waitList", width: 130 },
                   {
                     field: "time",
-                    cellStyle: { whiteSpace: "pre", lineHeight: "1.8", paddingTop: '7px', paddingBottom: '6px'},
-                    valueFormatter: col => col.data.time.join("\n"), 
+                    cellStyle: {
+                      whiteSpace: "pre",
+                      lineHeight: "1.8",
+                      paddingTop: "7px",
+                      paddingBottom: "6px",
+                    },
+                    valueFormatter: col => col.data.time.join("\n"),
                     width: 180,
                     autoHeight: true,
                   },
                   {
                     field: "room",
-                    cellStyle: { whiteSpace: "pre", lineHeight: "1.8", paddingTop: '7px', paddingBottom: '6px'},
+                    cellStyle: {
+                      whiteSpace: "pre",
+                      lineHeight: "1.8",
+                      paddingTop: "7px",
+                      paddingBottom: "6px",
+                    },
                     valueFormatter: col => col.data.room.join("\n"),
                     width: 128,
                     autoHeight: true,
                   },
                 ]}
-                domLayout='autoHeight'
+                domLayout="autoHeight"
               ></AgGridReact>
             </div>
           </div>
@@ -370,7 +380,7 @@ class FocusModal extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.showFocusModal && !prevProps.showFocusModal) {
-      getPost(this.props.focusId, this.state.focusModifiedTime).then(focusData => {
+      getProgram(this.props.focusId, this.state.focusModifiedTime).then(focusData => {
         if (!focusData.modified) return
 
         this.setState({
