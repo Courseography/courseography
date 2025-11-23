@@ -15,6 +15,7 @@
 - Updated the colour of the rendered options for the AutocompleteDropdown component
 - Added a `database-migrate` CLI option that runs SQL migrations
 - Updated the course info modal timetable styling and layout
+- Updated drag and drop functionality on the graph page to support mobile devices
 
 ### 🐛 Bug fixes
 
