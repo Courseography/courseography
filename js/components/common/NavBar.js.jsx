@@ -2,12 +2,49 @@ import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDownload } from "@fortawesome/free-solid-svg-icons"
 import { Tooltip } from "react-tooltip"
+import GraphDropdown from "../graph/GraphDropdown"
 
 /**
  * NavBar component.
  */
-export function NavBar({ selected_page, open_modal }) {
+export function NavBar({ selected_page, open_modal, graphs = [], updateGraph }) {
   const isActive = page => (page === selected_page ? "selected-page" : undefined)
+  const [showGraphDropdown, setShowGraphDropdown] = React.useState(false)
+  const [dropdownTimeouts, setDropdownTimeouts] = React.useState([])
+
+  const clearDropdownTimeouts = () => {
+    dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
+    setDropdownTimeouts([])
+  }
+
+  const handleShowGraphDropdown = () => {
+    clearDropdownTimeouts()
+    setShowGraphDropdown(true)
+  }
+
+  const handleHideGraphDropdown = () => {
+    const timeout = setTimeout(() => {
+      setShowGraphDropdown(false)
+    }, 500)
+    setDropdownTimeouts(dropdownTimeouts.concat(timeout))
+  }
+
+    React.useEffect(() => {
+    const navGraph = document.querySelector("#nav-graph")
+    
+    if (navGraph) {
+      navGraph.addEventListener("mouseenter", handleShowGraphDropdown)
+      navGraph.addEventListener("mouseleave", handleHideGraphDropdown)
+    }
+
+    return () => {
+      clearDropdownTimeouts()
+      if (navGraph) {
+        navGraph.removeEventListener("mouseenter", handleShowGraphDropdown)
+        navGraph.removeEventListener("mouseleave", handleHideGraphDropdown)
+      }
+    }
+  }, [])
 
   return (
     <nav className="row header">
@@ -28,6 +65,13 @@ export function NavBar({ selected_page, open_modal }) {
         <ul id="nav-links">
           <li id="nav-graph" className={isActive("graph")}>
             <a href="/graph">Graph</a>
+            <GraphDropdown
+              showGraphDropdown={showGraphDropdown}
+              onMouseMove={handleShowGraphDropdown}
+              onMouseLeave={handleHideGraphDropdown}
+              graphs={graphs}
+              updateGraph={updateGraph}
+            />
           </li>
           <li id="nav-grid" className={isActive("grid")}>
             <a href="/grid">Grid</a>
