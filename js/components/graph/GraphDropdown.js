@@ -24,7 +24,8 @@ export default function GraphDropdown({showGraphDropdown, onMouseMove, onMouseLe
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
         data-testid={"test-graph-dropdown"}
-        style={{ left: graphTabLeft }}
+        style={{ left: graphTabLeft, top: "50px", zIndex: 1000
+        }}
       >
         {graphs.map((graph, i) => {
           return (
