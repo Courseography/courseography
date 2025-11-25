@@ -10,8 +10,8 @@ export default function GraphFallback(props) {
       <div className="error-boundary-box">
         <FontAwesomeIcon icon={faTriangleExclamation} className="error-svg" />
         <div className="error-boundary-text">
-          Your graph has failed to render. Please reload this page or report this
-          issue to David Liu at {""}
+          Your graph has failed to render. Please reload this page or report this issue
+          to David Liu at {""}
           <a className="graph-fallback-email" href="mailto:david@cs.toronto.edu">
             david@cs.toronto.edu
           </a>
