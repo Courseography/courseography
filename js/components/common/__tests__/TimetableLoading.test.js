@@ -36,7 +36,7 @@ describe("Displays correct content based on timetable availability", () => {
     await screen.findByText("sample description")
     await screen.findByText("Beyonce")
   })
-  
+
   // New test for winter session
   it("displays a timetable for winter session", async () => {
     const courseInfo = {

@@ -1,14 +1,20 @@
 import PropTypes from "prop-types"
 
-export default function InfoBox({showInfoBox, nodeId, xPos, yPos, onClick, onMouseEnter, onMouseLeave}) {
+export default function InfoBox({
+  showInfoBox,
+  nodeId,
+  xPos,
+  yPos,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+}) {
   // guard against rendering with no course
   if (!nodeId) {
     return null
   }
 
-  const className = showInfoBox
-    ? "tooltip-group-display"
-    : "tooltip-group-hidden"
+  const className = showInfoBox ? "tooltip-group-display" : "tooltip-group-hidden"
 
   const rectAttrs = {
     id: nodeId + "-tooltip" + "-rect",
