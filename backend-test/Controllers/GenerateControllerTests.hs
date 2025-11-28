@@ -64,12 +64,12 @@ findAndSavePrereqsResponseTestCases =
     3,
     1
     ),
-    -- ("MAT257Y1 with an empty department field",
-    -- [("MAT240H1", Nothing), ("MAT157Y1", Nothing), ("MAT247H1", Just "MAT240H1"), ("MAT257Y1", Just "MAT157Y1, MAT247H1")],
-    -- "{\"courses\":[\"MAT257Y1\"],\"programs\":[],\"taken\":[\"\"],\"departments\":[\"\"]}",
-    -- 4,
-    -- 1
-    -- ),
+    ("MAT257Y1 with an empty department field",
+    [("MAT240H1", Nothing), ("MAT157Y1", Nothing), ("MAT247H1", Just "MAT240H1"), ("MAT257Y1", Just "MAT157Y1, MAT247H1")],
+    "{\"courses\":[\"MAT257Y1\"],\"programs\":[],\"taken\":[\"\"],\"departments\":[\"\"]}",
+    4,
+    1
+    ),
     ("MAT257Y1 with a populated department field",
     [("MAT240H1", Nothing), ("MAT157Y1", Nothing), ("MAT247H1", Just "MAT240H1"), ("MAT257Y1", Just "MAT157Y1, MAT247H1")],
     "{\"courses\":[\"MAT257Y1\"],\"programs\":[],\"taken\":[\"\"],\"departments\":[\"MAT\"]}",

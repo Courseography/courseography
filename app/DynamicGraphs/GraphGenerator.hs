@@ -29,7 +29,7 @@ import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.CourseFinder (lookupCourses)
 import DynamicGraphs.GraphNodeUtils (formatModOr, maybeHead, paddingSpaces, stringifyModAnd)
 import DynamicGraphs.GraphOptions (GraphOptions (..), defaultGraphOptions)
-import Prelude hiding (last)
+import Prelude hiding (last, zip)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
@@ -65,11 +65,16 @@ sampleGraph = fst $ State.runState (reqsToGraph
 -- multiple Reqs using the same Grade requirement
 reqsToGraph :: GraphOptions -> [(Text, Req)] -> State GeneratorState (DotGraph Text)
 reqsToGraph options reqs = do
-    allStmts <- concatUnique <$> mapM (reqToStmts options) filteredReqs
+    allStmts <- concatUnique <$> mapM (reqToStmts options) reqs'
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . Prelude.concat
         filteredReqs = [(n, filterReq options req) | (n, req) <- reqs]
+        reqs' =  Prelude.filter includeName filteredReqs
+
+        includeName (n, _) =
+            pickCourse options n &&
+            n `notElem`taken options
 
 -- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
 filterReq :: GraphOptions -> Req -> Req
@@ -143,12 +148,9 @@ reqToStmtsTree :: GraphOptions -- ^ Options to toggle dynamic graph
 reqToStmtsTree _ _ None = return (Node [] [])
 reqToStmtsTree options parentID (J name2 _) = do
     let name = pack name2
-    if pickCourse options name then do
-        prereq <- makeNode name $ Just (nodeColor options name)
-        edge <- makeEdge (nodeID prereq) parentID Nothing
-        return (Node [DN prereq, DE edge] [])
-    else
-        return (Node [] [])
+    prereq <- makeNode name $ Just (nodeColor options name)
+    edge <- makeEdge (nodeID prereq) parentID Nothing
+    return (Node [DN prereq, DE edge] [])
 -- Two or more required prerequisites.
 reqToStmtsTree options parentID (ReqAnd reqs) = do
     (andNode, _) <- makeBool "and" reqs
