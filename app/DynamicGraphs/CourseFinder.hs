@@ -33,11 +33,7 @@ lookupCourse options code = do
 
 lookupReqs :: GraphOptions -> Req -> StateT (Map.Map T.Text Req) IO ()
 lookupReqs options (J name _) = do
-    if Set.member name (Set.fromList $ map T.unpack (taken options)) ||
-        not (Set.member (take 3 name) $ Set.fromList $ map T.unpack (departments options))
-        -- This course has been taken or is not a department we want to include; we don't need its prerequisites
-        then return ()
-        else lookupCourse options $ T.pack name
+    lookupCourse options $ T.pack name
 lookupReqs options (ReqAnd parents) = mapM_ (lookupReqs options) parents
 lookupReqs options (ReqOr parents) =
     if any hasTaken parents
