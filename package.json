@@ -83,7 +83,7 @@
     "sass": "^1.89.1",
     "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
-    "stylelint": "^16.25.0",
+    "stylelint": "^16.26.1",
     "stylelint-config-standard-scss": "^16.0.0",
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1",
