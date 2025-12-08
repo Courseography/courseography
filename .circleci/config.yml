@@ -25,6 +25,10 @@ jobs:
             - v1.4-courseography-haskell-{{ checksum "courseography.cabal" }}
             - v1.4-courseography-haskell-{{ checksum "stack.yaml.lock" }}
             - v1.4-courseography-haskell-
+      - restore_cache:
+          name: Restore Cached Dependencies (Imagemagick)
+          keys:
+            - v1.4-courseography-imagemagick
 
       - run:
           name: Install Package Dependencies
@@ -32,9 +36,11 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y graphviz
             sudo apt-get install -y texlive-latex-base
-            sudo wget http://imagemagick.org/archive/binaries/magick
-            sudo cp magick /usr/local/bin
-            sudo chmod 777 /usr/local/bin/magick
+            if [ ! -d squashfs-root ]; then
+              sudo wget http://imagemagick.org/archive/binaries/magick
+              sudo chmod u+x ./magick
+              sudo ./magick --appimage-extract
+            fi
             sudo dpkg --remove --force-remove-reinstreq nodejs
             stack update
 
@@ -76,6 +82,12 @@ jobs:
           paths:
             - "/root/.stack"
             - ".stack-work"
+
+      - save_cache:
+          name: Cache Dependencies (Imagemagick)
+          key: v1.4-courseography-imagemagick
+          paths:
+            - "squashfs-root"
 
       - run:
           name: Run lint-staged checks
