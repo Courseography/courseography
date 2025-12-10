@@ -109,8 +109,7 @@ pickCourse options name =
 pickCourseByDepartment :: GraphOptions -> Text -> Bool
 pickCourseByDepartment options name =
     Prelude.null (departments options) ||
-    prefixedByOneOf name (departments options) ||
-    [""] == departments options
+    prefixedByOneOf name (departments options)
 
 pickCourseByLocation :: GraphOptions -> Text -> Bool
 pickCourseByLocation options name =
