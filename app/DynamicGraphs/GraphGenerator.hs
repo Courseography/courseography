@@ -29,7 +29,7 @@ import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.CourseFinder (lookupCourses)
 import DynamicGraphs.GraphNodeUtils (formatModOr, maybeHead, paddingSpaces, stringifyModAnd)
 import DynamicGraphs.GraphOptions (GraphOptions (..), defaultGraphOptions)
-import Prelude hiding (last, zip)
+import Prelude hiding (last)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
 coursesToPrereqGraph :: [String] -- ^ courses to generate
