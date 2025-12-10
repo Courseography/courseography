@@ -16,6 +16,7 @@
 - Added a `database-migrate` CLI option that runs SQL migrations
 - Updated the course info modal timetable styling and layout
 - Updated drag and drop functionality on the graph page to support mobile devices
+- Added a recursive function to remove Requirements from the Requirement Tree
 
 ### 🐛 Bug fixes
 
