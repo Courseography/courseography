@@ -30,6 +30,7 @@ module.exports = [
       "react/no-find-dom-node": "off",
       "react/no-render-return-value": "off",
       "react/no-string-refs": "off",
+      "react/react-in-jsx-scope": "off",
     },
     settings: {
       react: {

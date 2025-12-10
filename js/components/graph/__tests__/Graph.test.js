@@ -113,6 +113,25 @@ describe("Graph Navigation", () => {
     expect(newY).toBe(expectedY)
   })
 
+  it("Should pan when the user touches and drags", async () => {
+    await TestGraph.build()
+    const svg = document.querySelector("#main-graph")
+    const initialX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
+    const initialY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
+
+    fireEvent.touchStart(svg, { touches: [{ clientX: 250, clientY: 10 }] })
+    fireEvent.touchMove(svg, { touches: [{ clientX: 100, clientY: 20 }] })
+    fireEvent.touchEnd(svg)
+
+    const newX = parseInt(svg.getAttribute("viewBox").split(" ")[0])
+    const newY = parseInt(svg.getAttribute("viewBox").split(" ")[1])
+    const expectedX = initialX + 150
+    const expectedY = initialY - 10
+
+    expect(newX).toBe(expectedX)
+    expect(newY).toBe(expectedY)
+  })
+
   it("Should zoom in when the mouse wheel is scrolled down", async () => {
     const graph = await TestGraph.build()
     const svg = document.querySelector("#main-graph")

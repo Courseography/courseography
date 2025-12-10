@@ -16,9 +16,9 @@ const computerScienceFocusLabels = [
 ]
 
 /**
-* React component representing the focus menu bar
-*/
-export default function FocusBar({focusBarEnabled, highlightFocus, currFocus}) {
+ * React component representing the focus menu bar
+ */
+export default function FocusBar({ focusBarEnabled, highlightFocus, currFocus }) {
   const [open, setOpen] = React.useState(false)
 
   /**
@@ -57,9 +57,7 @@ export default function FocusBar({focusBarEnabled, highlightFocus, currFocus}) {
       <button className="focus-menu-toggle" onClick={toggleFocusBar}>
         {open ? "⪡ Close" : "Focuses ⪢"}
       </button>
-      <div className="focuses-list">
-        {open && generateFocusTabs()}
-      </div>
+      <div className="focuses-list">{open && generateFocusTabs()}</div>
     </div>
   )
 }

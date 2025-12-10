@@ -629,8 +629,7 @@ export class Graph extends React.Component {
         panStartX: event.clientX + this.state.horizontalPanFactor,
         panStartY: event.clientY + this.state.verticalPanFactor,
       })
-    } else {
-      event.preventDefault()
+    } else if (event.type === "touchstart") {
       this.setState({
         panning: true,
         panStartX: event.touches[0].clientX + this.state.horizontalPanFactor,
@@ -644,18 +643,28 @@ export class Graph extends React.Component {
    * @param {Event} event
    */
   panGraph = event => {
-    if (this.state.panning) {
-      const currentX = event.clientX
-      const currentY = event.clientY
-
-      const deltaX = currentX - this.state.panStartX
-      const deltaY = currentY - this.state.panStartY
-
-      this.setState({
-        horizontalPanFactor: -deltaX,
-        verticalPanFactor: -deltaY,
-      })
+    if (!this.state.panning) {
+      return
     }
+
+    let currentX, currentY
+    if (event.type === "mousemove") {
+      currentX = event.clientX
+      currentY = event.clientY
+    } else if (event.type === "touchmove") {
+      currentX = event.touches[0].clientX
+      currentY = event.touches[0].clientY
+    } else {
+      return
+    }
+
+    const deltaX = currentX - this.state.panStartX
+    const deltaY = currentY - this.state.panStartY
+
+    this.setState({
+      horizontalPanFactor: -deltaX,
+      verticalPanFactor: -deltaY,
+    })
   }
 
   /**

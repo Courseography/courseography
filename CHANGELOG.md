@@ -15,6 +15,7 @@
 - Updated the colour of the rendered options for the AutocompleteDropdown component
 - Added a `database-migrate` CLI option that runs SQL migrations
 - Updated the course info modal timetable styling and layout
+- Updated drag and drop functionality on the graph page to support mobile devices
 
 ### 🐛 Bug fixes
 
@@ -49,6 +50,8 @@
 - Switched CircleCI ImageMagick download to use http
 - Modified CI config to take advantage of partial dependency caching and exploit parallelism when resolving/updating dependencies
 - Migrate graph-related components (FocusBar, FocusTab, GraphDropdown, GraphFallback, Infobox, and Sidebar) from classes to functions
+- Added `lint-staged` development dependency and fixed eslint issues
+- Updated CircleCI ImageMagick setup to avoid using AppImage executable and to cache download
 
 ## [0.7.1] - 2025-06-16
 
