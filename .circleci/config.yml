@@ -32,6 +32,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y graphviz
             sudo apt-get install -y texlive-latex-base
+            sudo apt-get install -y imagemagick
             sudo wget http://imagemagick.org/archive/binaries/magick
             sudo cp magick /usr/local/bin
             sudo chmod 777 /usr/local/bin/magick
