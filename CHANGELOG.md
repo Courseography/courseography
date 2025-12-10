@@ -6,6 +6,14 @@
 
 ### ✨ New features/enhancements
 
+### 🐛 Bug fixes
+
+### 🔧 Internal changes
+
+## [0.7.2] - 2025-12-10
+
+### ✨ New features/enhancements
+
 - Updated the Zoom In/Zoom Out buttons on the graph page to Awesome Icons from +/-
 - Added the React ErrorBoundary library and implemented an ErrorBoundary for the Graph component in the Container component and `js/components/draw/main.js`
 - Updated the export button on the graph and grid pages to Awesome Icons; also added highlight effect and tooltip popup on hover
