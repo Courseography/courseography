@@ -4,6 +4,5 @@ exports[`GraphDropdown should match snapshot 1`] = `
 <ul
   class="hidden"
   data-testid="test-graph-dropdown"
-  style="left: 0px;"
 />
 `;

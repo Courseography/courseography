@@ -95,7 +95,7 @@ export default class Container extends React.Component {
   render() {
     return (
       <div>
-        <NavBar selected_page="graph" open_modal={this.openExportModal}></NavBar>
+        <NavBar selected_page="graph" open_modal={this.openExportModal} graphs={this.state.graphs} updateGraph={this.updateGraph}></NavBar>
         <ExportModal
           page="graph"
           open={this.state.modalOpen}

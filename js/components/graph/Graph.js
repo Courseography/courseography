@@ -8,7 +8,6 @@ import Edge from "./Edge"
 import Node from "./Node"
 import Button from "./Button"
 import InfoBox from "./InfoBox"
-import GraphDropdown from "./GraphDropdown"
 import Sidebar from "./Sidebar"
 import { parseAnd } from "../../util/util.js"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -24,8 +23,7 @@ const ZOOM_ENUM = {
   ZOOM_IN: 1,
 }
 const TIMEOUT_NAMES_ENUM = {
-  INFOBOX: 0,
-  DROPDOWN: 1,
+  INFOBOX: 0
 }
 
 export class Graph extends React.Component {
@@ -44,7 +42,6 @@ export class Graph extends React.Component {
       highlightedNodesFocus: [],
       highlightedNodesDeps: [],
       infoboxTimeouts: [],
-      dropdownTimeouts: [],
       width: window.innerWidth,
       height: window.innerHeight,
       zoomFactor: 1,
@@ -68,7 +65,6 @@ export class Graph extends React.Component {
       panStartX: 0,
       panStartY: 0,
       showCourseModal: false,
-      showGraphDropdown: false,
       selectedNodes: new Set(),
     }
     this.exportModal = React.createRef()
@@ -82,15 +78,6 @@ export class Graph extends React.Component {
 
     // can't detect keydown event when adding event listener to react-graph
     document.body.addEventListener("keydown", this.onKeyDown)
-
-    if (document.querySelector("#nav-graph > a")) {
-      document
-        .querySelector("#nav-graph > a")
-        .addEventListener("mouseenter", this.setShowGraphDropdown)
-      document
-        .querySelector("#nav-graph > a")
-        .addEventListener("mouseleave", this.hideGraphDropdown)
-    }
 
     if (document.querySelector(".sidebar")) {
       document
@@ -107,22 +94,12 @@ export class Graph extends React.Component {
 
   componentWillUnmount() {
     this.state.infoboxTimeouts.forEach(timeout => clearTimeout(timeout))
-    this.state.dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
     document.body.removeEventListener("keydown", this.onKeyDown)
 
     if (document.getElementById("nav-export")) {
       document
         .getElementById("nav-export")
         .removeEventListener("click", this.exportModal.current.openModal)
-    }
-
-    if (document.querySelector("#nav-graph > a")) {
-      document
-        .querySelector("#nav-graph > a")
-        .removeEventListener("mouseenter", this.setShowGraphDropdown)
-      document
-        .querySelector("#nav-graph > a")
-        .removeEventListener("mouseleave", this.hideGraphDropdown)
     }
   }
 
@@ -362,17 +339,9 @@ export class Graph extends React.Component {
   }
 
   clearAllTimeouts = timeoutName => {
-    switch (timeoutName) {
-      case TIMEOUT_NAMES_ENUM.INFOBOX:
-        this.state.infoboxTimeouts.forEach(timeout => clearTimeout(timeout))
-        this.setState({ infoboxTimeouts: [] })
-        break
-      case TIMEOUT_NAMES_ENUM.DROPDOWN:
-        this.state.dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
-        this.setState({ dropdownTimeouts: [] })
-        break
-    }
-  }
+  this.state.infoboxTimeouts.forEach(timeout => clearTimeout(timeout))
+  this.setState({ infoboxTimeouts: [] })
+}
 
   /**
    * Update the status of the Edge, based on the status of the Node/Bool it points from/to.
@@ -489,7 +458,7 @@ export class Graph extends React.Component {
     const currentNode = this.state.nodesJSON[courseId]
     this.focusPrereqs(courseId)
 
-    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
+    this.clearAllTimeouts()
 
     let xPos = currentNode.pos[0]
     let yPos = currentNode.pos[1]
@@ -690,20 +659,6 @@ export class Graph extends React.Component {
     this.setState({
       courseId: newCourse,
       showCourseModal: true,
-    })
-  }
-
-  setShowGraphDropdown = () => {
-    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.DROPDOWN)
-    this.setState({ showGraphDropdown: true })
-  }
-
-  hideGraphDropdown = () => {
-    const timeout = setTimeout(() => {
-      this.setState({ showGraphDropdown: false })
-    }, 500)
-    this.setState({
-      dropdownTimeouts: this.state.dropdownTimeouts.concat(timeout),
     })
   }
 
@@ -1645,13 +1600,6 @@ export class Graph extends React.Component {
           onClose={this.onClose}
         />
         <ExportModal context="graph" session="" ref={this.exportModal} />
-        <GraphDropdown
-          showGraphDropdown={this.state.showGraphDropdown}
-          onMouseMove={this.setShowGraphDropdown}
-          onMouseLeave={this.hideGraphDropdown}
-          graphs={this.props.graphs}
-          updateGraph={this.props.updateGraph}
-        />
         {Object.keys(this.state.nodesJSON).length > 1 && (
           <div className="graph-button-group">
             <div className="button-group">

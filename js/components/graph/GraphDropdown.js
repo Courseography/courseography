@@ -1,46 +1,33 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-export default function GraphDropdown({showGraphDropdown, onMouseMove, onMouseLeave, graphs = [], updateGraph}) {
-    let className = "hidden"
-    let graphTabLeft = 0
-    if (graphs.length !== 0 && document.querySelector("#nav-graph")) {
-      const navGraph = document.querySelector("#nav-graph")
-        if (graphs.length === 0) {
-          navGraph.classList.remove("show-dropdown-arrow")
-        } else {
-          if (!navGraph.classList.contains("show-dropdown-arrow")) {
-            navGraph.classList.add("show-dropdown-arrow")
-          }
-          if (showGraphDropdown) {
-            graphTabLeft = navGraph.getBoundingClientRect().left
-            className = "graph-dropdown-display"
-          }
-      }
-    }
-    return (
-      <ul
-        className={className}
-        onMouseMove={onMouseMove}
-        onMouseLeave={onMouseLeave}
-        data-testid={"test-graph-dropdown"}
-        style={{ left: graphTabLeft }}
-      >
-        {graphs.map((graph, i) => {
-          return (
-            <li
-              key={i}
-              className="graph-dropdown-item"
-              onClick={() => updateGraph(graph.title)}
-              data-testid={"test-graph-" + i}
-            >
-              {graph.title}
-            </li>
-          )
-        })}
-      </ul>
-    )
-  }
+export default function GraphDropdown({showGraphDropdown, onMouseEnter, onMouseLeave, graphs = [], updateGraph}) {
+  const className = showGraphDropdown && graphs.length > 0 
+    ? "graph-dropdown-display" 
+    : "hidden"
+  
+  return (
+    <ul
+      className={className}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      data-testid="test-graph-dropdown"
+    >
+      {graphs.map((graph, i) => {
+        return (
+          <li
+            key={i}
+            className="graph-dropdown-item"
+            onClick={() => updateGraph(graph.title)}
+            data-testid={"test-graph-" + i}
+          >
+            {graph.title}
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
 
 GraphDropdown.defaultProps = {
   graphs: [],
@@ -48,7 +35,7 @@ GraphDropdown.defaultProps = {
 
 GraphDropdown.propTypes = {
   showGraphDropdown: PropTypes.bool,
-  onMouseMove: PropTypes.func,
+  onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   graphs: PropTypes.array,
   updateGraph: PropTypes.func,
