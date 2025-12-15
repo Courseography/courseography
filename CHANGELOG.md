@@ -6,6 +6,14 @@
 
 ### ✨ New features/enhancements
 
+### 🐛 Bug fixes
+
+### 🔧 Internal changes
+
+## [0.7.2] - 2025-12-10
+
+### ✨ New features/enhancements
+
 - Updated the Zoom In/Zoom Out buttons on the graph page to Awesome Icons from +/-
 - Added the React ErrorBoundary library and implemented an ErrorBoundary for the Graph component in the Container component and `js/components/draw/main.js`
 - Updated the export button on the graph and grid pages to Awesome Icons; also added highlight effect and tooltip popup on hover
@@ -15,6 +23,8 @@
 - Updated the colour of the rendered options for the AutocompleteDropdown component
 - Added a `database-migrate` CLI option that runs SQL migrations
 - Updated the course info modal timetable styling and layout
+- Updated drag and drop functionality on the graph page to support mobile devices
+- Added a recursive function to remove Requirements from the Requirement Tree
 
 ### 🐛 Bug fixes
 
@@ -24,6 +34,7 @@
 - Fixed a bug that led code to crash when parsing all pre-generated graphs from svg (i.e., program graphs)
 - Fixed a bug where redundant boolean nodes were being generated
 - Fixed a bug where the course info modal title did not display the H1/Y1 suffix
+- Fixed a bug where the focus tab functionality was not working as intended
 
 ### 🔧 Internal changes
 
@@ -49,6 +60,8 @@
 - Modified CI config to take advantage of partial dependency caching and exploit parallelism when resolving/updating dependencies
 - Migrate graph-related components (FocusBar, FocusTab, GraphDropdown, GraphFallback, Infobox, and Sidebar) from classes to functions
 - Refactor GraphDropdown component from being a child of Graph to being a child of NavBar
+- Added `lint-staged` development dependency and fixed eslint issues
+- Updated CircleCI ImageMagick setup to avoid using AppImage executable and to cache download
 
 ## [0.7.1] - 2025-06-16
 

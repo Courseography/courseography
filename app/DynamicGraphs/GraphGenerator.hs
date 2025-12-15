@@ -5,6 +5,7 @@ module DynamicGraphs.GraphGenerator
   , coursesToPrereqGraph
   , coursesToPrereqGraphExcluding
   , graphProfileHash
+  , filterReq
   )
   where
 
@@ -60,14 +61,43 @@ sampleGraph = fst $ State.runState (reqsToGraph
 -- ** Main algorithm for converting requirements into a DotGraph
 
 -- | Convert a list of coursenames and requirements to a DotGraph object for
---  drawing using Dot. Also prunes any repeated edges that arise from
---  multiple Reqs using the same Grade requirement
+-- drawing using Dot. Also prunes any repeated edges that arise from
+-- multiple Reqs using the same Grade requirement
 reqsToGraph :: GraphOptions -> [(Text, Req)] -> State GeneratorState (DotGraph Text)
 reqsToGraph options reqs = do
-    allStmts <- concatUnique <$> mapM (reqToStmts options) reqs
+    allStmts <- concatUnique <$> mapM (reqToStmts options) reqs'
     return $ buildGraph allStmts
     where
         concatUnique = nubOrd . Prelude.concat
+        filteredReqs = [(n, filterReq options req) | (n, req) <- reqs]
+        reqs' =  Prelude.filter includeName filteredReqs
+
+        includeName (n, _) =
+            pickCourse options n &&
+            n `notElem`taken options
+
+-- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
+filterReq :: GraphOptions -> Req -> Req
+filterReq _ None = None
+filterReq options (J course info)
+    | not (pickCourse options (pack course)) = None
+    | pack course `elem` taken options = None
+    | otherwise = J course info
+filterReq options (ReqAnd reqs) =
+    case Prelude.filter (/= None) (map (filterReq options) reqs) of
+        [] -> None
+        [r] -> r
+        reqs' -> ReqAnd reqs'
+filterReq options (ReqOr reqs) =
+    case Prelude.filter (/= None) (map (filterReq options) reqs) of
+        [] -> None
+        [r] -> r
+        reqs' -> ReqOr reqs'
+filterReq _ (Fces fl modifier) = Fces fl modifier
+filterReq options  (Grade str req) = Grade str (filterReq options req)
+filterReq _ (Gpa fl str) = Gpa fl str
+filterReq _ (Program pro) = Program pro
+filterReq _ (Raw s) = Raw s
 
 data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
@@ -107,12 +137,9 @@ nodeColor options name = colors !! depIndex
 -- corresponding DotGraph objects.
 reqToStmts :: GraphOptions -> (Text, Req) -> State GeneratorState [DotStatement Text]
 reqToStmts options (name, req) = do
-    if pickCourse options name
-        then do
-            node <- makeNode name $ Just (nodeColor options name)
-            stmts <- reqToStmtsTree options (nodeID node) req
-            return $ DN node:Prelude.concat (toList stmts)
-        else return []
+    node <- makeNode name $ Just (nodeColor options name)
+    stmts <- reqToStmtsTree options (nodeID node) req
+    return $ DN node:Prelude.concat (toList stmts)
 
 reqToStmtsTree :: GraphOptions -- ^ Options to toggle dynamic graph
                -> Text -- ^ Name of parent course
@@ -121,12 +148,9 @@ reqToStmtsTree :: GraphOptions -- ^ Options to toggle dynamic graph
 reqToStmtsTree _ _ None = return (Node [] [])
 reqToStmtsTree options parentID (J name2 _) = do
     let name = pack name2
-    if pickCourse options name then do
-        prereq <- makeNode name $ Just (nodeColor options name)
-        edge <- makeEdge (nodeID prereq) parentID Nothing
-        return (Node [DN prereq, DE edge] [])
-    else
-        return (Node [] [])
+    prereq <- makeNode name $ Just (nodeColor options name)
+    edge <- makeEdge (nodeID prereq) parentID Nothing
+    return (Node [DN prereq, DE edge] [])
 -- Two or more required prerequisites.
 reqToStmtsTree options parentID (ReqAnd reqs) = do
     (andNode, _) <- makeBool "and" reqs

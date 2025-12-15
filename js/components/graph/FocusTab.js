@@ -5,7 +5,7 @@ import { FocusModal } from "../common/react_modal.js.jsx"
 /**
  * React component representing an item on the focus menu bar
  */
-export default function FocusTab({focusName, highlightFocus, selected, pId}) {
+export default function FocusTab({ focusName, highlightFocus, selected, pId }) {
   const [showFocusModal, setShowFocusModal] = React.useState(false)
 
   /**

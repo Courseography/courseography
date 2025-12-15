@@ -22,7 +22,7 @@ import Database.Tables (Courses (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (mockPutRequest, clearDatabase, runServerPartWith, withDatabase)
+import TestHelpers (clearDatabase, mockPutRequest, runServerPartWith, withDatabase)
 
 -- | Helper function to insert courses into the database
 insertCoursesWithPrerequisites :: [(T.Text, Maybe T.Text)] -> SqlPersistM ()
@@ -36,13 +36,43 @@ findAndSavePrereqsResponseTestCases :: [(String, [(T.Text, Maybe T.Text)], BSL.B
 findAndSavePrereqsResponseTestCases =
     [("CSC148H1",
     [("CSC108H1", Nothing), ("CSC148H1", Just "CSC108H1")],
-    "{\"courses\":[\"CSC148H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}}",
+    "{\"courses\":[\"CSC148H1\"],\"programs\":[],\"taken\":[],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}",
     2,
     0
     ),
     ("CSC368H1",
     [("CSC209H1", Nothing), ("CSC258H1", Nothing), ("CSC368H1", Just "CSC209H1,  CSC258H1"), ("CSC369H1", Just "CSC209H1, CSC258H1")],
-    "{\"courses\":[\"CSC368H1\", \"CSC369H1\"],\"programs\":[],\"graphOptions\":{\"taken\":[],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}}",
+    "{\"courses\":[\"CSC368H1\", \"CSC369H1\"],\"programs\":[],\"taken\":[],\"departments\":[]}",
+    4,
+    1
+    ),
+    ("CSC149H1",
+    [("CSC108H1", Nothing), ("CSC149H1", Just "CSC108H1")],
+    "{\"courses\":[\"CSC149H1\"],\"programs\":[],\"taken\":[\"CSC108H1\"],\"departments\":[\"CSC\",\"MAT\",\"STA\"]}",
+    1,
+    0
+    ),
+    ("CSC150H1",
+    [("CSC108H1", Nothing), ("MAT135H1", Nothing), ("CSC150H1", Just "CSC108H1, MAT135H1")],
+    "{\"courses\":[\"CSC150H1\"],\"programs\":[],\"taken\":[\"CSC108H1\"],\"departments\":[\"\"]}",
+    2,
+    0
+    ),
+    ("CSC373H1",
+    [("CSC236H1", Nothing), ("CSC165H1", Nothing), ("MAT237Y1", Nothing), ("CSC373H1", Just "CSC236H1,  CSC165H1, MAT237Y1")],
+    "{\"courses\":[\"CSC373H1\"],\"programs\":[],\"taken\":[\"\"],\"departments\":[\"CSC\"]}",
+    3,
+    1
+    ),
+    ("MAT257Y1 with an empty department field",
+    [("MAT240H1", Nothing), ("MAT157Y1", Nothing), ("MAT247H1", Just "MAT240H1"), ("MAT257Y1", Just "MAT157Y1, MAT247H1")],
+    "{\"courses\":[\"MAT257Y1\"],\"programs\":[],\"taken\":[\"\"],\"departments\":[\"\"]}",
+    4,
+    1
+    ),
+    ("MAT257Y1 with a populated department field",
+    [("MAT240H1", Nothing), ("MAT157Y1", Nothing), ("MAT247H1", Just "MAT240H1"), ("MAT257Y1", Just "MAT157Y1, MAT247H1")],
+    "{\"courses\":[\"MAT257Y1\"],\"programs\":[],\"taken\":[\"\"],\"departments\":[\"MAT\"]}",
     4,
     1
     )]
