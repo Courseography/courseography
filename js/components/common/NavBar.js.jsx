@@ -7,7 +7,7 @@ import GraphDropdown from "../graph/GraphDropdown"
 /**
  * NavBar component.
  */
-export function NavBar({ selected_page, open_modal, graphs = [], updateGraph}) {
+export function NavBar({ selected_page, open_modal, graphs = [], updateGraph }) {
   const isActive = page => (page === selected_page ? "selected-page" : undefined)
   const [showGraphDropdown, setShowGraphDropdown] = React.useState(false)
   const [dropdownTimeouts, setDropdownTimeouts] = React.useState([])
@@ -48,14 +48,14 @@ export function NavBar({ selected_page, open_modal, graphs = [], updateGraph}) {
         <ul id="nav-links">
           <li 
             id="nav-graph"
-            className={`${isActive("graph")} show-dropdown-arrow`}
+            className={`${isActive("graph")} ${graphs.length > 0 ? "show-dropdown-arrow" : ""}`}
             onMouseEnter={handleShowGraphDropdown}
             onMouseLeave={handleHideGraphDropdown}
           >
             <a href="/graph">Graph</a>
             {selected_page === "graph" && (
               <GraphDropdown
-                showGraphDropdown={showGraphDropdown }
+                showGraphDropdown={showGraphDropdown}
                 onMouseMove={handleShowGraphDropdown}
                 onMouseLeave={handleHideGraphDropdown}
                 graphs={graphs}

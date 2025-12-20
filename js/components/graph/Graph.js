@@ -338,11 +338,6 @@ export class Graph extends React.Component {
     }
   }
 
-  clearAllTimeouts = timeoutName => {
-  this.state.infoboxTimeouts.forEach(timeout => clearTimeout(timeout))
-  this.setState({ infoboxTimeouts: [] })
-}
-
   /**
    * Update the status of the Edge, based on the status of the Node/Bool it points from/to.
    */
@@ -457,8 +452,6 @@ export class Graph extends React.Component {
 
     const currentNode = this.state.nodesJSON[courseId]
     this.focusPrereqs(courseId)
-
-    this.clearAllTimeouts()
 
     let xPos = currentNode.pos[0]
     let yPos = currentNode.pos[1]
@@ -648,7 +641,6 @@ export class Graph extends React.Component {
   }
 
   infoBoxMouseEnter = () => {
-    this.clearAllTimeouts(TIMEOUT_NAMES_ENUM.INFOBOX)
     this.setState({ showInfoBox: true, isMouseOnInfoBox: true })
   }
 
