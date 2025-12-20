@@ -2,17 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import Button from "./Button"
 
-export default function Sidebar({
-  fceCount,
-  reset,
-  activeCourses,
-  courses,
-  courseClick,
-  xClick,
-  sidebarItemClick,
-  onHover,
-  onMouseLeave,
-}) {
+export default function Sidebar({fceCount, reset, activeCourses, courses, courseClick, xClick, sidebarItemClick, onHover, onMouseLeave}) {
   const [collapsed, setCollapsed] = React.useState(true)
   const [results, setResults] = React.useState([])
 
@@ -58,7 +48,9 @@ export default function Sidebar({
    * @return {HTMLDivElement} FCE to the DOM
    */
   const renderFCE = () => {
-    const fceString = Number.isInteger(fceCount) ? fceCount + ".0" : fceCount
+    const fceString = Number.isInteger(fceCount)
+      ? fceCount + ".0"
+      : fceCount
 
     return (
       <div className="fcecount" data-testid="test-fcecount">
@@ -118,7 +110,10 @@ export default function Sidebar({
               onMouseLeave={onMouseLeave}
             >
               {course}
-              <Button text="X" mouseDown={() => xClick(courseIdFromLabel(course))} />
+              <Button
+                text="X"
+                mouseDown={() => xClick(courseIdFromLabel(course))}
+              />
             </div>
           )
         })}
@@ -126,42 +121,50 @@ export default function Sidebar({
     )
   }
 
-  const collapsedClass = collapsed ? "collapsed" : "expanded"
-  const masterSidebarClass = `${collapsedClass} sidebar`
+    const collapsedClass = collapsed ? "collapsed" : "expanded"
+    const masterSidebarClass = `${collapsedClass} sidebar`
 
-  return (
-    <div
-      className={masterSidebarClass}
-      data-testid="test-toggle"
-      onWheel={e => e.stopPropagation()}
-    >
-      {renderFCE()}
-      <div className="sidebar-dropdown" data-testid="test-sidebar">
-        <div>
-          <label htmlFor="header-search">
-            {/* For text to speech purposes */}
-            <span className="label-hidden">Search courses</span>
-          </label>
-          <input
-            id="header-search"
-            className="search-bar"
-            data-testid="test-search-bar"
-            type="text"
-            onChange={e => {
-              setResults(filteredSearch(e.target.value))
-            }}
-          />
+    return (
+      <div
+        className={masterSidebarClass}
+        data-testid="test-toggle"
+        onWheel={e => e.stopPropagation()}
+      >
+        {renderFCE()}
+        <div className="sidebar-dropdown" data-testid="test-sidebar">
+          <div>
+            <label htmlFor="header-search">
+              {/* For text to speech purposes */}
+              <span className="label-hidden">Search courses</span>
+            </label>
+            <input
+              id="header-search"
+              className="search-bar"
+              data-testid="test-search-bar"
+              type="text"
+              onChange={e => {
+                setResults(filteredSearch(e.target.value))
+              }}
+            />
+          </div>
+          {renderDropdown()}
+          <h3 className="selected-courses">Selected courses</h3>
+          {renderActiveCourses()}
+          <button
+            className="reset-selections"
+            data-testid="test-reset"
+            onClick={() => reset()}
+          >
+            Reset Selections
+          </button>
         </div>
-        {renderDropdown()}
-        <h3 className="selected-courses">Selected courses</h3>
-        {renderActiveCourses()}
-        <button
-          className="reset-selections"
-          data-testid="test-reset"
-          onClick={() => reset()}
+        <div
+          className="sidebar-button"
+          onClick={() => toggleSidebar()}
+          data-testid="test-sidebar-button"
         >
-          Reset Selections
-        </button>
+          <img id="sidebar-icon" src="/static/res/ico/sidebar.png" />
+        </div>
       </div>
     )
   }
