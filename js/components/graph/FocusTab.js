@@ -12,16 +12,13 @@ export default function FocusTab({ focusName, highlightFocus, selected, pId }) {
    * Change whether the modal popup describing this focus is shown
    * @param {bool} value
    */
-  const toggleFocusModal = (value => {
+  const toggleFocusModal = value => {
     setShowFocusModal(value)
-  })
+  }
 
   return (
     <div className={selected ? "focus active-focus" : "focus"}>
-      <button
-        id={pId}
-        onClick={() => highlightFocus(pId)}
-      >
+      <button id={pId} onClick={() => highlightFocus(pId)}>
         {focusName}
       </button>
       <div className="focus-info">
@@ -31,10 +28,7 @@ export default function FocusTab({ focusName, highlightFocus, selected, pId }) {
           onClose={() => toggleFocusModal(false)}
         />
         {selected && (
-          <button
-            onClick={() => toggleFocusModal(true)}
-            aria-label="Focus Description"
-          >
+          <button onClick={() => toggleFocusModal(true)} aria-label="Focus Description">
             i
           </button>
         )}
