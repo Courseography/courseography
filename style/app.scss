@@ -2204,7 +2204,14 @@ main-filter input {
   display: none;
 }
 
+#nav-graph {
+  position: relative;
+}
+
 .graph-dropdown-display {
+  left: 0px;
+  top: 100%;
+  z-index: 10;
   background-color: #5c497e;
   color: #fff;
   column-count: 2;
@@ -2212,6 +2219,7 @@ main-filter input {
   font-size: 15px;
   list-style: none;
   padding: 8px;
+  min-width: 300px;
   position: absolute;
   text-align: left;
 }

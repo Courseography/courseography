@@ -2,12 +2,32 @@ import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDownload } from "@fortawesome/free-solid-svg-icons"
 import { Tooltip } from "react-tooltip"
+import GraphDropdown from "../graph/GraphDropdown"
 
 /**
  * NavBar component.
  */
-export function NavBar({ selected_page, open_modal }) {
+export function NavBar({ selected_page, open_modal, graphs = [], updateGraph }) {
   const isActive = page => (page === selected_page ? "selected-page" : undefined)
+  const [showGraphDropdown, setShowGraphDropdown] = React.useState(false)
+  const [dropdownTimeouts, setDropdownTimeouts] = React.useState([])
+
+  const clearDropdownTimeouts = () => {
+    dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
+    setDropdownTimeouts([])
+  }
+
+  const handleShowGraphDropdown = () => {
+    clearDropdownTimeouts()
+    setShowGraphDropdown(true)
+  }
+
+  const handleHideGraphDropdown = () => {
+    const timeout = setTimeout(() => {
+      setShowGraphDropdown(false)
+    }, 500)
+    setDropdownTimeouts(dropdownTimeouts.concat(timeout))
+  }
 
   return (
     <nav className="row header">
@@ -26,8 +46,22 @@ export function NavBar({ selected_page, open_modal }) {
       {/* Navigation links */}
       <div className="nav-middle">
         <ul id="nav-links">
-          <li id="nav-graph" className={isActive("graph")}>
+          <li 
+            id="nav-graph"
+            className={`${isActive("graph")} ${graphs.length > 0 ? "show-dropdown-arrow" : ""}`}
+            onMouseEnter={handleShowGraphDropdown}
+            onMouseLeave={handleHideGraphDropdown}
+          >
             <a href="/graph">Graph</a>
+            {selected_page === "graph" && (
+              <GraphDropdown
+                showGraphDropdown={showGraphDropdown}
+                onMouseMove={handleShowGraphDropdown}
+                onMouseLeave={handleHideGraphDropdown}
+                graphs={graphs}
+                updateGraph={updateGraph}
+              />
+            )}
           </li>
           <li id="nav-grid" className={isActive("grid")}>
             <a href="/grid">Grid</a>
