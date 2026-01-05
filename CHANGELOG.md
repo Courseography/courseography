@@ -10,6 +10,8 @@
 
 ### 🔧 Internal changes
 
+- Refactor GraphDropdown component from being a child of Graph to being a child of NavBar
+
 ## [0.7.2] - 2025-12-10
 
 ### ✨ New features/enhancements
@@ -59,7 +61,6 @@
 - Switched CircleCI ImageMagick download to use http
 - Modified CI config to take advantage of partial dependency caching and exploit parallelism when resolving/updating dependencies
 - Migrate graph-related components (FocusBar, FocusTab, GraphDropdown, GraphFallback, Infobox, and Sidebar) from classes to functions
-- Refactor GraphDropdown component from being a child of Graph to being a child of NavBar
 - Added `lint-staged` development dependency and fixed eslint issues
 - Updated CircleCI ImageMagick setup to avoid using AppImage executable and to cache download
 
