@@ -40,7 +40,7 @@
     "handlebars": "^4.7.8",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.3",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-error-boundary": "^5.0.0",
