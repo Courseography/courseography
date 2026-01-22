@@ -8,9 +8,12 @@
 
 ### 🐛 Bug fixes
 
+- Fixed a bug where duplicate graph components were being added
+
 ### 🔧 Internal changes
 
 - Refactor GraphDropdown component from being a child of Graph to being a child of NavBar
+- Added test cases for the saveGraphJSON function in `Controllers/Graph`
 
 ## [0.7.2] - 2025-12-10
 

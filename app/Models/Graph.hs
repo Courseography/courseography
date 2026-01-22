@@ -4,14 +4,13 @@ module Models.Graph
 
 import Config (runDb)
 import Data.Aeson (Value, object, toJSON)
-import Data.List (partition)
 import qualified Data.Text as T (Text)
 import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
 import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64), SqlPersistM,
                                 entityKey, entityVal, insert, insertMany_, keyToValues, selectFirst,
                                 selectList, (<-.), (==.))
 import Database.Tables hiding (paths, shapes, texts)
-import Svg.Builder (buildEllipses, buildPath, buildRect, intersectsWithShape)
+import Svg.Builder (buildEllipses, buildPath, buildRect)
 import Util.Helpers
 
 getGraph :: T.Text -> IO (Maybe Value)
@@ -44,15 +43,11 @@ getGraph graphName = runDb $ do
                 graphpaths     = zipWith (buildPath rects ellipses)
                                          (map entityVal sqlPaths)
                                          (map keyAsInt sqlPaths)
-                (regions, _)   = partition pathIsRegion graphpaths
-                regionTexts    = filter (not .
-                                         intersectsWithShape (rects ++ ellipses))
-                                        graphtexts
 
                 response = object [
-                        ("texts", toJSON $ graphtexts ++ regionTexts),
+                        ("texts", toJSON graphtexts),
                         ("shapes", toJSON $ rects ++ ellipses),
-                        ("paths", toJSON $ graphpaths ++ regions),
+                        ("paths", toJSON graphpaths),
                         ("width", toJSON $ graphWidth $ entityVal graph),
                         ("height", toJSON $ graphHeight $ entityVal graph)
                     ]
