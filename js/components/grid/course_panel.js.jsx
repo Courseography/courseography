@@ -157,6 +157,13 @@ function Course(props) {
         S: [],
         Y: [],
       }
+
+      if (!data) {
+        setCourseInfo(course)
+        console.error(`Course with code ${props.courseCode} not found`)
+        return
+      }
+
       course.courseCode = data.name
 
       const parsedLectures = parseLectures(data.allMeetingTimes)
