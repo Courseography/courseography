@@ -101,6 +101,16 @@ class CourseModal extends React.Component {
       })
     } else if (prevState.courseId !== this.state.courseId) {
       getCourse(this.state.courseId).then(course => {
+        if (!course) {
+          this.setState({
+            course: {},
+            sessions: {},
+            courseTitle: "Course Not Found",
+          })
+          console.error(`Course with code ${this.state.courseId} not found`)
+          return
+        }
+
         const newCourse = {
           ...course,
           description: this.convertToLink(course.description),

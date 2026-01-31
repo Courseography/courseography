@@ -7,7 +7,7 @@ import qualified Data.Text as T (Text, unlines)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
 import Database.Tables as Tables (Courses, coursesCode)
-import Happstack.Server (Response, ServerPart, lookText', toResponse)
+import Happstack.Server (Response, ServerPart, lookText', notFound, ok, toResponse)
 import Models.Course (getDeptCourses, returnCourse)
 import Util.Happstack (createJSONResponse)
 
@@ -17,7 +17,9 @@ retrieveCourse :: ServerPart Response
 retrieveCourse = do
     name <- lookText' "name"
     courses <- liftIO $ returnCourse name
-    return $ createJSONResponse courses
+    case courses of
+        Just x -> ok $ createJSONResponse x
+        Nothing -> notFound $ toResponse ("Course not found" :: String)
 
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response
