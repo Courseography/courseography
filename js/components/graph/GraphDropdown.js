@@ -1,11 +1,16 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-export default function GraphDropdown({showGraphDropdown, onMouseEnter, onMouseLeave, graphs = [], updateGraph }) {
-  const className = showGraphDropdown && graphs.length > 0 
-    ? "graph-dropdown-display" 
-    : "hidden"
-  
+export default function GraphDropdown({
+  showGraphDropdown,
+  onMouseEnter,
+  onMouseLeave,
+  graphs = [],
+  updateGraph,
+}) {
+  const className =
+    showGraphDropdown && graphs.length > 0 ? "graph-dropdown-display" : "hidden"
+
   return (
     <ul
       className={className}

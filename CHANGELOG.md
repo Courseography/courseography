@@ -14,6 +14,7 @@
 
 - Refactor GraphDropdown component from being a child of Graph to being a child of NavBar
 - Added test cases for the saveGraphJSON function in `Controllers/Graph`
+- Fix unused variable from `Graph.js`, formatting in `Container.js` and `GraphDropdown.js`, and eslint config
 
 ## [0.7.2] - 2025-12-10
 

@@ -22,9 +22,6 @@ const ZOOM_ENUM = {
   ZOOM_OUT: -1,
   ZOOM_IN: 1,
 }
-const TIMEOUT_NAMES_ENUM = {
-  INFOBOX: 0
-}
 
 export class Graph extends React.Component {
   constructor(props) {
