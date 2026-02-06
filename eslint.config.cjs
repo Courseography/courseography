@@ -38,4 +38,22 @@ module.exports = [
       },
     },
   },
+  {
+    files: ["cypress/**/*.js"],
+    languageOptions: {
+      globals: {
+        cy: "readonly",
+      },
+    },
+  },
+  {
+    files: ["tests/**/*.js"],
+    languageOptions: {
+      globals: {
+        QUnit: "readonly",
+        setCookie: "readonly",
+        getCookie: "readonly",
+      },
+    },
+  },
 ]
