@@ -11,19 +11,19 @@ module Controllers.GraphControllerTests
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
-import Controllers.Graph (index, saveGraphJSON)
+import Controllers.Graph (index, saveGraphJSON, getGraphJSON)
 import Data.Aeson (Value (Number, Object), decode)
 import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Graph (..))
+import Database.Tables (Graph (..), Path, Shape, Text, SvgJSON (SvgJSON))
 import Happstack.Server (rsBody)
-import Models.Graph (getGraph)
+import Models.Graph (getGraph, insertGraph)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (clearDatabase, mockPutRequest, runServerPart, runServerPartWith, withDatabase)
+import TestHelpers (clearDatabase, mockPutRequest, runServerPart, runServerPartWith, withDatabase, mockGetRequest)
 
 -- | List of test cases as (label, input graphs, expected output)
 indexTestCases :: [(String, [T.Text], String)]
@@ -45,9 +45,9 @@ indexTestCases =
 
 -- | Helper function to insert graphs into the database
 insertGraphs :: [T.Text] -> SqlPersistM ()
-insertGraphs = mapM_ insertGraph
+insertGraphs = mapM_ insertGraph'
     where
-        insertGraph title = insert_ (Graph title 0 0 False )
+        insertGraph' title = insert_ (Graph title 0 0 False )
 
 -- | Run a test case (case, input, expected output) on the index function.
 runIndexTest :: String -> [T.Text] -> String -> TestTree
@@ -102,6 +102,33 @@ runSaveGraphJSONTest label payload =
 runSaveGraphJSONTests :: [TestTree]
 runSaveGraphJSONTests = map (uncurry runSaveGraphJSONTest) saveGraphJSONTestCases
 
+-- | List of test cases for getGraphJSON as (label, (texts, shapes, paths), expected)
+-- | TODO: Build texts/shapes/paths into test cases
+getGraphJSONTestCases :: [(String, ([Text], [Shape], [Path]), String)]
+getGraphJSONTestCases = 
+    [ ("Empty attributes",
+        ([], [], []),
+        "{\"height\":256,\"paths\":[],\"shapes\":[],\"texts\":[],\"width\":256}"
+    )
+    ]
+
+-- | Run a test case (case, (texts, shapes, paths), expected output) on getGraphJSON.
+runGetGraphJSONTest :: String -> ([Text], [Shape], [Path]) -> String -> TestTree
+runGetGraphJSONTest label (texts, shapes, paths) expected =
+    testCase label $ do
+        let graphName = "Test Graph Name"
+        runDb $ do
+            clearDatabase
+            insertGraph graphName (SvgJSON texts shapes paths)
+        response <- runServerPartWith Controllers.Graph.getGraphJSON $ mockGetRequest "/get-json-data" [("graphName", T.unpack graphName)] ""
+        let actual = BL.unpack $ rsBody response
+        assertEqual ("Unexpected response body for " ++ label) expected actual
+
+-- | Run all getGraphJSON tests
+runGetGraphJSONTests :: [TestTree]
+runGetGraphJSONTests = map (\(label, (texts, shapes, paths), expected) -> runGetGraphJSONTest label (texts, shapes, paths) expected) getGraphJSONTestCases
+
+
 -- | Test suite for Graph Controller Module
 test_graphController :: TestTree
-test_graphController = withDatabase "Graph Controller tests" (runIndexTests ++ runSaveGraphJSONTests)
+test_graphController = withDatabase "Graph Controller tests" (runIndexTests ++ runSaveGraphJSONTests ++ runGetGraphJSONTests)
