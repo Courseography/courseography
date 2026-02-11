@@ -46,7 +46,7 @@ export function NavBar({ selected_page, open_modal, graphs = [], updateGraph }) 
       {/* Navigation links */}
       <div className="nav-middle">
         <ul id="nav-links">
-          <li 
+          <li
             id="nav-graph"
             className={`${isActive("graph")} ${graphs.length > 0 ? "show-dropdown-arrow" : ""}`}
             onMouseEnter={handleShowGraphDropdown}
