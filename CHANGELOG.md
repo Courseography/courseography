@@ -4,9 +4,9 @@
 
 ### 🚨 Breaking changes
 
-- Added 404 status code return to `retrieveCourse` in `Controllers/Course`
-
 ### ✨ New features/enhancements
+
+- Added 404 status code return to `retrieveCourse` in `Controllers/Course` and added front-end tests for affected components
 
 ### 🐛 Bug fixes
 

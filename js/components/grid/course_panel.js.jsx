@@ -150,29 +150,33 @@ function Course(props) {
   }, [props.selectedLectures])
 
   useEffect(() => {
-    getCourse(props.courseCode).then(data => {
-      const course = {
-        courseCode: "",
-        F: [],
-        S: [],
-        Y: [],
-      }
+    getCourse(props.courseCode)
+      .then(data => {
+        const course = {
+          courseCode: "",
+          F: [],
+          S: [],
+          Y: [],
+        }
 
-      if (!data) {
+        course.courseCode = data.name
+
+        const parsedLectures = parseLectures(data.allMeetingTimes)
+        // Split the lecture sections into Fall, Spring and Years
+        course.F = filterLectureList(parsedLectures, "F")
+        course.S = filterLectureList(parsedLectures, "S")
+        course.Y = filterLectureList(parsedLectures, "Y")
         setCourseInfo(course)
+      })
+      .catch(error => {
         console.error(`Course with code ${props.courseCode} not found`)
-        return
-      }
-
-      course.courseCode = data.name
-
-      const parsedLectures = parseLectures(data.allMeetingTimes)
-      // Split the lecture sections into Fall, Spring and Years
-      course.F = filterLectureList(parsedLectures, "F")
-      course.S = filterLectureList(parsedLectures, "S")
-      course.Y = filterLectureList(parsedLectures, "Y")
-      setCourseInfo(course)
-    })
+        setCourseInfo({
+          courseCode: "",
+          F: [],
+          S: [],
+          Y: [],
+        })
+      })
   }, [])
 
   return (

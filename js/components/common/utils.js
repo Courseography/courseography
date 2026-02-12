@@ -7,21 +7,13 @@
 export function getCourse(courseName) {
   "use strict"
 
-  return fetch("course?name=" + courseName)
-    .then(response => {
-      if (response.status === 404) {
-        return null
-      }
+  return fetch("course?name=" + courseName).then(response => {
+    if (!response.ok) {
+      throw new Error(`Failed to fetch course with name ${courseName}`)
+    }
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch course with name ${courseName}`)
-      }
-
-      return response.json()
-    })
-    .catch(error => {
-      throw error
-    })
+    return response.json()
+  })
 }
 
 /**
