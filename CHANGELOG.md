@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Added 404 status code return to `retrieveCourse` in `Controllers/Course` and added front-end tests for affected components
+
 ### 🐛 Bug fixes
 
 - Fixed a bug where duplicate graph components were being added
@@ -14,6 +16,7 @@
 
 - Refactor GraphDropdown component from being a child of Graph to being a child of NavBar
 - Added test cases for the saveGraphJSON function in `Controllers/Graph`
+- Fix unused variable from `Graph.js`, formatting in `Container.js` and `GraphDropdown.js`, and eslint config
 
 ## [0.7.2] - 2025-12-10
 

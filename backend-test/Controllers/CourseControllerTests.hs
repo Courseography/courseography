@@ -18,13 +18,13 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables (Courses (..))
-import Happstack.Server (rsBody)
+import Happstack.Server (rsBody, rsCode)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (mockGetRequest, clearDatabase, runServerPart, runServerPartWith, withDatabase)
+import TestHelpers (clearDatabase, mockGetRequest, runServerPart, runServerPartWith, withDatabase)
 
--- | List of test cases as (input course name, course data, expected JSON output)
-retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, String)]
+-- | List of test cases as (input course name, course data, status code, expected JSON output)
+retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, Int, String)]
 retrieveCourseTestCases =
     [ ("Course exists",
        "STA238",
@@ -40,25 +40,28 @@ retrieveCourseTestCases =
         ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."),
         ("videoUrls", "https://example.com/video1, https://example.com/video2")
         ],
+        200,
         "{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
     ),
 
     ("Course does not exist",
        "STA238",
        Map.empty,
-       "null"
+       404,
+       "Course not found"
     ),
 
     ("No course provided",
        "",
        Map.empty,
-       "null"
+       404,
+       "Course not found"
     )
     ]
 
--- | Run a test case (case, input, expected output) on the retrieveCourse function.
-runRetrieveCourseTest :: String -> T.Text -> Map.Map T.Text T.Text -> String -> TestTree
-runRetrieveCourseTest label courseName courseData expected =
+-- | Run a test case (case, input, expected status code, expected output) on the retrieveCourse function.
+runRetrieveCourseTest :: String -> T.Text -> Map.Map T.Text T.Text -> Int -> String -> TestTree
+runRetrieveCourseTest label courseName courseData expectedCode expectedBody =
     testCase label $ do
         let currCourseName = fromMaybe "" $ Map.lookup "name" courseData
 
@@ -86,12 +89,15 @@ runRetrieveCourseTest label courseName courseData expected =
                 insert_ courseToInsert
 
         response <- runServerPartWith Controllers.Course.retrieveCourse $ mockGetRequest "/course" [("name", T.unpack courseName)] ""
-        let actual = BL.unpack $ rsBody response
-        assertEqual ("Unexpected response body for " ++ label) expected actual
+        let statusCode = rsCode response
+        assertEqual ("Unexpected status code for " ++ label) expectedCode statusCode
+
+        let actualBody = BL.unpack $ rsBody response
+        assertEqual ("Unexpected response body for " ++ label) expectedBody actualBody
 
 -- | Run all the retrieveCourse test cases
 runRetrieveCourseTests :: [TestTree]
-runRetrieveCourseTests = map (\(label, courseName, courseData, expected) -> runRetrieveCourseTest label courseName courseData expected) retrieveCourseTestCases
+runRetrieveCourseTests = map (\(label, courseName, courseData, expectedCode, expectedBody) -> runRetrieveCourseTest label courseName courseData expectedCode expectedBody) retrieveCourseTestCases
 
 -- | Helper function to insert courses into the database
 insertCourses :: [T.Text] -> SqlPersistM ()
