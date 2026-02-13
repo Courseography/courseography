@@ -1,16 +1,19 @@
 /**
  * Retrieves a course from file.
  * @param {string} courseName The course code. This + '.txt' is the name of the file.
- * @returns {Promise} Promise object representing the JSON object containing course information.
+ * @returns {Promise} Promise object representing the JSON object containing course information
+ *                    or null if not found.
  */
 export function getCourse(courseName) {
   "use strict"
 
-  return fetch("course?name=" + courseName)
-    .then(response => response.json())
-    .catch(error => {
-      throw error
-    })
+  return fetch("course?name=" + courseName).then(response => {
+    if (!response.ok) {
+      throw new Error(`Failed to fetch course with name ${courseName}`)
+    }
+
+    return response.json()
+  })
 }
 
 /**

@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Added 404 status code return to `retrieveCourse` in `Controllers/Course` and added front-end tests for affected components
+
 ### 🐛 Bug fixes
 
 - Fixed a bug where duplicate graph components were being added

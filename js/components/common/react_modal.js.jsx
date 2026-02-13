@@ -100,27 +100,36 @@ class CourseModal extends React.Component {
         currVisitedIndex: 0,
       })
     } else if (prevState.courseId !== this.state.courseId) {
-      getCourse(this.state.courseId).then(course => {
-        const newCourse = {
-          ...course,
-          description: this.convertToLink(course.description),
-          prereqString: this.convertToLink(course.prereqString),
-          coreqs: this.convertToLink(course.coreq),
-          exclusions: this.convertToLink(course.exclusions),
-        }
+      getCourse(this.state.courseId)
+        .then(course => {
+          const newCourse = {
+            ...course,
+            description: this.convertToLink(course.description),
+            prereqString: this.convertToLink(course.prereqString),
+            coreqs: this.convertToLink(course.coreq),
+            exclusions: this.convertToLink(course.exclusions),
+          }
 
-        const sessions = {
-          F: this.getTable(course.allMeetingTimes, "F"),
-          S: this.getTable(course.allMeetingTimes, "S"),
-          Y: this.getTable(course.allMeetingTimes, "Y"),
-        }
+          const sessions = {
+            F: this.getTable(course.allMeetingTimes, "F"),
+            S: this.getTable(course.allMeetingTimes, "S"),
+            Y: this.getTable(course.allMeetingTimes, "Y"),
+          }
 
-        this.setState({
-          course: newCourse,
-          sessions: sessions,
-          courseTitle: `${course.name} ${course.title}`,
+          this.setState({
+            course: newCourse,
+            sessions: sessions,
+            courseTitle: `${course.name} ${course.title}`,
+          })
         })
-      })
+        .catch(error => {
+          console.error(`Course with code ${this.state.courseId} not found`)
+          this.setState({
+            course: {},
+            sessions: {},
+            courseTitle: "Course Not Found",
+          })
+        })
     }
   }
 
