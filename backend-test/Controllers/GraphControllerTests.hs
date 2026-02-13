@@ -17,13 +17,14 @@ import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Graph (..), Path, Shape, Text, SvgJSON (SvgJSON))
+import Database.Persist.Sqlite (SqlPersistM, insert_, toSqlKey)
+import Database.Tables (Graph (..), Path (..), Shape (..), Text (..), SvgJSON (..))
 import Happstack.Server (rsBody)
 import Models.Graph (getGraph, insertGraph)
 import Test.Tasty (TestTree)
-import Test.Tasty.HUnit (assertEqual, testCase)
+import Test.Tasty.HUnit (assertEqual, assertFailure, testCase)
 import TestHelpers (clearDatabase, mockPutRequest, runServerPart, runServerPartWith, withDatabase, mockGetRequest)
+import Database.DataType (ShapeType(..))
 
 -- | List of test cases as (label, input graphs, expected output)
 indexTestCases :: [(String, [T.Text], String)]
@@ -102,31 +103,102 @@ runSaveGraphJSONTest label payload =
 runSaveGraphJSONTests :: [TestTree]
 runSaveGraphJSONTests = map (uncurry runSaveGraphJSONTest) saveGraphJSONTestCases
 
--- | List of test cases for getGraphJSON as (label, (texts, shapes, paths), expected)
--- | TODO: Build texts/shapes/paths into test cases
-getGraphJSONTestCases :: [(String, ([Text], [Shape], [Path]), String)]
+
+-- | List of test cases for getGraphJSON as (label, (texts, shapes, paths))
+getGraphJSONTestCases :: [(String, ([Text], [Shape], [Path]))]
 getGraphJSONTestCases = 
-    [ ("Empty attributes",
-        ([], [], []),
-        "{\"height\":256,\"paths\":[],\"shapes\":[],\"texts\":[],\"width\":256}"
-    )
+    let testWords1 = Text {
+                textGraph = toSqlKey 1,
+                textRId = T.pack "t1",
+                textPos = (20.0, 30.0),
+                textText = T.pack "Sample Text 1",
+                textAlign = T.pack "center",
+                textFill = T.pack "red",
+                textTransform = [1,0,0,1,0,0]
+            }
+        testWords2 = Text {
+                textGraph = toSqlKey 1,
+                textRId = T.pack "t2",
+                textPos = (100.0, 60.0),
+                textText = T.pack "Sample Text 2",
+                textAlign = T.pack "left",
+                textFill = T.pack "green",
+                textTransform = [1,0,0,1,0,0]
+            }
+        testShape1 = Shape {
+                shapeGraph = toSqlKey 1,
+                shapeId_ = T.pack "s1",
+                shapePos = (0.0, 0.0),
+                shapeWidth = 40.0,
+                shapeHeight = 60.0,
+                shapeFill = T.pack "black",
+                shapeStroke = T.pack "white",
+                shapeText = [testWords1],
+                shapeType_ = Node,
+                shapeTransform = [1,0,0,1,0,0]
+            }
+        testShape2 = Shape {
+                shapeGraph = toSqlKey 1,
+                shapeId_ = T.pack "s2",
+                shapePos = (100.0, 45.0),
+                shapeWidth = 50.0,
+                shapeHeight = 30.0,
+                shapeFill = T.pack "black",
+                shapeStroke = T.pack "white",
+                shapeText = [testWords2],
+                shapeType_ = Node,
+                shapeTransform = [1,0,0,1,0,0]
+            }
+        testPath = Path {
+                pathGraph = toSqlKey 1,
+                pathId_ = T.pack "p1",
+                pathPoints = [(20.0, 30.0), (125.0, 60.0)],
+                pathFill = T.pack "red",
+                pathStroke = T.pack "blue",
+                pathIsRegion = False,
+                pathSource = T.pack "s1",
+                pathTarget = T.pack "s2",
+                pathTransform = [1,0,0,1,0,0]
+            }
+    in [ 
+        ("Empty graph",
+        ([], [], [])
+        ),
+
+        ("Single-text-element graph",
+            ([testWords1], [], [])
+        ),
+
+        ("Single-shape graph",
+            ([testWords2], [testShape2], [])
+        ),
+
+        ("Two-shape connected graph",
+            ([testWords1, testWords2], [testShape1, testShape2], [testPath])
+        )
     ]
 
--- | Run a test case (case, (texts, shapes, paths), expected output) on getGraphJSON.
-runGetGraphJSONTest :: String -> ([Text], [Shape], [Path]) -> String -> TestTree
-runGetGraphJSONTest label (texts, shapes, paths) expected =
+-- | Run a test case (case, (texts, shapes, paths)) on getGraphJSON.
+runGetGraphJSONTest :: String -> ([Text], [Shape], [Path]) -> TestTree
+runGetGraphJSONTest label (textlist, shapelist, pathlist) =
     testCase label $ do
         let graphName = "Test Graph Name"
         runDb $ do
             clearDatabase
-            insertGraph graphName (SvgJSON texts shapes paths)
+            insertGraph graphName (SvgJSON textlist shapelist pathlist)
         response <- runServerPartWith Controllers.Graph.getGraphJSON $ mockGetRequest "/get-json-data" [("graphName", T.unpack graphName)] ""
-        let actual = BL.unpack $ rsBody response
-        assertEqual ("Unexpected response body for " ++ label) expected actual
+        let body = rsBody response
+        let jsonObj = decode body :: Maybe SvgJSON
+        case jsonObj of
+            Nothing -> assertFailure ("Maybe SvgJSON returned as Nothing for " ++ label)
+            Just svg -> do
+                assertEqual ("Texts differ for " ++ label) (show (map (\text -> text {textGraph = toSqlKey 1}) textlist)) (show (map (\text -> text {textGraph = toSqlKey 1}) (texts svg)))
+                assertEqual ("Shapes differ for " ++ label) (show (map (\shape -> shape {shapeGraph = toSqlKey 1}) shapelist)) (show (map (\shape -> shape {shapeGraph = toSqlKey 1}) (shapes svg)))
+                assertEqual ("Paths differ for " ++ label) (show (map (\path -> path {pathGraph = toSqlKey 1}) pathlist)) (show (map (\path -> path {pathGraph = toSqlKey 1}) (paths svg)))
 
 -- | Run all getGraphJSON tests
 runGetGraphJSONTests :: [TestTree]
-runGetGraphJSONTests = map (\(label, (texts, shapes, paths), expected) -> runGetGraphJSONTest label (texts, shapes, paths) expected) getGraphJSONTestCases
+runGetGraphJSONTests = map (\(label, (textlist, shapelist, pathlist)) -> runGetGraphJSONTest label (textlist, shapelist, pathlist)) getGraphJSONTestCases
 
 
 -- | Test suite for Graph Controller Module
