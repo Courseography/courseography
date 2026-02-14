@@ -100,7 +100,7 @@ Text json
     text T.Text
     align T.Text
     fill T.Text
-    deriving Show
+    deriving Show Eq
     transform [Double] default=[1,0,0,1,0,0]
 
 Shape json
@@ -113,7 +113,7 @@ Shape json
     stroke T.Text
     text [Text]
     type_ ShapeType
-    deriving Show
+    deriving Show Eq
     transform [Double] default=[1,0,0,1,0,0]
 
 Path json
@@ -125,7 +125,7 @@ Path json
     isRegion Bool
     source T.Text
     target T.Text
-    deriving Show
+    deriving Show Eq
     transform [Double] default=[1,0,0,1,0,0]
 
 Program
