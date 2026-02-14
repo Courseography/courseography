@@ -105,64 +105,65 @@ runSaveGraphJSONTests = map (uncurry runSaveGraphJSONTest) saveGraphJSONTestCase
 
 
 -- | List of test cases for getGraphJSON as (label, (texts, shapes, paths))
+-- | Invariant: Expected Graph IDs are all set to 1
 getGraphJSONTestCases :: [(String, ([Text], [Shape], [Path]))]
 getGraphJSONTestCases = 
     let testWords1 = Text {
                 textGraph = toSqlKey 1,
-                textRId = T.pack "t1",
+                textRId = "t1",
                 textPos = (20.0, 30.0),
-                textText = T.pack "Sample Text 1",
-                textAlign = T.pack "center",
-                textFill = T.pack "red",
+                textText = "Sample Text 1",
+                textAlign = "center",
+                textFill = "red",
                 textTransform = [1,0,0,1,0,0]
             }
         testWords2 = Text {
                 textGraph = toSqlKey 1,
-                textRId = T.pack "t2",
+                textRId = "t2",
                 textPos = (100.0, 60.0),
-                textText = T.pack "Sample Text 2",
-                textAlign = T.pack "left",
-                textFill = T.pack "green",
+                textText = "Sample Text 2",
+                textAlign = "left",
+                textFill = "green",
                 textTransform = [1,0,0,1,0,0]
             }
         testShape1 = Shape {
                 shapeGraph = toSqlKey 1,
-                shapeId_ = T.pack "s1",
+                shapeId_ = "s1",
                 shapePos = (0.0, 0.0),
                 shapeWidth = 40.0,
                 shapeHeight = 60.0,
-                shapeFill = T.pack "black",
-                shapeStroke = T.pack "white",
+                shapeFill = "black",
+                shapeStroke = "white",
                 shapeText = [testWords1],
                 shapeType_ = Node,
                 shapeTransform = [1,0,0,1,0,0]
             }
         testShape2 = Shape {
                 shapeGraph = toSqlKey 1,
-                shapeId_ = T.pack "s2",
+                shapeId_ = "s2",
                 shapePos = (100.0, 45.0),
                 shapeWidth = 50.0,
                 shapeHeight = 30.0,
-                shapeFill = T.pack "black",
-                shapeStroke = T.pack "white",
+                shapeFill = "black",
+                shapeStroke = "white",
                 shapeText = [testWords2],
                 shapeType_ = Node,
                 shapeTransform = [1,0,0,1,0,0]
             }
         testPath = Path {
                 pathGraph = toSqlKey 1,
-                pathId_ = T.pack "p1",
+                pathId_ = "p1",
                 pathPoints = [(20.0, 30.0), (125.0, 60.0)],
-                pathFill = T.pack "red",
-                pathStroke = T.pack "blue",
+                pathFill = "red",
+                pathStroke = "blue",
                 pathIsRegion = False,
-                pathSource = T.pack "s1",
-                pathTarget = T.pack "s2",
+                pathSource = "s1",
+                pathTarget = "s2",
                 pathTransform = [1,0,0,1,0,0]
             }
     in [ 
         ("Empty graph",
-        ([], [], [])
+            ([], [], [])
         ),
 
         ("Single-text-element graph",
@@ -178,27 +179,28 @@ getGraphJSONTestCases =
         )
     ]
 
--- | Run a test case (case, (texts, shapes, paths)) on getGraphJSON.
+-- | Run a test case (case, (texts', shapes', paths')) on getGraphJSON.
+-- | Map GraphID to 1 in the assertions to account for insertGraph overriding the field.
 runGetGraphJSONTest :: String -> ([Text], [Shape], [Path]) -> TestTree
-runGetGraphJSONTest label (textlist, shapelist, pathlist) =
+runGetGraphJSONTest label (texts', shapes', paths') =
     testCase label $ do
         let graphName = "Test Graph Name"
         runDb $ do
             clearDatabase
-            insertGraph graphName (SvgJSON textlist shapelist pathlist)
+            insertGraph graphName (SvgJSON texts' shapes' paths')
         response <- runServerPartWith Controllers.Graph.getGraphJSON $ mockGetRequest "/get-json-data" [("graphName", T.unpack graphName)] ""
         let body = rsBody response
         let jsonObj = decode body :: Maybe SvgJSON
         case jsonObj of
             Nothing -> assertFailure ("Maybe SvgJSON returned as Nothing for " ++ label)
             Just svg -> do
-                assertEqual ("Texts differ for " ++ label) (show (map (\text -> text {textGraph = toSqlKey 1}) textlist)) (show (map (\text -> text {textGraph = toSqlKey 1}) (texts svg)))
-                assertEqual ("Shapes differ for " ++ label) (show (map (\shape -> shape {shapeGraph = toSqlKey 1}) shapelist)) (show (map (\shape -> shape {shapeGraph = toSqlKey 1}) (shapes svg)))
-                assertEqual ("Paths differ for " ++ label) (show (map (\path -> path {pathGraph = toSqlKey 1}) pathlist)) (show (map (\path -> path {pathGraph = toSqlKey 1}) (paths svg)))
+                assertEqual ("Texts differ for " ++ label) texts' (map (\text -> text {textGraph = toSqlKey 1}) (texts svg))
+                assertEqual ("Shapes differ for " ++ label) shapes' (map (\shape -> shape {shapeGraph = toSqlKey 1}) (shapes svg))
+                assertEqual ("Paths differ for " ++ label) paths' (map (\path -> path {pathGraph = toSqlKey 1}) (paths svg))
 
 -- | Run all getGraphJSON tests
 runGetGraphJSONTests :: [TestTree]
-runGetGraphJSONTests = map (\(label, (textlist, shapelist, pathlist)) -> runGetGraphJSONTest label (textlist, shapelist, pathlist)) getGraphJSONTestCases
+runGetGraphJSONTests = map (\(label, (texts', shapes', paths')) -> runGetGraphJSONTest label (texts', shapes', paths')) getGraphJSONTestCases
 
 
 -- | Test suite for Graph Controller Module
