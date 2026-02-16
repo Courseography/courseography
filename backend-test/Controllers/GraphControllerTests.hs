@@ -11,19 +11,20 @@ module Controllers.GraphControllerTests
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
-import Controllers.Graph (index, saveGraphJSON)
+import Controllers.Graph (index, saveGraphJSON, getGraphJSON)
 import Data.Aeson (Value (Number, Object), decode)
 import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Graph (..))
+import Database.Persist.Sqlite (SqlPersistM, insert_, toSqlKey)
+import Database.Tables (Graph (..), Path (..), Shape (..), Text (..), SvgJSON (..))
 import Happstack.Server (rsBody)
-import Models.Graph (getGraph)
+import Models.Graph (getGraph, insertGraph)
 import Test.Tasty (TestTree)
-import Test.Tasty.HUnit (assertEqual, testCase)
-import TestHelpers (clearDatabase, mockPutRequest, runServerPart, runServerPartWith, withDatabase)
+import Test.Tasty.HUnit (assertEqual, assertFailure, testCase)
+import TestHelpers (clearDatabase, mockPutRequest, runServerPart, runServerPartWith, withDatabase, mockGetRequest)
+import Database.DataType (ShapeType(..))
 
 -- | List of test cases as (label, input graphs, expected output)
 indexTestCases :: [(String, [T.Text], String)]
@@ -45,9 +46,9 @@ indexTestCases =
 
 -- | Helper function to insert graphs into the database
 insertGraphs :: [T.Text] -> SqlPersistM ()
-insertGraphs = mapM_ insertGraph
+insertGraphs = mapM_ insertGraph'
     where
-        insertGraph title = insert_ (Graph title 0 0 False )
+        insertGraph' title = insert_ (Graph title 0 0 False )
 
 -- | Run a test case (case, input, expected output) on the index function.
 runIndexTest :: String -> [T.Text] -> String -> TestTree
@@ -102,6 +103,106 @@ runSaveGraphJSONTest label payload =
 runSaveGraphJSONTests :: [TestTree]
 runSaveGraphJSONTests = map (uncurry runSaveGraphJSONTest) saveGraphJSONTestCases
 
+
+-- | List of test cases for getGraphJSON as (label, (texts, shapes, paths))
+-- | Invariant: Expected Graph IDs are all set to 1
+getGraphJSONTestCases :: [(String, ([Text], [Shape], [Path]))]
+getGraphJSONTestCases = 
+    let testWords1 = Text {
+                textGraph = toSqlKey 1,
+                textRId = "t1",
+                textPos = (20.0, 30.0),
+                textText = "Sample Text 1",
+                textAlign = "center",
+                textFill = "red",
+                textTransform = [1,0,0,1,0,0]
+            }
+        testWords2 = Text {
+                textGraph = toSqlKey 1,
+                textRId = "t2",
+                textPos = (100.0, 60.0),
+                textText = "Sample Text 2",
+                textAlign = "left",
+                textFill = "green",
+                textTransform = [1,0,0,1,0,0]
+            }
+        testShape1 = Shape {
+                shapeGraph = toSqlKey 1,
+                shapeId_ = "s1",
+                shapePos = (0.0, 0.0),
+                shapeWidth = 40.0,
+                shapeHeight = 60.0,
+                shapeFill = "black",
+                shapeStroke = "white",
+                shapeText = [testWords1],
+                shapeType_ = Node,
+                shapeTransform = [1,0,0,1,0,0]
+            }
+        testShape2 = Shape {
+                shapeGraph = toSqlKey 1,
+                shapeId_ = "s2",
+                shapePos = (100.0, 45.0),
+                shapeWidth = 50.0,
+                shapeHeight = 30.0,
+                shapeFill = "black",
+                shapeStroke = "white",
+                shapeText = [testWords2],
+                shapeType_ = Node,
+                shapeTransform = [1,0,0,1,0,0]
+            }
+        testPath = Path {
+                pathGraph = toSqlKey 1,
+                pathId_ = "p1",
+                pathPoints = [(20.0, 30.0), (125.0, 60.0)],
+                pathFill = "red",
+                pathStroke = "blue",
+                pathIsRegion = False,
+                pathSource = "s1",
+                pathTarget = "s2",
+                pathTransform = [1,0,0,1,0,0]
+            }
+    in [ 
+        ("Empty graph",
+            ([], [], [])
+        ),
+
+        ("Single-text-element graph",
+            ([testWords1], [], [])
+        ),
+
+        ("Single-shape graph",
+            ([testWords2], [testShape2], [])
+        ),
+
+        ("Two-shape connected graph",
+            ([testWords1, testWords2], [testShape1, testShape2], [testPath])
+        )
+    ]
+
+-- | Run a test case (case, (texts', shapes', paths')) on getGraphJSON.
+-- | Map GraphID to 1 in the assertions to account for insertGraph overriding the field.
+runGetGraphJSONTest :: String -> ([Text], [Shape], [Path]) -> TestTree
+runGetGraphJSONTest label (texts', shapes', paths') =
+    testCase label $ do
+        let graphName = "Test Graph Name"
+        runDb $ do
+            clearDatabase
+            insertGraph graphName (SvgJSON texts' shapes' paths')
+        response <- runServerPartWith Controllers.Graph.getGraphJSON $ mockGetRequest "/get-json-data" [("graphName", T.unpack graphName)] ""
+        let body = rsBody response
+        let jsonObj = decode body :: Maybe SvgJSON
+        case jsonObj of
+            Nothing -> assertFailure ("Maybe SvgJSON returned as Nothing for " ++ label)
+            Just svg -> do
+                assertEqual ("Texts differ for " ++ label) texts' (map (\text -> text {textGraph = toSqlKey 1}) (texts svg))
+                assertEqual ("Shapes differ for " ++ label) shapes' (map (\shape -> shape {shapeGraph = toSqlKey 1}) (shapes svg))
+                assertEqual ("Paths differ for " ++ label) paths' (map (\path -> path {pathGraph = toSqlKey 1}) (paths svg))
+
+-- | Run all getGraphJSON tests
+runGetGraphJSONTests :: [TestTree]
+runGetGraphJSONTests = map (\(label, (texts', shapes', paths')) -> runGetGraphJSONTest label (texts', shapes', paths')) getGraphJSONTestCases
+
+
 -- | Test suite for Graph Controller Module
 test_graphController :: TestTree
-test_graphController = withDatabase "Graph Controller tests" (runIndexTests ++ runSaveGraphJSONTests)
+test_graphController = withDatabase "Graph Controller tests" (runIndexTests ++ runSaveGraphJSONTests ++ runGetGraphJSONTests)
