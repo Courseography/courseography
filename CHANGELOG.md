@@ -18,6 +18,7 @@
 - Added test cases for the saveGraphJSON function in `Controllers/Graph`
 - Added test cases for the getGraphJSON function in `Controllers/Graph`
 - Fix unused variable from `Graph.js`, formatting in `Container.js` and `GraphDropdown.js`, and eslint config
+- Refactor `graphImageResponse` in `Controllers/Graph` to use temporary files
 
 ## [0.7.2] - 2025-12-10
 

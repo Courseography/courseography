@@ -7,7 +7,7 @@ Defines functions for creating images from graphs and timetables, most
 functions return the name of the created svg and png files after creation.
 -}
 module Export.GetImages
-    (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable) where
+    (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable, writeActiveGraphImage) where
 
 import Config (runDb)
 import Data.Aeson (decode)
@@ -24,16 +24,22 @@ import Models.Meeting (getMeetingTime)
 import Svg.Generator
 import System.Random (genWord32, newStdGen)
 
-
--- | If there is an active graph available, an image of that graph is created,
--- otherwise the Computer Science graph is created as a default.
--- Either way, the resulting graph's .svg and .png names are returned.
-getActiveGraphImage :: String -> IO (String, String)
-getActiveGraphImage graphInfo = do
+-- | If there is an active graph available, an image of the active graph is written,
+-- otherwise the Computer Science graph is written as a default.
+writeActiveGraphImage :: String -> FilePath -> FilePath -> IO ()
+writeActiveGraphImage graphInfo svgPath pngPath = do
     let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
         graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
-    getGraphImage graphName graphInfoMap
+    getGraphImage graphName graphInfoMap svgPath pngPath
 
+-- | Creates an image of the graph given info and returns resulting graph's .svg and .png names.
+getActiveGraphImage :: String -> IO (String, String)
+getActiveGraphImage graphInfo = do
+    rand <- randomName
+    let svgFilename = rand ++ ".svg"
+        imageFilename = rand ++ ".png"
+    writeActiveGraphImage graphInfo svgFilename imageFilename
+    return (svgFilename, imageFilename)
 
 -- | If there are selected lectures available, an timetable image of
 -- those lectures in specified session is created.
@@ -107,16 +113,11 @@ generateTimetableImg schedule courseSession = do
     createImageFile svgFilename imageFilename
     return (svgFilename, imageFilename)
 
--- | Creates an image, and returns the name of the svg used to create the
--- image and the name of the image
-getGraphImage :: T.Text -> M.Map T.Text T.Text -> IO (String, String)
-getGraphImage graphName courseMap = do
-    rand <- randomName
-    let svgFilename = rand ++ ".svg"
-        imageFilename = rand ++ ".png"
-    buildSVG graphName courseMap svgFilename True
-    createImageFile svgFilename imageFilename
-    return (svgFilename, imageFilename)
+-- | Creates an image, given file paths to the svg and image to write to
+getGraphImage :: T.Text -> M.Map T.Text T.Text -> FilePath -> FilePath -> IO ()
+getGraphImage graphName courseMap svgPath pngPath = do
+    buildSVG graphName courseMap svgPath True
+    createImageFile svgPath pngPath
 
 -- | Creates an image, and returns the name of the svg used to create the
 -- image and the name of the image
