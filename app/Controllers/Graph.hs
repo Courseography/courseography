@@ -54,10 +54,9 @@ graphImageResponse :: ServerPart Response
 graphImageResponse = do
     graphInfo <- look "JsonLocalStorageObj"
     liftIO $ withSystemTempFile "graph.svg" $ \svgPath svgHandle -> do
-        hClose svgHandle
         withSystemTempFile "graph.png" $ \pngPath pngHandle -> do
             hClose pngHandle
-            writeActiveGraphImage graphInfo svgPath pngPath
+            writeActiveGraphImage graphInfo svgPath svgHandle pngPath
             readImageData pngPath
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables

@@ -22,15 +22,16 @@ import Export.ImageConversion
 import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
 import Models.Meeting (getMeetingTime)
 import Svg.Generator
+import System.IO (Handle, IOMode (WriteMode), hClose, withFile)
 import System.Random (genWord32, newStdGen)
 
 -- | If there is an active graph available, an image of the active graph is written,
 -- otherwise the Computer Science graph is written as a default.
-writeActiveGraphImage :: String -> FilePath -> FilePath -> IO ()
-writeActiveGraphImage graphInfo svgPath pngPath = do
+writeActiveGraphImage :: String -> FilePath -> Handle -> FilePath -> IO ()
+writeActiveGraphImage graphInfo svgPath svgHandle pngPath = do
     let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
         graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
-    getGraphImage graphName graphInfoMap svgPath pngPath
+    getGraphImage graphName graphInfoMap svgPath svgHandle pngPath
 
 -- | Creates an image of the graph given info and returns resulting graph's .svg and .png names.
 getActiveGraphImage :: String -> IO (String, String)
@@ -38,7 +39,8 @@ getActiveGraphImage graphInfo = do
     rand <- randomName
     let svgFilename = rand ++ ".svg"
         imageFilename = rand ++ ".png"
-    writeActiveGraphImage graphInfo svgFilename imageFilename
+    withFile svgFilename WriteMode $ \svgHandle ->
+        writeActiveGraphImage graphInfo svgFilename svgHandle imageFilename
     return (svgFilename, imageFilename)
 
 -- | If there are selected lectures available, an timetable image of
@@ -114,9 +116,10 @@ generateTimetableImg schedule courseSession = do
     return (svgFilename, imageFilename)
 
 -- | Creates an image, given file paths to the svg and image to write to
-getGraphImage :: T.Text -> M.Map T.Text T.Text -> FilePath -> FilePath -> IO ()
-getGraphImage graphName courseMap svgPath pngPath = do
-    buildSVG graphName courseMap svgPath True
+getGraphImage :: T.Text -> M.Map T.Text T.Text -> FilePath -> Handle -> FilePath -> IO ()
+getGraphImage graphName courseMap svgPath svgHandle pngPath = do
+    buildSVG graphName courseMap svgHandle True
+    hClose svgHandle
     createImageFile svgPath pngPath
 
 -- | Creates an image, and returns the name of the svg used to create the
