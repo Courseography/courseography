@@ -3,6 +3,7 @@ module Controllers.Graph (graphResponse, index, getGraphJSON, graphImageResponse
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (decode, object, (.=))
 import Data.Maybe (fromMaybe)
+import Export.ImageConversion
 import Happstack.Server (Response, ServerPart, look, lookBS, lookText', ok, toResponse)
 import MasterTemplate (masterTemplate)
 import Scripts (graphScripts)
@@ -56,7 +57,9 @@ graphImageResponse = do
     liftIO $ withSystemTempFile "graph.svg" $ \svgPath svgHandle -> do
         withSystemTempFile "graph.png" $ \pngPath pngHandle -> do
             hClose pngHandle
-            writeActiveGraphImage graphInfo svgPath svgHandle pngPath
+            writeActiveGraphImage graphInfo svgHandle
+            hClose svgHandle
+            createImageFile svgPath pngPath
             readImageData pngPath
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
