@@ -23,6 +23,7 @@ import Database.DataType
 import Database.Persist.Sqlite
 import Database.Tables hiding (paths, texts)
 import Svg.Builder
+import System.IO (Handle, hPutStrLn)
 import Text.Blaze (toMarkup)
 import Text.Blaze.Internal (stringValue, textValue)
 import Text.Blaze.Svg.Renderer.String (renderSvg)
@@ -41,16 +42,16 @@ buildSVG :: T.Text               -- ^ The name of the graph that is being built.
                                  --   The data-active attribute is used in the
                                  --   interactive graph to indicate which
                                  --   courses the user has selected.
-         -> String               -- ^ The filename that this graph will be
+         -> Handle               -- ^ The file handler that this graph will be
                                  --   written to.
          -> Bool                 -- ^ Whether to include inline styles.
          -> IO ()
-buildSVG graphName courseMap filename styled = runDb $ do
+buildSVG graphName courseMap fileHandle styled = runDb $ do
         maybeGraph  :: Maybe (Entity Graph) <- selectFirst [GraphTitle ==. graphName] []
         case maybeGraph of
             Nothing -> return ()
             Just val -> do
-                liftIO $ buildSVGHelper courseMap filename styled (entityVal val) (entityKey val)
+                liftIO $ buildSVGHelper courseMap fileHandle styled (entityVal val) (entityKey val)
 
 buildSVGHelper :: M.Map T.Text T.Text   -- ^ A map of courses that holds the course
                                         --   ID as a key, and the data-active
@@ -58,13 +59,13 @@ buildSVGHelper :: M.Map T.Text T.Text   -- ^ A map of courses that holds the cou
                                         --   The data-active attribute is used in the
                                         --   interactive graph to indicate which
                                         --   courses the user has selected.
-         -> String                      -- ^ The filename that this graph will be
+         -> Handle                      -- ^ The file handler  that this graph will be
                                         --   written to.
          -> Bool                        -- ^ Whether to include inline styles.
          -> Graph
          -> Key Graph
          -> IO ()
-buildSVGHelper courseMap filename styled sqlGraph gId = runDb $ do
+buildSVGHelper courseMap fileHandle styled sqlGraph gId = runDb $ do
         sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
                                               ShapeGraph ==. gId] []
@@ -102,7 +103,7 @@ buildSVGHelper courseMap filename styled sqlGraph gId = runDb $ do
                                                     styled
                                                     width
                                                     height
-        liftIO $ writeFile filename stringSVG :: SqlPersistM ()
+        liftIO $ hPutStrLn fileHandle stringSVG :: SqlPersistM ()
     where
         keyAsInt :: PersistEntity a => Entity a -> Integer
         keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . safeHead (PersistInt64 0) . keyToValues . entityKey
