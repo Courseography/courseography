@@ -9,6 +9,7 @@ import Data.List (intersperse)
 import qualified Data.Text as T
 import Diagrams.Backend.SVG
 import Diagrams.Prelude
+import TextShow (showt)
 
 days :: [T.Text]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
@@ -16,7 +17,7 @@ days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 -- |A list of lists of Texts, which has the "times" from 8:00 to 12:00, and
 -- 1:00 to 8:00.times
 times :: [[T.Text]]
-times = map (\x -> [T.pack (show x ++ ":00")]) ([8..12] ++ [1..8] :: [Int])
+times = map (\x -> [showt x <> ":00"]) ([8..12] ++ [1..8] :: [Int])
 
 blue3 :: Colour Double
 blue3 = sRGB24read "#437699"
