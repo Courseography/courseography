@@ -19,6 +19,7 @@
 - Added test cases for the getGraphJSON function in `Controllers/Graph`
 - Fix unused variable from `Graph.js`, formatting in `Container.js` and `GraphDropdown.js`, and eslint config
 - Refactored various backend text functions and tests to avoid `String` data in favour of `Text` when feasible
+- Removed unused files
 
 ## [0.7.2] - 2025-12-10
 
