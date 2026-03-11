@@ -3,7 +3,7 @@ module Controllers.Graph (graphResponse, index, getGraphJSON, graphImageResponse
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (decode, object, (.=))
 import Data.Maybe (fromMaybe)
-import Export.ImageConversion
+import Export.ImageConversion (createImageFile)
 import Happstack.Server (Response, ServerPart, look, lookBS, lookText', ok, toResponse)
 import MasterTemplate (masterTemplate)
 import Scripts (graphScripts)

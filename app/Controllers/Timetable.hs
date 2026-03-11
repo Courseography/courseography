@@ -14,8 +14,8 @@ import Data.Time (Day, defaultTimeLocale, formatTime, getCurrentTime, toGregoria
 import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
 import Database.Persist.Sqlite (entityKey, entityVal, selectList, (==.))
 import Database.Tables
-import Export.GetImages
-import Export.ImageConversion
+import Export.GetImages (getActiveTimetable, writeActiveGraphImage)
+import Export.ImageConversion (createImageFile)
 import Export.LatexGenerator
 import Export.PdfGenerator
 import Happstack.Server
@@ -23,8 +23,8 @@ import MasterTemplate
 import Models.Meeting (returnMeeting)
 import Scripts
 import System.FilePath ((</>))
-import System.IO (IOMode (WriteMode), hClose, withFile)
-import System.IO.Temp (withSystemTempDirectory, withSystemTempFile)
+import System.IO (IOMode (WriteMode), withFile)
+import System.IO.Temp (withSystemTempDirectory)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
@@ -49,12 +49,9 @@ exportTimetableImageResponse = do
     session <- lookText' "session"
     selectedCourses <- lookText' "courses"
 
-    liftIO $ withSystemTempFile "timetable.svg" $ \svgPath svgHandle -> do
-        withSystemTempFile "timetable.png" $ \pngPath pngHandle -> do
-            hClose svgHandle
-            hClose pngHandle
-            getActiveTimetable selectedCourses session svgPath pngPath
-            readImageData pngPath
+    liftIO $ withSystemTempDirectory "timetable-image" $ \tempDir -> do
+        pngPath <- getActiveTimetable selectedCourses session tempDir
+        readImageData pngPath
 
 -- | Returns a PDF containing graph and timetable requested by the user.
 exportTimetablePDFResponse :: ServerPart Response
@@ -65,19 +62,12 @@ exportTimetablePDFResponse = do
     liftIO $ withSystemTempDirectory "timetable-pdf" $ \tempDir -> do
         let graphSvgPath = tempDir </> "graph.svg"
             graphPngPath = tempDir </> "graph.png"
-            fallSvgPath = tempDir </> "fall.svg"
-            fallPngPath = tempDir </> "fall.png"
-            springSvgPath = tempDir </> "spring.svg"
-            springPngPath = tempDir </> "spring.png"
 
         withFile graphSvgPath WriteMode $ \graphSvgHandle ->
             writeActiveGraphImage graphInfo graphSvgHandle
         createImageFile graphSvgPath graphPngPath
-
-        getActiveTimetable selectedCourses "Fall" fallSvgPath fallPngPath
-
-        getActiveTimetable selectedCourses "Spring" springSvgPath springPngPath
-
+        fallPngPath <- getActiveTimetable selectedCourses "Fall" tempDir
+        springPngPath <- getActiveTimetable selectedCourses "Spring" tempDir
         pdfName <- returnPDF graphPngPath fallPngPath springPngPath tempDir
         returnPdfBS pdfName
 
@@ -94,7 +84,7 @@ returnPDF graphImg fallTimetableImg springTimetableImg tempDir = do
     let texName = tempDir </> "timetable.tex"
         pdfName = tempDir </> "timetable.pdf"
     generateTex [graphImg, fallTimetableImg, springTimetableImg] texName -- generate a temporary TEX file
-    createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
+    createPDF texName                            -- create PDF using TEX
     return pdfName
 
 
