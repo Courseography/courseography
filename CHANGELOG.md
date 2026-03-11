@@ -20,6 +20,8 @@
 - Fix unused variable from `Graph.js`, formatting in `Container.js` and `GraphDropdown.js`, and eslint config
 - Refactor `Controllers/Graph.hs` and `Controllers/Timetable.hs` to use temporary files
 - Remove unused `getTimetableImage` function in `Export/GetImages.hs`
+- Refactored various backend text functions and tests to avoid `String` data in favour of `Text` when feasible
+- Removed unused files
 
 ## [0.7.2] - 2025-12-10
 

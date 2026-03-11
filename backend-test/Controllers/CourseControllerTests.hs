@@ -176,7 +176,7 @@ courseInfoTestCases =
             , coursesDistribution = Nothing
             , coursesPrereqString = Just "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"
             , coursesCoreqs = Just "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."
-            , coursesVideoUrls = [T.pack "[https://example.com/video1", T.pack "https://example.com/video2]"]
+            , coursesVideoUrls = ["[https://example.com/video1", "https://example.com/video2]"]
             }
         csc108 = Courses
             { coursesCode = "CSC108H1"

@@ -20,7 +20,6 @@ import Config (graphPath, runDb)
 import Control.Monad.IO.Class (liftIO)
 import Data.Char (isSpace)
 import Data.List as List
-import Data.List.Split (splitOn)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
@@ -239,7 +238,7 @@ parseRect globalTrans key (tagsHead:tagsTail) =
                   Node
                   [a, b, c, d, e, f]
         makePoly polyOpenTag =
-          let points = map (parseCoord . T.pack) $ splitOn " " $ T.unpack $ fromAttrib "points" polyOpenTag
+          let points = map parseCoord (T.splitOn " " $ fromAttrib "points" polyOpenTag)
               [[a, c, e], [b, d, f], _] = completeTrans
           in
             updateShape (fromAttrib "fill" polyOpenTag) $
@@ -273,9 +272,9 @@ parsePath globalTrans key tags =
                     [0, 0, 1]]
             (x:_) -> getTransform x
         edgeInfo = case splitArr of
-            [a, b] -> (T.pack a, T.pack b)
+            [a, b] -> (a, b)
             _ -> ("", "")
-            where splitArr = splitOn "|" (T.unpack (fromAttrib "id" $ safeHead (TS.TagOpen T.empty []) tags))
+            where splitArr = T.splitOn "|" (fromAttrib "id" $ safeHead (TS.TagOpen T.empty []) tags)
 
 
 parsePathHelper :: GraphId -- ^ The Path's corresponding graph identifier.

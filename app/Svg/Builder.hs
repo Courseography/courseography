@@ -23,6 +23,7 @@ import qualified Data.Text as T
 import Database.DataType
 import Database.Tables hiding (shapes, texts)
 import Svg.Parser (matrixPointMultiply)
+import TextShow (showt)
 import Util.Helpers
 
 -- * Builder functions
@@ -37,7 +38,7 @@ buildPath :: [Shape] -- ^ Node elements.
           -> Path
 buildPath rects ellipses entity elementId
     | pathIsRegion entity =
-          entity {pathId_ = T.concat [pathId_ entity, "p", T.pack $ show elementId],
+          entity {pathId_ = pathId_ entity <> "p" <> showt elementId,
                   pathSource = "",
                   pathTarget = ""}
     | otherwise =
@@ -58,7 +59,7 @@ buildPath rects ellipses entity elementId
                           (filter (\r -> shapeId_ r /= sourceNode) nodes)
                       else pathTarget entity
           in
-              entity {pathId_ = T.pack $ 'p' : show elementId,
+              entity {pathId_ = "p" <> showt elementId,
                       pathSource = sourceNode,
                       pathTarget = targetNode}
 
@@ -82,7 +83,7 @@ buildRect texts entity elementId =
                 ) texts
         textString = T.concat $ map textText rectTexts
         id_ = case shapeType_ entity of
-              Hybrid -> T.pack $ 'h' : show elementId
+              Hybrid -> "h" <> showt elementId
               Node -> if shapeId_ entity == ""
                   then T.map toLower . sanitizeId $ textString
                   else shapeId_ entity
@@ -115,7 +116,7 @@ buildEllipses texts entity elementId =
         entity {
             shapeId_ =
                 if shapeId_ entity == ""
-                    then T.pack $ "bool" ++ show elementId
+                    then "bool" <> showt elementId
                     else shapeId_ entity,
             shapeText = ellipseText
             }
@@ -130,7 +131,7 @@ buildEllipses texts entity elementId =
 buildPathString :: [Point] -> T.Text
 buildPathString d = T.unwords $ map toString d
     where
-        toString (a, b) = T.pack $ show a ++ "," ++ show b
+        toString (a, b) = showt a <> "," <> showt b
 
 
 -- * Intersection helpers
