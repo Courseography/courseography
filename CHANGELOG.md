@@ -18,6 +18,8 @@
 - Added test cases for the saveGraphJSON function in `Controllers/Graph`
 - Added test cases for the getGraphJSON function in `Controllers/Graph`
 - Fix unused variable from `Graph.js`, formatting in `Container.js` and `GraphDropdown.js`, and eslint config
+- Refactor `Controllers/Graph.hs` and `Controllers/Timetable.hs` to use temporary files
+- Remove unused `getTimetableImage` function in `Export/GetImages.hs`
 - Refactored various backend text functions and tests to avoid `String` data in favour of `Text` when feasible
 - Removed unused files
 

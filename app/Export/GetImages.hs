@@ -4,47 +4,45 @@
                   timetables.
 
 Defines functions for creating images from graphs and timetables, most
-functions return the name of the created svg and png files after creation.
+functions write to the svg and png files given their file or directory paths.
 -}
 module Export.GetImages
-    (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable) where
+    (getActiveTimetable, writeActiveGraphImage) where
 
 import Config (runDb)
 import Data.Aeson (decode)
 import Data.ByteString.Char8 as BC (pack)
 import Data.ByteString.Lazy (fromStrict)
+import Data.Char (isAlphaNum)
 import Data.Fixed (mod')
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.Tables as Tables
-import Export.ImageConversion
-import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
+import Export.ImageConversion (createImageFile)
+import Export.TimetableImageCreator (renderTableHelper, times)
 import Models.Meeting (getMeetingTime)
-import Svg.Generator
-import System.Random (genWord32, newStdGen)
+import Svg.Generator (buildSVG)
+import System.FilePath ((</>))
+import System.IO (Handle)
 
-
--- | If there is an active graph available, an image of that graph is created,
--- otherwise the Computer Science graph is created as a default.
--- Either way, the resulting graph's .svg and .png names are returned.
-getActiveGraphImage :: String -> IO (String, String)
-getActiveGraphImage graphInfo = do
+-- | If there is an active graph available, an image of the active graph is written,
+-- otherwise the Computer Science graph is written as a default.
+writeActiveGraphImage :: String -> Handle -> IO ()
+writeActiveGraphImage graphInfo svgHandle = do
     let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
         graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
-    getGraphImage graphName graphInfoMap
+    getGraphImage graphName graphInfoMap svgHandle
 
-
--- | If there are selected lectures available, an timetable image of
+-- | If there are selected lectures available, a timetable image of
 -- those lectures in specified session is created.
 -- Otherwise an empty timetable image is created as default.
--- Either way, the resulting image's .svg and .png names are returned.
-getActiveTimetable :: T.Text -> T.Text -> IO (String, String)
-getActiveTimetable selectedCourses termSession = do
+getActiveTimetable :: T.Text -> T.Text -> FilePath -> IO FilePath
+getActiveTimetable selectedCourses termSession tempDir = do
     let selectedMeetings = parseSelectedCourses selectedCourses termSession
     mTimes <- getTimes selectedMeetings
     let schedule = getScheduleByTime selectedMeetings mTimes
-    generateTimetableImg schedule termSession
+    generateTimetableImg schedule termSession tempDir
 
 -- | Parses selected courses local storage and returns two lists of information about courses
 -- in the format of (code, section, session).
@@ -96,43 +94,18 @@ addCourseHelper (courseCode, courseSection, courseSession) currentSchedule (day,
       timeSchedule' = take day timeSchedule ++ [newDaySchedule] ++ drop (day + 1) timeSchedule
   in take courseTime currentSchedule ++ [timeSchedule'] ++ drop (courseTime + 1) currentSchedule
 
--- | Creates an timetable image based on schedule, and returns the name of the svg
--- used to create the image and the name of the image
-generateTimetableImg :: [[[T.Text]]] -> T.Text -> IO (String, String)
-generateTimetableImg schedule courseSession = do
-    rand <- randomName
-    let svgFilename = rand ++ ".svg"
-        imageFilename = rand ++ ".png"
-    renderTableHelper svgFilename (zipWith (:) times schedule) courseSession
-    createImageFile svgFilename imageFilename
-    return (svgFilename, imageFilename)
+-- | Creates a timetable image based on schedule.
+generateTimetableImg :: [[[T.Text]]] -> T.Text -> FilePath -> IO FilePath
+generateTimetableImg schedule courseSession tempDir = do
+    let session = filter isAlphaNum (T.unpack courseSession)
+        sessionStem = if null session then "session" else session
+        svgPath = tempDir </> (sessionStem ++ ".svg")
+        pngPath = tempDir </> (sessionStem ++ ".png")
+    renderTableHelper svgPath (zipWith (:) times schedule) courseSession
+    createImageFile svgPath pngPath
+    return pngPath
 
--- | Creates an image, and returns the name of the svg used to create the
--- image and the name of the image
-getGraphImage :: T.Text -> M.Map T.Text T.Text -> IO (String, String)
-getGraphImage graphName courseMap = do
-    rand <- randomName
-    let svgFilename = rand ++ ".svg"
-        imageFilename = rand ++ ".png"
-    buildSVG graphName courseMap svgFilename True
-    createImageFile svgFilename imageFilename
-    return (svgFilename, imageFilename)
-
--- | Creates an image, and returns the name of the svg used to create the
--- image and the name of the image
-getTimetableImage :: T.Text -> T.Text -> IO (String, String)
-getTimetableImage courses termSession = do
-    -- generate 2 random names
-    rand <- randomName
-    let svgFilename = rand ++ ".svg"
-        imageFilename = rand ++ ".png"
-    renderTable svgFilename courses termSession
-    createImageFile svgFilename imageFilename
-    return (svgFilename, imageFilename)
-
--- | Generate a string containing random integers
-randomName :: IO String
-randomName = do
-    gen <- newStdGen
-    let (rand, _) = genWord32 gen
-    return (show rand)
+-- | Builds the graph svg, given file handler of the svg
+getGraphImage :: T.Text -> M.Map T.Text T.Text -> Handle -> IO ()
+getGraphImage graphName courseMap svgHandle = do
+    buildSVG graphName courseMap svgHandle True
