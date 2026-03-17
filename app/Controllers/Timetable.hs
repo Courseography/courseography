@@ -52,7 +52,7 @@ exportTimetableImageResponse = do
 exportTimetablePDFResponse :: ServerPart Response
 exportTimetablePDFResponse = do
     selectedCourses <- lookText' "courses"
-    graphInfo <- look "JsonLocalStorageObj"
+    graphInfo <- lookText' "JsonLocalStorageObj"
     (graphSvg, graphImg) <- liftIO $ getActiveGraphImage graphInfo
     (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable selectedCourses "Fall"
     (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable selectedCourses "Spring"

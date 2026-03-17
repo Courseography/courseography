@@ -11,12 +11,12 @@ module Export.GetImages
 
 import Config (runDb)
 import Data.Aeson (decode)
-import Data.ByteString.Char8 as BC (pack)
 import Data.ByteString.Lazy (fromStrict)
 import Data.Fixed (mod')
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
+import qualified Data.Text.Encoding as TE
 import Database.Tables as Tables
 import Export.ImageConversion
 import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
@@ -28,9 +28,9 @@ import System.Random (genWord32, newStdGen)
 -- | If there is an active graph available, an image of that graph is created,
 -- otherwise the Computer Science graph is created as a default.
 -- Either way, the resulting graph's .svg and .png names are returned.
-getActiveGraphImage :: String -> IO (String, String)
+getActiveGraphImage :: T.Text -> IO (String, String)
 getActiveGraphImage graphInfo = do
-    let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
+    let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ TE.encodeUtf8 graphInfo :: M.Map T.Text T.Text
         graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
     getGraphImage graphName graphInfoMap
 
