@@ -2113,38 +2113,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-common-types@npm:7.1.0":
-  version: 7.1.0
-  resolution: "@fortawesome/fontawesome-common-types@npm:7.1.0"
-  checksum: 4cc34a4cd4b96dcf4e83a40f9537038e25a6069b6c6f57c15138b9e00188b3f610ff794995672548831c51634b5513111743ae41b9ce68b836954e0f0044766a
+"@fortawesome/fontawesome-common-types@npm:7.2.0":
+  version: 7.2.0
+  resolution: "@fortawesome/fontawesome-common-types@npm:7.2.0"
+  checksum: d8886411efb978c5a22374a1076b504b1815641bc4a6dc69b9e630c1e04be2297d8700369f839a95566aad234dd6a5068f9fb84add24122a9314db87073e5a90
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-svg-core@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "@fortawesome/fontawesome-svg-core@npm:7.1.0"
+"@fortawesome/fontawesome-svg-core@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@fortawesome/fontawesome-svg-core@npm:7.2.0"
   dependencies:
-    "@fortawesome/fontawesome-common-types": 7.1.0
-  checksum: 83d0839257c979dfd689ca068d231fca00896da97e1f91fd4a1e27de87b5afb1bf341dc2cbc90e9476885bb720bd9d0cf1d29f7736338ecdba3fceb6f923298e
+    "@fortawesome/fontawesome-common-types": 7.2.0
+  checksum: e07c1d71dfd5206b87bd24576980e7398da745b2a617a390d3a86577b4e84ca628385a85628b8135c9bdefee45f8dac88bda7bccb4e2758b5d97756a4b66a1d9
   languageName: node
   linkType: hard
 
-"@fortawesome/free-solid-svg-icons@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "@fortawesome/free-solid-svg-icons@npm:7.1.0"
+"@fortawesome/free-solid-svg-icons@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@fortawesome/free-solid-svg-icons@npm:7.2.0"
   dependencies:
-    "@fortawesome/fontawesome-common-types": 7.1.0
-  checksum: f239480ac1bb3591bbec3c01690054aa3801fa78cd5eafe9128c2e14a9a2a760fc0f5a34b7ed2533056d524c284114af0a6e1dd1f4b8ca89fefb8f8660a3a158
+    "@fortawesome/fontawesome-common-types": 7.2.0
+  checksum: 5197283bf3a4ec0c5715b6a3c48d4ae5ea57e74449b257af477927f27b5f711bfe3ec3ed81d8d0a60ad21f64becb9a8f2a5b5af94919b695a0443aadd37e0290
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "@fortawesome/react-fontawesome@npm:3.1.1"
+"@fortawesome/react-fontawesome@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@fortawesome/react-fontawesome@npm:3.2.0"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~6 || ~7
     react: ^18.0.0 || ^19.0.0
-  checksum: e25654313ed35d792c0a0f4a7223ffbc881a407da4d7c1ded6fc6f9d91c04627aff02f200d2c4d7d737e3d240e4b69bd42c820e916dae5714cf300720d28be8a
+  checksum: 35b806110644914135177729d72658447e4cd917983d93fecd5e5b0462e7778c27c5e06e6cea3c83ecbb4d48d1b35d6a013e940b5ecb8f913cd2b9f01022112b
   languageName: node
   linkType: hard
 
@@ -4158,32 +4158,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-charts-types@npm:13.0.1":
-  version: 13.0.1
-  resolution: "ag-charts-types@npm:13.0.1"
-  checksum: 2cd0f49d3ec7e3339c6932f1473156d691e1665af23ae12a9d9eeaefda8a920abb3dca7613d58911c9c7c44b33dcb65eafc77f3f95ed6433cb0683dcb4ee968d
+"ag-charts-types@npm:13.1.0":
+  version: 13.1.0
+  resolution: "ag-charts-types@npm:13.1.0"
+  checksum: 96fff8351e02a8a2291b997e5251b855eba84b672710a783a7fbc5ed0bfd322d2917d8f1de3dd7963deddbbcf4a756b1d40a9f0527f8f1037a8ad5ab1e08e374
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:35.0.1, ag-grid-community@npm:^35.0.1":
-  version: 35.0.1
-  resolution: "ag-grid-community@npm:35.0.1"
+"ag-grid-community@npm:35.1.0, ag-grid-community@npm:^35.1.0":
+  version: 35.1.0
+  resolution: "ag-grid-community@npm:35.1.0"
   dependencies:
-    ag-charts-types: 13.0.1
-  checksum: c1beb4bd07feae928714c7703e327d46cba813cd12fb2c051a6f2b94919cfefbfedcaeb8691d6ebf648c8457925ff8637f89f6d9465b5f6a38f6c3624eaabf02
+    ag-charts-types: 13.1.0
+  checksum: a0794fdbf712c4721ce9974437b6c3bc72152bbb32d8516fefb16e4660df51847495f373ec6cb7bf0a4f1ae279cfd33bd8a172100f7c2760037aadda21654b64
   languageName: node
   linkType: hard
 
-"ag-grid-react@npm:^35.0.1":
-  version: 35.0.1
-  resolution: "ag-grid-react@npm:35.0.1"
+"ag-grid-react@npm:^35.1.0":
+  version: 35.1.0
+  resolution: "ag-grid-react@npm:35.1.0"
   dependencies:
-    ag-grid-community: 35.0.1
+    ag-grid-community: 35.1.0
     prop-types: ^15.8.1
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 85d11d679494721690aa4d498e528ba515aed5bd07649b5238ba2c1fb6ce382374e2dedca065ae038e0f517d2fd52d25e406dd91a3ec2233d74d79f56741ec75
+  checksum: bff116d076eb25ee84824860c1da71417971d6863c453c5c8b17fc1a2cb859ce6a1ee6b1a31d4c8daa4da78d4bb6137b648d2b8e62d8921fd7ebf4ec982c4d5e
   languageName: node
   linkType: hard
 
@@ -5553,15 +5553,15 @@ __metadata:
     "@emotion/react": ^11.14.0
     "@emotion/styled": ^11.14.1
     "@eslint/compat": ^1.2.9
-    "@fortawesome/fontawesome-svg-core": ^7.1.0
-    "@fortawesome/free-solid-svg-icons": ^7.1.0
-    "@fortawesome/react-fontawesome": ^3.1.1
+    "@fortawesome/fontawesome-svg-core": ^7.2.0
+    "@fortawesome/free-solid-svg-icons": ^7.2.0
+    "@fortawesome/react-fontawesome": ^3.2.0
     "@mui/material": ^7.3.1
     "@testing-library/dom": ^10.4.0
     "@testing-library/react": ^16.0.1
     "@testing-library/user-event": ^14.6.1
-    ag-grid-community: ^35.0.1
-    ag-grid-react: ^35.0.1
+    ag-grid-community: ^35.1.0
+    ag-grid-react: ^35.1.0
     babel-jest: ^29.5.0
     babel-loader: ^10.0.0
     bootstrap: ^5.3.3
@@ -12574,15 +12574,15 @@ __metadata:
   linkType: hard
 
 "tar@npm:^7.4.3":
-  version: 7.5.10
-  resolution: "tar@npm:7.5.10"
+  version: 7.5.11
+  resolution: "tar@npm:7.5.11"
   dependencies:
     "@isaacs/fs-minipass": ^4.0.0
     chownr: ^3.0.0
     minipass: ^7.1.2
     minizlib: ^3.1.0
     yallist: ^5.0.0
-  checksum: aed1a7ae188fc80539184682bfaed7c4d5ae276f591dce67cc03b4ed8898aebde0cc195187f6abd455e3f25b24399a809ed2eaf6410ca3abc1ba30b19a94089e
+  checksum: 7f6785a85dd571b88985e493ec86f692962cbfa7b4017961fddfd2241e0ff3bcd89ed347f4c02b5433aa22b30cca5566e8711543df054fda8fd12425f505378f
   languageName: node
   linkType: hard
 

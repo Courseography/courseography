@@ -14,19 +14,22 @@ import Data.Time (Day, defaultTimeLocale, formatTime, getCurrentTime, toGregoria
 import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
 import Database.Persist.Sqlite (entityKey, entityVal, selectList, (==.))
 import Database.Tables
-import Export.GetImages
+import Export.GetImages (getActiveTimetable, writeActiveGraphImage)
+import Export.ImageConversion (createImageFile)
 import Export.LatexGenerator
 import Export.PdfGenerator
 import Happstack.Server
 import MasterTemplate
 import Models.Meeting (returnMeeting)
 import Scripts
-import System.Directory (removeFile)
+import System.FilePath ((</>))
+import System.IO (IOMode (WriteMode), withFile)
+import System.IO.Temp (withSystemTempDirectory)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Read (readMaybe)
-import Util.Helpers (returnImageData, safeHead)
+import Util.Helpers (readImageData, safeHead)
 
 gridResponse :: ServerPart Response
 gridResponse =
@@ -45,37 +48,43 @@ exportTimetableImageResponse :: ServerPart Response
 exportTimetableImageResponse = do
     session <- lookText' "session"
     selectedCourses <- lookText' "courses"
-    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable selectedCourses session
-    liftIO $ returnImageData svgFilename imageFilename
+
+    liftIO $ withSystemTempDirectory "timetable-image" $ \tempDir -> do
+        pngPath <- getActiveTimetable selectedCourses session tempDir
+        readImageData pngPath
 
 -- | Returns a PDF containing graph and timetable requested by the user.
 exportTimetablePDFResponse :: ServerPart Response
 exportTimetablePDFResponse = do
     selectedCourses <- lookText' "courses"
     graphInfo <- look "JsonLocalStorageObj"
-    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage graphInfo
-    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable selectedCourses "Fall"
-    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable selectedCourses "Spring"
-    pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
-    liftIO $ returnPdfBS pdfName
 
--- | Returns 64base bytestring of PDF for given name, then deletes PDF from local.
+    liftIO $ withSystemTempDirectory "timetable-pdf" $ \tempDir -> do
+        let graphSvgPath = tempDir </> "graph.svg"
+            graphPngPath = tempDir </> "graph.png"
+
+        withFile graphSvgPath WriteMode $ \graphSvgHandle ->
+            writeActiveGraphImage graphInfo graphSvgHandle
+        createImageFile graphSvgPath graphPngPath
+        fallPngPath <- getActiveTimetable selectedCourses "Fall" tempDir
+        springPngPath <- getActiveTimetable selectedCourses "Spring" tempDir
+        pdfName <- returnPDF graphPngPath fallPngPath springPngPath tempDir
+        returnPdfBS pdfName
+
+-- | Returns 64base bytestring of PDF for given name.
 returnPdfBS :: String -> IO Response
 returnPdfBS pdfFilename = do
     pdfData <- BS.readFile pdfFilename
-    _ <- removeFile pdfFilename
     return $ toResponseBS "application/pdf" $ BEnc.encode $ L.fromStrict pdfData
 
--- | Returns the name of a generated pdf that contains graphImg and timetableImg
--- and deletes all of the img and svg files passed as arguments
-returnPDF :: String -> String -> String -> String -> String -> String -> IO String
-returnPDF graphSvg graphImg fallTimetableSvg fallTimetableImg springTimetableSvg springTimetableImg = do
-    rand <- randomName
-    let texName = rand ++ ".tex"
-        pdfName = rand ++ ".pdf"
+-- | Returns the name of a generated pdf that contains graphImg, fallTimetableImg,
+-- and springTimetableImg generated in tempDir.
+returnPDF :: String -> String -> String -> FilePath -> IO String
+returnPDF graphImg fallTimetableImg springTimetableImg tempDir = do
+    let texName = tempDir </> "timetable.tex"
+        pdfName = tempDir </> "timetable.pdf"
     generateTex [graphImg, fallTimetableImg, springTimetableImg] texName -- generate a temporary TEX file
-    createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
-    mapM_ removeFile [graphSvg, graphImg, fallTimetableSvg, fallTimetableImg, springTimetableSvg, springTimetableImg]
+    createPDF texName                            -- create PDF using TEX
     return pdfName
 
 
