@@ -28,9 +28,9 @@ import System.IO (Handle)
 
 -- | If there is an active graph available, an image of the active graph is written,
 -- otherwise the Computer Science graph is written as a default.
-writeActiveGraphImage :: String -> Handle -> IO ()
+writeActiveGraphImage :: T.Text -> Handle -> IO ()
 writeActiveGraphImage graphInfo svgHandle = do
-    let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
+    let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ TE.encodeUtf8 graphInfo :: M.Map T.Text T.Text
         graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
     getGraphImage graphName graphInfoMap svgHandle
 
