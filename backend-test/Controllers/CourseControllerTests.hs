@@ -14,19 +14,22 @@ import Control.Monad (unless)
 import Controllers.Course (courseInfo, index, retrieveCourse)
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Map as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, mapMaybe)
+import Data.List (nub)
 import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Courses (..))
+import Database.Persist.Sqlite (SqlPersistM, insert, insert_, insertMany_)
+import Database.Tables (Building (..), Courses (..), MeetTime (..), Meeting (..), Time' (..), buildTimes)
 import Happstack.Server (rsBody, rsCode)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, mockGetRequest, runServerPart, runServerPartWith, withDatabase)
 
--- | List of test cases as (input course name, course data, status code, expected JSON output)
-retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, Int, String)]
+
+-- | List of test cases as (case description, input course name, course data, list of meeting data, status code, expected JSON output)
+retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, [MeetTime], Int, String)]
 retrieveCourseTestCases =
-    [ ("Course exists",
+    [
+    ("Course exists with meeting times, and other meeting times exist",
        "STA238",
        Map.fromList [
         ("name", "STA238H1"),
@@ -40,6 +43,128 @@ retrieveCourseTestCases =
         ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."),
         ("videoUrls", "https://example.com/video1, https://example.com/video2")
         ],
+        [
+            MeetTime
+                Meeting {
+                    meetingCode = "STA238",
+                    meetingSession = "F",
+                    meetingSection = "LEC0101",
+                    meetingCap = 50,
+                    meetingInstructor = "Instructor Name",
+                    meetingEnrol = 15,
+                    meetingWait = 0,
+                    meetingExtra = 0
+                }
+                [
+                    Time' {
+                        weekDay' = 0.0,
+                        startHour' = 10.0,
+                        endHour' = 11.0,
+                        firstRoom' = Just "MP",
+                        secondRoom' = Nothing
+                    },
+                    Time' {
+                        weekDay' = 2.0,
+                        startHour' = 13.0,
+                        endHour' = 14.0,
+                        firstRoom' = Just "SS",
+                        secondRoom' = Nothing
+                    }
+                ],
+            MeetTime
+                Meeting {
+                    meetingCode = "STA239",
+                    meetingSession = "S",
+                    meetingSection = "LEC0201",
+                    meetingCap = 500,
+                    meetingInstructor = "Instructor Name 2",
+                    meetingEnrol = 150,
+                    meetingWait = 0,
+                    meetingExtra = 0
+                }
+                [
+                    Time' {
+                        weekDay' = 1.0,
+                        startHour' = 10.0,
+                        endHour' = 11.0,
+                        firstRoom' = Just "WW",
+                        secondRoom' = Nothing
+                    },
+                    Time' {
+                        weekDay' = 4.0,
+                        startHour' = 13.0,
+                        endHour' = 14.0,
+                        firstRoom' = Just "SS",
+                        secondRoom' = Nothing
+                    }
+                ]
+        ],
+        200,
+        "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"firstRoom\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"secondRoom\":null,\"startHour\":10,\"weekDay\":0},{\"endHour\":14,\"firstRoom\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"secondRoom\":null,\"startHour\":13,\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
+    ),
+
+    ("Course exists with meeting times",
+       "STA238",
+       Map.fromList [
+        ("name", "STA238H1"),
+        ("title", "Probability, Statistics and Data Analysis II"),
+        ("description", "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."),
+        ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
+        ("exclusions", "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"),
+        ("breadth", "The Physical and Mathematical Universes (5)"),
+        ("distribution", "null"),
+        ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
+        ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."),
+        ("videoUrls", "https://example.com/video1, https://example.com/video2")
+        ],
+        [
+            MeetTime
+                Meeting {
+                    meetingCode = "STA238",
+                    meetingSession = "F",
+                    meetingSection = "LEC0101",
+                    meetingCap = 50,
+                    meetingInstructor = "Instructor Name",
+                    meetingEnrol = 15,
+                    meetingWait = 0,
+                    meetingExtra = 0
+                }
+                [
+                    Time' {
+                        weekDay' = 0.0,
+                        startHour' = 10.0,
+                        endHour' = 11.0,
+                        firstRoom' = Just "MP",
+                        secondRoom' = Nothing
+                    },
+                    Time' {
+                        weekDay' = 2.0,
+                        startHour' = 13.0,
+                        endHour' = 14.0,
+                        firstRoom' = Just "SS",
+                        secondRoom' = Nothing
+                    }
+                ]
+        ],
+        200,
+        "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"firstRoom\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"secondRoom\":null,\"startHour\":10,\"weekDay\":0},{\"endHour\":14,\"firstRoom\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"secondRoom\":null,\"startHour\":13,\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
+    ),
+
+    ("Course exists",
+       "STA238",
+       Map.fromList [
+        ("name", "STA238H1"),
+        ("title", "Probability, Statistics and Data Analysis II"),
+        ("description", "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."),
+        ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
+        ("exclusions", "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"),
+        ("breadth", "The Physical and Mathematical Universes (5)"),
+        ("distribution", "null"),
+        ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
+        ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."),
+        ("videoUrls", "https://example.com/video1, https://example.com/video2")
+        ],
+        [],
         200,
         "{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
     ),
@@ -47,6 +172,7 @@ retrieveCourseTestCases =
     ("Course does not exist",
        "STA238",
        Map.empty,
+       [],
        404,
        "Course not found"
     ),
@@ -54,14 +180,15 @@ retrieveCourseTestCases =
     ("No course provided",
        "",
        Map.empty,
+       [],
        404,
        "Course not found"
     )
     ]
 
 -- | Run a test case (case, input, expected status code, expected output) on the retrieveCourse function.
-runRetrieveCourseTest :: String -> T.Text -> Map.Map T.Text T.Text -> Int -> String -> TestTree
-runRetrieveCourseTest label courseName courseData expectedCode expectedBody =
+runRetrieveCourseTest :: String -> T.Text -> Map.Map T.Text T.Text -> [MeetTime] -> Int -> String -> TestTree
+runRetrieveCourseTest label courseName courseData meetingTimes expectedCode expectedBody =
     testCase label $ do
         let currCourseName = fromMaybe "" $ Map.lookup "name" courseData
 
@@ -83,10 +210,16 @@ runRetrieveCourseTest label courseName courseData expectedCode expectedBody =
                     , coursesVideoUrls = videoUrls
                     }
 
+        let buildingCodes = getUniqueBuildings meetingTimes
+
         runDb $ do
             clearDatabase
             unless (T.null currCourseName) $
                 insert_ courseToInsert
+            unless (null buildingCodes) $
+                insertBuildings buildingCodes
+            unless (null meetingTimes) $
+                insertMeetingTimes meetingTimes
 
         response <- runServerPartWith Controllers.Course.retrieveCourse $ mockGetRequest "/course" [("name", T.unpack courseName)] ""
         let statusCode = rsCode response
@@ -97,13 +230,33 @@ runRetrieveCourseTest label courseName courseData expectedCode expectedBody =
 
 -- | Run all the retrieveCourse test cases
 runRetrieveCourseTests :: [TestTree]
-runRetrieveCourseTests = map (\(label, courseName, courseData, expectedCode, expectedBody) -> runRetrieveCourseTest label courseName courseData expectedCode expectedBody) retrieveCourseTestCases
+runRetrieveCourseTests = map (\(label, courseName, courseData, meetingTimes, expectedCode, expectedBody) -> runRetrieveCourseTest label courseName courseData meetingTimes expectedCode expectedBody) retrieveCourseTestCases
 
 -- | Helper function to insert courses into the database
 insertCourses :: [T.Text] -> SqlPersistM ()
 insertCourses = mapM_ insertCourse
     where
         insertCourse code = insert_ (Courses code Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing [])
+
+-- | Helper function to insert MeetTimes into the database
+insertMeetingTimes :: [MeetTime] -> SqlPersistM ()
+insertMeetingTimes = mapM_ insertMeeting
+    where
+        insertMeeting (MeetTime meetingData meetingTime) = do
+            meetingKey <- insert meetingData
+            insertMany_ $ map (buildTimes meetingKey) meetingTime
+
+-- | Helper function to insert dummy buildings from a list of codes
+insertBuildings :: [T.Text] -> SqlPersistM ()
+insertBuildings = mapM_ insertBuilding
+    where
+        insertBuilding code = insert_ Building {buildingCode = code, buildingName = code, buildingAddress = "N/A", buildingPostalCode = "A1A 1A1", buildingLat = 1.0, buildingLng = 1.0}
+
+-- | Helper function to get a list of unique firstRoom' and secondRoom' values involved in a MeetTime
+getUniqueBuildings :: [MeetTime] -> [T.Text]
+getUniqueBuildings = nub . concatMap getMeetBuildings
+    where
+        getMeetBuildings (MeetTime _ times') = mapMaybe firstRoom' times' ++ mapMaybe secondRoom' times'
 
 -- | List of test cases as (label, input courses, expected output)
 indexTestCases :: [(String, [T.Text], String)]
