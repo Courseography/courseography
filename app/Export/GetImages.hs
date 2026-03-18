@@ -10,14 +10,12 @@ module Export.GetImages
     (getActiveTimetable, writeActiveGraphImage) where
 
 import Config (runDb)
-import Data.Aeson (decode)
-import Data.ByteString.Lazy (fromStrict)
+import Data.Aeson (decodeStrictText)
 import Data.Char (isAlphaNum)
 import Data.Fixed (mod')
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
-import qualified Data.Text.Encoding as TE
 import Database.Tables as Tables
 import Export.ImageConversion (createImageFile)
 import Export.TimetableImageCreator (renderTableHelper, times)
@@ -30,7 +28,7 @@ import System.IO (Handle)
 -- otherwise the Computer Science graph is written as a default.
 writeActiveGraphImage :: T.Text -> Handle -> IO ()
 writeActiveGraphImage graphInfo svgHandle = do
-    let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ TE.encodeUtf8 graphInfo :: M.Map T.Text T.Text
+    let graphInfoMap = fromMaybe M.empty $ decodeStrictText graphInfo :: M.Map T.Text T.Text
         graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
     getGraphImage graphName graphInfoMap svgHandle
 
