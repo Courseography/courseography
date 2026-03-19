@@ -15,7 +15,7 @@ import Data.Time.Calendar.OrdinalDate (fromMondayStartWeek, mondayStartWeek)
 import Database.Persist.Sqlite (entityKey, entityVal, selectList, (==.))
 import Database.Tables
 import Export.GetImages (getActiveTimetable, writeActiveGraphImage)
-import Export.ImageConversion (createImageFile)
+import Export.ImageConversion (withImageFile)
 import Export.LatexGenerator
 import Export.PdfGenerator
 import Happstack.Server
@@ -23,7 +23,6 @@ import MasterTemplate
 import Models.Meeting (returnMeeting)
 import Scripts
 import System.FilePath ((</>))
-import System.IO (IOMode (WriteMode), withFile)
 import System.IO.Temp (withSystemTempDirectory)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -60,12 +59,8 @@ exportTimetablePDFResponse = do
     graphInfo <- look "JsonLocalStorageObj"
 
     liftIO $ withSystemTempDirectory "timetable-pdf" $ \tempDir -> do
-        let graphSvgPath = tempDir </> "graph.svg"
-            graphPngPath = tempDir </> "graph.png"
-
-        withFile graphSvgPath WriteMode $ \graphSvgHandle ->
-            writeActiveGraphImage graphInfo graphSvgHandle
-        createImageFile graphSvgPath graphPngPath
+        let graphPngPath = tempDir </> "graph.png"
+        withImageFile graphPngPath (writeActiveGraphImage graphInfo)
         fallPngPath <- getActiveTimetable selectedCourses "Fall" tempDir
         springPngPath <- getActiveTimetable selectedCourses "Spring" tempDir
         pdfName <- returnPDF graphPngPath fallPngPath springPngPath tempDir
@@ -81,10 +76,10 @@ returnPdfBS pdfFilename = do
 -- and springTimetableImg generated in tempDir.
 returnPDF :: String -> String -> String -> FilePath -> IO String
 returnPDF graphImg fallTimetableImg springTimetableImg tempDir = do
-    let texName = tempDir </> "timetable.tex"
-        pdfName = tempDir </> "timetable.pdf"
-    generateTex [graphImg, fallTimetableImg, springTimetableImg] texName -- generate a temporary TEX file
-    createPDF texName                            -- create PDF using TEX
+    let timetableName = "timetable"
+        pdfName = tempDir </> (timetableName ++ ".pdf")
+    texText <- generateTex [graphImg, fallTimetableImg, springTimetableImg]
+    createPDF texText tempDir timetableName         -- create PDF using TEX
     return pdfName
 
 

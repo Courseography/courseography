@@ -5,30 +5,34 @@
 module Export.PdfGenerator
     (createPDF) where
 
-import Data.List.Utils (replace)
+import Data.Text (Text)
+import qualified Data.Text.IO as TIO
 import GHC.IO.Handle.Types
-import System.Directory (removeFile)
-import System.Process (ProcessHandle, createProcess, shell, waitForProcess)
+import System.IO (hClose)
+import System.Process (ProcessHandle, StdStream (CreatePipe), createProcess, proc, std_in,
+                       waitForProcess)
 
--- | Opens a new process to create a PDF from a TEX (texName) and deletes
--- the tex file and extra files created by pdflatex
-createPDF :: String -> IO ()
-createPDF texName  = do
-  (_, _, _, pid) <- convertTexToPDF texName
-  putStrLn "Waiting for a process..."
-  _ <- waitForProcess pid
-  let auxFile = replace ".tex" ".aux" texName
-      logFile = replace ".tex" ".log" texName
-  mapM_ removeFile [auxFile, logFile, texName]
-  putStrLn "Process Complete"
+-- | Opens a new process to create a PDF from a TEX
+createPDF :: Text -> FilePath -> String -> IO ()
+createPDF texText outDir jobName = do
+    (Just hin, _, _, pid) <- convertTexToPDF outDir jobName
+    TIO.hPutStr hin texText
+    hClose hin
+    putStrLn "Waiting for a process..."
+    _ <- waitForProcess pid
+    putStrLn "Process Complete"
 
 -- | Create a process to use the pdflatex program to create a PDF from a TEX
--- file (texName). The process is run in nonstop mode and so it will not block
--- if an error occurs. The resulting PDF will have the same filename as texName.
-convertTexToPDF :: String -> IO
-                            (Maybe Handle,
-                             Maybe Handle,
-                             Maybe Handle,
-                             ProcessHandle)
-convertTexToPDF texName =
-    createProcess $ shell $ "pdflatex -interaction=nonstopmode " ++ texName
+-- read from stdin. The process is run in nonstop mode and so it will not block
+-- if an error occurs. The resulting PDF will have the same filename as jobName.
+convertTexToPDF :: FilePath -> String -> IO
+                                        (Maybe Handle,
+                                         Maybe Handle,
+                                         Maybe Handle,
+                                         ProcessHandle)
+convertTexToPDF outDir jobName =
+    createProcess (proc "pdflatex"
+      [ "-interaction=nonstopmode"
+      , "-output-directory=" ++ outDir
+      , "-jobname=" ++ jobName
+      ]) { std_in = CreatePipe }
