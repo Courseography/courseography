@@ -4,7 +4,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (decode, object, (.=))
 import Data.Maybe (fromMaybe)
 import Export.ImageConversion (createImageFile)
-import Happstack.Server (Response, ServerPart, look, lookBS, lookText', ok, toResponse)
+import Happstack.Server (Response, ServerPart, lookBS, lookText', ok, toResponse)
 import MasterTemplate (masterTemplate)
 import Scripts (graphScripts)
 import System.IO (hClose)
@@ -53,7 +53,7 @@ getGraphJSON = do
 -- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.
 graphImageResponse :: ServerPart Response
 graphImageResponse = do
-    graphInfo <- look "JsonLocalStorageObj"
+    graphInfo <- lookText' "JsonLocalStorageObj"
     liftIO $ withSystemTempFile "graph.svg" $ \svgPath svgHandle -> do
         withSystemTempFile "graph.png" $ \pngPath pngHandle -> do
             hClose pngHandle
