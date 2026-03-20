@@ -22,6 +22,7 @@
 - Remove unused `getTimetableImage` function in `Export/GetImages.hs`
 - Refactored various backend text functions and tests to avoid `String` data in favour of `Text` when feasible
 - Removed unused files
+- Refactored controllers to retrieve graph info data using `lookText'` instead of `look`
 - Removed `Location` datatype in favour of `Building`
 
 ## [0.7.2] - 2025-12-10
