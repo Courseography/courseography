@@ -184,16 +184,6 @@ data Time =
           secondRoom :: Maybe Building
         } deriving (Show, Generic)
 
-data Location =
-  Location { room :: T.Text,
-            bName :: T.Text,
-            bCode :: T.Text,
-            address :: T.Text,
-            postalCode :: T.Text,
-            lat :: Double,
-            lng :: Double
-          } deriving (Show, Generic)
-
 -- | A Meeting with its associated Times.
 data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time'] }
   deriving (Show, Generic)
@@ -220,7 +210,6 @@ instance ToJSON Program
 instance ToJSON Time
 instance ToJSON MeetTime'
 instance ToJSON Building
-instance ToJSON Location
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
