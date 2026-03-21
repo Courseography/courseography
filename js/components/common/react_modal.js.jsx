@@ -152,14 +152,14 @@ class CourseModal extends React.Component {
         if (occurrence.firstRoom === null || occurrence.firstRoom === undefined) {
           firstRoom = " "
         } else {
-          firstRoom = occurrence.firstRoom.room
+          firstRoom = occurrence.firstRoom.buildingCode
         }
 
         let secondRoom = ""
         if (occurrence.secondRoom === null || occurrence.secondRoom === undefined) {
           secondRoom = " "
         } else {
-          secondRoom = occurrence.secondRoom.room
+          secondRoom = occurrence.secondRoom.buildingCode
         }
 
         if ((firstRoom != " ") & (secondRoom != " ")) {
@@ -483,7 +483,7 @@ class MapModal extends React.Component {
   // their course codes
   groupLecturesByBuilding(lecsByBuilding, lecture, roomNum) {
     const foundBuilding = lecsByBuilding.find(
-      b => b.buildingName === lecture[roomNum].bName
+      b => b.buildingName === lecture[roomNum].buildingName
     )
 
     const timeframeData = {
@@ -503,12 +503,12 @@ class MapModal extends React.Component {
     // if the building is not in the lecsByBuilding yet, add it into the array
     if (!foundBuilding) {
       lecsByBuilding.push({
-        buildingName: lecture[roomNum].bName,
-        buildingCode: lecture[roomNum].bCode,
-        address: lecture[roomNum].address,
-        lat: lecture[roomNum].lat,
-        lng: lecture[roomNum].lng,
-        postalCode: lecture[roomNum].postalCode,
+        buildingName: lecture[roomNum].buildingName,
+        buildingCode: lecture[roomNum].buildingCode,
+        address: lecture[roomNum].buildingAddress,
+        lat: lecture[roomNum].buildingLat,
+        lng: lecture[roomNum].buildingLng,
+        postalCode: lecture[roomNum].buildingPostalCode,
         days: [dayData],
       })
     }
@@ -700,14 +700,12 @@ class DayBox extends React.Component {
 
   getRoomStr(lec, room, roomNum) {
     return (
-      "Room" +
+      "Location" +
       (lec.fstRoom && lec.secRoom ? " " + roomNum : "") +
       ": " +
-      room.room +
-      ", " +
-      room.bName +
+      room.buildingName +
       " (" +
-      room.bCode +
+      room.buildingCode +
       ")"
     )
   }
@@ -875,8 +873,8 @@ class CampusMap extends React.Component {
       let colouredMarker
       const buildingInd = this.props.selectedLecTimeframes.findIndex(
         lec =>
-          (lec.fstRoom && lec.fstRoom.bCode === building.buildingCode) ||
-          (lec.secRoom && lec.secRoom.bCode === building.buildingCode)
+          (lec.fstRoom && lec.fstRoom.buildingCode === building.buildingCode) ||
+          (lec.secRoom && lec.secRoom.buildingCode === building.buildingCode)
       )
 
       colouredMarker = buildingInd == -1 ? blueMarker : redMarker

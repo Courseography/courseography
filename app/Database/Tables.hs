@@ -180,19 +180,9 @@ data Time =
   Time { weekDay :: Double,
           startHour :: Double,
           endHour :: Double,
-          firstRoom :: Maybe Location,
-          secondRoom :: Maybe Location
+          firstRoom :: Maybe Building,
+          secondRoom :: Maybe Building
         } deriving (Show, Generic)
-
-data Location =
-  Location { room :: T.Text,
-            bName :: T.Text,
-            bCode :: T.Text,
-            address :: T.Text,
-            postalCode :: T.Text,
-            lat :: Double,
-            lng :: Double
-          } deriving (Show, Generic)
 
 -- | A Meeting with its associated Times.
 data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time'] }
@@ -220,7 +210,6 @@ instance ToJSON Program
 instance ToJSON Time
 instance ToJSON MeetTime'
 instance ToJSON Building
-instance ToJSON Location
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
@@ -323,8 +312,8 @@ convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
 -- | Convert Times into Time
 buildTime :: Times -> SqlPersistM Time
 buildTime t = do
-  room1 <- buildLocation (timesFirstRoom t)
-  room2 <- buildLocation (timesSecondRoom t)
+  room1 <- getBuilding (timesFirstRoom t)
+  room2 <- getBuilding (timesSecondRoom t)
   return $ Time (timesWeekDay t)
     (timesStartHour t)
     (timesEndHour t)
@@ -340,8 +329,9 @@ buildTimes meetingKey t =
     (firstRoom' t)
     (secondRoom' t)
 
-buildLocation :: Maybe T.Text -> SqlPersistM (Maybe Location)
-buildLocation rm = do
+-- | Given a building code, get the persistent Building associated with it
+getBuilding :: Maybe T.Text -> SqlPersistM (Maybe Building)
+getBuilding rm = do
   case rm of
     Nothing -> return Nothing
     Just r -> do
@@ -350,10 +340,4 @@ buildLocation rm = do
         Nothing -> return Nothing
         Just entBuilding -> do
           let building = entityVal entBuilding
-          return $ Just $ Location (T.take 2 r)  -- Remove room number
-                                  (buildingName building)
-                                  (buildingCode building)
-                                  (buildingAddress building)
-                                  (buildingPostalCode building)
-                                  (buildingLat building)
-                                  (buildingLng building)
+          return $ Just building
