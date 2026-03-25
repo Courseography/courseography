@@ -11,10 +11,8 @@ import Text.LaTeX.Packages.Geometry
 import Text.LaTeX.Packages.Graphicx
 
 -- | Generates a TEX text that includes all of the images in imageNames
-generateTex :: [String] -> IO Text
-generateTex imageNames = do
-    texText <- execLaTeXT (buildTex imageNames)
-    return $ render texText
+generateTex :: [String] -> Text
+generateTex imageNames = render $ execLaTeXM (buildTex imageNames)
 
 -- | Combine the preamble and the document text into a single block of latex
 -- code. The document text contains code to insert all of the images in

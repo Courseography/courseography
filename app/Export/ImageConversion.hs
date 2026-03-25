@@ -16,9 +16,8 @@ withImageFile outName writeAction = do
     (Just hin, _, _, pid) <- createProcess (proc "magick" ["svg:-", outName]) { std_in = CreatePipe }
     writeAction hin
     hClose hin
-    putStrLn "Waiting for process..."
     _ <- waitForProcess pid
-    putStrLn "Process Complete"
+    return ()
 
 -- | Opens a new process to convert an SVG (inName) to a PNG (outName)
 -- Note: hGetContents can be used to read Handles. Useful when trying to read from
@@ -26,9 +25,8 @@ withImageFile outName writeAction = do
 createImageFile :: String -> String -> IO ()
 createImageFile inName outName =  do
     (_, _, _, pid) <- convertToImage inName outName
-    putStrLn "Waiting for process..."
     _ <- waitForProcess pid
-    putStrLn "Process Complete"
+    return ()
 
 -- | Converts an SVG file to a PNG file. Note that ImageMagick's 'magick' command
 -- can take in file descriptors.

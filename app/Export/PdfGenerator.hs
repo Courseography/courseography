@@ -18,9 +18,8 @@ createPDF texText outDir jobName = do
     (Just hin, _, _, pid) <- convertTexToPDF outDir jobName
     TIO.hPutStr hin texText
     hClose hin
-    putStrLn "Waiting for a process..."
     _ <- waitForProcess pid
-    putStrLn "Process Complete"
+    return ()
 
 -- | Create a process to use the pdflatex program to create a PDF from a TEX
 -- read from stdin. The process is run in nonstop mode and so it will not block

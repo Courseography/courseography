@@ -78,7 +78,7 @@ returnPDF :: String -> String -> String -> FilePath -> IO String
 returnPDF graphImg fallTimetableImg springTimetableImg tempDir = do
     let timetableName = "timetable"
         pdfName = tempDir </> (timetableName ++ ".pdf")
-    texText <- generateTex [graphImg, fallTimetableImg, springTimetableImg]
+        texText = generateTex [graphImg, fallTimetableImg, springTimetableImg]
     createPDF texText tempDir timetableName         -- create PDF using TEX
     return pdfName
 
