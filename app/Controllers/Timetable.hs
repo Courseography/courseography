@@ -56,7 +56,7 @@ exportTimetableImageResponse = do
 exportTimetablePDFResponse :: ServerPart Response
 exportTimetablePDFResponse = do
     selectedCourses <- lookText' "courses"
-    graphInfo <- look "JsonLocalStorageObj"
+    graphInfo <- lookText' "JsonLocalStorageObj"
 
     liftIO $ withSystemTempDirectory "timetable-pdf" $ \tempDir -> do
         let graphPngPath = tempDir </> "graph.png"
