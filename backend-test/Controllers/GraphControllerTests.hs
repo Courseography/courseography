@@ -51,8 +51,8 @@ insertGraphs = mapM_ insertGraph'
         insertGraph' title = insert_ (Graph title 0 0 False )
 
 -- | Run a test case (case, input, expected output) on the index function.
-runIndexTest :: String -> [T.Text] -> String -> TestTree
-runIndexTest label graphs expected =
+runIndexTest :: (String, [T.Text], String) -> TestTree
+runIndexTest (label, graphs, expected) =
     testCase label $ do
         runDb $ do
             clearDatabase
@@ -63,7 +63,7 @@ runIndexTest label graphs expected =
 
 -- | Run all the index test cases
 runIndexTests :: [TestTree]
-runIndexTests = map (\(label, graphs, expected) -> runIndexTest label graphs expected) indexTestCases
+runIndexTests = map runIndexTest indexTestCases
 
 -- | Helper function to add the default width and height to graph JSON
 addDefaults :: Value -> Value
@@ -89,8 +89,8 @@ saveGraphJSONTestCases =
     ]
 
 -- | Run a test case (case, graph JSON payload)
-runSaveGraphJSONTest :: String -> BL.ByteString -> TestTree
-runSaveGraphJSONTest label payload =
+runSaveGraphJSONTest :: (String, BL.ByteString) -> TestTree
+runSaveGraphJSONTest (label, payload) =
     testCase label $ do
         runDb clearDatabase
         let graphName = "Test Graph Name"
@@ -101,7 +101,7 @@ runSaveGraphJSONTest label payload =
 
 -- | Run all save graph test cases
 runSaveGraphJSONTests :: [TestTree]
-runSaveGraphJSONTests = map (uncurry runSaveGraphJSONTest) saveGraphJSONTestCases
+runSaveGraphJSONTests = map runSaveGraphJSONTest saveGraphJSONTestCases
 
 
 -- | List of test cases for getGraphJSON as (label, (texts, shapes, paths))
@@ -181,8 +181,8 @@ getGraphJSONTestCases =
 
 -- | Run a test case (case, (texts', shapes', paths')) on getGraphJSON.
 -- | Map GraphID to 1 in the assertions to account for insertGraph overriding the field.
-runGetGraphJSONTest :: String -> ([Text], [Shape], [Path]) -> TestTree
-runGetGraphJSONTest label (texts', shapes', paths') =
+runGetGraphJSONTest :: (String, ([Text], [Shape], [Path])) -> TestTree
+runGetGraphJSONTest (label, (texts', shapes', paths')) =
     testCase label $ do
         let graphName = "Test Graph Name"
         runDb $ do
@@ -200,7 +200,7 @@ runGetGraphJSONTest label (texts', shapes', paths') =
 
 -- | Run all getGraphJSON tests
 runGetGraphJSONTests :: [TestTree]
-runGetGraphJSONTests = map (\(label, (texts', shapes', paths')) -> runGetGraphJSONTest label (texts', shapes', paths')) getGraphJSONTestCases
+runGetGraphJSONTests = map runGetGraphJSONTest getGraphJSONTestCases
 
 
 -- | Test suite for Graph Controller Module
