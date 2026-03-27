@@ -24,6 +24,7 @@
 - Removed unused files
 - Refactored controllers to retrieve graph info data using `lookText'` instead of `look`
 - Removed `Location` datatype in favour of `Building`
+- Renamed usages of the word "room" to "location" in the codebase to better reflect the data represented
 
 ## [0.7.2] - 2025-12-10
 

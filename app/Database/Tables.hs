@@ -75,8 +75,8 @@ Times
     startHour Double
     endHour Double
     meeting MeetingId
-    firstRoom T.Text Maybe
-    secondRoom T.Text Maybe
+    firstLocation T.Text Maybe
+    secondLocation T.Text Maybe
 
 Breadth
     description T.Text
@@ -172,16 +172,16 @@ data Time' =
   Time' { weekDay' :: Double,
           startHour' :: Double,
           endHour' :: Double,
-          firstRoom' :: Maybe T.Text,
-          secondRoom' :: Maybe T.Text
+          firstLocation' :: Maybe T.Text,
+          secondLocation' :: Maybe T.Text
         } deriving (Show, Generic)
 
 data Time =
   Time { weekDay :: Double,
           startHour :: Double,
           endHour :: Double,
-          firstRoom :: Maybe Building,
-          secondRoom :: Maybe Building
+          firstLocation :: Maybe Building,
+          secondLocation :: Maybe Building
         } deriving (Show, Generic)
 
 -- | A Meeting with its associated Times.
@@ -312,8 +312,8 @@ convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
 -- | Convert Times into Time
 buildTime :: Times -> SqlPersistM Time
 buildTime t = do
-  room1 <- getBuilding (timesFirstRoom t)
-  room2 <- getBuilding (timesSecondRoom t)
+  room1 <- getBuilding (timesFirstLocation t)
+  room2 <- getBuilding (timesSecondLocation t)
   return $ Time (timesWeekDay t)
     (timesStartHour t)
     (timesEndHour t)
@@ -326,8 +326,8 @@ buildTimes meetingKey t =
     (startHour' t)
     (endHour' t)
     meetingKey
-    (firstRoom' t)
-    (secondRoom' t)
+    (firstLocation' t)
+    (secondLocation' t)
 
 -- | Given a building code, get the persistent Building associated with it
 getBuilding :: Maybe T.Text -> SqlPersistM (Maybe Building)
