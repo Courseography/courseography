@@ -25,7 +25,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstRoom: {
+              firstLocation: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -33,7 +33,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondRoom: null,
+              secondLocation: null,
               startHour: 15,
               weekDay: 1,
             },
@@ -50,7 +50,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM "],
+          location: ["LM "],
         },
       ]
       expect(actual).toEqual(expected)
@@ -74,7 +74,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstRoom: {
+              firstLocation: {
                 buildingAddress: "15  King's College Circle",
                 buildingCode: "UC",
                 buildingName: "University College",
@@ -82,13 +82,13 @@ describe("getTable", () => {
                 buildingLng: -79.395181775127,
                 buildingPostalCode: "M5S 3H7",
               },
-              secondRoom: null,
+              secondLocation: null,
               startHour: 16,
               weekDay: 3,
             },
             {
               endHour: 17,
-              firstRoom: {
+              firstLocation: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -96,7 +96,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondRoom: null,
+              secondLocation: null,
               startHour: 15,
               weekDay: 1,
             },
@@ -113,7 +113,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17", "Thursday 16 - 17"],
-          room: ["LM ", "UC "],
+          location: ["LM ", "UC "],
         },
       ]
 
@@ -121,7 +121,7 @@ describe("getTable", () => {
     })
   })
 
-  describe("The occurence of the lecture has two rooms ", () => {
+  describe("The occurence of the lecture has two locations ", () => {
     beforeEach(() => {
       meetingTime = [
         {
@@ -138,7 +138,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstRoom: {
+              firstLocation: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -146,7 +146,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondRoom: {
+              secondLocation: {
                 buildingAddress: "15  King's College Circle",
                 buildingCode: "UC",
                 buildingName: "University College",
@@ -161,7 +161,7 @@ describe("getTable", () => {
         },
       ]
     })
-    test("Both of the first and second room of the occurence are shown", () => {
+    test("Both of the first and second location of the occurence are shown", () => {
       actual = wrapper.getTable(meetingTime, "F")
       expected = [
         {
@@ -170,7 +170,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM, UC"],
+          location: ["LM, UC"],
         },
       ]
       expect(actual).toEqual(expected)
@@ -194,7 +194,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstRoom: {
+              firstLocation: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -202,7 +202,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondRoom: null,
+              secondLocation: null,
               startHour: 15,
               weekDay: 1,
             },
@@ -222,7 +222,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstRoom: {
+              firstLocation: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -230,7 +230,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondRoom: null,
+              secondLocation: null,
               startHour: 15,
               weekDay: 1,
             },
@@ -247,7 +247,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM "],
+          location: ["LM "],
         },
         {
           activity: "LEC2001",
@@ -255,7 +255,7 @@ describe("getTable", () => {
           availability: "0 of 1 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM "],
+          location: ["LM "],
         },
       ]
       expect(actual).toEqual(expected)
@@ -279,8 +279,8 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 16,
-              firstRoom: null,
-              secondRoom: null,
+              firstLocation: null,
+              secondLocation: null,
               startHour: 14,
               weekDay: 0,
             },
@@ -300,7 +300,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstRoom: {
+              firstLocation: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -308,7 +308,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondRoom: null,
+              secondLocation: null,
               startHour: 15,
               weekDay: 1,
             },
@@ -325,7 +325,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM "],
+          location: ["LM "],
         },
         {
           activity: "TUT0301",
@@ -333,7 +333,7 @@ describe("getTable", () => {
           availability: "2 of 166 available",
           waitList: "0 students",
           time: ["Monday 14 - 16"],
-          room: ["  "],
+          location: ["  "],
         },
       ]
       expect(actual).toEqual(expected)
