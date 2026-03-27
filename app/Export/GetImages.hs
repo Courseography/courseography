@@ -16,8 +16,9 @@ import Data.Fixed (mod')
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
+import qualified Data.Text.Lazy.IO as LTIO
 import Database.Tables as Tables
-import Export.ImageConversion (createImageFile)
+import Export.ImageConversion (withImageFile)
 import Export.TimetableImageCreator (renderTableHelper, times)
 import Models.Meeting (getMeetingTime)
 import Svg.Generator (buildSVG)
@@ -97,10 +98,10 @@ generateTimetableImg :: [[[T.Text]]] -> T.Text -> FilePath -> IO FilePath
 generateTimetableImg schedule courseSession tempDir = do
     let session = filter isAlphaNum (T.unpack courseSession)
         sessionStem = if null session then "session" else session
-        svgPath = tempDir </> (sessionStem ++ ".svg")
         pngPath = tempDir </> (sessionStem ++ ".png")
-    renderTableHelper svgPath (zipWith (:) times schedule) courseSession
-    createImageFile svgPath pngPath
+        svgText = renderTableHelper (zipWith (:) times schedule) courseSession
+    withImageFile pngPath $ \hin ->
+        LTIO.hPutStr hin svgText
     return pngPath
 
 -- | Builds the graph svg, given file handler of the svg
