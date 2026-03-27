@@ -10,10 +10,9 @@ import Text.LaTeX.Packages.Fancyhdr
 import Text.LaTeX.Packages.Geometry
 import Text.LaTeX.Packages.Graphicx
 
--- | Create a TEX file named texName that includes all of the images in
--- imageNames
-generateTex :: [String] -> String -> IO ()
-generateTex imageNames texName = execLaTeXT (buildTex imageNames) >>= renderFile texName
+-- | Generates a TEX text that includes all of the images in imageNames
+generateTex :: [String] -> Text
+generateTex imageNames = render $ execLaTeXM (buildTex imageNames)
 
 -- | Combine the preamble and the document text into a single block of latex
 -- code. The document text contains code to insert all of the images in

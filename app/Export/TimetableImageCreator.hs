@@ -7,8 +7,10 @@ module Export.TimetableImageCreator
 
 import Data.List (intersperse)
 import qualified Data.Text as T
+import qualified Data.Text.Lazy as L
 import Diagrams.Backend.SVG
 import Diagrams.Prelude
+import Graphics.Svg.Core (renderText)
 import TextShow (showt)
 
 days :: [T.Text]
@@ -107,17 +109,20 @@ makeTable :: [[[T.Text]]] -> T.Text -> Diagram B
 makeTable s session = vsep 0.04 $ header session: intersperse rowBorder (map makeRow s)
 
 -- |Creates a timetable by zipping the time and course tables.
-renderTable :: String -> T.Text -> T.Text -> IO ()
-renderTable filename courses session = do
+renderTable :: T.Text -> T.Text -> L.Text
+renderTable courses session =
     let courseTable = partition5 $ map (\x -> [x | not (T.null x)]) $ T.splitOn "_" courses
-    renderTableHelper filename (zipWith (:) times courseTable) session
+    in renderTableHelper (zipWith (:) times courseTable) session
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
 
 -- |Renders an SVG with a width of 1024, though the documentation doesn't
 -- specify the units, it is assumed that these are pixels.
-renderTableHelper :: String -> [[[T.Text]]] -> T.Text -> IO ()
-renderTableHelper filename schedule session = do
+renderTableHelper :: [[[T.Text]]] -> T.Text -> L.Text
+renderTableHelper schedule session =
     let g = makeTable schedule session
-    renderSVG filename (mkWidth 1024) g
+        opts = SVGOptions (mkWidth 1024) Nothing (T.pack "") [] False
+        svgElement = renderDia SVG opts g
+    in
+        renderText svgElement

@@ -13,12 +13,13 @@ import Config (runDb)
 import Control.Monad (unless)
 import Controllers.Course (courseInfo, index, retrieveCourse)
 import qualified Data.ByteString.Lazy.Char8 as BL
+import Data.List (nub)
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe, mapMaybe)
-import Data.List (nub)
 import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, insert, insert_, insertMany_)
-import Database.Tables (Building (..), Courses (..), MeetTime (..), Meeting (..), Time' (..), buildTimes)
+import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_)
+import Database.Tables (Building (..), Courses (..), MeetTime (..), Meeting (..), Time' (..),
+                        buildTimes)
 import Happstack.Server (rsBody, rsCode)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)

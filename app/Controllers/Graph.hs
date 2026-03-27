@@ -3,12 +3,12 @@ module Controllers.Graph (graphResponse, index, getGraphJSON, graphImageResponse
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (decode, object, (.=))
 import Data.Maybe (fromMaybe)
-import Export.ImageConversion (createImageFile)
+import Export.ImageConversion (withImageFile)
 import Happstack.Server (Response, ServerPart, lookBS, lookText', ok, toResponse)
 import MasterTemplate (masterTemplate)
 import Scripts (graphScripts)
-import System.IO (hClose)
-import System.IO.Temp (withSystemTempFile)
+import System.FilePath ((</>))
+import System.IO.Temp (withSystemTempDirectory)
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
@@ -54,13 +54,10 @@ getGraphJSON = do
 graphImageResponse :: ServerPart Response
 graphImageResponse = do
     graphInfo <- lookText' "JsonLocalStorageObj"
-    liftIO $ withSystemTempFile "graph.svg" $ \svgPath svgHandle -> do
-        withSystemTempFile "graph.png" $ \pngPath pngHandle -> do
-            hClose pngHandle
-            writeActiveGraphImage graphInfo svgHandle
-            hClose svgHandle
-            createImageFile svgPath pngPath
-            readImageData pngPath
+    liftIO $ withSystemTempDirectory "graph-image" $ \tempDir -> do
+        let pngPath = tempDir </> "graph.png"
+        withImageFile pngPath (writeActiveGraphImage graphInfo)
+        readImageData pngPath
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: ServerPart Response
