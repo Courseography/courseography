@@ -188,8 +188,8 @@ retrieveCourseTestCases =
     ]
 
 -- | Run a test case (case, input, expected status code, expected output) on the retrieveCourse function.
-runRetrieveCourseTest :: String -> T.Text -> Map.Map T.Text T.Text -> [MeetTime] -> Int -> String -> TestTree
-runRetrieveCourseTest label courseName courseData meetingTimes expectedCode expectedBody =
+runRetrieveCourseTest :: (String, T.Text, Map.Map T.Text T.Text, [MeetTime], Int, String) -> TestTree
+runRetrieveCourseTest (label, courseName, courseData, meetingTimes, expectedCode, expectedBody) =
     testCase label $ do
         let currCourseName = fromMaybe "" $ Map.lookup "name" courseData
 
@@ -231,7 +231,7 @@ runRetrieveCourseTest label courseName courseData meetingTimes expectedCode expe
 
 -- | Run all the retrieveCourse test cases
 runRetrieveCourseTests :: [TestTree]
-runRetrieveCourseTests = map (\(label, courseName, courseData, meetingTimes, expectedCode, expectedBody) -> runRetrieveCourseTest label courseName courseData meetingTimes expectedCode expectedBody) retrieveCourseTestCases
+runRetrieveCourseTests = map runRetrieveCourseTest retrieveCourseTestCases
 
 -- | Helper function to insert courses into the database
 insertCourses :: [T.Text] -> SqlPersistM ()
@@ -269,8 +269,8 @@ indexTestCases =
     ]
 
 -- | Run a test case (case, input, expected output) on the index function.
-runIndexTest :: String -> [T.Text] -> String -> TestTree
-runIndexTest label courses expected =
+runIndexTest :: (String, [T.Text], String) -> TestTree
+runIndexTest (label, courses, expected) =
     testCase label $ do
         runDb $ do
             clearDatabase
@@ -281,7 +281,7 @@ runIndexTest label courses expected =
 
 -- | Run all the index test cases
 runIndexTests :: [TestTree]
-runIndexTests = map (\(label, courses, expected) -> runIndexTest label courses expected) indexTestCases
+runIndexTests = map runIndexTest indexTestCases
 
 -- | List of test cases as (case, database state, input [dept], expected JSON output) for the courseInfo function
 courseInfoTestCases :: [(String, [Courses], T.Text, String)]
@@ -346,8 +346,8 @@ courseInfoTestCases =
             }
 
 -- | Run a test case (case, database state, input [dept], expected JSON output) on the courseInfo function
-runCourseInfoTest :: String -> [Courses] -> T.Text -> String -> TestTree
-runCourseInfoTest label state dept expected =
+runCourseInfoTest :: (String, [Courses], T.Text, String) -> TestTree
+runCourseInfoTest (label, state, dept, expected) =
     testCase label $ do
         runDb $ do
             clearDatabase
@@ -358,7 +358,7 @@ runCourseInfoTest label state dept expected =
 
 -- | Run all courseInfo test cases
 runCourseInfoTests :: [TestTree]
-runCourseInfoTests = map (\(label, state, dept, expected) -> runCourseInfoTest label state dept expected) courseInfoTestCases
+runCourseInfoTests = map runCourseInfoTest courseInfoTestCases
 
 -- | Test suite for Course Controller Module
 test_courseController :: TestTree

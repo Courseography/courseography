@@ -42,8 +42,8 @@ instance FromJSON ProgramResponseNoTime where
         return $ ProgramResponseNoTime code dept desc name reqs
 
 -- | List of test cases as (label, programs to insert, query params, expected output)
-retrieveprogramTestCases :: [(String, [T.Text], T.Text, Maybe ProgramResponseNoTime)]
-retrieveprogramTestCases =
+retrieveProgramTestCases :: [(String, [T.Text], T.Text, Maybe ProgramResponseNoTime)]
+retrieveProgramTestCases =
     [ ("Valid program code returns JSON"
       , ["ASMAJ1689"]
       , "ASMAJ1689"
@@ -66,8 +66,8 @@ parseProgramResponse :: String -> Maybe ProgramResponseNoTime
 parseProgramResponse jsonStr = decode (BL.pack jsonStr)
 
 -- | Run a test case (case, input, expected output) on the retrieveProgram function.
-runRetrieveProgramTest :: String -> [T.Text] -> T.Text -> Maybe ProgramResponseNoTime -> TestTree
-runRetrieveProgramTest label programs queryParam expected =
+runRetrieveProgramTest :: (String, [T.Text], T.Text, Maybe ProgramResponseNoTime) -> TestTree
+runRetrieveProgramTest (label, programs, queryParam, expected) =
     testCase label $ do
         runDb $ do
             clearDatabase
@@ -79,7 +79,7 @@ runRetrieveProgramTest label programs queryParam expected =
 
 -- | Run all the retrieveProgram test cases
 runRetrieveProgramTests :: [TestTree]
-runRetrieveProgramTests = map (\(label, programs, params, expected) -> runRetrieveProgramTest label programs params expected) retrieveprogramTestCases
+runRetrieveProgramTests = map runRetrieveProgramTest retrieveProgramTestCases
 
 -- | List of test cases as (label, input programs, expected output)
 indexTestCases :: [(String, [T.Text], String)]
@@ -91,8 +91,8 @@ indexTestCases =
     ]
 
 -- | Run a test case (case, input, expected output) on the index function.
-runIndexTest :: String -> [T.Text] -> String -> TestTree
-runIndexTest label programs expected =
+runIndexTest :: (String, [T.Text], String) -> TestTree
+runIndexTest (label, programs, expected) =
     testCase label $ do
         runDb $ do
             clearDatabase
@@ -112,7 +112,7 @@ insertPrograms = mapM_ insertProgram
 
 -- | Run all the index test cases
 runIndexTests :: [TestTree]
-runIndexTests = map (\(label, programs, expected) -> runIndexTest label programs expected) indexTestCases
+runIndexTests = map runIndexTest indexTestCases
 
 -- | Test suite for Program Controller Module
 test_programController :: TestTree

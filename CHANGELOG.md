@@ -25,6 +25,7 @@
 - Refactored `returnPDF`, `exportTimetablePDFResponse`, and `graphImageResponse` to use stdin instead of temporary `.tex` and `.svg` files
 - Refactored controllers to retrieve graph info data using `lookText'` instead of `look`
 - Removed `Location` datatype in favour of `Building`
+- Refactor tests to run directly on tuple input to prevent unnecessary unpacking and repacking
 
 ## [0.7.2] - 2025-12-10
 
