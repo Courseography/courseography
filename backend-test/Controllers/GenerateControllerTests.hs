@@ -78,8 +78,8 @@ findAndSavePrereqsResponseTestCases =
     )]
 
 -- | Run a test case (input course, course/prereq structure, JSON payload, expected # of nodes) on the findAndSavePrereqsResponse function.
-runfindAndSavePrereqsResponseTest :: String -> [(T.Text, Maybe T.Text)] -> BSL.ByteString -> Integer -> Integer -> TestTree
-runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes expectedBoolNodes =
+runFindAndSavePrereqsResponseTest :: (String, [(T.Text, Maybe T.Text)], BSL.ByteString, Integer, Integer) -> TestTree
+runFindAndSavePrereqsResponseTest (course, graphStructure, payload, expectedNodes, expectedBoolNodes) =
     testCase course $ do
         runDb $ do
             clearDatabase
@@ -108,9 +108,9 @@ runfindAndSavePrereqsResponseTest course graphStructure payload expectedNodes ex
         isBoolNode _ = False
 
 -- | Run all the findAndSavePrereqsResponse test cases
-runfindAndSavePrereqsResponseTests :: [TestTree]
-runfindAndSavePrereqsResponseTests = map (\(course, courseStructure, payload, expectedNodes, expectedBoolNodes) -> runfindAndSavePrereqsResponseTest course courseStructure payload expectedNodes expectedBoolNodes) findAndSavePrereqsResponseTestCases
+runFindAndSavePrereqsResponseTests :: [TestTree]
+runFindAndSavePrereqsResponseTests = map runFindAndSavePrereqsResponseTest findAndSavePrereqsResponseTestCases
 
 -- | Test suite for Generate Controller Module
 test_generateController :: TestTree
-test_generateController = withDatabase "Generate Controller tests" runfindAndSavePrereqsResponseTests
+test_generateController = withDatabase "Generate Controller tests" runFindAndSavePrereqsResponseTests

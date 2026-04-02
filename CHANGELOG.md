@@ -22,9 +22,10 @@
 - Remove unused `getTimetableImage` function in `Export/GetImages.hs`
 - Refactored various backend text functions and tests to avoid `String` data in favour of `Text` when feasible
 - Removed unused files
+- Refactored `returnPDF`, `exportTimetablePDFResponse`, and `graphImageResponse` to use stdin instead of temporary `.tex` and `.svg` files
 - Refactored controllers to retrieve graph info data using `lookText'` instead of `look`
 - Removed `Location` datatype in favour of `Building`
-- Renamed usages of the word "room" to "location" in the codebase to better reflect the data represented
+- Refactor tests to run directly on tuple input to prevent unnecessary unpacking and repacking
 
 ## [0.7.2] - 2025-12-10
 

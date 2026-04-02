@@ -110,8 +110,8 @@ filterReqTestCases =
   ]
 
 -- | Helper to run a single test case
-runFilterReqTest :: String -> Req -> GraphOptions -> Req -> TestTree
-runFilterReqTest description input options expected =
+runFilterReqTest :: (String, Req, GraphOptions, Req) -> TestTree
+runFilterReqTest (description, input, options, expected) =
   testCase description $
     assertEqual ("Failed test: " ++ description)
       expected
@@ -119,8 +119,7 @@ runFilterReqTest description input options expected =
 
 -- | Generate all tests from the list above
 runFilterReqTests :: [TestTree]
-runFilterReqTests =
-  [runFilterReqTest name input options expected | (name, input, options, expected) <- filterReqTestCases]
+runFilterReqTests = map runFilterReqTest filterReqTestCases
 
 -- | Test suite for FilterReq
 test_filterReqs :: TestTree
