@@ -2138,13 +2138,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@fortawesome/react-fontawesome@npm:3.2.0"
+"@fortawesome/react-fontawesome@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@fortawesome/react-fontawesome@npm:3.3.0"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~6 || ~7
     react: ^18.0.0 || ^19.0.0
-  checksum: 35b806110644914135177729d72658447e4cd917983d93fecd5e5b0462e7778c27c5e06e6cea3c83ecbb4d48d1b35d6a013e940b5ecb8f913cd2b9f01022112b
+  checksum: 0bdaaa984fa171df3f2acaae362b959ba74b1bfafffdf9e2ed267e51f9d100bdb7b508a2a0063188ed0a5abe25183fb8e8fdf54670d668a575ed2527777c7c6a
   languageName: node
   linkType: hard
 
@@ -5555,7 +5555,7 @@ __metadata:
     "@eslint/compat": ^1.2.9
     "@fortawesome/fontawesome-svg-core": ^7.2.0
     "@fortawesome/free-solid-svg-icons": ^7.2.0
-    "@fortawesome/react-fontawesome": ^3.2.0
+    "@fortawesome/react-fontawesome": ^3.3.0
     "@mui/material": ^7.3.1
     "@testing-library/dom": ^10.4.0
     "@testing-library/react": ^16.0.1
