@@ -370,13 +370,13 @@ ol {
 }
 
 %overlay {
+  align-items: center;
   background-color: rgb(0 0 0 / 50%);
+  display: flex;
   inset: 0;
+  justify-content: center;
   position: fixed;
   z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .overlay {
