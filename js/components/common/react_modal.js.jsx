@@ -148,24 +148,24 @@ class CourseModal extends React.Component {
         occ1.weekDay > occ2.weekDay ? 1 : -1
       )
       sortedTimeData.map(occurrence => {
-        let firstLocation = ""
-        if (occurrence.firstLocation === null || occurrence.firstLocation === undefined) {
-          firstLocation = " "
+        let firstRoom = ""
+        if (occurrence.firstRoom === null || occurrence.firstRoom === undefined) {
+          firstRoom = " "
         } else {
-          firstLocation = occurrence.firstLocation.buildingCode
+          firstRoom = occurrence.firstRoom.buildingCode
         }
 
-        let secondLocation = ""
-        if (occurrence.secondLocation === null || occurrence.secondLocation === undefined) {
-          secondLocation = " "
+        let secondRoom = ""
+        if (occurrence.secondRoom === null || occurrence.secondRoom === undefined) {
+          secondRoom = " "
         } else {
-          secondLocation = occurrence.secondLocation.buildingCode
+          secondRoom = occurrence.secondRoom.buildingCode
         }
 
-        if ((firstLocation != " ") & (secondLocation != " ")) {
-          firstLocation += ", "
+        if ((firstRoom != " ") & (secondRoom != " ")) {
+          firstRoom += ", "
         }
-        occurrences.locations.push(firstLocation + secondLocation)
+        occurrences.locations.push(firstRoom + secondRoom)
         occurrences.times.push(
           DAY_TO_INT[occurrence.weekDay] +
             " " +

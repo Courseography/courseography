@@ -25,7 +25,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstLocation: {
+              firstRoom: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -33,7 +33,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondLocation: null,
+              secondRoom: null,
               startHour: 15,
               weekDay: 1,
             },
@@ -74,7 +74,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstLocation: {
+              firstRoom: {
                 buildingAddress: "15  King's College Circle",
                 buildingCode: "UC",
                 buildingName: "University College",
@@ -82,13 +82,13 @@ describe("getTable", () => {
                 buildingLng: -79.395181775127,
                 buildingPostalCode: "M5S 3H7",
               },
-              secondLocation: null,
+              secondRoom: null,
               startHour: 16,
               weekDay: 3,
             },
             {
               endHour: 17,
-              firstLocation: {
+              firstRoom: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -96,7 +96,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondLocation: null,
+              secondRoom: null,
               startHour: 15,
               weekDay: 1,
             },
@@ -138,7 +138,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstLocation: {
+              firstRoom: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -146,7 +146,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondLocation: {
+              secondRoom: {
                 buildingAddress: "15  King's College Circle",
                 buildingCode: "UC",
                 buildingName: "University College",
@@ -194,7 +194,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstLocation: {
+              firstRoom: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -202,7 +202,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondLocation: null,
+              secondRoom: null,
               startHour: 15,
               weekDay: 1,
             },
@@ -222,7 +222,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstLocation: {
+              firstRoom: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -230,7 +230,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondLocation: null,
+              secondRoom: null,
               startHour: 15,
               weekDay: 1,
             },
@@ -279,8 +279,8 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 16,
-              firstLocation: null,
-              secondLocation: null,
+              firstRoom: null,
+              secondRoom: null,
               startHour: 14,
               weekDay: 0,
             },
@@ -300,7 +300,7 @@ describe("getTable", () => {
           timeData: [
             {
               endHour: 17,
-              firstLocation: {
+              firstRoom: {
                 buildingAddress: "80  St. George Street",
                 buildingCode: "LM",
                 buildingName: "Lash Miller Chemical Laboratories",
@@ -308,7 +308,7 @@ describe("getTable", () => {
                 buildingLng: -79.39841172598216,
                 buildingPostalCode: "M5S 3H6",
               },
-              secondLocation: null,
+              secondRoom: null,
               startHour: 15,
               weekDay: 1,
             },

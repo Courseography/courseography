@@ -75,8 +75,8 @@ Times
     startHour Double
     endHour Double
     meeting MeetingId
-    firstLocation T.Text Maybe
-    secondLocation T.Text Maybe
+    firstRoom T.Text Maybe
+    secondRoom T.Text Maybe
 
 Breadth
     description T.Text
@@ -312,8 +312,8 @@ convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
 -- | Convert Times into Time
 buildTime :: Times -> SqlPersistM Time
 buildTime t = do
-  room1 <- getBuilding (timesFirstLocation t)
-  room2 <- getBuilding (timesSecondLocation t)
+  room1 <- getBuilding (timesFirstRoom t)
+  room2 <- getBuilding (timesSecondRoom t)
   return $ Time (timesWeekDay t)
     (timesStartHour t)
     (timesEndHour t)
