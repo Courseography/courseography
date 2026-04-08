@@ -11,6 +11,7 @@
 ### 🐛 Bug fixes
 
 - Fixed a bug where duplicate graph components were being added
+- Fixed CSS styling to center course modal and lighten overlay
 
 ### 🔧 Internal changes
 
