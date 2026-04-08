@@ -6,16 +6,16 @@ export default {
       timeData: [
         {
           endingTime: 14,
-          secRoom: null,
+          secLocation: null,
           startingTime: 12,
-          fstRoom: "MY 150",
+          fstLocation: "MY 150",
           weekDay: 1,
         },
         {
           endingTime: 14,
-          secRoom: null,
+          secLocation: null,
           startingTime: 13,
-          fstRoom: "MY 150",
+          fstLocation: "MY 150",
           weekDay: 3,
         },
       ],
@@ -34,16 +34,16 @@ export default {
       timeData: [
         {
           endingTime: 15,
-          secRoom: null,
+          secLocation: null,
           startingTime: 13,
-          fstRoom: "BA 1160",
+          fstLocation: "BA 1160",
           weekDay: 2,
         },
         {
           endingTime: 14,
-          secRoom: null,
+          secLocation: null,
           startingTime: 13,
-          fstRoom: "BA 1160",
+          fstLocation: "BA 1160",
           weekDay: 4,
         },
       ],
@@ -62,9 +62,9 @@ export default {
       timeData: [
         {
           endingTime: 21,
-          secRoom: null,
+          secLocation: null,
           startingTime: 18,
-          fstRoom: "MY 150",
+          fstLocation: "MY 150",
           weekDay: 1,
         },
       ],
@@ -83,16 +83,16 @@ export default {
       timeData: [
         {
           endingTime: 14,
-          secRoom: null,
+          secLocation: null,
           startingTime: 13,
-          fstRoom: "MY 150",
+          fstLocation: "MY 150",
           weekDay: 3,
         },
         {
           endingTime: 14,
-          secRoom: null,
+          secLocation: null,
           startingTime: 12,
-          fstRoom: "MY 150",
+          fstLocation: "MY 150",
           weekDay: 1,
         },
       ],
@@ -111,9 +111,9 @@ export default {
       timeData: [
         {
           endingTime: 21,
-          secRoom: null,
+          secLocation: null,
           startingTime: 18,
-          fstRoom: "MY 150",
+          fstLocation: "MY 150",
           weekDay: 1,
         },
       ],
@@ -132,9 +132,9 @@ export default {
       timeData: [
         {
           endingTime: 25,
-          secRoom: null,
+          secLocation: null,
           startingTime: 25,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 5,
         },
       ],
@@ -153,16 +153,16 @@ export default {
       timeData: [
         {
           endingTime: 14,
-          secRoom: "MY 150",
+          secLocation: "MY 150",
           startingTime: 13,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 4,
         },
         {
           endingTime: 15,
-          secRoom: "MY 150",
+          secLocation: "MY 150",
           startingTime: 13,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 1,
         },
       ],
@@ -194,9 +194,9 @@ export default {
       timeData: [
         {
           endingTime: 17,
-          secRoom: "Contact Dept",
+          secLocation: "Contact Dept",
           startingTime: 16,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 0,
         },
       ],
@@ -215,9 +215,9 @@ export default {
       timeData: [
         {
           endingTime: 16,
-          secRoom: "MY 315",
+          secLocation: "MY 315",
           startingTime: 13,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 3,
         },
       ],
@@ -236,9 +236,9 @@ export default {
       timeData: [
         {
           endingTime: 21,
-          secRoom: "MY 150",
+          secLocation: "MY 150",
           startingTime: 18,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 1,
         },
       ],
@@ -257,16 +257,16 @@ export default {
       timeData: [
         {
           endingTime: 15,
-          secRoom: "MY 150",
+          secLocation: "MY 150",
           startingTime: 13,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 1,
         },
         {
           endingTime: 14,
-          secRoom: "MY 150",
+          secLocation: "MY 150",
           startingTime: 13,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 4,
         },
       ],
@@ -285,9 +285,9 @@ export default {
       timeData: [
         {
           endingTime: 21,
-          secRoom: "MY 150",
+          secLocation: "MY 150",
           startingTime: 18,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 1,
         },
       ],
@@ -306,9 +306,9 @@ export default {
       timeData: [
         {
           endingTime: 17,
-          secRoom: "Contact Dept",
+          secLocation: "Contact Dept",
           startingTime: 16,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 4,
         },
       ],
@@ -327,9 +327,9 @@ export default {
       timeData: [
         {
           endingTime: 25,
-          secRoom: null,
+          secLocation: null,
           startingTime: 25,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 5,
         },
       ],
@@ -348,9 +348,9 @@ export default {
       timeData: [
         {
           endingTime: 17,
-          secRoom: "Contact Dept",
+          secLocation: "Contact Dept",
           startingTime: 16,
-          fstRoom: null,
+          fstLocation: null,
           weekDay: 2,
         },
       ],

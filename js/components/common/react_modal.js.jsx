@@ -143,7 +143,7 @@ class CourseModal extends React.Component {
     )
 
     return sortedSessions.map(lecture => {
-      const occurrences = { times: [], rooms: [] }
+      const occurrences = { times: [], locations: [] }
       const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
         occ1.weekDay > occ2.weekDay ? 1 : -1
       )
@@ -165,7 +165,7 @@ class CourseModal extends React.Component {
         if ((firstRoom != " ") & (secondRoom != " ")) {
           firstRoom += ", "
         }
-        occurrences.rooms.push(firstRoom + secondRoom)
+        occurrences.locations.push(firstRoom + secondRoom)
         occurrences.times.push(
           DAY_TO_INT[occurrence.weekDay] +
             " " +
@@ -185,7 +185,7 @@ class CourseModal extends React.Component {
           " available",
         waitList: lecture.meetData.wait + " students",
         time: occurrences.times,
-        room: occurrences.rooms,
+        location: occurrences.locations,
       }
 
       return rowData
@@ -299,14 +299,14 @@ class Description extends React.Component {
                     autoHeight: true,
                   },
                   {
-                    field: "room",
+                    field: "location",
                     cellStyle: {
                       whiteSpace: "pre",
                       lineHeight: "1.8",
                       paddingTop: "7px",
                       paddingBottom: "6px",
                     },
-                    valueFormatter: col => col.data.room.join("\n"),
+                    valueFormatter: col => col.data.location.join("\n"),
                     width: 128,
                     autoHeight: true,
                   },
@@ -605,11 +605,11 @@ class MapModal extends React.Component {
     const lecturesByDay = {}
 
     this.props.lectures.forEach(lecture => {
-      if (lecture.fstRoom) {
-        this.groupLecturesByBuilding(lecturesByBuilding, lecture, "fstRoom")
+      if (lecture.fstLocation) {
+        this.groupLecturesByBuilding(lecturesByBuilding, lecture, "fstLocation")
       }
-      if (lecture.secRoom) {
-        this.groupLecturesByBuilding(lecturesByBuilding, lecture, "secRoom")
+      if (lecture.secLocation) {
+        this.groupLecturesByBuilding(lecturesByBuilding, lecture, "secLocation")
       }
 
       if (lecturesByDay[lecture.dayString]) {
@@ -691,21 +691,21 @@ class DayBox extends React.Component {
     }
 
     this.toggleExpand = this.toggleExpand.bind(this)
-    this.getRoomStr = this.getRoomStr.bind(this)
+    this.getLocationStr = this.getLocationStr.bind(this)
   }
 
   toggleExpand() {
     this.setState({ expanded: !this.state.expanded })
   }
 
-  getRoomStr(lec, room, roomNum) {
+  getLocationStr(lec, location, locationNum) {
     return (
       "Location" +
-      (lec.fstRoom && lec.secRoom ? " " + roomNum : "") +
+      (lec.fstLocation && lec.secLocation ? " " + locationNum : "") +
       ": " +
-      room.buildingName +
+      location.buildingName +
       " (" +
-      room.buildingCode +
+      location.buildingCode +
       ")"
     )
   }
@@ -749,16 +749,16 @@ class DayBox extends React.Component {
         {this.state.expanded && (
           <ul id="map-day-list">
             {this.props.dayLectures.map(lec => {
-              let roomStr = ""
-              let roomNum = 0
-              if (lec.fstRoom) {
-                roomNum += 1
-                roomStr += this.getRoomStr(lec, lec.fstRoom, roomNum)
+              let locationStr = ""
+              let locationNum = 0
+              if (lec.fstLocation) {
+                locationNum += 1
+                locationStr += this.getLocationStr(lec, lec.fstLocation, locationNum)
               }
-              if (lec.secRoom) {
-                roomNum += 1
-                roomStr +=
-                  (lec.fstRoom ? "\n" : "") + this.getRoomStr(lec, lec.secRoom, roomNum)
+              if (lec.secLocation) {
+                locationNum += 1
+                locationStr +=
+                  (lec.fstLocation ? "\n" : "") + this.getLocationStr(lec, lec.secLocation, locationNum)
               }
 
               return (
@@ -782,7 +782,7 @@ class DayBox extends React.Component {
                       "-" +
                       convertTimeToString(lec.endTime)}{" "}
                   </h5>
-                  <h5> {roomStr} </h5>
+                  <h5> {locationStr} </h5>
                 </li>
               )
             })}
@@ -873,8 +873,8 @@ class CampusMap extends React.Component {
       let colouredMarker
       const buildingInd = this.props.selectedLecTimeframes.findIndex(
         lec =>
-          (lec.fstRoom && lec.fstRoom.buildingCode === building.buildingCode) ||
-          (lec.secRoom && lec.secRoom.buildingCode === building.buildingCode)
+          (lec.fstLocation && lec.fstLocation.buildingCode === building.buildingCode) ||
+          (lec.secLocation && lec.secLocation.buildingCode === building.buildingCode)
       )
 
       colouredMarker = buildingInd == -1 ? blueMarker : redMarker

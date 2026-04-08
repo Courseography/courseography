@@ -172,16 +172,16 @@ data Time' =
   Time' { weekDay' :: Double,
           startHour' :: Double,
           endHour' :: Double,
-          firstRoom' :: Maybe T.Text,
-          secondRoom' :: Maybe T.Text
+          firstLocation' :: Maybe T.Text,
+          secondLocation' :: Maybe T.Text
         } deriving (Show, Generic)
 
 data Time =
   Time { weekDay :: Double,
           startHour :: Double,
           endHour :: Double,
-          firstRoom :: Maybe Building,
-          secondRoom :: Maybe Building
+          firstLocation :: Maybe Building,
+          secondLocation :: Maybe Building
         } deriving (Show, Generic)
 
 -- | A Meeting with its associated Times.
@@ -326,8 +326,8 @@ buildTimes meetingKey t =
     (startHour' t)
     (endHour' t)
     meetingKey
-    (firstRoom' t)
-    (secondRoom' t)
+    (firstLocation' t)
+    (secondLocation' t)
 
 -- | Given a building code, get the persistent Building associated with it
 getBuilding :: Maybe T.Text -> SqlPersistM (Maybe Building)

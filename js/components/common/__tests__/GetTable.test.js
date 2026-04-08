@@ -50,7 +50,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM "],
+          location: ["LM "],
         },
       ]
       expect(actual).toEqual(expected)
@@ -113,7 +113,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17", "Thursday 16 - 17"],
-          room: ["LM ", "UC "],
+          location: ["LM ", "UC "],
         },
       ]
 
@@ -121,7 +121,7 @@ describe("getTable", () => {
     })
   })
 
-  describe("The occurence of the lecture has two rooms ", () => {
+  describe("The occurence of the lecture has two locations ", () => {
     beforeEach(() => {
       meetingTime = [
         {
@@ -161,7 +161,7 @@ describe("getTable", () => {
         },
       ]
     })
-    test("Both of the first and second room of the occurence are shown", () => {
+    test("Both of the first and second location of the occurence are shown", () => {
       actual = wrapper.getTable(meetingTime, "F")
       expected = [
         {
@@ -170,7 +170,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM, UC"],
+          location: ["LM, UC"],
         },
       ]
       expect(actual).toEqual(expected)
@@ -247,7 +247,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM "],
+          location: ["LM "],
         },
         {
           activity: "LEC2001",
@@ -255,7 +255,7 @@ describe("getTable", () => {
           availability: "0 of 1 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM "],
+          location: ["LM "],
         },
       ]
       expect(actual).toEqual(expected)
@@ -325,7 +325,7 @@ describe("getTable", () => {
           availability: "31 of 69 available",
           waitList: "0 students",
           time: ["Tuesday 15 - 17"],
-          room: ["LM "],
+          location: ["LM "],
         },
         {
           activity: "TUT0301",
@@ -333,7 +333,7 @@ describe("getTable", () => {
           availability: "2 of 166 available",
           waitList: "0 students",
           time: ["Monday 14 - 16"],
-          room: ["  "],
+          location: ["  "],
         },
       ]
       expect(actual).toEqual(expected)
