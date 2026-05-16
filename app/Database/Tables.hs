@@ -67,7 +67,7 @@ Meeting
     enrol Int
     wait Int
     extra Int
-    deriving Generic Show
+    deriving Generic Show Eq
     UniqueMeeting code session section
 
 Times
