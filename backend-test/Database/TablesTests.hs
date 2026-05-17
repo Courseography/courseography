@@ -26,8 +26,8 @@ time'FromJSONTestCases =
     , ("Invalid JSON string (no day value)", "{ \"start\": { \"millisofday\": 43200000 }, \"end\": { \"millisofday\": 50400000 }, \"building\": { \"buildingCode\": \"MY\", \"buildingRoomNumber\": \"150\" } }", Just (Time' {weekDay' = 5.0, startHour' = 25.0, endHour' = 25.0, firstLocation' = Just "MY150", secondLocation' = Nothing}))
     , ("Invalid JSON string (no start millisofday value)", "{ \"start\": { \"day\": 3 }, \"end\": { \"millisofday\": 50400000 }, \"building\": { \"buildingCode\": \"MY\", \"buildingRoomNumber\": \"150\" } }", Just (Time' {weekDay' = 5.0, startHour' = 25.0, endHour' = 25.0, firstLocation' = Just "MY150", secondLocation' = Nothing}))
     , ("Invalid JSON string (no end millisofday value)", "{ \"start\": { \"day\": 3, \"millisofday\": 43200000 }, \"end\": { }, \"building\": { \"buildingCode\": \"MY\", \"buildingRoomNumber\": \"150\" } }", Just (Time' {weekDay' = 5.0, startHour' = 25.0, endHour' = 25.0, firstLocation' = Just "MY150", secondLocation' = Nothing}))
-    , ("Invalid JSON string (no buildingCode value)", "{ \"day\": 4, \"start\": { \"millisofday\": 50400000 }, \"end\": { \"millisofday\": 54000000 }, \"building\": { \"buildingRoomNumber\": \"202\" } }", Nothing)
-    , ("Invalid JSON string (no buildingRoomNumber value)", "{ \"day\": 4, \"start\": { \"millisofday\": 50400000 }, \"end\": { \"millisofday\": 54000000 }, \"building\": { \"buildingCode\": \"MP\" } }", Nothing)
+    , ("Invalid JSON string (no buildingCode value)", "{ \"start\": { \"day\": 4, \"millisofday\": 50400000 }, \"end\": { \"millisofday\": 54000000 }, \"building\": { \"buildingRoomNumber\": \"202\" } }", Nothing)
+    , ("Invalid JSON string (no buildingRoomNumber value)", "{ \"start\": { \"day\": 4, \"millisofday\": 50400000 }, \"end\": { \"millisofday\": 54000000 }, \"building\": { \"buildingCode\": \"MP\" } }", Nothing)
     ]
 
 -- | Run a test case (label, input JSON string, expected output) on the FromJSON instance of Time'.
@@ -35,7 +35,7 @@ runTime'FromJSONTest :: (String, T.Text, Maybe Time') -> TestTree
 runTime'FromJSONTest (label, input, expected) =
     testCase label $ do
         let decoded = decode (BL.fromStrict (TE.encodeUtf8 input)) :: Maybe Time'
-        assertEqual ("Unexpected response body for " ++ label) (show expected) (show decoded)
+        assertEqual ("Unexpected response body for " ++ label) expected decoded
 
 -- | Run all the time'FromJSON test cases
 runTime'FromJSONTests :: [TestTree]
