@@ -31,7 +31,10 @@ applyMigrations currVersion migrations = do
 
 -- | List of migrations
 migrationList :: [MigrationWrapper]
-migrationList = [MigrationWrapper {version=2, script=renamePostTables}]
+migrationList = [
+    MigrationWrapper {version=2, script=renamePostTables},
+    MigrationWrapper {version=3, script=splitTimes}
+    ]
 
 -- | Migration script which renames the Post tables to Program
 renamePostTables :: Migration
@@ -39,6 +42,13 @@ renamePostTables = do
     addMigration True "ALTER TABLE post RENAME TO program;"
     addMigration True "ALTER TABLE post_category RENAME TO program_category;"
     addMigration True "ALTER TABLE program_category RENAME COLUMN post TO program;"
+
+-- | Migration script to add proper support for year-long courses
+splitTimes :: Migration
+splitTimes = do 
+    addMigration True "ALTER TABLE times RENAME COLUMN first_room TO location;"
+    addMigration True "ALTER TABLE times DROP COLUMN second_room;"
+    addMigration True "ALTER TABLE times ADD session varchar(32);"
 
 -- | Gets the current version of the database.
 -- If no version is defined, initialize the
