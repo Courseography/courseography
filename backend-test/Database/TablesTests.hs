@@ -1,4 +1,3 @@
-{- HLINT ignore "Use forM_" -}
 {-|
 Description: Tables module tests.
 
