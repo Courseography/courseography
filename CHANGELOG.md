@@ -28,6 +28,7 @@
 - Removed `Location` datatype in favour of `Building`
 - Refactor tests to run directly on tuple input to prevent unnecessary unpacking and repacking
 - Renamed usages of the word "room" to "location" in the codebase to better reflect the data represented
+- Refactor `Times` database schema to encompass only a single session of a course
 
 ## [0.7.2] - 2025-12-10
 
