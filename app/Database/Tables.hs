@@ -71,12 +71,12 @@ Meeting
     UniqueMeeting code session section
 
 Times
+    session T.Text Maybe
     weekDay Double
     startHour Double
     endHour Double
     meeting MeetingId
-    firstRoom T.Text Maybe
-    secondRoom T.Text Maybe
+    location T.Text Maybe
 
 Breadth
     description T.Text
@@ -312,22 +312,21 @@ convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
 -- | Convert Times into Time
 buildTime :: Times -> SqlPersistM Time
 buildTime t = do
-  room1 <- getBuilding (timesFirstRoom t)
-  room2 <- getBuilding (timesSecondRoom t)
+  room1 <- getBuilding (timesLocation t)
   return $ Time (timesWeekDay t)
     (timesStartHour t)
     (timesEndHour t)
     room1
-    room2
+    Nothing -- Temporary null data
 
 buildTimes :: Key Meeting -> Time' -> Times
 buildTimes meetingKey t =
-  Times (weekDay' t)
+  Times (Just "") -- Temporary null data
+    (weekDay' t)
     (startHour' t)
     (endHour' t)
     meetingKey
     (firstLocation' t)
-    (secondLocation' t)
 
 -- | Given a building code, get the persistent Building associated with it
 getBuilding :: Maybe T.Text -> SqlPersistM (Maybe Building)
