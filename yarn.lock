@@ -47,10 +47,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/compat-data@npm:^7.28.6, @babel/compat-data@npm:^7.29.0":
+"@babel/compat-data@npm:^7.28.6":
   version: 7.29.0
   resolution: "@babel/compat-data@npm:7.29.0"
   checksum: ad19db279dfd06cbe91b505d03be00d603c6d3fcc141cfc14f4ace5c558193e9b6aae4788cb01fd209c4c850e52d73c8f3c247680e3c0d84fa17ab8b3d50c808
+  languageName: node
+  linkType: hard
+
+"@babel/compat-data@npm:^7.29.3":
+  version: 7.29.3
+  resolution: "@babel/compat-data@npm:7.29.3"
+  checksum: 977192bab334f66bc8150026340a33ed318c1a7ce18a9323f4c1b86f8ed1d8645bfe5600242bf682717c05c46a4ff06225242207c1d599f4296914b9b4e3efb5
   languageName: node
   linkType: hard
 
@@ -500,6 +507,18 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0
   checksum: 621cfddfcc99a81e74f8b6f9101fd260b27500cb1a568e3ceae9cc8afe9aee45ac3bca3900a2b66c612b1a2366d29ef67d4df5a1c975be727eaad6906f98c2c6
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-bugfix-safari-rest-destructuring-rhs-array@npm:^7.29.3":
+  version: 7.29.3
+  resolution: "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array@npm:7.29.3"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.28.6
+    "@babel/helper-skip-transparent-expression-wrappers": ^7.27.1
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: fd13198afc9b72c6a4e4868f1592fc8010f390e7601148a71d2d6111664c0242d6d5ff27d8eb77ca4c35ef47f8416daf5dbc8d46a498ac706d69c6b3a0988cd7
   languageName: node
   linkType: hard
 
@@ -1067,8 +1086,8 @@ __metadata:
   linkType: hard
 
 "@babel/plugin-transform-modules-systemjs@npm:^7.29.0":
-  version: 7.29.0
-  resolution: "@babel/plugin-transform-modules-systemjs@npm:7.29.0"
+  version: 7.29.4
+  resolution: "@babel/plugin-transform-modules-systemjs@npm:7.29.4"
   dependencies:
     "@babel/helper-module-transforms": ^7.28.6
     "@babel/helper-plugin-utils": ^7.28.6
@@ -1076,7 +1095,7 @@ __metadata:
     "@babel/traverse": ^7.29.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 36fd7bcd694549effdbdf733c32f0c9dbadea052316ff5e0830b07482a60c8ff1ee79850efff05e8046c4b99c241832f2c5267e0ae7c721c531c8ef12930c4b9
+  checksum: d9cbb30669077756048af990a08ad1ba149785c336024affa49848dc4ffc5948bfaaf52d90bbec711a1f320e19e2c60182dbeff40d81cc5b9a09a87919abe07d
   languageName: node
   linkType: hard
 
@@ -1432,17 +1451,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:^7.29.2":
-  version: 7.29.2
-  resolution: "@babel/preset-env@npm:7.29.2"
+"@babel/preset-env@npm:^7.29.3":
+  version: 7.29.3
+  resolution: "@babel/preset-env@npm:7.29.3"
   dependencies:
-    "@babel/compat-data": ^7.29.0
+    "@babel/compat-data": ^7.29.3
     "@babel/helper-compilation-targets": ^7.28.6
     "@babel/helper-plugin-utils": ^7.28.6
     "@babel/helper-validator-option": ^7.27.1
     "@babel/plugin-bugfix-firefox-class-in-computed-class-key": ^7.28.5
     "@babel/plugin-bugfix-safari-class-field-initializer-scope": ^7.27.1
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": ^7.27.1
+    "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array": ^7.29.3
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": ^7.27.1
     "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": ^7.28.6
     "@babel/plugin-proposal-private-property-in-object": 7.21.0-placeholder-for-preset-env.2
@@ -1508,7 +1528,7 @@ __metadata:
     semver: ^6.3.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 51741f39f2c77f5dfa6caeafa0cbeaab0bcaa1f350fbc4081f0e9c2bf6986521cf063a4e114cebcfaf0bdf2f60e93f036bcb4f0957e8f8fdc2386fa9c72268e7
+  checksum: bc07d151dbbcee339e9f7f68876b8d89798e01bc0a04d44c92460be61ac7bdc34810e81bc99055dc01305c86350fd8b54969fc907aa405702824b9b96917028d
   languageName: node
   linkType: hard
 
@@ -2138,13 +2158,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@fortawesome/react-fontawesome@npm:3.3.0"
+"@fortawesome/react-fontawesome@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "@fortawesome/react-fontawesome@npm:3.3.1"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~6 || ~7
     react: ^18.0.0 || ^19.0.0
-  checksum: 0bdaaa984fa171df3f2acaae362b959ba74b1bfafffdf9e2ed267e51f9d100bdb7b508a2a0063188ed0a5abe25183fb8e8fdf54670d668a575ed2527777c7c6a
+  checksum: 00ce57412f1c02618a33c0c62de8adeb3bca8544a79e33ea937c06a681f3dc90c719da91bb05830b230d12057070a4b6c539f492154392f6160cb5538eaa5eb3
   languageName: node
   linkType: hard
 
@@ -4862,12 +4882,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"brace-expansion@npm:^2.0.1":
-  version: 2.0.2
-  resolution: "brace-expansion@npm:2.0.2"
+"brace-expansion@npm:^2.0.2":
+  version: 2.1.0
+  resolution: "brace-expansion@npm:2.1.0"
   dependencies:
     balanced-match: ^1.0.0
-  checksum: 01dff195e3646bc4b0d27b63d9bab84d2ebc06121ff5013ad6e5356daa5a9d6b60fa26cf73c74797f2dc3fbec112af13578d51f75228c1112b26c790a87b0488
+  checksum: c77a7a64aabf94b8d5913955adb4f36957917565374461355bb4276830c027a313d981f32410cea9e38f52573e7eb776d02fe05091c3a79a061958d97e4d2b43
   languageName: node
   linkType: hard
 
@@ -5545,7 +5565,7 @@ __metadata:
     "@babel/core": ^7.29.0
     "@babel/eslint-parser": ^7.28.6
     "@babel/plugin-proposal-class-properties": ^7.18.6
-    "@babel/preset-env": ^7.29.2
+    "@babel/preset-env": ^7.29.3
     "@babel/preset-react": ^7.28.5
     "@babel/runtime": ^7.29.2
     "@emotion/react": ^11.14.0
@@ -5553,7 +5573,7 @@ __metadata:
     "@eslint/compat": ^1.2.9
     "@fortawesome/fontawesome-svg-core": ^7.2.0
     "@fortawesome/free-solid-svg-icons": ^7.2.0
-    "@fortawesome/react-fontawesome": ^3.3.0
+    "@fortawesome/react-fontawesome": ^3.3.1
     "@mui/material": ^7.3.1
     "@testing-library/dom": ^10.4.0
     "@testing-library/react": ^16.0.1
@@ -5585,7 +5605,7 @@ __metadata:
     markdown-loader: ^8.0.0
     mini-css-extract-plugin: ^2.9.2
     node-fetch: ^3.3.2
-    postcss: ^8.4.49
+    postcss: ^8.5.10
     precise-commits: 1.0.2
     prettier: ^3.7.4
     prop-types: 15.8.1
@@ -5602,7 +5622,7 @@ __metadata:
     stylelint-config-standard-scss: ^17.0.0
     webpack: ^5.105.3
     webpack-cli: ^6.0.1
-    webpack-dev-server: ^5.2.3
+    webpack-dev-server: ^5.2.4
     webpack-merge: ^6.0.1
   languageName: unknown
   linkType: soft
@@ -6848,9 +6868,9 @@ __metadata:
   linkType: hard
 
 "fast-uri@npm:^3.0.1":
-  version: 3.0.6
-  resolution: "fast-uri@npm:3.0.6"
-  checksum: 7161ba2a7944778d679ba8e5f00d6a2bb479a2142df0982f541d67be6c979b17808f7edbb0ce78161c85035974bde3fa52b5137df31da46c0828cb629ba67c4e
+  version: 3.1.2
+  resolution: "fast-uri@npm:3.1.2"
+  checksum: 73a6e1b04e6fcf7a09ed93316e72d643ef177d26969973784690708612141f2c2f74657120bab75bf5bbc26bfd535a32c90a8c3bc50aca50584cf01f98815afe
   languageName: node
   linkType: hard
 
@@ -7371,23 +7391,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^10.2.2":
-  version: 10.4.5
-  resolution: "glob@npm:10.4.5"
-  dependencies:
-    foreground-child: ^3.1.0
-    jackspeak: ^3.1.2
-    minimatch: ^9.0.4
-    minipass: ^7.1.2
-    package-json-from-dist: ^1.0.0
-    path-scurry: ^1.11.1
-  bin:
-    glob: dist/esm/bin.mjs
-  checksum: 0bc725de5e4862f9f387fd0f2b274baf16850dcd2714502ccf471ee401803997983e2c05590cb65f9675a3c6f2a58e7a53f9e365704108c6ad3cbf1d60934c4a
-  languageName: node
-  linkType: hard
-
-"glob@npm:^10.5.0":
+"glob@npm:^10.2.2, glob@npm:^10.5.0":
   version: 10.5.0
   resolution: "glob@npm:10.5.0"
   dependencies:
@@ -8004,9 +8008,9 @@ __metadata:
   linkType: hard
 
 "ip-address@npm:^10.0.1":
-  version: 10.0.1
-  resolution: "ip-address@npm:10.0.1"
-  checksum: 525d5391cfd31a91f80f5857e98487aeaa8474e860a6725a0b6461ac8e436c7f8c869774dece391c8f8e7486306a34a4d1c094778c4c583a3f1f2cd905e5ed50
+  version: 10.2.0
+  resolution: "ip-address@npm:10.2.0"
+  checksum: 3ffba04dc4cdaf81ed2ed6edc47eee1494bb97550ef73f1918ca28405d175c03efa416b8337e868123b08c2cc677e3a07c5ce03eda3b1aeb2741c149bd37ddf9
   languageName: node
   linkType: hard
 
@@ -9824,11 +9828,11 @@ __metadata:
   linkType: hard
 
 "minimatch@npm:^9.0.4":
-  version: 9.0.5
-  resolution: "minimatch@npm:9.0.5"
+  version: 9.0.9
+  resolution: "minimatch@npm:9.0.9"
   dependencies:
-    brace-expansion: ^2.0.1
-  checksum: 2c035575eda1e50623c731ec6c14f65a85296268f749b9337005210bb2b34e2705f8ef1a358b188f69892286ab99dc42c8fb98a57bde55c8d81b3023c19cea28
+    brace-expansion: ^2.0.2
+  checksum: 5292681ba1e14544ca9214ba5e412bb346214fb783354b22752f2d1e5c176e4a2c0bfcafeb1046389b816009ab73ba5410b176ce605632e8aa695db25f87f6b9
   languageName: node
   linkType: hard
 
@@ -10584,14 +10588,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picomatch@npm:^4.0.2":
-  version: 4.0.3
-  resolution: "picomatch@npm:4.0.3"
-  checksum: 6817fb74eb745a71445debe1029768de55fd59a42b75606f478ee1d0dc1aa6e78b711d041a7c9d5550e042642029b7f373dc1a43b224c4b7f12d23436735dba0
-  languageName: node
-  linkType: hard
-
-"picomatch@npm:^4.0.3":
+"picomatch@npm:^4.0.2, picomatch@npm:^4.0.3":
   version: 4.0.4
   resolution: "picomatch@npm:4.0.4"
   checksum: 76b387b5157951422fa6049a96bdd1695e39dd126cd99df34d343638dc5cdb8bcdc83fff288c23eddcf7c26657c35e3173d4d5f488c4f28b889b314472e0a662
@@ -10754,7 +10751,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.40, postcss@npm:^8.4.49, postcss@npm:^8.5.6":
+"postcss@npm:^8.4.40, postcss@npm:^8.5.6":
   version: 8.5.6
   resolution: "postcss@npm:8.5.6"
   dependencies:
@@ -10762,6 +10759,17 @@ __metadata:
     picocolors: ^1.1.1
     source-map-js: ^1.2.1
   checksum: 20f3b5d673ffeec2b28d65436756d31ee33f65b0a8bedb3d32f556fbd5973be38c3a7fb5b959a5236c60a5db7b91b0a6b14ffaac0d717dce1b903b964ee1c1bb
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.5.10":
+  version: 8.5.14
+  resolution: "postcss@npm:8.5.14"
+  dependencies:
+    nanoid: ^3.3.11
+    picocolors: ^1.1.1
+    source-map-js: ^1.2.1
+  checksum: ec17d1519cd997b43aceb82bfa959f380085591269e286c53d5ba76eb1989525e7cde106a44f1565516fcbb50f206eb1858cc2cd5e5aaea3a8ee793886c8232c
   languageName: node
   linkType: hard
 
@@ -13286,9 +13294,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^5.2.3":
-  version: 5.2.3
-  resolution: "webpack-dev-server@npm:5.2.3"
+"webpack-dev-server@npm:^5.2.4":
+  version: 5.2.4
+  resolution: "webpack-dev-server@npm:5.2.4"
   dependencies:
     "@types/bonjour": ^3.5.13
     "@types/connect-history-api-fallback": ^1.5.4
@@ -13327,7 +13335,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 2b7f2096529945f578e86966d9a0994b0a87b82e3bb3a7cd1ccea2fb81aa95724473a88c9b2033ae3d2f799d13330342948ea77638029d10c8c0c746aac545f7
+  checksum: 4e1b13dc170b9964e579e5703dd56e97c2fbb6b101586cfda56f58f1ea0327ea9fcb9e4f36ff6264ee02ab69298697df87bd9617716d9c8379d2a6dc22bb103f
   languageName: node
   linkType: hard
 

@@ -174,7 +174,7 @@ data Time' =
           endHour' :: Double,
           firstLocation' :: Maybe T.Text,
           secondLocation' :: Maybe T.Text
-        } deriving (Show, Generic)
+        } deriving (Show, Eq, Generic)
 
 data Time =
   Time { weekDay :: Double,
