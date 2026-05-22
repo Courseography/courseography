@@ -10,8 +10,8 @@ module Database.TablesTests
 ) where
 
 import Data.Aeson (decode, decodeStrictText)
-import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BL
+import qualified Data.Text as T
 import Database.Tables (Meeting (..), Time' (..))
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (assertEqual, testCase)
@@ -70,4 +70,4 @@ runTime'FromJSONTests = map runTime'FromJSONTest time'FromJSONTestCases
 -- | Test suite for Tables Module
 test_tables :: TestTree
 test_tables =
-    testGroup "Tables tests" [runMeetingFromJSONTests, runTime'FromJSONTests]
+    testGroup "Tables tests" $ runMeetingFromJSONTests ++ runTime'FromJSONTests
