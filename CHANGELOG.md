@@ -30,6 +30,7 @@
 - Renamed usages of the word "room" to "location" in the codebase to better reflect the data represented
 - Added test cases for JSON parsing of Meeting data type in `backend-test/Database/TablesTests.hs`
 - Added test cases for JSON parsing of Time' data type in `backend-test/Database/TablesTests.hs`
+- Refactored functions relating to `Building` into `Models/Building`
 
 ## [0.7.2] - 2025-12-10
 
