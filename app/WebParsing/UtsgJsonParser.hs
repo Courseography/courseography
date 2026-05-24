@@ -10,7 +10,8 @@ import Data.Default.Class (def)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, Update, deleteWhere, entityKey, insert, insertMany_,
                                 selectFirst, upsert, (=.), (==.))
-import Database.Tables (EntityField (..), MeetTime (..), Meeting (..), buildTimes)
+import Database.Tables (EntityField (..), MeetTime (..), Meeting (..))
+import Models.Building (buildTimes)
 import Network.Connection (TLSSettings (TLSSettingsSimple))
 import Network.HTTP.Conduit (RequestBody (RequestBodyLBS), httpLbs, method, mkManagerSettings,
                              newManager, parseRequest, requestBody, requestHeaders, responseBody)

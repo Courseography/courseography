@@ -3,27 +3,23 @@ module WebParsing.ArtSciParser
 
 import Config (fasCalendarUrl, programsUrl, runDb)
 import Control.Monad.IO.Class (liftIO)
-import Data.CSV
 import Data.List (findIndex, nubBy)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Database.Persist (insertUnique)
-import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, insertMany_)
-import Database.Tables (Building (..), Courses (..), Department (..))
-import Filesystem.Path.CurrentOS as Path
+import Database.Persist.Sqlite (SqlPersistM)
+import Database.Tables (Courses (..), Department (..))
+import Models.Building (parseBuildings)
 import Models.Course (insertCourse)
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
-import System.Directory (getCurrentDirectory)
 import qualified Text.HTML.TagSoup as TS
 import Text.HTML.TagSoup (Tag)
 import Text.HTML.TagSoup.Match (anyAttrValue, tagOpen, tagOpenAttrLit, tagOpenAttrNameLit)
 import Text.Parsec (count, many, parse)
 import qualified Text.Parsec.Char as P
 import Text.Parsec.Text (Parser)
-import Text.ParserCombinators.Parsec (parseFromFile)
-import Util.Helpers
 import WebParsing.ParsecCombinators (text)
 import WebParsing.PostParser (addPostToDatabase)
 import WebParsing.ReqParser (parseReqs)
@@ -32,34 +28,6 @@ parseCalendar :: IO ()
 parseCalendar = do
     parseArtSci
     parseBuildings
-
--- The file name is building.csv and it is in the courseography/db folder
-buildingsCSV :: IO Prelude.FilePath
-buildingsCSV = do
-    curDir <- getCurrentDirectory
-    return $ Path.encodeString $ Path.append (Path.decodeString curDir) $ Path.append (Path.decodeString "db") (Path.decodeString "building.csv")
-
-parseBuildings :: IO ()
-parseBuildings = do
-    buildingInfo <- getBuildingsFromCSV =<< buildingsCSV
-    runDb $ do
-        liftIO $ putStrLn "Inserting buildings"
-        deleteWhere ([] :: [Filter Building])  :: SqlPersistM ()
-        insertMany_ buildingInfo :: SqlPersistM ()
-
--- | Extract building names, codes, addresses, postal codes, latitude and longitude from csv file
-getBuildingsFromCSV :: String -> IO [Building]
-getBuildingsFromCSV buildingCSVFile = do
-    buildingCSVData <- parseFromFile csvFile buildingCSVFile
-    case buildingCSVData of
-        Left _ -> error "csv parse error"
-        Right buildingData -> do
-            return $ map (\b -> Building (T.pack $ safeHead "" b)
-                                        (T.pack (b !! 1))
-                                        (T.pack (b !! 2))
-                                        (T.pack (b !! 3))
-                                        (read (b !! 4) :: Double)
-                                        (read (b !! 5) :: Double)) $ drop 1 buildingData
 
 -- | Parses the entire Arts & Science Course Calendar and inserts courses
 -- into the database.

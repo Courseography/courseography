@@ -20,6 +20,7 @@ import Export.LatexGenerator
 import Export.PdfGenerator
 import Happstack.Server
 import MasterTemplate
+import Models.Building (buildTime)
 import Models.Meeting (returnMeeting)
 import Scripts
 import System.FilePath ((</>))

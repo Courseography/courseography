@@ -26,7 +26,6 @@ import Data.Char (toLower)
 import qualified Data.Text as T
 import Data.Time.Clock (UTCTime)
 import Database.DataType
-import Database.Persist.Sqlite (Key, SqlPersistM, entityVal, selectFirst, (==.))
 import Database.Persist.TH
 import GHC.Generics
 
@@ -308,36 +307,3 @@ convertTimeVals (Just day) (Just start) (Just end) =
         endDbl = getHourVal end
     in (dayDbl, startDbl, endDbl)
 convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
-
--- | Convert Times into Time
-buildTime :: Times -> SqlPersistM Time
-buildTime t = do
-  room1 <- getBuilding (timesFirstRoom t)
-  room2 <- getBuilding (timesSecondRoom t)
-  return $ Time (timesWeekDay t)
-    (timesStartHour t)
-    (timesEndHour t)
-    room1
-    room2
-
-buildTimes :: Key Meeting -> Time' -> Times
-buildTimes meetingKey t =
-  Times (weekDay' t)
-    (startHour' t)
-    (endHour' t)
-    meetingKey
-    (firstLocation' t)
-    (secondLocation' t)
-
--- | Given a building code, get the persistent Building associated with it
-getBuilding :: Maybe T.Text -> SqlPersistM (Maybe Building)
-getBuilding rm = do
-  case rm of
-    Nothing -> return Nothing
-    Just r -> do
-      maybeEntityBuilding <- selectFirst [BuildingCode ==. T.take 2 r] []
-      case maybeEntityBuilding of
-        Nothing -> return Nothing
-        Just entBuilding -> do
-          let building = entityVal entBuilding
-          return $ Just building
