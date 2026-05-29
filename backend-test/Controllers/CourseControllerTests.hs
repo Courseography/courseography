@@ -20,7 +20,7 @@ import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_)
 import Database.Tables (Building (..), Courses (..), MeetTime (..), Meeting (..), Time' (..))
 import Happstack.Server (rsBody, rsCode)
-import Models.Building (buildTimes)
+import Models.Time (buildTimes)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, mockGetRequest, runServerPart, runServerPartWith, withDatabase)

@@ -2,21 +2,19 @@ module Models.Building
     (buildingsCSV,
     parseBuildings,
     getBuildingsFromCSV,
-    getBuilding,
-    buildTime,
-    buildTimes) where
+    getBuilding) where
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
-import Data.CSV
+import Data.CSV (csvFile)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, entityVal, insertMany_,
                                 selectFirst, (==.))
-import Database.Tables
-import Filesystem.Path.CurrentOS as Path
+import Database.Tables (Building (Building), EntityField (BuildingCode))
+import Filesystem.Path.CurrentOS as Path (append, decodeString, encodeString)
 import System.Directory (getCurrentDirectory)
 import Text.ParserCombinators.Parsec (parseFromFile)
-import Util.Helpers
+import Util.Helpers (safeHead)
 
 buildingsCSV :: IO Prelude.FilePath
 buildingsCSV = do
@@ -55,23 +53,3 @@ getBuilding rm =
             case maybeEntityBuilding of
                 Nothing -> return Nothing
                 Just entBuilding -> return $ Just (entityVal entBuilding)
-
--- | Convert a Times record into a Time by resolving room codes to Buildings
-buildTime :: Times -> SqlPersistM Time
-buildTime t = do
-    room1 <- getBuilding (timesFirstRoom t)
-    room2 <- getBuilding (timesSecondRoom t)
-    return $ Time (timesWeekDay t)
-        (timesStartHour t)
-        (timesEndHour t)
-        room1
-        room2
-
-buildTimes :: Key Meeting -> Time' -> Times
-buildTimes meetingKey t =
-    Times (weekDay' t)
-        (startHour' t)
-        (endHour' t)
-        meetingKey
-        (firstLocation' t)
-        (secondLocation' t)
