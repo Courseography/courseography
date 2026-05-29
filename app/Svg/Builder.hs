@@ -22,7 +22,7 @@ import Data.List (find)
 import qualified Data.Text as T
 import Database.DataType
 import Database.Tables hiding (shapes, texts)
-import Svg.Parser (matrixPointMultiply)
+import Util.Matrix (matrixPointMultiply)
 import TextShow (showt)
 import Util.Helpers
 
