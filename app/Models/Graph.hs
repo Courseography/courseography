@@ -1,14 +1,13 @@
 module Models.Graph
-    (getGraph,
-    insertGraph) where
+    (getGraph, insertGraph, insertElements, deleteGraph) where
 
 import Config (runDb)
 import Data.Aeson (Value, object, toJSON)
 import qualified Data.Text as T (Text)
 import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
 import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64), SqlPersistM,
-                                entityKey, entityVal, insert, insertMany_, keyToValues, selectFirst,
-                                selectList, (<-.), (==.))
+                                deleteWhere, entityKey, entityVal, insert, insert_, insertMany_, keyToValues, 
+                                selectFirst, selectList, (<-.), (==.))
 import Database.Tables hiding (paths, shapes, texts)
 import Svg.Builder (buildEllipses, buildPath, buildRect)
 import Util.Helpers
@@ -54,9 +53,28 @@ getGraph graphName = runDb $ do
 
             return (Just response)
 
-insertGraph :: T.Text -> SvgJSON -> SqlPersistM ()
+-- | Insert a new graph into the database, given its SVG JSON.
+-- | Return Nothing.
+insertGraph :: T.Text         -- ^ The title of the graph being inserted.
+            -> SvgJSON        -- ^ The SVG JSON data of the inserted graph (texts, shapes, paths).
+            -> SqlPersistM () -- ^ Return Nothing.
 insertGraph nameStr_ (SvgJSON texts shapes paths) = do
     gId <- insert $ Graph nameStr_ 256 256 False
     insertMany_ $ map (\text -> text {textGraph = gId}) texts
     insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
     insertMany_ $ map (\path -> path {pathGraph = gId}) paths
+
+-- | Insert graph components into the database.
+insertElements :: ([Path], [Shape], [Text]) -> SqlPersistM ()
+insertElements (paths, shapes, texts) = do
+    mapM_ insert_ shapes
+    mapM_ insert_ paths
+    mapM_ insert_ texts
+
+-- | Delete a graph with the given graph ID from the database.
+deleteGraph :: Key Graph -> SqlPersistM ()
+deleteGraph gId = do
+    deleteWhere [TextGraph ==. gId]
+    deleteWhere [ShapeGraph ==. gId]
+    deleteWhere [PathGraph ==. gId]
+    deleteWhere [GraphId ==. gId]

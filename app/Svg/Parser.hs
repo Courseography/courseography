@@ -19,14 +19,14 @@ module Svg.Parser
 import Config (graphPath, runDb)
 import Control.Monad.IO.Class (liftIO)
 import Data.Char (isSpace)
-import Data.List as List
+import Data.List as List hiding (insert)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
 import Database.DataType
 import Database.Persist.Sqlite
 import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
-import Svg.Database (deleteGraph, insertElements, insertGraph)
+import Models.Graph (deleteGraph, insertElements)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Text.HTML.TagSoup (Tag)
 import qualified Text.Parsec as P
@@ -91,7 +91,8 @@ performParseFromMemory :: T.Text -- ^ The title of the graph
                        -> Bool -- ^ True if SVG is dynamically generated
                        -> SqlPersistM ()
 performParseFromMemory graphName graphSvg isDynamic = do
-    key <- insertGraph graphName graphWidth graphHeight isDynamic
+    runMigration migrateAll
+    key <- insert (Graph graphName graphWidth graphHeight isDynamic)
     let parsedGraph = parseSvg key graphSvg
     insertElements parsedGraph
         where (graphWidth, graphHeight) = parseSizeFromSvg graphSvg
