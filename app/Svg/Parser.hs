@@ -5,7 +5,7 @@ This module is reponsible for parsing the SVG files exported from Inkscape.
 It also currently acts as a main driver for the whole graph pipeline:
 
 1. Parsing the raw SVG files
-2. Inserting them into the database (see "Svg.Database")
+2. Inserting them into the database (see "Models.Graph")
 3. Retrieving the database values and generating a new SVG file
    (See "Svg.Builder" and "Svg.Generator")
 
