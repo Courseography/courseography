@@ -1,5 +1,5 @@
 module Models.Graph
-    (getGraph, insertGraph, insertElements, deleteExistingGraph, deleteGraph) where
+    (getGraph, insertGraph, insertElements, deleteExistingGraph) where
 
 import Config (runDb)
 import Data.Aeson (Value, object, toJSON)

@@ -36,6 +36,7 @@ import Text.Read (readMaybe)
 import Util.Helpers
 import Util.Matrix (matrixMultiply)
 
+
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runDb $ do
     performParse "Computer Science" "csc2025.svg"
