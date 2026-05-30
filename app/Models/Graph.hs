@@ -1,5 +1,5 @@
 module Models.Graph
-    (getGraph, insertGraph, insertElements, deleteGraph) where
+    (getGraph, insertGraph, insertElements, deleteExistingGraph, deleteGraph) where
 
 import Config (runDb)
 import Data.Aeson (Value, object, toJSON)
@@ -70,6 +70,16 @@ insertElements (paths, shapes, texts) = do
     mapM_ insert_ shapes
     mapM_ insert_ paths
     mapM_ insert_ texts
+
+-- | Delete the graph with the given name from the database, if it exists.
+deleteExistingGraph :: T.Text -> SqlPersistM ()
+deleteExistingGraph graphName = do
+  graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
+  case graphEnt of
+    Just graph -> do
+      let gId = entityKey graph
+      deleteGraph gId
+    Nothing -> pure ()
 
 -- | Delete a graph with the given graph ID from the database.
 deleteGraph :: Key Graph -> SqlPersistM ()

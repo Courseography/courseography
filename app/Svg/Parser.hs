@@ -19,14 +19,14 @@ module Svg.Parser
 import Config (graphPath, runDb)
 import Control.Monad.IO.Class (liftIO)
 import Data.Char (isSpace)
-import Data.List as List hiding (insert)
+import qualified Data.List as List
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
 import Database.DataType
 import Database.Persist.Sqlite
 import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
-import Models.Graph (deleteGraph, insertElements)
+import Models.Graph (deleteExistingGraph, insertElements)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Text.HTML.TagSoup (Tag)
 import qualified Text.Parsec as P
@@ -34,7 +34,7 @@ import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
 import Text.Read (readMaybe)
 import Util.Helpers
-
+import Util.Matrix (matrixMultiply)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runDb $ do
@@ -76,22 +76,11 @@ performParse graphName inputFilename = do
     graphFile <- liftIO $ T.readFile (gPath ++ inputFilename)
     performParseFromMemory graphName graphFile False
 
--- | Deletes the graph with the given name from the database if it exists.
-deleteExistingGraph :: T.Text -> SqlPersistM ()
-deleteExistingGraph graphName = do
-  graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
-  case graphEnt of
-    Just graph -> do
-      let gId = entityKey graph
-      deleteGraph gId
-    Nothing -> pure ()
-
 performParseFromMemory :: T.Text -- ^ The title of the graph
                        -> T.Text -- ^ Filename of the SVG to parse
                        -> Bool -- ^ True if SVG is dynamically generated
                        -> SqlPersistM ()
 performParseFromMemory graphName graphSvg isDynamic = do
-    runMigration migrateAll
     key <- insert (Graph graphName graphWidth graphHeight isDynamic)
     let parsedGraph = parseSvg key graphSvg
     insertElements parsedGraph
@@ -668,14 +657,6 @@ updateShape fill r =
 -- | Adds two tuples together.
 addTuples :: Point -> Point -> Point
 addTuples (a,b) (c,d) = (a + c, b + d)
-
--- | Multiplies two 3x3 matrices together.
-matrixMultiply :: Matrix -> Matrix -> Matrix
-matrixMultiply m1 m2 = [[dotProduct row col | col <- transpose m2] | row <- m1]
-
--- | Computes the dot product of two vectors.
-dotProduct :: Vector -> Vector -> Double
-dotProduct v1 v2 = sum $ zipWith (*) v1 v2
 
 -- | Helper to remove leading and trailing whitespace.
 trim :: T.Text -> T.Text
