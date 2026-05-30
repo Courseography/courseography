@@ -121,6 +121,7 @@ test-suite Tests
     Controllers.GenerateControllerTests,
     Controllers.GraphControllerTests,
     Controllers.ProgramControllerTests,
+    Database.BuildingTests,
     Database.CourseQueriesTests,
     Database.TablesTests,
     RequirementTests.ModifierTests,
