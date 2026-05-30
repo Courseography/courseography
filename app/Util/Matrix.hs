@@ -1,6 +1,6 @@
 {-|
     Module      : Util.Matrix
-    Description : Contains a single function that applies a matrix transformation to a point.
+    Description : Contains functions for performing matrix operations.
 -}
 
 module Util.Matrix (matrixPointMultiply, matrixMultiply, dotProduct) where
