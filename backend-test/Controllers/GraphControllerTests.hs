@@ -193,10 +193,10 @@ runGetGraphJSONTest (label, (texts', shapes', paths')) =
         let jsonObj = parseGraphJSON body
         case jsonObj of
             Nothing -> assertFailure ("Maybe ([Text], [Shape], [Path]) returned as Nothing for " ++ label)
-            Just svg -> do
-                assertEqual ("Texts differ for " ++ label) texts' (map (\text -> text {textGraph = toSqlKey 1}) (texts svg))
-                assertEqual ("Shapes differ for " ++ label) shapes' (map (\shape -> shape {shapeGraph = toSqlKey 1}) (shapes svg))
-                assertEqual ("Paths differ for " ++ label) paths' (map (\path -> path {pathGraph = toSqlKey 1}) (paths svg))
+            Just (parsedTexts, parsedShapes, parsedPaths) -> do
+                assertEqual ("Texts differ for " ++ label) texts' (map (\text -> text {textGraph = toSqlKey 1}) parsedTexts)
+                assertEqual ("Shapes differ for " ++ label) shapes' (map (\shape -> shape {shapeGraph = toSqlKey 1}) parsedShapes)
+                assertEqual ("Paths differ for " ++ label) paths' (map (\path -> path {pathGraph = toSqlKey 1}) parsedPaths)
 
 -- | Run all getGraphJSON tests
 runGetGraphJSONTests :: [TestTree]
