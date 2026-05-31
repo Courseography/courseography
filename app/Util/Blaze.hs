@@ -30,7 +30,7 @@ toLink :: T.Text -> T.Text -> H.Html
 toLink link content = H.a ! A.href (H.textValue link)
                           $ H.toHtml content
 
--- | mdToHTML takes in the contents of a file written in Mark Down and converts it to
+-- |mdToHTML takes in the contents of a file written in Mark Down and converts it to
 -- blaze-HTML.
 mdToHTML :: Text -> H.Html
 mdToHTML = markdown def
