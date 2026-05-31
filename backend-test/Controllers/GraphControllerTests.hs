@@ -18,7 +18,7 @@ import qualified Data.Aeson.KeyMap as KeyMap
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_, toSqlKey)
-import Database.Tables (Graph (..), Path (..), Shape (..), Text (..), SvgJSON (..))
+import Database.Tables (Graph (..), Path (..), Shape (..), Text (..), parseGraphJSON)
 import Happstack.Server (rsBody)
 import Models.Graph (getGraph, insertGraph)
 import Test.Tasty (TestTree)
@@ -187,12 +187,12 @@ runGetGraphJSONTest (label, (texts', shapes', paths')) =
         let graphName = "Test Graph Name"
         runDb $ do
             clearDatabase
-            insertGraph graphName (SvgJSON texts' shapes' paths')
+            insertGraph graphName (texts', shapes', paths')
         response <- runServerPartWith Controllers.Graph.getGraphJSON $ mockGetRequest "/get-json-data" [("graphName", T.unpack graphName)] ""
         let body = rsBody response
-        let jsonObj = decode body :: Maybe SvgJSON
+        let jsonObj = parseGraphJSON body
         case jsonObj of
-            Nothing -> assertFailure ("Maybe SvgJSON returned as Nothing for " ++ label)
+            Nothing -> assertFailure ("Maybe ([Text], [Shape], [Path]) returned as Nothing for " ++ label)
             Just svg -> do
                 assertEqual ("Texts differ for " ++ label) texts' (map (\text -> text {textGraph = toSqlKey 1}) (texts svg))
                 assertEqual ("Shapes differ for " ++ label) shapes' (map (\shape -> shape {shapeGraph = toSqlKey 1}) (shapes svg))
