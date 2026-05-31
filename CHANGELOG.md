@@ -32,6 +32,7 @@
 - Added test cases for JSON parsing of Time' data type in `backend-test/Database/TablesTests.hs`
 - Refactor graph helper functions from `app/Svg/Database.hs` to `app/Models/Graph.hs`
 - Refactor functions for performing matrix operations from `app/Svg/Parser.hs` to `app/Util/Matrix.hs`
+- Updated documentation in `app/Util/Blaze.hs`
 
 ## [0.7.2] - 2025-12-10
 
