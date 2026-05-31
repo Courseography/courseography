@@ -19,11 +19,12 @@ straightforward.
 
 module Database.Tables where
 
-import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject, (.!=), (.:),
-                   (.:?))
-import Data.Aeson.Types (Options (..), Parser, Value (Object), defaultOptions)
+import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), decode, genericToJSON, withObject,
+                   (.!=), (.:), (.:?))
+import Data.Aeson.Types (Options (..), Parser, Value (Object), defaultOptions, parseMaybe)
 import Data.Char (toLower)
 import qualified Data.Text as T
+import qualified Data.ByteString.Lazy as L
 import Data.Time.Clock (UTCTime)
 import Database.DataType
 import Database.Persist.Sqlite (Key, SqlPersistM, entityVal, selectFirst, (==.))
@@ -161,13 +162,6 @@ SchemaVersion
 
 -- ** TODO: Remove these extra types and class instances
 
--- | JSON SVG data
-data SvgJSON =
-    SvgJSON { texts :: [Text],
-              shapes :: [Shape],
-              paths :: [Path]
-            } deriving (Show, Generic)
-
 data Time' =
   Time' { weekDay' :: Double,
           startHour' :: Double,
@@ -210,10 +204,6 @@ instance ToJSON Program
 instance ToJSON Time
 instance ToJSON MeetTime'
 instance ToJSON Building
-
--- instance FromJSON required so that tables can be parsed into JSON,
--- not necessary otherwise.
-instance FromJSON SvgJSON
 
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
@@ -277,6 +267,17 @@ parseInstr (Object io) = do
   lastName <- io .:? "lastName" .!= ""
   return (T.concat [firstName, ". ", lastName])
 parseInstr _ = return ""
+
+-- | Parse the JSON representation of a graph into its texts, shapes, and paths components.
+parseGraphJSON :: L.ByteString -> Maybe ([Text], [Shape], [Path])
+parseGraphJSON jsonStr = do
+  obj <- decode jsonStr
+  parseMaybe (\o -> do
+    texts <- o .: "texts"
+    shapes <- o .: "shapes"
+    paths <- o .: "paths"
+    return (texts, shapes, paths)
+    ) obj
 
 -- | Converts the miliseconds time into hourly time
 -- | Assumes times are rounded to the nearest hour

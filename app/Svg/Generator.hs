@@ -21,7 +21,7 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.DataType
 import Database.Persist.Sqlite
-import Database.Tables hiding (paths, texts)
+import Database.Tables
 import Svg.Builder
 import System.IO (Handle, hPutStrLn)
 import Text.Blaze (toMarkup)

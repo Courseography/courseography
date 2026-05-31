@@ -1,7 +1,7 @@
 module Controllers.Graph (graphResponse, index, getGraphJSON, graphImageResponse, saveGraphJSON) where
 
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (decode, object, (.=))
+import Data.Aeson (object, (.=))
 import Data.Maybe (fromMaybe)
 import Export.ImageConversion (withImageFile)
 import Happstack.Server (Response, ServerPart, lookBS, lookText', ok, toResponse)
@@ -15,7 +15,7 @@ import qualified Text.Blaze.Html5.Attributes as A
 
 import Config (runDb)
 import Database.Persist.Sqlite (Entity, SelectOpt (Asc), SqlPersistM, selectList, (==.))
-import Database.Tables as Tables (EntityField (GraphDynamic, GraphTitle), Graph, SvgJSON, Text)
+import Database.Tables as Tables (EntityField (GraphDynamic, GraphTitle), Graph, Text, parseGraphJSON)
 import Export.GetImages (writeActiveGraphImage)
 import Models.Graph (getGraph, insertGraph)
 import Util.Happstack (createJSONResponse)
@@ -64,7 +64,7 @@ saveGraphJSON :: ServerPart Response
 saveGraphJSON = do
     jsonStr <- lookBS "jsonData"
     nameStr <- lookText' "nameData"
-    let jsonObj = decode jsonStr :: Maybe SvgJSON
+    let jsonObj = parseGraphJSON jsonStr
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just svg -> do

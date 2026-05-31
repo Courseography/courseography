@@ -25,7 +25,7 @@ import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
 import Database.DataType
 import Database.Persist.Sqlite
-import Database.Tables hiding (graphHeight, graphWidth, paths, shapes, texts)
+import Database.Tables hiding (graphHeight, graphWidth)
 import Models.Graph (deleteExistingGraph, insertElements)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Text.HTML.TagSoup (Tag)

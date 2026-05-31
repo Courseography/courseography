@@ -8,7 +8,7 @@ import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
 import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64), SqlPersistM,
                                 deleteWhere, entityKey, entityVal, insert, insert_, insertMany_, keyToValues, 
                                 selectFirst, selectList, (<-.), (==.))
-import Database.Tables hiding (paths, shapes, texts)
+import Database.Tables 
 import Svg.Builder (buildEllipses, buildPath, buildRect)
 import Util.Helpers
 
@@ -55,10 +55,10 @@ getGraph graphName = runDb $ do
 
 -- | Insert a new graph into the database, given its SVG JSON.
 -- | Return Nothing.
-insertGraph :: T.Text         -- ^ The title of the graph being inserted.
-            -> SvgJSON        -- ^ The SVG JSON data of the inserted graph (texts, shapes, paths).
-            -> SqlPersistM () -- ^ Return Nothing.
-insertGraph nameStr_ (SvgJSON texts shapes paths) = do
+insertGraph :: T.Text                    -- ^ The title of the graph being inserted.
+            -> ([Text], [Shape], [Path]) -- ^ The parsed JSON data of the inserted graph.
+            -> SqlPersistM ()            -- ^ Return Nothing.
+insertGraph nameStr_ (texts, shapes, paths) = do
     gId <- insert $ Graph nameStr_ 256 256 False
     insertMany_ $ map (\text -> text {textGraph = gId}) texts
     insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes

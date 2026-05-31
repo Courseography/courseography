@@ -21,7 +21,7 @@ import Data.Char (toLower)
 import Data.List (find)
 import qualified Data.Text as T
 import Database.DataType
-import Database.Tables hiding (shapes, texts)
+import Database.Tables
 import Util.Matrix (matrixPointMultiply)
 import TextShow (showt)
 import Util.Helpers
