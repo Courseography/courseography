@@ -8,7 +8,8 @@ import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
 import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64), SqlPersistM,
                                 deleteWhere, entityKey, entityVal, insert, insert_, insertMany_, keyToValues, 
                                 selectFirst, selectList, (<-.), (==.))
-import Database.Tables 
+import Database.Tables (EntityField(GraphId, ShapeType_, GraphTitle, TextGraph, ShapeGraph, PathGraph),
+                        Key, Path(pathGraph), Shape(shapeGraph), Text(textGraph), Graph(graphWidth, graphHeight, Graph))   
 import Svg.Builder (buildEllipses, buildPath, buildRect)
 import Util.Helpers
 

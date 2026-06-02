@@ -21,7 +21,11 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Database.DataType
 import Database.Persist.Sqlite
-import Database.Tables
+import Database.Tables (EntityField(ShapeGraph, GraphTitle, TextGraph, PathGraph, ShapeType_),
+                        Path(pathFill, pathIsRegion, pathSource, pathTarget, pathId_, pathPoints, pathTransform),
+                        Shape(shapeText, shapeFill, shapeType_, shapeId_, shapeTransform, shapeWidth, shapeHeight, shapePos),
+                        Text(textText, textPos, textAlign, textFill, textTransform),
+                        Graph(graphHeight, graphWidth))
 import Svg.Builder
 import System.IO (Handle, hPutStrLn)
 import Text.Blaze (toMarkup)

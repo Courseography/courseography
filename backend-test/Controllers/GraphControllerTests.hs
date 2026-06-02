@@ -18,7 +18,7 @@ import qualified Data.Aeson.KeyMap as KeyMap
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_, toSqlKey)
-import Database.Tables (Graph (..), Path (..), Shape (..), Text (..), parseGraphJSON)
+import Database.Tables (parseGraphJSON, Graph(Graph), Path(..), Shape(..), Text(..))
 import Happstack.Server (rsBody)
 import Models.Graph (getGraph, insertGraph)
 import Test.Tasty (TestTree)

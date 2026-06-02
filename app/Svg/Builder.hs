@@ -21,7 +21,10 @@ import Data.Char (toLower)
 import Data.List (find)
 import qualified Data.Text as T
 import Database.DataType
-import Database.Tables
+import Database.Tables (Matrix, Point, 
+                        Path(pathTarget, pathIsRegion, pathPoints, pathTransform, pathId_, pathSource),
+                        Shape(shapeText, shapeWidth, shapeHeight, shapePos, shapeTransform, shapeType_, shapeId_),
+                        Text(textPos, textText, textTransform))
 import Util.Matrix (matrixPointMultiply)
 import TextShow (showt)
 import Util.Helpers
