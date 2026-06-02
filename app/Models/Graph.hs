@@ -1,9 +1,11 @@
 module Models.Graph
-    (getGraph, insertGraph, insertElements, deleteExistingGraph) where
+    (getGraph, insertGraph, insertElements, deleteExistingGraph, parseGraphComponentsJSON) where
 
 import Config (runDb)
-import Data.Aeson (Value, object, toJSON)
+import Data.Aeson (Value, decode, object, toJSON, (.:))
+import Data.Aeson.Types (parseMaybe)
 import qualified Data.Text as T (Text)
+import qualified Data.ByteString.Lazy as L
 import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
 import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64), SqlPersistM,
                                 deleteWhere, entityKey, entityVal, insert, insert_, insertMany_, keyToValues, 
@@ -89,3 +91,14 @@ deleteGraph gId = do
     deleteWhere [ShapeGraph ==. gId]
     deleteWhere [PathGraph ==. gId]
     deleteWhere [GraphId ==. gId]
+
+-- | Parse the JSON representation of a graph into its texts, shapes, and paths components.
+parseGraphComponentsJSON :: L.ByteString -> Maybe ([Text], [Shape], [Path])
+parseGraphComponentsJSON jsonStr = do
+  obj <- decode jsonStr
+  parseMaybe (\o -> do
+    texts <- o .: "texts"
+    shapes <- o .: "shapes"
+    paths <- o .: "paths"
+    return (texts, shapes, paths)
+    ) obj

@@ -18,9 +18,9 @@ import qualified Data.Aeson.KeyMap as KeyMap
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_, toSqlKey)
-import Database.Tables (parseGraphJSON, Graph(Graph), Path(..), Shape(..), Text(..))
+import Database.Tables (Graph(Graph), Path(..), Shape(..), Text(..))
 import Happstack.Server (rsBody)
-import Models.Graph (getGraph, insertGraph)
+import Models.Graph (getGraph, insertGraph, parseGraphComponentsJSON)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, assertFailure, testCase)
 import TestHelpers (clearDatabase, mockPutRequest, runServerPart, runServerPartWith, withDatabase, mockGetRequest)
@@ -190,7 +190,7 @@ runGetGraphJSONTest (label, (texts', shapes', paths')) =
             insertGraph graphName (texts', shapes', paths')
         response <- runServerPartWith Controllers.Graph.getGraphJSON $ mockGetRequest "/get-json-data" [("graphName", T.unpack graphName)] ""
         let body = rsBody response
-        let jsonObj = parseGraphJSON body
+        let jsonObj = parseGraphComponentsJSON body
         case jsonObj of
             Nothing -> assertFailure ("Maybe ([Text], [Shape], [Path]) returned as Nothing for " ++ label)
             Just (parsedTexts, parsedShapes, parsedPaths) -> do

@@ -15,9 +15,9 @@ import qualified Text.Blaze.Html5.Attributes as A
 
 import Config (runDb)
 import Database.Persist.Sqlite (Entity, SelectOpt (Asc), SqlPersistM, selectList, (==.))
-import Database.Tables as Tables (EntityField (GraphDynamic, GraphTitle), Graph, Text, parseGraphJSON)
+import Database.Tables as Tables (EntityField(GraphTitle, GraphDynamic), Text, Graph)
 import Export.GetImages (writeActiveGraphImage)
-import Models.Graph (getGraph, insertGraph)
+import Models.Graph (getGraph, insertGraph, parseGraphComponentsJSON)
 import Util.Happstack (createJSONResponse)
 import Util.Helpers (readImageData)
 
@@ -64,9 +64,9 @@ saveGraphJSON :: ServerPart Response
 saveGraphJSON = do
     jsonStr <- lookBS "jsonData"
     nameStr <- lookText' "nameData"
-    let jsonObj = parseGraphJSON jsonStr
+    let jsonObj = parseGraphComponentsJSON jsonStr
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
-        Just svg -> do
-            _ <- liftIO $ runDb $ insertGraph nameStr svg
+        Just components -> do
+            _ <- liftIO $ runDb $ insertGraph nameStr components
             return $ toResponse ("Success" :: String)
