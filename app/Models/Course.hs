@@ -26,6 +26,9 @@ import Models.Meeting (buildMeetTimes, meetingQuery)
 
 -- | The data for a single course, as returned by the back-end to the front-end.
 -- This is different from the schema-defined 'Courses' type (in "Database.Tables")
+-- 'Courses' describes how a course is stored in the database, whereas
+-- 'CourseData' describes the shape of the information sent to the client
+-- when a course is requested.
 data CourseData =
     CourseData { breadth :: Maybe T.Text,
                  description :: Maybe T.Text,
