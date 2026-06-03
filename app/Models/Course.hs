@@ -1,5 +1,8 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Models.Course
-    (buildCourse,
+    (CourseData (..),
+    buildCourse,
     returnCourse,
     prereqsForCourse,
     getDeptCourses,
@@ -7,17 +10,40 @@ module Models.Course
 
 import Config (runDb)
 import Control.Monad.IO.Class (MonadIO, liftIO)
+import Data.Aeson (ToJSON)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T (Text, append, filter, snoc, toUpper)
 import Database.Persist.Class (selectKeysList)
 import Database.Persist.Sqlite (Entity, PersistValue (PersistText), SqlPersistM, entityVal, get,
                                 insert_, rawSql, selectFirst, selectList, (<-.), (==.))
-import Database.Tables hiding (breadth, distribution)
+import Database.Tables (Breadth (breadthDescription),
+                        Courses (coursesBreadth, coursesCode, coursesCoreqs, coursesDescription, coursesDistribution, coursesExclusions, coursesPrereqString, coursesTitle, coursesVideoUrls),
+                        Distribution (distributionDescription),
+                        EntityField (BreadthDescription, CoursesCode, DistributionDescription, MeetingCode),
+                        Key, MeetTime', Meeting (meetingCode))
+import GHC.Generics (Generic)
 import Models.Meeting (buildMeetTimes, meetingQuery)
 
+-- | The data for a single course, as returned by the back-end to the front-end.
+-- This is different from the schema-defined 'Courses' type (in "Database.Tables")
+data CourseData =
+    CourseData { breadth :: Maybe T.Text,
+                 description :: Maybe T.Text,
+                 title :: Maybe T.Text,
+                 prereqString :: Maybe T.Text,
+                 allMeetingTimes :: Maybe [MeetTime'],
+                 name :: !T.Text,
+                 exclusions :: Maybe T.Text,
+                 distribution :: Maybe T.Text,
+                 coreqs :: Maybe T.Text,
+                 videoUrls :: [T.Text]
+               } deriving (Show, Generic)
+
+instance ToJSON CourseData
+
 -- | Queries the database for all information about @course@,
--- constructs and returns a Course value.
-returnCourse :: T.Text -> IO (Maybe Course)
+-- constructs and returns a CourseData value.
+returnCourse :: T.Text -> IO (Maybe CourseData)
 returnCourse lowerStr = runDb $ do
     let courseStr = T.toUpper lowerStr
     -- TODO: require the client to pass the full course code
@@ -44,13 +70,13 @@ getDescriptionD (Just key) = do
     maybeDistribution <- get key
     return $ fmap distributionDescription maybeDistribution
 
--- | Builds a Course structure from a tuple from the Courses table.
+-- | Builds a CourseData structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
-buildCourse :: [MeetTime'] -> Courses -> SqlPersistM Course
+buildCourse :: [MeetTime'] -> Courses -> SqlPersistM CourseData
 buildCourse allMeetings course = do
     cBreadth <- getDescriptionB (coursesBreadth course)
     cDistribution <- getDescriptionD (coursesDistribution course)
-    return $ Course cBreadth
+    return $ CourseData cBreadth
            -- TODO: Remove the filter and allow double-quotes
            (fmap (T.filter (/='\"')) (coursesDescription course))
            (fmap (T.filter (/='\"')) (coursesTitle course))
@@ -77,7 +103,7 @@ prereqsForCourse courseCode = runDb $ do
                       fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
                     ) :: SqlPersistM (Either String (T.Text, T.Text))
 
-getDeptCourses :: MonadIO m => T.Text -> m [Course]
+getDeptCourses :: MonadIO m => T.Text -> m [CourseData]
 getDeptCourses dept = liftIO $ runDb $ do
         courses :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
         let deptCourses = map entityVal courses
@@ -111,10 +137,10 @@ getBreadthKey description_ = do
 
 -- | Inserts course into the Courses table.
 insertCourse :: (Courses, T.Text, T.Text) -> SqlPersistM ()
-insertCourse (course, breadth, distribution) = do
+insertCourse (course, breadthDesc, distributionDesc) = do
     maybeCourse <- selectFirst [CoursesCode ==. coursesCode course] []
-    breadthKey <- getBreadthKey breadth
-    distributionKey <- getDistributionKey distribution
+    breadthKey <- getBreadthKey breadthDesc
+    distributionKey <- getDistributionKey distributionDesc
     case maybeCourse of
         Nothing -> insert_ $ course {coursesBreadth = breadthKey,
                                      coursesDistribution = distributionKey}
