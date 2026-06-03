@@ -1,14 +1,17 @@
 module Models.Graph
-    (getGraph, insertGraph, insertElements, deleteExistingGraph) where
+    (getGraph, insertGraph, insertElements, deleteExistingGraph, parseGraphComponentsJSON) where
 
 import Config (runDb)
-import Data.Aeson (Value, object, toJSON)
+import Data.Aeson (Value, decode, object, toJSON, (.:))
+import Data.Aeson.Types (parseMaybe)
 import qualified Data.Text as T (Text)
+import qualified Data.ByteString.Lazy as L
 import Database.DataType (ShapeType (BoolNode, Hybrid, Node))
 import Database.Persist.Sqlite (Entity, PersistEntity, PersistValue (PersistInt64), SqlPersistM,
                                 deleteWhere, entityKey, entityVal, insert, insert_, insertMany_, keyToValues, 
                                 selectFirst, selectList, (<-.), (==.))
-import Database.Tables hiding (paths, shapes, texts)
+import Database.Tables (EntityField(GraphId, ShapeType_, GraphTitle, TextGraph, ShapeGraph, PathGraph),
+                        Key, Path(pathGraph), Shape(shapeGraph), Text(textGraph), Graph(graphWidth, graphHeight, Graph))   
 import Svg.Builder (buildEllipses, buildPath, buildRect)
 import Util.Helpers
 
@@ -55,10 +58,10 @@ getGraph graphName = runDb $ do
 
 -- | Insert a new graph into the database, given its SVG JSON.
 -- | Return Nothing.
-insertGraph :: T.Text         -- ^ The title of the graph being inserted.
-            -> SvgJSON        -- ^ The SVG JSON data of the inserted graph (texts, shapes, paths).
-            -> SqlPersistM () -- ^ Return Nothing.
-insertGraph nameStr_ (SvgJSON texts shapes paths) = do
+insertGraph :: T.Text                    -- ^ The title of the graph being inserted.
+            -> ([Text], [Shape], [Path]) -- ^ The parsed JSON data of the inserted graph.
+            -> SqlPersistM ()            -- ^ Return Nothing.
+insertGraph nameStr_ (texts, shapes, paths) = do
     gId <- insert $ Graph nameStr_ 256 256 False
     insertMany_ $ map (\text -> text {textGraph = gId}) texts
     insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
@@ -88,3 +91,14 @@ deleteGraph gId = do
     deleteWhere [ShapeGraph ==. gId]
     deleteWhere [PathGraph ==. gId]
     deleteWhere [GraphId ==. gId]
+
+-- | Parse the JSON representation of a graph into its texts, shapes, and paths components.
+parseGraphComponentsJSON :: L.ByteString -> Maybe ([Text], [Shape], [Path])
+parseGraphComponentsJSON jsonStr = do
+  obj <- decode jsonStr
+  parseMaybe (\o -> do
+    texts <- o .: "texts"
+    shapes <- o .: "shapes"
+    paths <- o .: "paths"
+    return (texts, shapes, paths)
+    ) obj
