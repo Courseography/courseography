@@ -44,7 +44,7 @@ data CourseData =
 
 instance ToJSON CourseData
 
--- | Queries the database for all information about @course@,
+-- | Queries the database for all information about 'CourseData',
 -- constructs and returns a CourseData value.
 returnCourse :: T.Text -> IO (Maybe CourseData)
 returnCourse lowerStr = runDb $ do
