@@ -18,9 +18,9 @@ import qualified Data.Aeson.KeyMap as KeyMap
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_, toSqlKey)
-import Database.Tables (Graph (..), Path (..), Shape (..), Text (..), SvgJSON (..))
+import Database.Tables (Graph(Graph), Path(..), Shape(..), Text(..))
 import Happstack.Server (rsBody)
-import Models.Graph (getGraph, insertGraph)
+import Models.Graph (getGraph, insertGraph, parseGraphComponentsJSON)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, assertFailure, testCase)
 import TestHelpers (clearDatabase, mockPutRequest, runServerPart, runServerPartWith, withDatabase, mockGetRequest)
@@ -187,16 +187,16 @@ runGetGraphJSONTest (label, (texts', shapes', paths')) =
         let graphName = "Test Graph Name"
         runDb $ do
             clearDatabase
-            insertGraph graphName (SvgJSON texts' shapes' paths')
+            insertGraph graphName (texts', shapes', paths')
         response <- runServerPartWith Controllers.Graph.getGraphJSON $ mockGetRequest "/get-json-data" [("graphName", T.unpack graphName)] ""
         let body = rsBody response
-        let jsonObj = decode body :: Maybe SvgJSON
+        let jsonObj = parseGraphComponentsJSON body
         case jsonObj of
-            Nothing -> assertFailure ("Maybe SvgJSON returned as Nothing for " ++ label)
-            Just svg -> do
-                assertEqual ("Texts differ for " ++ label) texts' (map (\text -> text {textGraph = toSqlKey 1}) (texts svg))
-                assertEqual ("Shapes differ for " ++ label) shapes' (map (\shape -> shape {shapeGraph = toSqlKey 1}) (shapes svg))
-                assertEqual ("Paths differ for " ++ label) paths' (map (\path -> path {pathGraph = toSqlKey 1}) (paths svg))
+            Nothing -> assertFailure ("Maybe ([Text], [Shape], [Path]) returned as Nothing for " ++ label)
+            Just (parsedTexts, parsedShapes, parsedPaths) -> do
+                assertEqual ("Texts differ for " ++ label) texts' (map (\text -> text {textGraph = toSqlKey 1}) parsedTexts)
+                assertEqual ("Shapes differ for " ++ label) shapes' (map (\shape -> shape {shapeGraph = toSqlKey 1}) parsedShapes)
+                assertEqual ("Paths differ for " ++ label) paths' (map (\path -> path {pathGraph = toSqlKey 1}) parsedPaths)
 
 -- | Run all getGraphJSON tests
 runGetGraphJSONTests :: [TestTree]

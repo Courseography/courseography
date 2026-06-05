@@ -19,8 +19,8 @@ straightforward.
 
 module Database.Tables where
 
-import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject, (.!=), (.:),
-                   (.:?))
+import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject,
+                   (.!=), (.:), (.:?))
 import Data.Aeson.Types (Options (..), Parser, Value (Object), defaultOptions)
 import Data.Char (toLower)
 import qualified Data.Text as T
@@ -160,13 +160,6 @@ SchemaVersion
 
 -- ** TODO: Remove these extra types and class instances
 
--- | JSON SVG data
-data SvgJSON =
-    SvgJSON { texts :: [Text],
-              shapes :: [Shape],
-              paths :: [Path]
-            } deriving (Show, Generic)
-
 data Time' =
   Time' { weekDay' :: Double,
           startHour' :: Double,
@@ -194,10 +187,6 @@ instance ToJSON Program
 instance ToJSON Time
 instance ToJSON MeetTime'
 instance ToJSON Building
-
--- instance FromJSON required so that tables can be parsed into JSON,
--- not necessary otherwise.
-instance FromJSON SvgJSON
 
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
