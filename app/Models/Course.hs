@@ -45,7 +45,7 @@ data CourseData =
 instance ToJSON CourseData
 
 -- | Queries the database for all information about 'CourseData',
--- constructs and returns a CourseData value.
+-- constructs and returns a 'CourseData' value.
 returnCourse :: T.Text -> IO (Maybe CourseData)
 returnCourse lowerStr = runDb $ do
     let courseStr = T.toUpper lowerStr
@@ -73,7 +73,7 @@ getDescriptionD (Just key) = do
     maybeDistribution <- get key
     return $ fmap distributionDescription maybeDistribution
 
--- | Builds a CourseData structure from a tuple from the Courses table.
+-- | Builds a 'CourseData' structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
 buildCourse :: [MeetTime'] -> Courses -> SqlPersistM CourseData
 buildCourse allMeetings course = do
