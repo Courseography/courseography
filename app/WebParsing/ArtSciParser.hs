@@ -40,6 +40,8 @@ parseArtSci = do
         insertDepts $ map snd deptInfo
         mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)
 
+-- | Parse the list of all departments, given the URL of the program/subject areas page. 
+-- Exclude departments with no courses, duplicate courses, and program areas belonging to a college.
 parseDepartmentList :: String -> IO [(T.Text, T.Text)]
 parseDepartmentList url = do
     let ignoredDepts = ["ASIP (Arts & Science Internship Program)", 
