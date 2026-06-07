@@ -34,12 +34,16 @@ parseCalendar = do
 parseArtSci :: IO ()
 parseArtSci = do
     programs <- programsUrl
-    bodyTags <- httpBodyTags programs
-    let deptInfo = getDeptList bodyTags
+    deptInfo <- parseDepartmentList programs
     runDb $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
         mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)
+
+parseDepartmentList :: String -> IO [(T.Text, T.Text)]
+parseDepartmentList url = do
+    bodyTags <- httpBodyTags url
+    return $ getDeptList bodyTags
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
