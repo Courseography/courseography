@@ -35,6 +35,7 @@
 - Refactor functions for performing matrix operations from `app/Svg/Parser.hs` to `app/Util/Matrix.hs`
 - Updated documentation in `app/Util/Blaze.hs`
 - Removed `SvgJSON` data type in favour of `([Text], [Shape], [Path])`
+- Refactor `parseArtSci` function in `app/WebParsing/ArtSciParser.hs` by introducing `parseDepartmentList`
 
 ## [0.7.2] - 2025-12-10
 
