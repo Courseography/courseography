@@ -42,8 +42,15 @@ parseArtSci = do
 
 parseDepartmentList :: String -> IO [(T.Text, T.Text)]
 parseDepartmentList url = do
+    let ignoredDepts = ["ASIP (Arts & Science Internship Program)", 
+                        "Biology", "Combined Degree Programs", 
+                        "Data Science", 
+                        "Faculty of Arts & Science Programs (299/398/399)", 
+                        "Pathobiology (see Laboratory Medicine and Pathobiology)", 
+                        "Research Opportunity/Research Excursions (299/398/399)"]
     bodyTags <- httpBodyTags url
-    return $ getDeptList bodyTags
+    let deptList = getDeptList bodyTags
+    return $ filter (\(_, deptName) -> deptName `notElem` ignoredDepts && not (" College)" `T.isSuffixOf` deptName)) deptList
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
