@@ -7,11 +7,13 @@
 ### ✨ New features/enhancements
 
 - Added 404 status code return to `retrieveCourse` in `Controllers/Course` and added front-end tests for affected components
+- Updated Computer Science graph and configuration for 2026-27
 
 ### 🐛 Bug fixes
 
 - Fixed a bug where duplicate graph components were being added
 - Fixed CSS styling to center course modal and lighten overlay
+- Fixed a bug in SVG parsing where `path` elements with a `Z` path directive were not being ignored
 
 ### 🔧 Internal changes
 
