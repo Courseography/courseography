@@ -6,6 +6,14 @@
 
 ### ✨ New features/enhancements
 
+### 🐛 Bug fixes
+
+### 🔧 Internal changes
+
+## [0.8.0] - 2026-06-09
+
+### ✨ New features/enhancements
+
 - Added 404 status code return to `retrieveCourse` in `Controllers/Course` and added front-end tests for affected components
 - Updated Computer Science graph and configuration for 2026-27
 - Added privacy-preserving analytics using GoatCounter and updated privacy policy
