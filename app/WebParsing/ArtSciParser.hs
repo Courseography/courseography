@@ -45,7 +45,8 @@ parseArtSci = do
 parseDepartmentList :: String -> IO [(T.Text, T.Text)]
 parseDepartmentList url = do
     let ignoredDepts = ["ASIP (Arts & Science Internship Program)", 
-                        "Biology", "Combined Degree Programs", 
+                        "Biology", 
+                        "Combined Degree Programs", 
                         "Data Science", 
                         "Faculty of Arts & Science Programs (299/398/399)", 
                         "Pathobiology (see Laboratory Medicine and Pathobiology)", 
