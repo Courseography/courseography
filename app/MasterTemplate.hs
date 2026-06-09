@@ -20,6 +20,10 @@ masterTemplate title headers body scripts =
                    ! A.href "/static/res/ico/favicon.png"
             sequence_ headers
             toStylesheet "/static/style/app.css"
+            H.script ! H.customAttribute "data-goatcounter" "https://david-yz-liu.goatcounter.com/count"
+                     ! H.customAttribute "async" ""
+                     ! A.src "//gc.zgo.at/count.js"
+                     $ mempty
         H.body $ do
             body
             scripts
