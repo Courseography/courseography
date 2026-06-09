@@ -36,6 +36,7 @@
 - Updated documentation in `app/Util/Blaze.hs`
 - Moved the `Course` data type from `Database/Tables.hs` into `Models/Course.hs`, renamed it to `CourseData`
 - Removed `SvgJSON` data type in favour of `([Text], [Shape], [Path])`
+- Refactor `parseArtSci` function in `app/WebParsing/ArtSciParser.hs` by introducing `parseDepartmentList`
 
 ## [0.7.2] - 2025-12-10
 

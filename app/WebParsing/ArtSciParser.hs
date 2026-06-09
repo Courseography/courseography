@@ -34,12 +34,26 @@ parseCalendar = do
 parseArtSci :: IO ()
 parseArtSci = do
     programs <- programsUrl
-    bodyTags <- httpBodyTags programs
-    let deptInfo = getDeptList bodyTags
+    deptInfo <- parseDepartmentList programs
     runDb $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
         mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)
+
+-- | Parse the list of all departments, given the URL of the program/subject areas page. 
+-- Exclude departments with no courses, duplicate courses, and program areas belonging to a college.
+parseDepartmentList :: String -> IO [(T.Text, T.Text)]
+parseDepartmentList url = do
+    let ignoredDepts = ["ASIP (Arts & Science Internship Program)", 
+                        "Biology", 
+                        "Combined Degree Programs", 
+                        "Data Science", 
+                        "Faculty of Arts & Science Programs (299/398/399)", 
+                        "Pathobiology (see Laboratory Medicine and Pathobiology)", 
+                        "Research Opportunity/Research Excursions (299/398/399)"]
+    bodyTags <- httpBodyTags url
+    let deptList = getDeptList bodyTags
+    return $ filter (\(_, deptName) -> deptName `notElem` ignoredDepts && not (" College)" `T.isSuffixOf` deptName)) deptList
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
