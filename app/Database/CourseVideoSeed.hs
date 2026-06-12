@@ -24,7 +24,7 @@ courseVideos = [
 
 seedVideo :: (Text, [Text]) -> SqlPersistM ()
 seedVideo (code, videos) =
-    updateWhere [CoursesCode ==. code] [CoursesVideoUrls =. videos]
+    updateWhere [CourseCode ==. code] [CourseVideoUrls =. videos]
 
 -- | Sets the video routes of all course rows.
 seedVideos :: IO ()

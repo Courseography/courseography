@@ -17,16 +17,16 @@ import Database.Persist.Class (selectKeysList)
 import Database.Persist.Sqlite (Entity, PersistValue (PersistText), SqlPersistM, entityVal, get,
                                 insert_, rawSql, selectFirst, selectList, (<-.), (==.))
 import Database.Tables (Breadth (breadthDescription),
-                        Courses (coursesBreadth, coursesCode, coursesCoreqs, coursesDescription, coursesDistribution, coursesExclusions, coursesPrereqString, coursesTitle, coursesVideoUrls),
+                        Course (courseBreadth, courseCode, courseCoreqs, courseDescription, courseDistribution, courseExclusions, coursePrereqString, courseTitle, courseVideoUrls),
                         Distribution (distributionDescription),
-                        EntityField (BreadthDescription, CoursesCode, DistributionDescription, MeetingCode),
+                        EntityField (BreadthDescription, CourseCode, DistributionDescription, MeetingCode),
                         Key, MeetTime', Meeting (meetingCode))
 import GHC.Generics (Generic)
 import Models.Meeting (buildMeetTimes, meetingQuery)
 
 -- | The data for a single course, as returned by the back-end to the front-end.
--- This is different from the schema-defined 'Courses' type (in "Database.Tables")
--- 'Courses' describes how a course is stored in the database, whereas
+-- This is different from the schema-defined 'Course' type (in "Database.Tables")
+-- 'Course' describes how a course is stored in the database, whereas
 -- 'CourseData' describes the shape of the information sent to the client
 -- when a course is requested.
 data CourseData =
@@ -51,7 +51,7 @@ returnCourse lowerStr = runDb $ do
     let courseStr = T.toUpper lowerStr
     -- TODO: require the client to pass the full course code
     let fullCodes = [courseStr, T.append courseStr "H1", T.append courseStr "Y1"]
-    sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode <-. fullCodes] []
+    sqlCourse :: (Maybe (Entity Course)) <- selectFirst [CourseCode <-. fullCodes] []
     case sqlCourse of
       Nothing -> return Nothing
       Just course -> do
@@ -73,48 +73,48 @@ getDescriptionD (Just key) = do
     maybeDistribution <- get key
     return $ fmap distributionDescription maybeDistribution
 
--- | Builds a 'CourseData' structure from a tuple from the Courses table.
+-- | Builds a 'CourseData' structure from a tuple from the Course table.
 -- Some fields still need to be added in.
-buildCourse :: [MeetTime'] -> Courses -> SqlPersistM CourseData
+buildCourse :: [MeetTime'] -> Course -> SqlPersistM CourseData
 buildCourse allMeetings course = do
-    cBreadth <- getDescriptionB (coursesBreadth course)
-    cDistribution <- getDescriptionD (coursesDistribution course)
+    cBreadth <- getDescriptionB (courseBreadth course)
+    cDistribution <- getDescriptionD (courseDistribution course)
     return $ CourseData cBreadth
            -- TODO: Remove the filter and allow double-quotes
-           (fmap (T.filter (/='\"')) (coursesDescription course))
-           (fmap (T.filter (/='\"')) (coursesTitle course))
-           (coursesPrereqString course)
+           (fmap (T.filter (/='\"')) (courseDescription course))
+           (fmap (T.filter (/='\"')) (courseTitle course))
+           (coursePrereqString course)
            (Just allMeetings)
-           (coursesCode course)
-           (coursesExclusions course)
+           (courseCode course)
+           (courseExclusions course)
            cDistribution
-           (coursesCoreqs course)
-           (coursesVideoUrls course)
+           (courseCoreqs course)
+           (courseVideoUrls course)
 
 -- | Retrieves the prerequisites for a course (code) as a string.
 -- Also retrieves the actual course code in the database in case
 -- the one the user inputs doesn't match it exactly
 prereqsForCourse :: T.Text -> IO (Either String (T.Text, T.Text))
-prereqsForCourse courseCode = runDb $ do
-    let upperCaseCourseCode = T.toUpper courseCode
-    course <- selectFirst [CoursesCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
+prereqsForCourse code = runDb $ do
+    let upperCaseCourseCode = T.toUpper code
+    course <- selectFirst [CourseCode <-. [upperCaseCourseCode, upperCaseCourseCode `T.append` "H1", upperCaseCourseCode `T.append` "Y1"]] []
     case course of
         Nothing -> return (Left "Course not found")
         Just courseEntity ->
             return (Right
-                     (coursesCode $ entityVal courseEntity,
-                      fromMaybe "" $ coursesPrereqString $ entityVal courseEntity)
+                     (courseCode $ entityVal courseEntity,
+                      fromMaybe "" $ coursePrereqString $ entityVal courseEntity)
                     ) :: SqlPersistM (Either String (T.Text, T.Text))
 
 getDeptCourses :: MonadIO m => T.Text -> m [CourseData]
 getDeptCourses dept = liftIO $ runDb $ do
-        courses :: [Entity Courses] <- rawSql "SELECT ?? FROM courses WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
+        courses :: [Entity Course] <- rawSql "SELECT ?? FROM course WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
         let deptCourses = map entityVal courses
-        meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map coursesCode deptCourses] []
+        meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map courseCode deptCourses] []
         mapM (processCourse meetings) deptCourses
     where
         processCourse allMeetings course = do
-            let courseMeetings = filter (\m -> meetingCode (entityVal m) == coursesCode course) allMeetings
+            let courseMeetings = filter (\m -> meetingCode (entityVal m) == courseCode course) allMeetings
             allTimes <- mapM buildMeetTimes courseMeetings
             buildCourse allTimes course
 
@@ -138,13 +138,13 @@ getBreadthKey description_ = do
         [] -> Nothing
         (x:_) -> Just x
 
--- | Inserts course into the Courses table.
-insertCourse :: (Courses, T.Text, T.Text) -> SqlPersistM ()
+-- | Inserts course into the Course table.
+insertCourse :: (Course, T.Text, T.Text) -> SqlPersistM ()
 insertCourse (course, breadthDesc, distributionDesc) = do
-    maybeCourse <- selectFirst [CoursesCode ==. coursesCode course] []
+    maybeCourse <- selectFirst [CourseCode ==. courseCode course] []
     breadthKey <- getBreadthKey breadthDesc
     distributionKey <- getDistributionKey distributionDesc
     case maybeCourse of
-        Nothing -> insert_ $ course {coursesBreadth = breadthKey,
-                                     coursesDistribution = distributionKey}
+        Nothing -> insert_ $ course {courseBreadth = breadthKey,
+                                     courseDistribution = distributionKey}
         Just _ -> return ()
