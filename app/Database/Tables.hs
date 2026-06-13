@@ -169,20 +169,20 @@ data SvgJSON =
             } deriving (Show, Generic)
 
 data Time' =
-  Time' { weekDay' :: Double,
+  Time' { timeSession' :: Maybe T.Text,
+          weekDay' :: Double,
           startHour' :: Double,
           endHour' :: Double,
-          firstLocation' :: Maybe T.Text,
-          secondLocation' :: Maybe T.Text
+          timeLocation' :: Maybe T.Text
         } deriving (Show, Generic)
 
 data Time =
-  Time { weekDay :: Double,
-          startHour :: Double,
-          endHour :: Double,
-          firstLocation :: Maybe Building,
-          secondLocation :: Maybe Building
-        } deriving (Show, Generic)
+  Time { timeSession :: Maybe T.Text,
+         weekDay :: Double,
+         startHour :: Double,
+         endHour :: Double,
+         timeLocation :: Maybe Building
+       } deriving (Show, Generic)
 
 -- | A Meeting with its associated Times.
 data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time'] }
@@ -256,12 +256,11 @@ instance FromJSON Time' where
 
     building <- o .: "building"
     buildingCode <- building .: "buildingCode"
-    buildingRoomNumber <- building .: "buildingRoomNumber"
-    let meetingRoom1 = Just (T.concat [buildingCode, buildingRoomNumber])
-    meetingRoom2 <- o .:? "assignedRoom2" .!= Nothing
+
+    session <- o .:? "sessionCode"
 
     let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
-    return $ Time' adjustedDay adjustedStartTime adjustedEndTime meetingRoom1 meetingRoom2
+    return $ Time' session adjustedDay adjustedStartTime adjustedEndTime buildingCode
 
 instance FromJSON MeetTime where
   parseJSON (Object o) = do
@@ -312,21 +311,21 @@ convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
 -- | Convert Times into Time
 buildTime :: Times -> SqlPersistM Time
 buildTime t = do
-  room1 <- getBuilding (timesLocation t)
-  return $ Time (timesWeekDay t)
+  building <- getBuilding (timesLocation t)
+  return $ Time (timesSession t)
+    (timesWeekDay t)
     (timesStartHour t)
     (timesEndHour t)
-    room1
-    Nothing -- Temporary null data
+    building
 
 buildTimes :: Key Meeting -> Time' -> Times
 buildTimes meetingKey t =
-  Times (Just "") -- Temporary null data
+  Times (timeSession' t)
     (weekDay' t)
     (startHour' t)
     (endHour' t)
     meetingKey
-    (firstLocation' t)
+    (timeLocation' t)
 
 -- | Given a building code, get the persistent Building associated with it
 getBuilding :: Maybe T.Text -> SqlPersistM (Maybe Building)
