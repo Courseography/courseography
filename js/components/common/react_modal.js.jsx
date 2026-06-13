@@ -149,8 +149,8 @@ class CourseModal extends React.Component {
       )
       sortedTimeData.map(occurrence => {
         let location = " "
-        if (occurrence.location !== null && occurrence.location !== undefined) {
-          location = occurrence.location.buildingCode
+        if (occurrence.timeLocation !== null && occurrence.timeLocation !== undefined) {
+          location = occurrence.timeLocation.buildingCode
         }
         occurrences.locations.push(location)
         occurrences.times.push(
