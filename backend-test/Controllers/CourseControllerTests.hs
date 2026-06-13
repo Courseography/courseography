@@ -58,18 +58,18 @@ retrieveCourseTestCases =
                 }
                 [
                     Time' {
-                        session' = Just "F",
+                        timeSession' = Just "F",
                         weekDay' = 0.0,
                         startHour' = 10.0,
                         endHour' = 11.0,
-                        location' = Just "MP"
+                        timeLocation' = Just "MP"
                     },
                     Time' {
-                        session' = Just "F",
+                        timeSession' = Just "F",
                         weekDay' = 2.0,
                         startHour' = 13.0,
                         endHour' = 14.0,
-                        location' = Just "SS"
+                        timeLocation' = Just "SS"
                     }
                 ],
             MeetTime
@@ -85,18 +85,18 @@ retrieveCourseTestCases =
                 }
                 [
                     Time' {
-                        session' = Just "S",
+                        timeSession' = Just "S",
                         weekDay' = 1.0,
                         startHour' = 10.0,
                         endHour' = 11.0,
-                        location' = Just "WW"
+                        timeLocation' = Just "WW"
                     },
                     Time' {
-                        session' = Just "S",
+                        timeSession' = Just "S",
                         weekDay' = 4.0,
                         startHour' = 13.0,
                         endHour' = 14.0,
-                        location' = Just "SS"
+                        timeLocation' = Just "SS"
                     }
                 ]
         ],
@@ -132,18 +132,18 @@ retrieveCourseTestCases =
                 }
                 [
                     Time' {
-                        session' = Just "F",
+                        timeSession' = Just "F",
                         weekDay' = 0.0,
                         startHour' = 10.0,
                         endHour' = 11.0,
-                        location' = Just "MP"
+                        timeLocation' = Just "MP"
                     },
                     Time' {
-                        session' = Just "F",
+                        timeSession' = Just "F",
                         weekDay' = 2.0,
                         startHour' = 13.0,
                         endHour' = 14.0,
-                        location' = Just "SS"
+                        timeLocation' = Just "SS"
                     }
                 ]
         ],
@@ -255,9 +255,9 @@ insertBuildings = mapM_ insertBuilding
 
 -- | Helper function to get a list of unique locations involved in a MeetTime
 getUniqueBuildings :: [MeetTime] -> [T.Text]
-getUniqueBuildings = nub . concatMap getMeetBuilding
+getUniqueBuildings = nub . concatMap getMeetBuildings
     where
-        getMeetBuilding (MeetTime _ times') = mapMaybe location' times'
+        getMeetBuildings (MeetTime _ times') = mapMaybe timeLocation' times'
 
 -- | List of test cases as (label, input courses, expected output)
 indexTestCases :: [(String, [T.Text], String)]

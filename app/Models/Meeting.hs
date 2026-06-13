@@ -27,10 +27,10 @@ buildMeetTimes meet = do
 -- | Queries the database for all information regarding a specific meeting for
 --  a @course@, returns a Meeting.
 returnMeeting :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe (Entity Meeting))
-returnMeeting lowerStr sect sess = do
+returnMeeting lowerStr sect session = do
     selectFirst [MeetingCode ==. T.toUpper lowerStr,
                                   MeetingSection ==. sect,
-                                  MeetingSession ==. sess]
+                                  MeetingSession ==. session]
                                  []
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for

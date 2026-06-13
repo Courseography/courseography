@@ -96,8 +96,8 @@ addCourseHelper (courseCode, courseSection, courseSession) currentSchedule (day,
 -- | Creates a timetable image based on schedule.
 generateTimetableImg :: [[[T.Text]]] -> T.Text -> FilePath -> IO FilePath
 generateTimetableImg schedule courseSession tempDir = do
-    let sess = filter isAlphaNum (T.unpack courseSession)
-        sessionStem = if null sess then "session" else sess
+    let session = filter isAlphaNum (T.unpack courseSession)
+        sessionStem = if null session then "session" else session
         pngPath = tempDir </> (sessionStem ++ ".png")
         svgText = renderTableHelper (zipWith (:) times schedule) courseSession
     withImageFile pngPath $ \hin ->

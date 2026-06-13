@@ -169,20 +169,20 @@ data SvgJSON =
             } deriving (Show, Generic)
 
 data Time' =
-  Time' { session' :: Maybe T.Text,
+  Time' { timeSession' :: Maybe T.Text,
           weekDay' :: Double,
           startHour' :: Double,
           endHour' :: Double,
-          location' :: Maybe T.Text
+          timeLocation' :: Maybe T.Text
         } deriving (Show, Generic)
 
 data Time =
-  Time {  session :: Maybe T.Text,
-          weekDay :: Double,
-          startHour :: Double,
-          endHour :: Double,
-          location :: Maybe Building
-        } deriving (Show, Generic)
+  Time { timeSession :: Maybe T.Text,
+         weekDay :: Double,
+         startHour :: Double,
+         endHour :: Double,
+         timeLocation :: Maybe Building
+       } deriving (Show, Generic)
 
 -- | A Meeting with its associated Times.
 data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time'] }
@@ -320,12 +320,12 @@ buildTime t = do
 
 buildTimes :: Key Meeting -> Time' -> Times
 buildTimes meetingKey t =
-  Times (session' t)
+  Times (timeSession' t)
     (weekDay' t)
     (startHour' t)
     (endHour' t)
     meetingKey
-    (location' t)
+    (timeLocation' t)
 
 -- | Given a building code, get the persistent Building associated with it
 getBuilding :: Maybe T.Text -> SqlPersistM (Maybe Building)

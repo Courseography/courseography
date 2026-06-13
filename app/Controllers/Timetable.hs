@@ -45,11 +45,11 @@ gridResponse =
 -- | Returns an image of the timetable requested by the user.
 exportTimetableImageResponse :: ServerPart Response
 exportTimetableImageResponse = do
-    selectedSession <- lookText' "session"
+    session <- lookText' "session"
     selectedCourses <- lookText' "courses"
 
     liftIO $ withSystemTempDirectory "timetable-image" $ \tempDir -> do
-        pngPath <- getActiveTimetable selectedCourses selectedSession tempDir
+        pngPath <- getActiveTimetable selectedCourses session tempDir
         readImageData pngPath
 
 -- | Returns a PDF containing graph and timetable requested by the user.
@@ -131,14 +131,14 @@ type Session = T.Text
 getCoursesInfo :: T.Text -> [(Code, Section, Session)]
 getCoursesInfo courses = map courseInfo allCourses
     where
-        courseInfo [code, sect, sess] = (code, sect, sess)
+        courseInfo [code, sect, session] = (code, sect, session)
         courseInfo _ = ("", "", "")
         allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
 pullDatabase :: (Code, Section, Session) -> IO (Maybe MeetTime')
-pullDatabase (code, sect, sess) = runDb $ do
-    meet <- returnMeeting code fullSection sess
+pullDatabase (code, section, session) = runDb $ do
+    meet <- returnMeeting code fullSection session
     case meet of
         Nothing -> return Nothing
         Just x -> do
@@ -147,11 +147,11 @@ pullDatabase (code, sect, sess) = runDb $ do
             return $ Just (MeetTime' (entityVal x) parsedTime)
     where
     fullSection
-        | T.isPrefixOf "L" sect = T.append "LEC" sectCode
-        | T.isPrefixOf "T" sect = T.append "TUT" sectCode
-        | T.isPrefixOf "P" sect = T.append "PRA" sectCode
-        | otherwise             = sect
-    sectCode = T.tail sect
+        | T.isPrefixOf "L" section = T.append "LEC" sectCode
+        | T.isPrefixOf "T" section = T.append "TUT" sectCode
+        | T.isPrefixOf "P" section = T.append "PRA" sectCode
+        | otherwise                = section
+    sectCode = T.tail section
 
 -- | The current date and time as obtained from the system.
 type SystemTime = String
@@ -314,12 +314,12 @@ formatMinutes decimal = if minutes >= 10 then show minutes else '0' : show minut
 
 -- | Obtains all the dates for each course depending on its session.
 getDatesByCourse :: InfoTimeFieldsByDay -> Session -> IO DatesByDay
-getDatesByCourse dataInOrder selectedSession
-    | selectedSession == "Y" = do
+getDatesByCourse dataInOrder session
+    | session == "Y" = do
         fallDates <- mapM (getDatesByDay "F") dataInOrder
         winterDates <- mapM (getDatesByDay "S") dataInOrder
         return (fallDates ++ winterDates)
-    | otherwise = mapM (getDatesByDay selectedSession) dataInOrder
+    | otherwise = mapM (getDatesByDay session) dataInOrder
 
 -- | The string representation for a date in which an event
 -- occurs for the first time.
@@ -333,8 +333,8 @@ type EndDate = String
 -- course takes place, depending on the course session.
 getDatesByDay :: Session -> [Time] -> IO (StartDate, EndDate)
 getDatesByDay _ [] = error "Failed to fetch dates"
-getDatesByDay selectedSession (firstDate:_)
-    | selectedSession == "F" = do
+getDatesByDay session (firstDate:_)
+    | session == "F" = do
         fallStart <- fallStartDate
         fallEnd <- fallEndDate
         formatDates $ getDates fallStart fallEnd dayOfWeek
