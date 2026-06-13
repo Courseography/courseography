@@ -121,9 +121,6 @@ describe("getTable", () => {
     })
   })
 
-  /*** 
-   * TODO: Re-implement this test once the logic for formatting Y courses is complete
-   
   describe("The occurence of the lecture has two locations ", () => {
     beforeEach(() => {
       meetingTime = [
@@ -164,7 +161,7 @@ describe("getTable", () => {
         },
       ]
     })
-    test("Both of the first and second location of the occurence are shown", () => {
+    test.skip("Both of the first and second location of the occurence are shown", () => {
       actual = wrapper.getTable(meetingTime, "F")
       expected = [
         {
@@ -180,7 +177,6 @@ describe("getTable", () => {
     })
   })
 
-  */
 
   describe("The meeting time has two lectures each with one occurence", () => {
     beforeEach(() => {
