@@ -48,7 +48,7 @@ parseDepartmentList url = do
                         "Biology", 
                         "Combined Degree Programs", 
                         "Data Science", 
-                        "Faculty of Arts & Science Programs (299/398/399)", 
+                        "Faculty of Arts and Science Programs (299/398/399)", 
                         "Pathobiology (see Laboratory Medicine and Pathobiology)", 
                         "Research Opportunity/Research Excursions (299/398/399)"]
     bodyTags <- httpBodyTags url
