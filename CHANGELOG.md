@@ -11,7 +11,7 @@
 ### 🔧 Internal changes
 
 - Refactor `parseArtSci` function in `app/WebParsing/ArtSciParser.hs` by introducing `parseDepartmentList`
-- Added test cases for the `parseDepartmentList` function in `backend-test/WebParsing/ArtSciParserTests.hs`
+- Add test cases for the `parseDepartmentList` function in `backend-test/WebParsing/ArtSciParserTests.hs`
 
 ## [0.8.0] - 2026-06-09
 
