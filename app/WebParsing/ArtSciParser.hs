@@ -6,6 +6,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.List (findIndex, nubBy)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
+import qualified Data.Bifunctor as BF
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Database.Persist (insertUnique)
@@ -44,16 +45,17 @@ parseArtSci = do
 -- Exclude departments with no courses, duplicate courses, and program areas belonging to a college.
 parseDepartmentList :: String -> IO [(T.Text, T.Text)]
 parseDepartmentList url = do
-    let ignoredDepts = ["ASIP (Arts & Science Internship Program)", 
-                        "Biology", 
-                        "Combined Degree Programs", 
-                        "Data Science", 
-                        "Faculty of Arts and Science Programs (299/398/399)", 
-                        "Pathobiology (see Laboratory Medicine and Pathobiology)", 
+    let ignoredDepts = ["ASIP (Arts & Science Internship Program)",
+                        "Biology",
+                        "Combined Degree Programs",
+                        "Data Science",
+                        "Faculty of Arts and Science Programs (299/398/399)",
+                        "Laboratory Medicine and Pathobiology)", -- | Displayed as "Pathobiology (see Laboratory Medicine and Pathobiology)" on program areas page
                         "Research Opportunity/Research Excursions (299/398/399)"]
     bodyTags <- httpBodyTags url
     let deptList = getDeptList bodyTags
-    return $ filter (\(_, deptName) -> deptName `notElem` ignoredDepts && not (" College)" `T.isSuffixOf` deptName)) deptList
+    let cleaned = map (BF.second (T.replace "\160" " ")) deptList
+    return $ filter (\(deptPage, deptName) -> "/" `T.isPrefixOf` deptPage && deptName `notElem` ignoredDepts && not (" College)" `T.isSuffixOf` deptName)) cleaned
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
