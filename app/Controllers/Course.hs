@@ -6,7 +6,7 @@ import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T (Text, unlines)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
-import Database.Tables as Tables (Courses, coursesCode)
+import Database.Tables as Tables (Course, courseCode)
 import Happstack.Server (Response, ServerPart, lookText', notFound, ok, toResponse)
 import Models.Course (getDeptCourses, returnCourse)
 import Util.Happstack (createJSONResponse)
@@ -25,8 +25,8 @@ retrieveCourse = do
 index :: ServerPart Response
 index = do
   response <- liftIO $ runDb $ do
-      coursesList :: [Entity Courses] <- selectList [] []
-      let codes = map (coursesCode . entityVal) coursesList
+      coursesList :: [Entity Course] <- selectList [] []
+      let codes = map (courseCode . entityVal) coursesList
       return $ T.unlines codes :: SqlPersistM T.Text
   return $ toResponse response
 
