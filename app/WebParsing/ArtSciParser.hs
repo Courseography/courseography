@@ -117,16 +117,16 @@ parseCourses tags =
                 breadth = fromMaybe "" $ getValue "Breadth Requirements:" courseContents
             in
                 (Course code
-                         (Just title)
-                         (Just description)
-                         (fmap (T.pack . show . parseReqs . T.unpack) prereqString)
-                         exclusion
-                         Nothing
-                         Nothing
-                         prereqString
-                         coreq
-                         [],
-                 breadth, distribution)
+                    (Just title)
+                    (Just description)
+                    (fmap (T.pack . show . parseReqs . T.unpack) prereqString)
+                    exclusion
+                    Nothing
+                    Nothing
+                    prereqString
+                    coreq
+                    [],
+                breadth, distribution)
 
         getValue label texts = do
             i <- findIndex (T.isPrefixOf label) texts
