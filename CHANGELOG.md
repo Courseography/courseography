@@ -36,6 +36,7 @@
 - Updated documentation in `app/Util/Blaze.hs`
 - Removed `SvgJSON` data type in favour of `([Text], [Shape], [Path])`
 - Refactor `parseArtSci` function in `app/WebParsing/ArtSciParser.hs` by introducing `parseDepartmentList`
+- Added test cases for the `parseDepartmentList` function in `backend-test/WebParsing/ArtSciParserTests.hs`
 
 ## [0.7.2] - 2025-12-10
 
