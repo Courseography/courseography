@@ -26,7 +26,7 @@ buildMeetTimes meet = do
     return $ Tables.MeetTime' (entityVal meet) parsedTime
 
 -- | Queries the database for all information regarding a specific meeting for
---  a @course@, returns a Meeting.
+--  a course, returns a Meeting.
 returnMeeting :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe (Entity Meeting))
 returnMeeting lowerStr sect session = do
     selectFirst [MeetingCode ==. T.toUpper lowerStr,
@@ -35,7 +35,7 @@ returnMeeting lowerStr sect session = do
                                  []
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
--- a @course@, returns a list of Time.
+-- a course, returns a list of Time.
 getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
 getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
     maybeEntityMeetings <- selectFirst [MeetingCode ==. meetingCode_,

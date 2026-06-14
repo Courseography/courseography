@@ -6,12 +6,23 @@
 
 ### ✨ New features/enhancements
 
+### 🐛 Bug fixes
+
+### 🔧 Internal changes
+
+## [0.8.0] - 2026-06-09
+
+### ✨ New features/enhancements
+
 - Added 404 status code return to `retrieveCourse` in `Controllers/Course` and added front-end tests for affected components
+- Updated Computer Science graph and configuration for 2026-27
+- Added privacy-preserving analytics using GoatCounter and updated privacy policy
 
 ### 🐛 Bug fixes
 
 - Fixed a bug where duplicate graph components were being added
 - Fixed CSS styling to center course modal and lighten overlay
+- Fixed a bug in SVG parsing where `path` elements with a `Z` path directive were not being ignored
 
 ### 🔧 Internal changes
 
@@ -34,6 +45,7 @@
 - Refactor graph helper functions from `app/Svg/Database.hs` to `app/Models/Graph.hs`
 - Refactor functions for performing matrix operations from `app/Svg/Parser.hs` to `app/Util/Matrix.hs`
 - Updated documentation in `app/Util/Blaze.hs`
+- Moved the `Course` data type from `Database/Tables.hs` into `Models/Course.hs`, renamed it to `CourseData`
 - Removed `SvgJSON` data type in favour of `([Text], [Shape], [Path])`
 - Refactor `parseArtSci` function in `app/WebParsing/ArtSciParser.hs` by introducing `parseDepartmentList`
 - Added test cases for the `parseDepartmentList` function in `backend-test/WebParsing/ArtSciParserTests.hs`

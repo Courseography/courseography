@@ -18,7 +18,7 @@ module Svg.Parser
 
 import Config (graphPath, runDb)
 import Control.Monad.IO.Class (liftIO)
-import Data.Char (isSpace)
+import Data.Char (isSpace, toLower)
 import qualified Data.List as List
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
@@ -41,7 +41,7 @@ import Util.Matrix (matrixMultiply)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runDb $ do
-    performParse "Computer Science" "csc2025.svg"
+    performParse "Computer Science" "csc2026.svg"
     performParse "Statistics" "sta2022.svg"
     -- performParse "(unofficial) Mathematics Specialist" "math_specialist2022.svg"
     -- performParse "(unofficial) Biochemistry" "bch2015.svg"
@@ -296,7 +296,9 @@ parsePathHelper key trans globalTrans (src, dst) pathTag =
             isRegion
             src
             dst
-            [a, b, c, d', e, f] | not (T.null d || null realD || (T.last d == 'z' && not isRegion))
+            [a, b, c, d', e, f]
+            -- Ignore empty paths and non-region paths that are loops (these are arrowheads in the raw SVG)
+            | not (T.null d || null realD || (toLower (T.last d) == 'z' && not isRegion))
         ]
     where
         -- Remove consecutive duplicated points

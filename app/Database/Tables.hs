@@ -183,21 +183,6 @@ data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time'] }
 data MeetTime' = MeetTime' { meetData :: Meeting, timeData :: [Time] }
   deriving (Show, Generic)
 
--- | A Course. TODO: remove this data type (it's redundant).
-data Course =
-    Course { breadth :: Maybe T.Text,
-             description :: Maybe T.Text,
-             title :: Maybe T.Text,
-             prereqString :: Maybe T.Text,
-             allMeetingTimes :: Maybe [MeetTime'],
-             name :: !T.Text,
-             exclusions :: Maybe T.Text,
-             distribution :: Maybe T.Text,
-             coreqs :: Maybe T.Text,
-             videoUrls :: [T.Text]
-           } deriving (Show, Generic)
-
-instance ToJSON Course
 instance ToJSON Program
 instance ToJSON Time
 instance ToJSON MeetTime'
