@@ -1,5 +1,5 @@
 module WebParsing.ArtSciParser
-    (parseCalendar, getDeptList, parseDepartmentList) where
+    (parseCalendar, parseDepartmentList) where
 
 import Config (fasCalendarUrl, programsUrl, runDb)
 import Control.Monad.IO.Class (liftIO)
