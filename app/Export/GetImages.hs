@@ -17,7 +17,7 @@ import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy.IO as LTIO
-import Database.Tables as Tables
+import Database.Tables (Time (..))
 import Export.ImageConversion (withImageFile)
 import Export.TimetableImageCreator (renderTableHelper, times)
 import Models.Meeting (getMeetingTime)

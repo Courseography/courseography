@@ -10,6 +10,8 @@
 
 ### 🔧 Internal changes
 
+- Refactored the `Courses` table to `Course` with a database migration
+
 - Refactor `parseArtSci` function in `app/WebParsing/ArtSciParser.hs` by introducing `parseDepartmentList`
 - Add test cases for the `parseDepartmentList` function in `backend-test/WebParsing/ArtSciParserTests.hs`
 

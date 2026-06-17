@@ -19,8 +19,8 @@ straightforward.
 
 module Database.Tables where
 
-import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject,
-                   (.!=), (.:), (.:?))
+import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject, (.!=), (.:),
+                   (.:?))
 import Data.Aeson.Types (Options (..), Parser, Value (Object), defaultOptions)
 import Data.Char (toLower)
 import qualified Data.Text as T
@@ -43,7 +43,7 @@ Department json
     Primary name
     UniqueName name
 
-Courses
+Course
     code T.Text
     Primary code
     title T.Text Maybe
