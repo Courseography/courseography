@@ -31,7 +31,9 @@ applyMigrations currVersion migrations = do
 
 -- | List of migrations
 migrationList :: [MigrationWrapper]
-migrationList = [MigrationWrapper {version=2, script=renamePostTables}]
+migrationList = [ MigrationWrapper {version=2, script=renamePostTables}
+                , MigrationWrapper {version=3, script=renameCoursesTable}
+                ]
 
 -- | Migration script which renames the Post tables to Program
 renamePostTables :: Migration
@@ -39,6 +41,11 @@ renamePostTables = do
     addMigration True "ALTER TABLE post RENAME TO program;"
     addMigration True "ALTER TABLE post_category RENAME TO program_category;"
     addMigration True "ALTER TABLE program_category RENAME COLUMN post TO program;"
+
+-- | Migration script which renames the Courses table to Course
+renameCoursesTable :: Migration
+renameCoursesTable =
+    addMigration True "ALTER TABLE courses RENAME TO course;"
 
 -- | Gets the current version of the database.
 -- If no version is defined, initialize the

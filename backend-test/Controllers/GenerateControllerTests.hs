@@ -18,7 +18,7 @@ import qualified Data.ByteString.Lazy as BSL
 import Data.Foldable (toList)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert_)
-import Database.Tables (Courses (..))
+import Database.Tables (Course (..))
 import Happstack.Server (rsBody)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
@@ -28,7 +28,7 @@ import TestHelpers (clearDatabase, mockPutRequest, runServerPartWith, withDataba
 insertCoursesWithPrerequisites :: [(T.Text, Maybe T.Text)] -> SqlPersistM ()
 insertCoursesWithPrerequisites = mapM_ insertCourse
     where
-        insertCourse (code, prereqString) = insert_ (Courses { coursesCode = code, coursesTitle = Nothing, coursesDescription = Nothing, coursesPrereqs = prereqString, coursesExclusions = Nothing, coursesBreadth = Nothing, coursesDistribution = Nothing, coursesPrereqString = prereqString, coursesCoreqs = Nothing, coursesVideoUrls = [] })
+        insertCourse (code, prereqString) = insert_ (Course { courseCode = code, courseTitle = Nothing, courseDescription = Nothing, coursePrereqs = prereqString, courseExclusions = Nothing, courseBreadth = Nothing, courseDistribution = Nothing, coursePrereqString = prereqString, courseCoreqs = Nothing, courseVideoUrls = [] })
 
 -- | List of test cases as
 -- (input course, course/prereq structure, JSON payload, expected # of nodes in prereq graph, expected # of boolean nodes in prereq graph)

@@ -10,6 +10,8 @@
 
 ### 🔧 Internal changes
 
+- Refactored the `Courses` table to `Course` with a database migration
+
 ## [0.8.0] - 2026-06-09
 
 ### ✨ New features/enhancements

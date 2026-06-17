@@ -10,7 +10,7 @@ import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Database.Persist (insertUnique)
 import Database.Persist.Sqlite (SqlPersistM)
-import Database.Tables (Courses (..), Department (..))
+import Database.Tables (Course (..), Department (..))
 import Models.Building (parseBuildings)
 import Models.Course (insertCourse)
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
@@ -89,7 +89,7 @@ parsePrograms programs = mapM_ addPostToDatabase $ TS.partitions isAccordionHead
         isAccordionHeader = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "js-views-accordion-group-header")
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
-parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]
+parseCourses :: [Tag T.Text] -> [(Course, T.Text, T.Text)]
 parseCourses tags =
     let elems = TS.partitions isAccordion tags
         courses = map parseCourse elems
@@ -98,7 +98,7 @@ parseCourses tags =
     where
         isAccordion = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "js-views-accordion-group-header")
 
-        parseCourse :: [Tag T.Text] -> (Courses, T.Text, T.Text)
+        parseCourse :: [Tag T.Text] -> (Course, T.Text, T.Text)
         parseCourse courseTags =
             let courseHeader = T.strip . TS.innerText $ takeWhile (not . TS.isTagCloseName "h3") courseTags
                 (code, title) = either (error . show) id $ parse parseCourseTitle "course title" courseHeader
@@ -116,17 +116,17 @@ parseCourses tags =
                 distribution = fromMaybe "" $ getValue "Distribution Requirements:" courseContents
                 breadth = fromMaybe "" $ getValue "Breadth Requirements:" courseContents
             in
-                (Courses code
-                         (Just title)
-                         (Just description)
-                         (fmap (T.pack . show . parseReqs . T.unpack) prereqString)
-                         exclusion
-                         Nothing
-                         Nothing
-                         prereqString
-                         coreq
-                         [],
-                 breadth, distribution)
+                (Course code
+                    (Just title)
+                    (Just description)
+                    (fmap (T.pack . show . parseReqs . T.unpack) prereqString)
+                    exclusion
+                    Nothing
+                    Nothing
+                    prereqString
+                    coreq
+                    [],
+                breadth, distribution)
 
         getValue label texts = do
             i <- findIndex (T.isPrefixOf label) texts
