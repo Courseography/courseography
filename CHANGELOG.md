@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Fixed CSS styling to match the background colour of application with the graph
+
 ### 🔧 Internal changes
 
 - Refactored the `Courses` table to `Course` with a database migration
