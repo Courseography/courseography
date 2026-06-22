@@ -8,6 +8,8 @@
 
 ### 🐛 Bug fixes
 
+- Fixed CSS styling of background colour and let the application have full height
+
 ### 🔧 Internal changes
 
 - Refactored the `Courses` table to `Course` with a database migration
