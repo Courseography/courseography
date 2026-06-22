@@ -8,7 +8,7 @@
 
 ### 🐛 Bug fixes
 
-- Fixed CSS styling to match the background colour of application with the graph
+- Fixed CSS styling of background colour and let the application have full height
 
 ### 🔧 Internal changes
 
