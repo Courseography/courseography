@@ -82,7 +82,6 @@ getDeptList tags =
                 getDept :: [Tag T.Text] -> Maybe (T.Text, T.Text)
                 getDept [] = Nothing
                 getDept (x:xs) = Just (TS.fromAttrib "href" x, T.strip $ TS.innerText (x:xs))
-            
 
 -- | Insert department names to database
 insertDepts :: [T.Text] -> SqlPersistM ()
