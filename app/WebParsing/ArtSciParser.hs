@@ -54,8 +54,13 @@ parseDepartmentList url = do
                         "Research Opportunity/Research Excursions (299/398/399)"]
     bodyTags <- httpBodyTags url
     let deptList = getDeptList bodyTags
-    let cleaned = map (BF.second (T.replace "\160" " ")) deptList
-    return $ filter (\(deptPage, deptName) -> "/" `T.isPrefixOf` deptPage && deptName `notElem` ignoredDepts && not (" College)" `T.isSuffixOf` deptName)) cleaned
+    return $ filter (isValidDepartment ignoredDepts) deptList
+    where
+        isValidDepartment :: [T.Text] -> (T.Text, T.Text) -> Bool
+        isValidDepartment ignoredDepts (deptPage, deptName) = 
+            "/" `T.isPrefixOf` deptPage && 
+            deptName `notElem` ignoredDepts && 
+            not (" College)" `T.isSuffixOf` deptName)
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
@@ -64,7 +69,7 @@ getDeptList tags =
     let tables = TS.partitions (TS.isTagOpenName "table") tags  -- every partition is a table
         tables' = map (takeWhile (not . TS.isTagCloseName "table")) tables
         depts = concatMap extractDepartments tables'
-    in  depts
+    in map (BF.second cleanText) depts
     where
         extractDepartments :: [Tag T.Text] -> [(T.Text, T.Text)]
         extractDepartments tableTags =
@@ -77,6 +82,7 @@ getDeptList tags =
                 getDept :: [Tag T.Text] -> Maybe (T.Text, T.Text)
                 getDept [] = Nothing
                 getDept (x:xs) = Just (TS.fromAttrib "href" x, T.strip $ TS.innerText (x:xs))
+            
 
 -- | Insert department names to database
 insertDepts :: [T.Text] -> SqlPersistM ()
@@ -172,4 +178,4 @@ httpBodyTags url = do
 
 -- | Remove odd characters from text
 cleanText :: T.Text -> T.Text
-cleanText = T.replace "\n" "" . T.replace "\8203" "" . T.replace "\160" "" . T.strip
+cleanText = T.replace "\n" "" . T.replace "\8203" "" . T.replace "\160" " " . T.strip
