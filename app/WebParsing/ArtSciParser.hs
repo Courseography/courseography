@@ -50,7 +50,7 @@ parseDepartmentList url = do
                         "Combined Degree Programs",
                         "Data Science",
                         "Faculty of Arts and Science Programs (299/398/399)",
-                        "Laboratory Medicine and Pathobiology)", -- | Displayed as "Pathobiology (see Laboratory Medicine and Pathobiology)" on program areas page
+                        "Laboratory Medicine and Pathobiology)", -- Displayed as "Pathobiology (see Laboratory Medicine and Pathobiology)" on program areas page
                         "Research Opportunity/Research Excursions (299/398/399)"]
     bodyTags <- httpBodyTags url
     let deptList = getDeptList bodyTags
@@ -58,9 +58,9 @@ parseDepartmentList url = do
     where
         isValidDepartment :: [T.Text] -> (T.Text, T.Text) -> Bool
         isValidDepartment ignoredDepts (deptPage, deptName) = 
-            "/" `T.isPrefixOf` deptPage && 
-            deptName `notElem` ignoredDepts && 
-            not (" College)" `T.isSuffixOf` deptName)
+            "/" `T.isPrefixOf` deptPage &&            -- Ignore footer links
+            deptName `notElem` ignoredDepts &&        -- Ignore departments in ignoredDepts
+            not (" College)" `T.isSuffixOf` deptName) -- Ignore departments belonging to a college
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
