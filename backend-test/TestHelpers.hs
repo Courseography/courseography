@@ -97,7 +97,7 @@ runServerPart sp = runServerPartWith sp (mockGetRequest "/" [] "")
 clearDatabase :: SqlPersistM ()
 clearDatabase = do
     deleteWhere ([] :: [Filter Department])
-    deleteWhere ([] :: [Filter Courses])
+    deleteWhere ([] :: [Filter Course])
     deleteWhere ([] :: [Filter Times])
     deleteWhere ([] :: [Filter Meeting])
     deleteWhere ([] :: [Filter Breadth])

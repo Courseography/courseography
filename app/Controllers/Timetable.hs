@@ -21,6 +21,7 @@ import Export.PdfGenerator
 import Happstack.Server
 import MasterTemplate
 import Models.Meeting (returnMeeting)
+import Models.Time (buildTime)
 import Scripts
 import System.FilePath ((</>))
 import System.IO.Temp (withSystemTempDirectory)

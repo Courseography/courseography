@@ -33,8 +33,9 @@ applyMigrations currVersion migrations = do
 migrationList :: [MigrationWrapper]
 migrationList = [
     MigrationWrapper {version=2, script=renamePostTables},
-    MigrationWrapper {version=3, script=splitTimes}
-    ]
+    MigrationWrapper {version=3, script=renameCoursesTable},
+    MigrationWrapper {version=4, script=splitTimes}
+                ]
 
 -- | Migration script which renames the Post tables to Program
 renamePostTables :: Migration
@@ -42,6 +43,11 @@ renamePostTables = do
     addMigration True "ALTER TABLE post RENAME TO program;"
     addMigration True "ALTER TABLE post_category RENAME TO program_category;"
     addMigration True "ALTER TABLE program_category RENAME COLUMN post TO program;"
+
+-- | Migration script which renames the Courses table to Course
+renameCoursesTable :: Migration
+renameCoursesTable =
+    addMigration True "ALTER TABLE courses RENAME TO course;"
 
 -- | Migration script to add proper support for year-long courses
 splitTimes :: Migration

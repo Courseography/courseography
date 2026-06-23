@@ -26,7 +26,6 @@ import Data.Char (toLower)
 import qualified Data.Text as T
 import Data.Time.Clock (UTCTime)
 import Database.DataType
-import Database.Persist.Sqlite (Key, SqlPersistM, entityVal, selectFirst, (==.))
 import Database.Persist.TH
 import GHC.Generics
 
@@ -44,7 +43,7 @@ Department json
     Primary name
     UniqueName name
 
-Courses
+Course
     code T.Text
     Primary code
     title T.Text Maybe
@@ -67,7 +66,7 @@ Meeting
     enrol Int
     wait Int
     extra Int
-    deriving Generic Show
+    deriving Generic Show Eq
     UniqueMeeting code session section
 
 Times
@@ -161,13 +160,6 @@ SchemaVersion
 
 -- ** TODO: Remove these extra types and class instances
 
--- | JSON SVG data
-data SvgJSON =
-    SvgJSON { texts :: [Text],
-              shapes :: [Shape],
-              paths :: [Path]
-            } deriving (Show, Generic)
-
 data Time' =
   Time' { timeSession' :: Maybe T.Text,
           weekDay' :: Double,
@@ -191,29 +183,10 @@ data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time'] }
 data MeetTime' = MeetTime' { meetData :: Meeting, timeData :: [Time] }
   deriving (Show, Generic)
 
--- | A Course. TODO: remove this data type (it's redundant).
-data Course =
-    Course { breadth :: Maybe T.Text,
-             description :: Maybe T.Text,
-             title :: Maybe T.Text,
-             prereqString :: Maybe T.Text,
-             allMeetingTimes :: Maybe [MeetTime'],
-             name :: !T.Text,
-             exclusions :: Maybe T.Text,
-             distribution :: Maybe T.Text,
-             coreqs :: Maybe T.Text,
-             videoUrls :: [T.Text]
-           } deriving (Show, Generic)
-
-instance ToJSON Course
 instance ToJSON Program
 instance ToJSON Time
 instance ToJSON MeetTime'
 instance ToJSON Building
-
--- instance FromJSON required so that tables can be parsed into JSON,
--- not necessary otherwise.
-instance FromJSON SvgJSON
 
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
@@ -307,35 +280,3 @@ convertTimeVals (Just day) (Just start) (Just end) =
         endDbl = getHourVal end
     in (dayDbl, startDbl, endDbl)
 convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
-
--- | Convert Times into Time
-buildTime :: Times -> SqlPersistM Time
-buildTime t = do
-  building <- getBuilding (timesLocation t)
-  return $ Time (timesSession t)
-    (timesWeekDay t)
-    (timesStartHour t)
-    (timesEndHour t)
-    building
-
-buildTimes :: Key Meeting -> Time' -> Times
-buildTimes meetingKey t =
-  Times (timeSession' t)
-    (weekDay' t)
-    (startHour' t)
-    (endHour' t)
-    meetingKey
-    (timeLocation' t)
-
--- | Given a building code, get the persistent Building associated with it
-getBuilding :: Maybe T.Text -> SqlPersistM (Maybe Building)
-getBuilding rm = do
-  case rm of
-    Nothing -> return Nothing
-    Just r -> do
-      maybeEntityBuilding <- selectFirst [BuildingCode ==. T.take 2 r] []
-      case maybeEntityBuilding of
-        Nothing -> return Nothing
-        Just entBuilding -> do
-          let building = entityVal entBuilding
-          return $ Just building

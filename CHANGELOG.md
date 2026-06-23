@@ -6,12 +6,27 @@
 
 ### ✨ New features/enhancements
 
+### 🐛 Bug fixes
+
+- Fixed CSS styling of background colour and let the application have full height
+
+### 🔧 Internal changes
+
+- Refactored the `Courses` table to `Course` with a database migration
+
+## [0.8.0] - 2026-06-09
+
+### ✨ New features/enhancements
+
 - Added 404 status code return to `retrieveCourse` in `Controllers/Course` and added front-end tests for affected components
+- Updated Computer Science graph and configuration for 2026-27
+- Added privacy-preserving analytics using GoatCounter and updated privacy policy
 
 ### 🐛 Bug fixes
 
 - Fixed a bug where duplicate graph components were being added
 - Fixed CSS styling to center course modal and lighten overlay
+- Fixed a bug in SVG parsing where `path` elements with a `Z` path directive were not being ignored
 
 ### 🔧 Internal changes
 
@@ -28,6 +43,14 @@
 - Removed `Location` datatype in favour of `Building`
 - Refactor tests to run directly on tuple input to prevent unnecessary unpacking and repacking
 - Renamed usages of the word "room" to "location" in the codebase to better reflect the data represented
+- Added test cases for JSON parsing of Meeting data type in `backend-test/Database/TablesTests.hs`
+- Added test cases for JSON parsing of Time' data type in `backend-test/Database/TablesTests.hs`
+- Refactored functions relating to `Building` and `Time` into `Models/Building` and `Models/Time` respectively
+- Refactor graph helper functions from `app/Svg/Database.hs` to `app/Models/Graph.hs`
+- Refactor functions for performing matrix operations from `app/Svg/Parser.hs` to `app/Util/Matrix.hs`
+- Updated documentation in `app/Util/Blaze.hs`
+- Moved the `Course` data type from `Database/Tables.hs` into `Models/Course.hs`, renamed it to `CourseData`
+- Removed `SvgJSON` data type in favour of `([Text], [Shape], [Path])`
 
 #### y-course-refactor mini changelog (to replace):
 - Refactor `Times` database schema to encompass only a single session of a course
