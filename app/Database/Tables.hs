@@ -166,7 +166,7 @@ data Time' =
           startHour' :: Double,
           endHour' :: Double,
           timeLocation' :: Maybe T.Text
-        } deriving (Show, Generic)
+        } deriving (Show, Eq, Generic)
 
 data Time =
   Time { timeSession :: Maybe T.Text,
