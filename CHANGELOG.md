@@ -56,10 +56,6 @@
 - Refactor `Times` database schema to encompass only a single session of a course
 - Change `Time` and `Time'` datatypes to match the database schema, and resolve resulting compilation and type errors
 
-#### y-course-refactor mini changelog (to replace):
-- Refactor `Times` database schema to encompass only a single session of a course
-- Change `Time` and `Time'` datatypes to match the database schema, and resolve resulting compilation and type errors
-
 ## [0.7.2] - 2025-12-10
 
 ### ✨ New features/enhancements
