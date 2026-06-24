@@ -3,10 +3,10 @@ module WebParsing.ArtSciParser
 
 import Config (fasCalendarUrl, programsUrl, runDb)
 import Control.Monad.IO.Class (liftIO)
+import qualified Data.Bifunctor as BF
 import Data.List (findIndex, nubBy)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
-import qualified Data.Bifunctor as BF
 import Data.Text.Lazy (toStrict)
 import Data.Text.Lazy.Encoding (decodeUtf8)
 import Database.Persist (insertUnique)
@@ -45,22 +45,24 @@ parseArtSci = do
 -- Exclude departments with no courses, duplicate courses, and program areas belonging to a college.
 parseDepartmentList :: String -> IO [(T.Text, T.Text)]
 parseDepartmentList url = do
-    let ignoredDepts = ["ASIP (Arts & Science Internship Program)",
+    bodyTags <- httpBodyTags url
+    let deptList = getDeptList bodyTags
+    return $ filter (isValidDepartment ignoredDepts) deptList
+    where
+        ignoredDepts = ["ASIP (Arts & Science Internship Program)",
                         "Biology",
                         "Combined Degree Programs",
                         "Data Science",
                         "Faculty of Arts and Science Programs (299/398/399)",
                         "Laboratory Medicine and Pathobiology)", -- Displayed as "Pathobiology (see Laboratory Medicine and Pathobiology)" on program areas page
-                        "Research Opportunity/Research Excursions (299/398/399)"]
-    bodyTags <- httpBodyTags url
-    let deptList = getDeptList bodyTags
-    return $ filter (isValidDepartment ignoredDepts) deptList
-    where
+                        "Research Opportunity/Research Excursions (299/398/399)",
+                        "Writing in the Faculty of Arts & Science"]
+
         isValidDepartment :: [T.Text] -> (T.Text, T.Text) -> Bool
-        isValidDepartment ignoredDepts (deptPage, deptName) = 
-            "/" `T.isPrefixOf` deptPage &&            -- Ignore footer links
-            deptName `notElem` ignoredDepts &&        -- Ignore departments in ignoredDepts
-            not (" College)" `T.isSuffixOf` deptName) -- Ignore departments belonging to a college
+        isValidDepartment ignoredDepartments (deptPage, deptName) = 
+            "/" `T.isPrefixOf` deptPage &&                       -- Ignore footer links
+            deptName `notElem` ignoredDepartments &&             -- Ignore departments in ignoredDepartments
+            not (" College)" `T.isSuffixOf` deptName)            -- Ignore departments belonging to a college
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names

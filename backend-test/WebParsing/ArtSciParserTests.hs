@@ -102,7 +102,6 @@ parsedDepts =
     ("/section/Victoria-College", "Victoria College"),
     ("/section/Women-and-Gender-Studies", "Women and Gender Studies"),
     ("/section/Woodsworth-College", "Woodsworth College"),
-    ("/writing-faculty-arts-science", "Writing in the Faculty of Arts & Science"),
     ("/section/Yiddish-Studies", "Yiddish Studies")
   ]
 
