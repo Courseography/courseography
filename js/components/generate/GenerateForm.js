@@ -324,7 +324,9 @@ export default class GenerateForm extends React.Component {
     return (
       <>
         <NavBar selected_page="generate" open_modal={undefined}></NavBar>
-        <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
+        <div
+          style={{ display: "flex", flexDirection: "row", height: "calc(100% - 50px)" }}
+        >
           <Disclaimer />
           <div
             id="generateDiv"
