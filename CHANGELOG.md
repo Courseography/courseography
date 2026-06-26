@@ -9,6 +9,7 @@
 ### 🐛 Bug fixes
 
 - Fixed CSS styling of background colour and let the application have full height
+- Fixed a bug regarding the scrollbar appearing on the /graph and /generate pages
 
 ### 🔧 Internal changes
 
