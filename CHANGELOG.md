@@ -10,6 +10,7 @@
 
 - Fixed CSS styling of background colour and let the application have full height
 - Remove period after instructor's first name in course info modal
+- Fix bool node centering in Generate page
 
 ### 🔧 Internal changes
 

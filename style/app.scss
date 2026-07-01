@@ -1009,7 +1009,7 @@ g.bool > text {
   font-weight: bold;
   stroke: none;
   text-anchor: middle;
-  transform: translateY(-0.23em);
+  dominant-baseline: middle;
 }
 
 path {
