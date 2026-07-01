@@ -19,7 +19,7 @@ export default function Bool(props) {
       {props.JSON.text.map(function (textTag, i) {
         const textAttrs = {
           x: ellipseAttrs.cx,
-          y: textTag.pos[1],
+          y: ellipseAttrs.cy,
         }
         return (
           <text {...textAttrs} key={i}>
