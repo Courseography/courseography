@@ -16,6 +16,7 @@
 - Refactored the `Courses` table to `Course` with a database migration
 - Refactor `parseArtSci` function in `app/WebParsing/ArtSciParser.hs` by introducing `parseDepartmentList`
 - Updated CircleCI download link for ImageMagick
+- Began Babel 8 migration prep: bumped CI/engines to Node 24, pinned an explicit `browserslist` target, consolidated the duplicated Babel preset config between `babel.config.json` and `webpack.common.js`, fixed `corejs` version pinning, and removed the unused `@babel/plugin-proposal-class-properties` dependency
 
 ## [0.8.0] - 2026-06-09
 
