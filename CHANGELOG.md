@@ -16,6 +16,7 @@
 
 - Refactored the `Courses` table to `Course` with a database migration
 - Refactor `parseArtSci` function in `app/WebParsing/ArtSciParser.hs` by introducing `parseDepartmentList`
+- Updated CircleCI download link for ImageMagick
 
 ## [0.8.0] - 2026-06-09
 
