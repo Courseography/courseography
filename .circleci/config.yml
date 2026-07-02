@@ -37,7 +37,7 @@ jobs:
             sudo apt-get install -y graphviz
             sudo apt-get install -y texlive-latex-base
             if [ ! -d squashfs-root ]; then
-              sudo wget https://imagemagick.org/archive/binaries/magick
+              sudo wget https://download.imagemagick.org/archive/binaries/magick
               sudo chmod u+x ./magick
               sudo ./magick --appimage-extract
             fi
