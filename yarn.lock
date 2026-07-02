@@ -1463,10 +1463,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.28.2, @babel/runtime@npm:^7.29.7, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.28.2, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.29.7
   resolution: "@babel/runtime@npm:7.29.7"
   checksum: bc311855c6dbf5356030979584ca0f8b6cee39fe058175b02e85a73e246fc76ae30248b0d40e70c2652101faeb43279468ed2d086a670673eb9783c1fee1df2b
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@babel/runtime@npm:8.0.0"
+  checksum: 5b4e6f2700190f62146d9ff8c9715037847dcfc0ac4d429e1c95d2817f86263b664e5faa35213ff504b9c8ade791bc5dcf0b77d31c0c117d918442d87cebd21e
   languageName: node
   linkType: hard
 
@@ -5304,7 +5311,7 @@ __metadata:
     "@babel/eslint-parser": ^8.0.1
     "@babel/preset-env": ^8.0.2
     "@babel/preset-react": ^8.0.1
-    "@babel/runtime": ^7.29.7
+    "@babel/runtime": ^8.0.0
     "@emotion/react": ^11.14.0
     "@emotion/styled": ^11.14.1
     "@eslint/compat": ^1.2.9
