@@ -439,7 +439,7 @@ ol {
 
 #react-graph {
   display: inline-block;
-  height: 100%;
+  height: calc(100% - 50px);
   margin: 0;
   overflow: hidden;
   position: absolute;
@@ -2013,6 +2013,7 @@ div[id*="_inq"] .code::after {
 
 #generateRoot #react-graph {
   position: static;
+  height: 100%;
   background-color: #f0f5f8;
 }
 
