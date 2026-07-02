@@ -108,7 +108,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-create-class-features-plugin@npm:^7.18.6, @babel/helper-create-class-features-plugin@npm:^7.29.7":
+"@babel/helper-create-class-features-plugin@npm:^7.29.7":
   version: 7.29.7
   resolution: "@babel/helper-create-class-features-plugin@npm:7.29.7"
   dependencies:
@@ -366,18 +366,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0
   checksum: 7a58b4b32f4c04b86160dc7900612904e2b88d42c8b89d59a89d3c343f320ad096d73fb453a2e8bf8e97c9d4af3563043bc6d1e3def53c819812cb03f3f873c8
-  languageName: node
-  linkType: hard
-
-"@babel/plugin-proposal-class-properties@npm:^7.18.6":
-  version: 7.18.6
-  resolution: "@babel/plugin-proposal-class-properties@npm:7.18.6"
-  dependencies:
-    "@babel/helper-create-class-features-plugin": ^7.18.6
-    "@babel/helper-plugin-utils": ^7.18.6
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 49a78a2773ec0db56e915d9797e44fd079ab8a9b2e1716e0df07c92532f2c65d76aeda9543883916b8e0ff13606afeffa67c5b93d05b607bc87653ad18a91422
   languageName: node
   linkType: hard
 
@@ -4516,11 +4504,11 @@ __metadata:
   linkType: hard
 
 "baseline-browser-mapping@npm:^2.9.0":
-  version: 2.9.5
-  resolution: "baseline-browser-mapping@npm:2.9.5"
+  version: 2.10.41
+  resolution: "baseline-browser-mapping@npm:2.10.41"
   bin:
-    baseline-browser-mapping: dist/cli.js
-  checksum: 1390acbd846a62571f8f76c121099b069093953300610f54dcbfac285df9d658c735ffd109c86f37ffde6829e1e0940d75093c777293ab065f7f7e25abbd8ba4
+    baseline-browser-mapping: dist/cli.cjs
+  checksum: 62a73067953b1b72d1a4b8a7e54bffa542471390c1ea04cc1427b61e6420c204e8ec2ad6129ac264b36eaba67bd7f98fd5ec53e7cf60fbbe6f000ea22fc6dc98
   languageName: node
   linkType: hard
 
@@ -4803,9 +4791,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001759":
-  version: 1.0.30001759
-  resolution: "caniuse-lite@npm:1.0.30001759"
-  checksum: db200cf52ab976df18aaf75415e4c407a989bd538ac195f8ddd0993f0e158cfe0d048c26c0161b0409ed754745ea82830abbcbecace4afef9f1ecc9a4c0a0a50
+  version: 1.0.30001800
+  resolution: "caniuse-lite@npm:1.0.30001800"
+  checksum: 347e1394aa05a29f06bfcddc27fc90abdece41fc7be56a2c0ff88ef6b53811ac67d27ae58634893a1f15f4de8a020b29e637ae74c627b7b0e12deb345214b9b4
   languageName: node
   linkType: hard
 
@@ -5292,7 +5280,6 @@ __metadata:
   dependencies:
     "@babel/core": ^7.29.7
     "@babel/eslint-parser": ^7.29.7
-    "@babel/plugin-proposal-class-properties": ^7.18.6
     "@babel/preset-env": ^7.29.7
     "@babel/preset-react": ^7.29.7
     "@babel/runtime": ^7.29.7
