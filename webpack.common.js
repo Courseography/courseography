@@ -2,11 +2,6 @@ const path = require("path")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const webpack = require("webpack")
 
-const presets = [
-  ["@babel/preset-env", { useBuiltIns: "usage", corejs: 3 }],
-  ["@babel/preset-react", { runtime: "automatic" }],
-]
-
 const isDevelopment = process.env.NODE_ENV !== "production"
 
 module.exports = {
@@ -27,19 +22,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: {
-          loader: "babel-loader",
-          options: { presets },
-        },
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.jsx$/,
-        use: {
-          loader: "babel-loader",
-          options: { presets },
-        },
+        test: /\.jsx?$/,
+        use: "babel-loader",
         exclude: /node_modules/,
       },
       {
