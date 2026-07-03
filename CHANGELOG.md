@@ -11,6 +11,7 @@
 - Fixed CSS styling of background colour and let the application have full height
 - Remove period after instructor's first name in course info modal
 - Fixed a bug regarding the scrollbar appearing on the /graph and /generate pages
+- Fix bool node centering in Generate page
 
 ### 🔧 Internal changes
 
