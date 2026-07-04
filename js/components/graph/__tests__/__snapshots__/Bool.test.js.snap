@@ -22,7 +22,7 @@ exports[`AND Bool should match snapshot 1`] = `
   />
   <text
     x="1020.015148"
-    y="246.655709"
+    y="243.51310800000002"
   >
     and
   </text>
@@ -51,7 +51,7 @@ exports[`OR Bool should match snapshot 1`] = `
   />
   <text
     x="1020.015148"
-    y="246.655709"
+    y="243.51310800000002"
   >
     or
   </text>
