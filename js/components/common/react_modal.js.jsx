@@ -123,7 +123,7 @@ class CourseModal extends React.Component {
           })
         })
         .catch(error => {
-          console.error(`${error}`)
+          console.error(`Course with code ${this.state.courseId} not found`)
           this.setState({
             course: {},
             sessions: {},
