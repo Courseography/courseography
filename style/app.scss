@@ -1004,12 +1004,12 @@ g.bool.missing > ellipse {
 }
 
 g.bool > text {
+  dominant-baseline: middle;
   font-family: "Trebuchet MS", Arial, sans-serif;
   font-size: 6pt;
   font-weight: bold;
   stroke: none;
   text-anchor: middle;
-  dominant-baseline: middle;
 }
 
 path {
