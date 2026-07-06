@@ -281,7 +281,7 @@ class Description extends React.Component {
               <AgGridReact
                 rowData={this.props.sessions[session]}
                 columnDefs={[
-                  { field: "activity", width: session === "Y" ? 100 : 155 },
+                  { field: "activity", width: session === "Y" ? 96 : 155 },
                   { field: "instructor", width: session === "Y" ? 190 : 215 },
                   { field: "availability", width: session === "Y" ? 180 : 205 },
                   { field: "waitList", width: session === "Y" ? 130 : 145 },
@@ -297,7 +297,7 @@ class Description extends React.Component {
                       paddingBottom: "6px",
                     },
                     valueFormatter: col => col.data.time1.join("\n"),
-                    width: session === "Y" ? 150 : 205,
+                    width: session === "Y" ? 155 : 205,
                     autoHeight: true
                   },
                   {
@@ -311,7 +311,7 @@ class Description extends React.Component {
                       paddingBottom: "6px",
                     },
                     valueFormatter: col => col.data.location1.join("\n"),
-                    width: session === "Y" ? 93 : 153,
+                    width: session === "Y" ? 90 : 153,
                     autoHeight: true
                   },
 
@@ -326,7 +326,7 @@ class Description extends React.Component {
                       paddingBottom: "6px",
                     },
                     valueFormatter: col => col.data.time2.join("\n"),
-                    width: 150,
+                    width: 155,
                     autoHeight: true,
                     hide: session !== "Y",
                   },
@@ -341,7 +341,7 @@ class Description extends React.Component {
                       paddingBottom: "6px",
                     },
                     valueFormatter: col => col.data.location2.join("\n"),
-                    width: 93,
+                    width: 90,
                     autoHeight: true,
                     hide: session !== "Y"
                   },
