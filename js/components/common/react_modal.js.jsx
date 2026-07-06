@@ -123,7 +123,7 @@ class CourseModal extends React.Component {
           })
         })
         .catch(error => {
-          console.error(`Course with code ${this.state.courseId} not found`)
+          console.error(`${error}`)
           this.setState({
             course: {},
             sessions: {},
@@ -131,6 +131,11 @@ class CourseModal extends React.Component {
           })
         })
     }
+  }
+
+  /** Helper function to format the time of a Time JSON object for display */
+  formatTime(time) {
+    return DAY_TO_INT[time.weekDay] + " " + time.startHour + " - " + time.endHour
   }
 
   /** 
@@ -147,8 +152,7 @@ class CourseModal extends React.Component {
     )
 
     return sortedSessions.map(lecture => {
-      const occurrences = { times: [], locations: [] }
-      const yearOccurrences = {fallTimes: [], fallLocations: [], winterTimes: [], winterLocations: []}
+      const occurrences = { times1: [], locations1: [], times2: [], locations2: [] }
       const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
         occ1.weekDay > occ2.weekDay ? 1 : -1
       )
@@ -158,40 +162,13 @@ class CourseModal extends React.Component {
           location = occurrence.timeLocation.buildingCode
         }
 
-        // Time and location formatting for Y session courses
-        if (session === "Y") {
-          if (occurrence.timeSession.endsWith("9")) {
-            yearOccurrences.fallLocations.push(location)
-            yearOccurrences.fallTimes.push(
-              DAY_TO_INT[occurrence.weekDay].substring(0, 3) +
-                " " +
-                occurrence.startHour +
-                " - " +
-                occurrence.endHour
-            )
+        if (session === "Y" && occurrence.timeSession.endsWith("1")) {
+          occurrences.locations2.push(location)
+          occurrences.times2.push(this.formatTime(occurrence))
           }
-          else {
-            yearOccurrences.winterLocations.push(location)
-            yearOccurrences.winterTimes.push(
-              DAY_TO_INT[occurrence.weekDay].substring(0, 3) +
-                " " +
-                occurrence.startHour +
-                " - " +
-                occurrence.endHour
-            )
-          }
-        }
-
-        // Time and location formatting for F/S courses
         else {
-          occurrences.locations.push(location)
-          occurrences.times.push(
-            DAY_TO_INT[occurrence.weekDay] +
-              " " +
-              occurrence.startHour +
-              " - " +
-              occurrence.endHour
-          )
+          occurrences.locations1.push(location)
+          occurrences.times1.push(this.formatTime(occurrence))
         }
       })
       const rowData = {
@@ -202,14 +179,12 @@ class CourseModal extends React.Component {
           lecture.meetData.enrol +
           " of " +
           lecture.meetData.cap +
-          (session === "Y" ? "" : " available"), // Account for shortened column width for Y courses
+          " available",
         waitList: lecture.meetData.wait + " students",
-        time: occurrences.times,
-        location: occurrences.locations,
-        fallTime: yearOccurrences.fallTimes,
-        fallLocation: yearOccurrences.fallLocations,
-        winterTime: yearOccurrences.winterTimes,
-        winterLocation: yearOccurrences.winterLocations
+        time1: occurrences.times1,
+        location1: occurrences.locations1,
+        time2: occurrences.times2,
+        location2: occurrences.locations2
       }
 
       return rowData
@@ -302,105 +277,73 @@ class Description extends React.Component {
             <strong className="semester-heading">
               {session === "F" ? "Fall" : session === "S" ? "Winter" : "Full Year"}
             </strong>
-            <div className="ag-theme-alpine" style={{ width: 940 }}>
+            <div className="ag-theme-alpine" style={{ width: 1088 }}>
               <AgGridReact
                 rowData={this.props.sessions[session]}
                 columnDefs={[
-                  { field: "activity", width: session === "Y" ? 100 : 130 },
-                  { field: "instructor", width: session === "Y" ? 172 : 190 },
-                  { field: "availability", width: session === "Y" ? 130 : 180 },
-                  { field: "waitList", width: session === "Y" ? 120 : 130 },
+                  { field: "activity", width: session === "Y" ? 100 : 155 },
+                  { field: "instructor", width: session === "Y" ? 190 : 215 },
+                  { field: "availability", width: session === "Y" ? 180 : 205 },
+                  { field: "waitList", width: session === "Y" ? 130 : 145 },
 
-                  /* Single-session occurrence columns */
                   {
-                    field: "time",
+                    field: "time1",
+                    headerName: session === "Y" ? "Fall Time" : "Time",
+                    wrapHeaderText: true,
                     cellStyle: {
                       whiteSpace: "pre",
                       lineHeight: "1.8",
                       paddingTop: "7px",
                       paddingBottom: "6px",
                     },
-                    valueFormatter: col => col.data.time.join("\n"),
-                    width: 180,
-                    autoHeight: true,
-                    hide: session === "Y",
+                    valueFormatter: col => col.data.time1.join("\n"),
+                    width: session === "Y" ? 150 : 205,
+                    autoHeight: true
                   },
                   {
-                    field: "location",
+                    field: "location1",
+                    headerName: session === "Y" ? "Fall Location" : "Location",
+                    wrapHeaderText: true,
                     cellStyle: {
                       whiteSpace: "pre",
                       lineHeight: "1.8",
                       paddingTop: "7px",
                       paddingBottom: "6px",
                     },
-                    valueFormatter: col => col.data.location.join("\n"),
-                    width: 128,
-                    autoHeight: true,
-                    hide: session === "Y"
+                    valueFormatter: col => col.data.location1.join("\n"),
+                    width: session === "Y" ? 93 : 153,
+                    autoHeight: true
                   },
 
-                  /* Y session occurrence columns */
                   {
-                    field: "fallTime",
+                    field: "time2",
+                    headerName: "Winter Time",
+                    wrapHeaderText: true,
                     cellStyle: {
                       whiteSpace: "pre",
                       lineHeight: "1.8",
                       paddingTop: "7px",
                       paddingBottom: "6px",
                     },
-                    valueFormatter: col => col.data.fallTime.join("\n"),
-                    width: 115,
-                    autoHeaderHeight: false,
+                    valueFormatter: col => col.data.time2.join("\n"),
+                    width: 150,
                     autoHeight: true,
-                    wrapHeaderText: true,
-                    autoHeaderHeight: true,
                     hide: session !== "Y",
                   },
                   {
-                    field: "fallLocation",
-                    cellStyle: {
-                      whiteSpace: "pre",
-                      lineHeight: "1.8",
-                      paddingTop: "7px",
-                      paddingBottom: "6px",
-                    },
-                    valueFormatter: col => col.data.fallLocation.join("\n"),
-                    width: 93,
-                    autoHeaderHeight: false,
-                    autoHeight: true,
+                    field: "location2",
+                    headerName: "Winter Location",
                     wrapHeaderText: true,
-                    autoHeaderHeight: true,
-                    hide: session !== "Y",
-                  },
-                  {
-                    field: "winterTime",
                     cellStyle: {
                       whiteSpace: "pre",
                       lineHeight: "1.8",
                       paddingTop: "7px",
                       paddingBottom: "6px",
                     },
-                    valueFormatter: col => col.data.winterTime.join("\n"),
-                    width: 115,
-                    autoHeight: true,
-                    wrapHeaderText: true,
-                    autoHeaderHeight: true,
-                    hide: session !== "Y",
-                  },
-                  {
-                    field: "winterLocation",
-                    cellStyle: {
-                      whiteSpace: "pre",
-                      lineHeight: "1.8",
-                      paddingTop: "7px",
-                      paddingBottom: "6px",
-                    },
-                    valueFormatter: col => col.data.winterLocation.join("\n"),
+                    valueFormatter: col => col.data.location2.join("\n"),
                     width: 93,
                     autoHeight: true,
-                    wrapHeaderText: true,
-                    autoHeaderHeight: true,
-                    hide: session !== "Y",
+                    hide: session !== "Y"
                   },
                 ]}
                 domLayout="autoHeight"
