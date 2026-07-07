@@ -1,8 +1,9 @@
 module WebParsing.ArtSciParser
-    (parseCalendar, getDeptList) where
+    (parseCalendar, parseDepartmentList) where
 
 import Config (fasCalendarUrl, programsUrl, runDb)
 import Control.Monad.IO.Class (liftIO)
+import qualified Data.Bifunctor as BF
 import Data.List (findIndex, nubBy)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
@@ -34,12 +35,34 @@ parseCalendar = do
 parseArtSci :: IO ()
 parseArtSci = do
     programs <- programsUrl
-    bodyTags <- httpBodyTags programs
-    let deptInfo = getDeptList bodyTags
+    deptInfo <- parseDepartmentList programs
     runDb $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
         mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)
+
+-- | Parse the list of all departments, given the URL of the program/subject areas page. 
+-- Exclude departments with no courses, duplicate courses, and program areas belonging to a college.
+parseDepartmentList :: String -> IO [(T.Text, T.Text)]
+parseDepartmentList url = do
+    bodyTags <- httpBodyTags url
+    let deptList = getDeptList bodyTags
+    return $ filter (isValidDepartment ignoredDepts) deptList
+    where
+        ignoredDepts = ["ASIP (Arts & Science Internship Program)",
+                        "Biology",
+                        "Combined Degree Programs",
+                        "Data Science",
+                        "Faculty of Arts and Science Programs (299/398/399)",
+                        "Laboratory Medicine and Pathobiology)", -- Displayed as "Pathobiology (see Laboratory Medicine and Pathobiology)" on program areas page
+                        "Research Opportunity/Research Excursions (299/398/399)",
+                        "Writing in the Faculty of Arts & Science"]
+
+        isValidDepartment :: [T.Text] -> (T.Text, T.Text) -> Bool
+        isValidDepartment ignoredDepartments (deptPage, deptName) = 
+            "/" `T.isPrefixOf` deptPage &&                       -- Ignore footer links
+            deptName `notElem` ignoredDepartments &&             -- Ignore departments in ignoredDepartments
+            not (" College)" `T.isSuffixOf` deptName)            -- Ignore departments belonging to a college
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
@@ -48,7 +71,7 @@ getDeptList tags =
     let tables = TS.partitions (TS.isTagOpenName "table") tags  -- every partition is a table
         tables' = map (takeWhile (not . TS.isTagCloseName "table")) tables
         depts = concatMap extractDepartments tables'
-    in  depts
+    in map (BF.second cleanText) depts
     where
         extractDepartments :: [Tag T.Text] -> [(T.Text, T.Text)]
         extractDepartments tableTags =
@@ -156,4 +179,4 @@ httpBodyTags url = do
 
 -- | Remove odd characters from text
 cleanText :: T.Text -> T.Text
-cleanText = T.replace "\n" "" . T.replace "\8203" "" . T.replace "\160" "" . T.strip
+cleanText = T.replace "\n" "" . T.replace "\8203" "" . T.replace "\160" " " . T.strip

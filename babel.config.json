@@ -1,16 +1,20 @@
 {
   "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "useBuiltIns": "usage",
-        "corejs": { "version": "3.30", "proposals": true }
-      }
-    ],
+    "@babel/preset-env",
     [
       "@babel/preset-react",
       {
         "runtime": "automatic"
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "babel-plugin-polyfill-corejs3",
+      {
+        "method": "usage-global",
+        "version": "3.45.0",
+        "proposals": true
       }
     ]
   ]

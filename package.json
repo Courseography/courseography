@@ -14,6 +14,10 @@
     "prepare": "husky"
   },
   "private": true,
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "browserslist": "defaults",
   "lint-staged": {
     "*": "yarn prettier --ignore-unknown --write",
     "*.js": "yarn run eslint --cache --fix js",
@@ -25,15 +29,15 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime": "^7.29.7",
+    "@babel/runtime": "^8.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@fortawesome/react-fontawesome": "^3.3.1",
     "@mui/material": "^7.3.1",
-    "ag-grid-community": "^35.3.1",
-    "ag-grid-react": "^35.3.1",
+    "ag-grid-community": "^36.0.0",
+    "ag-grid-react": "^36.0.0",
     "bootstrap": "^5.3.3",
     "core-js": "^3.42.0",
     "formik": "^2.4.6",
@@ -49,17 +53,17 @@
     "react-tooltip": "^5.28.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
-    "@babel/eslint-parser": "^7.29.7",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/preset-env": "^7.29.7",
-    "@babel/preset-react": "^7.29.7",
+    "@babel/core": "^8.0.1",
+    "@babel/eslint-parser": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-react": "^8.0.1",
     "@eslint/compat": "^1.2.9",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.6.1",
-    "babel-jest": "^29.5.0",
-    "babel-loader": "^10.0.0",
+    "babel-jest": "^30.4.1",
+    "babel-loader": "^10.1.1",
+    "babel-plugin-polyfill-corejs3": "^1.0.0",
     "css-loader": "^7.1.4",
     "cypress": "14.0.1",
     "eslint": "^9.39.2",

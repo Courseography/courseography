@@ -247,7 +247,7 @@ parseInstr :: Value -> Parser T.Text
 parseInstr (Object io) = do
   firstName <- io .:? "firstName" .!= ""
   lastName <- io .:? "lastName" .!= ""
-  return (T.concat [firstName, ". ", lastName])
+  return (T.concat [firstName, " ", lastName])
 parseInstr _ = return ""
 
 -- | Converts the miliseconds time into hourly time

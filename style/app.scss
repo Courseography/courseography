@@ -439,7 +439,7 @@ ol {
 
 #react-graph {
   display: inline-block;
-  height: 100%;
+  height: calc(100% - 50px);
   margin: 0;
   overflow: hidden;
   position: absolute;
@@ -1004,12 +1004,12 @@ g.bool.missing > ellipse {
 }
 
 g.bool > text {
+  dominant-baseline: middle;
   font-family: "Trebuchet MS", Arial, sans-serif;
   font-size: 6pt;
   font-weight: bold;
   stroke: none;
   text-anchor: middle;
-  transform: translateY(-0.23em);
 }
 
 path {
@@ -2013,6 +2013,7 @@ div[id*="_inq"] .code::after {
 
 #generateRoot #react-graph {
   position: static;
+  height: 100%;
   background-color: #f0f5f8;
 }
 
