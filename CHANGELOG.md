@@ -9,10 +9,17 @@
 ### 🐛 Bug fixes
 
 - Fixed CSS styling of background colour and let the application have full height
+- Remove period after instructor's first name in course info modal
+- Fixed a bug regarding the scrollbar appearing on the /graph and /generate pages
+- Fix bool node centering in Generate page
 
 ### 🔧 Internal changes
 
 - Refactored the `Courses` table to `Course` with a database migration
+- Refactor `parseArtSci` function in `app/WebParsing/ArtSciParser.hs` by introducing `parseDepartmentList`
+- Updated CircleCI download link for ImageMagick
+- Began Babel 8 migration prep: bumped CI/engines to Node 24, pinned an explicit `browserslist` target, consolidated the duplicated Babel preset config between `babel.config.json` and `webpack.common.js`, fixed `corejs` version pinning, and removed the unused `@babel/plugin-proposal-class-properties` dependency
+- Upgraded to Babel 8 (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/eslint-parser`, `babel-loader`, `babel-jest`); replaced the removed `preset-env` `useBuiltIns`/`corejs` options with the `babel-plugin-polyfill-corejs3` plugin
 
 ## [0.8.0] - 2026-06-09
 
@@ -56,6 +63,8 @@
 - Refactor `Times` database schema to encompass only a single session of a course
 - Change `Time` and `Time'` datatypes to match the database schema, and resolve resulting compilation and type errors
 - Update the course modal width and columns to properly account for and display Y-session courses
+- Update `createReqBody` in `Config.hs` to search for Y-session courses
+- Resolve merge conflicts with master
 
 ## [0.7.2] - 2025-12-10
 
