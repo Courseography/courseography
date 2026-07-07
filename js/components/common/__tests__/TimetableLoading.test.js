@@ -20,8 +20,10 @@ describe("Displays correct content based on timetable availability", () => {
             activity: "LEC0101",
             availability: "50 out of 100 available",
             instructor: "Beyonce",
-            location: ["BA "],
-            time: ["Monday  13 - 14", "Wednesday  13 - 14", "Friday  13 - 14"],
+            location1: ["BA "],
+            time1: ["Monday  13 - 14", "Wednesday  13 - 14", "Friday  13 - 14"],
+            location2: [],
+            time2: [],
             waitlist: "0 students",
           },
         ],
@@ -54,8 +56,10 @@ describe("Displays correct content based on timetable availability", () => {
             activity: "LEC0101",
             availability: "60 out of 120 available",
             instructor: "John Doe",
-            location: ["BA 1234"],
-            time: ["Tuesday 10 - 11", "Thursday 10 - 11"],
+            location1: ["BA 1234"],
+            time1: ["Tuesday 10 - 11", "Thursday 10 - 11"],
+            location2: [],
+            time2: [],
             waitlist: "5 students",
           },
         ],
@@ -87,8 +91,10 @@ describe("Displays correct content based on timetable availability", () => {
             activity: "LEC0101",
             availability: "80 out of 150 available",
             instructor: "Jane Smith",
-            location: ["MP 203"],
-            time: ["Monday 14 - 16", "Wednesday 14 - 16"],
+            location1: ["MP"],
+            time1: ["Monday 14 - 16", "Wednesday 14 - 16"],
+            location2: ["BA"],
+            time2: ["Monday 14 - 16", "Wednesday 14 - 16"],
             waitlist: "10 students",
           },
         ],
@@ -99,6 +105,8 @@ describe("Displays correct content based on timetable availability", () => {
     await screen.findByText(/full year/i)
     await screen.findByText(/LEC0101/)
     await screen.findByText("Jane Smith")
+    await screen.findByText("MP")
+    await screen.findByText("BA")
   })
 
   it("displays a timetable when there is more than one session", async () => {
@@ -116,8 +124,10 @@ describe("Displays correct content based on timetable availability", () => {
             activity: "LEC0101",
             availability: "50 out of 100 available",
             instructor: "Beyonce",
-            location: ["BA "],
-            time: ["Monday  13 - 14", "Wednesday  13 - 14", "Friday  13 - 14"],
+            location1: ["BA "],
+            time1: ["Monday  13 - 14", "Wednesday  13 - 14", "Friday  13 - 14"],
+            location2: [],
+            time2: [],
             waitlist: "0 students",
           },
         ],
@@ -126,8 +136,10 @@ describe("Displays correct content based on timetable availability", () => {
             activity: "LEC0202",
             availability: "100 out of 200 available",
             instructor: "David. Liu",
-            location: ["BA "],
-            time: ["Monday  13 - 14", "Wednesday  13 - 14", "Friday  13 - 14"],
+            location1: ["BA "],
+            time1: ["Monday  13 - 14", "Wednesday  13 - 14", "Friday  13 - 14"],
+            location2: [],
+            time2: [],
             waitlist: "0 students",
           },
         ],
