@@ -65,6 +65,7 @@
 - Update the course modal width and columns to properly account for and display Y-session courses
 - Update `createReqBody` in `Config.hs` to search for Y-session courses
 - Resolve merge conflicts with master
+- Update `FromJSON Time'` to return `Nothing` when the `sessionCode` value is missing
 
 ## [0.7.2] - 2025-12-10
 

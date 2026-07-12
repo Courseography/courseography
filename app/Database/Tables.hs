@@ -230,7 +230,7 @@ instance FromJSON Time' where
     building <- o .: "building"
     buildingCode <- building .: "buildingCode"
 
-    session <- o .:? "sessionCode"
+    session <- o .: "sessionCode"
 
     let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
     return $ Time' session adjustedDay adjustedStartTime adjustedEndTime buildingCode
