@@ -31,10 +31,9 @@ applyMigrations currVersion migrations = do
 
 -- | List of migrations
 migrationList :: [MigrationWrapper]
-migrationList = [
-    MigrationWrapper {version=2, script=renamePostTables},
-    MigrationWrapper {version=3, script=renameCoursesTable},
-    MigrationWrapper {version=4, script=splitTimes}
+migrationList = [ MigrationWrapper {version=2, script=renamePostTables}
+                , MigrationWrapper {version=3, script=renameCoursesTable}
+                , MigrationWrapper {version=4, script=splitTimes}
                 ]
 
 -- | Migration script which renames the Post tables to Program
@@ -51,7 +50,7 @@ renameCoursesTable =
 
 -- | Migration script to add proper support for year-long courses
 splitTimes :: Migration
-splitTimes = do 
+splitTimes = do
     addMigration True "ALTER TABLE times RENAME COLUMN first_room TO location;"
     addMigration True "ALTER TABLE times DROP COLUMN second_room;"
     addMigration True "ALTER TABLE times ADD session varchar(32);"
