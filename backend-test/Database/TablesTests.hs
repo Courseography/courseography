@@ -52,6 +52,7 @@ time'FromJSONTestCases =
     , ("Invalid JSON string with no start value, Nothing returned", "{ \"end\": { \"millisofday\": 54000000 }, \"building\": { \"buildingCode\": \"MP\", \"buildingRoomNumber\": \"202\" }, \"sessionCode\": \"20269\" }", Nothing)
     , ("Invalid JSON string with no end value, Nothing returned", "{ \"start\": { \"day\": 4, \"millisofday\": 50400000 }, \"building\": { \"buildingCode\": \"MP\", \"buildingRoomNumber\": \"202\" }, \"sessionCode\": \"20269\" }", Nothing)
     , ("Invalid JSON string with no buildingCode value, Nothing returned", "{ \"start\": { \"day\": 4, \"millisofday\": 50400000 }, \"end\": { \"millisofday\": 54000000 }, \"building\": { \"buildingRoomNumber\": \"202\" }, \"sessionCode\": \"20269\" }", Nothing)
+    , ("Invalid JSON string with no sessionCode value, Nothing returned", "{ \"start\": { \"day\": 4, \"millisofday\": 50400000 }, \"end\": { \"millisofday\": 54000000 }, \"building\": { \"buildingCode\": \"MP\", \"buildingRoomNumber\": \"202\" } }", Nothing)
     ]
 
 -- | Run a test case (label, input JSON string, expected output) on the FromJSON instance of Time'.
