@@ -12,6 +12,7 @@
 - Remove period after instructor's first name in course info modal
 - Fixed a bug regarding the scrollbar appearing on the /graph and /generate pages
 - Fix bool node centering in Generate page
+- Fixed support for year-long ("Y" session) courses
 
 ### 🔧 Internal changes
 
@@ -58,14 +59,6 @@
 - Updated documentation in `app/Util/Blaze.hs`
 - Moved the `Course` data type from `Database/Tables.hs` into `Models/Course.hs`, renamed it to `CourseData`
 - Removed `SvgJSON` data type in favour of `([Text], [Shape], [Path])`
-
-#### y-course-refactor mini changelog (to replace):
-- Refactor `Times` database schema to encompass only a single session of a course
-- Change `Time` and `Time'` datatypes to match the database schema, and resolve resulting compilation and type errors
-- Update the course modal width and columns to properly account for and display Y-session courses
-- Update `createReqBody` in `Config.hs` to search for Y-session courses
-- Resolve merge conflicts with master
-- Update `FromJSON Time'` to return `Nothing` when the `sessionCode` value is missing
 
 ## [0.7.2] - 2025-12-10
 
