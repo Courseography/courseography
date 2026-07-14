@@ -12,6 +12,7 @@
 - Remove period after instructor's first name in course info modal
 - Fixed a bug regarding the scrollbar appearing on the /graph and /generate pages
 - Fix bool node centering in Generate page
+- Fixed support for year-long ("Y" session) courses
 
 ### 🔧 Internal changes
 
