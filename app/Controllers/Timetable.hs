@@ -1,6 +1,10 @@
-module Controllers.Timetable
-    (gridResponse, returnPDF, exportTimetableImageResponse,
-     exportTimetablePDFResponse, calendarResponse) where
+module Controllers.Timetable (
+    gridResponse,
+    returnPDF,
+    exportTimetableImageResponse,
+    exportTimetablePDFResponse,
+    calendarResponse,
+) where
 
 import Config (fallEndDate, fallStartDate, holidays, outDay, runDb, winterEndDate, winterStartDate)
 import Control.Monad.IO.Class (liftIO)
@@ -33,15 +37,16 @@ import Util.Helpers (readImageData, safeHead)
 
 gridResponse :: ServerPart Response
 gridResponse =
-    ok $ toResponse $
-        masterTemplate "Courseography - Grid"
-            []
-            (do
-                H.div ! A.id "navbar" $ ""
-                H.div ! A.id "grid-body"! A.class_ "row main" $ ""
-            )
-            timetableScripts
-
+    ok $
+        toResponse $
+            masterTemplate
+                "Courseography - Grid"
+                []
+                ( do
+                    H.div ! A.id "navbar" $ ""
+                    H.div ! A.id "grid-body" ! A.class_ "row main" $ ""
+                )
+                timetableScripts
 
 -- | Returns an image of the timetable requested by the user.
 exportTimetableImageResponse :: ServerPart Response
@@ -80,9 +85,8 @@ returnPDF graphImg fallTimetableImg springTimetableImg tempDir = do
     let timetableName = "timetable"
         pdfName = tempDir </> (timetableName ++ ".pdf")
         texText = generateTex [graphImg, fallTimetableImg, springTimetableImg]
-    createPDF texText tempDir timetableName         -- create PDF using TEX
+    createPDF texText tempDir timetableName -- create PDF using TEX
     return pdfName
-
 
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: ServerPart Response
@@ -111,13 +115,15 @@ type ICSFile = String
 getICS :: Events -> ICSFile
 getICS [] = ""
 getICS events = unlines $ header_ ++ events ++ bottom
-    where
-        header_ = ["BEGIN:VCALENDAR",
-                  "VERSION:2.0",
-                  "PRODID:-//Courseography//Calendar",
-                  "CALSCALE:GREGORIAN",
-                  "METHOD:PUBLISH"]
-        bottom = ["END:VCALENDAR"]
+  where
+    header_ =
+        [ "BEGIN:VCALENDAR"
+        , "VERSION:2.0"
+        , "PRODID:-//Courseography//Calendar"
+        , "CALSCALE:GREGORIAN"
+        , "METHOD:PUBLISH"
+        ]
+    bottom = ["END:VCALENDAR"]
 
 -- | The code for a course.
 type Code = T.Text
@@ -131,10 +137,10 @@ type Session = T.Text
 -- | Obtains the code, section and session for each course in the local storage.
 getCoursesInfo :: T.Text -> [(Code, Section, Session)]
 getCoursesInfo courses = map courseInfo allCourses
-    where
-        courseInfo [code, sect, session] = (code, sect, session)
-        courseInfo _ = ("", "", "")
-        allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
+  where
+    courseInfo [code, sect, session] = (code, sect, session)
+    courseInfo _ = ("", "", "")
+    allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
 pullDatabase :: (Code, Section, Session) -> IO (Maybe MeetTime')
@@ -146,12 +152,12 @@ pullDatabase (code, section, session) = runDb $ do
             allTimes <- selectList [TimesMeeting ==. entityKey x] []
             parsedTime <- mapM (buildTime . entityVal) allTimes
             return $ Just (MeetTime' (entityVal x) parsedTime)
-    where
+  where
     fullSection
         | T.isPrefixOf "L" section = T.append "LEC" sectCode
         | T.isPrefixOf "T" section = T.append "TUT" sectCode
         | T.isPrefixOf "P" section = T.append "PRA" sectCode
-        | otherwise                = section
+        | otherwise = section
     sectCode = T.tail section
 
 -- | The current date and time as obtained from the system.
@@ -161,35 +167,39 @@ type SystemTime = String
 getEvents :: SystemTime -> Maybe MeetTime' -> IO [String]
 getEvents _ Nothing = return []
 getEvents systemTime (Just courseTime) = do
-    courseInfo <- getCourseInfo courseTime  -- Get the course information
-    let startTimes = third courseInfo   -- Extract start times
-        endTimes = fourth courseInfo     -- Extract end times
-        dates = fifth courseInfo         -- Extract dates
+    courseInfo <- getCourseInfo courseTime -- Get the course information
+    let startTimes = third courseInfo -- Extract start times
+        endTimes = fourth courseInfo -- Extract end times
+        dates = fifth courseInfo -- Extract dates
     events <- mapM (eventsByDate courseInfo) (zip' startTimes endTimes dates)
     return (concat events)
-    where
-        eventsByDate :: (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay) -> ([String], [String], (String, String)) -> IO [String]
-        eventsByDate courseInfo (start, end, dates) = do
-            eventLists <- mapM (formatEvents courseInfo dates) (zip start end)
-            return (concat eventLists)
+  where
+    eventsByDate ::
+        (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay) -> ([String], [String], (String, String)) -> IO [String]
+    eventsByDate courseInfo (start, end, dates) = do
+        eventLists <- mapM (formatEvents courseInfo dates) (zip start end)
+        return (concat eventLists)
 
-        formatEvents :: (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay) -> (String, String) -> (String, String) -> IO [String]
-        formatEvents courseInfo (startDate, endDate) (start1, end1)
-            | startDate == "" || endDate == "" = return []
-            | otherwise = do
-                holidayList <- holidays
-                let eventLines =
-                        ["BEGIN:VEVENT",
-                         "DTSTAMP:" ++ systemTime,
-                         "DTSTART;TZID=America/Toronto:" ++ startDate ++ start1,
-                         "DTEND;TZID=America/Toronto:" ++ startDate ++ end1,
-                         "RRULE:FREQ=WEEKLY;UNTIL=" ++ endDate ++ "000000Z"]
+    formatEvents ::
+        (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay) -> (String, String) -> (String, String) -> IO [String]
+    formatEvents courseInfo (startDate, endDate) (start1, end1)
+        | startDate == "" || endDate == "" = return []
+        | otherwise = do
+            holidayList <- holidays
+            let eventLines =
+                    [ "BEGIN:VEVENT"
+                    , "DTSTAMP:" ++ systemTime
+                    , "DTSTART;TZID=America/Toronto:" ++ startDate ++ start1
+                    , "DTEND;TZID=America/Toronto:" ++ startDate ++ end1
+                    , "RRULE:FREQ=WEEKLY;UNTIL=" ++ endDate ++ "000000Z"
+                    ]
                         ++ map (\date -> "EXDATE;TZID=America/Toronto:" ++ date ++ start1) holidayList
-                        ++ ["ORGANIZER:University of Toronto",
-                            "SUMMARY:" ++ T.unpack (first courseInfo) ++ " " ++ T.unpack (second courseInfo),
-                            "CATEGORIES:EDUCATION",
-                            "END:VEVENT"]
-                return eventLines
+                        ++ [ "ORGANIZER:University of Toronto"
+                           , "SUMMARY:" ++ T.unpack (first courseInfo) ++ " " ++ T.unpack (second courseInfo)
+                           , "CATEGORIES:EDUCATION"
+                           , "END:VEVENT"
+                           ]
+            return eventLines
 
 -- | A list including all the start times for a course ordered by day.
 type StartTimesByDay = [[String]]
@@ -217,8 +227,8 @@ getCourseInfo meeting = do
 -- ** Functions that deal with tuples
 
 -- | Join three lists together in tuples of three elements.
-zip' :: [a] -> [b] -> [c] -> [(a,b,c)]
-zip' (x:xs) (y:ys) (z:zs) = (x,y,z):zip' xs ys zs
+zip' :: [a] -> [b] -> [c] -> [(a, b, c)]
+zip' (x : xs) (y : ys) (z : zs) = (x, y, z) : zip' xs ys zs
 zip' _ _ _ = []
 
 -- | Obtains the first item of the tuple, which represents the code for a course.
@@ -252,38 +262,40 @@ type InfoTimeFieldsByDay = [[Time]]
 -- | Orders by day the start and endtimes obtained from the database.
 orderTimeFields :: [Time] -> InfoTimeFieldsByDay
 orderTimeFields timeFields = groupBy (\x y -> weekDay x == weekDay y) sortedList
-    where
-        sortedList = sortOn weekDay timeFields
+  where
+    sortedList = sortOn weekDay timeFields
 
 -- ** Start time
 
 -- | Obtains the start times for each course depending on its session.
 startTimesByCourse :: InfoTimeFieldsByDay -> Session -> StartTimesByDay
-startTimesByCourse dataInOrder "Y" = startTime dataInOrder ++
-                                     startTime dataInOrder
+startTimesByCourse dataInOrder "Y" =
+    startTime dataInOrder
+        ++ startTime dataInOrder
 startTimesByCourse dataInOrder _ = startTime dataInOrder
 
 -- | Obtains the start times for each course by day.
 startTime :: InfoTimeFieldsByDay -> StartTimesByDay
 startTime =
     map (map formatTimes . timesOrdered)
-    where
-        timesOrdered dataDay = sort $ map startHour dataDay
+  where
+    timesOrdered dataDay = sort $ map startHour dataDay
 
 -- ** End time
 
 -- | Obtains the end times for each course depending on its session.
 endTimesByCourse :: InfoTimeFieldsByDay -> Session -> StartTimesByDay
-endTimesByCourse dataInOrder "Y" = endTime dataInOrder ++
-                                   endTime dataInOrder
+endTimesByCourse dataInOrder "Y" =
+    endTime dataInOrder
+        ++ endTime dataInOrder
 endTimesByCourse dataInOrder _ = endTime dataInOrder
 
 -- | Obtains the end times for each course by day.
 endTime :: InfoTimeFieldsByDay -> EndTimesByDay
 endTime =
     map (map formatTimes . timesOrdered)
-    where
-        timesOrdered dataDay = sort $ map endHour dataDay
+  where
+    timesOrdered dataDay = sort $ map endHour dataDay
 
 -- ** Functions that work for both start and end times
 
@@ -295,12 +307,12 @@ type TimeString = String
 formatTimes :: Double -> TimeString
 formatTimes fullTime =
     if maybe True (== 0) minutes
-    then hour ++ "0000"
-    else hour ++ maybe "0000" formatMinutes minutes ++ "00"
-    where
-        hours = splitOn "." (show fullTime)
-        hour = safeHead "" hours
-        minutes = readMaybe $ hours !! 1
+        then hour ++ "0000"
+        else hour ++ maybe "0000" formatMinutes minutes ++ "00"
+  where
+    hours = splitOn "." (show fullTime)
+    hour = safeHead "" hours
+    minutes = readMaybe $ hours !! 1
 
 -- | The string representaion for minutes.
 type MinutesString = String
@@ -308,8 +320,8 @@ type MinutesString = String
 -- | Creates a string for the minutes out of the decimal part given as a parameter.
 formatMinutes :: Int -> MinutesString
 formatMinutes decimal = if minutes >= 10 then show minutes else '0' : show minutes
-    where
-        minutes = decimal * 6
+  where
+    minutes = decimal * 6
 
 -- ** Start/End date
 
@@ -334,7 +346,7 @@ type EndDate = String
 -- course takes place, depending on the course session.
 getDatesByDay :: Session -> [Time] -> IO (StartDate, EndDate)
 getDatesByDay _ [] = error "Failed to fetch dates"
-getDatesByDay session (firstDate:_)
+getDatesByDay session (firstDate : _)
     | session == "F" = do
         fallStart <- fallStartDate
         fallEnd <- fallEndDate
@@ -343,7 +355,8 @@ getDatesByDay session (firstDate:_)
         winterStart <- winterStartDate
         winterEnd <- winterEndDate
         formatDates $ getDates winterStart winterEnd dayOfWeek
-    where dayOfWeek = weekDay firstDate
+  where
+    dayOfWeek = weekDay firstDate
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.
@@ -353,28 +366,29 @@ formatDates (start, end) = do
     if start == outDate || end == outDate
         then return ("", "")
         else return (startStr, endStr)
-    where
-        startStr = formatTime defaultTimeLocale "%Y%m%dT" start
-        endStr = formatTime defaultTimeLocale "%Y%m%dT" end
+  where
+    startStr = formatTime defaultTimeLocale "%Y%m%dT" start
+    endStr = formatTime defaultTimeLocale "%Y%m%dT" end
 
 -- | Gives the appropriate starting and ending dates for courses in the given
 -- range.
 getDates :: Day -> Day -> Double -> (Day, Day)
 getDates startDate endDate x =
-    (fromMondayStartWeek year firstWeek' dayOfWeek,
-     fromMondayStartWeek year endWeek' dayOfWeek)
-    where
-        (year, _, _) = toGregorian startDate
-        (firstWeek, firstDay) = mondayStartWeek startDate
-        (endWeek, endDay) = mondayStartWeek endDate
+    ( fromMondayStartWeek year firstWeek' dayOfWeek
+    , fromMondayStartWeek year endWeek' dayOfWeek
+    )
+  where
+    (year, _, _) = toGregorian startDate
+    (firstWeek, firstDay) = mondayStartWeek startDate
+    (endWeek, endDay) = mondayStartWeek endDate
 
-        convertDay 0.0 = 1
-        convertDay 1.0 = 2
-        convertDay 2.0 = 3
-        convertDay 3.0 = 4
-        convertDay _ = 5
+    convertDay 0.0 = 1
+    convertDay 1.0 = 2
+    convertDay 2.0 = 3
+    convertDay 3.0 = 4
+    convertDay _ = 5
 
-        dayOfWeek = convertDay x
+    dayOfWeek = convertDay x
 
-        firstWeek' = if firstDay <= dayOfWeek then firstWeek else firstWeek + 1
-        endWeek' = if endDay >= dayOfWeek then endWeek else endWeek - 1
+    firstWeek' = if firstDay <= dayOfWeek then firstWeek else firstWeek + 1
+    endWeek' = if endDay >= dayOfWeek then endWeek else endWeek - 1

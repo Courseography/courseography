@@ -1,7 +1,13 @@
 module Scripts (
-    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, generateScripts, aboutScripts,
-    )
-    where
+    graphScripts,
+    timetableScripts,
+    drawScripts,
+    postScripts,
+    searchScripts,
+    generateScripts,
+    aboutScripts,
+)
+where
 
 import Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -16,11 +22,13 @@ timetableScripts = H.script ! A.src "/static/js/grid/app.js" $ ""
 
 drawScripts :: H.Html
 drawScripts = do
-    mapM_ toScript
-        ["/static/js/draw/variables.js",
-         "/static/js/draw/path.js",
-         "/static/js/draw/setup.js",
-         "/static/js/vendor/jscolor.min.js"]
+    mapM_
+        toScript
+        [ "/static/js/draw/variables.js"
+        , "/static/js/draw/path.js"
+        , "/static/js/draw/setup.js"
+        , "/static/js/vendor/jscolor.min.js"
+        ]
     H.script ! A.src "/static/js/draw/app.js" $ ""
 
 postScripts :: H.Html

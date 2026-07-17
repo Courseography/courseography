@@ -1,5 +1,4 @@
-module Controllers.Generate
-    (generateResponse, findAndSavePrereqsResponse) where
+module Controllers.Generate (generateResponse, findAndSavePrereqsResponse) where
 
 import Control.Monad ()
 import Control.Monad.IO.Class (liftIO)
@@ -20,14 +19,16 @@ import Util.Happstack (createJSONResponse)
 
 generateResponse :: ServerPart Response
 generateResponse =
-    ok $ toResponse $
-        masterTemplate "Courseography - Generate"
-                    []
-                    (do
-                        H.div ! A.id "navbar" $ ""
-                        generatePrerequisites
-                    )
-                    generateScripts
+    ok $
+        toResponse $
+            masterTemplate
+                "Courseography - Generate"
+                []
+                ( do
+                    H.div ! A.id "navbar" $ ""
+                    generatePrerequisites
+                )
+                generateScripts
 
 generatePrerequisites :: H.Html
 generatePrerequisites =
@@ -42,26 +43,34 @@ findAndSavePrereqsResponse = do
     requestBody <- getBody
     let coursesOptions :: CourseGraphOptions = fromJust $ decode requestBody
 
-    programResults <- liftIO $ mapM (\code -> do
-                        program <- returnProgram (TL.toStrict code)
-                        return (TL.toStrict code, program))
-                   (programs coursesOptions)
+    programResults <-
+        liftIO $
+            mapM
+                ( \code -> do
+                    program <- returnProgram (TL.toStrict code)
+                    return (TL.toStrict code, program)
+                )
+                (programs coursesOptions)
 
     let invalidPrograms = map fst $ filter (isNothing . snd) programResults
         validPrograms = mapMaybe snd programResults
 
-    allCourses <- liftIO $ nub <$>
-        if all (== TL.empty) (courses coursesOptions)
-            then return $ map TL.pack (concatMap reqsForProgram validPrograms)
-            else return $ courses coursesOptions
+    allCourses <-
+        liftIO $
+            nub
+                <$> if all (== TL.empty) (courses coursesOptions)
+                    then return $ map TL.pack (concatMap reqsForProgram validPrograms)
+                    else return $ courses coursesOptions
 
-    let updatedCoursesOptions = coursesOptions
-            { courses = map TL.toUpper allCourses
-            , graphOptions = (graphOptions coursesOptions)
-                { taken = map TL.toUpper (taken (graphOptions coursesOptions))
-                , departments = map TL.toUpper (departments (graphOptions coursesOptions))
+    let updatedCoursesOptions =
+            coursesOptions
+                { courses = map TL.toUpper allCourses
+                , graphOptions =
+                    (graphOptions coursesOptions)
+                        { taken = map TL.toUpper (taken (graphOptions coursesOptions))
+                        , departments = map TL.toUpper (departments (graphOptions coursesOptions))
+                        }
                 }
-            }
 
     if all (== TL.empty) (courses coursesOptions) && not (null invalidPrograms)
         then return $ createJSONResponse $ object ["error" .= object ["invalidPrograms" .= invalidPrograms]]

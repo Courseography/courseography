@@ -1,26 +1,42 @@
-{-# LANGUAGE DataKinds, DeriveGeneric, DerivingStrategies, EmptyDataDecls, FlexibleContexts,
-             FlexibleInstances, GADTs, GeneralizedNewtypeDeriving, MultiParamTypeClasses,
-             QuasiQuotes, StandaloneDeriving, TemplateHaskell, TypeFamilies, TypeOperators,
-             UndecidableInstances #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE EmptyDataDecls #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE StandaloneDeriving #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -fno-warn-name-shadowing #-}
 
-{-|
-    Module      : Database.Tables
-    Description : The database schema (and some helpers).
-
-This module defines the database schema. It uses Template Haskell to also
-create new types for these values so that they can be used in the rest of
-the application.
-
-Though types and typeclass instances are created automatically, we currently
-have a few manually-generated spots to clean up. This should be rather
-straightforward.
--}
-
+-- |
+--     Module      : Database.Tables
+--     Description : The database schema (and some helpers).
+--
+-- This module defines the database schema. It uses Template Haskell to also
+-- create new types for these values so that they can be used in the rest of
+-- the application.
+--
+-- Though types and typeclass instances are created automatically, we currently
+-- have a few manually-generated spots to clean up. This should be rather
+-- straightforward.
 module Database.Tables where
 
-import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericToJSON, withObject, (.!=), (.:),
-                   (.:?))
+import Data.Aeson (
+    FromJSON (parseJSON),
+    ToJSON (toJSON),
+    genericToJSON,
+    withObject,
+    (.!=),
+    (.:),
+    (.:?),
+ )
 import Data.Aeson.Types (Options (..), Parser, Value (Object), defaultOptions)
 import Data.Char (toLower)
 import qualified Data.Text as T
@@ -31,12 +47,16 @@ import GHC.Generics
 
 -- | A two-dimensional point.
 type Point = (Double, Double)
+
 -- | A matrix of any dimensions.
 type Matrix = [[Double]]
+
 -- | A vector of any dimesions.
 type Vector = [Double]
 
-share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+share
+    [mkPersist sqlSettings, mkMigrate "migrateAll"]
+    [persistLowerCase|
 
 Department json
     name T.Text
@@ -160,28 +180,32 @@ SchemaVersion
 
 -- ** TODO: Remove these extra types and class instances
 
-data Time' =
-  Time' { timeSession' :: Maybe T.Text,
-          weekDay' :: Double,
-          startHour' :: Double,
-          endHour' :: Double,
-          timeLocation' :: Maybe T.Text
-        } deriving (Show, Eq, Generic)
+data Time'
+    = Time'
+    { timeSession' :: Maybe T.Text
+    , weekDay' :: Double
+    , startHour' :: Double
+    , endHour' :: Double
+    , timeLocation' :: Maybe T.Text
+    }
+    deriving (Show, Eq, Generic)
 
-data Time =
-  Time { timeSession :: Maybe T.Text,
-         weekDay :: Double,
-         startHour :: Double,
-         endHour :: Double,
-         timeLocation :: Maybe Building
-       } deriving (Show, Generic)
+data Time
+    = Time
+    { timeSession :: Maybe T.Text
+    , weekDay :: Double
+    , startHour :: Double
+    , endHour :: Double
+    , timeLocation :: Maybe Building
+    }
+    deriving (Show, Generic)
 
 -- | A Meeting with its associated Times.
-data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time'] }
-  deriving (Show, Generic)
+data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time']}
+    deriving (Show, Generic)
 
-data MeetTime' = MeetTime' { meetData :: Meeting, timeData :: [Time] }
-  deriving (Show, Generic)
+data MeetTime' = MeetTime' {meetData :: Meeting, timeData :: [Time]}
+    deriving (Show, Generic)
 
 instance ToJSON Program
 instance ToJSON Time
@@ -189,77 +213,79 @@ instance ToJSON MeetTime'
 instance ToJSON Building
 
 instance ToJSON Meeting where
-  toJSON = genericToJSON defaultOptions {
-      fieldLabelModifier =
-        lowerFirst .
-        drop 7
-    }
-    where
-      lowerFirst :: [Char] -> String
-      lowerFirst [] = ""
-      lowerFirst (fieldHead: fieldTail) = toLower fieldHead: fieldTail
+    toJSON =
+        genericToJSON
+            defaultOptions
+                { fieldLabelModifier =
+                    lowerFirst
+                        . drop 7
+                }
+      where
+        lowerFirst :: [Char] -> String
+        lowerFirst [] = ""
+        lowerFirst (fieldHead : fieldTail) = toLower fieldHead : fieldTail
 
 instance FromJSON Meeting where
-  parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do
-    teachingMethod :: T.Text <- o .:? "teachMethod" .!= ""
-    sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
-    let sectionId = T.concat [teachingMethod, sectionNumber]
+    parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do
+        teachingMethod :: T.Text <- o .:? "teachMethod" .!= ""
+        sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
+        let sectionId = T.concat [teachingMethod, sectionNumber]
 
-    cap <- o .:? "maxEnrolment" .!= (-1)
-    enrol <- o .:? "currentEnrolment" .!= 0
-    wait <- o .:? "currentWaitlist" .!= 0
-    instrList <- o .:? "instructors" .!= []
-    instrs <- mapM parseInstr instrList
+        cap <- o .:? "maxEnrolment" .!= (-1)
+        enrol <- o .:? "currentEnrolment" .!= 0
+        wait <- o .:? "currentWaitlist" .!= 0
+        instrList <- o .:? "instructors" .!= []
+        instrs <- mapM parseInstr instrList
 
-    let extra = 0
-    let instructor = T.intercalate "; " $ filter (not . T.null) instrs
-    if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
-    then
-      return $ Meeting "" "" sectionId cap instructor enrol wait extra
-    else
-      fail "Not a lecture, Tutorial or Practical"
+        let extra = 0
+        let instructor = T.intercalate "; " $ filter (not . T.null) instrs
+        if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
+            then
+                return $ Meeting "" "" sectionId cap instructor enrol wait extra
+            else
+                fail "Not a lecture, Tutorial or Practical"
 
 instance FromJSON Time' where
-  parseJSON = withObject "Expected Object for Times" $ \o -> do
-    startObject <- o .: "start"
-    endObject <- o .: "end"
-    meetingDay :: Maybe Int <- startObject .:? "day" .!= Nothing
-    meetingStartTime :: Maybe Int <- startObject .:? "millisofday" .!= Nothing
-    meetingEndTime :: Maybe Int <- endObject .:? "millisofday" .!= Nothing
+    parseJSON = withObject "Expected Object for Times" $ \o -> do
+        startObject <- o .: "start"
+        endObject <- o .: "end"
+        meetingDay :: Maybe Int <- startObject .:? "day" .!= Nothing
+        meetingStartTime :: Maybe Int <- startObject .:? "millisofday" .!= Nothing
+        meetingEndTime :: Maybe Int <- endObject .:? "millisofday" .!= Nothing
 
-    building <- o .: "building"
-    buildingCode <- building .: "buildingCode"
+        building <- o .: "building"
+        buildingCode <- building .: "buildingCode"
 
-    session <- o .: "sessionCode"
+        session <- o .: "sessionCode"
 
-    let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
-    return $ Time' session adjustedDay adjustedStartTime adjustedEndTime buildingCode
+        let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
+        return $ Time' session adjustedDay adjustedStartTime adjustedEndTime buildingCode
 
 instance FromJSON MeetTime where
-  parseJSON (Object o) = do
-    meeting <- parseJSON (Object o)
-    timesList :: [Time'] <- o .:? "meetingTimes" .!= []
-    return $ MeetTime meeting timesList
-  parseJSON _ = fail "Invalid meeting"
+    parseJSON (Object o) = do
+        meeting <- parseJSON (Object o)
+        timesList :: [Time'] <- o .:? "meetingTimes" .!= []
+        return $ MeetTime meeting timesList
+    parseJSON _ = fail "Invalid meeting"
 
 -- | Helpers for parsing JSON
 parseInstr :: Value -> Parser T.Text
 parseInstr (Object io) = do
-  firstName <- io .:? "firstName" .!= ""
-  lastName <- io .:? "lastName" .!= ""
-  return (T.concat [firstName, " ", lastName])
+    firstName <- io .:? "firstName" .!= ""
+    lastName <- io .:? "lastName" .!= ""
+    return (T.concat [firstName, " ", lastName])
 parseInstr _ = return ""
 
 -- | Converts the miliseconds time into hourly time
 -- | Assumes times are rounded to the nearest hour
 getHourVal :: Int -> Double
 getHourVal millis =
-  let
-    seconds = fromIntegral millis / 1000.0
-    minutes = seconds / 60
-    hours = minutes / 60
-  in
-    hours
+    let
+        seconds = fromIntegral millis / 1000.0
+        minutes = seconds / 60
+        hours = minutes / 60
+     in
+        hours
 
 -- | Converts a the given day into a double representation for the database
 -- | Monday (1) to Friday (5) becomes 0.0 to 4.0
@@ -278,5 +304,5 @@ convertTimeVals (Just day) (Just start) (Just end) =
     let dayDbl = getDayVal day
         startDbl = getHourVal start
         endDbl = getHourVal end
-    in (dayDbl, startDbl, endDbl)
+     in (dayDbl, startDbl, endDbl)
 convertTimeVals _ _ _ = (5.0, 25.0, 25.0)

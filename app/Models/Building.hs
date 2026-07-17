@@ -1,15 +1,23 @@
-module Models.Building
-    (buildingsCSV,
+module Models.Building (
+    buildingsCSV,
     parseBuildings,
     getBuildingsFromCSV,
-    getBuilding) where
+    getBuilding,
+) where
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
 import Data.CSV (csvFile)
 import qualified Data.Text as T
-import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere, entityVal, insertMany_,
-                                selectFirst, (==.))
+import Database.Persist.Sqlite (
+    Filter,
+    SqlPersistM,
+    deleteWhere,
+    entityVal,
+    insertMany_,
+    selectFirst,
+    (==.),
+ )
 import Database.Tables (Building (Building), EntityField (BuildingCode))
 import Filesystem.Path.CurrentOS as Path (append, decodeString, encodeString)
 import System.Directory (getCurrentDirectory)
@@ -19,7 +27,10 @@ import Util.Helpers (safeHead)
 buildingsCSV :: IO Prelude.FilePath
 buildingsCSV = do
     curDir <- getCurrentDirectory
-    return $ Path.encodeString $ Path.append (Path.decodeString curDir) $ Path.append (Path.decodeString "db") (Path.decodeString "building.csv")
+    return $
+        Path.encodeString $
+            Path.append (Path.decodeString curDir) $
+                Path.append (Path.decodeString "db") (Path.decodeString "building.csv")
 
 parseBuildings :: IO ()
 parseBuildings = do
@@ -36,12 +47,18 @@ getBuildingsFromCSV buildingCSVFile = do
     case buildingCSVData of
         Left _ -> error "csv parse error"
         Right buildingData ->
-            return $ map (\b -> Building (T.pack $ safeHead "" b)
-                                        (T.pack (b !! 1))
-                                        (T.pack (b !! 2))
-                                        (T.pack (b !! 3))
-                                        (read (b !! 4) :: Double)
-                                        (read (b !! 5) :: Double)) $ drop 1 buildingData
+            return
+                $ map
+                    ( \b ->
+                        Building
+                            (T.pack $ safeHead "" b)
+                            (T.pack (b !! 1))
+                            (T.pack (b !! 2))
+                            (T.pack (b !! 3))
+                            (read (b !! 4) :: Double)
+                            (read (b !! 5) :: Double)
+                    )
+                $ drop 1 buildingData
 
 -- | Given a building code, get the persistent Building associated with it
 getBuilding :: Maybe T.Text -> SqlPersistM (Maybe Building)

@@ -1,9 +1,7 @@
-{-|
-    Module      : Export.LatexGenerator
-    Description : Contains functions for creating LaTeX text.
--}
-module Export.LatexGenerator
-    (generateTex) where
+-- |
+--     Module      : Export.LatexGenerator
+--     Description : Contains functions for creating LaTeX text.
+module Export.LatexGenerator (generateTex) where
 
 import Text.LaTeX
 import Text.LaTeX.Packages.Fancyhdr
@@ -29,7 +27,7 @@ preamble = do
     usepackage [] graphicx
     usepackage [] geometry
     applyGeometry [GLandscape True, GWidth (In 9)]
-    let mySettings = defaultHdrSettings {leftHeader = "Graph and Timetables", rightHeader = "courseography.cdf.toronto.edu"}
+    let mySettings = defaultHdrSettings{leftHeader = "Graph and Timetables", rightHeader = "courseography.cdf.toronto.edu"}
     applyHdrSettings mySettings
     raw "\\pagenumbering{gobble}"
 
@@ -37,6 +35,6 @@ preamble = do
 -- list of imageNames was provided, the body will be empty.
 body :: Monad m => [String] -> LaTeXT_ m
 body [] = ""
-body (imageName:imageNames) = do
+body (imageName : imageNames) = do
     center $ includegraphics [IGWidth (CustomMeasure linewidth)] imageName
     body imageNames

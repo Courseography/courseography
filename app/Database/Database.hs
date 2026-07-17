@@ -1,13 +1,10 @@
-{-|
-    Module      : Database.Database
-    Description : Main module for database course seeding.
-
-The main module for parsing course information from the web and
-inserting it into the database. Run when @cabal run database@ is executed.
--}
-
-module Database.Database
-    (populateCalendar, setupDatabase) where
+-- |
+--     Module      : Database.Database
+--     Description : Main module for database course seeding.
+--
+-- The main module for parsing course information from the web and
+-- inserting it into the database. Run when @cabal run database@ is executed.
+module Database.Database (populateCalendar, setupDatabase) where
 
 import Config (databasePath, runDb)
 import Control.Monad (void)
@@ -21,19 +18,17 @@ import Database.Tables
 import System.Directory (createDirectoryIfMissing)
 import WebParsing.ArtSciParser (parseCalendar)
 
-
 distTableSetUpStr :: String
 distTableSetUpStr = "Distribution table set up"
 breathTableSetUpStr :: String
 breathTableSetUpStr = "breadth table set up"
-
 
 -- | Creates the database if it doesn't exist and runs migrations.
 setupDatabase :: Bool -> IO ()
 setupDatabase quiet = do
     -- Create db folder if it doesn't exist
     dbPath <- liftIO databasePath
-    let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ dbPath
+    let ind = (T.length dbPath -) . fromMaybe 0 . T.findIndex (== '/') . T.reverse $ dbPath
         db = T.unpack $ T.take ind dbPath
     createDirectoryIfMissing True db
 
