@@ -1342,10 +1342,8 @@ export class Graph extends React.Component {
       // state and its value should be true.
       const aID = a.id_
       const bID = b.id_
-      let aMiss = false
-      let bMiss = false
-      aMiss = aID in state && state[aID]
-      bMiss = bID in state && state[bID]
+      const aMiss = aID in state && state[aID]
+      const bMiss = bID in state && state[bID]
       if ((aMiss && bMiss) || (!aMiss && !bMiss)) {
         // a and b are equal
         return 0
@@ -1497,8 +1495,8 @@ export class Graph extends React.Component {
       containerHeight = reactGraph.clientHeight
     }
 
-    let newViewboxHeight = this.state.height
-    let newViewboxWidth = this.state.width
+    let newViewboxHeight
+    let newViewboxWidth
     if (document.getElementById("generateRoot") !== null) {
       newViewboxHeight =
         Math.max(this.state.height, containerHeight) * this.state.zoomFactor
@@ -1536,7 +1534,7 @@ export class Graph extends React.Component {
       this.state.verticalPanFactor === 0
 
     // Mouse events for draw tool
-    let svgMouseEvents = {}
+    let svgMouseEvents
     if (this.state.onDraw) {
       svgMouseEvents = {
         onMouseDown: this.drawGraphObject,
