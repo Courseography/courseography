@@ -23,6 +23,7 @@
 - Upgraded to Babel 8 (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/eslint-parser`, `babel-loader`, `babel-jest`); replaced the removed `preset-env` `useBuiltIns`/`corejs` options with the `babel-plugin-polyfill-corejs3` plugin
 - Refactored styling colors into CSS variables
 - Removed dead CSS rules including ids, classNames, and colors
+- Switched Haskell formatter to `fourmolu` and ran on all files
 
 ## [0.8.0] - 2026-06-09
 

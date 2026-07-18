@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module DynamicGraphs.GraphGenerator
-  ( sampleGraph
-  , coursesToPrereqGraph
-  , coursesToPrereqGraphExcluding
-  , graphProfileHash
-  , filterReq
-  )
-  where
+module DynamicGraphs.GraphGenerator (
+    sampleGraph,
+    coursesToPrereqGraph,
+    coursesToPrereqGraphExcluding,
+    graphProfileHash,
+    filterReq,
+)
+where
 
 import Control.Monad.State (State)
 import qualified Control.Monad.State as State
@@ -17,8 +17,13 @@ import Data.Foldable (toList)
 import Data.Graph (Tree (Node))
 import Data.GraphViz.Attributes as A
 import Data.GraphViz.Attributes.Complete as AC
-import Data.GraphViz.Types.Generalised (DotEdge (..), DotGraph (..), DotNode (..),
-                                        DotStatement (..), GlobalAttributes (..))
+import Data.GraphViz.Types.Generalised (
+    DotEdge (..),
+    DotGraph (..),
+    DotNode (..),
+    DotStatement (..),
+    GlobalAttributes (..),
+ )
 import Data.Hash.MD5 (Str (Str), md5s)
 import Data.List (elemIndex)
 import qualified Data.Map.Strict as Map
@@ -32,8 +37,10 @@ import DynamicGraphs.GraphOptions (GraphOptions (..), defaultGraphOptions)
 import Prelude hiding (last)
 
 -- | Generates a DotGraph dependency graph including all the given courses and their recursive dependecies
-coursesToPrereqGraph :: [String] -- ^ courses to generate
-                        -> IO (DotGraph Text)
+coursesToPrereqGraph ::
+    -- | courses to generate
+    [String] ->
+    IO (DotGraph Text)
 coursesToPrereqGraph rootCourses = coursesToPrereqGraphExcluding (map pack rootCourses) defaultGraphOptions
 
 -- | Takes a list of courses we wish to generate a dependency graph for, along with graph options
@@ -45,18 +52,22 @@ coursesToPrereqGraphExcluding rootCourses options = do
     reqs <- lookupCourses options rootCourses
     let reqs' = Map.toList reqs
     return $ fst $ State.runState (reqsToGraph options reqs') initialState
-    where
-        initialState = GeneratorState 0 Map.empty
+  where
+    initialState = GeneratorState 0 Map.empty
 
 sampleGraph :: DotGraph Text
-sampleGraph = fst $ State.runState (reqsToGraph
-    defaultGraphOptions
-    [("MAT237H1", J "MAT137H1" ""),
-    ("MAT133H1", None),
-    ("CSC148H1", ReqAnd [J "CSC108H1" "", J "CSC104H1" ""]),
-    ("CSC265H1", ReqAnd [J "CSC148H1" "", J "CSC236H1" ""])
-    ])
-    (GeneratorState 0 Map.empty)
+sampleGraph =
+    fst $
+        State.runState
+            ( reqsToGraph
+                defaultGraphOptions
+                [ ("MAT237H1", J "MAT137H1" "")
+                , ("MAT133H1", None)
+                , ("CSC148H1", ReqAnd [J "CSC108H1" "", J "CSC104H1" ""])
+                , ("CSC265H1", ReqAnd [J "CSC148H1" "", J "CSC236H1" ""])
+                ]
+            )
+            (GeneratorState 0 Map.empty)
 
 -- ** Main algorithm for converting requirements into a DotGraph
 
@@ -67,14 +78,14 @@ reqsToGraph :: GraphOptions -> [(Text, Req)] -> State GeneratorState (DotGraph T
 reqsToGraph options reqs = do
     allStmts <- concatUnique <$> mapM (reqToStmts options) reqs'
     return $ buildGraph allStmts
-    where
-        concatUnique = nubOrd . Prelude.concat
-        filteredReqs = [(n, filterReq options req) | (n, req) <- reqs]
-        reqs' =  Prelude.filter includeName filteredReqs
+  where
+    concatUnique = nubOrd . Prelude.concat
+    filteredReqs = [(n, filterReq options req) | (n, req) <- reqs]
+    reqs' = Prelude.filter includeName filteredReqs
 
-        includeName (n, _) =
-            pickCourse options n &&
-            n `notElem`taken options
+    includeName (n, _) =
+        pickCourse options n
+            && n `notElem` taken options
 
 -- | Recurse through the Req Tree to remove any nodes specified in GraphOptions
 filterReq :: GraphOptions -> Req -> Req
@@ -94,7 +105,7 @@ filterReq options (ReqOr reqs) =
         [r] -> r
         reqs' -> ReqOr reqs'
 filterReq _ (Fces fl modifier) = Fces fl modifier
-filterReq options  (Grade str req) = Grade str (filterReq options req)
+filterReq options (Grade str req) = Grade str (filterReq options req)
 filterReq _ (Gpa fl str) = Gpa fl str
 filterReq _ (Program pro) = Program pro
 filterReq _ (Raw s) = Raw s
@@ -103,35 +114,39 @@ data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
 pickCourse :: GraphOptions -> Text -> Bool
 pickCourse options name =
-    pickCourseByDepartment options name &&
-    pickCourseByLocation options name
+    pickCourseByDepartment options name
+        && pickCourseByLocation options name
 
 pickCourseByDepartment :: GraphOptions -> Text -> Bool
 pickCourseByDepartment options name =
-    Prelude.null (departments options) ||
-    prefixedByOneOf name (departments options)
+    Prelude.null (departments options)
+        || prefixedByOneOf name (departments options)
 
 pickCourseByLocation :: GraphOptions -> Text -> Bool
 pickCourseByLocation options name =
-    Prelude.null (location options) ||
-    courseLocation `elem` mapMaybe locationNum (location options)
-    where
-        courseLocation = last name
-        locationNum l = case l of
-            "utsg" -> Just '1'
-            "utsc" -> Just '3'
-            "utm" -> Just '5'
-            _ -> Nothing
+    Prelude.null (location options)
+        || courseLocation `elem` mapMaybe locationNum (location options)
+  where
+    courseLocation = last name
+    locationNum l = case l of
+        "utsg" -> Just '1'
+        "utsc" -> Just '3'
+        "utm" -> Just '5'
+        _ -> Nothing
 
 nodeColor :: GraphOptions -> Text -> Color
 nodeColor options name = colors !! depIndex
-    where colors :: [Color]
-          colors = cycle $ map toColor
-            [Orchid, Orange, CornFlowerBlue, Salmon, Aquamarine, Yellow, OliveDrab]
-          depIndex :: Int
-          depIndex = fromMaybe 0 (elemIndex courseDep (departments options))
-          courseDep :: Text
-          courseDep = Data.Text.Lazy.take 3 name
+  where
+    colors :: [Color]
+    colors =
+        cycle $
+            map
+                toColor
+                [Orchid, Orange, CornFlowerBlue, Salmon, Aquamarine, Yellow, OliveDrab]
+    depIndex :: Int
+    depIndex = fromMaybe 0 (elemIndex courseDep (departments options))
+    courseDep :: Text
+    courseDep = Data.Text.Lazy.take 3 name
 
 -- | Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects.
@@ -139,12 +154,16 @@ reqToStmts :: GraphOptions -> (Text, Req) -> State GeneratorState [DotStatement 
 reqToStmts options (name, req) = do
     node <- makeNode name $ Just (nodeColor options name)
     stmts <- reqToStmtsTree options (nodeID node) req
-    return $ DN node:Prelude.concat (toList stmts)
+    return $ DN node : Prelude.concat (toList stmts)
 
-reqToStmtsTree :: GraphOptions -- ^ Options to toggle dynamic graph
-               -> Text -- ^ Name of parent course
-               -> Req  -- ^ Requirement to generate dep tree for
-               -> State GeneratorState (Tree [DotStatement Text])
+reqToStmtsTree ::
+    -- | Options to toggle dynamic graph
+    GraphOptions ->
+    -- | Name of parent course
+    Text ->
+    -- | Requirement to generate dep tree for
+    Req ->
+    State GeneratorState (Tree [DotStatement Text])
 reqToStmtsTree _ _ None = return (Node [] [])
 reqToStmtsTree options parentID (J name2 _) = do
     let name = pack name2
@@ -159,7 +178,7 @@ reqToStmtsTree options parentID (ReqAnd reqs) = do
     let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
     case filteredStmts of
         [] -> return $ Node [] []
-        [Node (DN node:_) xs] -> do
+        [Node (DN node : _) xs] -> do
             -- make new edge with parent id and single child id
             newEdge <- makeEdge (nodeID node) parentID Nothing
             return $ Node [DN node, DE newEdge] xs
@@ -172,26 +191,29 @@ reqToStmtsTree options parentID (ReqOr reqs) = do
     let filteredStmts = Prelude.filter (Node [] [] /=) prereqStmts
     case filteredStmts of
         [] -> return $ Node [] []
-        [Node (DN node:_) xs] -> do
+        [Node (DN node : _) xs] -> do
             -- make new edge with parent id and single child id
             newEdge <- makeEdge (nodeID node) parentID Nothing
             return $ Node [DN node, DE newEdge] xs
-        _  -> return $ Node [DN orNode, DE edge] filteredStmts
+        _ -> return $ Node [DN orNode, DE edge] filteredStmts
 
 -- A prerequisite with a grade requirement.
 reqToStmtsTree options parentID (Grade description req) = do
-    if includeGrades options then do
-        Node root rest <- reqToStmtsTree options parentID req
-        case root of
-            DN gradeNode:_ -> do
-                -- make an annotated edge
-                gradeEdge <- makeEdge (nodeID gradeNode)
-                                      parentID
-                                      (Just $ pack $ description ++ "%")
-                -- swap out top edge of prereqStmt tree with annotated edge
-                return $ Node [DN gradeNode, DE gradeEdge] rest
-            _ -> return $ Node [] [] -- ERROR
-    else reqToStmtsTree options parentID req
+    if includeGrades options
+        then do
+            Node root rest <- reqToStmtsTree options parentID req
+            case root of
+                DN gradeNode : _ -> do
+                    -- make an annotated edge
+                    gradeEdge <-
+                        makeEdge
+                            (nodeID gradeNode)
+                            parentID
+                            (Just $ pack $ description ++ "%")
+                    -- swap out top edge of prereqStmt tree with annotated edge
+                    return $ Node [DN gradeNode, DE gradeEdge] rest
+                _ -> return $ Node [] [] -- ERROR
+        else reqToStmtsTree options parentID req
 
 -- A raw string description of a prerequisite.
 reqToStmtsTree options parentID (Raw rawText) =
@@ -202,43 +224,43 @@ reqToStmtsTree options parentID (Raw rawText) =
             edge <- makeEdge (nodeID prereq) parentID Nothing
             return $ Node [DN prereq, DE edge] []
 
---A prerequisite concerning a given number of earned credits
+-- A prerequisite concerning a given number of earned credits
 reqToStmtsTree _ parentID (Fces creds (Requirement (Raw ""))) = do
     fceNode <- makeNode (pack $ show creds ++ " FCEs") Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     return $ Node [DN fceNode, DE edge] []
 
---A prerequisite concerning a given number of earned credits in some raw string
+-- A prerequisite concerning a given number of earned credits in some raw string
 reqToStmtsTree _ parentID (Fces creds (Requirement (Raw text))) = do
     fceNode <- makeNode (pack $ show creds ++ " FCEs from " ++ text ++ paddingSpaces 18) Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     return $ Node [DN fceNode, DE edge] []
 
---A prerequisite concerning a given number of earned credits in some course(s)
+-- A prerequisite concerning a given number of earned credits in some course(s)
 reqToStmtsTree options parentID (Fces creds (Requirement req)) = do
     fceNode <- makeNode (pack $ show creds ++ " FCEs") Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
     return $ Node [DN fceNode, DE edge] [prereqStmts]
 
---A prerequisite concerning a given number of earned credits in a department
+-- A prerequisite concerning a given number of earned credits in a department
 reqToStmtsTree _ parentID (Fces creds (Department dept)) = do
     fceNode <- makeNode (pack $ show creds ++ " " ++ dept ++ " FCEs") Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     return $ Node [DN fceNode, DE edge] []
 
---A prerequisite concerning a given number of earned credits at a given level
+-- A prerequisite concerning a given number of earned credits at a given level
 reqToStmtsTree _ parentID (Fces creds (Level level)) = do
     fceNode <- makeNode (pack $ show creds ++ " FCEs at the " ++ level ++ " level" ++ paddingSpaces 18) Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
     return $ Node [DN fceNode, DE edge] []
 
--- | A prerequisite concerning a given number of earned credits with a combination
--- | of some modifiers related through ModAnds
--- | Assumes each modifier constructor appears in modifiers at most once
--- | The ModOr constructor may appear more than once, but each occurrence
--- | of ModOr contains exactly one constructor for all its elements
--- | and such constructor does not appear anywhere else in ModAnd
+-- A prerequisite concerning a given number of earned credits with a combination
+-- of some modifiers related through ModAnds
+-- Assumes each modifier constructor appears in modifiers at most once
+-- The ModOr constructor may appear more than once, but each occurrence
+-- of ModOr contains exactly one constructor for all its elements
+-- and such constructor does not appear anywhere else in ModAnd
 reqToStmtsTree options parentID (Fces creds (ModAnd modifiers)) = do
     fceNode <- makeNode (pack $ stringifyModAnd creds modifiers ++ paddingSpaces 10) Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
@@ -249,9 +271,9 @@ reqToStmtsTree options parentID (Fces creds (ModAnd modifiers)) = do
             prereqStmts <- reqToStmtsTree options (nodeID fceNode) req
             return $ Node [DN fceNode, DE edge] [prereqStmts]
 
--- | A prerequisite concerning a given number of earned credits with a combination
--- | of some modifiers related through a ModOr
--- | Assumes all modifiers in the list have the same constructor
+-- A prerequisite concerning a given number of earned credits with a combination
+-- of some modifiers related through a ModOr
+-- Assumes all modifiers in the list have the same constructor
 reqToStmtsTree options parentID (Fces creds (ModOr modifiers)) = do
     fceNode <- makeNode (pack $ formatModOr creds modifiers) Nothing
     edge <- makeEdge (nodeID fceNode) parentID Nothing
@@ -273,7 +295,7 @@ reqToStmtsTree _ parentID (Program prog) = do
 -- a cGPA requirement
 reqToStmtsTree _ parentID (Gpa float string) = do
     gpaNode <- makeNode (pack $ "Minimum cGPA of " ++ show float ++ string) Nothing
-    edge <-  makeEdge (nodeID gpaNode) parentID Nothing
+    edge <- makeEdge (nodeID gpaNode) parentID Nothing
     return $ Node [DN gpaNode, DE edge] []
 
 prefixedByOneOf :: Text -> [Text] -> Bool
@@ -288,12 +310,15 @@ makeNode name nodeCol = do
                 actualColor = case nodeCol of
                     Nothing -> toColor Gray
                     Just c -> c
-                node = DotNode nodeId
-                               [AC.Label $ toLabelValue name,
-                                ID nodeId,
-                                AC.FixedSize AC.GrowAsNeeded,
-                                AC.FontSize nodeFontSize,
-                                FillColor $ toColorList [actualColor]]
+                node =
+                    DotNode
+                        nodeId
+                        [ AC.Label $ toLabelValue name
+                        , ID nodeId
+                        , AC.FixedSize AC.GrowAsNeeded
+                        , AC.FontSize nodeFontSize
+                        , FillColor $ toColorList [actualColor]
+                        ]
                 nodesMap' = Map.insert name node nodesMap
             State.put (GeneratorState (i + 1) nodesMap')
             return node
@@ -308,8 +333,10 @@ makeBool text1 reqs = do
     case Map.lookup boolKey boolsMap of
         Nothing -> do
             let nodeId = mappendTextWithCounter text1 i
-            let boolNode = DotNode nodeId
-                                    ([AC.Label (toLabelValue text1), ID nodeId] ++ ellipseAttrs)
+            let boolNode =
+                    DotNode
+                        nodeId
+                        ([AC.Label (toLabelValue text1), ID nodeId] ++ ellipseAttrs)
                 boolsMap' = Map.insert boolKey boolNode boolsMap
             State.put (GeneratorState (i + 1) boolsMap')
 
@@ -320,12 +347,15 @@ makeBool text1 reqs = do
 -- | Create edge from two node ids. Also allow for potential edge label
 makeEdge :: Text -> Text -> Maybe Text -> State GeneratorState (DotEdge Text)
 makeEdge id1 id2 description =
-    return $ DotEdge id1 id2
-                     (ID (id1 `mappend` "|" `mappend` id2) : textLabelList)
-    where
-        textLabelList = case description of
-            Nothing -> []
-            Just a -> [textLabel a]
+    return $
+        DotEdge
+            id1
+            id2
+            (ID (id1 `mappend` "|" `mappend` id2) : textLabelList)
+  where
+    textLabelList = case description of
+        Nothing -> []
+        Just a -> [textLabel a]
 
 mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` pack (show counter)
@@ -337,7 +367,7 @@ generateBoolKey (J s1 _) = return $ pack ("_" ++ s1)
 generateBoolKey (Grade _ req) = do
     generateBoolKey req
 generateBoolKey (ReqAnd reqs) = do
-    (_, boolKey)<- makeBool "and" reqs
+    (_, boolKey) <- makeBool "and" reqs
     return $ pack ("_[" ++ unpack boolKey ++ "]")
 generateBoolKey (ReqOr reqs) = do
     (_, boolKey) <- makeBool "or" reqs
@@ -351,46 +381,52 @@ generateBoolKey _ = return ""
 -- 2.graph edges have directions 3.graphID not defined(not so clear) 4.the graph layout, node shape, edge shape
 -- are defined by the attributes as below)
 buildGraph :: [DotStatement Text] -> DotGraph Text
-buildGraph statements = DotGraph {
-    strictGraph = False,
-    directedGraph = True,
-    graphID = Nothing,
-    graphStatements = Seq.fromList $ [
-        GA graphAttrs,
-        GA nodeAttrs,
-        GA edgeAttrs
-        ] ++ statements
-    }
+buildGraph statements =
+    DotGraph
+        { strictGraph = False
+        , directedGraph = True
+        , graphID = Nothing
+        , graphStatements =
+            Seq.fromList $
+                [ GA graphAttrs
+                , GA nodeAttrs
+                , GA edgeAttrs
+                ]
+                    ++ statements
+        }
 
 graphProfileHash :: String
 graphProfileHash = md5s . Str . show $ (buildGraph [], ellipseAttrs)
 
 -- | Means the layout of the full graph is from left to right.
 graphAttrs :: GlobalAttributes
-graphAttrs = GraphAttrs
-    [ AC.RankDir AC.FromTop
-    , AC.Splines AC.Ortho
-    , AC.Concentrate False
-    ]
+graphAttrs =
+    GraphAttrs
+        [ AC.RankDir AC.FromTop
+        , AC.Splines AC.Ortho
+        , AC.Concentrate False
+        ]
 
 nodeAttrs :: GlobalAttributes
-nodeAttrs = NodeAttrs
-    [ A.shape A.BoxShape
-    , AC.FixedSize GrowAsNeeded
-    , A.style A.filled
-    ]
+nodeAttrs =
+    NodeAttrs
+        [ A.shape A.BoxShape
+        , AC.FixedSize GrowAsNeeded
+        , A.style A.filled
+        ]
 
 ellipseAttrs :: A.Attributes
 ellipseAttrs =
     [ A.shape A.Ellipse
-    , AC.Width 0.20     -- min 0.01
-    , AC.Height 0.15    -- min 0.01
+    , AC.Width 0.20 -- min 0.01
+    , AC.Height 0.15 -- min 0.01
     , AC.FixedSize SetNodeSize
     , A.fillColor White
-    , AC.FontSize 6.0  -- min 1.0
+    , AC.FontSize 6.0 -- min 1.0
     ]
 
 edgeAttrs :: GlobalAttributes
-edgeAttrs = EdgeAttrs [
-    ArrowHead (AType [(ArrMod FilledArrow BothSides, Normal)])
-    ]
+edgeAttrs =
+    EdgeAttrs
+        [ ArrowHead (AType [(ArrMod FilledArrow BothSides, Normal)])
+        ]

@@ -1,12 +1,10 @@
-{-|
-    Module      : Util.Matrix
-    Description : Contains functions for performing matrix operations.
--}
-
+-- |
+--     Module      : Util.Matrix
+--     Description : Contains functions for performing matrix operations.
 module Util.Matrix (matrixPointMultiply, matrixMultiply, dotProduct) where
 
-import Database.Tables (Matrix, Point, Vector)
 import Data.List (transpose)
+import Database.Tables (Matrix, Point, Vector)
 
 -- | Apply a matrix transformation to a point.
 -- The matrix must have dimensions 3x3, representing a transformation for a two-dimensional point,

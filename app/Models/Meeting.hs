@@ -1,14 +1,23 @@
-module Models.Meeting
-    (meetingQuery,
+module Models.Meeting (
+    meetingQuery,
     buildMeetTimes,
     returnMeeting,
     getMeetingTime,
-    getMeetingSection) where
+    getMeetingSection,
+) where
 
 import Data.Maybe (fromJust)
 import qualified Data.Text as T (Text, append, isPrefixOf, tail, take, toUpper)
-import Database.Persist.Sqlite (Entity, SqlPersistM, entityKey, entityVal, selectFirst, selectList,
-                                (<-.), (==.))
+import Database.Persist.Sqlite (
+    Entity,
+    SqlPersistM,
+    entityKey,
+    entityVal,
+    selectFirst,
+    selectList,
+    (<-.),
+    (==.),
+ )
 import Database.Tables as Tables
 import Models.Time (buildTime)
 
@@ -29,19 +38,24 @@ buildMeetTimes meet = do
 --  a course, returns a Meeting.
 returnMeeting :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe (Entity Meeting))
 returnMeeting lowerStr sect session = do
-    selectFirst [MeetingCode ==. T.toUpper lowerStr,
-                                  MeetingSection ==. sect,
-                                  MeetingSession ==. session]
-                                 []
+    selectFirst
+        [ MeetingCode ==. T.toUpper lowerStr
+        , MeetingSection ==. sect
+        , MeetingSession ==. session
+        ]
+        []
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a course, returns a list of Time.
 getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
 getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
-    maybeEntityMeetings <- selectFirst [MeetingCode ==. meetingCode_,
-                                        MeetingSection ==. getMeetingSection meetingSection_,
-                                        MeetingSession ==. meetingSession_]
-                                       []
+    maybeEntityMeetings <-
+        selectFirst
+            [ MeetingCode ==. meetingCode_
+            , MeetingSection ==. getMeetingSection meetingSection_
+            , MeetingSession ==. meetingSession_
+            ]
+            []
     allTimes <- selectList [TimesMeeting ==. entityKey (fromJust maybeEntityMeetings)] []
     mapM (buildTime . entityVal) allTimes
 
@@ -50,5 +64,6 @@ getMeetingSection sec
     | T.isPrefixOf "L" sec = T.append "LEC" sectCode
     | T.isPrefixOf "T" sec = T.append "TUT" sectCode
     | T.isPrefixOf "P" sec = T.append "PRA" sectCode
-    | otherwise            = sec
-    where sectCode = T.tail sec
+    | otherwise = sec
+  where
+    sectCode = T.tail sec

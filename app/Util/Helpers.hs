@@ -1,9 +1,7 @@
-{-|
-    Module      : Util.Helpers
-    Description : Contains general-use helper functions.
--}
-module Util.Helpers
-    (safeHead, readImageData) where
+-- |
+--     Module      : Util.Helpers
+--     Description : Contains general-use helper functions.
+module Util.Helpers (safeHead, readImageData) where
 
 import qualified Data.ByteString as BS (readFile)
 import qualified Data.ByteString.Base64 as BEnc (encode)
@@ -13,7 +11,7 @@ import Happstack.Server (Response, toResponse)
 -- if the list is empty.
 safeHead :: a -> [a] -> a
 safeHead listHead [] = listHead
-safeHead _ (listHead:_) = listHead
+safeHead _ (listHead : _) = listHead
 
 -- | Reads the data in an image file and returns the data as a response.
 readImageData :: String -> IO Response
