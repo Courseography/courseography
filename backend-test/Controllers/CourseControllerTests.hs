@@ -58,18 +58,18 @@ retrieveCourseTestCases =
                 }
                 [
                     Time' {
+                        timeSession' = Just "F",
                         weekDay' = 0.0,
                         startHour' = 10.0,
                         endHour' = 11.0,
-                        firstLocation' = Just "MP",
-                        secondLocation' = Nothing
+                        timeLocation' = Just "MP"
                     },
                     Time' {
+                        timeSession' = Just "F",
                         weekDay' = 2.0,
                         startHour' = 13.0,
                         endHour' = 14.0,
-                        firstLocation' = Just "SS",
-                        secondLocation' = Nothing
+                        timeLocation' = Just "SS"
                     }
                 ],
             MeetTime
@@ -85,23 +85,23 @@ retrieveCourseTestCases =
                 }
                 [
                     Time' {
+                        timeSession' = Just "S",
                         weekDay' = 1.0,
                         startHour' = 10.0,
                         endHour' = 11.0,
-                        firstLocation' = Just "WW",
-                        secondLocation' = Nothing
+                        timeLocation' = Just "WW"
                     },
                     Time' {
+                        timeSession' = Just "S",
                         weekDay' = 4.0,
                         startHour' = 13.0,
                         endHour' = 14.0,
-                        firstLocation' = Just "SS",
-                        secondLocation' = Nothing
+                        timeLocation' = Just "SS"
                     }
                 ]
         ],
         200,
-        "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"firstLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"secondLocation\":null,\"startHour\":10,\"weekDay\":0},{\"endHour\":14,\"firstLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"secondLocation\":null,\"startHour\":13,\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
+        "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"startHour\":10,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":0},{\"endHour\":14,\"startHour\":13,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
     ),
 
     ("Course exists with meeting times",
@@ -132,23 +132,23 @@ retrieveCourseTestCases =
                 }
                 [
                     Time' {
+                        timeSession' = Just "F",
                         weekDay' = 0.0,
                         startHour' = 10.0,
                         endHour' = 11.0,
-                        firstLocation' = Just "MP",
-                        secondLocation' = Nothing
+                        timeLocation' = Just "MP"
                     },
                     Time' {
+                        timeSession' = Just "F",
                         weekDay' = 2.0,
                         startHour' = 13.0,
                         endHour' = 14.0,
-                        firstLocation' = Just "SS",
-                        secondLocation' = Nothing
+                        timeLocation' = Just "SS"
                     }
                 ]
         ],
         200,
-        "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"firstLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"secondLocation\":null,\"startHour\":10,\"weekDay\":0},{\"endHour\":14,\"firstLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"secondLocation\":null,\"startHour\":13,\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
+        "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"startHour\":10,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":0},{\"endHour\":14,\"startHour\":13,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
     ),
 
     ("Course exists",
@@ -253,11 +253,11 @@ insertBuildings = mapM_ insertBuilding
     where
         insertBuilding code = insert_ Building {buildingCode = code, buildingName = code, buildingAddress = "N/A", buildingPostalCode = "A1A 1A1", buildingLat = 1.0, buildingLng = 1.0}
 
--- | Helper function to get a list of unique firstLocation' and secondLocation' values involved in a MeetTime
+-- | Helper function to get a list of unique locations involved in a MeetTime
 getUniqueBuildings :: [MeetTime] -> [T.Text]
 getUniqueBuildings = nub . concatMap getMeetBuildings
     where
-        getMeetBuildings (MeetTime _ times') = mapMaybe firstLocation' times' ++ mapMaybe secondLocation' times'
+        getMeetBuildings (MeetTime _ times') = mapMaybe timeLocation' times'
 
 -- | List of test cases as (label, input courses, expected output)
 indexTestCases :: [(String, [T.Text], String)]

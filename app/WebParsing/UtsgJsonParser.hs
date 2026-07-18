@@ -1,5 +1,4 @@
-module WebParsing.UtsgJsonParser
-     (parseTimetable, insertAllMeetings) where
+module WebParsing.UtsgJsonParser (parseTimetable, insertAllMeetings) where
 
 import Config (createReqBody, reqHeaders, runDb, timetableApiUrl)
 import Control.Monad.IO.Class (liftIO)
@@ -8,13 +7,32 @@ import Data.Aeson.Types (parseMaybe)
 import Data.ByteString.Lazy.Internal (ByteString)
 import Data.Default.Class (def)
 import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, Update, deleteWhere, entityKey, insert, insertMany_,
-                                selectFirst, upsert, (=.), (==.))
+import Database.Persist.Sqlite (
+    SqlPersistM,
+    Update,
+    deleteWhere,
+    entityKey,
+    insert,
+    insertMany_,
+    selectFirst,
+    upsert,
+    (=.),
+    (==.),
+ )
 import Database.Tables (EntityField (..), MeetTime (..), Meeting (..))
 import Models.Time (buildTimes)
 import Network.Connection (TLSSettings (TLSSettingsSimple))
-import Network.HTTP.Conduit (RequestBody (RequestBodyLBS), httpLbs, method, mkManagerSettings,
-                             newManager, parseRequest, requestBody, requestHeaders, responseBody)
+import Network.HTTP.Conduit (
+    RequestBody (RequestBodyLBS),
+    httpLbs,
+    method,
+    mkManagerSettings,
+    newManager,
+    parseRequest,
+    requestBody,
+    requestHeaders,
+    responseBody,
+ )
 import Network.TLS (EMSMode (AllowEMS), Supported (..))
 
 -- | Parse all timetable data.
@@ -29,10 +47,13 @@ makeRequest pageNum = do
     let reqBody = createReqBody pageNum
     timetableApi <- liftIO timetableApiUrl
     request <- liftIO $ parseRequest (T.unpack timetableApi)
-    let request' = request {method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
+    let request' = request{method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
 
     -- make the request
-    manager <- liftIO $ newManager $ mkManagerSettings (TLSSettingsSimple False False False (def { supportedExtendedMainSecret = AllowEMS })) Nothing
+    manager <-
+        liftIO $
+            newManager $
+                mkManagerSettings (TLSSettingsSimple False False False (def{supportedExtendedMainSecret = AllowEMS})) Nothing
     response <- liftIO $ httpLbs request' manager
     return $ responseBody response
 
@@ -41,20 +62,20 @@ getPageInfo :: ByteString -> Maybe (Int, Int, Int)
 getPageInfo respBody = do
     json <- decode respBody
     flip parseMaybe json $ \obj -> do
-      payload <- obj .: "payload"
-      pageableCourse <- payload .: "pageableCourse"
-      page <- pageableCourse .: "page"
-      pageSize <- pageableCourse .: "pageSize"
-      totalCourses <- pageableCourse .: "total"
-      return (page, pageSize, totalCourses)
+        payload <- obj .: "payload"
+        pageableCourse <- payload .: "pageableCourse"
+        page <- pageableCourse .: "page"
+        pageSize <- pageableCourse .: "pageSize"
+        totalCourses <- pageableCourse .: "total"
+        return (page, pageSize, totalCourses)
 
 -- Helper function to insert courses for a page of a HTTP response
 insertCourses :: ByteString -> SqlPersistM ()
 insertCourses respBody = do
     let meetings :: Maybe DBList = decode respBody
     case meetings of
-      Nothing -> return ()
-      Just dblist -> mapM_ insertMeeting $ flattenDBList dblist
+        Nothing -> return ()
+        Just dblist -> mapM_ insertMeeting $ flattenDBList dblist
 
 -- | Helper function to flatten the list of DB Objects
 flattenDBList :: DBList -> [MeetTime]
@@ -67,18 +88,17 @@ insertAllMeetings page = do
     respBody <- liftIO $ makeRequest page
     let pageInfo = getPageInfo respBody
     case pageInfo of
-      Nothing -> return ()
-      Just (_, pageSize, totalCourses) -> do
-        liftIO $ print $ "Parsing results for page " ++ show page ++ " of " ++ show totalPages
-        insertCourses respBody
+        Nothing -> return ()
+        Just (_, pageSize, totalCourses) -> do
+            liftIO $ print $ "Parsing results for page " ++ show page ++ " of " ++ show totalPages
+            insertCourses respBody
 
-        if page * pageSize >= totalCourses
-          then liftIO $ print ("All courses have been parsed." :: String)
-        else insertAllMeetings (page + 1)
-        where
-          totalPages :: Int
-          totalPages = ceiling (fromIntegral totalCourses / fromIntegral pageSize :: Double)
-
+            if page * pageSize >= totalCourses
+                then liftIO $ print ("All courses have been parsed." :: String)
+                else insertAllMeetings (page + 1)
+          where
+            totalPages :: Int
+            totalPages = ceiling (fromIntegral totalCourses / fromIntegral pageSize :: Double)
 
 -- | Insert or update a meeting and then delete
 --   and re-insert the corresponding Times into the database.
@@ -90,51 +110,54 @@ insertMeeting (MeetTime meetingData meetingTime) = do
     let section = meetingSection meetingData
     maybeMeetingKey <- selectFirst [MeetingCode ==. code, MeetingSession ==. session, MeetingSection ==. section] []
     case maybeMeetingKey of
-        Just _ -> do -- meeting already exists, so update/replace
-          entity <- upsert meetingData (meetingUpdates meetingData)
-          let meetingKey = entityKey entity
-          deleteWhere [ TimesMeeting ==. meetingKey ]
-          let allTimes = map (buildTimes meetingKey) meetingTime
-          insertMany_ allTimes
-        Nothing -> do -- meeting does not exist, so insert
-          meetingKey <- insert meetingData
-          let allTimes = map (buildTimes meetingKey) meetingTime
-          insertMany_ allTimes
+        Just _ -> do
+            -- meeting already exists, so update/replace
+            entity <- upsert meetingData (meetingUpdates meetingData)
+            let meetingKey = entityKey entity
+            deleteWhere [TimesMeeting ==. meetingKey]
+            let allTimes = map (buildTimes meetingKey) meetingTime
+            insertMany_ allTimes
+        Nothing -> do
+            -- meeting does not exist, so insert
+            meetingKey <- insert meetingData
+            let allTimes = map (buildTimes meetingKey) meetingTime
+            insertMany_ allTimes
 
 -- | Update the entries of the Meeting Table if necessary
 meetingUpdates :: Meeting -> [Update Meeting]
-meetingUpdates m = [ MeetingCode =. meetingCode m
-                   , MeetingSession =. meetingSession m
-                   , MeetingSection =. meetingSection m
-                   , MeetingCap =. meetingCap m
-                   , MeetingInstructor =. meetingInstructor m
-                   , MeetingEnrol =. meetingEnrol m
-                   , MeetingWait =. meetingWait m
-                   , MeetingExtra =. meetingExtra m
-                   ]
+meetingUpdates m =
+    [ MeetingCode =. meetingCode m
+    , MeetingSession =. meetingSession m
+    , MeetingSection =. meetingSection m
+    , MeetingCap =. meetingCap m
+    , MeetingInstructor =. meetingInstructor m
+    , MeetingEnrol =. meetingEnrol m
+    , MeetingWait =. meetingWait m
+    , MeetingExtra =. meetingExtra m
+    ]
 
-newtype DB = DB { dbData :: [MeetTime]}
-  deriving Show
+newtype DB = DB {dbData :: [MeetTime]}
+    deriving Show
 
 instance FromJSON DB where
-  parseJSON = withObject "Expected an Object for DB" $ \o -> do
-    codeExtraChars <- o .: "code"
-    let courseCode = T.dropEnd 2 codeExtraChars
-    session :: T.Text <- o .: "sectionCode"
-    sectionsList :: [MeetTime] <- o .:? "sections" .!= []
-    let finalSectionsList = map (\m -> m { meetInfo = (meetInfo m) { meetingCode = courseCode, meetingSession = session } }) sectionsList
-    return $ DB finalSectionsList
+    parseJSON = withObject "Expected an Object for DB" $ \o -> do
+        codeExtraChars <- o .: "code"
+        let courseCode = T.dropEnd 2 codeExtraChars
+        session :: T.Text <- o .: "sectionCode"
+        sectionsList :: [MeetTime] <- o .:? "sections" .!= []
+        let finalSectionsList = map (\m -> m{meetInfo = (meetInfo m){meetingCode = courseCode, meetingSession = session}}) sectionsList
+        return $ DB finalSectionsList
 
 newtype DBList = DBList [DB]
-  deriving Show
+    deriving Show
 
 instance FromJSON DBList where
-  parseJSON = withObject "Expected an Object for DBList" $ \o -> do
-    maybeOrg <- o .:? "payload"
-    case maybeOrg of
-      Just payload -> do
-        pageableCourse <- payload .: "pageableCourse"
-        courses <- pageableCourse .: "courses"
-        dbList <- mapM parseJSON courses
-        return $ DBList dbList
-      Nothing -> return $ DBList []
+    parseJSON = withObject "Expected an Object for DBList" $ \o -> do
+        maybeOrg <- o .:? "payload"
+        case maybeOrg of
+            Just payload -> do
+                pageableCourse <- payload .: "pageableCourse"
+                courses <- pageableCourse .: "courses"
+                dbList <- mapM parseJSON courses
+                return $ DBList dbList
+            Nothing -> return $ DBList []

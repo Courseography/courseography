@@ -24,8 +24,8 @@ module Config (
     winterStartDate,
     winterEndDate,
     outDay,
-    holidays
-    ) where
+    holidays,
+) where
 
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger (NoLoggingT)
@@ -44,51 +44,53 @@ import System.Log.Logger (Priority (INFO), logM)
 
 -- Main configuration data type
 data Config = Config
-    { portValue             :: Int
-    , logMessage            :: String
-    , logFile               :: String
-    , databasePathValue     :: Text
-    , graphPathValue        :: String
-    , genCssPathValue       :: String
-    , timetableUrlValue     :: String
-    , timetableApiUrlValue  :: Text
-    , fasCalendarUrlValue   :: String
-    , programsUrlValue      :: String
-    , fallStartDateValue    :: Day
-    , fallEndDateValue      :: Day
-    , winterStartDateValue  :: Day
-    , winterEndDateValue    :: Day
-    , outDayValue           :: Day
-    , holidaysList          :: [String]
-    } deriving (Show)
+    { portValue :: Int
+    , logMessage :: String
+    , logFile :: String
+    , databasePathValue :: Text
+    , graphPathValue :: String
+    , genCssPathValue :: String
+    , timetableUrlValue :: String
+    , timetableApiUrlValue :: Text
+    , fasCalendarUrlValue :: String
+    , programsUrlValue :: String
+    , fallStartDateValue :: Day
+    , fallEndDateValue :: Day
+    , winterStartDateValue :: Day
+    , winterEndDateValue :: Day
+    , outDayValue :: Day
+    , holidaysList :: [String]
+    }
+    deriving Show
 
 instance FromJSON Config where
-    parseJSON = withObject "Config" $ \obj -> Config
-        <$> obj .: "port"
-        <*> obj .: "logMessage"
-        <*> obj .: "logFile"
-        <*> obj .: "databasePath"
-        <*> obj .: "graphPath"
-        <*> obj .: "genCssPath"
-        <*> obj .: "timetableUrl"
-        <*> obj .: "timetableApiUrl"
-        <*> obj .: "fasCalendarUrl"
-        <*> obj .: "programsUrl"
-        <*> obj .: "fallStartDate"
-        <*> obj .: "fallEndDate"
-        <*> obj .: "winterStartDate"
-        <*> obj .: "winterEndDate"
-        <*> obj .: "outDay"
-        <*> obj .: "holidaysList"
+    parseJSON = withObject "Config" $ \obj ->
+        Config
+            <$> obj .: "port"
+            <*> obj .: "logMessage"
+            <*> obj .: "logFile"
+            <*> obj .: "databasePath"
+            <*> obj .: "graphPath"
+            <*> obj .: "genCssPath"
+            <*> obj .: "timetableUrl"
+            <*> obj .: "timetableApiUrl"
+            <*> obj .: "fasCalendarUrl"
+            <*> obj .: "programsUrl"
+            <*> obj .: "fallStartDate"
+            <*> obj .: "fallEndDate"
+            <*> obj .: "winterStartDate"
+            <*> obj .: "winterEndDate"
+            <*> obj .: "outDay"
+            <*> obj .: "holidaysList"
 
 -- Load the configuration
 loadConfig :: IO Config
 loadConfig = do
     env <- lookupEnv "APP_ENV"
     let configFiles = case env of
-            Nothing     -> ["config.yaml"]
+            Nothing -> ["config.yaml"]
             Just "test" -> ["test.config.yaml", "config.yaml"]
-            Just _      -> error "APP_ENV should have value 'test' or not exist"
+            Just _ -> error "APP_ENV should have value 'test' or not exist"
     loadYamlSettings configFiles [] useEnv
 
 -- SERVER CONFIGURATION
@@ -96,25 +98,26 @@ loadConfig = do
 -- | Server configuration settings.
 serverConf :: IO Conf
 serverConf = do
-  config <- loadConfig
-  return $ nullConf {
-        port      = portValue config,
-        logAccess = Just logMAccessShort
-    }
+    config <- loadConfig
+    return $
+        nullConf
+            { port = portValue config
+            , logAccess = Just logMAccessShort
+            }
 
 -- | Server log configuration. Default is to log access requests using hslogger
 -- and a condensed log formatting.
 logMAccessShort :: LogAccess t
 logMAccessShort host user _ requestLine responseCode _ referer _ = do
     config <- loadConfig
-    logM (logMessage config) INFO $ unwords [
-        host,
-        user,
-        requestLine,
-        show responseCode,
-        referer
-        ]
-
+    logM (logMessage config) INFO $
+        unwords
+            [ host
+            , user
+            , requestLine
+            , show responseCode
+            , referer
+            ]
 
 -- DATABASE CONNECTION STRINGS
 
@@ -123,11 +126,10 @@ databasePath :: IO Text
 databasePath = databasePathValue <$> loadConfig
 
 -- | Fetch the database path and execute the given action in the context of the database.
-runDb :: (MonadUnliftIO m) => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a -> m a
+runDb :: MonadUnliftIO m => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a -> m a
 runDb action = do
-  dbPath <- liftIO databasePath
-  runSqlite dbPath action
-
+    dbPath <- liftIO databasePath
+    runSqlite dbPath action
 
 -- FILE PATH STRINGS
 
@@ -142,7 +144,6 @@ genCssPath = genCssPathValue <$> loadConfig
 -- | The relative path to log server access to.
 logFilePath :: IO String
 logFilePath = logFile <$> loadConfig
-
 
 -- URLs
 
@@ -165,27 +166,30 @@ programsUrl = programsUrlValue <$> loadConfig
 
 -- | Create the body for the HTTP request based on the page
 createReqBody :: Int -> Value
-createReqBody page = object [ "campuses" .= ([] :: [T.Text]),
-                       "courseCodeAndTitleProps" .= object
-                       [ "courseCode" .= ("" :: T.Text),
-                         "courseSectionCode" .= ("" :: T.Text),
-                         "courseTitle" .= ("" :: T.Text),
-                         "searchCourseDescription" .= True
-                       ],
-                        "courseLevels" .= ([] :: [T.Text]),
-                        "creditWeights" .= ([] :: [T.Text]),
-                        "dayPreferences" .= ([] :: [T.Text]),
-                        "deliveryModes" .= ([] :: [T.Text]),
-                        "departmentProps" .= ([] :: [T.Text]),
-                        "direction" .= ("asc" :: T.Text),
-                        "divisions" .= (["ARTSC"] :: [T.Text]),
-                        "instructor" .= ("" :: T.Text),
-                        "page" .= page,
-                        "pageSize" .= (300 :: Int),
-                        "requirementProps" .= ([] :: [T.Text]),
-                        "sessions" .= (["20269", "20271"] :: [T.Text]),
-                        "timePreferences" .= ([] :: [T.Text])
-                     ]
+createReqBody page =
+    object
+        [ "campuses" .= ([] :: [T.Text])
+        , "courseCodeAndTitleProps"
+            .= object
+                [ "courseCode" .= ("" :: T.Text)
+                , "courseSectionCode" .= ("" :: T.Text)
+                , "courseTitle" .= ("" :: T.Text)
+                , "searchCourseDescription" .= True
+                ]
+        , "courseLevels" .= ([] :: [T.Text])
+        , "creditWeights" .= ([] :: [T.Text])
+        , "dayPreferences" .= ([] :: [T.Text])
+        , "deliveryModes" .= ([] :: [T.Text])
+        , "departmentProps" .= ([] :: [T.Text])
+        , "direction" .= ("asc" :: T.Text)
+        , "divisions" .= (["ARTSC"] :: [T.Text])
+        , "instructor" .= ("" :: T.Text)
+        , "page" .= page
+        , "pageSize" .= (300 :: Int)
+        , "requirementProps" .= ([] :: [T.Text])
+        , "sessions" .= (["20269", "20271", "20269-20271"] :: [T.Text])
+        , "timePreferences" .= ([] :: [T.Text])
+        ]
 
 -- | The headers for the HTTP request
 reqHeaders :: RequestHeaders

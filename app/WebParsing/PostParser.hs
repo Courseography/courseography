@@ -1,9 +1,9 @@
-module WebParsing.PostParser
-    ( addPostToDatabase
-    , postInfoParser
-    , pruneHtml
-    , getPostType
-    ) where
+module WebParsing.PostParser (
+    addPostToDatabase,
+    postInfoParser,
+    pruneHtml,
+    getPostType,
+) where
 
 import Control.Monad.Trans (liftIO)
 import Data.Either (fromRight)
@@ -24,14 +24,13 @@ import Text.Parsec.Text (Parser)
 import WebParsing.ParsecCombinators (parseUntil)
 import WebParsing.ReqParser (parseReqs)
 
-
 addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
 addPostToDatabase programElements = do
     let fullPostName = maybe "" (strip . fromTagText) $ find isTagText programElements
         postDescHtml = partitions isDescriptionSection programElements
         descriptionText = case postDescHtml of
             [] -> T.empty
-            (x:_) -> renderTags x
+            (x : _) -> renderTags x
         postReqHtml = sections isRequirementSection programElements
         requirementLines = if null postReqHtml then [] else pruneHtml $ last postReqHtml
         requirements = concatMap parseRequirement $ reqHtmlToLines requirementLines
@@ -41,32 +40,39 @@ addPostToDatabase programElements = do
         Left _ -> return ()
         Right (department, code) -> do
             currTime <- liftIO getCurrentTime
-            programExists <- insertUnique Program {
-                programName = getPostType code department,
-                programDepartment = department,
-                programCode = code,
-                programDescription = descriptionText,
-                programRequirements = renderTags requirementLines,
-                programCreated = currTime,
-                programModified = currTime
-                }
+            programExists <-
+                insertUnique
+                    Program
+                        { programName = getPostType code department
+                        , programDepartment = department
+                        , programCode = code
+                        , programDescription = descriptionText
+                        , programRequirements = renderTags requirementLines
+                        , programCreated = currTime
+                        , programModified = currTime
+                        }
             case programExists of
                 Just key ->
                     mapM_ (insert_ . ProgramCategory key) requirements
                 Nothing -> return ()
-    where
-        isDescriptionSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-body") tag || isRequirementSection tag
-        isRequirementSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag || tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag
-
+  where
+    isDescriptionSection tag = tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-body") tag || isRequirementSection tag
+    isRequirementSection tag =
+        tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-enrolment-requirements") tag
+            || tagOpenAttrNameLit "div" "class" (T.isInfixOf "views-field-field-completion-requirements") tag
 
 -- | Parse a Post value from its title.
 -- Titles are usually of the form "Actuarial Science Major (Science Program)".
 postInfoParser :: Parser (T.Text, T.Text)
 postInfoParser = do
-    deptName <- P.manyTill P.anyChar $ P.choice $ map (P.try . P.lookAhead) [
-        void postCodeParser,
-        P.eof
-        ]
+    deptName <-
+        P.manyTill P.anyChar $
+            P.choice $
+                map
+                    (P.try . P.lookAhead)
+                    [ void postCodeParser
+                    , P.eof
+                    ]
     code <- postCodeParser P.<|> return T.empty
 
     return (T.pack deptName, code)
@@ -113,10 +119,10 @@ postCodeParser = do
 -- | Removes all <a></a> tags
 pruneHtml :: [Tag T.Text] -> [Tag T.Text]
 pruneHtml [] = []
-pruneHtml ((TagOpen "a" _):xs) = pruneHtml xs
-pruneHtml ((TagClose "a"):xs) = pruneHtml xs
-pruneHtml ((TagOpen tag attrs):xs) = (TagOpen tag [style | style@("style", _) <- attrs]) : pruneHtml xs
-pruneHtml (x:xs) = x : pruneHtml xs
+pruneHtml ((TagOpen "a" _) : xs) = pruneHtml xs
+pruneHtml ((TagClose "a") : xs) = pruneHtml xs
+pruneHtml ((TagOpen tag attrs) : xs) = (TagOpen tag [style | style@("style", _) <- attrs]) : pruneHtml xs
+pruneHtml (x : xs) = x : pruneHtml xs
 
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
@@ -125,47 +131,47 @@ reqHtmlToLines tags =
         sectionsNoNotes = filter (not . isNoteSection) sects
         paragraphs = concatMap (splitWhen (isTagOpenName "p")) sectionsNoNotes
         lines' = map (map (T.strip . convertLine) . splitLines) paragraphs
-    in
-        lines'
-
-    where
-        isSectionSplit :: Tag T.Text -> Bool
-        isSectionSplit tag =
-            isTagText tag &&
-            any (flip T.isInfixOf $ fromTagText tag)
+     in lines'
+  where
+    isSectionSplit :: Tag T.Text -> Bool
+    isSectionSplit tag =
+        isTagText tag
+            && any
+                (flip T.isInfixOf $ fromTagText tag)
                 ["First", "Second", "Third", "Higher", "Recommended Courses:", "Notes", "NOTES"]
 
-        isNoteSection :: [Tag T.Text] -> Bool
-        isNoteSection (sectionTitleTag:_) =
-            isTagText sectionTitleTag && any (flip T.isInfixOf $ fromTagText sectionTitleTag) ["Notes", "NOTES"]
-        isNoteSection [] = False
+    isNoteSection :: [Tag T.Text] -> Bool
+    isNoteSection (sectionTitleTag : _) =
+        isTagText sectionTitleTag && any (flip T.isInfixOf $ fromTagText sectionTitleTag) ["Notes", "NOTES"]
+    isNoteSection [] = False
 
-        splitLines :: [Tag T.Text] -> [[Tag T.Text]]
-        splitLines = splitWhen (\tag -> isTagOpenName "br" tag || isTagOpenName "li" tag)
+    splitLines :: [Tag T.Text] -> [[Tag T.Text]]
+    splitLines = splitWhen (\tag -> isTagOpenName "br" tag || isTagOpenName "li" tag)
 
-        convertLine :: [Tag T.Text] -> T.Text
-        convertLine [] = ""
-        convertLine (t:ts)
-            | isTagOpenName "li" t = T.append "0." (innerText ts)
-            | otherwise = innerText (t:ts)
-
+    convertLine :: [Tag T.Text] -> T.Text
+    convertLine [] = ""
+    convertLine (t : ts)
+        | isTagOpenName "li" t = T.append "0." (innerText ts)
+        | otherwise = innerText (t : ts)
 
 parseRequirement :: [T.Text] -> [T.Text]
 parseRequirement requirement = map parseSingleReq $ filter isReq requirement
-    where
-        isReq t = T.length t >= 7 &&
-            not (any (`T.isInfixOf` t) ["First", "Second", "Third", "Higher"])
+  where
+    isReq t =
+        T.length t >= 7
+            && not (any (`T.isInfixOf` t) ["First", "Second", "Third", "Higher"])
 
-        parseSingleReq =
-            T.pack . show .
-            parseReqs .      -- Using parser for new Req type
-            T.unpack .
-            fromRight "" .
-            P.parse getLineText "Reading a requirement line" .
-            T.strip
+    parseSingleReq =
+        T.pack
+            . show
+            . parseReqs
+            . T.unpack -- Using parser for new Req type
+            . fromRight ""
+            . P.parse getLineText "Reading a requirement line"
+            . T.strip
 
-        -- Strips the optional leading numbering (#.) from a line.
-        getLineText :: Parser T.Text
-        getLineText = do
-            P.optional $ P.try (P.digit >> P.char '.' >> P.space)
-            parseUntil P.eof
+    -- Strips the optional leading numbering (#.) from a line.
+    getLineText :: Parser T.Text
+    getLineText = do
+        P.optional $ P.try (P.digit >> P.char '.' >> P.space)
+        parseUntil P.eof

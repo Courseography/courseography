@@ -25,7 +25,7 @@
     "*.scss": "yarn run stylelint --fix",
     "*.hs": [
       "stack exec hlint",
-      "stack exec stylish-haskell -- --inplace"
+      "stack exec fourmolu -- --mode check"
     ]
   },
   "dependencies": {

@@ -133,8 +133,17 @@ class CourseModal extends React.Component {
     }
   }
 
-  /* Generate the data needed for each row of the timetable based on course meeting times for
-   * each session F, S, Y.
+  /** Helper function to format the time of a Time JSON object for display */
+  formatTime(time) {
+    return DAY_TO_INT[time.weekDay] + " " + time.startHour + " - " + time.endHour
+  }
+
+  /**
+   * Generate the data needed for the course modal table based on the meeting times corresponding
+   * to a course in a given session.
+   * @param allMeetingTimes An array of MeetTime' objects corresponding to a particular course.
+   * @param session The session (F, S, Y) to query.
+   * @returns A map containing the table data that will appear in the course modal.
    */
   getTable(allMeetingTimes, session) {
     const sessions = allMeetingTimes.filter(lec => lec.meetData.session === session)
@@ -143,36 +152,23 @@ class CourseModal extends React.Component {
     )
 
     return sortedSessions.map(lecture => {
-      const occurrences = { times: [], locations: [] }
+      const occurrences = { times1: [], locations1: [], times2: [], locations2: [] }
       const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
         occ1.weekDay > occ2.weekDay ? 1 : -1
       )
       sortedTimeData.map(occurrence => {
-        let firstRoom = ""
-        if (occurrence.firstRoom === null || occurrence.firstRoom === undefined) {
-          firstRoom = " "
-        } else {
-          firstRoom = occurrence.firstRoom.buildingCode
+        let location = " "
+        if (occurrence.timeLocation !== null && occurrence.timeLocation !== undefined) {
+          location = occurrence.timeLocation.buildingCode
         }
 
-        let secondRoom = ""
-        if (occurrence.secondRoom === null || occurrence.secondRoom === undefined) {
-          secondRoom = " "
+        if (session === "Y" && occurrence.timeSession.endsWith("1")) {
+          occurrences.locations2.push(location)
+          occurrences.times2.push(this.formatTime(occurrence))
         } else {
-          secondRoom = occurrence.secondRoom.buildingCode
+          occurrences.locations1.push(location)
+          occurrences.times1.push(this.formatTime(occurrence))
         }
-
-        if ((firstRoom != " ") & (secondRoom != " ")) {
-          firstRoom += ", "
-        }
-        occurrences.locations.push(firstRoom + secondRoom)
-        occurrences.times.push(
-          DAY_TO_INT[occurrence.weekDay] +
-            " " +
-            occurrence.startHour +
-            " - " +
-            occurrence.endHour
-        )
       })
       const rowData = {
         activity: lecture.meetData.section,
@@ -184,8 +180,10 @@ class CourseModal extends React.Component {
           lecture.meetData.cap +
           " available",
         waitList: lecture.meetData.wait + " students",
-        time: occurrences.times,
-        location: occurrences.locations,
+        time1: occurrences.times1,
+        location1: occurrences.locations1,
+        time2: occurrences.times2,
+        location2: occurrences.locations2,
       }
 
       return rowData
@@ -278,37 +276,73 @@ class Description extends React.Component {
             <strong className="semester-heading">
               {session === "F" ? "Fall" : session === "S" ? "Winter" : "Full Year"}
             </strong>
-            <div className="ag-theme-alpine" style={{ width: 940 }}>
+            <div className="ag-theme-alpine" style={{ width: 1088 }}>
               <AgGridReact
                 rowData={this.props.sessions[session]}
                 columnDefs={[
-                  { field: "activity", width: 130 },
-                  { field: "instructor", width: 190 },
-                  { field: "availability", width: 180 },
-                  { field: "waitList", width: 130 },
+                  { field: "activity", width: session === "Y" ? 96 : 155 },
+                  { field: "instructor", width: session === "Y" ? 190 : 215 },
+                  { field: "availability", width: session === "Y" ? 180 : 205 },
+                  { field: "waitList", width: session === "Y" ? 130 : 145 },
+
                   {
-                    field: "time",
+                    field: "time1",
+                    headerName: session === "Y" ? "Fall Time" : "Time",
+                    wrapHeaderText: true,
                     cellStyle: {
                       whiteSpace: "pre",
                       lineHeight: "1.8",
                       paddingTop: "7px",
                       paddingBottom: "6px",
                     },
-                    valueFormatter: col => col.data.time.join("\n"),
-                    width: 180,
+                    valueFormatter: col => col.data.time1.join("\n"),
+                    width: session === "Y" ? 155 : 205,
                     autoHeight: true,
                   },
                   {
-                    field: "location",
+                    field: "location1",
+                    headerName: session === "Y" ? "Fall Location" : "Location",
+                    wrapHeaderText: true,
                     cellStyle: {
                       whiteSpace: "pre",
                       lineHeight: "1.8",
                       paddingTop: "7px",
                       paddingBottom: "6px",
                     },
-                    valueFormatter: col => col.data.location.join("\n"),
-                    width: 128,
+                    valueFormatter: col => col.data.location1.join("\n"),
+                    width: session === "Y" ? 90 : 153,
                     autoHeight: true,
+                  },
+
+                  {
+                    field: "time2",
+                    headerName: "Winter Time",
+                    wrapHeaderText: true,
+                    cellStyle: {
+                      whiteSpace: "pre",
+                      lineHeight: "1.8",
+                      paddingTop: "7px",
+                      paddingBottom: "6px",
+                    },
+                    valueFormatter: col => col.data.time2.join("\n"),
+                    width: 155,
+                    autoHeight: true,
+                    hide: session !== "Y",
+                  },
+                  {
+                    field: "location2",
+                    headerName: "Winter Location",
+                    wrapHeaderText: true,
+                    cellStyle: {
+                      whiteSpace: "pre",
+                      lineHeight: "1.8",
+                      paddingTop: "7px",
+                      paddingBottom: "6px",
+                    },
+                    valueFormatter: col => col.data.location2.join("\n"),
+                    width: 90,
+                    autoHeight: true,
+                    hide: session !== "Y",
                   },
                 ]}
                 domLayout="autoHeight"
@@ -605,11 +639,8 @@ class MapModal extends React.Component {
     const lecturesByDay = {}
 
     this.props.lectures.forEach(lecture => {
-      if (lecture.fstLocation) {
-        this.groupLecturesByBuilding(lecturesByBuilding, lecture, "fstLocation")
-      }
-      if (lecture.secLocation) {
-        this.groupLecturesByBuilding(lecturesByBuilding, lecture, "secLocation")
+      if (lecture.location) {
+        this.groupLecturesByBuilding(lecturesByBuilding, lecture, "location")
       }
 
       if (lecturesByDay[lecture.dayString]) {
@@ -691,23 +722,15 @@ class DayBox extends React.Component {
     }
 
     this.toggleExpand = this.toggleExpand.bind(this)
-    this.getLocationStr = this.getLocationStr.bind(this)
+    this.formatLocation = this.formatLocation.bind(this)
   }
 
   toggleExpand() {
     this.setState({ expanded: !this.state.expanded })
   }
 
-  getLocationStr(lec, location, locationNum) {
-    return (
-      "Location" +
-      (lec.fstLocation && lec.secLocation ? " " + locationNum : "") +
-      ": " +
-      location.buildingName +
-      " (" +
-      location.buildingCode +
-      ")"
-    )
+  formatLocation(location) {
+    return "Location: " + location.buildingName + " (" + location.buildingCode + ")"
   }
 
   render() {
@@ -750,15 +773,8 @@ class DayBox extends React.Component {
           <ul id="map-day-list">
             {this.props.dayLectures.map(lec => {
               let locationStr = ""
-              let locationNum = 0
-              if (lec.fstLocation) {
-                locationNum += 1
-                locationStr += this.getLocationStr(lec, lec.fstLocation, locationNum)
-              }
-              if (lec.secLocation) {
-                locationNum += 1
-                locationStr +=
-                  (lec.fstLocation ? "\n" : "") + this.getLocationStr(lec, lec.secLocation, locationNum)
+              if (lec.location) {
+                locationStr += this.formatLocation(lec.location)
               }
 
               return (
@@ -872,9 +888,7 @@ class CampusMap extends React.Component {
 
       let colouredMarker
       const buildingInd = this.props.selectedLecTimeframes.findIndex(
-        lec =>
-          (lec.fstLocation && lec.fstLocation.buildingCode === building.buildingCode) ||
-          (lec.secLocation && lec.secLocation.buildingCode === building.buildingCode)
+        lec => lec.location && lec.location.buildingCode === building.buildingCode
       )
 
       colouredMarker = buildingInd == -1 ? blueMarker : redMarker

@@ -1,5 +1,4 @@
-module Response.About
-    (aboutResponse) where
+module Response.About (aboutResponse) where
 
 import Happstack.Server
 import MasterTemplate
@@ -10,10 +9,12 @@ import qualified Text.Blaze.Html5.Attributes as A
 
 aboutResponse :: ServerPart Response
 aboutResponse =
-   ok $ toResponse $
-    masterTemplate "Courseography - About"
+    ok $
+        toResponse $
+            masterTemplate
+                "Courseography - About"
                 []
-                (do
+                ( do
                     header "about"
                     H.div ! A.id "aboutDiv" $ ""
                 )

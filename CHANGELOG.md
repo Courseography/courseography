@@ -11,6 +11,8 @@
 - Fixed CSS styling of background colour and let the application have full height
 - Remove period after instructor's first name in course info modal
 - Fixed a bug regarding the scrollbar appearing on the /graph and /generate pages
+- Fix bool node centering in Generate page
+- Fixed support for year-long ("Y" session) courses
 
 ### 🔧 Internal changes
 
@@ -19,6 +21,9 @@
 - Updated CircleCI download link for ImageMagick
 - Began Babel 8 migration prep: bumped CI/engines to Node 24, pinned an explicit `browserslist` target, consolidated the duplicated Babel preset config between `babel.config.json` and `webpack.common.js`, fixed `corejs` version pinning, and removed the unused `@babel/plugin-proposal-class-properties` dependency
 - Upgraded to Babel 8 (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/eslint-parser`, `babel-loader`, `babel-jest`); replaced the removed `preset-env` `useBuiltIns`/`corejs` options with the `babel-plugin-polyfill-corejs3` plugin
+- Refactored styling colors into CSS variables
+- Removed dead CSS rules including ids, classNames, and colors
+- Switched Haskell formatter to `fourmolu` and ran on all files
 
 ## [0.8.0] - 2026-06-09
 

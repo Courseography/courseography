@@ -1,16 +1,24 @@
-module Database.Migrations
-    (migrateDatabase, getDatabaseVersion, setDatabaseVersion, migrationList) where
+module Database.Migrations (migrateDatabase, getDatabaseVersion, setDatabaseVersion, migrationList) where
 
 import Control.Monad.Reader (MonadIO)
 import Data.List (sortOn)
-import Database.Persist.Sql (Entity (..), Migration, SqlPersistT, addMigration, insert_,
-                             runMigrationUnsafe, selectFirst, update, (=.))
+import Database.Persist.Sql (
+    Entity (..),
+    Migration,
+    SqlPersistT,
+    addMigration,
+    insert_,
+    runMigrationUnsafe,
+    selectFirst,
+    update,
+    (=.),
+ )
 import Database.Tables
 
-data MigrationWrapper = MigrationWrapper {
-    version :: Int,
-    script :: Migration
-}
+data MigrationWrapper = MigrationWrapper
+    { version :: Int
+    , script :: Migration
+    }
 
 -- | Migrates the database
 migrateDatabase :: MonadIO m => SqlPersistT m ()
@@ -21,9 +29,9 @@ migrateDatabase = do
 -- | Migrates the database by applying only migrations newer than the current version number
 applyMigrations :: MonadIO m => Int -> [MigrationWrapper] -> SqlPersistT m ()
 applyMigrations currVersion migrations = do
-    mapM_ (runMigrationUnsafe . script)
-        $ sortOn version
-        $ filter (\migration -> version migration > currVersion) migrations
+    mapM_ (runMigrationUnsafe . script) $
+        sortOn version $
+            filter (\migration -> version migration > currVersion) migrations
 
     case migrations of
         [] -> return ()
@@ -31,9 +39,11 @@ applyMigrations currVersion migrations = do
 
 -- | List of migrations
 migrationList :: [MigrationWrapper]
-migrationList = [ MigrationWrapper {version=2, script=renamePostTables}
-                , MigrationWrapper {version=3, script=renameCoursesTable}
-                ]
+migrationList =
+    [ MigrationWrapper{version = 2, script = renamePostTables}
+    , MigrationWrapper{version = 3, script = renameCoursesTable}
+    , MigrationWrapper{version = 4, script = splitTimes}
+    ]
 
 -- | Migration script which renames the Post tables to Program
 renamePostTables :: Migration
@@ -46,6 +56,13 @@ renamePostTables = do
 renameCoursesTable :: Migration
 renameCoursesTable =
     addMigration True "ALTER TABLE courses RENAME TO course;"
+
+-- | Migration script to add proper support for year-long courses
+splitTimes :: Migration
+splitTimes = do
+    addMigration True "ALTER TABLE times RENAME COLUMN first_room TO location;"
+    addMigration True "ALTER TABLE times DROP COLUMN second_room;"
+    addMigration True "ALTER TABLE times ADD session varchar(32);"
 
 -- | Gets the current version of the database.
 -- If no version is defined, initialize the
