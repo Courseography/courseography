@@ -1503,7 +1503,7 @@ export class Graph extends React.Component {
     for (let i = 0; i < shapes.length; i++) {
       // Skip shapes with no position
       if (!Array.isArray(shapes[i].pos)) {
-        return
+        continue
       }
 
       let shapeWidth = Number(shapes[i].width)
@@ -1518,7 +1518,7 @@ export class Graph extends React.Component {
 
       // Skip shapes with no size
       if (shapeWidth === 0 && shapeHeight === 0) {
-        return
+        continue
       }
 
       const x = shapes[i].pos[0]
@@ -1534,7 +1534,7 @@ export class Graph extends React.Component {
       return null
     }
 
-    return { minX, minY, maxX, maxY, width: maxX - minX, height: maxY - minY }
+    return { minX, minY, maxX, maxY }
   }
 
   render() {
@@ -1551,18 +1551,17 @@ export class Graph extends React.Component {
     let viewboxCentreX = this.state.width / 2
     let viewboxCentreY = this.state.height / 2
     if (document.getElementById("generateRoot") !== null) {
-      let shapesWidth = this.state.width
-      let shapesHeight = this.state.height
       const bbox = this.computeShapesBbox()
       if (bbox !== null) {
+        // Centre viewBox on bbox
         viewboxCentreX = (bbox.minX + bbox.maxX) / 2
         viewboxCentreY = (bbox.minY + bbox.maxY) / 2
-        shapesWidth = bbox.width
-        shapesHeight = bbox.height
       }
 
-      newViewboxWidth = Math.max(shapesWidth, containerWidth) * this.state.zoomFactor
-      newViewboxHeight = Math.max(shapesHeight, containerHeight) * this.state.zoomFactor
+      newViewboxWidth =
+        Math.max(this.state.width, containerWidth) * this.state.zoomFactor
+      newViewboxHeight =
+        Math.max(this.state.height, containerHeight) * this.state.zoomFactor
     }
 
     const viewboxContainerRatio =
