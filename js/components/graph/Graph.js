@@ -1500,18 +1500,18 @@ export class Graph extends React.Component {
     let maxX = -Infinity
     let maxY = -Infinity
 
-    shapes.forEach(shape => {
+    for (let i = 0; i < shapes.length; i++) {
       // Skip shapes with no position
-      if (!Array.isArray(shape.pos)) {
+      if (!Array.isArray(shapes[i].pos)) {
         return
       }
 
-      let shapeWidth = Number(shape.width)
+      let shapeWidth = Number(shapes[i].width)
       if (Number.isNaN(shapeWidth) || shapeWidth < 0) {
         shapeWidth = 0
       }
 
-      let shapeHeight = Number(shape.height)
+      let shapeHeight = Number(shapes[i].height)
       if (Number.isNaN(shapeHeight) || shapeHeight < 0) {
         shapeHeight = 0
       }
@@ -1521,13 +1521,13 @@ export class Graph extends React.Component {
         return
       }
 
-      const x = shape.pos[0]
-      const y = shape.pos[1]
+      const x = shapes[i].pos[0]
+      const y = shapes[i].pos[1]
       minX = Math.min(minX, x)
       minY = Math.min(minY, y)
       maxX = Math.max(maxX, x + shapeWidth)
       maxY = Math.max(maxY, y + shapeHeight)
-    })
+    }
 
     // Return null if all shapes have no size or position
     if (!Number.isFinite(minX)) {
