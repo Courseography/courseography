@@ -1553,7 +1553,7 @@ export class Graph extends React.Component {
     if (document.getElementById("generateRoot") !== null) {
       const bbox = this.computeShapesBbox()
       if (bbox !== null) {
-        // Centre viewBox on bbox
+        // Compute and store coordinates of bbox's centre point
         viewboxCentreX = (bbox.minX + bbox.maxX) / 2
         viewboxCentreY = (bbox.minY + bbox.maxY) / 2
       }
@@ -1564,6 +1564,7 @@ export class Graph extends React.Component {
         Math.max(this.state.height, containerHeight) * this.state.zoomFactor
     }
 
+    // Centre viewBox using viewboxCentreX/Y, then apply pan
     const viewboxContainerRatio =
       containerHeight !== 0 ? newViewboxHeight / containerHeight : 1
     const viewboxX =
