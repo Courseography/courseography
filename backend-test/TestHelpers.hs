@@ -1,20 +1,18 @@
-{-|
-Description: Helper functions for various controller modules tests.
-
-Module that contains helper functions used in testing controller module functions.
-
--}
-
-module TestHelpers
-    (acquireDatabase,
+-- |
+-- Description: Helper functions for various controller modules tests.
+--
+-- Module that contains helper functions used in testing controller module functions.
+module TestHelpers (
+    acquireDatabase,
     mockGetRequest,
     mockPutRequest,
     runServerPartWith,
     runServerPart,
     clearDatabase,
     releaseDatabase,
-    withDatabase)
-    where
+    withDatabase,
+)
+where
 
 import Config (databasePath)
 import Control.Concurrent.MVar (newEmptyMVar, newMVar, putMVar)
@@ -26,9 +24,20 @@ import Data.Text (unpack)
 import Database.Database (setupDatabase)
 import Database.Persist.Sqlite (Filter, SqlPersistM, deleteWhere)
 import Database.Tables
-import Happstack.Server (ContentType (..), HttpVersion (..), Input (..), Method (GET, PUT),
-                         Request (..), Response, RqBody (..), ServerPart, inputContentType,
-                         inputFilename, inputValue, simpleHTTP'')
+import Happstack.Server (
+    ContentType (..),
+    HttpVersion (..),
+    Input (..),
+    Method (GET, PUT),
+    Request (..),
+    Response,
+    RqBody (..),
+    ServerPart,
+    inputContentType,
+    inputFilename,
+    inputValue,
+    simpleHTTP'',
+ )
 import System.Directory (removeFile)
 import System.Environment (setEnv, unsetEnv)
 import Test.Tasty (TestTree, testGroup, withResource)
@@ -42,30 +51,32 @@ createMockRequest reqMethod reqUri queryInputs body = do
     -- If a payload is provided, write it into the request body
     when (body /= "") $
         putMVar reqBody (Body body)
-    return Request
-        { rqSecure          = False
-        , rqMethod          = reqMethod
-        , rqPaths           = splitPath reqUri
-        , rqUri             = reqUri
-        , rqQuery           = ""
-        , rqInputsQuery     = map (fmap convertInput) queryInputs
-        , rqInputsBody      = reqInputsBody
-        , rqCookies         = []
-        , rqVersion         = HttpVersion 1 1
-        , rqHeaders         = Map.empty
-        , rqBody            = reqBody
-        , rqPeer            = ("127.0.0.1", 0)
-        }
+    return
+        Request
+            { rqSecure = False
+            , rqMethod = reqMethod
+            , rqPaths = splitPath reqUri
+            , rqUri = reqUri
+            , rqQuery = ""
+            , rqInputsQuery = map (fmap convertInput) queryInputs
+            , rqInputsBody = reqInputsBody
+            , rqCookies = []
+            , rqVersion = HttpVersion 1 1
+            , rqHeaders = Map.empty
+            , rqBody = reqBody
+            , rqPeer = ("127.0.0.1", 0)
+            }
   where
-    -- | Helper to convert a String to a query input parameter
+    -- \| Helper to convert a String to a query input parameter
     convertInput :: String -> Input
-    convertInput paramValue = Input
-        { inputValue = Right (BSL8.pack paramValue)
-        , inputFilename = Nothing
-        , inputContentType = defaultContentType
-        }
+    convertInput paramValue =
+        Input
+            { inputValue = Right (BSL8.pack paramValue)
+            , inputFilename = Nothing
+            , inputContentType = defaultContentType
+            }
 
-    -- | Split a URI into path segments
+    -- \| Split a URI into path segments
     splitPath :: String -> [String]
     splitPath = splitOn "/"
 
@@ -79,11 +90,12 @@ mockPutRequest = createMockRequest PUT
 
 -- | Default content type for the MockRequestWithQuery, specifically for retrieveCourse
 defaultContentType :: ContentType
-defaultContentType = ContentType
-    { ctType = "text"
-    , ctSubtype = "html"
-    , ctParameters = []
-    }
+defaultContentType =
+    ContentType
+        { ctType = "text"
+        , ctSubtype = "html"
+        , ctParameters = []
+        }
 
 -- | Run a 'ServerPart' with a custom request.
 runServerPartWith :: ServerPart Response -> IO Request -> IO Response
@@ -121,7 +133,7 @@ releaseDatabase _ = do
     removeFile $ unpack path
     unsetEnv "APP_ENV"
 
-withDatabase ::  String -> [TestTree] -> TestTree
+withDatabase :: String -> [TestTree] -> TestTree
 withDatabase label tests =
     withResource acquireDatabase releaseDatabase $ \_ ->
-    testGroup label tests
+        testGroup label tests

@@ -1,12 +1,9 @@
-{-|
-Description: CourseQueries module tests.
-
-Module that contains the tests for the functions in the CourseQueries module.
-
--}
-
-module Database.CourseQueriesTests
-( test_courseQueries
+-- |
+-- Description: CourseQueries module tests.
+--
+-- Module that contains the tests for the functions in the CourseQueries module.
+module Database.CourseQueriesTests (
+    test_courseQueries,
 ) where
 
 import Config (runDb)

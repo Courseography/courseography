@@ -1,12 +1,9 @@
-{-|
-Description: Course Controller module tests.
-
-Module that contains the tests for the functions in the Course Controller module.
-
--}
-
-module Controllers.CourseControllerTests
-( test_courseController
+-- |
+-- Description: Course Controller module tests.
+--
+-- Module that contains the tests for the functions in the Course Controller module.
+module Controllers.CourseControllerTests (
+    test_courseController,
 ) where
 
 import Config (runDb)
@@ -25,166 +22,180 @@ import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, mockGetRequest, runServerPart, runServerPartWith, withDatabase)
 
-
 -- | List of test cases as (case description, input course name, course data, list of meeting data, status code, expected JSON output)
 retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, [MeetTime], Int, String)]
 retrieveCourseTestCases =
     [
-    ("Course exists with meeting times, and other meeting times exist",
-       "STA238",
-       Map.fromList [
-        ("name", "STA238H1"),
-        ("title", "Probability, Statistics and Data Analysis II"),
-        ("description", "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."),
-        ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
-        ("exclusions", "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"),
-        ("breadth", "The Physical and Mathematical Universes (5)"),
-        ("distribution", "null"),
-        ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
-        ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."),
-        ("videoUrls", "https://example.com/video1, https://example.com/video2")
-        ],
-        [
-            MeetTime
-                Meeting {
-                    meetingCode = "STA238",
-                    meetingSession = "F",
-                    meetingSection = "LEC0101",
-                    meetingCap = 50,
-                    meetingInstructor = "Instructor Name",
-                    meetingEnrol = 15,
-                    meetingWait = 0,
-                    meetingExtra = 0
-                }
-                [
-                    Time' {
-                        timeSession' = Just "F",
-                        weekDay' = 0.0,
-                        startHour' = 10.0,
-                        endHour' = 11.0,
-                        timeLocation' = Just "MP"
-                    },
-                    Time' {
-                        timeSession' = Just "F",
-                        weekDay' = 2.0,
-                        startHour' = 13.0,
-                        endHour' = 14.0,
-                        timeLocation' = Just "SS"
+        ( "Course exists with meeting times, and other meeting times exist"
+        , "STA238"
+        , Map.fromList
+            [ ("name", "STA238H1")
+            , ("title", "Probability, Statistics and Data Analysis II")
+            ,
+                ( "description"
+                , "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."
+                )
+            , ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5")
+            ,
+                ( "exclusions"
+                , "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"
+                )
+            , ("breadth", "The Physical and Mathematical Universes (5)")
+            , ("distribution", "null")
+            , ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5")
+            , ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.")
+            , ("videoUrls", "https://example.com/video1, https://example.com/video2")
+            ]
+        ,
+            [ MeetTime
+                Meeting
+                    { meetingCode = "STA238"
+                    , meetingSession = "F"
+                    , meetingSection = "LEC0101"
+                    , meetingCap = 50
+                    , meetingInstructor = "Instructor Name"
+                    , meetingEnrol = 15
+                    , meetingWait = 0
+                    , meetingExtra = 0
                     }
-                ],
-            MeetTime
-                Meeting {
-                    meetingCode = "STA239",
-                    meetingSession = "S",
-                    meetingSection = "LEC0201",
-                    meetingCap = 500,
-                    meetingInstructor = "Instructor Name 2",
-                    meetingEnrol = 150,
-                    meetingWait = 0,
-                    meetingExtra = 0
-                }
-                [
-                    Time' {
-                        timeSession' = Just "S",
-                        weekDay' = 1.0,
-                        startHour' = 10.0,
-                        endHour' = 11.0,
-                        timeLocation' = Just "WW"
-                    },
-                    Time' {
-                        timeSession' = Just "S",
-                        weekDay' = 4.0,
-                        startHour' = 13.0,
-                        endHour' = 14.0,
-                        timeLocation' = Just "SS"
+                [ Time'
+                    { timeSession' = Just "F"
+                    , weekDay' = 0.0
+                    , startHour' = 10.0
+                    , endHour' = 11.0
+                    , timeLocation' = Just "MP"
+                    }
+                , Time'
+                    { timeSession' = Just "F"
+                    , weekDay' = 2.0
+                    , startHour' = 13.0
+                    , endHour' = 14.0
+                    , timeLocation' = Just "SS"
                     }
                 ]
-        ],
-        200,
-        "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"startHour\":10,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":0},{\"endHour\":14,\"startHour\":13,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
-    ),
-
-    ("Course exists with meeting times",
-       "STA238",
-       Map.fromList [
-        ("name", "STA238H1"),
-        ("title", "Probability, Statistics and Data Analysis II"),
-        ("description", "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."),
-        ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
-        ("exclusions", "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"),
-        ("breadth", "The Physical and Mathematical Universes (5)"),
-        ("distribution", "null"),
-        ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
-        ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."),
-        ("videoUrls", "https://example.com/video1, https://example.com/video2")
-        ],
-        [
-            MeetTime
-                Meeting {
-                    meetingCode = "STA238",
-                    meetingSession = "F",
-                    meetingSection = "LEC0101",
-                    meetingCap = 50,
-                    meetingInstructor = "Instructor Name",
-                    meetingEnrol = 15,
-                    meetingWait = 0,
-                    meetingExtra = 0
-                }
-                [
-                    Time' {
-                        timeSession' = Just "F",
-                        weekDay' = 0.0,
-                        startHour' = 10.0,
-                        endHour' = 11.0,
-                        timeLocation' = Just "MP"
-                    },
-                    Time' {
-                        timeSession' = Just "F",
-                        weekDay' = 2.0,
-                        startHour' = 13.0,
-                        endHour' = 14.0,
-                        timeLocation' = Just "SS"
+            , MeetTime
+                Meeting
+                    { meetingCode = "STA239"
+                    , meetingSession = "S"
+                    , meetingSection = "LEC0201"
+                    , meetingCap = 500
+                    , meetingInstructor = "Instructor Name 2"
+                    , meetingEnrol = 150
+                    , meetingWait = 0
+                    , meetingExtra = 0
+                    }
+                [ Time'
+                    { timeSession' = Just "S"
+                    , weekDay' = 1.0
+                    , startHour' = 10.0
+                    , endHour' = 11.0
+                    , timeLocation' = Just "WW"
+                    }
+                , Time'
+                    { timeSession' = Just "S"
+                    , weekDay' = 4.0
+                    , startHour' = 13.0
+                    , endHour' = 14.0
+                    , timeLocation' = Just "SS"
                     }
                 ]
-        ],
-        200,
-        "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"startHour\":10,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":0},{\"endHour\":14,\"startHour\":13,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
-    ),
-
-    ("Course exists",
-       "STA238",
-       Map.fromList [
-        ("name", "STA238H1"),
-        ("title", "Probability, Statistics and Data Analysis II"),
-        ("description", "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."),
-        ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
-        ("exclusions", "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"),
-        ("breadth", "The Physical and Mathematical Universes (5)"),
-        ("distribution", "null"),
-        ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"),
-        ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."),
-        ("videoUrls", "https://example.com/video1, https://example.com/video2")
-        ],
-        [],
-        200,
-        "{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
-    ),
-
-    ("Course does not exist",
-       "STA238",
-       Map.empty,
-       [],
-       404,
-       "Course not found"
-    ),
-
-    ("No course provided",
-       "",
-       Map.empty,
-       [],
-       404,
-       "Course not found"
-    )
+            ]
+        , 200
+        , "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"startHour\":10,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":0},{\"endHour\":14,\"startHour\":13,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
+        )
+    ,
+        ( "Course exists with meeting times"
+        , "STA238"
+        , Map.fromList
+            [ ("name", "STA238H1")
+            , ("title", "Probability, Statistics and Data Analysis II")
+            ,
+                ( "description"
+                , "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."
+                )
+            , ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5")
+            ,
+                ( "exclusions"
+                , "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"
+                )
+            , ("breadth", "The Physical and Mathematical Universes (5)")
+            , ("distribution", "null")
+            , ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5")
+            , ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.")
+            , ("videoUrls", "https://example.com/video1, https://example.com/video2")
+            ]
+        ,
+            [ MeetTime
+                Meeting
+                    { meetingCode = "STA238"
+                    , meetingSession = "F"
+                    , meetingSection = "LEC0101"
+                    , meetingCap = 50
+                    , meetingInstructor = "Instructor Name"
+                    , meetingEnrol = 15
+                    , meetingWait = 0
+                    , meetingExtra = 0
+                    }
+                [ Time'
+                    { timeSession' = Just "F"
+                    , weekDay' = 0.0
+                    , startHour' = 10.0
+                    , endHour' = 11.0
+                    , timeLocation' = Just "MP"
+                    }
+                , Time'
+                    { timeSession' = Just "F"
+                    , weekDay' = 2.0
+                    , startHour' = 13.0
+                    , endHour' = 14.0
+                    , timeLocation' = Just "SS"
+                    }
+                ]
+            ]
+        , 200
+        , "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"startHour\":10,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":0},{\"endHour\":14,\"startHour\":13,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"F\",\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
+        )
+    ,
+        ( "Course exists"
+        , "STA238"
+        , Map.fromList
+            [ ("name", "STA238H1")
+            , ("title", "Probability, Statistics and Data Analysis II")
+            ,
+                ( "description"
+                , "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."
+                )
+            , ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5")
+            ,
+                ( "exclusions"
+                , "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"
+                )
+            , ("breadth", "The Physical and Mathematical Universes (5)")
+            , ("distribution", "null")
+            , ("prereqString", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5")
+            , ("coreqs", "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.")
+            , ("videoUrls", "https://example.com/video1, https://example.com/video2")
+            ]
+        , []
+        , 200
+        , "{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
+        )
+    ,
+        ( "Course does not exist"
+        , "STA238"
+        , Map.empty
+        , []
+        , 404
+        , "Course not found"
+        )
+    ,
+        ( "No course provided"
+        , ""
+        , Map.empty
+        , []
+        , 404
+        , "Course not found"
+        )
     ]
 
 -- | Run a test case (case, input, expected status code, expected output) on the retrieveCourse function.
@@ -222,7 +233,8 @@ runRetrieveCourseTest (label, courseName, courseData, meetingTimes, expectedCode
             unless (null meetingTimes) $
                 insertMeetingTimes meetingTimes
 
-        response <- runServerPartWith Controllers.Course.retrieveCourse $ mockGetRequest "/course" [("name", T.unpack courseName)] ""
+        response <-
+            runServerPartWith Controllers.Course.retrieveCourse $ mockGetRequest "/course" [("name", T.unpack courseName)] ""
         let statusCode = rsCode response
         assertEqual ("Unexpected status code for " ++ label) expectedCode statusCode
 
@@ -236,36 +248,48 @@ runRetrieveCourseTests = map runRetrieveCourseTest retrieveCourseTestCases
 -- | Helper function to insert courses into the database
 insertCourses :: [T.Text] -> SqlPersistM ()
 insertCourses = mapM_ insertCourse
-    where
-        insertCourse code = insert_ (Course code Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing [])
+  where
+    insertCourse code = insert_ (Course code Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing [])
 
 -- | Helper function to insert MeetTimes into the database
 insertMeetingTimes :: [MeetTime] -> SqlPersistM ()
 insertMeetingTimes = mapM_ insertMeeting
-    where
-        insertMeeting (MeetTime meetingData meetingTime) = do
-            meetingKey <- insert meetingData
-            insertMany_ $ map (buildTimes meetingKey) meetingTime
+  where
+    insertMeeting (MeetTime meetingData meetingTime) = do
+        meetingKey <- insert meetingData
+        insertMany_ $ map (buildTimes meetingKey) meetingTime
 
 -- | Helper function to insert dummy buildings from a list of codes
 insertBuildings :: [T.Text] -> SqlPersistM ()
 insertBuildings = mapM_ insertBuilding
-    where
-        insertBuilding code = insert_ Building {buildingCode = code, buildingName = code, buildingAddress = "N/A", buildingPostalCode = "A1A 1A1", buildingLat = 1.0, buildingLng = 1.0}
+  where
+    insertBuilding code =
+        insert_
+            Building
+                { buildingCode = code
+                , buildingName = code
+                , buildingAddress = "N/A"
+                , buildingPostalCode = "A1A 1A1"
+                , buildingLat = 1.0
+                , buildingLng = 1.0
+                }
 
 -- | Helper function to get a list of unique locations involved in a MeetTime
 getUniqueBuildings :: [MeetTime] -> [T.Text]
 getUniqueBuildings = nub . concatMap getMeetBuildings
-    where
-        getMeetBuildings (MeetTime _ times') = mapMaybe timeLocation' times'
+  where
+    getMeetBuildings (MeetTime _ times') = mapMaybe timeLocation' times'
 
 -- | List of test cases as (label, input courses, expected output)
 indexTestCases :: [(String, [T.Text], String)]
 indexTestCases =
     [ ("Empty database", [], "")
     , ("One course", ["CSC199"], "CSC199\n")
-    , ("Multiple courses", ["CSC101", "CSC102", "CSC103", "CSC104", "CSC105"],
-       "CSC101\nCSC102\nCSC103\nCSC104\nCSC105\n")
+    ,
+        ( "Multiple courses"
+        , ["CSC101", "CSC102", "CSC103", "CSC104", "CSC105"]
+        , "CSC101\nCSC102\nCSC103\nCSC104\nCSC105\n"
+        )
     ]
 
 -- | Run a test case (case, input, expected output) on the index function.
@@ -286,58 +310,88 @@ runIndexTests = map runIndexTest indexTestCases
 -- | List of test cases as (case, database state, input [dept], expected JSON output) for the courseInfo function
 courseInfoTestCases :: [(String, [Course], T.Text, String)]
 courseInfoTestCases =
-    [ ("Empty Database"
-    , []
-    , "STA"
-    , "[]")
-    , ("Department with one course in database called"
-    , [csc108, sta237, sta238]
-    , "CSC"
-    , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":null,\"description\":\"Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required.\",\"distribution\":null,\"exclusions\":\"CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3\",\"name\":\"CSC108H1\",\"prereqString\":null,\"title\":\"Introduction to Computer Programming\",\"videoUrls\":[]}]")
-    , ("Department with two courses in database called"
-    , [csc108, sta237, sta238]
-    , "STA"
-    , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.\",\"distribution\":null,\"exclusions\":\"STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5\",\"name\":\"STA237H1\",\"prereqString\":\"(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)\",\"title\":\"Probability, Statistics and Data Analysis I\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"[https://example.com/video1\",\"https://example.com/video2]\"]}]")
-    , ("Department with no courses in database called"
-    , [csc108, sta237, sta238]
-    , "MAT"
-    , "[]")
-    , ("Empty department called in a non-empty database -- should return the entire database"
-    , [csc108, sta237, sta238]
-    , ""
-    , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":null,\"description\":\"Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required.\",\"distribution\":null,\"exclusions\":\"CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3\",\"name\":\"CSC108H1\",\"prereqString\":null,\"title\":\"Introduction to Computer Programming\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.\",\"distribution\":null,\"exclusions\":\"STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5\",\"name\":\"STA237H1\",\"prereqString\":\"(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)\",\"title\":\"Probability, Statistics and Data Analysis I\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"[https://example.com/video1\",\"https://example.com/video2]\"]}]")
+    [
+        ( "Empty Database"
+        , []
+        , "STA"
+        , "[]"
+        )
+    ,
+        ( "Department with one course in database called"
+        , [csc108, sta237, sta238]
+        , "CSC"
+        , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":null,\"description\":\"Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required.\",\"distribution\":null,\"exclusions\":\"CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3\",\"name\":\"CSC108H1\",\"prereqString\":null,\"title\":\"Introduction to Computer Programming\",\"videoUrls\":[]}]"
+        )
+    ,
+        ( "Department with two courses in database called"
+        , [csc108, sta237, sta238]
+        , "STA"
+        , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.\",\"distribution\":null,\"exclusions\":\"STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5\",\"name\":\"STA237H1\",\"prereqString\":\"(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)\",\"title\":\"Probability, Statistics and Data Analysis I\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"[https://example.com/video1\",\"https://example.com/video2]\"]}]"
+        )
+    ,
+        ( "Department with no courses in database called"
+        , [csc108, sta237, sta238]
+        , "MAT"
+        , "[]"
+        )
+    ,
+        ( "Empty department called in a non-empty database -- should return the entire database"
+        , [csc108, sta237, sta238]
+        , ""
+        , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":null,\"description\":\"Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required.\",\"distribution\":null,\"exclusions\":\"CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3\",\"name\":\"CSC108H1\",\"prereqString\":null,\"title\":\"Introduction to Computer Programming\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.\",\"distribution\":null,\"exclusions\":\"STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5\",\"name\":\"STA237H1\",\"prereqString\":\"(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)\",\"title\":\"Probability, Statistics and Data Analysis I\",\"videoUrls\":[]},{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"[https://example.com/video1\",\"https://example.com/video2]\"]}]"
+        )
     ]
-    where
-        sta237 = Course
+  where
+    sta237 =
+        Course
             { courseCode = "STA237H1"
             , courseTitle = Just "Probability, Statistics and Data Analysis I"
-            , courseDescription = Just "An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development."
-            , coursePrereqs = Just "(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)"
-            , courseExclusions = Just "STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5"
+            , courseDescription =
+                Just
+                    "An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development."
+            , coursePrereqs =
+                Just
+                    "(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)"
+            , courseExclusions =
+                Just "STA247H1,  STA201H1,  STA255H1,  STA257H1,  ECO227Y1,  MAT370H1,  STAB52H3,  STA256H5,  ECO227Y5"
             , courseBreadth = Nothing
             , courseDistribution = Nothing
-            , coursePrereqString = Just "(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)"
-            , courseCoreqs = Just "(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."
+            , coursePrereqString =
+                Just
+                    "(  MAT135H1,  MAT136H1)/  MAT137Y1/  MAT157Y1/  (  MATA30H3,  MATA36H3)/  (  MATA31H3,  MATA37H3)/  (  MAT135H5,  MAT136H5)/  MAT137Y5/  MAT157Y5/  ( MAT137H5,  MAT139H5)/  ( MAT157H5,  MAT159H5)"
+            , courseCoreqs =
+                Just
+                    "(  CSC108H1/  equivalent programming experience)/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."
             , courseVideoUrls = []
             }
-        sta238 = Course
+    sta238 =
+        Course
             { courseCode = "STA238H1"
             , courseTitle = Just "Probability, Statistics and Data Analysis II"
-            , courseDescription = Just "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."
+            , courseDescription =
+                Just
+                    "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."
             , coursePrereqs = Just "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"
-            , courseExclusions = Just "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"
+            , courseExclusions =
+                Just
+                    "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"
             , courseBreadth = Nothing
             , courseDistribution = Nothing
             , coursePrereqString = Just "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5"
-            , courseCoreqs = Just "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."
+            , courseCoreqs =
+                Just "CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance."
             , courseVideoUrls = ["[https://example.com/video1", "https://example.com/video2]"]
             }
-        csc108 = Course
+    csc108 =
+        Course
             { courseCode = "CSC108H1"
             , courseTitle = Just "Introduction to Computer Programming"
-            , courseDescription = Just "Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required."
+            , courseDescription =
+                Just
+                    "Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing. Floating-point numbers and numerical computation. No prior programming experience required."
             , coursePrereqs = Nothing
-            , courseExclusions = Just "CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3"
+            , courseExclusions =
+                Just "CSC110Y1,  CSC111H1,  CSC120H1,  CSC121H1,  CSC148H1,  CSC108H5,  CSC148H5,  CSCA08H3,  CSCA20H3,  CSCA48H3"
             , courseBreadth = Nothing
             , courseDistribution = Nothing
             , coursePrereqString = Nothing
@@ -362,5 +416,10 @@ runCourseInfoTests = map runCourseInfoTest courseInfoTestCases
 
 -- | Test suite for Course Controller Module
 test_courseController :: TestTree
-test_courseController = withDatabase "Course Controller tests" (runRetrieveCourseTests ++
-    runIndexTests ++ runCourseInfoTests)
+test_courseController =
+    withDatabase
+        "Course Controller tests"
+        ( runRetrieveCourseTests
+            ++ runIndexTests
+            ++ runCourseInfoTests
+        )
