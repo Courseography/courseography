@@ -1486,6 +1486,57 @@ export class Graph extends React.Component {
     return transform ? `matrix(${transform.join(", ")})` : ""
   }
 
+  /**
+   * Compute the dimensions of the bounding box (bbox) that encloses every valid shape (node, hybrid, and bool) in the graph.
+   * @returns {?{minX, minY, maxX, maxY, width, height}} The bbox dimensions (minimum xy-coordinates, maximum
+   * xy-coordinates, width, and height), or null if all shapes in the graph have no size or position.
+   */
+  computeShapesBbox = () => {
+    const shapes = Object.values(this.state.nodesJSON)
+      .concat(Object.values(this.state.hybridsJSON))
+      .concat(Object.values(this.state.boolsJSON))
+    let minX = Infinity
+    let minY = Infinity
+    let maxX = -Infinity
+    let maxY = -Infinity
+
+    for (let i = 0; i < shapes.length; i++) {
+      // Skip shapes with no position
+      if (!Array.isArray(shapes[i].pos)) {
+        continue
+      }
+
+      let shapeWidth = Number(shapes[i].width)
+      if (Number.isNaN(shapeWidth) || shapeWidth < 0) {
+        shapeWidth = 0
+      }
+
+      let shapeHeight = Number(shapes[i].height)
+      if (Number.isNaN(shapeHeight) || shapeHeight < 0) {
+        shapeHeight = 0
+      }
+
+      // Skip shapes with no size
+      if (shapeWidth === 0 && shapeHeight === 0) {
+        continue
+      }
+
+      const x = shapes[i].pos[0]
+      const y = shapes[i].pos[1]
+      minX = Math.min(minX, x)
+      minY = Math.min(minY, y)
+      maxX = Math.max(maxX, x + shapeWidth)
+      maxY = Math.max(maxY, y + shapeHeight)
+    }
+
+    // Return null if all shapes have no size or position
+    if (!Number.isFinite(minX)) {
+      return null
+    }
+
+    return { minX, minY, maxX, maxY }
+  }
+
   render() {
     let containerWidth = 0
     let containerHeight = 0
@@ -1495,26 +1546,35 @@ export class Graph extends React.Component {
       containerHeight = reactGraph.clientHeight
     }
 
-    let newViewboxHeight
-    let newViewboxWidth
+    let newViewboxWidth = this.state.width * this.state.zoomFactor
+    let newViewboxHeight = this.state.height * this.state.zoomFactor
+    let viewboxCentreX = this.state.width / 2
+    let viewboxCentreY = this.state.height / 2
     if (document.getElementById("generateRoot") !== null) {
-      newViewboxHeight =
-        Math.max(this.state.height, containerHeight) * this.state.zoomFactor
+      const bbox = this.computeShapesBbox()
+      if (bbox !== null) {
+        // Compute and store coordinates of bbox's centre point
+        viewboxCentreX = (bbox.minX + bbox.maxX) / 2
+        viewboxCentreY = (bbox.minY + bbox.maxY) / 2
+      }
+
       newViewboxWidth =
         Math.max(this.state.width, containerWidth) * this.state.zoomFactor
-    } else {
-      newViewboxWidth = this.state.width * this.state.zoomFactor
-      newViewboxHeight = this.state.height * this.state.zoomFactor
+      newViewboxHeight =
+        Math.max(this.state.height, containerHeight) * this.state.zoomFactor
     }
 
-    const viewBoxContainerRatio =
+    // Centre viewBox using viewboxCentreX/Y, then apply pan
+    const viewboxContainerRatio =
       containerHeight !== 0 ? newViewboxHeight / containerHeight : 1
     const viewboxX =
-      (this.state.width - newViewboxWidth) / 2 +
-      this.state.horizontalPanFactor * viewBoxContainerRatio
+      viewboxCentreX -
+      newViewboxWidth / 2 +
+      this.state.horizontalPanFactor * viewboxContainerRatio
     const viewboxY =
-      (this.state.height - newViewboxHeight) / 2 +
-      this.state.verticalPanFactor * viewBoxContainerRatio
+      viewboxCentreY -
+      newViewboxHeight / 2 +
+      this.state.verticalPanFactor * viewboxContainerRatio
 
     // not all of these properties are supported in React
     const svgAttrs = {
