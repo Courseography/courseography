@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Added recommended preparation field to courses and updated the course info modal
+
 ### 🐛 Bug fixes
 
 - Fixed CSS styling of background colour and let the application have full height

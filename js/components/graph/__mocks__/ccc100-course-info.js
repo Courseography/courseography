@@ -365,6 +365,7 @@ export default {
   videoUrls: [],
   breadth: "The Physical and Mathematical Universes (5)",
   name: "CCC100H1",
+  prep: "CCC101H1",
   exclusions: "",
   title: "Introduction to CCC Thinking",
   description:

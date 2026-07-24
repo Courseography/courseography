@@ -365,6 +365,7 @@ export default {
   videoUrls: [],
   breadth: "The Physical and Mathematical Universes (5)",
   name: "BBB100H1",
+  prep: "BBB101H1",
   exclusions: "",
   title: "Introduction to BBB Thinking",
   description:
