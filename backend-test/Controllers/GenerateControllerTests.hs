@@ -32,6 +32,7 @@ insertCoursesWithPrerequisites = mapM_ insertCourse
                 , courseTitle = Nothing
                 , courseDescription = Nothing
                 , coursePrereqs = prereqString
+                , coursePrep = Nothing
                 , courseExclusions = Nothing
                 , courseBreadth = Nothing
                 , courseDistribution = Nothing

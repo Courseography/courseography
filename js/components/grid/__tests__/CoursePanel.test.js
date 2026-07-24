@@ -32,6 +32,7 @@ describe("CoursePanel", () => {
       title: "Foundations of Computer Science I",
       description: null,
       prereqs: null,
+      prep: null,
       exclusions: null,
       breadth: null,
       distribution: null,

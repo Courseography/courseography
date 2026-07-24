@@ -133,8 +133,7 @@ parseCourses tags =
             description = maybe "" ((courseContents !!) . (+ 1)) i1
             prereqString = getValue "Prerequisite:" courseContents
             coreq = getValue "Corequisite:" courseContents
-            -- TODO: add a "recommended preparation" field to the database
-            -- prep = getValue "Recommended Preparation:" courseContents
+            prep = getValue "Recommended Preparation:" courseContents
             exclusion = getValue "Exclusion:" courseContents
             distribution = fromMaybe "" $ getValue "Distribution Requirements:" courseContents
             breadth = fromMaybe "" $ getValue "Breadth Requirements:" courseContents
@@ -143,6 +142,7 @@ parseCourses tags =
                 (Just title)
                 (Just description)
                 (fmap (T.pack . show . parseReqs . T.unpack) prereqString)
+                prep
                 exclusion
                 Nothing
                 Nothing
