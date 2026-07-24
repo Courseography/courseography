@@ -24,6 +24,7 @@
 - Refactored styling colors into CSS variables
 - Removed dead CSS rules including ids, classNames, and colors
 - Switched Haskell formatter to `fourmolu` and ran on all files
+- Ran `fourmolu` on Haskell files in `backend-test/`
 
 ## [0.8.0] - 2026-06-09
 
