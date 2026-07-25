@@ -1487,18 +1487,16 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Compute the dimensions of the bounding box (bbox) that encloses every valid shape (node, hybrid, and bool) in the graph.
-   * @returns {?{minX, minY, maxX, maxY, width, height}} The bbox dimensions (minimum xy-coordinates, maximum
-   * xy-coordinates, width, and height), or null if all shapes in the graph have no size or position.
+   * Get the minimum xy-values of all valid shapes (node, hybrid, and bool) in the graph.
+   * @returns {?{minX, minY}} The minimum xy-values of all valid shapes in the graph,
+   * or null if every shape has no size or position.
    */
-  computeShapesBbox = () => {
+  getShapesMinXY = () => {
     const shapes = Object.values(this.state.nodesJSON)
       .concat(Object.values(this.state.hybridsJSON))
       .concat(Object.values(this.state.boolsJSON))
     let minX = Infinity
     let minY = Infinity
-    let maxX = -Infinity
-    let maxY = -Infinity
 
     for (let i = 0; i < shapes.length; i++) {
       // Skip shapes with no position
@@ -1525,16 +1523,14 @@ export class Graph extends React.Component {
       const y = shapes[i].pos[1]
       minX = Math.min(minX, x)
       minY = Math.min(minY, y)
-      maxX = Math.max(maxX, x + shapeWidth)
-      maxY = Math.max(maxY, y + shapeHeight)
     }
 
     // Return null if all shapes have no size or position
-    if (!Number.isFinite(minX)) {
+    if (!Number.isFinite(minX) || !Number.isFinite(minX)) {
       return null
     }
 
-    return { minX, minY, maxX, maxY }
+    return { x: minX, y: minY }
   }
 
   render() {
@@ -1551,20 +1547,20 @@ export class Graph extends React.Component {
     let viewboxCentreX = this.state.width / 2
     let viewboxCentreY = this.state.height / 2
     if (document.getElementById("generateRoot") !== null) {
-      const bbox = this.computeShapesBbox()
-      if (bbox !== null) {
-        // Compute and store coordinates of bbox's centre point
-        viewboxCentreX = (bbox.minX + bbox.maxX) / 2
-        viewboxCentreY = (bbox.minY + bbox.maxY) / 2
+      const minCoordinates = this.getShapesMinXY()
+      if (minCoordinates !== null) {
+        // Shift the viewBox's centre by the minimum xy-values of all valid shapes in the graph,
+        // aligning the viewBox on the position of the graph
+        viewboxCentreX += minCoordinates.x
+        viewboxCentreY += minCoordinates.y
       }
-
       newViewboxWidth =
         Math.max(this.state.width, containerWidth) * this.state.zoomFactor
       newViewboxHeight =
         Math.max(this.state.height, containerHeight) * this.state.zoomFactor
     }
 
-    // Centre viewBox using viewboxCentreX/Y, then apply pan
+    // Centre the viewBox using viewboxCentreX/Y, then apply pan
     const viewboxContainerRatio =
       containerHeight !== 0 ? newViewboxHeight / containerHeight : 1
     const viewboxX =
