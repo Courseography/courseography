@@ -77,6 +77,8 @@ export default function Node(props) {
   }
 
   const textXOffset = props.JSON.pos[0] + props.JSON.width / 2
+  const textYOffset = props.JSON.pos[1] + props.JSON.height / 2
+  const singleLine = props.className === "node" && props.JSON.text.length === 1
 
   return (
     <g
@@ -97,7 +99,8 @@ export default function Node(props) {
       {props.JSON.text.map(function (textTag, i) {
         const textAttrs = {
           x: textXOffset,
-          y: textTag.pos[1],
+          y: singleLine ? textYOffset : textTag.pos[1],
+          dominantBaseline: singleLine ? "central" : undefined,
         }
         return (
           <text {...textAttrs} key={i}>
