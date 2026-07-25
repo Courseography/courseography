@@ -1550,7 +1550,7 @@ export class Graph extends React.Component {
       const minCoordinates = this.getShapesMinXY()
       if (minCoordinates !== null) {
         // Shift the viewBox's centre by the minimum xy-values of all valid shapes in the graph,
-        // aligning the viewBox on the position of the graph
+        // aligning the viewBox on the graph
         viewboxCentreX += minCoordinates.x
         viewboxCentreY += minCoordinates.y
       }
