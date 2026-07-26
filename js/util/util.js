@@ -1,99 +1,128 @@
-/** Helper function for parsing hybrid node's text.
- *
- * @param {string} s a combination of course codes
- * @returns {Array} an array containing parsed course codes
+/**
+ * Helper function to strip a string entirely contained within a pair of parentheses.
+ */
+export function removeOuterParens(s) {
+  if (s.length < 2 || s.charAt(0) !== "(" || s.charAt(s.length - 1) !== ")") {
+    return s
+  }
+
+  let parenLayer = 1 // Depth of nested parentheses
+  // Iterate through the string outside its opening '(' and closing ')'.
+  // If we reach a nest depth of 0 prior to the end of the string, it isn't contained in parentheses.
+  for (let i = 1; i <= s.length - 2; i++) {
+    if (s.charAt(i) === "(") {
+      parenLayer += 1
+    }
+    if (s.charAt(i) === ")") {
+      parenLayer -= 1
+    }
+    if (parenLayer === 0) {
+      return s
+    }
+  }
+
+  return s.substr(1, s.length - 2)
+}
+
+/**
+ * Helper function to split a prerequisite string by its 'and' or 'or' separator.
+ * Strip the result of top-level outer parentheses and spaces.
+ * @param {string} s the prerequisite string
+ * @param {string} separator the separator to split by (',' for and, '/' for or)
+ * @returns the resulting list of conjunctives/disjunctives
+ */
+export function splitPrereqString(s, separator) {
+  let splitList = []
+  let currIndex = 0
+  let curr = ""
+  let parenLayer = 0 // Depth of nested parentheses
+  while (currIndex < s.length) {
+    // If a parenthesis is encountered, update parenLayer
+    if (s.charAt(currIndex) === "(") {
+      parenLayer += 1
+    }
+    if (s.charAt(currIndex) === ")") {
+      parenLayer -= 1
+    } 
+
+    // If the separator is encountered and we aren't inside parentheses, split on it and reset curr
+    if (s.charAt(currIndex) === separator && parenLayer === 0) {
+      splitList.push(removeOuterParens(curr))
+      curr = ""
+    }
+    // Add all other non-space characters to curr
+    else if (s.charAt(currIndex) !== " ") {
+      curr += s.charAt(currIndex)
+    }
+    currIndex += 1
+  }
+  splitList.push(removeOuterParens(curr))
+
+  return splitList
+}
+
+/**
+ * Parse a logical prerequisite string as a conjunction of disjunctions.
+ * @param {string} s the prerequisite string
+ * @returns a nested list of courses as an AND of ORs, or the course itself if no splitting is made
  */
 export function parseAnd(s) {
-  "use strict"
-  let curr = s
-  const andList = []
-  while (curr.length > 0) {
-    if (curr.charAt(0) === "," || curr.charAt(0) === ";" || curr.charAt(0) === " ") {
-      curr = curr.substr(1)
-    } else {
-      const result = parseOr(curr)
-      if (curr === result[1]) {
-        console.error("Parsing failed for " + s + "  with curr = " + curr)
-        break
-      } else {
-        curr = result[1]
-        andList.push(result[0])
+  // Base case: return the course if no splitting is to be made.
+  if (!s.includes(",") && !s.includes("/")) {
+    return removeOuterParens(s)
+  }
+  // Otherwise, recurse and parse each conjunctive as a disjunction.
+  const andList = splitPrereqString(removeOuterParens(s), ",")
+  let splitList = []
+  for (const str of andList) {
+    splitList.push(parseOr(str))
+  }
+  // Expand any shorthand groups of strings (e.g. "MAT237,257") to their full course codes
+  let currPrefix = ""
+  for (let i = 0; i < splitList.length; i++) {
+    if (typeof splitList[i] === "object") {
+      currPrefix = ""
+    } 
+    else if (typeof splitList[i] === "string") {
+      if (splitList[i].match(/^[A-Z]{3}/g)) {
+        currPrefix = splitList[i].substr(0, 3)
+      } else if (splitList[i].match(/^[0-9]{3}$/g)) {
+        splitList[i] = currPrefix + splitList[i]
       }
     }
   }
-  return [andList, curr]
+  return splitList
 }
 
 /**
- * Helper function for parsing hybrid node's text.
- * Calls parseCourse to parse courses separated by '/'.
- * If the resulting parsed list only has one course, return the course
- * itself as the first element as the return array.
- * If there is a course separated by ',', stop and return the remaining
- * courses as the second element in the return array.
- *
- * @param {string} s a combination of course codes
- * @returns {Array} an array containing parsed course codes
+ * Parse a logical prerequisite string as a disjunction of conjunctions.
+ * @param {string} s the prerequisite string
+ * @returns a nested list of courses as an OR of ANDs, or the course itself if no splitting is made
  */
 export function parseOr(s) {
-  "use strict"
-  let curr = s
-  let orList = []
-  let tmp
-  let result
-  let coursePrefix
-  while (curr.length > 0 && curr.charAt(0) !== "," && curr.charAt(0) !== ";") {
-    if (curr.charAt(0) === "(") {
-      tmp = curr.substr(1, curr.indexOf(")"))
-      if (coursePrefix === undefined && tmp.length >= 6) {
-        coursePrefix = tmp.substr(0, 3).toUpperCase()
+  // Base case: return the course if no splitting is to be made.
+  if (!s.includes(",") && !s.includes("/")) {
+    return removeOuterParens(s)
+  }
+  // Otherwise, recurse and parse each conjunctive as a disjunction.
+  const orList = splitPrereqString(removeOuterParens(s), "/")
+  let splitList = []
+  for (const str of orList) {
+    splitList.push(parseAnd(str))
+  }
+  // Expand any shorthand groups of strings (e.g. "MAT237/257") to their full course codes
+  let currPrefix = ""
+  for (let i = 0; i < splitList.length; i++) {
+    if (typeof splitList[i] === "object") {
+      currPrefix = ""
+    } 
+    else if (typeof splitList[i] === "string") {
+      if (splitList[i].match(/^[A-Z]{3}/g)) {
+        currPrefix = splitList[i].substr(0, 3)
+      } else if (splitList[i].match(/^[0-9]{3}$/g)) {
+        splitList[i] = currPrefix + splitList[i]
       }
-
-      result = parseCourse(tmp, coursePrefix)
-      orList.push(result[0])
-      curr = curr.substr(curr.indexOf(")") + 1)
-    } else if (curr.charAt(0) === " " || curr.charAt(0) === "/") {
-      curr = curr.substr(1)
-    } else {
-      if (coursePrefix === undefined && curr.length >= 6) {
-        coursePrefix = curr.substr(0, 3).toUpperCase()
-      }
-      result = parseCourse(curr, coursePrefix)
-      if (curr === result[1]) {
-        console.error("Parsing failed for " + s + " with curr = " + curr)
-        break
-      }
-      curr = result[1]
-      orList.push(result[0])
     }
   }
-  // If only one course was parsed, return that course.
-  if (orList.length === 1) {
-    orList = orList[0]
-  }
-
-  return [orList, curr]
-}
-
-/**
- * Helper function for parsing hybrid node's text
- *
- * @param {string} s a combination of courses
- * @param {string} prefix prefix of the current course
- * @returns {Array} an array containing parsed courses
- */
-export function parseCourse(s, prefix) {
-  "use strict"
-
-  const start = s.search(/[,/]/)
-  if (start === 3) {
-    return [prefix + s.substr(0, start), s.substr(start)]
-  } else if (start > 0) {
-    return [s.substr(0, start).toUpperCase(), s.substr(start)]
-  }
-
-  if (s.length === 3) {
-    return [prefix + s, ""]
-  }
-  return [s, ""]
+  return splitList
 }

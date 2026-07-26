@@ -945,17 +945,26 @@ export class Graph extends React.Component {
    */
   updateNode = (nodeId, recursive) => {
     let newState
-    if (this.arePrereqsSatisfiedNode(nodeId)) {
-      if (this.isSelected(nodeId) || this.state.hybridsJSON[nodeId]) {
+    if (this.state.hybridsJSON[nodeId]) {
+      if (this.arePrereqsSatisfiedHybrid(nodeId)) {
         newState = "active"
       } else {
-        newState = "takeable"
-      }
-    } else {
-      if (this.isSelected(nodeId) && !this.state.hybridsJSON[nodeId]) {
-        newState = "overridden"
-      } else {
         newState = "inactive"
+      }
+    } 
+    else {
+      if (this.arePrereqsSatisfiedNode(nodeId)) {
+        if (this.isSelected(nodeId)) {
+          newState = "active"
+        } else {
+          newState = "takeable"
+        }
+      } else {
+        if (this.isSelected(nodeId)) {
+          newState = "overridden"
+        } else {
+          newState = "inactive"
+        }
       }
     }
 
@@ -1276,6 +1285,46 @@ export class Graph extends React.Component {
     }
 
     return parents.every(isAllTrue)
+  }
+
+  /**
+   * Checks whether a hybrid node's prereqs are satisfied
+   * @return {boolean}
+   */
+  arePrereqsSatisfiedHybrid = nodeId => {
+    // Concatenate prereq string
+    let hybridNode = this.state.hybridsJSON[nodeId]
+    let hybridText = ""
+    hybridNode.text.forEach(textTag => (hybridText += textTag.text))
+    
+    // Parse prereq string into a nested list alternating between AND and OR conditions
+    let prereqList = parseAnd(hybridText)
+
+    // Recursively check if each prerequisite condition is satisfied within the selected courses
+    let nodesList = Object.values(this.state.nodesJSON)
+    const isSelectedCourse = course => {
+      let prereqNode = findRelationship(course, nodesList)
+      if (prereqNode !== undefined) {
+        return this.isSelectedNode(prereqNode.id_)
+      } else {
+        return false
+      }
+    }
+    const andSatisfied = andList => {
+      if (typeof andList === "string") {
+        return isSelectedCourse(andList)
+      } else {
+        return andList.every(orSatisfied)
+      }
+    }
+    const orSatisfied = orList => {
+      if (typeof orList === "string") {
+        return isSelectedCourse(orList)
+      } else {
+        return orList.some(andSatisfied)
+      }
+    }
+    return andSatisfied(prereqList)
   }
 
   /**
@@ -1716,10 +1765,11 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
     nodeParents.push(prereqNode.id_)
     childrenObj[prereqNode.id_].push(hybridNode.id_)
   } else {
-    // Parse text first
-    const prereqs = parseAnd(hybridText)[0]
-    prereqs.forEach(course => {
-      if (typeof course === "string") {
+    // Flatten the list of prereqs and add a parent-child connection for each one
+    let prereqs = parseAnd(hybridText)
+    if (typeof prereqs === "object") {
+      prereqs = prereqs.flat(Infinity)
+      prereqs.forEach(course => {
         prereqNode = findRelationship(course, nodesJSON)
         if (prereqNode !== undefined) {
           nodeParents.push(prereqNode.id_)
@@ -1727,22 +1777,10 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
         } else {
           console.error("Could not find prereq for ", hybridText)
         }
-      } else if (typeof course === "object") {
-        const orPrereq = []
-        course.forEach(c => {
-          const prereqNode = findRelationship(c, nodesJSON)
-          if (prereqNode !== undefined) {
-            orPrereq.push(prereqNode.id_)
-            childrenObj[prereqNode.id_].push(hybridNode.id_)
-          } else {
-            console.error("Could not find prereq for ", hybridText)
-          }
-        })
-        if (orPrereq.length > 0) {
-          nodeParents.push(orPrereq)
-        }
-      }
-    })
+      })
+    } else {
+      console.error("Could not find prereq for ", hybridText)
+    }
   }
   parents[hybridNode.id_] = nodeParents
 }
