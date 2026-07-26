@@ -7,14 +7,14 @@ export default {
         {
           endHour: 14,
           startHour: 12,
-          timeSession: "F",
+          timeSession: "20269",
           timeLocation: "MY 150",
           weekDay: 1,
         },
         {
           endHour: 14,
           startHour: 13,
-          timeSession: "F",
+          timeSession: "20269",
           timeLocation: "MY 150",
           weekDay: 3,
         },
@@ -35,14 +35,14 @@ export default {
         {
           endHour: 15,
           startHour: 13,
-          timeSession: "F",
+          timeSession: "20269",
           timeLocation: "BA 1160",
           weekDay: 2,
         },
         {
           endHour: 14,
           startHour: 13,
-          timeSession: "F",
+          timeSession: "20269",
           timeLocation: "BA 1160",
           weekDay: 4,
         },
@@ -63,7 +63,7 @@ export default {
         {
           endHour: 21,
           startHour: 18,
-          timeSession: "F",
+          timeSession: "20269",
           timeLocation: "MY 150",
           weekDay: 1,
         },
@@ -84,14 +84,14 @@ export default {
         {
           endHour: 14,
           startHour: 13,
-          timeSession: "F",
+          timeSession: "20269",
           timeLocation: "MY 150",
           weekDay: 3,
         },
         {
           endHour: 14,
           startHour: 12,
-          timeSession: "F",
+          timeSession: "20269",
           timeLocation: "MY 150",
           weekDay: 1,
         },
@@ -112,7 +112,7 @@ export default {
         {
           endHour: 21,
           startHour: 18,
-          timeSession: "F",
+          timeSession: "20269",
           timeLocation: "MY 150",
           weekDay: 1,
         },
@@ -151,14 +151,14 @@ export default {
       timeData: [
         {
           endHour: 14,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "MY 150",
           startHour: 13,
           weekDay: 4,
         },
         {
           endHour: 15,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "MY 150",
           startHour: 13,
           weekDay: 1,
@@ -192,7 +192,7 @@ export default {
       timeData: [
         {
           endHour: 17,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "Contact Dept",
           startHour: 16,
           weekDay: 0,
@@ -213,7 +213,7 @@ export default {
       timeData: [
         {
           endHour: 16,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "MY 315",
           startHour: 13,
           weekDay: 3,
@@ -234,7 +234,7 @@ export default {
       timeData: [
         {
           endHour: 21,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "MY 150",
           startHour: 18,
           weekDay: 1,
@@ -255,14 +255,14 @@ export default {
       timeData: [
         {
           endHour: 15,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "MY 150",
           startHour: 13,
           weekDay: 1,
         },
         {
           endHour: 14,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "MY 150",
           startHour: 13,
           weekDay: 4,
@@ -283,7 +283,7 @@ export default {
       timeData: [
         {
           endHour: 21,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "MY 150",
           startHour: 18,
           weekDay: 1,
@@ -304,7 +304,7 @@ export default {
       timeData: [
         {
           endHour: 17,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "Contact Dept",
           startHour: 16,
           weekDay: 4,
@@ -344,7 +344,7 @@ export default {
       timeData: [
         {
           endHour: 17,
-          timeSession: "S",
+          timeSession: "20271",
           timeLocation: "Contact Dept",
           startHour: 16,
           weekDay: 2,
