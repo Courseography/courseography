@@ -14,6 +14,7 @@
 - Fix bool node centering in Generate page
 - Fixed support for year-long ("Y" session) courses
 - Introduced `getShapesMinXY` in `js/components/graph/Graph.js` to fix graph centering in Generate page
+- Fixed course node dimensions and centering in Generate graph to match main graph
 
 ### 🔧 Internal changes
 
