@@ -59,14 +59,14 @@ retrieveCourseTestCases =
                     , meetingExtra = 0
                     }
                 [ Time'
-                    { timeSession' = Just "F"
+                    { timeSession' = Just "20269"
                     , weekDay' = 0.0
                     , startHour' = 10.0
                     , endHour' = 11.0
                     , timeLocation' = Just "MP"
                     }
                 , Time'
-                    { timeSession' = Just "F"
+                    { timeSession' = Just "20269"
                     , weekDay' = 2.0
                     , startHour' = 13.0
                     , endHour' = 14.0
@@ -85,14 +85,14 @@ retrieveCourseTestCases =
                     , meetingExtra = 0
                     }
                 [ Time'
-                    { timeSession' = Just "S"
+                    { timeSession' = Just "20271"
                     , weekDay' = 1.0
                     , startHour' = 10.0
                     , endHour' = 11.0
                     , timeLocation' = Just "WW"
                     }
                 , Time'
-                    { timeSession' = Just "S"
+                    { timeSession' = Just "20271"
                     , weekDay' = 4.0
                     , startHour' = 13.0
                     , endHour' = 14.0
@@ -137,14 +137,14 @@ retrieveCourseTestCases =
                     , meetingExtra = 0
                     }
                 [ Time'
-                    { timeSession' = Just "F"
+                    { timeSession' = Just "20269"
                     , weekDay' = 0.0
                     , startHour' = 10.0
                     , endHour' = 11.0
                     , timeLocation' = Just "MP"
                     }
                 , Time'
-                    { timeSession' = Just "F"
+                    { timeSession' = Just "20269"
                     , weekDay' = 2.0
                     , startHour' = 13.0
                     , endHour' = 14.0
