@@ -945,6 +945,8 @@ export class Graph extends React.Component {
    */
   updateNode = (nodeId, recursive) => {
     let newState
+    // For a hybrid node, set the state to 'active' or 'inactive' depending on if its text is satisfied
+    // as a prerequisite string
     if (this.state.hybridsJSON[nodeId]) {
       if (this.arePrereqsSatisfiedHybrid(nodeId)) {
         newState = "active"
@@ -952,6 +954,8 @@ export class Graph extends React.Component {
         newState = "inactive"
       }
     } 
+    // For a regular course node, set the state to 'active', 'takeable', 'inactive', or 'overridden'
+    // depending on whether the user has selected the course and whether the course's prereqs are met
     else {
       if (this.arePrereqsSatisfiedNode(nodeId)) {
         if (this.isSelected(nodeId)) {
@@ -1288,7 +1292,7 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Checks whether a hybrid node's prereqs are satisfied
+   * Checks whether a hybrid node's prereq string is satisfied
    * @return {boolean}
    */
   arePrereqsSatisfiedHybrid = nodeId => {
@@ -1759,13 +1763,15 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
   let hybridText = ""
   hybridNode.text.forEach(textTag => (hybridText += textTag.text))
   const nodeParents = []
-  // First search for entire string (see Stats graph)
+  // First search for a node that matches the entire string
   let prereqNode = findRelationship(hybridText, nodesJSON)
   if (prereqNode !== undefined) {
     nodeParents.push(prereqNode.id_)
     childrenObj[prereqNode.id_].push(hybridNode.id_)
-  } else {
-    // Flatten the list of prereqs and add a parent-child connection for each one
+  } 
+  // Otherwise, parse the hybrid node's text as a prerequisite string of multiple courses,
+  // and add a parent-child connection for each involved course
+  else {
     let prereqs = parseAnd(hybridText)
     if (typeof prereqs === "object") {
       prereqs = prereqs.flat(Infinity)
