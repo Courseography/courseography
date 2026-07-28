@@ -1,32 +1,54 @@
 /**
- * Helper function to strip a string entirely contained within a pair of parentheses.
+ * Parse a logical prerequisite string as a conjunction of disjunctions.
+ * @param {string} s the prerequisite string
+ * @returns a nested list of courses as an AND of ORs, or the course itself if no splitting is made
  */
-export function removeOuterParens(s) {
-  if (s.length < 2 || s.charAt(0) !== "(" || s.charAt(s.length - 1) !== ")") {
-    return s
+export function parseAnd(s) {
+  // Base case: return the course if no splitting is to be made.
+  if (!s.includes(",") && !s.includes(";") && !s.includes("/")) {
+    return removeOuterParens(s)
   }
-
-  let parenLayer = 1 // Depth of nested parentheses
-  // Iterate through the string outside its opening '(' and closing ')'.
-  // If we reach a nest depth of 0 prior to the end of the string, it isn't contained in parentheses.
-  for (let i = 1; i <= s.length - 2; i++) {
-    if (s.charAt(i) === "(") {
-      parenLayer += 1
-    }
-    if (s.charAt(i) === ")") {
-      parenLayer -= 1
-    }
-    if (parenLayer === 0) {
-      return s
+  // Otherwise, recurse and parse each conjunctive as a disjunction.
+  const andList = splitPrereqString(removeOuterParens(s.replaceAll(";", ",")), ",")
+  let splitList = []
+  for (const str of andList) {
+    if (str.length > 0) {
+      splitList.push(parseOr(str))
     }
   }
 
-  return s.substr(1, s.length - 2)
+  // Modify the returned list to account for shorthand course codes and remove grade requirements
+  parseSplitList(splitList)
+  return splitList
 }
 
 /**
- * Helper function to split a prerequisite string by its 'and' or 'or' separator.
- * Strip the result of top-level outer parentheses and spaces.
+ * Parse a logical prerequisite string as a disjunction of conjunctions.
+ * @param {string} s the prerequisite string
+ * @returns a nested list of courses as an OR of ANDs, or the course itself if no splitting is made
+ */
+export function parseOr(s) {
+  // Base case: return the course if no splitting is to be made.
+  if (!s.includes(",") && !s.includes("/")) {
+    return removeOuterParens(s)
+  }
+  // Otherwise, recurse and parse each conjunctive as a disjunction.
+  const orList = splitPrereqString(removeOuterParens(s), "/")
+  let splitList = []
+  for (const str of orList) {
+    if (str.length > 0) {
+      splitList.push(parseAnd(str))
+    }
+  }
+
+  // Modify the returned list to account for shorthand course codes and remove grade requirements
+  parseSplitList(splitList)
+  return splitList
+}
+
+/**
+ * Helper function to split a prerequisite string by its 'and' or 'or' separator, and
+ * strip the result of top-level outer parentheses and spaces.
  * @param {string} s the prerequisite string
  * @param {string} separator the separator to split by (',' for and, '/' for or)
  * @returns the resulting list of conjunctives/disjunctives
@@ -62,67 +84,56 @@ export function splitPrereqString(s, separator) {
 }
 
 /**
- * Parse a logical prerequisite string as a conjunction of disjunctions.
- * @param {string} s the prerequisite string
- * @returns a nested list of courses as an AND of ORs, or the course itself if no splitting is made
+ * Helper function to strip a string entirely contained within a pair of parentheses.
  */
-export function parseAnd(s) {
-  // Base case: return the course if no splitting is to be made.
-  if (!s.includes(",") && !s.includes("/")) {
-    return removeOuterParens(s)
+export function removeOuterParens(s) {
+  if (s.length < 2 || s.charAt(0) !== "(" || s.charAt(s.length - 1) !== ")") {
+    return s
   }
-  // Otherwise, recurse and parse each conjunctive as a disjunction.
-  const andList = splitPrereqString(removeOuterParens(s), ",")
-  let splitList = []
-  for (const str of andList) {
-    splitList.push(parseOr(str))
-  }
-  // Expand any shorthand groups of strings (e.g. "MAT237,257") to their full course codes
-  let currPrefix = ""
-  for (let i = 0; i < splitList.length; i++) {
-    if (typeof splitList[i] === "object") {
-      currPrefix = ""
-    } 
-    else if (typeof splitList[i] === "string") {
-      if (splitList[i].match(/^[A-Z]{3}/g)) {
-        currPrefix = splitList[i].substr(0, 3)
-      } else if (splitList[i].match(/^[0-9]{3}$/g)) {
-        splitList[i] = currPrefix + splitList[i]
-      }
+
+  let parenLayer = 1 // Depth of nested parentheses
+  // Iterate through the string outside its opening '(' and closing ')'.
+  // If we reach a nest depth of 0 prior to the end of the string, it isn't contained in parentheses.
+  for (let i = 1; i <= s.length - 2; i++) {
+    if (s.charAt(i) === "(") {
+      parenLayer += 1
+    }
+    if (s.charAt(i) === ")") {
+      parenLayer -= 1
+    }
+    if (parenLayer === 0) {
+      return s
     }
   }
-  return splitList
+
+  return s.substr(1, s.length - 2)
 }
 
 /**
- * Parse a logical prerequisite string as a disjunction of conjunctions.
- * @param {string} s the prerequisite string
- * @returns a nested list of courses as an OR of ANDs, or the course itself if no splitting is made
+ * Helper function to expand shorthand course codes (e.g. "MAT237/257") in-place from a list of course
+ * strings, and remove any grade requirement strings (e.g. "MAT137 (73%)")
  */
-export function parseOr(s) {
-  // Base case: return the course if no splitting is to be made.
-  if (!s.includes(",") && !s.includes("/")) {
-    return removeOuterParens(s)
-  }
-  // Otherwise, recurse and parse each conjunctive as a disjunction.
-  const orList = splitPrereqString(removeOuterParens(s), "/")
-  let splitList = []
-  for (const str of orList) {
-    splitList.push(parseAnd(str))
-  }
-  // Expand any shorthand groups of strings (e.g. "MAT237/257") to their full course codes
+export function parseSplitList(splitList) {
   let currPrefix = ""
   for (let i = 0; i < splitList.length; i++) {
     if (typeof splitList[i] === "object") {
       currPrefix = ""
-    } 
+    }
     else if (typeof splitList[i] === "string") {
+      // Filter out a grade requirement from the current course string
+      let matchResult = splitList[i].match(/^(.+)\(.*%\)$/)
+      if (matchResult !== null) {
+        splitList[i] = matchResult[1]
+      }
+
+      // Update currPrefix if the current course string contains a prefix
       if (splitList[i].match(/^[A-Z]{3}/g)) {
         currPrefix = splitList[i].substr(0, 3)
-      } else if (splitList[i].match(/^[0-9]{3}$/g)) {
+      } 
+      // Append currPrefix if the current course string is missing a prefix
+      else if (splitList[i].match(/^[0-9]{3}$/g)) {
         splitList[i] = currPrefix + splitList[i]
       }
     }
   }
-  return splitList
 }
