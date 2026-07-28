@@ -13,6 +13,7 @@
 - Fixed a bug regarding the scrollbar appearing on the /graph and /generate pages
 - Fix bool node centering in Generate page
 - Fixed support for year-long ("Y" session) courses
+- Fix hybrid node text parsing not properly accounting for all types of logical prerequisite strings
 
 ### 🔧 Internal changes
 
