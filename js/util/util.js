@@ -29,7 +29,7 @@ export function parseAnd(s) {
  */
 export function parseOr(s) {
   // Base case: return the course if no splitting is to be made.
-  if (!s.includes(",") && !s.includes("/")) {
+  if (!s.includes(",") && !s.includes(";") && !s.includes("/")) {
     return removeOuterParens(s)
   }
   // Otherwise, recurse and parse each conjunctive as a disjunction.
