@@ -138,7 +138,7 @@ class CourseModal extends React.Component {
     return DAY_TO_INT[time.weekDay] + " " + time.startHour + " - " + time.endHour
   }
 
-  /** 
+  /**
    * Generate the data needed for the course modal table based on the meeting times corresponding
    * to a course in a given session.
    * @param allMeetingTimes An array of MeetTime' objects corresponding to a particular course.
@@ -165,8 +165,7 @@ class CourseModal extends React.Component {
         if (session === "Y" && occurrence.timeSession.endsWith("1")) {
           occurrences.locations2.push(location)
           occurrences.times2.push(this.formatTime(occurrence))
-          }
-        else {
+        } else {
           occurrences.locations1.push(location)
           occurrences.times1.push(this.formatTime(occurrence))
         }
@@ -184,7 +183,7 @@ class CourseModal extends React.Component {
         time1: occurrences.times1,
         location1: occurrences.locations1,
         time2: occurrences.times2,
-        location2: occurrences.locations2
+        location2: occurrences.locations2,
       }
 
       return rowData
@@ -298,7 +297,7 @@ class Description extends React.Component {
                     },
                     valueFormatter: col => col.data.time1.join("\n"),
                     width: session === "Y" ? 155 : 205,
-                    autoHeight: true
+                    autoHeight: true,
                   },
                   {
                     field: "location1",
@@ -312,7 +311,7 @@ class Description extends React.Component {
                     },
                     valueFormatter: col => col.data.location1.join("\n"),
                     width: session === "Y" ? 90 : 153,
-                    autoHeight: true
+                    autoHeight: true,
                   },
 
                   {
@@ -343,7 +342,7 @@ class Description extends React.Component {
                     valueFormatter: col => col.data.location2.join("\n"),
                     width: 90,
                     autoHeight: true,
-                    hide: session !== "Y"
+                    hide: session !== "Y",
                   },
                 ]}
                 domLayout="autoHeight"
@@ -731,13 +730,7 @@ class DayBox extends React.Component {
   }
 
   formatLocation(location) {
-    return (
-      "Location: " +
-      location.buildingName +
-      " (" +
-      location.buildingCode +
-      ")"
-    )
+    return "Location: " + location.buildingName + " (" + location.buildingCode + ")"
   }
 
   render() {
@@ -895,8 +888,7 @@ class CampusMap extends React.Component {
 
       let colouredMarker
       const buildingInd = this.props.selectedLecTimeframes.findIndex(
-        lec =>
-          (lec.location && lec.location.buildingCode === building.buildingCode)
+        lec => lec.location && lec.location.buildingCode === building.buildingCode
       )
 
       colouredMarker = buildingInd == -1 ? blueMarker : redMarker

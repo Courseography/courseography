@@ -1,13 +1,11 @@
-{-|
-    Module      : Export.GetImages
-    Description : Defines functions for creating images from graphs and
-                  timetables.
-
-Defines functions for creating images from graphs and timetables, most
-functions write to the svg and png files given their file or directory paths.
--}
-module Export.GetImages
-    (getActiveTimetable, writeActiveGraphImage) where
+-- |
+--     Module      : Export.GetImages
+--     Description : Defines functions for creating images from graphs and
+--                   timetables.
+--
+-- Defines functions for creating images from graphs and timetables, most
+-- functions write to the svg and png files given their file or directory paths.
+module Export.GetImages (getActiveTimetable, writeActiveGraphImage) where
 
 import Config (runDb)
 import Data.Aeson (decodeStrictText)
@@ -48,10 +46,10 @@ getActiveTimetable selectedCourses termSession tempDir = do
 parseSelectedCourses :: T.Text -> T.Text -> [(T.Text, T.Text, T.Text)]
 parseSelectedCourses "" _ = []
 parseSelectedCourses s termSession =
-  let selectedMeetings = map (T.splitOn "-") $ T.splitOn "_" s
-      meetingOfSession = filter (\x -> T.head (x !! 2) == T.head termSession || T.head (x !! 2) == 'Y') selectedMeetings
-      selectedMeetings' = map list2tuple meetingOfSession
-  in selectedMeetings'
+    let selectedMeetings = map (T.splitOn "-") $ T.splitOn "_" s
+        meetingOfSession = filter (\x -> T.head (x !! 2) == T.head termSession || T.head (x !! 2) == 'Y') selectedMeetings
+        selectedMeetings' = map list2tuple meetingOfSession
+     in selectedMeetings'
 
 list2tuple :: [T.Text] -> (T.Text, T.Text, T.Text)
 list2tuple [a, b, c] = (a, b, c)
@@ -67,31 +65,31 @@ getTimes selectedMeetings = runDb $ mapM getMeetingTime selectedMeetings
 -- Courses are added to schedule, based on their days and times.
 getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[[T.Text]]]
 getScheduleByTime selectedMeetings mTimes =
-  let meetingTimes_ = zip selectedMeetings mTimes
-      schedule = replicate 26 $ replicate 5 []
-  in foldl addCourseToSchedule schedule meetingTimes_
+    let meetingTimes_ = zip selectedMeetings mTimes
+        schedule = replicate 26 $ replicate 5 []
+     in foldl addCourseToSchedule schedule meetingTimes_
 
 -- | Take a list of Time and returns a list of tuples that correctly index
 -- into the 2-D table (for generating the image).
 -- TODO: Make this support half-hour times.
 convertTimeToArray :: Time -> [(Int, Int)]
-convertTimeToArray Time {weekDay=day, startHour=startTime, endHour=endTime} =
-    [(floor day, row) | row <- [(floor startTime - 8)..(floor endTime - 8) - 1]]
+convertTimeToArray Time{weekDay = day, startHour = startTime, endHour = endTime} =
+    [(floor day, row) | row <- [(floor startTime - 8) .. (floor endTime - 8) - 1]]
 
 addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Time]) -> [[[T.Text]]]
 addCourseToSchedule schedule (course, courseTimes) =
-  let time' = filter (\t-> mod' (startHour t) 1 == 0) courseTimes
-      timeArray = concatMap convertTimeToArray time'
-  in foldl (addCourseHelper course) schedule timeArray
+    let time' = filter (\t -> mod' (startHour t) 1 == 0) courseTimes
+        timeArray = concatMap convertTimeToArray time'
+     in foldl (addCourseHelper course) schedule timeArray
 
 -- | Appends information of course to the current schedule for specified day and time.
 -- Returns new schedule.
 addCourseHelper :: (T.Text, T.Text, T.Text) -> [[[T.Text]]] -> (Int, Int) -> [[[T.Text]]]
 addCourseHelper (courseCode, courseSection, courseSession) currentSchedule (day, courseTime) =
-  let timeSchedule = currentSchedule !! courseTime
-      newDaySchedule = timeSchedule !! day ++ [T.concat [courseCode, courseSession, " ", courseSection]]
-      timeSchedule' = take day timeSchedule ++ [newDaySchedule] ++ drop (day + 1) timeSchedule
-  in take courseTime currentSchedule ++ [timeSchedule'] ++ drop (courseTime + 1) currentSchedule
+    let timeSchedule = currentSchedule !! courseTime
+        newDaySchedule = timeSchedule !! day ++ [T.concat [courseCode, courseSession, " ", courseSection]]
+        timeSchedule' = take day timeSchedule ++ [newDaySchedule] ++ drop (day + 1) timeSchedule
+     in take courseTime currentSchedule ++ [timeSchedule'] ++ drop (courseTime + 1) currentSchedule
 
 -- | Creates a timetable image based on schedule.
 generateTimetableImg :: [[[T.Text]]] -> T.Text -> FilePath -> IO FilePath

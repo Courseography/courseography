@@ -1,5 +1,4 @@
-module Controllers.Course
-    (retrieveCourse, index, courseInfo) where
+module Controllers.Course (retrieveCourse, index, courseInfo) where
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
@@ -24,13 +23,13 @@ retrieveCourse = do
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response
 index = do
-  response <- liftIO $ runDb $ do
-      coursesList :: [Entity Course] <- selectList [] []
-      let codes = map (courseCode . entityVal) coursesList
-      return $ T.unlines codes :: SqlPersistM T.Text
-  return $ toResponse response
+    response <- liftIO $ runDb $ do
+        coursesList :: [Entity Course] <- selectList [] []
+        let codes = map (courseCode . entityVal) coursesList
+        return $ T.unlines codes :: SqlPersistM T.Text
+    return $ toResponse response
 
-  -- | Returns all course info for a given department.
+-- | Returns all course info for a given department.
 courseInfo :: ServerPart Response
 courseInfo = do
     dept <- lookText' "dept"

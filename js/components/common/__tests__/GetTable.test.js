@@ -167,7 +167,7 @@ describe("getTable", () => {
               timeSession: "20271",
               startHour: 15,
               weekDay: 1,
-            }
+            },
           ],
         },
       ]
@@ -189,7 +189,6 @@ describe("getTable", () => {
       expect(actual).toEqual(expected)
     })
   })
-
 
   describe("The meeting time has two lectures each with one occurence", () => {
     beforeEach(() => {

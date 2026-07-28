@@ -1,5 +1,4 @@
-module Response.NotFound
-    (notFoundResponse) where
+module Response.NotFound (notFoundResponse) where
 
 import Happstack.Server
 import Text.Blaze ((!))
@@ -9,15 +8,17 @@ import Util.Blaze
 
 notFoundResponse :: ServerPart Response
 notFoundResponse =
-  notFound $ toResponse $
-    H.html $ do
-        H.head $ do
-            H.title "Courseography - 404!"
-            H.meta ! A.httpEquiv "Content-Type"
-                   ! A.content "text/html;charset=utf-8"
-            toStylesheet "/static/style/app.css"
+    notFound $
+        toResponse $
+            H.html $ do
+                H.head $ do
+                    H.title "Courseography - 404!"
+                    H.meta
+                        ! A.httpEquiv "Content-Type"
+                        ! A.content "text/html;charset=utf-8"
+                    toStylesheet "/static/style/app.css"
 
-        H.body notFoundContent
+                H.body notFoundContent
 
 notFoundContent :: H.Html
 notFoundContent =

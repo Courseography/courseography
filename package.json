@@ -25,7 +25,7 @@
     "*.scss": "yarn run stylelint --fix",
     "*.hs": [
       "stack exec hlint",
-      "stack exec stylish-haskell -- --inplace"
+      "stack exec fourmolu -- --mode check"
     ]
   },
   "dependencies": {
@@ -58,6 +58,7 @@
     "@babel/preset-env": "^8.0.2",
     "@babel/preset-react": "^8.0.1",
     "@eslint/compat": "^1.2.9",
+    "@eslint/js": "^10.0.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.6.1",
@@ -66,7 +67,7 @@
     "babel-plugin-polyfill-corejs3": "^1.0.0",
     "css-loader": "^7.1.4",
     "cypress": "14.0.1",
-    "eslint": "^9.39.2",
+    "eslint": "^10.6.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "5",
     "eslint-plugin-react": "^7.37.5",
@@ -91,7 +92,7 @@
     "stylelint-config-standard-scss": "^17.0.0",
     "webpack": "^5.105.3",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.5",
+    "webpack-dev-server": "^5.2.6",
     "webpack-merge": "^6.0.1"
   },
   "packageManager": "yarn@3.3.1",

@@ -1,4 +1,4 @@
-module Controllers.Program(index, retrieveProgram) where
+module Controllers.Program (index, retrieveProgram) where
 
 import Config (runDb)
 import Control.Monad.IO.Class (liftIO)
@@ -7,8 +7,15 @@ import qualified Data.Text as T (Text, null, strip, unlines)
 import Database.Persist (Entity)
 import Database.Persist.Sqlite (SqlPersistM, entityVal, selectList)
 import Database.Tables as Tables (Program, programCode, programModified)
-import Happstack.Server (Request, Response, ServerPart, askRq, ifModifiedSince, lookText',
-                         toResponse)
+import Happstack.Server (
+    Request,
+    Response,
+    ServerPart,
+    askRq,
+    ifModifiedSince,
+    lookText',
+    toResponse,
+ )
 import Models.Program (returnProgram)
 import Util.Happstack (createJSONResponse)
 

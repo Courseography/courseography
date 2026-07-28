@@ -1,10 +1,9 @@
-{-|
-    Module      : DynamicGraphs.CourseFinder
-    Description : Retrieve course information needed to generate graphs.
-
-This module contains the logic requests for information needed to
-generate graphs before retrieving and structuring the necessary data.
--}
+-- |
+--     Module      : DynamicGraphs.CourseFinder
+--     Description : Retrieve course information needed to generate graphs.
+--
+-- This module contains the logic requests for information needed to
+-- generate graphs before retrieving and structuring the necessary data.
 module DynamicGraphs.CourseFinder (lookupCourses) where
 
 import Control.Monad.Trans.Class (lift)
@@ -40,10 +39,10 @@ lookupReqs options (ReqOr parents) =
         -- We've taken at least one of parents, so this entire ReqOr is satisfied
         then return ()
         else mapM_ (lookupReqs options) parents
-    where
-        hasTaken :: Req -> Bool
-        hasTaken (J name _) = Set.member name (Set.fromList $ map T.unpack (taken options))
-        hasTaken _ = False
+  where
+    hasTaken :: Req -> Bool
+    hasTaken (J name _) = Set.member name (Set.fromList $ map T.unpack (taken options))
+    hasTaken _ = False
 lookupReqs options (Fces _ (Requirement parent)) = lookupReqs options parent
 lookupReqs options (Grade _ parent) = lookupReqs options parent
 -- This will catch None, Raw, and Fces with non-course modifiers

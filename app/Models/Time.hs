@@ -1,6 +1,8 @@
-module Models.Time
-    (buildTime,
-    buildTimes) where
+module Models.Time (
+    buildTime,
+    buildTimes,
+) where
+
 import Database.Persist.Sqlite (SqlPersistM)
 import Database.Tables (MeetingId, Time (..), Time' (..), Times (..))
 import Models.Building (getBuilding)
@@ -9,15 +11,18 @@ import Models.Building (getBuilding)
 buildTime :: Times -> SqlPersistM Time
 buildTime t = do
     location <- getBuilding (timesLocation t)
-    return $ Time (timesSession t)
-        (timesWeekDay t)
-        (timesStartHour t)
-        (timesEndHour t)
-        location
+    return $
+        Time
+            (timesSession t)
+            (timesWeekDay t)
+            (timesStartHour t)
+            (timesEndHour t)
+            location
 
 buildTimes :: MeetingId -> Time' -> Times
 buildTimes meetingKey t =
-    Times (timeSession' t) 
+    Times
+        (timeSession' t)
         (weekDay' t)
         (startHour' t)
         (endHour' t)

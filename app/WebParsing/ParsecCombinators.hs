@@ -1,19 +1,18 @@
-module WebParsing.ParsecCombinators
-    (getCourseFromTag,
-     findCourseFromTag,
-     text,
-     parseUntil) where
+module WebParsing.ParsecCombinators (
+    getCourseFromTag,
+    findCourseFromTag,
+    text,
+    parseUntil,
+) where
 
 import qualified Data.Text as T
 import qualified Text.Parsec as P
 import Text.Parsec.Text (Parser)
 
-
 getCourseFromTag :: T.Text -> T.Text
 getCourseFromTag courseTag =
     let course = P.parse findCourseFromTag "(source)" courseTag
-    in
-        case course of
+     in case course of
             Right courseName -> courseName
             Left _ -> ""
 

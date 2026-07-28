@@ -1,9 +1,7 @@
-{-|
-    Module      : Export.TimetableImageCreator
-    Description : Primarily defines a function used to render SVGs with times.
--}
-module Export.TimetableImageCreator
-    (renderTable, renderTableHelper, times) where
+-- |
+--     Module      : Export.TimetableImageCreator
+--     Description : Primarily defines a function used to render SVGs with times.
+module Export.TimetableImageCreator (renderTable, renderTableHelper, times) where
 
 import Data.List (intersperse)
 import qualified Data.Text as T
@@ -16,10 +14,10 @@ import TextShow (showt)
 days :: [T.Text]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 
--- |A list of lists of Texts, which has the "times" from 8:00 to 12:00, and
--- 1:00 to 8:00.times
+-- | A list of lists of Texts, which has the "times" from 8:00 to 12:00, and
+--  1:00 to 8:00.times
 times :: [[T.Text]]
-times = map (\x -> [showt x <> ":00"]) ([8..12] ++ [1..8] :: [Int])
+times = map (\x -> [showt x <> ":00"]) ([8 .. 12] ++ [1 .. 8] :: [Int])
 
 blue3 :: Colour Double
 blue3 = sRGB24read "#437699"
@@ -58,7 +56,7 @@ timeCellPadding :: Diagram B
 timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none
 
 cellText :: T.Text -> Diagram B
-cellText s = font "Trebuchet MS" $ text (T.unpack s) # fontSizeO (1024/900 * fs)
+cellText s = font "Trebuchet MS" $ text (T.unpack s) # fontSizeO (1024 / 900 * fs)
 
 -- | Creates and accumulates cells according to the number of course.
 makeCell :: Int -> [T.Text] -> Diagram B
@@ -66,10 +64,14 @@ makeCell maxCourse sList =
     let actualCourse = length sList
         emptyCellNum = if maxCourse == 0 then 1 else maxCourse - actualCourse
         extraCell = replicate emptyCellNum [cellPadding # fc white # lc white, cellText "" # fc white <> cell # fc white # lc white]
-    in vsep 0.030 $
-        concat $ map (\x -> [cellPadding # fc background # lc background, cellText x # fc white <> cell # fc background # lc background]) sList ++ extraCell
-    where
-        background = getBackground sList
+     in vsep 0.030 $
+            concat $
+                map
+                    (\x -> [cellPadding # fc background # lc background, cellText x # fc white <> cell # fc background # lc background])
+                    sList
+                    ++ extraCell
+  where
+    background = getBackground sList
 
 getBackground :: [T.Text] -> Colour Double
 getBackground s
@@ -93,10 +95,10 @@ makeTimeCell s =
     timeCellPadding === (cellText s <> timeCell)
 
 makeRow :: [[T.Text]] -> Diagram B
-makeRow ([x]:xs) =
+makeRow ([x] : xs) =
     let maxCourse = maximum (map length xs)
-    in (# centerX) . hcat $
-        makeTimeCell x : map (makeCell maxCourse) xs
+     in (# centerX) . hcat $
+            makeTimeCell x : map (makeCell maxCourse) xs
 makeRow _ = error "invalid timetable format"
 
 headerBorder :: Diagram B
@@ -106,23 +108,22 @@ rowBorder :: Diagram B
 rowBorder = hrule 11.2 # lw thin # lc pink1
 
 makeTable :: [[[T.Text]]] -> T.Text -> Diagram B
-makeTable s session = vsep 0.04 $ header session: intersperse rowBorder (map makeRow s)
+makeTable s session = vsep 0.04 $ header session : intersperse rowBorder (map makeRow s)
 
--- |Creates a timetable by zipping the time and course tables.
+-- | Creates a timetable by zipping the time and course tables.
 renderTable :: T.Text -> T.Text -> L.Text
 renderTable courses session =
     let courseTable = partition5 $ map (\x -> [x | not (T.null x)]) $ T.splitOn "_" courses
-    in renderTableHelper (zipWith (:) times courseTable) session
-    where
-        partition5 [] = []
-        partition5 lst = take 5 lst : partition5 (drop 5 lst)
+     in renderTableHelper (zipWith (:) times courseTable) session
+  where
+    partition5 [] = []
+    partition5 lst = take 5 lst : partition5 (drop 5 lst)
 
--- |Renders an SVG with a width of 1024, though the documentation doesn't
--- specify the units, it is assumed that these are pixels.
+-- | Renders an SVG with a width of 1024, though the documentation doesn't
+--  specify the units, it is assumed that these are pixels.
 renderTableHelper :: [[[T.Text]]] -> T.Text -> L.Text
 renderTableHelper schedule session =
     let g = makeTable schedule session
         opts = SVGOptions (mkWidth 1024) Nothing (T.pack "") [] False
         svgElement = renderDia SVG opts g
-    in
-        renderText svgElement
+     in renderText svgElement

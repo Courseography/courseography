@@ -86,9 +86,6 @@ $graph-overlay-side-margin: 15px;
   --missing-path-color: #c01;
   --hybrid-node-fill-color: #888;
   --node-inactive-fill-color: #ccc;
-  --reset-button-fill-color: #900;
-  --reset-button-stroke-color: #404040;
-  --svg-title-color: #072d68;
 
   // Course/timetable status colors
   --satisfied-bg-color: var(--subheading-color);
@@ -98,10 +95,6 @@ $graph-overlay-side-margin: 15px;
   --conflict-hover-bg-color: #b91333;
   --active-highlight-bg-color: #5566f5;
   --course-default-bg-color: #336685;
-  --positive-bg-color: #aae4a4;
-  --valid-color: #008000;
-  --completed-color: #519a73;
-  --selected-code-color: #696;
 
   // Nav / misc UI colors
   --nav-active-color: #deddbb;
@@ -109,16 +102,8 @@ $graph-overlay-side-margin: 15px;
   --map-day-bg-color: #dedae5;
   --draw-panel-color: #008080;
   --draw-panel-hover-color: #28b0a2;
-  --year-name-border-color: #815463;
   --spotlight-fill-color: #feefc8; // hover over a course
   --spotlight-stroke-color: #ffbd8e;
-
-  // Timetable grid backgrounds
-  --session-header-bg-color: #a5a6f5;
-  --timetable-section-bg-color: #ddbdbd;
-  --timetable-time-bg-color: #b8e7f9;
-  --timetable-instructor-bg-color: #cd96cd;
-  --timetable-wait-bg-color: #ecbdd2;
 
   // Draw-tool palette for /draw
   --draw-swatch-1: #ff7878;
@@ -137,12 +122,9 @@ $graph-overlay-side-margin: 15px;
   --light-border-color: #c0c0c0;
   --disabled-text: #9c9c9c;
   --info-disabled-bg-color: #a0aec0;
-  --more-info-bg-color: #bababa;
-  --neutral-surface-color: #949494;
   --input-focus-ring-color: #ffd700;
 
   // Shadow / overlay tints
-  --shadow-black-faint: rgb(0 0 0 / 5.5%);
   --shadow-black-soft: rgb(0 0 0 / 20%);
   --shadow-black-medium: rgb(0 0 0 / 35%);
   --shadow-black-strong: rgb(0 0 0 / 50%);
@@ -312,22 +294,6 @@ a:active {
   margin: 5px;
 }
 
-.ui-dialog {
-  background-color: var(--color-white);
-  box-shadow: 8px 8px 8px;
-  color: var(--color-black);
-  outline: solid 0 var(--color-black);
-  overflow: hidden auto;
-}
-
-.ui-widget-overlay {
-  height: 100%;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
 .modal-header {
   align-items: center;
   border-bottom: solid 1px var(--color-black);
@@ -478,32 +444,6 @@ ol {
   @extend %overlay;
 }
 
-.ui-dialog-titlebar {
-  border-bottom: solid 1px var(--color-black);
-  color: var(--subheading-color);
-  cursor: move;
-  font-size: 1em;
-  height: 1.8em;
-  line-height: 1.8em;
-  padding-left: 25px;
-}
-
-.ui-dialog-titlebar-close {
-  display: none;
-}
-
-.ui-width-overlay {
-  height: 100%;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-.ui-dialog tr {
-  margin: 0 auto;
-}
-
 #course-video-div {
   height: 100%;
   margin: 5pt 0;
@@ -522,15 +462,6 @@ ol {
   max-width: 100%;
 }
 
-#modal-buttons {
-  float: right;
-  margin: 20px auto;
-}
-
-#modal-buttons .btn {
-  margin: 0 5px;
-}
-
 #react-graph {
   display: inline-block;
   height: calc(100% - 50px);
@@ -538,15 +469,6 @@ ol {
   overflow: hidden;
   position: absolute;
   text-align: center;
-  width: 100%;
-}
-
-#react-graphRootSVG {
-  height: 100%;
-  shape-rendering: geometricprecision;
-  stroke: var(--color-black);
-  stroke-linecap: square;
-  stroke-miterlimit: 10;
   width: 100%;
 }
 
@@ -754,11 +676,6 @@ div.sidebar.collapsed {
 
 .active {
   background-color: var(--primary-color);
-}
-
-.disabled {
-  background-color: var(--neutral-grey-color);
-  pointer-events: none;
 }
 
 .graph-dropdown-item {
@@ -1140,25 +1057,6 @@ path.missing {
   stroke-width: 2px;
 }
 
-#resetButton {
-  cursor: pointer;
-  fill: var(--reset-button-fill-color);
-  stroke: var(--reset-button-stroke-color);
-  stroke-width: 3;
-}
-
-#resetButton > text {
-  fill: var(--color-white);
-}
-
-#svgTitle {
-  fill: var(--svg-title-color);
-  font-family: Bitter, serif;
-  font-size: 2.5em;
-  font-style: italic;
-  font-weight: bold;
-}
-
 .region-label {
   font-size: 13pt;
 }
@@ -1329,14 +1227,6 @@ path.missing {
   width: 0%;
 }
 
-.timetable .timetable-half-cell {
-  display: none;
-}
-
-.timetable .timetable-half-cell-display {
-  display: table-cell;
-}
-
 .timetable .timetable-cell {
   border-bottom: solid 2px var(--timetable-border-color);
   border-left-style: none;
@@ -1363,13 +1253,6 @@ path.missing {
   border-left: solid 2px var(--timetable-border-color);
   border-right: solid 2px var(--timetable-border-color);
   border-top: solid 2px var(--timetable-border-color);
-}
-
-.timetable .timetable-middle {
-  border-bottom-style: none;
-  border-left: solid 2px var(--timetable-border-color);
-  border-right: solid 2px var(--timetable-border-color);
-  border-top-style: none;
 }
 
 #course-select-wrapper {
@@ -1485,31 +1368,6 @@ path.missing {
   background-color: var(--satisfied-bg-color);
 }
 
-.sections li[clicked*="true"][data-satisfied*="false"] {
-  background-color: var(--unsatisfied-bg-color);
-}
-
-.sections li[clicked*="true"][data-satisfied*="false"]:hover {
-  background-color: var(--unsatisfied-hover-bg-color);
-}
-
-.sections li[clicked*="true"][data-satisfied*="true"] {
-  background-color: var(--satisfied-bg-color);
-}
-
-.timetable td.hover-time {
-  background-color: var(--active-highlight-bg-color);
-}
-
-.timetable td[hover*="good"] {
-  background-color: var(--satisfied-bg-color);
-}
-
-.timetable td[hover*="remove"] {
-  opacity: 0.5;
-  transition: all 0.5s ease-in-out 0s;
-}
-
 .timetable td[data-satisfied*="false"] {
   background-color: var(--unsatisfied-bg-color);
 }
@@ -1532,21 +1390,6 @@ path.missing {
 
 .timetable td[data-in-conflict*="false"][data-satisfied*="true"]:empty {
   background-color: var(--color-white);
-}
-
-.timetable td[data-satisfied*="true"][hover*="conflict"],
-.timetable td[data-satisfied*="false"][hover*="conflict"] {
-  background-color: var(--problem-color);
-}
-
-#modal-content-container > a {
-  margin-left: 10px;
-  outline: none;
-  text-decoration: none;
-}
-
-#modal-content-container > a:hover {
-  text-decoration: underline;
 }
 
 #colour-table {
@@ -1737,217 +1580,8 @@ input:focus {
   width: 40%;
 }
 
-#posts {
-  background-color: var(--color-white);
-  border-radius: 4px;
-  display: block;
-  font-family: "Work Sans", sans-serif;
-  font-size: 15px;
-  margin: 15px 0 25px;
-  overflow: hidden;
-}
-
-#posts ul {
-  margin: 0;
-  width: 100%;
-}
-
-#posts li {
-  display: inline-block;
-  list-style-type: none;
-  transition: all 0.2s;
-  width: 32%;
-}
-
-#posts li:hover {
-  background-color: var(--background-color) !important;
-}
-
-#posts li a {
-  color: var(--color-black);
-  display: inline-block;
-  line-height: 50px;
-  padding-left: 24px;
-  text-decoration: none;
-  width: 70%;
-}
-
-#posts ul .nav_selected {
-  border: solid 1.5px var(--neutral-grey-color);
-  border-bottom: solid 1.5px var(--color-white);
-}
-
-#posts ul .nav_not_selected {
-  border-bottom: solid 1.5px var(--neutral-grey-color);
-}
-
-#posts ul .credits_completed {
-  color: var(--completed-color);
-  font-size: 15px;
-}
-
-#posts ul .credits_not_completed {
-  color: var(--problem-color);
-  font-size: 15px;
-}
-
-// useless ?
-.year_name {
-  border-bottom: solid 2px #815463;
-  font-family: "Work Sans", sans-serif;
-  font-size: 25px;
-  font-style: normal;
-}
-
-.year_course_list {
-  font-family: "Work Sans", sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  list-style-type: none;
-  margin-top: 20px;
-  padding-left: 5px;
-}
-
-.year_course_list .code {
-  padding: 0;
-  text-indent: -20px;
-}
-
-#button_wrapper {
-  height: 50px;
-  padding-left: 20px;
-  text-align: center;
-}
-
-#update {
-  cursor: pointer;
-  font-size: 14px;
-  height: 40px;
-  opacity: 0.7;
-}
-
-#update:hover {
-  opacity: 1;
-}
-
-.code::before {
-  color: var(--color-white);
-  content: "\2713";
-  padding-right: 5px;
-}
-
-.selected .code {
-  color: var(--selected-code-color);
-}
-
-.selected .code::before {
-  color: var(--selected-code-color);
-  content: "\2713";
-}
-
-.selected .full_name {
-  background-color: var(--positive-bg-color);
-}
-
-div .code {
-  list-style-type: none;
-  padding-left: 20px;
-  transition: all 0.2s;
-  width: 99%;
-}
-
-div .code .courseName {
-  cursor: pointer;
-}
-
-div .code .courseName:hover {
-  font-weight: bold;
-}
-
 i {
   color: var(--invalid-color);
-}
-
-#post_specialist,
-#post_major,
-#post_minor {
-  font-family: "Work Sans", sans-serif;
-  font-size: 18px;
-  font-weight: 300;
-  height: 70%;
-  padding: 30px 50px;
-  position: absolute;
-  width: 97%;
-}
-
-#spec_creds,
-#maj_creds,
-#min_creds {
-  display: inline-block;
-  margin-left: 0;
-}
-
-.more-info {
-  background-color: var(--more-info-bg-color);
-  border: solid 2px var(--neutral-surface-color);
-  border-radius: 4px;
-  box-shadow: 0 2px 2px -1px var(--shadow-black-faint);
-  cursor: pointer;
-  display: none;
-  line-height: 40px;
-  list-style-type: none;
-  margin: 0;
-  margin-right: 10px;
-  text-align: center;
-  transition: all 0.2s;
-}
-
-.info_opened > div {
-  display: block;
-}
-
-.full_name {
-  margin: 0;
-  text-align: center;
-}
-
-#notes {
-  clear: left;
-  float: center;
-  font-weight: bold;
-  padding-top: 20px;
-}
-
-#notes > ul {
-  list-style-type: none;
-}
-
-.valid_extra_course {
-  color: var(--valid-color);
-}
-
-.not_valid_extra_course {
-  color: var(--invalid-color);
-}
-
-.post_selected {
-  display: block;
-}
-
-.post_not_selected {
-  display: none;
-}
-
-div[id*="_category_"] .code::after {
-  content: "\2B9F";
-  cursor: pointer;
-  padding-left: 10px;
-}
-
-div[id*="_inq"] .code::after {
-  content: "\2B9F";
-  cursor: pointer;
-  padding-left: 10px;
 }
 
 #aboutDiv {
@@ -1967,138 +1601,8 @@ div[id*="_inq"] .code::after {
   margin: 0 25px;
 }
 
-#picDiv {
-  margin: 0 25px;
-}
-
 #links {
   list-style-type: none;
-}
-
-#timetableSearch {
-  text-align: center;
-}
-
-#filter {
-  border: solid 1px var(--color-black);
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  margin-left: 10px;
-  text-align: center;
-  width: 200px;
-}
-
-#deptSelect {
-  margin-left: 10px;
-  text-align: center;
-}
-
-#timetableContainer {
-  height: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 1em;
-  width: 1016px;
-}
-
-#timetableMain {
-  background-color: var(--neutral-surface-color);
-  border: solid 2px var(--color-black);
-  border-spacing: 0;
-  table-layout: fixed;
-}
-
-#timetableMain td,
-#timetableMain th {
-  border-color: var(--color-black);
-  border-spacing: 0;
-  border-style: solid;
-  border-width: 2px 2px 1px;
-  margin: 0;
-  padding: 0;
-  vertical-align: top;
-}
-
-#timetableMain td.sessionHeader,
-#timetableMain th.sessionHeader {
-  background-color: var(--session-header-bg-color);
-  font-size: 1.1em;
-  font-weight: bold;
-  text-align: center;
-}
-
-#timetableMain td.timetableSection,
-#timetableMain th.timetableSection {
-  background-color: var(--timetable-section-bg-color);
-  text-align: center;
-  width: 75px;
-}
-
-#timetableMain td.timetableTime,
-#timetableMain th.timetableTime {
-  background-color: var(--timetable-time-bg-color);
-  padding-left: 5px;
-  padding-right: 5px;
-  width: 110px;
-}
-
-#timetableMain td.timetableInstructor,
-#timetableMain th.timetableInstructor {
-  background-color: var(--timetable-instructor-bg-color);
-  padding-left: 5px;
-  width: 130px;
-}
-
-#timetableMain td.timetableCap,
-#timetableMain th.timetableCap {
-  background-color: var(--positive-bg-color);
-  text-align: center;
-  width: 90px;
-}
-
-#timetableMain td.timetableWait,
-#timetableMain th.timetableWait {
-  background-color: var(--timetable-wait-bg-color);
-  text-align: center;
-  width: 40px;
-}
-
-#timetableMain .courseTable {
-  border-spacing: 0;
-  min-height: 23px;
-  table-layout: fixed;
-}
-
-#timetableMain .courseTable tr,
-#timetableMain .courseTable td,
-#timetableMain .courseTable th {
-  border-style: none;
-}
-
-#timetableMain .timetableCourseName {
-  background-color: var(--session-header-bg-color);
-  font-size: 1.05em;
-  min-width: 90px;
-  text-align: center;
-}
-
-#timetableMain .FOffering,
-#timetableMain .SOffering,
-#timetableMain .YOffering {
-  width: 460px;
-}
-
-#timetableMain .FOffering > table,
-#timetableMain .SOffering > table,
-#timetableMain .YOffering > table {
-  border-style: none;
-  margin: 0;
-  padding: 0;
-  width: 460px;
-}
-
-#timetableMain .YOffering .courseTable {
-  margin-left: auto;
-  margin-right: auto;
 }
 
 #generateRoot {
@@ -2157,15 +1661,6 @@ div[id*="_inq"] .code::after {
   font-weight: normal;
   font-size: 1rem;
   color: var(--tertiary-color);
-}
-
-main-filter {
-  margin-top: 30px;
-  text-align: center;
-}
-
-main-filter input {
-  border: solid 5px var(--primary-color);
 }
 
 .form-section {

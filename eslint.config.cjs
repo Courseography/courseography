@@ -34,7 +34,11 @@ module.exports = [
     },
     settings: {
       react: {
-        version: "detect",
+        // eslint-plugin-react's "detect" option calls the removed
+        // context.getFilename() API and crashes under ESLint 10
+        // (https://github.com/jsx-eslint/eslint-plugin-react/issues/3977).
+        // Hardcode the version from package.json until upstream ships a fix.
+        version: require("./package.json").dependencies.react,
       },
     },
   },

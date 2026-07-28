@@ -1,12 +1,9 @@
-{-|
-Description: Building module tests.
-
-Module that contains the tests for the functions in the Building module.
-
--}
-
-module Database.BuildingTests
-( test_buildings
+-- |
+-- Description: Building module tests.
+--
+-- Module that contains the tests for the functions in the Building module.
+module Database.BuildingTests (
+    test_buildings,
 ) where
 
 import Config (runDb)
@@ -51,8 +48,10 @@ testParseBuildingsIdempotent =
         countAfterSecond <- countBuildings
         expected <- expectedBuildingCount
         assertEqual "Expected parseBuildings to insert every building row from the CSV" expected countAfterFirst
-        assertEqual "Expected building count to be the same after multiple calls"
-            countAfterFirst countAfterSecond
+        assertEqual
+            "Expected building count to be the same after multiple calls"
+            countAfterFirst
+            countAfterSecond
 
 -- | Test suite for Building module
 test_buildings :: TestTree

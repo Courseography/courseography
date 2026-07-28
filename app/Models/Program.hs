@@ -1,6 +1,7 @@
-module Models.Program
-    (returnProgram,
-    reqsForProgram) where
+module Models.Program (
+    returnProgram,
+    reqsForProgram,
+) where
 
 import Config (runDb)
 import Data.Char (isAlpha, isAlphaNum, isDigit, isPunctuation)
@@ -24,12 +25,12 @@ reqsForProgram program = do
         potentialCodes = words cleaned
     filter isCourseCode potentialCodes
   where
-    -- | TODO: change function to use a regex
+    -- TODO: change function to use a regex
     isCourseCode :: String -> Bool
     isCourseCode codeStr =
-        length codeStr == 8 &&
-        all isAlphaNum codeStr &&
-        all isAlpha (take 3 codeStr) &&
-        all isDigit (take 3 (drop 3 codeStr)) &&
-        isAlpha (codeStr !! 6) &&
-        isDigit (codeStr !! 7)
+        length codeStr == 8
+            && all isAlphaNum codeStr
+            && all isAlpha (take 3 codeStr)
+            && all isDigit (take 3 (drop 3 codeStr))
+            && isAlpha (codeStr !! 6)
+            && isDigit (codeStr !! 7)
