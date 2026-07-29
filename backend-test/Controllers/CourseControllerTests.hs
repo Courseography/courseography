@@ -36,7 +36,6 @@ retrieveCourseTestCases =
                 , "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."
                 )
             , ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5")
-            , ("prep", "null")
             ,
                 ( "exclusions"
                 , "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"
@@ -115,7 +114,6 @@ retrieveCourseTestCases =
                 , "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."
                 )
             , ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5")
-            , ("prep", "null")
             ,
                 ( "exclusions"
                 , "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"
@@ -168,7 +166,6 @@ retrieveCourseTestCases =
                 , "An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation."
                 )
             , ("prereqs", "STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5")
-            , ("prep", "null")
             ,
                 ( "exclusions"
                 , "ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5"
@@ -182,6 +179,31 @@ retrieveCourseTestCases =
         , []
         , 200
         , "{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prep\":null,\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
+        )
+    ,
+        ( "Course exists with a recommended preparation"
+        , "CSC311"
+        , Map.fromList
+            [ ("name", "CSC311H1")
+            , ("title", "Introduction to Machine Learning")
+            ,
+                ( "description"
+                , "An introduction to methods for automated learning of relationships on the basis of empirical data. Classification and regression using nearest neighbour methods, decision trees, linear models, and neural networks. Clustering algorithms. Problems of overfitting and of assessing accuracy."
+                )
+            , ("prep", "(  MAT235H1,  MAT236H1)/  MAT235Y1/  MAT237Y1/  MAT257Y1")
+            ,
+                ( "exclusions"
+                , "CSC411H1, STA314H1, ECE421H1, CSC311H5, CSC411H5, CSCC11H3. NOTE: Students not enrolled in the Computer Science Major or Specialist program at A&S, UTM, or UTSC, or the Data Science Specialist at A&S, are limited to a maximum of 1.5 credits in 300-/400-level CSC/ECE courses."
+                )
+            , ("breadth", "The Physical and Mathematical Universes (5)")
+            ,
+                ( "prereqString"
+                , "CSC207H1/ CSC207H5/ CSCB07H3; MAT235H1/ MAT235Y1/ MAT237Y1/ MAT257Y1/ (minimum of 77% in MAT130H1/ MAT135H1 and MAT136H1)/ (minimum of 73% in MAT148H1/ minimum of 67% in MAT158H1 and minimum of 73% in MAT149H1/ minimum of 67% in MAT159H1)/ minimum of 73% in MAT137Y1/ minimum of 67% in MAT157Y1; MAT223H1/ MAT240H1; STA237H1/ STA247H1/ STA255H1/ STA257H1"
+                )
+            ]
+        , []
+        , 200
+        , "{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":null,\"description\":\"An introduction to methods for automated learning of relationships on the basis of empirical data. Classification and regression using nearest neighbour methods, decision trees, linear models, and neural networks. Clustering algorithms. Problems of overfitting and of assessing accuracy.\",\"distribution\":null,\"exclusions\":\"CSC411H1, STA314H1, ECE421H1, CSC311H5, CSC411H5, CSCC11H3. NOTE: Students not enrolled in the Computer Science Major or Specialist program at A&S, UTM, or UTSC, or the Data Science Specialist at A&S, are limited to a maximum of 1.5 credits in 300-/400-level CSC/ECE courses.\",\"name\":\"CSC311H1\",\"prep\":\"(  MAT235H1,  MAT236H1)/  MAT235Y1/  MAT237Y1/  MAT257Y1\",\"prereqString\":\"CSC207H1/ CSC207H5/ CSCB07H3; MAT235H1/ MAT235Y1/ MAT237Y1/ MAT257Y1/ (minimum of 77% in MAT130H1/ MAT135H1 and MAT136H1)/ (minimum of 73% in MAT148H1/ minimum of 67% in MAT158H1 and minimum of 73% in MAT149H1/ minimum of 67% in MAT159H1)/ minimum of 73% in MAT137Y1/ minimum of 67% in MAT157Y1; MAT223H1/ MAT240H1; STA237H1/ STA247H1/ STA255H1/ STA257H1\",\"title\":\"Introduction to Machine Learning\",\"videoUrls\":[]}"
         )
     ,
         ( "Course does not exist"
@@ -217,7 +239,7 @@ runRetrieveCourseTest (label, courseName, courseData, meetingTimes, expectedCode
                     , courseTitle = Map.lookup "title" courseData
                     , courseDescription = Map.lookup "description" courseData
                     , coursePrereqs = Map.lookup "prereqs" courseData
-                    , coursePrep = Nothing
+                    , coursePrep = Map.lookup "prep" courseData
                     , courseExclusions = Map.lookup "exclusions" courseData
                     , courseBreadth = Nothing
                     , courseDistribution = Nothing
@@ -339,6 +361,12 @@ courseInfoTestCases =
         , "[]"
         )
     ,
+        ( "Department with a course that has a recommended preparation"
+        , [csc311]
+        , "CSC"
+        , "[{\"allMeetingTimes\":[],\"breadth\":null,\"coreqs\":null,\"description\":\"An introduction to methods for automated learning of relationships on the basis of empirical data. Classification and regression using nearest neighbour methods, decision trees, linear models, and neural networks. Clustering algorithms. Problems of overfitting and of assessing accuracy.\",\"distribution\":null,\"exclusions\":\"CSC411H1, STA314H1, ECE421H1, CSC311H5, CSC411H5, CSCC11H3. NOTE: Students not enrolled in the Computer Science Major or Specialist program at A&S, UTM, or UTSC, or the Data Science Specialist at A&S, are limited to a maximum of 1.5 credits in 300-/400-level CSC/ECE courses.\",\"name\":\"CSC311H1\",\"prep\":\"(  MAT235H1,  MAT236H1)/  MAT235Y1/  MAT237Y1/  MAT257Y1\",\"prereqString\":\"CSC207H1/ CSC207H5/ CSCB07H3; MAT235H1/ MAT235Y1/ MAT237Y1/ MAT257Y1/ (minimum of 77% in MAT130H1/ MAT135H1 and MAT136H1)/ (minimum of 73% in MAT148H1/ minimum of 67% in MAT158H1 and minimum of 73% in MAT149H1/ minimum of 67% in MAT159H1)/ minimum of 73% in MAT137Y1/ minimum of 67% in MAT157Y1; MAT223H1/ MAT240H1; STA237H1/ STA247H1/ STA255H1/ STA257H1\",\"title\":\"Introduction to Machine Learning\",\"videoUrls\":[]}]"
+        )
+    ,
         ( "Empty department called in a non-empty database -- should return the entire database"
         , [csc108, sta237, sta238]
         , ""
@@ -402,6 +430,28 @@ courseInfoTestCases =
             , courseBreadth = Nothing
             , courseDistribution = Nothing
             , coursePrereqString = Nothing
+            , courseCoreqs = Nothing
+            , courseVideoUrls = []
+            }
+    csc311 =
+        Course
+            { courseCode = "CSC311H1"
+            , courseTitle = Just "Introduction to Machine Learning"
+            , courseDescription =
+                Just
+                    "An introduction to methods for automated learning of relationships on the basis of empirical data. Classification and regression using nearest neighbour methods, decision trees, linear models, and neural networks. Clustering algorithms. Problems of overfitting and of assessing accuracy."
+            , coursePrereqs =
+                Just
+                    "CSC207H1/ CSC207H5/ CSCB07H3; MAT235H1/ MAT235Y1/ MAT237Y1/ MAT257Y1/ (minimum of 77% in MAT130H1/ MAT135H1 and MAT136H1)/ (minimum of 73% in MAT148H1/ minimum of 67% in MAT158H1 and minimum of 73% in MAT149H1/ minimum of 67% in MAT159H1)/ minimum of 73% in MAT137Y1/ minimum of 67% in MAT157Y1; MAT223H1/ MAT240H1; STA237H1/ STA247H1/ STA255H1/ STA257H1"
+            , coursePrep = Just "(  MAT235H1,  MAT236H1)/  MAT235Y1/  MAT237Y1/  MAT257Y1"
+            , courseExclusions =
+                Just
+                    "CSC411H1, STA314H1, ECE421H1, CSC311H5, CSC411H5, CSCC11H3. NOTE: Students not enrolled in the Computer Science Major or Specialist program at A&S, UTM, or UTSC, or the Data Science Specialist at A&S, are limited to a maximum of 1.5 credits in 300-/400-level CSC/ECE courses."
+            , courseBreadth = Nothing
+            , courseDistribution = Nothing
+            , coursePrereqString =
+                Just
+                    "CSC207H1/ CSC207H5/ CSCB07H3; MAT235H1/ MAT235Y1/ MAT237Y1/ MAT257Y1/ (minimum of 77% in MAT130H1/ MAT135H1 and MAT136H1)/ (minimum of 73% in MAT148H1/ minimum of 67% in MAT158H1 and minimum of 73% in MAT149H1/ minimum of 67% in MAT159H1)/ minimum of 73% in MAT137Y1/ minimum of 67% in MAT157Y1; MAT223H1/ MAT240H1; STA237H1/ STA247H1/ STA255H1/ STA257H1"
             , courseCoreqs = Nothing
             , courseVideoUrls = []
             }
