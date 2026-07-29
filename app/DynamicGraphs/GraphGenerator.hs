@@ -411,6 +411,8 @@ nodeAttrs :: GlobalAttributes
 nodeAttrs =
     NodeAttrs
         [ A.shape A.BoxShape
+        , AC.Width 1.1806 -- 85pts / 72
+        , AC.Height 0.417 -- 30pts / 72
         , AC.FixedSize GrowAsNeeded
         , A.style A.filled
         ]

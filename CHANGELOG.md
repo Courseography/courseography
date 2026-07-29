@@ -15,6 +15,8 @@
 - Fixed a bug regarding the scrollbar appearing on the /graph and /generate pages
 - Fix bool node centering in Generate page
 - Fixed support for year-long ("Y" session) courses
+- Introduced `getShapesMinXY` in `js/components/graph/Graph.js` to fix graph centering in Generate page
+- Fixed course node dimensions and centering in Generate graph to match main graph
 
 ### 🔧 Internal changes
 
@@ -27,6 +29,7 @@
 - Removed dead CSS rules including ids, classNames, and colors
 - Switched Haskell formatter to `fourmolu` and ran on all files
 - Ran `fourmolu` on Haskell files in `backend-test/`
+- Cleaned up test data to match the new single-session `Time'` data format
 
 ## [0.8.0] - 2026-06-09
 
