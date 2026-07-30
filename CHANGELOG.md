@@ -31,6 +31,7 @@
 - Switched Haskell formatter to `fourmolu` and ran on all files
 - Ran `fourmolu` on Haskell files in `backend-test/`
 - Cleaned up test data to match the new single-session `Time'` data format
+- Added `WebParsing.ArtSciParserTests` to the cabal file
 
 ## [0.8.0] - 2026-06-09
 
