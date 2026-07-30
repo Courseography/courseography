@@ -18,6 +18,7 @@
 - Introduced `getShapesMinXY` in `js/components/graph/Graph.js` to fix graph centering in Generate page
 - Fixed course node dimensions and centering in Generate graph to match main graph
 - Fixed the positions of the Theory of Computing and Artificial Intelligence labels
+- Fixed MAT237 prerequisite parsing by enabling `lParen` and `rParen` in `WebParsing.ReqParser` to handle square brackets
 
 ### 🔧 Internal changes
 
