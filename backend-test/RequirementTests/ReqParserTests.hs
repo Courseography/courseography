@@ -112,7 +112,7 @@ bracketInputs :: [(String, Req)]
 bracketInputs =
     [ ("[CSC108H1/CSC148H1]/CSC110Y1", ReqOr [J "CSC108H1" "", J "CSC148H1" "", J "CSC110Y1" ""])
     , ("[CSC108H1, CSC148H1]/CSC110Y1", ReqOr [ReqAnd [J "CSC108H1" "", J "CSC148H1" ""], J "CSC110Y1" ""])
-    , ("MAT237Y1/[MAT223H1/MAT240H1]", ReqOr [J "MAT237Y1" "", J "MAT223H1" "", J "MAT240H1" ""])
+    , ("MAT237Y1, [MAT223H1/MAT240H1]", ReqAnd [J "MAT237Y1" "", ReqOr [J "MAT223H1" "", J "MAT240H1" ""]])
     ,
         ( "[(MAT135H1, MAT136H1)/MAT137Y1], MAT223H1"
         , ReqAnd [ReqOr [ReqAnd [J "MAT135H1" "", J "MAT136H1" ""], J "MAT137Y1" ""], J "MAT223H1" ""]
