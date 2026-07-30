@@ -37,6 +37,7 @@ import Database.Tables (
         courseDescription,
         courseDistribution,
         courseExclusions,
+        coursePrep,
         coursePrereqString,
         courseTitle,
         courseVideoUrls
@@ -63,6 +64,7 @@ data CourseData
     , prereqString :: Maybe T.Text
     , allMeetingTimes :: Maybe [MeetTime']
     , name :: !T.Text
+    , prep :: Maybe T.Text
     , exclusions :: Maybe T.Text
     , distribution :: Maybe T.Text
     , coreqs :: Maybe T.Text
@@ -118,6 +120,7 @@ buildCourse allMeetings course = do
             (coursePrereqString course)
             (Just allMeetings)
             (courseCode course)
+            (coursePrep course)
             (courseExclusions course)
             cDistribution
             (courseCoreqs course)

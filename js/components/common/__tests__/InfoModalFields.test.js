@@ -11,6 +11,7 @@ describe("Displays course information fields iff they are non-empty.", () => {
       description: "test description",
       prereqString: ["ABC101H1"],
       coreqs: ["DEF101H1"],
+      prep: ["JKL101H1"],
       exclusions: ["GHI101H1"],
       distribution: "Sciences",
       breadth: "The Physical and Mathematical Universes (5)",
@@ -20,6 +21,7 @@ describe("Displays course information fields iff they are non-empty.", () => {
     await screen.findByText("test description")
     await screen.findByText("ABC101H1")
     await screen.findByText("DEF101H1")
+    await screen.findByText("JKL101H1")
     await screen.findByText("GHI101H1")
     await screen.findByText("Sciences")
     await screen.findByText("The Physical and Mathematical Universes (5)")
@@ -31,6 +33,7 @@ describe("Displays course information fields iff they are non-empty.", () => {
       description: "",
       prereqString: [],
       coreqs: [],
+      prep: [],
       exclusions: [],
       distribution: "",
       breadth: "",
@@ -39,6 +42,7 @@ describe("Displays course information fields iff they are non-empty.", () => {
     render(<Description course={courseInfo} sessions={{}} />)
     expect(screen.queryByText("Prerequisite:")).toBeNull()
     expect(screen.queryByText("Corequisite:")).toBeNull()
+    expect(screen.queryByText("Recommended Preparation:")).toBeNull()
     expect(screen.queryByText("Exclusion:")).toBeNull()
     expect(screen.queryByText("Distribution Requirement Status:")).toBeNull()
     expect(screen.queryByText("Breadth Requirement:")).toBeNull()
