@@ -945,18 +945,17 @@ export class Graph extends React.Component {
    */
   updateNode = (nodeId, recursive) => {
     let newState
-    // For a hybrid node, set the state to 'active' or 'inactive' depending on if its text is satisfied
-    // as a prerequisite string
     if (this.state.hybridsJSON[nodeId]) {
+      // For a hybrid node, set the state to 'active' or 'inactive' depending on if its text is satisfied
+      // as a prerequisite string
       if (this.arePrereqsSatisfiedHybrid(nodeId)) {
         newState = "active"
       } else {
         newState = "inactive"
       }
-    } 
-    // For a regular course node, set the state to 'active', 'takeable', 'inactive', or 'overridden'
-    // depending on whether the user has selected the course and whether the course's prereqs are met
-    else {
+    } else {
+      // For a regular course node, set the state to 'active', 'takeable', 'inactive', or 'overridden'
+      // depending on whether the user has selected the course and whether the course's prereqs are met
       if (this.arePrereqsSatisfiedNode(nodeId)) {
         if (this.isSelected(nodeId)) {
           newState = "active"
@@ -1298,8 +1297,7 @@ export class Graph extends React.Component {
   arePrereqsSatisfiedHybrid = nodeId => {
     // Concatenate prereq string
     let hybridNode = this.state.hybridsJSON[nodeId]
-    let hybridText = ""
-    hybridNode.text.forEach(textTag => (hybridText += textTag.text))
+    let hybridText = hybridNode.text.map(textTag => textTag.text).join("")
     
     // Parse prereq string into a nested list alternating between AND and OR conditions
     let prereqList = parseAnd(hybridText)
@@ -1814,10 +1812,9 @@ export { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT }
  */
 export function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj) {
   // parse prereqs based on text
-  let hybridText = ""
-  hybridNode.text.forEach(textTag => (hybridText += textTag.text))
+  let hybridText = hybridNode.text.map(textTag => textTag.text).join("")
   const nodeParents = []
-  // First search for a node that matches the entire string
+  // First search for a node that matches the entire string (see Stats graph)
   let prereqNode = findRelationship(hybridText, nodesJSON)
   if (prereqNode !== undefined) {
     nodeParents.push(prereqNode.id_)

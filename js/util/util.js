@@ -62,8 +62,7 @@ export function splitPrereqString(s, separator) {
     // If a parenthesis is encountered, update parenLayer
     if (s.charAt(currIndex) === "(") {
       parenLayer += 1
-    }
-    if (s.charAt(currIndex) === ")") {
+    } else if (s.charAt(currIndex) === ")") {
       parenLayer -= 1
     } 
 
@@ -112,14 +111,15 @@ export function removeOuterParens(s) {
 /**
  * Helper function to expand shorthand course codes (e.g. "MAT237/257") in-place from a list of course
  * strings, and remove any grade requirement strings (e.g. "MAT137 (73%)")
+ * @param splitList the nested array to modify, representing a partially parsed prerequisite string
+ * @returns {void}
  */
 export function parseSplitList(splitList) {
   let currPrefix = ""
   for (let i = 0; i < splitList.length; i++) {
     if (typeof splitList[i] === "object") {
       currPrefix = ""
-    }
-    else if (typeof splitList[i] === "string") {
+    } else if (typeof splitList[i] === "string") {
       // Filter out a grade requirement from the current course string
       let matchResult = splitList[i].match(/^(.+)\(.*%\)$/)
       if (matchResult !== null) {
