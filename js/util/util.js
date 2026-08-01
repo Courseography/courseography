@@ -66,13 +66,12 @@ export function splitPrereqString(s, separator) {
       parenLayer -= 1
     } 
 
-    // If the separator is encountered and we aren't inside parentheses, split on it and reset curr
     if (s.charAt(currIndex) === separator && parenLayer === 0) {
+      // If the separator is encountered and we aren't inside parentheses, split on it and reset curr
       splitList.push(removeOuterParens(curr))
       curr = ""
-    }
-    // Add all other non-space characters to curr
-    else if (s.charAt(currIndex) !== " ") {
+    } else if (s.charAt(currIndex) !== " ") {
+      // Add all other non-space characters to curr
       curr += s.charAt(currIndex)
     }
     currIndex += 1
