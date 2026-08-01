@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Added recommended preparation field to courses and updated the course info modal
+
 ### 🐛 Bug fixes
 
 - Fixed CSS styling of background colour and let the application have full height
@@ -15,6 +17,8 @@
 - Fixed support for year-long ("Y" session) courses
 - Introduced `getShapesMinXY` in `js/components/graph/Graph.js` to fix graph centering in Generate page
 - Fixed course node dimensions and centering in Generate graph to match main graph
+- Fixed the positions of the Theory of Computing and Artificial Intelligence labels
+- Fixed MAT237 prerequisite parsing by enabling `lParen` and `rParen` in `WebParsing.ReqParser` to handle square brackets
 - Fix hybrid node text parsing not properly accounting for all types of logical prerequisite strings
 
 ### 🔧 Internal changes
@@ -29,6 +33,7 @@
 - Switched Haskell formatter to `fourmolu` and ran on all files
 - Ran `fourmolu` on Haskell files in `backend-test/`
 - Cleaned up test data to match the new single-session `Time'` data format
+- Added `WebParsing.ArtSciParserTests` to the cabal file
 
 ## [0.8.0] - 2026-06-09
 

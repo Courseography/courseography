@@ -127,10 +127,10 @@ includingSeparator =
         >> caseInsensitiveStr "including"
 
 lParen :: Parser Char
-lParen = Parsec.char '('
+lParen = Parsec.char '(' <|> Parsec.char '['
 
 rParen :: Parser Char
-rParen = Parsec.char ')'
+rParen = Parsec.char ')' <|> Parsec.char ']'
 
 orSeparator :: Parser String
 orSeparator =

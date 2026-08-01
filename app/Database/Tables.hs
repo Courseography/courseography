@@ -69,6 +69,7 @@ Course
     title T.Text Maybe
     description T.Text Maybe
     prereqs T.Text Maybe
+    prep T.Text Maybe
     exclusions T.Text Maybe
     breadth BreadthId Maybe
     distribution DistributionId Maybe

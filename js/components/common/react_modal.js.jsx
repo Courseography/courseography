@@ -107,6 +107,7 @@ class CourseModal extends React.Component {
             description: this.convertToLink(course.description),
             prereqString: this.convertToLink(course.prereqString),
             coreqs: this.convertToLink(course.coreq),
+            prep: this.convertToLink(course.prep),
             exclusions: this.convertToLink(course.exclusions),
           }
 
@@ -372,6 +373,12 @@ class Description extends React.Component {
           <p>
             <strong>Corequisite: </strong>
             {this.props.course.coreqs}
+          </p>
+        )}
+        {this.props.course.prep?.length > 0 && (
+          <p>
+            <strong>Recommended Preparation: </strong>
+            {this.props.course.prep}
           </p>
         )}
         {this.props.course.exclusions?.length > 0 && (

@@ -365,6 +365,7 @@ export default {
   videoUrls: [],
   breadth: "The Physical and Mathematical Universes (5)",
   name: "AAA100H1",
+  prep: "AAA101H1",
   exclusions: "",
   title: "Introduction to AAA Thinking",
   description:

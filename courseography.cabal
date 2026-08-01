@@ -129,7 +129,8 @@ test-suite Tests
     RequirementTests.ReqParserTests,
     RequirementTests.FilterReqTests,
     SvgTests.IntersectionTests,
-    TestHelpers
+    TestHelpers,
+    WebParsing.ArtSciParserTests
   Type: exitcode-stdio-1.0
   build-depends:
     aeson,

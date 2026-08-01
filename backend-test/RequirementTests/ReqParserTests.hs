@@ -108,6 +108,25 @@ parInputs =
         )
     ]
 
+bracketInputs :: [(String, Req)]
+bracketInputs =
+    [ ("[CSC108H1/CSC148H1]/CSC110Y1", ReqOr [J "CSC108H1" "", J "CSC148H1" "", J "CSC110Y1" ""])
+    , ("[CSC108H1, CSC148H1]/CSC110Y1", ReqOr [ReqAnd [J "CSC108H1" "", J "CSC148H1" ""], J "CSC110Y1" ""])
+    , ("MAT237Y1, [MAT223H1/MAT240H1]", ReqAnd [J "MAT237Y1" "", ReqOr [J "MAT223H1" "", J "MAT240H1" ""]])
+    ,
+        ( "[(MAT135H1, MAT136H1)/MAT137Y1], MAT223H1"
+        , ReqAnd [ReqOr [ReqAnd [J "MAT135H1" "", J "MAT136H1" ""], J "MAT137Y1" ""], J "MAT223H1" ""]
+        )
+    ,
+        ( "[MAT133H1/[MAT135H1, MAT136H1]]/MAT137Y1"
+        , ReqOr [J "MAT133H1" "", ReqAnd [J "MAT135H1" "", J "MAT136H1" ""], J "MAT137Y1" ""]
+        )
+    ,
+        ( "[CSC148H1 with a minimum grade of 63%], CSC165H1"
+        , ReqAnd [Grade "63" (J "CSC148H1" ""), J "CSC165H1" ""]
+        )
+    ]
+
 fcesInputs :: [(String, Req)]
 fcesInputs =
     [ ("1.0 FCE from the following: (CSC148H1)", Fces 1.0 $ Requirement $ J "CSC148H1" "")
@@ -417,6 +436,9 @@ andorTests = createTest reqParser "Basic and-or-mixed Requirement" andorInputs
 parTests :: TestTree
 parTests = createTest reqParser "Basic and-or-parenthesized Requirement" parInputs
 
+bracketTests :: TestTree
+bracketTests = createTest reqParser "Square-bracketed Requirement" bracketInputs
+
 fcesTests :: TestTree
 fcesTests = createTest reqParser "Basic fces Requirement" fcesInputs
 
@@ -451,6 +473,7 @@ test_requirements =
         , andTests
         , andorTests
         , parTests
+        , bracketTests
         , fcesTests
         , gradeBefTests
         , gradeAftTests
