@@ -83,28 +83,39 @@ export function splitPrereqString(s, separator) {
 
 /**
  * Helper function to strip a string entirely contained within a pair of parentheses.
+ * @param {string} s the prerequisite string to strip parentheses from
+ * @returns the same string with all fully-enclosing pairs of parentheses removed
  */
 export function removeOuterParens(s) {
   if (s.length < 2 || s.charAt(0) !== "(" || s.charAt(s.length - 1) !== ")") {
     return s
   }
 
-  let parenLayer = 1 // Depth of nested parentheses
-  // Iterate through the string outside its opening '(' and closing ')'.
-  // If we reach a nest depth of 0 prior to the end of the string, it isn't contained in parentheses.
-  for (let i = 1; i <= s.length - 2; i++) {
+  let startIndex = 0
+  while (s.charAt(startIndex) === "(" && s.charAt(s.length - 1 - startIndex) === ")") {
+    startIndex += 1
+  }
+  let parenLayer = startIndex // Depth of nested parentheses
+  let minParenLayer = startIndex // Minimum depth seen so far
+  // Iterate through the string outside its opening '(' and closing ')' to find the minimum nest depth.
+  for (let i = startIndex; i <= s.length - 1 - startIndex; i++) {
     if (s.charAt(i) === "(") {
       parenLayer += 1
     }
     if (s.charAt(i) === ")") {
       parenLayer -= 1
+      if (parenLayer < minParenLayer) {
+        minParenLayer = parenLayer
+      }
     }
     if (parenLayer === 0) {
+      // If we reach a nest depth of 0 prior to the end of the string, it isn't contained in parentheses.
       return s
     }
   }
 
-  return s.substr(1, s.length - 2)
+  // Strip the amount of outer layers equal to the minimum nest depth.
+  return s.substr(minParenLayer, s.length - minParenLayer * 2)
 }
 
 /**

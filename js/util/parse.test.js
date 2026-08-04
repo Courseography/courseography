@@ -129,6 +129,12 @@ describe("removeOuterParens", () => {
     const expected = "(MAT235, MAT236)/(MAT237/MAT257)"
     expect(actual).toEqual(expected)
   })
+  test("removeOuterParens correctly strips multiple layers only when they enclose the string", () => {
+    const input = "(((((CSC110)),((CSC111)))))"
+    const actual = removeOuterParens(input)
+    const expected = "((CSC110)),((CSC111))"
+    expect(actual).toEqual(expected)
+  })
 })
 
 describe("splitPrereqString", () => {
