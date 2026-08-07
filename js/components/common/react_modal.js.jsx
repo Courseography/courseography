@@ -106,7 +106,7 @@ class CourseModal extends React.Component {
             ...course,
             description: this.convertToLink(course.description),
             prereqString: this.convertToLink(course.prereqString),
-            coreqs: this.convertToLink(course.coreq),
+            coreqs: this.convertToLink(course.coreqs),
             prep: this.convertToLink(course.prep),
             exclusions: this.convertToLink(course.exclusions),
           }

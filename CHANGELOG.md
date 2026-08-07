@@ -20,6 +20,7 @@
 - Fixed the positions of the Theory of Computing and Artificial Intelligence labels
 - Fixed MAT237 prerequisite parsing by enabling `lParen` and `rParen` in `WebParsing.ReqParser` to handle square brackets
 - Fix hybrid node text parsing not properly accounting for all types of logical prerequisite strings
+- Fixed "Corequisite" field not showing up in the course info modal
 
 ### 🔧 Internal changes
 
