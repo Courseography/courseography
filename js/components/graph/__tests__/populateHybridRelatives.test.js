@@ -147,7 +147,7 @@ describe("populateHybridRelatives", () => {
           id_: "mat135136137157calc1",
           text: [
             {
-              text: "MAT(135,136)/137/157",
+              text: "(MAT135,136)/MAT137/157",
             },
             {
               text: "Calc1",
@@ -175,7 +175,7 @@ describe("populateHybridRelatives", () => {
         csc111: [],
         csc165: [],
         mat135136137157calc1: [],
-        h62: [["csc111", "csc165", "mat135136137157calc1"]],
+        h62: ["csc111", "csc165", "mat135136137157calc1"],
       }
       const expectedChildren = {
         csc111: ["h62"],
@@ -193,7 +193,7 @@ describe("populateHybridRelatives", () => {
         csc111: [],
         csc165: [],
         mat135136137157calc1: [],
-        h62: [["csc111", "csc165"]],
+        h62: ["csc111", "csc165"],
       }
       const expectedChildren = {
         csc111: ["h62"],
