@@ -27,17 +27,20 @@ import Util.Happstack (createJSONResponse)
 
 doDots :: PrintDotRepr dg n => [(FilePath, dg n)] -> IO ()
 doDots cases = do
-    forM_ cases createImage
+    forM_ cases (createGraphFile Svg)
     putStrLn "Look in graphs/gen to see the created graphs"
 
-generatePrereqsForCourses :: (FilePath, [String]) -> IO ()
-generatePrereqsForCourses (output, rootCourses) = do
+-- | Generate the prerequisite graph for the courses in rootCourses using the given fileType.
+-- The output is located in graphs/gen.
+generatePrereqsForCourses :: GraphvizOutput -> (FilePath, [String]) -> IO ()
+generatePrereqsForCourses fileType (output, rootCourses) = do
     graph <- coursesToPrereqGraph rootCourses
-    _ <- createImage (output, graph)
+    _ <- createGraphFile fileType (output, graph)
     putStrLn $
         "Generated prerequisite graph for "
             ++ show rootCourses
-            ++ " in graphs/gen"
+            ++ " in graphs/gen as "
+            ++ show fileType
 
 getBody :: ServerPart L.ByteString
 getBody = do
@@ -88,16 +91,16 @@ hash coursesOptions = hashFunction (key, graphProfileHash)
 graphToByteString :: PrintDotRepr dg n => dg n -> IO B.ByteString
 graphToByteString graph = graphvizWithHandle Dot graph Svg B.hGetContents
 
-createImage :: PrintDotRepr dg n => (FilePath, dg n) -> IO FilePath
-createImage (n, g) = do
+createGraphFile :: PrintDotRepr dg n => GraphvizOutput -> (FilePath, dg n) -> IO FilePath
+createGraphFile fileType (n, g) = do
     _ <- createDirectoryIfMissing False filepath
-    createImageInDir filepath n Svg g
+    createGraphFileInDir filepath n fileType g
   where
     filepath = normalise "graphs/gen"
 
 -- | Here runGraphvizCommand Dot creates the final graph given the input DotGraph object g and connects it
 -- with the file path(by combining directory d and filename n) to make the final graph in the required directory.
-createImageInDir ::
+createGraphFileInDir ::
     PrintDotRepr dg n =>
     -- | directory to write in
     FilePath ->
@@ -108,4 +111,4 @@ createImageInDir ::
     -- | graph to draw
     dg n ->
     IO FilePath
-createImageInDir d n o g = Data.GraphViz.addExtension (runGraphvizCommand Dot g) o (combine d n)
+createGraphFileInDir d n o g = Data.GraphViz.addExtension (runGraphvizCommand Dot g) o (combine d n)
