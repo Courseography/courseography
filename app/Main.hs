@@ -8,6 +8,7 @@
 -- starts the server.
 module Main where
 
+import Data.GraphViz (GraphvizOutput (DotOutput, Svg))
 import Data.List (intercalate)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
@@ -36,6 +37,7 @@ taskMap =
         , ("database-graphs", const parsePrebuiltSvgs)
         , ("docs", const generateDocs)
         , ("generate", generate)
+        , ("generate-dot", generateDot)
         , ("database-setup", const (setupDatabase False))
         , ("database-migrate", const (runDb migrateDatabase))
         ]
@@ -60,8 +62,15 @@ putUsage _ = hPutStrLn stderr usageMsg
             ++ intercalate "\n" taskNames
 
 generate :: [String] -> IO ()
-generate (name : courses) = generatePrereqsForCourses (name, courses)
+generate (name : courses) = generatePrereqsForCourses Svg (name, courses)
 generate _ =
     hPutStrLn
         stderr
         "Generate Usage: generate <filename> <course1> <course2> ..."
+
+generateDot :: [String] -> IO ()
+generateDot (name : courses) = generatePrereqsForCourses DotOutput (name, courses)
+generateDot _ =
+    hPutStrLn
+        stderr
+        "Generate-Dot Usage: generate-dot <filename> <course1> <course2> ..."
