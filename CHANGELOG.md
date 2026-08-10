@@ -6,6 +6,14 @@
 
 ### ✨ New features/enhancements
 
+### 🐛 Bug fixes
+
+### 🔧 Internal changes
+
+## [0.8.1] - 2026-08-10
+
+### ✨ New features/enhancements
+
 - Added recommended preparation field to courses and updated the course info modal
 - Configured minimum space between nodes in Generate graphs
 
