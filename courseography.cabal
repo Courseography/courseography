@@ -61,6 +61,7 @@ library
     WebParsing.ParsecCombinators,
     WebParsing.PostParser,
     WebParsing.ReqParser,
+    WebParsing.UtsgJsonParser,
   build-depends:
     aeson,
     base >=4.14,
@@ -130,7 +131,8 @@ test-suite Tests
     RequirementTests.FilterReqTests,
     SvgTests.IntersectionTests,
     TestHelpers,
-    WebParsing.ArtSciParserTests
+    WebParsing.ArtSciParserTests,
+    WebParsing.UtsgJsonParserTests
   Type: exitcode-stdio-1.0
   build-depends:
     aeson,

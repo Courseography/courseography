@@ -1,9 +1,9 @@
-module WebParsing.UtsgJsonParser (parseTimetable, insertAllMeetings) where
+module WebParsing.UtsgJsonParser (parseTimetable, insertAllMeetings, insertCourses) where
 
 import Config (createReqBody, reqHeaders, runDb, timetableApiUrl)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (FromJSON (parseJSON), decode, encode, withObject, (.!=), (.:), (.:?))
-import Data.Aeson.Types (parseMaybe)
+import Data.Aeson (Value, decode, encode, withObject, (.!=), (.:), (.:?))
+import Data.Aeson.Types (Parser, parseMaybe)
 import Data.ByteString.Lazy.Internal (ByteString)
 import Data.Default.Class (def)
 import qualified Data.Text as T
@@ -71,15 +71,10 @@ getPageInfo respBody = do
 
 -- Helper function to insert courses for a page of a HTTP response
 insertCourses :: ByteString -> SqlPersistM ()
-insertCourses respBody = do
-    let meetings :: Maybe DBList = decode respBody
-    case meetings of
-        Nothing -> return ()
-        Just dblist -> mapM_ insertMeeting $ flattenDBList dblist
-
--- | Helper function to flatten the list of DB Objects
-flattenDBList :: DBList -> [MeetTime]
-flattenDBList (DBList meetings) = concatMap (\(DB meetTimes) -> meetTimes) meetings
+insertCourses respBody =
+    case parseMeetingInfo respBody of
+        Nothing -> liftIO $ print ("Failed to parse meeting information." :: String)
+        Just meetTimes -> mapM_ insertMeeting meetTimes
 
 -- | insert/update all the data into the Meeting and Times schema by creating and sending
 --   the http request to Artsci Timetable and then parsing the JSON response
@@ -136,28 +131,21 @@ meetingUpdates m =
     , MeetingExtra =. meetingExtra m
     ]
 
-newtype DB = DB {dbData :: [MeetTime]}
-    deriving Show
+-- | Parse all of the meetings, along with their associated times
+parseMeetingInfo :: ByteString -> Maybe [MeetTime]
+parseMeetingInfo respBody = do
+    json <- decode respBody
+    flip parseMaybe json $ \obj -> do
+        payload <- obj .: "payload"
+        pageableCourse <- payload .: "pageableCourse"
+        courses :: [Value] <- pageableCourse .: "courses"
+        concat <$> mapM parseCourse courses
 
-instance FromJSON DB where
-    parseJSON = withObject "Expected an Object for DB" $ \o -> do
-        codeExtraChars <- o .: "code"
-        let courseCode = T.dropEnd 2 codeExtraChars
-        session :: T.Text <- o .: "sectionCode"
-        sectionsList :: [MeetTime] <- o .:? "sections" .!= []
-        let finalSectionsList = map (\m -> m{meetInfo = (meetInfo m){meetingCode = courseCode, meetingSession = session}}) sectionsList
-        return $ DB finalSectionsList
-
-newtype DBList = DBList [DB]
-    deriving Show
-
-instance FromJSON DBList where
-    parseJSON = withObject "Expected an Object for DBList" $ \o -> do
-        maybeOrg <- o .:? "payload"
-        case maybeOrg of
-            Just payload -> do
-                pageableCourse <- payload .: "pageableCourse"
-                courses <- pageableCourse .: "courses"
-                dbList <- mapM parseJSON courses
-                return $ DBList dbList
-            Nothing -> return $ DBList []
+-- | Parse a single course object into the meetings it contains
+parseCourse :: Value -> Parser [MeetTime]
+parseCourse = withObject "Expected an Object for a course" $ \o -> do
+    codeExtraChars <- o .: "code"
+    let courseCode = T.dropEnd 2 codeExtraChars
+    session :: T.Text <- o .: "sectionCode"
+    sectionsList :: [MeetTime] <- o .:? "sections" .!= []
+    return $ map (\m -> m{meetInfo = (meetInfo m){meetingCode = courseCode, meetingSession = session}}) sectionsList

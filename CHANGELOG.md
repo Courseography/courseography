@@ -36,6 +36,7 @@
 - Ran `fourmolu` on Haskell files in `backend-test/`
 - Cleaned up test data to match the new single-session `Time'` data format
 - Added `WebParsing.ArtSciParserTests` to the cabal file
+- Refactored `UtsgJsonParser` by replacing the `DB` and `DBList` datatypes with helper functions
 - Defined `stack run generate-dot` command
 
 ## [0.8.0] - 2026-06-09
