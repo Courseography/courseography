@@ -1,0 +1,8 @@
+nodeLinker: hoisted
+allowBuilds:
+  "@parcel/watcher": true
+  core-js: true
+  cypress: true
+  unrs-resolver: true
+overrides:
+  pretty-format>react-is: "19.1.0"

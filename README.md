@@ -22,7 +22,7 @@ First install the following:
 
 1. [Haskell](https://www.haskell.org/ghcup/)
 2. [Node.js](https://nodejs.org/en/download/)
-3. Yarn, by opening a terminal and running: `npm install -g yarn`
+3. [pnpm](https://pnpm.io/), by opening a terminal and running: `corepack enable && corepack prepare pnpm@11.21.0 --activate`
 4. [ImageMagick](http://www.imagemagick.org/script/download.php)
 5. [GraphViz](https://graphviz.org/download/)
 6. [LaTeX](https://www.latex-project.org/get/)
@@ -41,7 +41,7 @@ _Run this step manually._
 Run the following commands (the parts after `#` are just comments):
 
 ```console
-$ yarn install  # Install all Javascript dependencies
+$ pnpm install  # Install all Javascript dependencies
 $ stack setup   # Install the required GHC compiler
 $ stack build   # Compile Courseography and all Haskell dependencies (this will take a while)
 ```
@@ -55,17 +55,17 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 
 #### Running
 
-1. Run `$ yarn watch` to build the web static assets (Javascript and CSS files)
+1. Run `$ pnpm run watch` to build the web static assets (Javascript and CSS files)
 2. In a new terminal window Run `$ stack run` to start the server
 3. Navigate to `http://localhost:8000/graph` in your browser
 
-When running in production you should run `$ yarn build` instead of `$ yarn watch` to build the web assets.
+When running in production you should run `$ pnpm run build` instead of `$ pnpm run watch` to build the web assets.
 This will take longer but results in smaller asset files.
 
 #### Running front-end tests
 
-To run all tests, run `$ yarn run test`. However, if you need to run a specific file or folder of tests,
-run `$ yarn run test -- <path>`.
+To run all tests, run `$ pnpm test`. However, if you need to run a specific file or folder of tests,
+run `$ pnpm test -- <path>`.
 
 #### Running back-end tests
 
@@ -77,9 +77,9 @@ _For more information on the `-p` argument, see https://github.com/UnkindPartiti
 
 If you are contributing to Courseography, you should run the following to install and test our pre-commit hooks:
 
-1. `yarn prepare`
+1. `pnpm exec husky`
 2. `stack install hlint`
-3. `npx lint-staged` (this will run the pre-commit hooks; make sure that it runs without errors)
+3. `pnpm exec lint-staged` (this will run the pre-commit hooks; make sure that it runs without errors)
 
 Also follow these steps to get IDE like support for Haskell through [Haskell Language Server (HLS)](https://haskell-language-server.readthedocs.io/en/stable/)
 

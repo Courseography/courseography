@@ -10,8 +10,7 @@
     "build": "webpack --config webpack.prod.js --disable-interpret",
     "test": "jest",
     "prettier": "prettier --write .",
-    "eslint": "eslint --fix js",
-    "prepare": "husky"
+    "eslint": "eslint --fix js"
   },
   "private": true,
   "engines": {
@@ -19,10 +18,10 @@
   },
   "browserslist": "defaults",
   "lint-staged": {
-    "*": "yarn prettier --ignore-unknown --write",
-    "*.js": "yarn run eslint --cache --fix js",
-    "*.css": "yarn run stylelint --fix",
-    "*.scss": "yarn run stylelint --fix",
+    "*": "pnpm prettier --ignore-unknown --write",
+    "*.js": "pnpm run eslint --cache --fix js",
+    "*.css": "pnpm run stylelint --fix",
+    "*.scss": "pnpm run stylelint --fix",
     "*.hs": [
       "stack exec hlint",
       "stack exec fourmolu -- --mode check"
@@ -95,8 +94,5 @@
     "webpack-dev-server": "^5.2.6",
     "webpack-merge": "^6.0.1"
   },
-  "packageManager": "yarn@3.3.1",
-  "resolutions": {
-    "pretty-format/react-is": "19.1.0"
-  }
+  "packageManager": "pnpm@11.21.0"
 }
