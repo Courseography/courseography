@@ -1,7 +1,6 @@
-module WebParsing.UtsgJsonParser (parseTimetable, insertAllMeetings) where
+module WebParsing.UtsgJsonParser (parseTimetable, insertAllMeetings, insertCourses) where
 
 import Config (createReqBody, reqHeaders, runDb, timetableApiUrl)
-import Control.Monad (forM_)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (Value, decode, encode, withObject, (.!=), (.:), (.:?))
 import Data.Aeson.Types (Parser, parseMaybe)
@@ -72,8 +71,10 @@ getPageInfo respBody = do
 
 -- Helper function to insert courses for a page of a HTTP response
 insertCourses :: ByteString -> SqlPersistM ()
-insertCourses respBody = do
-    forM_ (parseMeetingInfo respBody) (mapM_ insertMeeting)
+insertCourses respBody =
+    case parseMeetingInfo respBody of
+        Nothing -> liftIO $ print ("Failed to parse meeting information." :: String)
+        Just meetTimes -> mapM_ insertMeeting meetTimes
 
 -- | insert/update all the data into the Meeting and Times schema by creating and sending
 --   the http request to Artsci Timetable and then parsing the JSON response
@@ -135,13 +136,10 @@ parseMeetingInfo :: ByteString -> Maybe [MeetTime]
 parseMeetingInfo respBody = do
     json <- decode respBody
     flip parseMaybe json $ \obj -> do
-        maybePayload <- obj .:? "payload"
-        case maybePayload of
-            Nothing -> return []
-            Just payload -> do
-                pageableCourse <- payload .: "pageableCourse"
-                courses :: [Value] <- pageableCourse .: "courses"
-                concat <$> mapM parseCourse courses
+        payload <- obj .: "payload"
+        pageableCourse <- payload .: "pageableCourse"
+        courses :: [Value] <- pageableCourse .: "courses"
+        concat <$> mapM parseCourse courses
 
 -- | Parse a single course object into the meetings it contains
 parseCourse :: Value -> Parser [MeetTime]
