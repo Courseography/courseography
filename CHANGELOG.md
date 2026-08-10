@@ -7,6 +7,7 @@
 ### ✨ New features/enhancements
 
 - Added recommended preparation field to courses and updated the course info modal
+- Configured minimum space between nodes in Generate graphs
 
 ### 🐛 Bug fixes
 
@@ -19,6 +20,8 @@
 - Fixed course node dimensions and centering in Generate graph to match main graph
 - Fixed the positions of the Theory of Computing and Artificial Intelligence labels
 - Fixed MAT237 prerequisite parsing by enabling `lParen` and `rParen` in `WebParsing.ReqParser` to handle square brackets
+- Fix hybrid node text parsing not properly accounting for all types of logical prerequisite strings
+- Fixed "Corequisite" field not showing up in the course info modal
 
 ### 🔧 Internal changes
 
@@ -34,6 +37,7 @@
 - Cleaned up test data to match the new single-session `Time'` data format
 - Added `WebParsing.ArtSciParserTests` to the cabal file
 - Refactored `UtsgJsonParser` by replacing the `DB` and `DBList` datatypes with helper functions
+- Defined `stack run generate-dot` command
 
 ## [0.8.0] - 2026-06-09
 

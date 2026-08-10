@@ -405,6 +405,7 @@ graphAttrs =
         [ AC.RankDir AC.FromTop
         , AC.Splines AC.Ortho
         , AC.Concentrate False
+        , AC.NodeSep 0.5
         ]
 
 nodeAttrs :: GlobalAttributes
