@@ -47,7 +47,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-error-boundary": "^5.0.0",
-    "react-leaflet": "^4.2.1",
+    "react-leaflet": "^5.0.0",
     "react-modal": "^3.16.1",
     "react-tooltip": "^5.28.0"
   },
@@ -56,7 +56,7 @@
     "@babel/eslint-parser": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
     "@babel/preset-react": "^8.0.1",
-    "@eslint/compat": "^1.2.9",
+    "@eslint/compat": "^2.1.0",
     "@eslint/js": "^10.0.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
