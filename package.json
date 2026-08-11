@@ -7,7 +7,7 @@
   "scripts": {
     "start": "stack exec courseography",
     "watch": "webpack --watch --config webpack.dev.js --disable-interpret",
-    "build": "webpack --config webpack.prod.js --disable-interpret",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js --disable-interpret",
     "test": "jest",
     "prettier": "prettier --write .",
     "eslint": "eslint --fix js"
@@ -64,6 +64,7 @@
     "babel-jest": "^30.4.1",
     "babel-loader": "^10.1.1",
     "babel-plugin-polyfill-corejs3": "^1.0.0",
+    "cross-env": "^10.1.0",
     "css-loader": "^7.1.4",
     "cypress": "14.0.1",
     "eslint": "^10.8.0",

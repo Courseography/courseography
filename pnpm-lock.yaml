@@ -113,6 +113,9 @@ importers:
       babel-plugin-polyfill-corejs3:
         specifier: ^1.0.0
         version: 1.0.0(@babel/core@8.0.1)
+      cross-env:
+        specifier: ^10.1.0
+        version: 10.1.0
       css-loader:
         specifier: ^7.1.4
         version: 7.1.4(webpack@5.105.3)
@@ -1545,6 +1548,12 @@ packages:
     resolution:
       {
         integrity: sha512-snKqtPW01tN0ui7yu9rGv69aJXr/a/Ywvl11sUjNtEcRc+ng/mQriFL0wLXMef74iHa/EkftbDzU9F8iFbH+zg==,
+      }
+
+  "@epic-web/invariant@1.0.0":
+    resolution:
+      {
+        integrity: sha512-lrTPqgvfFQtR/eY/qkIzp98OGdNJu0m5ji3q/nJI8v3SXkRKEnWiOxMmbvcSoAIzv/cGiuvRy57k4suKQSAdwA==,
       }
 
   "@eslint-community/eslint-utils@4.9.0":
@@ -4004,6 +4013,14 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  cross-env@10.1.0:
+    resolution:
+      {
+        integrity: sha512-GsYosgnACZTADcmEyJctkJIoqAhHjttw7RsFrVoJNXbsWWqaq6Ym+7kZjq6mS45O0jij6vtiReppKQEtqWy6Dw==,
+      }
+    engines: { node: ">=20" }
+    hasBin: true
 
   cross-spawn@5.1.0:
     resolution:
@@ -10443,6 +10460,8 @@ snapshots:
 
   "@emotion/weak-memoize@0.4.0": {}
 
+  "@epic-web/invariant@1.0.0": {}
+
   "@eslint-community/eslint-utils@4.9.0(eslint@10.8.0(supports-color@8.1.1))":
     dependencies:
       eslint: 10.8.0(supports-color@8.1.1)
@@ -12063,6 +12082,11 @@ snapshots:
       import-fresh: 3.3.1
       js-yaml: 4.1.0
       parse-json: 5.2.0
+
+  cross-env@10.1.0:
+    dependencies:
+      "@epic-web/invariant": 1.0.0
+      cross-spawn: 7.0.6
 
   cross-spawn@5.1.0:
     dependencies:
