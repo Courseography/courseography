@@ -11,6 +11,8 @@
 ### 🔧 Internal changes
 
 - Migrated JS package manager from yarn to pnpm
+- Updated `react-leaflet` to v5.0.0 and `@eslint/compat` to v2.1.0
+- Added peer dependency overrides for `eslint-plugin-react` (for `eslint` v10) and `@babel/plugin-syntax-*` (for `@babel/core` v8.0.1
 
 ## [0.8.1] - 2026-08-10
 

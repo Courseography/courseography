@@ -68,8 +68,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0(react@19.2.8)
       react-leaflet:
-        specifier: ^4.2.1
-        version: 4.2.1(leaflet@1.9.4)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: ^5.0.0
+        version: 5.0.0(leaflet@1.9.4)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-modal:
         specifier: ^3.16.1
         version: 3.16.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -90,8 +90,8 @@ importers:
         specifier: ^8.0.1
         version: 8.0.1(@babel/core@8.0.1)
       "@eslint/compat":
-        specifier: ^1.2.9
-        version: 1.3.2(eslint@10.8.0(supports-color@8.1.1))
+        specifier: ^2.1.0
+        version: 2.1.0(eslint@10.8.0(supports-color@8.1.1))
       "@eslint/js":
         specifier: ^10.0.0
         version: 10.0.1(eslint@10.8.0(supports-color@8.1.1))
@@ -1563,14 +1563,14 @@ packages:
       }
     engines: { node: ^12.0.0 || ^14.0.0 || >=16.0.0 }
 
-  "@eslint/compat@1.3.2":
+  "@eslint/compat@2.1.0":
     resolution:
       {
-        integrity: sha512-jRNwzTbd6p2Rw4sZ1CgWRS8YMtqG15YyZf7zvb6gY2rB2u6n+2Z+ELW0GtL0fQgyl0pr4Y/BzBfng/BdsereRA==,
+        integrity: sha512-LgaSCymEpw7tF53xvDw9SNsraPb1IBHxpdABIOM0hW8UAlP8znrjYtuxfR58FSJ3L9BhwD+FaPRFQpZq84Nh6g==,
       }
-    engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
+    engines: { node: ^20.19.0 || ^22.13.0 || >=24 }
     peerDependencies:
-      eslint: ^8.40 || 9
+      eslint: ^8.40 || 9 || 10
     peerDependenciesMeta:
       eslint:
         optional: true
@@ -2340,15 +2340,15 @@ packages:
         integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==,
       }
 
-  "@react-leaflet/core@2.1.0":
+  "@react-leaflet/core@3.0.0":
     resolution:
       {
-        integrity: sha512-Qk7Pfu8BSarKGqILj4x7bCSZ1pjuAPZ+qmRwH5S7mDS91VSbVVsJSrW4qA+GPrro8t69gFYVMWb1Zc4yFmPiVg==,
+        integrity: sha512-3EWmekh4Nz+pGcr+xjf0KNyYfC3U2JjnkWsh0zcqaexYqmmB5ZhH37kz41JXGmKzpaMZCnPofBBm64i+YrEvGQ==,
       }
     peerDependencies:
       leaflet: ^1.9.0
-      react: ^18.0.0
-      react-dom: ^18.0.0
+      react: ^19.0.0
+      react-dom: ^19.0.0
 
   "@sinclair/typebox@0.34.41":
     resolution:
@@ -7679,15 +7679,15 @@ packages:
         integrity: sha512-s5un28nYxKJw5gvUHyW5PCC28CvBqLu9r3cWgzHT4Vo/5fqqkFcdRYsGcKf50WMPpjjFZS5d76fn3YCo2njKwQ==,
       }
 
-  react-leaflet@4.2.1:
+  react-leaflet@5.0.0:
     resolution:
       {
-        integrity: sha512-p9chkvhcKrWn/H/1FFeVSqLdReGwn2qmiobOQGO3BifX+/vV/39qhY8dGqbdcPh1e6jxh/QHriLXr7a4eLFK4Q==,
+        integrity: sha512-CWbTpr5vcHw5bt9i4zSlPEVQdTVcML390TjeDG0cK59z1ylexpqC6M1PJFjV8jD7CF+ACBFsLIDs6DRMoLEofw==,
       }
     peerDependencies:
       leaflet: ^1.9.0
-      react: ^18.0.0
-      react-dom: ^18.0.0
+      react: ^19.0.0
+      react-dom: ^19.0.0
 
   react-lifecycles-compat@3.0.4:
     resolution:
@@ -10450,7 +10450,9 @@ snapshots:
 
   "@eslint-community/regexpp@4.12.2": {}
 
-  "@eslint/compat@1.3.2(eslint@10.8.0(supports-color@8.1.1))":
+  "@eslint/compat@2.1.0(eslint@10.8.0(supports-color@8.1.1))":
+    dependencies:
+      "@eslint/core": 1.2.1
     optionalDependencies:
       eslint: 10.8.0(supports-color@8.1.1)
 
@@ -11054,7 +11056,7 @@ snapshots:
 
   "@popperjs/core@2.11.8": {}
 
-  "@react-leaflet/core@2.1.0(leaflet@1.9.4)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)":
+  "@react-leaflet/core@3.0.0(leaflet@1.9.4)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)":
     dependencies:
       leaflet: 1.9.4
       react: 19.2.8
@@ -14457,9 +14459,9 @@ snapshots:
 
   react-is@19.2.8: {}
 
-  react-leaflet@4.2.1(leaflet@1.9.4)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  react-leaflet@5.0.0(leaflet@1.9.4)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
-      "@react-leaflet/core": 2.1.0(leaflet@1.9.4)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      "@react-leaflet/core": 3.0.0(leaflet@1.9.4)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       leaflet: 1.9.4
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
