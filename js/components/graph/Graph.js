@@ -1298,7 +1298,7 @@ export class Graph extends React.Component {
     // Concatenate prereq string
     let hybridNode = this.state.hybridsJSON[nodeId]
     let hybridText = hybridNode.text.map(textTag => textTag.text).join("")
-    
+
     // Parse prereq string into a nested list alternating between AND and OR conditions
     let prereqList = parseAnd(hybridText)
 
@@ -1819,7 +1819,7 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
   if (prereqNode !== undefined) {
     nodeParents.push(prereqNode.id_)
     childrenObj[prereqNode.id_].push(hybridNode.id_)
-  } 
+  }
   // Otherwise, parse the hybrid node's text as a prerequisite string of multiple courses,
   // and add a parent-child connection for each involved course
   else {

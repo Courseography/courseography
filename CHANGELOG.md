@@ -10,6 +10,8 @@
 
 ### 🔧 Internal changes
 
+- Migrated JS package manager from yarn to pnpm
+
 ## [0.8.1] - 2026-08-10
 
 ### ✨ New features/enhancements

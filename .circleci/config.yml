@@ -49,7 +49,7 @@ jobs:
             sudo apt-get install -y nodejs
 
             corepack enable
-            corepack prepare yarn@stable --activate
+            corepack prepare pnpm@11.21.0 --activate
 
       - run:
           name: Set PATH
@@ -66,7 +66,7 @@ jobs:
             stack build hlint
             stack build fourmolu
             stack build hpc-lcov
-            yarn install
+            pnpm ci
 
       - save_cache:
           name: Cache Dependencies (Haskell)
@@ -84,7 +84,7 @@ jobs:
       - run:
           name: Run Frontend Tests and Generate Coverage
           command: |
-            yarn test --coverage --maxWorkers=4
+            pnpm test --coverage --maxWorkers=4
             mv coverage/lcov.info coverage/frontend.info
 
       - run:
@@ -99,7 +99,7 @@ jobs:
       - run:
           name: Run lint-staged checks
           command: |
-            npx lint-staged --diff="upstream/master...$(git branch --show-current)"
+            pnpm exec lint-staged --diff="upstream/master...$(git branch --show-current)"
 
       - run:
           name: Generate documentation

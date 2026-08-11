@@ -64,7 +64,7 @@ export function splitPrereqString(s, separator) {
       parenLayer += 1
     } else if (s.charAt(currIndex) === ")") {
       parenLayer -= 1
-    } 
+    }
 
     if (s.charAt(currIndex) === separator && parenLayer === 0) {
       // If the separator is encountered and we aren't inside parentheses, split on it and reset curr
@@ -139,7 +139,7 @@ export function parseSplitList(splitList) {
       // Update currPrefix if the current course string contains a prefix
       if (splitList[i].match(/^[A-Z]{3}/g)) {
         currPrefix = splitList[i].substr(0, 3)
-      } 
+      }
       // Append currPrefix if the current course string is missing a prefix
       else if (splitList[i].match(/^[0-9]{3}$/g)) {
         splitList[i] = currPrefix + splitList[i]

@@ -48,12 +48,12 @@ describe("parseAnd", () => {
     const input = "CSC111, STA247, Calc1/; MAT135/136, CSC145/CSC165/; CSC108/199"
     const actual = parseAnd(input)
     const expected = [
-        "CSC111",
-        "STA247",
-        ["Calc1"],
-        ["MAT135", "MAT136"],
-        ["CSC145", "CSC165"],
-        ["CSC108", "CSC199"],
+      "CSC111",
+      "STA247",
+      ["Calc1"],
+      ["MAT135", "MAT136"],
+      ["CSC145", "CSC165"],
+      ["CSC108", "CSC199"],
     ]
     expect(actual).toEqual(expected)
   })
