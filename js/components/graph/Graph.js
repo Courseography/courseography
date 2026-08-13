@@ -1569,7 +1569,7 @@ export class Graph extends React.Component {
       height: "100%",
       width: "100%",
       viewBox: `${viewboxX} ${viewboxY} ${newViewboxWidth} ${newViewboxHeight}`,
-      preserveAspectRatio: "xMidYMin",
+      preserveAspectRatio: "xMidYMid",
       "xmlns:svg": "http://www.w3.org/2000/svg",
       "xmlns:dc": "http://purl.org/dc/elements/1.1/",
       "xmlns:cc": "http://creativecommons.org/ns#",
