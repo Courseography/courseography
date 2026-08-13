@@ -509,7 +509,7 @@ parseTransform transform =
   where
     parser = do
         -- Parse one or more occurrences of transformFunction, separated and optionally ended by whitespace.
-        transformMatrices <- P.sepEndBy1 transformFunction P.space
+        transformMatrices <- P.sepEndBy1 transformFunction P.spaces
         P.eof
         -- Left-multiply all parsed transformation matrices to obtain a single tranformation matrix.
         return $ foldl1 matrixMultiply transformMatrices
