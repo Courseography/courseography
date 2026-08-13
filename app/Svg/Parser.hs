@@ -496,8 +496,8 @@ styleVal nameStr styleMap = fromMaybe "" $ lookup nameStr styleMap
 getTransform :: Tag T.Text -> Matrix
 getTransform = parseTransform . fromAttrib "transform"
 
--- | Parses a translation String into a 2D array of double (Matrix type),
--- ignoring scaling and rotation.
+-- | Parse a transform string into a single transformation matrix.
+-- Each function in the transform string is composed from left to right.
 parseTransform :: T.Text -> Matrix
 parseTransform "" =
     [ [1, 0, 0]
@@ -507,7 +507,13 @@ parseTransform "" =
 parseTransform transform =
     parseVal parser transform
   where
-    parser =
+    parser = do
+        -- Parse one or more occurrences of transformFunction, separated and optionally ended by whitespace.
+        transformMatrices <- P.sepEndBy1 transformFunction P.space
+        P.eof
+        -- Left-multiply all parsed transformation matrices to obtain a single tranformation matrix.
+        return $ foldl1 matrixMultiply transformMatrices
+    transformFunction =
         P.try scale
             <|> P.try rotate
             <|> P.try translate
@@ -517,6 +523,7 @@ parseTransform transform =
     scale = do
         _ <- P.string "scale("
         args <- double `P.sepBy` (P.char ',' *> P.many (P.char ' ') <|> P.many1 (P.char ' '))
+        _ <- P.char ')'
         let xScale = safeHead 1 args
             yScale = if length args > 1 then args !! 1 else xScale
         return
@@ -527,6 +534,7 @@ parseTransform transform =
     rotate = do
         _ <- P.string "rotate("
         args <- double `P.sepBy` (P.char ',' *> P.many (P.char ' ') <|> P.many1 (P.char ' '))
+        _ <- P.char ')'
         let angleDegrees = safeHead 0 args
             xRot = if length args > 1 then args !! 1 else 0
             yRot = if length args > 2 then args !! 2 else 0
@@ -539,6 +547,7 @@ parseTransform transform =
     translate = do
         _ <- P.string "translate("
         args <- double `P.sepBy` (P.char ',' *> P.many (P.char ' ') <|> P.many1 (P.char ' '))
+        _ <- P.char ')'
         let xPos = safeHead 0 args
             yPos = if length args > 1 then args !! 1 else 0
         return
@@ -554,6 +563,7 @@ parseTransform transform =
         d <- (P.char ',' <|> P.char ' ') >> double
         e <- (P.char ',' <|> P.char ' ') >> double
         f <- (P.char ',' <|> P.char ' ') >> double
+        _ <- P.char ')'
         return
             [ [a, c, e]
             , [b, d, f]
@@ -562,6 +572,7 @@ parseTransform transform =
     skewX = do
         _ <- P.string "skewX("
         angleDegrees <- double
+        _ <- P.char ')'
         let angle = angleDegrees * pi / 180
         return
             [ [1, tan angle, 0]
@@ -571,6 +582,7 @@ parseTransform transform =
     skewY = do
         _ <- P.string "skewY("
         angleDegrees <- double
+        _ <- P.char ')'
         let angle = angleDegrees * pi / 180
         return
             [ [1, 0, 0]
