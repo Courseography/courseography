@@ -14,6 +14,7 @@
 - Updated `react-leaflet` to v5.0.0 and `@eslint/compat` to v2.1.0
 - Added peer dependency overrides for `eslint-plugin-react` (for `eslint` v10) and `@babel/plugin-syntax-*` (for `@babel/core` v8.0.1
 - Set `NODE_ENV=production` for webpack `build` command
+- Fixed dynamic graph centering bug by updating `parseTransform` in `app/Svg/Parser.hs` to parse multiple transform functions and removing `getShapesMinXY` in `js/components/graph/Graph.js`
 
 ## [0.8.1] - 2026-08-10
 

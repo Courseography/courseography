@@ -1537,53 +1537,6 @@ export class Graph extends React.Component {
     return transform ? `matrix(${transform.join(", ")})` : ""
   }
 
-  /**
-   * Get the minimum xy-values of all valid shapes (node, hybrid, and bool) in the graph.
-   * @returns {?{minX, minY}} The minimum xy-values of all valid shapes in the graph,
-   * or null if every shape has no size or position.
-   */
-  getShapesMinXY = () => {
-    const shapes = Object.values(this.state.nodesJSON)
-      .concat(Object.values(this.state.hybridsJSON))
-      .concat(Object.values(this.state.boolsJSON))
-    let minX = Infinity
-    let minY = Infinity
-
-    for (let i = 0; i < shapes.length; i++) {
-      // Skip shapes with no position
-      if (!Array.isArray(shapes[i].pos)) {
-        continue
-      }
-
-      let shapeWidth = Number(shapes[i].width)
-      if (Number.isNaN(shapeWidth) || shapeWidth < 0) {
-        shapeWidth = 0
-      }
-
-      let shapeHeight = Number(shapes[i].height)
-      if (Number.isNaN(shapeHeight) || shapeHeight < 0) {
-        shapeHeight = 0
-      }
-
-      // Skip shapes with no size
-      if (shapeWidth === 0 && shapeHeight === 0) {
-        continue
-      }
-
-      const x = shapes[i].pos[0]
-      const y = shapes[i].pos[1]
-      minX = Math.min(minX, x)
-      minY = Math.min(minY, y)
-    }
-
-    // Return null if all shapes have no size or position
-    if (!Number.isFinite(minX) || !Number.isFinite(minX)) {
-      return null
-    }
-
-    return { x: minX, y: minY }
-  }
-
   render() {
     let containerWidth = 0
     let containerHeight = 0
@@ -1595,32 +1548,20 @@ export class Graph extends React.Component {
 
     let newViewboxWidth = this.state.width * this.state.zoomFactor
     let newViewboxHeight = this.state.height * this.state.zoomFactor
-    let viewboxCentreX = this.state.width / 2
-    let viewboxCentreY = this.state.height / 2
     if (document.getElementById("generateRoot") !== null) {
-      const minCoordinates = this.getShapesMinXY()
-      if (minCoordinates !== null) {
-        // Shift the viewBox's centre by the minimum xy-values of all valid shapes in the graph,
-        // aligning the viewBox on the graph
-        viewboxCentreX += minCoordinates.x
-        viewboxCentreY += minCoordinates.y
-      }
       newViewboxWidth =
         Math.max(this.state.width, containerWidth) * this.state.zoomFactor
       newViewboxHeight =
         Math.max(this.state.height, containerHeight) * this.state.zoomFactor
     }
 
-    // Centre the viewBox using viewboxCentreX/Y, then apply pan
     const viewboxContainerRatio =
       containerHeight !== 0 ? newViewboxHeight / containerHeight : 1
     const viewboxX =
-      viewboxCentreX -
-      newViewboxWidth / 2 +
+      (this.state.width - newViewboxWidth) / 2 +
       this.state.horizontalPanFactor * viewboxContainerRatio
     const viewboxY =
-      viewboxCentreY -
-      newViewboxHeight / 2 +
+      (this.state.height - newViewboxHeight) / 2 +
       this.state.verticalPanFactor * viewboxContainerRatio
 
     // not all of these properties are supported in React
@@ -1628,7 +1569,7 @@ export class Graph extends React.Component {
       height: "100%",
       width: "100%",
       viewBox: `${viewboxX} ${viewboxY} ${newViewboxWidth} ${newViewboxHeight}`,
-      preserveAspectRatio: "xMidYMin",
+      preserveAspectRatio: "xMidYMid",
       "xmlns:svg": "http://www.w3.org/2000/svg",
       "xmlns:dc": "http://purl.org/dc/elements/1.1/",
       "xmlns:cc": "http://creativecommons.org/ns#",
