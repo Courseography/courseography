@@ -42,7 +42,7 @@ Before opening your pull request:
 
 After opening your pull request:
 
-- [ ] I have verified that the CircleCI checks have passed.
+- [ ] I have verified that the CI checks have passed.
 - [ ] I have [requested a review](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/requesting-a-pull-request-review) from a project maintainer.
 
 ## Questions and Comments

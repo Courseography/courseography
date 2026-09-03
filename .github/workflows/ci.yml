@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: fpco/stack-build:lts-23
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/Courseography/courseography.git
+          git fetch upstream
+
+      - name: Restore Haskell dependency cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            /root/.stack
+            .stack-work
+          key: v1-courseography-haskell-${{ hashFiles('courseography.cabal') }}-${{ hashFiles('stack.yaml.lock') }}
+          restore-keys: |
+            v1-courseography-haskell-${{ hashFiles('courseography.cabal') }}-
+            v1-courseography-haskell-
+
+      - name: Restore ImageMagick cache
+        uses: actions/cache@v4
+        with:
+          path: squashfs-root
+          key: v1-courseography-imagemagick-squashfs-root
+
+      - name: Install package dependencies
+        run: |
+          apt-get update
+          apt-get install -y graphviz
+          apt-get install -y texlive-latex-base
+          if [ ! -d squashfs-root ]; then
+            wget https://download.imagemagick.org/archive/binaries/magick
+            chmod u+x ./magick
+            ./magick --appimage-extract
+          fi
+          dpkg --remove --force-remove-reinstreq nodejs
+          stack update
+
+          curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
+          dpkg --remove --force-remove-reinstreq libnode72:amd64
+          apt-get install -y nodejs
+
+          corepack enable
+          corepack prepare pnpm@11.21.0 --activate
+
+      - name: Set PATH
+        run: echo "$(pwd)/squashfs-root/usr/bin" >> "$GITHUB_PATH"
+
+      - name: Resolve/Update Dependencies
+        run: |
+          stack --no-terminal setup
+          rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
+          stack --no-terminal build --fast -j4 --ghc-options -Werror
+          stack build hlint
+          stack build fourmolu
+          stack build hpc-lcov
+          pnpm install --frozen-lockfile
+
+      - name: Run Frontend Tests and Generate Coverage
+        run: |
+          pnpm test --coverage --maxWorkers=4
+          mv coverage/lcov.info coverage/frontend.info
+
+      - name: Run Backend Tests and Generate Coverage
+        run: |
+          stack --no-terminal test --coverage
+          $(stack exec which hpc-lcov) -o coverage/backend.info
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          files: coverage/frontend.info coverage/backend.info
+
+      - name: Run lint-staged checks
+        run: pnpm exec lint-staged --diff="upstream/master...HEAD"
+
+      - name: Generate documentation
+        run: |
+          stack exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --optghc=-XLambdaCase --ignore-all-exports app/Main.hs
+
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: doc
