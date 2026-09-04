@@ -20,11 +20,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Add upstream remote
-        run: |
-          git remote add upstream https://github.com/Courseography/courseography.git
-          git fetch upstream
-
       - name: Restore Haskell dependency cache
         uses: actions/cache@v6
         with:
