@@ -17,6 +17,7 @@ jobs:
       image: fpco/stack-build:lts-23
     env:
       HOME: /root
+      STACK_ALLOW_DIFFERENT_USER: "true"
     steps:
       - uses: actions/checkout@v7
         with:
