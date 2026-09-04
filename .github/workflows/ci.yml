@@ -51,7 +51,7 @@ jobs:
           apt-get install -y graphviz
           apt-get install -y texlive-latex-base
           if [ ! -d squashfs-root ]; then
-            wget --tries=5 --retry-connrefused --waitretry=10 https://download.imagemagick.org/archive/binaries/magick
+            wget --tries=5 --retry-connrefused --waitretry=10 -O magick https://github.com/ImageMagick/ImageMagick/releases/download/7.1.2-31/ImageMagick-7.1.2-31-gcc-x86_64.AppImage
             chmod u+x ./magick
             ./magick --appimage-extract
           fi
