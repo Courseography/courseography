@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: fpco/stack-build:lts-23
+    env:
+      HOME: /root
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Configure git for container user mismatch
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git remote add upstream https://github.com/Courseography/courseography.git
+          git fetch upstream
+
+      - name: Restore Haskell dependency cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            /root/.stack
+            .stack-work
+          key: v1-courseography-haskell-${{ hashFiles('courseography.cabal') }}-${{ hashFiles('stack.yaml.lock') }}
+          restore-keys: |
+            v1-courseography-haskell-${{ hashFiles('courseography.cabal') }}-
+            v1-courseography-haskell-
+
+      - name: Restore ImageMagick cache
+        uses: actions/cache@v6
+        with:
+          path: squashfs-root
+          key: v1-courseography-imagemagick-squashfs-root
+
+      - name: Install package dependencies
+        run: |
+          apt-get update
+          apt-get install -y graphviz
+          apt-get install -y texlive-latex-base
+          if [ ! -d squashfs-root ]; then
+            wget --tries=5 --retry-connrefused --waitretry=10 -O magick https://github.com/ImageMagick/ImageMagick/releases/download/7.1.2-31/ImageMagick-7.1.2-31-gcc-x86_64.AppImage
+            chmod u+x ./magick
+            ./magick --appimage-extract
+          fi
+          stack --allow-different-user update
+
+      - uses: pnpm/setup@v2.1.0
+        with:
+          cache: true
+          runtime: node@24
+          require-lockfile: true
+
+      - name: Set PATH
+        run: echo "$(pwd)/squashfs-root/usr/bin" >> "$GITHUB_PATH"
+
+      - name: Resolve/Update Dependencies
+        run: |
+          stack --allow-different-user --no-terminal setup
+          rm -fr $(stack --allow-different-user path --dist-dir) $(stack --allow-different-user path --local-install-root)
+          stack --allow-different-user --no-terminal build --fast -j4 --ghc-options -Werror
+          stack --allow-different-user build hlint
+          stack --allow-different-user build fourmolu
+          stack --allow-different-user build hpc-lcov
+
+      - name: Run Frontend Tests and Generate Coverage
+        run: |
+          pnpm test --coverage --maxWorkers=4
+          mv coverage/lcov.info coverage/frontend.info
+
+      - name: Run Backend Tests and Generate Coverage
+        run: |
+          stack --allow-different-user --no-terminal test --coverage
+          $(stack --allow-different-user exec which hpc-lcov) -o coverage/backend.info
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          files: coverage/frontend.info coverage/backend.info
+
+      - name: Run lint-staged checks
+        run: pnpm exec lint-staged --diff="upstream/master...HEAD"
+
+      - name: Generate documentation
+        run: |
+          stack --allow-different-user exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --optghc=-XLambdaCase --ignore-all-exports app/Main.hs
+
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: docs
+          path: doc
