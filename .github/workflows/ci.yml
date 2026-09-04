@@ -55,15 +55,12 @@ jobs:
             chmod u+x ./magick
             ./magick --appimage-extract
           fi
-          dpkg --remove --force-remove-reinstreq nodejs
           stack --allow-different-user update
 
-          curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
-          dpkg --remove --force-remove-reinstreq libnode72:amd64
-          apt-get install -y nodejs
-
-          corepack enable
-          corepack prepare pnpm@11.21.0 --activate
+      - uses: pnpm/setup@v2
+        with:
+          runtime: node@24
+          require-lockfile: true
 
       - name: Set PATH
         run: echo "$(pwd)/squashfs-root/usr/bin" >> "$GITHUB_PATH"
@@ -76,7 +73,6 @@ jobs:
           stack --allow-different-user build hlint
           stack --allow-different-user build fourmolu
           stack --allow-different-user build hpc-lcov
-          pnpm install --frozen-lockfile
 
       - name: Run Frontend Tests and Generate Coverage
         run: |
