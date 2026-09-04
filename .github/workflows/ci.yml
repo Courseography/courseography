@@ -17,7 +17,6 @@ jobs:
       image: fpco/stack-build:lts-23
     env:
       HOME: /root
-      STACK_ALLOW_DIFFERENT_USER: "true"
     steps:
       - uses: actions/checkout@v7
         with:
@@ -51,7 +50,7 @@ jobs:
             ./magick --appimage-extract
           fi
           dpkg --remove --force-remove-reinstreq nodejs
-          stack update
+          stack --allow-different-user update
 
           curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
           dpkg --remove --force-remove-reinstreq libnode72:amd64
@@ -65,12 +64,12 @@ jobs:
 
       - name: Resolve/Update Dependencies
         run: |
-          stack --no-terminal setup
-          rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
-          stack --no-terminal build --fast -j4 --ghc-options -Werror
-          stack build hlint
-          stack build fourmolu
-          stack build hpc-lcov
+          stack --allow-different-user --no-terminal setup
+          rm -fr $(stack --allow-different-user path --dist-dir) $(stack --allow-different-user path --local-install-root)
+          stack --allow-different-user --no-terminal build --fast -j4 --ghc-options -Werror
+          stack --allow-different-user build hlint
+          stack --allow-different-user build fourmolu
+          stack --allow-different-user build hpc-lcov
           pnpm install --frozen-lockfile
 
       - name: Run Frontend Tests and Generate Coverage
@@ -80,8 +79,8 @@ jobs:
 
       - name: Run Backend Tests and Generate Coverage
         run: |
-          stack --no-terminal test --coverage
-          $(stack exec which hpc-lcov) -o coverage/backend.info
+          stack --allow-different-user --no-terminal test --coverage
+          $(stack --allow-different-user exec which hpc-lcov) -o coverage/backend.info
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
@@ -93,7 +92,7 @@ jobs:
 
       - name: Generate documentation
         run: |
-          stack exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --optghc=-XLambdaCase --ignore-all-exports app/Main.hs
+          stack --allow-different-user exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --optghc=-XLambdaCase --ignore-all-exports app/Main.hs
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v7
