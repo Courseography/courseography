@@ -16,7 +16,7 @@ jobs:
     container:
       image: fpco/stack-build:lts-23
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -26,7 +26,7 @@ jobs:
           git fetch upstream
 
       - name: Restore Haskell dependency cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             /root/.stack
@@ -37,7 +37,7 @@ jobs:
             v1-courseography-haskell-
 
       - name: Restore ImageMagick cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: squashfs-root
           key: v1-courseography-imagemagick-squashfs-root
@@ -98,7 +98,7 @@ jobs:
           stack exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --optghc=-XLambdaCase --ignore-all-exports app/Main.hs
 
       - name: Upload documentation artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: docs
           path: doc
