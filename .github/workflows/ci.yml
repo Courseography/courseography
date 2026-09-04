@@ -59,6 +59,7 @@ jobs:
 
       - uses: pnpm/setup@v2
         with:
+          cache: true
           runtime: node@24
           require-lockfile: true
 
