@@ -43,9 +43,9 @@ module.exports = [
     },
   },
   {
-    // @babel/eslint-parser converts TypeScript syntax (interfaces, type
-    // annotations, etc.) to an ESTree-shaped AST that core rules don't fully
-    // understand, so `no-undef` flags type-only identifiers as undefined.
+    // @babel/eslint-parser converts TypeScript syntax to an ESTree-shaped
+    // AST that core rules don't fully understand, so `no-undef` flags
+    // type-only identifiers as undefined.
     // TypeScript's own compiler (`pnpm run typecheck`) already catches
     // genuine undefined-reference errors, so disable the rule here — this
     // is the same guidance typescript-eslint gives for `.ts`/`.tsx` files.

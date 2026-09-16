@@ -17,7 +17,7 @@
 - Fixed dynamic graph centering bug by updating `parseTransform` in `app/Svg/Parser.hs` to parse multiple transform functions and removing `getShapesMinXY` in `js/components/graph/Graph.js`
 - Switched CI provider from CircleCI to GitHub Actions
 - Cleared up documentation for various graph-related front-end functions
-- Adopted TypeScript v7 without renaming existing files: integrated `.ts`/`.tsx` into the webpack/Babel/Jest pipeline, added a `pnpm run typecheck` script (wired into CI), extended ESLint to cover TypeScript files, and converted `js/components/graph/Button.js` to `Button.tsx` as a proof of concept
+- Adopted TypeScript v7 into build and CI pipelines and converted `js/components/graph/Button.js` to `Button.tsx` as a proof of concept
 
 ## [0.8.1] - 2026-08-10
 

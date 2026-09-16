@@ -62,6 +62,10 @@ $ stack build   # Compile Courseography and all Haskell dependencies (this will 
 When running in production you should run `$ pnpm run build` instead of `$ pnpm run watch` to build the web assets.
 This will take longer but results in smaller asset files.
 
+#### Typechecking
+
+Run `$ pnpm run typecheck`, which uses [Typescript](https://www.typescriptlang.org/) to typecheck our codebase. Only `.ts`/`.tsx` files are checked; existing `.js`/`.jsx` files are ignored.
+
 #### Running front-end tests
 
 To run all tests, run `$ pnpm test`. However, if you need to run a specific file or folder of tests,
