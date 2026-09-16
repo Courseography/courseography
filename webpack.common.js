@@ -19,10 +19,13 @@ module.exports = {
     publicPath: "./public",
     filename: "[name].js",
   },
+  resolve: {
+    extensions: [".js", ".jsx", ".ts", ".tsx", "..."],
+  },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.[jt]sx?$/,
         use: "babel-loader",
         exclude: /node_modules/,
       },

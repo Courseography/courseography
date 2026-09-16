@@ -75,6 +75,9 @@ jobs:
           stack --allow-different-user build fourmolu
           stack --allow-different-user build hpc-lcov
 
+      - name: Run TypeScript typecheck
+        run: pnpm run typecheck
+
       - name: Run Frontend Tests and Generate Coverage
         run: |
           pnpm test --coverage --maxWorkers=4
