@@ -1,7 +1,8 @@
 /**
  * Parse a logical prerequisite string as a conjunction of disjunctions.
  * @param {string} s the prerequisite string
- * @returns a nested list of courses as an AND of ORs, or the course itself if no splitting is made
+ * @returns {string|Array} a nested list of courses as an AND of ORs, or the course itself if no
+ *  splitting is made
  */
 export function parseAnd(s) {
   // Base case: return the course if no splitting is to be made.
@@ -25,7 +26,8 @@ export function parseAnd(s) {
 /**
  * Parse a logical prerequisite string as a disjunction of conjunctions.
  * @param {string} s the prerequisite string
- * @returns a nested list of courses as an OR of ANDs, or the course itself if no splitting is made
+ * @returns {string|Array} a nested list of courses as an OR of ANDs, or the course itself if no
+ *  splitting is made
  */
 export function parseOr(s) {
   // Base case: return the course if no splitting is to be made.
@@ -51,7 +53,7 @@ export function parseOr(s) {
  * strip the result of top-level outer parentheses and spaces.
  * @param {string} s the prerequisite string
  * @param {string} separator the separator to split by (',' for and, '/' for or)
- * @returns the resulting list of conjunctives/disjunctives
+ * @returns {string[]} the resulting list of conjunctives/disjunctives
  */
 export function splitPrereqString(s, separator) {
   let splitList = []
@@ -84,7 +86,7 @@ export function splitPrereqString(s, separator) {
 /**
  * Helper function to strip a string entirely contained within a pair of parentheses.
  * @param {string} s the prerequisite string to strip parentheses from
- * @returns the same string with all fully-enclosing pairs of parentheses removed
+ * @returns {string} the same string with all fully-enclosing pairs of parentheses removed
  */
 export function removeOuterParens(s) {
   if (s.length < 2 || s.charAt(0) !== "(" || s.charAt(s.length - 1) !== ")") {

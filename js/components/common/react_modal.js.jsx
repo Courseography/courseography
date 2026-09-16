@@ -134,7 +134,11 @@ class CourseModal extends React.Component {
     }
   }
 
-  /** Helper function to format the time of a Time JSON object for display */
+  /** 
+   * Helper function to format a Time data object for display in the course modal. 
+   * @param {object} time A Time data object.
+   * @returns {string} The time formatted as a string (e.g. "Tuesday 11 - 13").
+   * */
   formatTime(time) {
     return DAY_TO_INT[time.weekDay] + " " + time.startHour + " - " + time.endHour
   }
@@ -142,45 +146,48 @@ class CourseModal extends React.Component {
   /**
    * Generate the data needed for the course modal table based on the meeting times corresponding
    * to a course in a given session.
-   * @param allMeetingTimes An array of MeetTime' objects corresponding to a particular course.
-   * @param session The session (F, S, Y) to query.
-   * @returns A map containing the table data that will appear in the course modal.
+   * @param {object[]} allMeetTimes An array of MeetTime' objects corresponding to a particular course.
+   * @param {string} session The session (F, S, Y) to query.
+   * @returns {object[]} An array of row data objects that will appear in the course modal table.
    */
-  getTable(allMeetingTimes, session) {
-    const sessions = allMeetingTimes.filter(lec => lec.meetData.session === session)
-    const sortedSessions = sessions.sort((firstLec, secondLec) =>
-      firstLec.meetData.section > secondLec.meetData.section ? 1 : -1
+  getTable(allMeetTimes, session) {
+    // Filter and sort the lecture sections in the specified session by their section code
+    const filteredMeetTimes = allMeetTimes.filter(meetTime => meetTime.meetData.session === session)
+    const sortedMeetTimes = filteredMeetTimes.sort((firstMeetTime, secondMeetTime) =>
+      firstMeetTime.meetData.section > secondMeetTime.meetData.section ? 1 : -1
     )
 
-    return sortedSessions.map(lecture => {
+    return sortedMeetTimes.map(meetTime => {
+      // Sort each section's meeting time blocks and corresponding locations and store them in arrays.
+      // times2, locations2 are used for the extra columns that appear in the table when viewing a Y course.
       const occurrences = { times1: [], locations1: [], times2: [], locations2: [] }
-      const sortedTimeData = lecture.timeData.sort((occ1, occ2) =>
-        occ1.weekDay > occ2.weekDay ? 1 : -1
+      const sortedTimeData = meetTime.timeData.sort((time1, time2) =>
+        time1.weekDay > time2.weekDay ? 1 : -1
       )
-      sortedTimeData.map(occurrence => {
+      sortedTimeData.map(time => {
         let location = " "
-        if (occurrence.timeLocation !== null && occurrence.timeLocation !== undefined) {
-          location = occurrence.timeLocation.buildingCode
+        if (time.timeLocation !== null && time.timeLocation !== undefined) {
+          location = time.timeLocation.buildingCode
         }
 
-        if (session === "Y" && occurrence.timeSession.endsWith("1")) {
+        if (session === "Y" && time.timeSession.endsWith("1")) {
           occurrences.locations2.push(location)
-          occurrences.times2.push(this.formatTime(occurrence))
+          occurrences.times2.push(this.formatTime(time))
         } else {
           occurrences.locations1.push(location)
-          occurrences.times1.push(this.formatTime(occurrence))
+          occurrences.times1.push(this.formatTime(time))
         }
       })
       const rowData = {
-        activity: lecture.meetData.section,
-        instructor: lecture.meetData.instructor,
+        activity: meetTime.meetData.section,
+        instructor: meetTime.meetData.instructor,
         availability:
-          lecture.meetData.cap -
-          lecture.meetData.enrol +
+          meetTime.meetData.cap -
+          meetTime.meetData.enrol +
           " of " +
-          lecture.meetData.cap +
+          meetTime.meetData.cap +
           " available",
-        waitList: lecture.meetData.wait + " students",
+        waitList: meetTime.meetData.wait + " students",
         time1: occurrences.times1,
         location1: occurrences.locations1,
         time2: occurrences.times2,

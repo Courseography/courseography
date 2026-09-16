@@ -1218,6 +1218,11 @@ export class Graph extends React.Component {
     })
   }
 
+  /**
+   * Checks if a node or bool node is currently selected or active.
+   * @param {string} nodeId 
+   * @returns {boolean}
+   */
   isSelected = nodeId => {
     if (this.state.nodesStatus[nodeId]) {
       return this.isSelectedNode(nodeId)
@@ -1248,7 +1253,8 @@ export class Graph extends React.Component {
 
   /**
    * Check if the prerequisite courses have been satisfied based on bool type.
-   * @returns {boolean} Whether any of the prereqs are satisfied.
+   * @param {string} boolId the ID of the bool node.
+   * @returns {boolean} Whether the bool is satisfied based on its prerequisite nodes.
    */
   arePrereqsSatisfiedBool = boolId => {
     const isAllTrue = element => {
@@ -1265,8 +1271,9 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Checks whether all prerequisite/preceding nodes for the current one are satisfied
-   * @return {boolean}
+   * Recursively checks whether all prerequisite/preceding nodes for a node are satisfied.
+   * @param {string} nodeId the ID of the node.
+   * @return {boolean} whether all of the node's prerequisite nodes are satisfied by the selected courses.
    */
   arePrereqsSatisfiedNode = nodeId => {
     const parents = this.state.connections.parents[nodeId]
@@ -1291,8 +1298,9 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Checks whether a hybrid node's prereq string is satisfied
-   * @return {boolean}
+   * Checks whether a hybrid node's prereq string is satisfied.
+   * @param {string} nodeId the ID of the hybrid node.
+   * @return {boolean} whether the node's text prerequisite string is satisfied by the selected courses.
    */
   arePrereqsSatisfiedHybrid = nodeId => {
     // Concatenate prereq string
@@ -1744,14 +1752,15 @@ export class Graph extends React.Component {
 
 export { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT }
 
-/** Helper function that adds parents of hybridNode to the parents object, and adds hybrid nodes as children of the Nodes they represent
- *
+/** 
+ * Helper function to populate the parents object and children object with the connections of a hybrid node.
+ * A parent-child connection is added for each course that appears in the hybrid node's prereq string.
  * @param {Node} hybridNode
  * @param {Array} nodesJSON
- * @param {Object} parents
+ * @param {Object} parentsObj
  * @param {Object} childrenObj
  */
-export function populateHybridRelatives(hybridNode, nodesJSON, parents, childrenObj) {
+export function populateHybridRelatives(hybridNode, nodesJSON, parentsObj, childrenObj) {
   // parse prereqs based on text
   let hybridText = hybridNode.text.map(textTag => textTag.text).join("")
   const nodeParents = []
@@ -1780,12 +1789,12 @@ export function populateHybridRelatives(hybridNode, nodesJSON, parents, children
       console.error("Could not find prereq for ", hybridText)
     }
   }
-  parents[hybridNode.id_] = nodeParents
+  parentsObj[hybridNode.id_] = nodeParents
 }
 
 /**
  * Helper for hybrid computation. Finds the node with the same course label as the hybrid.
- * @param  {string} course
+ * @param {string} course
  * @param {Array} nodesJSON
  * @return {Node}
  */

@@ -16,6 +16,7 @@
 - Set `NODE_ENV=production` for webpack `build` command
 - Fixed dynamic graph centering bug by updating `parseTransform` in `app/Svg/Parser.hs` to parse multiple transform functions and removing `getShapesMinXY` in `js/components/graph/Graph.js`
 - Switched CI provider from CircleCI to GitHub Actions
+- Cleared up documentation for various graph-related front-end functions
 
 ## [0.8.1] - 2026-08-10
 
