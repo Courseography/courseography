@@ -10,6 +10,7 @@
 
 ### 🔧 Internal changes
 
+- Added a test case for the getGraphJSON function in `Controllers/Graph`
 - Migrated JS package manager from yarn to pnpm
 - Updated `react-leaflet` to v5.0.0 and `@eslint/compat` to v2.1.0
 - Added peer dependency overrides for `eslint-plugin-react` (for `eslint` v10) and `@babel/plugin-syntax-*` (for `@babel/core` v8.0.1
