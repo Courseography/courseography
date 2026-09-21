@@ -102,9 +102,18 @@ runSaveGraphJSONTest (label, payload) =
         let expectedValue = fmap addDefaults (decode payload :: Maybe Value)
         assertEqual ("Unexpected response for " ++ label) expectedValue retrievedResult
 
--- | Run all save graph test cases
+-- | Run all save graph test cases on valid inputs
 runSaveGraphJSONTests :: [TestTree]
 runSaveGraphJSONTests = map runSaveGraphJSONTest saveGraphJSONTestCases
+
+-- | Run save graph test on invalid input
+runSaveGraphJSONInvalidJSONTest :: TestTree
+runSaveGraphJSONInvalidJSONTest = testCase "Invalid JSON graph" $ do
+    runDb clearDatabase
+    response <-
+        runServerPartWith Controllers.Graph.saveGraphJSON $
+            mockPutRequest "/graph-save" [("nameData", "Invalid Graph Name"), ("jsonData", "Invalid JSON")] ""
+    assertEqual "Unexpected response for invalid JSON" "Error" (BL.unpack $ rsBody response)
 
 -- | List of test cases for getGraphJSON as (label, (texts, shapes, paths))
 -- | Invariant: Expected Graph IDs are all set to 1
@@ -213,4 +222,7 @@ runGetGraphJSONTests = map runGetGraphJSONTest getGraphJSONTestCases
 
 -- | Test suite for Graph Controller Module
 test_graphController :: TestTree
-test_graphController = withDatabase "Graph Controller tests" (runIndexTests ++ runSaveGraphJSONTests ++ runGetGraphJSONTests)
+test_graphController =
+    withDatabase
+        "Graph Controller tests"
+        (runIndexTests ++ runSaveGraphJSONTests ++ [runSaveGraphJSONInvalidJSONTest] ++ runGetGraphJSONTests)
