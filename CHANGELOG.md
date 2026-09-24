@@ -10,6 +10,7 @@
 
 ### 🔧 Internal changes
 
+- Added a test case for the getGraphJSON function in `Controllers/Graph`
 - Migrated JS package manager from yarn to pnpm
 - Updated `react-leaflet` to v5.0.0 and `@eslint/compat` to v2.1.0
 - Added peer dependency overrides for `eslint-plugin-react` (for `eslint` v10) and `@babel/plugin-syntax-*` (for `@babel/core` v8.0.1
@@ -18,6 +19,8 @@
 - Switched CI provider from CircleCI to GitHub Actions
 - Cleared up documentation for various graph-related front-end functions
 - Adopted TypeScript v7 into build and CI pipelines and converted `js/components/graph/Button.js` to `Button.tsx` as a proof of concept
+- Added `.gitattributes` file to standardize to LF line endings and renormalized codebase
+- Added invalid JSON graph test coverage for `saveGraphJSON` in `app/Controllers/Graph.hs`
 - Removed deprecated `Draw` feature and remaining references to previously deprecated `Search` and `Post` features
 
 ## [0.8.1] - 2026-08-10
