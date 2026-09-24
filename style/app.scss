@@ -1406,33 +1406,6 @@ input:focus {
   box-shadow: 0 0 3px 1px var(--input-focus-ring-color);
 }
 
-.mylabel {
-  dominant-baseline: central;
-  stroke: none;
-  text-align: center;
-  text-anchor: middle;
-  -webkit-touch-callout: none;
-  user-select: none;
-}
-
-.elbow {
-  opacity: 0;
-}
-
-.elbow:hover {
-  cursor: pointer;
-  opacity: 1;
-}
-
-.rElbow {
-  opacity: 0;
-}
-
-.rElbow:hover {
-  cursor: pointer;
-  opacity: 1;
-}
-
 i {
   color: var(--invalid-color);
 }
