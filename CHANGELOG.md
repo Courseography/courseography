@@ -18,6 +18,7 @@
 - Switched CI provider from CircleCI to GitHub Actions
 - Cleared up documentation for various graph-related front-end functions
 - Adopted TypeScript v7 into build and CI pipelines and converted `js/components/graph/Button.js` to `Button.tsx` as a proof of concept
+- Removed deprecated `Draw` feature and remaining references to previously deprecated `Search` and `Post` features
 
 ## [0.8.1] - 2026-08-10
 
