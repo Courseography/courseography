@@ -9,7 +9,6 @@ module.exports = {
   entry: {
     "js/grid/app": "./js/components/grid/main.js",
     "js/graph/app": "./js/components/graph/main.js",
-    "js/draw/app": "./js/components/draw/main.js",
     "js/generate/app": "./js/components/generate/generate.jsx",
     "js/about/app": "./js/components/about/about.js",
     "style/app": "./style/app.js",
