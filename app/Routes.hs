@@ -24,7 +24,7 @@ import Happstack.Server (
     seeOther,
     serveDirectory,
  )
-import Response (aboutResponse, drawResponse, loadingResponse, notFoundResponse)
+import Response (aboutResponse, loadingResponse, notFoundResponse)
 
 routeResponses :: String -> ServerPartT IO Response
 routeResponses staticDir =
@@ -45,7 +45,6 @@ strictRoutes =
     , ("timetable-image", TimetableController.exportTimetableImageResponse)
     , ("timetable-pdf", TimetableController.exportTimetablePDFResponse)
     , ("post", ProgramController.retrieveProgram)
-    , ("draw", drawResponse)
     , ("about", aboutResponse)
     , ("graphs", GraphsController.index)
     , ("generate", generateResponse)
