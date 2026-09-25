@@ -21,6 +21,7 @@
 - Adopted TypeScript v7 into build and CI pipelines and converted `js/components/graph/Button.js` to `Button.tsx` as a proof of concept
 - Added `.gitattributes` file to standardize to LF line endings and renormalized codebase
 - Added invalid JSON graph test coverage for `saveGraphJSON` in `app/Controllers/Graph.hs`
+- Converted various JS files to TypeScript
 - Added static info existence test for `Database/Database.hs`
 
 ## [0.8.1] - 2026-08-10

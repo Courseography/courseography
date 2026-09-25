@@ -1,8 +1,18 @@
 import React from "react"
-import PropTypes from "prop-types"
+import { GraphNodeJSON } from "./types"
+
+interface BoolProps {
+  className?: string
+  JSON: GraphNodeJSON
+  inEdges?: string[]
+  logicalType?: string
+  outEdges?: string[]
+  parents: string[]
+  status?: string
+}
 
 /** Function representing a boolean node (and/or) */
-export default function Bool(props) {
+export default function Bool(props: BoolProps) {
   const ellipseAttrs = {
     cx: props.JSON.pos[0],
     cy: props.JSON.pos[1],
@@ -29,14 +39,4 @@ export default function Bool(props) {
       })}
     </g>
   )
-}
-
-Bool.propTypes = {
-  className: PropTypes.string,
-  JSON: PropTypes.object,
-  inEdges: PropTypes.array,
-  logicalType: PropTypes.string,
-  outEdges: PropTypes.array,
-  parents: PropTypes.array,
-  status: PropTypes.string,
 }

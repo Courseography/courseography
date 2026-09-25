@@ -1,15 +1,15 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { CourseModal } from "../common/react_modal.js.jsx"
-import { ExportModal } from "../common/export.js.jsx"
-import { getProgram } from "../common/utils.js"
+import { ExportModal } from "../common/export"
+import { getProgram } from "../common/utils"
 import Bool from "./Bool"
 import Edge from "./Edge"
 import Node from "./Node"
 import Button from "./Button"
 import InfoBox from "./InfoBox"
 import Sidebar from "./Sidebar"
-import { parseAnd } from "../../util/util.js"
+import { parseAnd } from "../../util/util"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faMagnifyingGlassMinus,
@@ -1220,7 +1220,7 @@ export class Graph extends React.Component {
 
   /**
    * Checks if a node or bool node is currently selected or active.
-   * @param {string} nodeId 
+   * @param {string} nodeId
    * @returns {boolean}
    */
   isSelected = nodeId => {
@@ -1752,7 +1752,7 @@ export class Graph extends React.Component {
 
 export { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT }
 
-/** 
+/**
  * Helper function to populate the parents object and children object with the connections of a hybrid node.
  * A parent-child connection is added for each course that appears in the hybrid node's prereq string.
  * @param {Node} hybridNode
@@ -1760,7 +1760,12 @@ export { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT }
  * @param {Object} parentsObj
  * @param {Object} childrenObj
  */
-export function populateHybridRelatives(hybridNode, nodesJSON, parentsObj, childrenObj) {
+export function populateHybridRelatives(
+  hybridNode,
+  nodesJSON,
+  parentsObj,
+  childrenObj
+) {
   // parse prereqs based on text
   let hybridText = hybridNode.text.map(textTag => textTag.text).join("")
   const nodeParents = []
