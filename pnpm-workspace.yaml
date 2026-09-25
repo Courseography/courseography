@@ -6,6 +6,11 @@ allowBuilds:
   unrs-resolver: true
 overrides:
   pretty-format>react-is: "19.1.0"
+  # babel-jest pulls in its own nested @babel/core@7 (via babel-plugin-istanbul/@jest/transform),
+  # which silently mis-transforms some TS syntax (e.g. generic type arguments in a class
+  # `extends` clause) when combined with this project's Babel 8 `@babel/preset-typescript`.
+  # Force every nested resolution onto the same Babel 8 core used at the workspace root.
+  "@babel/core": "^8.0.1"
 peerDependencyRules:
   allowedVersions:
     eslint: "10"

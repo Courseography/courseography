@@ -55,6 +55,14 @@ module.exports = [
     },
   },
   {
+    // Ambient declaration files declare symbols for consumers elsewhere in
+    // the program, not for use within the file itself.
+    files: ["**/*.d.ts"],
+    rules: {
+      "no-unused-vars": "off",
+    },
+  },
+  {
     files: ["cypress/**/*.js"],
     languageOptions: {
       globals: {

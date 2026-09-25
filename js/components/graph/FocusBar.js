@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import FocusTab from "./FocusTab.js"
+import FocusTab from "./FocusTab"
 
 // These lists are in reverse order to what ends up appearing on the screen
 const computerScienceFocusLabels = [

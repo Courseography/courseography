@@ -4,7 +4,7 @@ import Disclaimer from "../common/Disclaimer"
 import { Graph } from "./Graph"
 import FocusBar from "./FocusBar"
 import { NavBar } from "../common/NavBar.js.jsx"
-import { ExportModal } from "../common/export.js.jsx"
+import { ExportModal } from "../common/export"
 import GraphFallback from "./GraphFallback"
 import { ErrorBoundary } from "react-error-boundary"
 

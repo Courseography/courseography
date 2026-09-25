@@ -1,35 +1,43 @@
-import React from "react"
+import React, { useImperativeHandle, useState } from "react"
 import ReactModal from "react-modal"
 
 if (document.getElementById("nav-export")) {
   ReactModal.setAppElement("#nav-export")
 }
 
-export class ExportModal extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      data: "",
-      otherSession: "Spring",
-    }
-    this.getImage = this.getImage.bind(this)
-    this.getGraphImage = this.getGraphImage.bind(this)
-    this.getGridImage = this.getGridImage.bind(this)
-    this.toggleSession = this.toggleSession.bind(this)
-  }
+interface SelectedLecture {
+  courseCode: string
+  lectureCode: string
+  session: string
+}
 
-  getImage() {
-    if (this.props.page === "graph") {
-      this.getGraphImage()
-    } else {
-      this.getGridImage(this.props.session)
-    }
-  }
+export interface ExportModalHandle {
+  getImage: () => void
+}
 
-  getGraphImage() {
-    const necessaryLS = new Object()
+interface ExportModalProps {
+  page?: string
+  session?: string
+  context?: string
+  open?: boolean
+  onRequestClose?: () => void
+  ref?: React.Ref<ExportModalHandle>
+}
+
+export function ExportModal({
+  page,
+  session,
+  open,
+  onRequestClose,
+  ref,
+}: ExportModalProps) {
+  const [data, setData] = useState("")
+  const [otherSession, setOtherSession] = useState("Spring")
+
+  const getGraphImage = () => {
+    const necessaryLS: Record<string, string | null> = {}
     for (const elem in localStorage) {
-      if (!localStorage.hasOwnProperty(elem)) {
+      if (!Object.prototype.hasOwnProperty.call(localStorage, elem)) {
         continue
       }
 
@@ -49,69 +57,78 @@ export class ExportModal extends React.Component {
     $.ajax({
       url: "/image",
       data: { JsonLocalStorageObj: JsonLocalStorageObj },
-      success: function (data) {
-        this.setState({ data: "data:image/png;base64," + data })
-      }.bind(this),
+      success: function (data: string) {
+        setData("data:image/png;base64," + data)
+      },
       error: function () {
         throw "No image generated"
       },
     })
   }
 
-  getGridImage(session) {
+  const getGridImage = (session: string) => {
     const formattedSession = session.charAt(0).toUpperCase() + session.slice(1)
-    const allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
+    const allCourses: SelectedLecture[] =
+      JSON.parse(localStorage.getItem("selectedLectures") ?? "null") || []
     const courseData = allCourses.map(
       data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`
     )
     $.ajax({
       url: "/timetable-image",
       data: { session: formattedSession, courses: courseData.join("_") },
-      success: function (data) {
-        this.setState({
-          data: "data:image/png;base64," + data,
-          otherSession: formattedSession === "Fall" ? "Spring" : "Fall",
-        })
-      }.bind(this),
+      success: function (data: string) {
+        setData("data:image/png;base64," + data)
+        setOtherSession(formattedSession === "Fall" ? "Spring" : "Fall")
+      },
       error: function () {
         throw "No image generated"
       },
     })
   }
 
-  toggleSession() {
-    this.getGridImage(this.state.otherSession)
+  const toggleSession = () => {
+    getGridImage(otherSession)
   }
 
-  render() {
-    if (this.props.page === "graph") {
-      return (
-        <ReactModal
-          className="modal-class"
-          overlayClassName="overlay"
-          isOpen={this.props.open}
-          onRequestClose={this.props.onRequestClose}
-        >
-          <GraphImage data={this.state.data} />
-        </ReactModal>
-      )
+  const getImage = () => {
+    if (page === "graph") {
+      getGraphImage()
     } else {
-      return (
-        <ReactModal
-          className="modal-class"
-          overlayClassName="overlay"
-          isOpen={this.props.open}
-          onRequestClose={this.props.onRequestClose}
-        >
-          <GridImage data={this.state.data} toggleSession={this.toggleSession} />
-        </ReactModal>
-      )
+      // `session` is expected to always be provided on this code path.
+      getGridImage(session!)
     }
+  }
+
+  useImperativeHandle(ref, () => ({ getImage }))
+
+  if (page === "graph") {
+    return (
+      <ReactModal
+        className="modal-class"
+        overlayClassName="overlay"
+        isOpen={open ?? false}
+        onRequestClose={onRequestClose}
+      >
+        <GraphImage data={data} />
+      </ReactModal>
+    )
+  } else {
+    return (
+      <ReactModal
+        className="modal-class"
+        overlayClassName="overlay"
+        isOpen={open ?? false}
+        onRequestClose={onRequestClose}
+      >
+        <GridImage data={data} toggleSession={toggleSession} />
+      </ReactModal>
+    )
   }
 }
 
 function getCalendar() {
-  const allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
+  const allCourses: SelectedLecture[] =
+    JSON.parse(localStorage.getItem("selectedLectures") ?? "null") || []
   const courseData = allCourses.map(
     data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`
   )
@@ -119,7 +136,7 @@ function getCalendar() {
     type: "post",
     url: "/calendar",
     data: { courses: courseData.join("_") },
-    success: function (data) {
+    success: function (data: string) {
       const dataURI = "data:text/calendar;charset=utf8," + escape(data)
       const downloadLink = document.createElement("a")
       downloadLink.href = dataURI
@@ -135,9 +152,9 @@ function getCalendar() {
 }
 
 function getPDF() {
-  const necessaryLS = new Object()
+  const necessaryLS: Record<string, string | null> = {}
   for (const elem in localStorage) {
-    if (!localStorage.hasOwnProperty(elem)) {
+    if (!Object.prototype.hasOwnProperty.call(localStorage, elem)) {
       continue
     }
 
@@ -153,7 +170,8 @@ function getPDF() {
     }
   }
 
-  const allCourses = JSON.parse(localStorage.getItem("selectedLectures")) || []
+  const allCourses: SelectedLecture[] =
+    JSON.parse(localStorage.getItem("selectedLectures") ?? "null") || []
   const courseData = allCourses.map(
     data => `${data.courseCode.split(" ")[0]}-${data.lectureCode}-${data.session}`
   )
@@ -164,7 +182,7 @@ function getPDF() {
       courses: courseData.join("_"),
       JsonLocalStorageObj: JSON.stringify(necessaryLS),
     },
-    success: function (data) {
+    success: function (data: string) {
       const dataURI = "data:application/pdf;base64," + data
       const downloadLink = document.createElement("a")
       downloadLink.href = dataURI
@@ -179,7 +197,7 @@ function getPDF() {
   })
 }
 
-function GraphImage(props) {
+function GraphImage({ data }: { data: string }) {
   return (
     <div>
       <div className="modal-header">Export</div>
@@ -187,13 +205,19 @@ function GraphImage(props) {
         <a onClick={getPDF} href="#">
           Download PDF
         </a>
-        <div>{props.data && <img id="post-image" src={props.data} />}</div>
+        <div>{data && <img id="post-image" src={data} />}</div>
       </div>
     </div>
   )
 }
 
-function GridImage(props) {
+function GridImage({
+  data,
+  toggleSession,
+}: {
+  data: string
+  toggleSession: () => void
+}) {
   return (
     <div>
       <div className="modal-header">Export</div>
@@ -205,12 +229,12 @@ function GridImage(props) {
         <a onClick={getPDF} href="#">
           Download PDF
         </a>
-        <div>{props.data && <img id="post-image" src={props.data} />}</div>
+        <div>{data && <img id="post-image" src={data} />}</div>
         <button
           type="button"
           className="btn btn-primary"
           id="switch-session-button"
-          onClick={props.toggleSession}
+          onClick={toggleSession}
         >
           Switch Sessions
         </button>

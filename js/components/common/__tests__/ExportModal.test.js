@@ -1,6 +1,6 @@
 import React from "react"
 import { render, screen, cleanup } from "@testing-library/react"
-import { ExportModal } from "../export.js.jsx"
+import { ExportModal } from "../export"
 
 describe("test that export modal displays correct content for graph and grid pages", () => {
   beforeEach(() => cleanup())

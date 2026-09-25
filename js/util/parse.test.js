@@ -1,4 +1,4 @@
-// Tests for parsing algorithms from js/util/util.js
+// Tests for parsing algorithms from js/util/util.ts
 import { parseAnd, parseOr, splitPrereqString, removeOuterParens } from "./util"
 
 describe("parseAnd", () => {
