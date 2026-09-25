@@ -4,7 +4,7 @@
 --
 -- The main module for parsing course information from the web and
 -- inserting it into the database. Run when @cabal run database@ is executed.
-module Database.Database (populateCalendar, setupDatabase) where
+module Database.Database (populateCalendar, setupDatabase, populateStaticInfo) where
 
 import Config (databasePath, runDb)
 import Control.Monad (void)
