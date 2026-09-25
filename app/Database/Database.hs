@@ -4,7 +4,7 @@
 --
 -- The main module for parsing course information from the web and
 -- inserting it into the database. Run when @cabal run database@ is executed.
-module Database.Database (populateCalendar, setupDatabase) where
+module Database.Database (populateCalendar, setupDatabase, populateStaticInfo) where
 
 import Config (databasePath, runDb)
 import Control.Monad (void)
@@ -13,7 +13,7 @@ import Data.Maybe (fromMaybe)
 import Data.Text as T (findIndex, length, reverse, take, unpack)
 import Database.CourseVideoSeed (seedVideos)
 import Database.Migrations (getDatabaseVersion)
-import Database.Persist.Sqlite (insert_, runMigration, runMigrationQuiet)
+import Database.Persist.Sqlite (insertMany_, runMigration, runMigrationQuiet)
 import Database.Tables
 import System.Directory (createDirectoryIfMissing)
 import WebParsing.ArtSciParser (parseCalendar)
@@ -54,16 +54,20 @@ populateStaticInfo = do
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = runDb $ do
-    insert_ $ Distribution "Humanities"
-    insert_ $ Distribution "Social Science"
-    insert_ $ Distribution "Science"
+    insertMany_
+        [ Distribution "Humanities"
+        , Distribution "Social Science"
+        , Distribution "Science"
+        ]
 
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
 setupBreadthTable = runDb $ do
-    insert_ $ Breadth "Creative and Cultural Representations (1)"
-    insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
-    insert_ $ Breadth "Society and its Institutions (3)"
-    insert_ $ Breadth "Living Things and Their Environment (4)"
-    insert_ $ Breadth "The Physical and Mathematical Universes (5)"
-    insert_ $ Breadth "No Breadth"
+    insertMany_
+        [ Breadth "Creative and Cultural Representations (1)"
+        , Breadth "Thought, Belief, and Behaviour (2)"
+        , Breadth "Society and its Institutions (3)"
+        , Breadth "Living Things and Their Environment (4)"
+        , Breadth "The Physical and Mathematical Universes (5)"
+        , Breadth "No Breadth"
+        ]
