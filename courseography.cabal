@@ -123,6 +123,7 @@ test-suite Tests
     Controllers.ProgramControllerTests,
     Database.BuildingTests,
     Database.CourseQueriesTests,
+    Database.DatabaseTests,
     Database.TablesTests,
     RequirementTests.ModifierTests,
     RequirementTests.PostParserTests,
