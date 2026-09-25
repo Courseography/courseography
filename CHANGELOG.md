@@ -22,6 +22,7 @@
 - Added `.gitattributes` file to standardize to LF line endings and renormalized codebase
 - Added invalid JSON graph test coverage for `saveGraphJSON` in `app/Controllers/Graph.hs`
 - Converted various JS files to TypeScript
+- Fixed lint-staged check for CSS files
 
 ## [0.8.1] - 2026-08-10
 
