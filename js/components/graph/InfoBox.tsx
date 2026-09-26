@@ -1,4 +1,14 @@
-import PropTypes from "prop-types"
+import React from "react"
+
+interface InfoBoxProps {
+  showInfoBox: boolean
+  nodeId: string
+  xPos: number
+  yPos: number
+  onClick: () => void
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+}
 
 export default function InfoBox({
   showInfoBox,
@@ -8,7 +18,7 @@ export default function InfoBox({
   onClick,
   onMouseEnter,
   onMouseLeave,
-}) {
+}: InfoBoxProps) {
   // guard against rendering with no course
   if (!nodeId) {
     return null
@@ -47,14 +57,4 @@ export default function InfoBox({
       <text {...textAttrs}>Info</text>
     </g>
   )
-}
-
-InfoBox.propTypes = {
-  showInfoBox: PropTypes.bool,
-  nodeId: PropTypes.string,
-  xPos: PropTypes.number,
-  yPos: PropTypes.number,
-  onClick: PropTypes.func,
-  onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func,
 }

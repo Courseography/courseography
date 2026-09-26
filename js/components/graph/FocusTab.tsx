@@ -1,18 +1,29 @@
-import React from "react"
-import PropTypes from "prop-types"
+import React, { useState } from "react"
 import { FocusModal } from "../common/react_modal.js.jsx"
+
+interface FocusTabProps {
+  focusName: string
+  highlightFocus: (pId: string) => void
+  selected: boolean
+  pId: string
+}
 
 /**
  * React component representing an item on the focus menu bar
  */
-export default function FocusTab({ focusName, highlightFocus, selected, pId }) {
-  const [showFocusModal, setShowFocusModal] = React.useState(false)
+export default function FocusTab({
+  focusName,
+  highlightFocus,
+  selected,
+  pId,
+}: FocusTabProps) {
+  const [showFocusModal, setShowFocusModal] = useState(false)
 
   /**
    * Change whether the modal popup describing this focus is shown
-   * @param {bool} value
+   * @param value
    */
-  const toggleFocusModal = value => {
+  const toggleFocusModal = (value: boolean) => {
     setShowFocusModal(value)
   }
 
@@ -35,11 +46,4 @@ export default function FocusTab({ focusName, highlightFocus, selected, pId }) {
       </div>
     </div>
   )
-}
-
-FocusTab.propTypes = {
-  focusName: PropTypes.string,
-  highlightFocus: PropTypes.func,
-  selected: PropTypes.bool,
-  pId: PropTypes.string,
 }

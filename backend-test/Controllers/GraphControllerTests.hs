@@ -102,9 +102,18 @@ runSaveGraphJSONTest (label, payload) =
         let expectedValue = fmap addDefaults (decode payload :: Maybe Value)
         assertEqual ("Unexpected response for " ++ label) expectedValue retrievedResult
 
--- | Run all save graph test cases
+-- | Run all save graph test cases on valid inputs
 runSaveGraphJSONTests :: [TestTree]
 runSaveGraphJSONTests = map runSaveGraphJSONTest saveGraphJSONTestCases
+
+-- | Run save graph test on invalid input
+runSaveGraphJSONInvalidJSONTest :: TestTree
+runSaveGraphJSONInvalidJSONTest = testCase "Invalid JSON graph" $ do
+    runDb clearDatabase
+    response <-
+        runServerPartWith Controllers.Graph.saveGraphJSON $
+            mockPutRequest "/graph-save" [("nameData", "Invalid Graph Name"), ("jsonData", "Invalid JSON")] ""
+    assertEqual "Unexpected response for invalid JSON" "Error" (BL.unpack $ rsBody response)
 
 -- | List of test cases for getGraphJSON as (label, (texts, shapes, paths))
 -- | Invariant: Expected Graph IDs are all set to 1
@@ -207,10 +216,32 @@ runGetGraphJSONTest (label, (texts', shapes', paths')) =
                 assertEqual ("Shapes differ for " ++ label) shapes' (map (\shape -> shape{shapeGraph = toSqlKey 1}) parsedShapes)
                 assertEqual ("Paths differ for " ++ label) paths' (map (\path -> path{pathGraph = toSqlKey 1}) parsedPaths)
 
+-- | Run a specific test case that verifies the behaviour of getGraphJSON when graphName does not correspond to a graph in the database.
+testGraphNotFound :: TestTree
+testGraphNotFound =
+    let label = "Graph not found returns empty components"
+     in testCase label $ do
+            let graphName = "Test Graph Name"
+            runDb clearDatabase
+            response <-
+                runServerPartWith Controllers.Graph.getGraphJSON $
+                    mockGetRequest "/get-json-data" [("graphName", T.unpack graphName)] ""
+            let body = rsBody response
+            let jsonObj = parseGraphComponentsJSON body
+            case jsonObj of
+                Nothing -> assertFailure ("Maybe ([Text], [Shape], [Path]) returned as Nothing for " ++ label)
+                Just (parsedTexts, parsedShapes, parsedPaths) -> do
+                    assertEqual ("Texts differ for " ++ label) [] parsedTexts
+                    assertEqual ("Shapes differ for " ++ label) [] parsedShapes
+                    assertEqual ("Paths differ for " ++ label) [] parsedPaths
+
 -- | Run all getGraphJSON tests
 runGetGraphJSONTests :: [TestTree]
-runGetGraphJSONTests = map runGetGraphJSONTest getGraphJSONTestCases
+runGetGraphJSONTests = map runGetGraphJSONTest getGraphJSONTestCases ++ [testGraphNotFound]
 
 -- | Test suite for Graph Controller Module
 test_graphController :: TestTree
-test_graphController = withDatabase "Graph Controller tests" (runIndexTests ++ runSaveGraphJSONTests ++ runGetGraphJSONTests)
+test_graphController =
+    withDatabase
+        "Graph Controller tests"
+        (runIndexTests ++ runSaveGraphJSONTests ++ [runSaveGraphJSONInvalidJSONTest] ++ runGetGraphJSONTests)

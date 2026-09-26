@@ -11,7 +11,8 @@
     "test": "jest",
     "typecheck": "tsc",
     "prettier": "prettier --write .",
-    "eslint": "eslint --fix js"
+    "eslint": "eslint --fix js",
+    "stylelint": "stylelint --fix"
   },
   "private": true,
   "engines": {
@@ -21,8 +22,8 @@
   "lint-staged": {
     "*": "pnpm prettier --ignore-unknown --write",
     "*.{js,ts,tsx}": "pnpm run eslint --cache --fix js",
-    "*.css": "pnpm run stylelint --fix",
-    "*.scss": "pnpm run stylelint --fix",
+    "*.css": "pnpm run stylelint",
+    "*.scss": "pnpm run stylelint",
     "*.hs": [
       "stack exec hlint",
       "stack exec fourmolu -- --mode check"
@@ -64,7 +65,9 @@
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^30.0.0",
+    "@types/jquery": "^4.0.1",
     "@types/node": "^22.20.2",
+    "@types/react-modal": "^3.16.3",
     "babel-jest": "^30.4.1",
     "babel-loader": "^10.1.1",
     "babel-plugin-polyfill-corejs3": "^1.0.0",

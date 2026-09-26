@@ -1,8 +1,22 @@
 import React, { useEffect, useState } from "react"
-import Autocomplete from "@mui/material/Autocomplete"
+import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete"
 import Chip from "@mui/material/Chip"
 import { useField } from "formik"
-import PropTypes from "prop-types"
+
+interface AutocompleteDropdownOwnProps {
+  name: string
+  placeholder?: string
+  id?: string
+  onSelectedChange: (newValues: string[]) => void
+}
+
+type AutocompleteDropdownProps = AutocompleteDropdownOwnProps &
+  Partial<
+    Omit<
+      AutocompleteProps<string, true, true, false>,
+      keyof AutocompleteDropdownOwnProps | "options" | "onChange" | "renderInput"
+    >
+  >
 
 export default function AutocompleteDropdown({
   name,
@@ -10,10 +24,10 @@ export default function AutocompleteDropdown({
   id,
   onSelectedChange,
   ...props
-}) {
-  const [, , helpers] = useField(name)
+}: AutocompleteDropdownProps) {
+  const [, , helpers] = useField<string>(name)
   const { setValue } = helpers
-  const [optionList, setOptionList] = useState([])
+  const [optionList, setOptionList] = useState<string[]>([])
 
   useEffect(() => {
     if (id == "courses") {
@@ -77,11 +91,4 @@ export default function AutocompleteDropdown({
       {...props}
     />
   )
-}
-
-AutocompleteDropdown.propTypes = {
-  name: PropTypes.string,
-  placeholder: PropTypes.string,
-  id: PropTypes.string,
-  onSelectedChange: PropTypes.func,
 }

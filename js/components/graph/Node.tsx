@@ -1,5 +1,24 @@
-import PropTypes from "prop-types"
 import React from "react"
+import { GraphNodeJSON } from "./types"
+
+interface NodeProps {
+  className: string
+  editMode?: boolean
+  focused?: boolean
+  highlightDeps?: boolean
+  highlightFocus?: boolean
+  hybrid: boolean
+  JSON: GraphNodeJSON & { id_: string }
+  onClick?: () => void
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
+  onWheel?: React.WheelEventHandler
+  onKeyDown?: React.KeyboardEventHandler
+  status?: string
+  transform?: string
+  parents: string[]
+  nodeDropshadowFilter?: string
+}
 
 /** React component class representing a Node on the graph
  *
@@ -23,7 +42,7 @@ import React from "react"
  *  - Hybrid nodes are the smaller, grey nodes on the graph that represent another course node
  *    farther away. They can only be either 'active' or 'inactive'
  */
-export default function Node(props) {
+export default function Node(props: NodeProps) {
   const getDataTestId = () => {
     if (props.hybrid) {
       return `h(${props.parents.join(",")})`
@@ -35,14 +54,14 @@ export default function Node(props) {
   const newClassName = props.className + " " + props.status
   if (props.highlightFocus || props.highlightDeps) {
     const attrs = props.JSON
-    const width = parseFloat(attrs.width) / 2
-    const height = parseFloat(attrs.height) / 2
+    const width = attrs.width / 2
+    const height = attrs.height / 2
     const isCombo = props.JSON.id_.length > 8
     ellipse = (
       <ellipse
         className={props.highlightDeps ? "spotlight" : "spotlight-focus"}
-        cx={parseFloat(attrs.pos[0]) + width}
-        cy={parseFloat(attrs.pos[1]) + height}
+        cx={attrs.pos[0] + width}
+        cy={attrs.pos[1] + height}
         rx={isCombo ? width + 18 : width + 9}
         ry={isCombo ? height + 17 : height + 8.5}
         filter="url(#blur-filter)"
@@ -58,9 +77,16 @@ export default function Node(props) {
     onMouseEnter: props.onMouseEnter,
     onMouseLeave: props.onMouseLeave,
     onClick: props.onClick,
-  }
+  } as const
 
-  const rectAttrs = {
+  const rectAttrs: {
+    height: number
+    width: number
+    x: number
+    y: number
+    rx?: string
+    ry?: string
+  } = {
     height: props.JSON.height,
     width: props.JSON.width,
     x: props.JSON.pos[0],
@@ -100,7 +126,7 @@ export default function Node(props) {
         const textAttrs = {
           x: textXOffset,
           y: singleLine ? textYOffset : textTag.pos[1],
-          dominantBaseline: singleLine ? "central" : undefined,
+          dominantBaseline: singleLine ? ("central" as const) : undefined,
         }
         return (
           <text {...textAttrs} key={i}>
@@ -110,23 +136,4 @@ export default function Node(props) {
       })}
     </g>
   )
-}
-
-Node.propTypes = {
-  className: PropTypes.string,
-  editMode: PropTypes.bool,
-  focused: PropTypes.bool,
-  highlightDeps: PropTypes.bool,
-  highlightFocus: PropTypes.bool,
-  hybrid: PropTypes.bool,
-  JSON: PropTypes.object,
-  onClick: PropTypes.func,
-  onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-  onWheel: PropTypes.func,
-  onKeyDown: PropTypes.func,
-  status: PropTypes.string,
-  transform: PropTypes.string,
-  parents: PropTypes.array,
-  nodeDropshadowFilter: PropTypes.string,
 }

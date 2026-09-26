@@ -1,5 +1,16 @@
 import React from "react"
-import PropTypes from "prop-types"
+
+interface Graph {
+  title: string
+}
+
+interface GraphDropdownProps {
+  showGraphDropdown?: boolean
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
+  graphs?: Graph[]
+  updateGraph: (title: string) => void
+}
 
 export default function GraphDropdown({
   showGraphDropdown,
@@ -7,7 +18,7 @@ export default function GraphDropdown({
   onMouseLeave,
   graphs = [],
   updateGraph,
-}) {
+}: GraphDropdownProps) {
   const className =
     showGraphDropdown && graphs.length > 0 ? "graph-dropdown-display" : "hidden"
 
@@ -32,16 +43,4 @@ export default function GraphDropdown({
       })}
     </ul>
   )
-}
-
-GraphDropdown.defaultProps = {
-  graphs: [],
-}
-
-GraphDropdown.propTypes = {
-  showGraphDropdown: PropTypes.bool,
-  onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-  graphs: PropTypes.array,
-  updateGraph: PropTypes.func,
 }

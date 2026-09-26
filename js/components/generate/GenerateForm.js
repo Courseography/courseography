@@ -6,7 +6,7 @@ import { Tooltip } from "react-tooltip"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
 import { NavBar } from "../common/NavBar.js.jsx"
-import AutocompleteDropdown from "./AutocompleteDropdown.js"
+import AutocompleteDropdown from "./AutocompleteDropdown"
 
 export default class GenerateForm extends React.Component {
   constructor(props) {
