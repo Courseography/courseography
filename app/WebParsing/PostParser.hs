@@ -17,12 +17,12 @@ import Database.DataType (ProgramType (..))
 import Database.Persist (insertUnique)
 import Database.Persist.Sqlite (SqlPersistM, insert_)
 import Database.Tables
+import Models.Requirement (parseReqs)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
 import Text.Parsec.Text (Parser)
 import WebParsing.ParsecCombinators (parseUntil)
-import WebParsing.ReqParser (parseReqs)
 
 addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
 addPostToDatabase programElements = do
@@ -165,7 +165,6 @@ parseRequirement requirement = map parseSingleReq $ filter isReq requirement
         T.pack
             . show
             . parseReqs
-            . T.unpack -- Using parser for new Req type
             . fromRight ""
             . P.parse getLineText "Reading a requirement line"
             . T.strip

@@ -729,14 +729,3 @@ many1Till p end = do
     x <- p
     xs <- Parsec.manyTill p end
     return $ x : xs
-
-parseReqs :: String -> Req
-parseReqs reqString = do
-    let reqStringLower = map toLower reqString
-    if all isSpace reqString || reqStringLower == "none" || reqStringLower == "no"
-        then None
-        else do
-            let req = Parsec.parse reqParser "" reqString
-             in case req of
-                    Right x -> x
-                    Left e -> J (show e) ""

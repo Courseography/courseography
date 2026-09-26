@@ -5,6 +5,7 @@
 module RequirementTests.ReqParserTests (test_requirements) where
 
 import Database.Requirement
+import Models.Requirement (parseReqs)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import qualified Text.Parsec as Parsec
