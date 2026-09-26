@@ -4,7 +4,9 @@
 -- Module containing test cases for Requirement Parsers.
 module RequirementTests.ReqParserTests (test_requirements) where
 
+import qualified Data.Text as T
 import Database.Requirement
+import Models.Requirement (parseReqs)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import qualified Text.Parsec as Parsec
@@ -35,7 +37,7 @@ createReqParserTest label input =
                     assertEqual
                         ("for (" ++ y ++ "),")
                         z
-                        (parseReqs y)
+                        (parseReqs (T.pack y))
             )
             [0 ..]
             input
