@@ -1,10 +1,12 @@
+import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"
-import PropTypes from "prop-types"
 
-export default function GraphFallback(props) {
-  const { error } = props
+interface GraphFallbackProps {
+  error: Error
+}
 
+export default function GraphFallback({ error }: GraphFallbackProps) {
   return (
     <div className="error-boundary-container">
       <div className="error-boundary-box">
@@ -20,8 +22,4 @@ export default function GraphFallback(props) {
       </div>
     </div>
   )
-}
-
-GraphFallback.propTypes = {
-  error: PropTypes.object.isRequired,
 }
