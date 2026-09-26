@@ -10,6 +10,7 @@
 
 ### 🔧 Internal changes
 
+- Refactored `parseReqs` into a new module `Models.Requirements` and updated its input type from `String` to `Text`
 - Migrated JS package manager from yarn to pnpm
 - Updated `react-leaflet` to v5.0.0 and `@eslint/compat` to v2.1.0
 - Added peer dependency overrides for `eslint-plugin-react` (for `eslint` v10) and `@babel/plugin-syntax-*` (for `@babel/core` v8.0.1
