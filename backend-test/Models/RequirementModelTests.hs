@@ -2,7 +2,7 @@
 -- Description: Test Course Requirement Parsers using HUnit Testing Framework.
 --
 -- Module containing test cases for Requirement Parsers.
-module RequirementTests.ReqParserTests (test_requirements) where
+module Models.RequirementModelTests (test_requirements) where
 
 import qualified Data.Text as T
 import Database.Requirement
@@ -28,16 +28,16 @@ createTest parser label input =
             [0 ..]
             input
 
-createReqParserTest :: String -> [(String, Req)] -> TestTree
+createReqParserTest :: String -> [(T.Text, Req)] -> TestTree
 createReqParserTest label input =
     testGroup label $
         zipWith
             ( \(x :: Int) (y, z) ->
                 testCase ("Test " ++ show x) $
                     assertEqual
-                        ("for (" ++ y ++ "),")
+                        ("for (" ++ T.unpack y ++ "),")
                         z
-                        (parseReqs (T.pack y))
+                        (parseReqs y)
             )
             [0 ..]
             input
@@ -417,7 +417,7 @@ cgpaInputs =
         )
     ]
 
-noPrereqInputs :: [(String, Req)]
+noPrereqInputs :: [(T.Text, Req)]
 noPrereqInputs =
     [ ("", None)
     , ("None", None)
