@@ -134,8 +134,8 @@ class CourseModal extends React.Component {
     }
   }
 
-  /** 
-   * Helper function to format a Time data object for display in the course modal. 
+  /**
+   * Helper function to format a Time data object for display in the course modal.
    * @param {object} time A Time data object.
    * @returns {string} The time formatted as a string (e.g. "Tuesday 11 - 13").
    * */
@@ -152,7 +152,9 @@ class CourseModal extends React.Component {
    */
   getTable(allMeetTimes, session) {
     // Filter and sort the lecture sections in the specified session by their section code
-    const filteredMeetTimes = allMeetTimes.filter(meetTime => meetTime.meetData.session === session)
+    const filteredMeetTimes = allMeetTimes.filter(
+      meetTime => meetTime.meetData.session === session
+    )
     const sortedMeetTimes = filteredMeetTimes.sort((firstMeetTime, secondMeetTime) =>
       firstMeetTime.meetData.section > secondMeetTime.meetData.section ? 1 : -1
     )

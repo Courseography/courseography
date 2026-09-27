@@ -52,10 +52,6 @@ header page =
                 if page == "generate-prerequisites"
                     then H.li ! A.class_ "selected-page" $ toLink "/generate" "Generate (beta)"
                     else H.li ! A.id "nav-generate" $ toLink "/generate" "Generate (beta)"
-                -- H.li $ toLink "/timesearch" "Search"
-                -- H.li $ toLink "/draw" "Draw"
-                -- TODO: re-enable after handling new first-year courses
-                -- H.li $ toLink "post" "Check My POSt!"
                 if page == "about"
                     then H.li ! A.class_ "selected-page" $ toLink "/about" "About"
                     else H.li $ toLink "/about" "About"

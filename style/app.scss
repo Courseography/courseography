@@ -100,25 +100,12 @@ $graph-overlay-side-margin: 15px;
   --nav-active-color: #deddbb;
   --timetable-border-color: #db94b8;
   --map-day-bg-color: #dedae5;
-  --draw-panel-color: #008080;
-  --draw-panel-hover-color: #28b0a2;
   --spotlight-fill-color: #feefc8; // hover over a course
   --spotlight-stroke-color: #ffbd8e;
 
-  // Draw-tool palette for /draw
-  --draw-swatch-1: #ff7878;
-  --draw-swatch-2: #ed9;
-  --draw-swatch-3: #9bd1fa;
-  --draw-swatch-4: #ffd1dc;
-  --draw-swatch-5: #ffc48c;
-  --draw-swatch-6: #bdecb6;
-  --draw-swatch-7: #e3aad6;
-  --draw-swatch-8: #ad876e;
-  --draw-swatch-9: #a2a9af;
-
   // Greys
   --elevation-grey-color: #808080; // box-shadow tint on floating panels/buttons, and .highlight-nodes bg
-  --neutral-grey-color: #dcdcdc; // disabled states, draw-tool buttons, post-nav borders, reset-selections shadow
+  --neutral-grey-color: #dcdcdc; // disabled states, post-nav borders, reset-selections shadow
   --light-border-color: #c0c0c0;
   --disabled-text: #9c9c9c;
   --info-disabled-bg-color: #a0aec0;
@@ -1392,51 +1379,6 @@ path.missing {
   background-color: var(--color-white);
 }
 
-#colour-table {
-  height: 40px;
-  width: 200px;
-}
-
-#colour-table tr:nth-child(1) td:nth-child(1) {
-  background: var(--draw-swatch-1);
-}
-
-#colour-table tr:nth-child(1) td:nth-child(2) {
-  background: var(--draw-swatch-2);
-}
-
-#colour-table tr:nth-child(1) td:nth-child(3) {
-  background: var(--draw-swatch-3);
-}
-
-#colour-table tr:nth-child(1) td:nth-child(4) {
-  background: var(--draw-swatch-4);
-}
-
-#colour-table tr:nth-child(1) td:nth-child(5) {
-  background: var(--color-white);
-}
-
-#colour-table tr:nth-child(2) td:nth-child(1) {
-  background: var(--draw-swatch-5);
-}
-
-#colour-table tr:nth-child(2) td:nth-child(2) {
-  background: var(--draw-swatch-6);
-}
-
-#colour-table tr:nth-child(2) td:nth-child(3) {
-  background: var(--draw-swatch-7);
-}
-
-#colour-table tr:nth-child(2) td:nth-child(4) {
-  background: var(--draw-swatch-8);
-}
-
-#colour-table tr:nth-child(2) td:nth-child(5) {
-  background: var(--draw-swatch-9);
-}
-
 #main {
   border: solid 2px var(--color-black);
   border-radius: 8px;
@@ -1444,80 +1386,6 @@ path.missing {
   height: 85%;
   position: relative;
   width: 85%;
-}
-
-#about-div {
-  font-size: 1.2em;
-  margin: 0 0 0 10px;
-}
-
-#background {
-  /* background-image : url(/static/res/backgrounds/draw-background.png); */
-  background-size: 8px;
-  height: 100%;
-  opacity: 0.3;
-  width: 100%;
-}
-
-#mySVG {
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
-
-#side-panel-wrap {
-  background-color: var(--draw-panel-color);
-  border: solid 2px var(--color-black);
-  border-radius: 8px;
-  float: left;
-  height: 85%;
-  overflow-y: auto;
-  padding: 5px 0;
-  width: 15%;
-}
-
-.mode {
-  border: solid 2px var(--draw-panel-color);
-  border-radius: 8px;
-  font-size: 0.75em;
-  margin: 0 0 0 5px;
-  padding: 0 0 0 5px;
-  transition: all 0.2s;
-  width: 93%;
-}
-
-.mode:hover {
-  background-color: var(--draw-panel-hover-color) !important;
-  color: var(--neutral-grey-color) !important;
-  cursor: pointer;
-}
-
-.clicked.mode {
-  background-color: var(--draw-panel-hover-color) !important;
-}
-
-.clicked {
-  border: solid 2px var(--color-black);
-  color: var(--neutral-grey-color) !important;
-}
-
-.button {
-  border: solid 2px var(--color-black);
-  border-radius: 8px;
-  font-size: 0.75em;
-  margin: 5px;
-  padding: 0;
-  text-align: center;
-  transition: all 0.2s;
-  width: 40%;
-}
-
-.button:hover {
-  background-color: var(--color-black) !important;
-  color: var(--neutral-grey-color) !important;
-  cursor: pointer;
 }
 
 input {
@@ -1536,48 +1404,6 @@ input[type="checkbox"] {
 
 input:focus {
   box-shadow: 0 0 3px 1px var(--input-focus-ring-color);
-}
-
-#add-text {
-  display: inline;
-  margin: 5px;
-  padding: 2px 5px;
-  width: 45%;
-}
-
-.mylabel {
-  dominant-baseline: central;
-  stroke: none;
-  text-align: center;
-  text-anchor: middle;
-  -webkit-touch-callout: none;
-  user-select: none;
-}
-
-.elbow {
-  opacity: 0;
-}
-
-.elbow:hover {
-  cursor: pointer;
-  opacity: 1;
-}
-
-.rElbow {
-  opacity: 0;
-}
-
-.rElbow:hover {
-  cursor: pointer;
-  opacity: 1;
-}
-
-#finish-region {
-  background-color: var(--neutral-grey-color);
-  border: solid 2px var(--draw-panel-color);
-  margin: 5px;
-  padding: 0;
-  width: 40%;
 }
 
 i {
