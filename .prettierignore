@@ -3,9 +3,6 @@ db/
 doc/
 graphs/
 
-# TODO: review this file
-js/components/draw/
-
 public/
 
 vendor/

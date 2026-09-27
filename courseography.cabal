@@ -201,7 +201,6 @@ executable courseography
     Models.Time,
     Response,
     Response.About,
-    Response.Draw,
     Response.Loading,
     Response.NotFound,
     Routes,
