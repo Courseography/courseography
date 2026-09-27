@@ -13,6 +13,7 @@ import Database.Persist.Sqlite (SqlPersistM)
 import Database.Tables (Course (..), Department (..))
 import Models.Building (parseBuildings)
 import Models.Course (insertCourse)
+import Models.Requirement (parseReqs)
 import Network.HTTP.Simple (getResponseBody, httpLBS, parseRequest)
 import Text.HTML.TagSoup (Tag)
 import qualified Text.HTML.TagSoup as TS
@@ -22,7 +23,6 @@ import qualified Text.Parsec.Char as P
 import Text.Parsec.Text (Parser)
 import WebParsing.ParsecCombinators (text)
 import WebParsing.PostParser (addPostToDatabase)
-import WebParsing.ReqParser (parseReqs)
 
 parseCalendar :: IO ()
 parseCalendar = do
@@ -141,7 +141,7 @@ parseCourses tags =
                 code
                 (Just title)
                 (Just description)
-                (fmap (T.pack . show . parseReqs . T.unpack) prereqString)
+                (fmap (T.pack . show . parseReqs) prereqString)
                 prep
                 exclusion
                 Nothing

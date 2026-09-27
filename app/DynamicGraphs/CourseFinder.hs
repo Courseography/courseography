@@ -14,7 +14,7 @@ import qualified Data.Text.Lazy as T
 import Database.Requirement (Modifier (..), Req (..))
 import DynamicGraphs.GraphOptions (GraphOptions (..))
 import Models.Course (prereqsForCourse)
-import WebParsing.ReqParser (parseReqs)
+import Models.Requirement (parseReqs)
 
 lookupCourses :: GraphOptions -> [T.Text] -> IO (Map.Map T.Text Req)
 lookupCourses options courses =
@@ -26,7 +26,7 @@ lookupCourse options code = do
     case prereqResults of
         Left _ -> return ()
         Right (courseCode, prereqStr) -> do
-            let prereqs = parseReqs (T.unpack $ T.fromStrict prereqStr)
+            let prereqs = parseReqs prereqStr
             modify $ Map.insert (T.fromStrict courseCode) prereqs
             lookupReqs options prereqs
 
