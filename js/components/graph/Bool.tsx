@@ -1,4 +1,3 @@
-import React from "react"
 import { GraphNodeJSON } from "./types"
 
 interface BoolProps {
@@ -26,7 +25,7 @@ export default function Bool(props: BoolProps) {
       data-testid={`and(${props.parents.join()})`}
     >
       <ellipse {...ellipseAttrs} />
-      {props.JSON.text.map(function (textTag, i) {
+      {props.JSON.text.map(function (_textTag, i) {
         const textAttrs = {
           x: ellipseAttrs.cx,
           y: ellipseAttrs.cy,

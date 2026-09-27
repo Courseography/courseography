@@ -1,14 +1,9 @@
 import React, { useImperativeHandle, useState } from "react"
 import ReactModal from "react-modal"
+import { SelectedLecture } from "../grid/types"
 
 if (document.getElementById("nav-export")) {
   ReactModal.setAppElement("#nav-export")
-}
-
-interface SelectedLecture {
-  courseCode: string
-  lectureCode: string
-  session: string
 }
 
 export interface ExportModalHandle {

@@ -1,5 +1,3 @@
-import React from "react"
-
 interface InfoBoxProps {
   showInfoBox: boolean
   nodeId: string

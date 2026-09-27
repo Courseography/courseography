@@ -25,6 +25,8 @@
 - Fixed lint-staged check for CSS files
 - Removed deprecated `Draw` feature and remaining references to previously deprecated `Search` and `Post` features
 - Added static info existence test for `Database/Database.hs`
+- Converted more JS files to TypeScript
+- Enabled `noUnusedLocals`/`noUnusedParameters` in `tsconfig.json` and disabled ESLint's `no-unused-vars` for `.ts`/`.tsx` files
 
 ## [0.8.1] - 2026-08-10
 
