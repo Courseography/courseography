@@ -24,6 +24,7 @@
 - Converted various JS files to TypeScript
 - Fixed lint-staged check for CSS files
 - Removed deprecated `Draw` feature and remaining references to previously deprecated `Search` and `Post` features
+- Added static info existence test for `Database/Database.hs`
 
 ## [0.8.1] - 2026-08-10
 
