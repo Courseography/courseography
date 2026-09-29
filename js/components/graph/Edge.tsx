@@ -1,5 +1,3 @@
-import React from "react"
-
 interface EdgeProps {
   className?: string
   /** Array of points for the edge. A straight edge will have 2. Each turn in the edge means another point*/

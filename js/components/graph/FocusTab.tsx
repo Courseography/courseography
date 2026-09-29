@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { FocusModal } from "../common/react_modal.js.jsx"
 
 interface FocusTabProps {

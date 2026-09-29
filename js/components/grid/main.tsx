@@ -1,6 +1,5 @@
-import React from "react"
 import { createRoot } from "react-dom/client"
-import Grid from "./grid.js.jsx"
+import Grid from "./grid"
 
 import {
   AllCommunityModule,
@@ -16,7 +15,7 @@ provideGlobalGridOptions({ theme: "legacy" })
 
 // The "main"
 document.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById("grid-body")
+  const container = document.getElementById("grid-body")!
   const root = createRoot(container)
   root.render(<Grid />)
 })

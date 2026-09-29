@@ -44,14 +44,19 @@ module.exports = [
   },
   {
     // @babel/eslint-parser converts TypeScript syntax to an ESTree-shaped
-    // AST that core rules don't fully understand, so `no-undef` flags
-    // type-only identifiers as undefined.
-    // TypeScript's own compiler (`pnpm run typecheck`) already catches
-    // genuine undefined-reference errors, so disable the rule here — this
-    // is the same guidance typescript-eslint gives for `.ts`/`.tsx` files.
+    // AST that core rules don't fully understand:
+    //  - `no-undef` flags type-only identifiers as undefined.
+    //  - `no-unused-vars` misses identifiers used only in a type position
+    //    (e.g. `const x: SomeType[] = ...`), reporting their import as unused.
+    // TypeScript's own compiler (`pnpm run typecheck`, with `noUnusedLocals`/
+    // `noUnusedParameters` enabled in tsconfig.json) already catches both of
+    // these correctly since it fully understands type positions, so disable
+    // both rules here — this is the same guidance typescript-eslint gives
+    // for `.ts`/`.tsx` files.
     files: ["**/*.ts", "**/*.tsx"],
     rules: {
       "no-undef": "off",
+      "no-unused-vars": "off",
     },
   },
   {

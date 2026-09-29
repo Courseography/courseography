@@ -1,6 +1,6 @@
 import React from "react"
 import { render, screen, cleanup, fireEvent } from "@testing-library/react"
-import Grid from "../grid.js.jsx"
+import Grid from "../grid"
 import fetchMock from "fetch-mock"
 
 describe("test export modal functionality on grid page", () => {

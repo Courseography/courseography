@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete"
 import Chip from "@mui/material/Chip"
 import { useField } from "formik"
@@ -50,7 +50,7 @@ export default function AutocompleteDropdown({
   return (
     <Autocomplete
       multiple
-      onChange={(event, newValues) => {
+      onChange={(_event, newValues) => {
         onSelectedChange(newValues)
         setValue(newValues.join(", "))
       }}
