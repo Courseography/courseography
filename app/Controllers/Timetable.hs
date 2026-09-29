@@ -25,7 +25,7 @@ import Export.PdfGenerator
 import Happstack.Server
 import MasterTemplate
 import Models.Meeting (MeetingData (..), returnMeeting)
-import Models.Time (buildTime)
+import Models.Time (TimeData (endHour, startHour, weekDay), buildTime)
 import Scripts
 import System.FilePath ((</>))
 import System.IO.Temp (withSystemTempDirectory)
@@ -257,10 +257,10 @@ fifth (_, _, _, _, dates) = dates
 -- ** Ordering data
 
 -- | A list of the information within the time fields ordered by day.
-type InfoTimeFieldsByDay = [[Time]]
+type InfoTimeFieldsByDay = [[TimeData]]
 
 -- | Orders by day the start and endtimes obtained from the database.
-orderTimeFields :: [Time] -> InfoTimeFieldsByDay
+orderTimeFields :: [TimeData] -> InfoTimeFieldsByDay
 orderTimeFields timeFields = groupBy (\x y -> weekDay x == weekDay y) sortedList
   where
     sortedList = sortOn weekDay timeFields
@@ -344,7 +344,7 @@ type EndDate = String
 
 -- | Gives the appropriate starting and ending dates for each day, in which the
 -- course takes place, depending on the course session.
-getDatesByDay :: Session -> [Time] -> IO (StartDate, EndDate)
+getDatesByDay :: Session -> [TimeData] -> IO (StartDate, EndDate)
 getDatesByDay _ [] = error "Failed to fetch dates"
 getDatesByDay session (firstDate : _)
     | session == "F" = do

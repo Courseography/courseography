@@ -24,11 +24,11 @@ import Database.Persist.Sqlite (
     (==.),
  )
 import Database.Tables as Tables
-import Models.Time (buildTime)
+import Models.Time (TimeData, buildTime)
 
 import GHC.Generics
 
-data MeetingData = MeetingData {meetData :: Meeting, timeData :: [Time]}
+data MeetingData = MeetingData {meetData :: Meeting, timeData :: [TimeData]}
     deriving (Show, Generic)
 
 instance ToJSON MeetingData
@@ -58,8 +58,8 @@ returnMeeting lowerStr sect session = do
         []
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
--- a course, returns a list of Time.
-getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
+-- a course, returns a list of TimeData.
+getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [TimeData]
 getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
     maybeEntityMeetings <-
         selectFirst
