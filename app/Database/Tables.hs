@@ -205,12 +205,8 @@ data Time
 data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time']}
     deriving (Show, Generic)
 
-data MeetTime' = MeetTime' {meetData :: Meeting, timeData :: [Time]}
-    deriving (Show, Generic)
-
 instance ToJSON Program
 instance ToJSON Time
-instance ToJSON MeetTime'
 instance ToJSON Building
 
 instance ToJSON Meeting where

@@ -24,7 +24,7 @@ import Export.LatexGenerator
 import Export.PdfGenerator
 import Happstack.Server
 import MasterTemplate
-import Models.Meeting (returnMeeting)
+import Models.Meeting (MeetingData (..), returnMeeting)
 import Models.Time (buildTime)
 import Scripts
 import System.FilePath ((</>))
@@ -143,7 +143,7 @@ getCoursesInfo courses = map courseInfo allCourses
     allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
-pullDatabase :: (Code, Section, Session) -> IO (Maybe MeetTime')
+pullDatabase :: (Code, Section, Session) -> IO (Maybe MeetingData)
 pullDatabase (code, section, session) = runDb $ do
     meet <- returnMeeting code fullSection session
     case meet of
@@ -151,7 +151,7 @@ pullDatabase (code, section, session) = runDb $ do
         Just x -> do
             allTimes <- selectList [TimesMeeting ==. entityKey x] []
             parsedTime <- mapM (buildTime . entityVal) allTimes
-            return $ Just (MeetTime' (entityVal x) parsedTime)
+            return $ Just (MeetingData (entityVal x) parsedTime)
   where
     fullSection
         | T.isPrefixOf "L" section = T.append "LEC" sectCode
@@ -164,7 +164,7 @@ pullDatabase (code, section, session) = runDb $ do
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> Maybe MeetTime' -> IO [String]
+getEvents :: SystemTime -> Maybe MeetingData -> IO [String]
 getEvents _ Nothing = return []
 getEvents systemTime (Just courseTime) = do
     courseInfo <- getCourseInfo courseTime -- Get the course information
@@ -212,7 +212,7 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: MeetTime' -> IO (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
+getCourseInfo :: MeetingData -> IO (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
 getCourseInfo meeting = do
     let meet = meetData meeting
         allTimes = timeData meeting

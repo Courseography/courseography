@@ -146,7 +146,7 @@ class CourseModal extends React.Component {
   /**
    * Generate the data needed for the course modal table based on the meeting times corresponding
    * to a course in a given session.
-   * @param {object[]} allMeetTimes An array of MeetTime' objects corresponding to a particular course.
+   * @param {object[]} allMeetTimes An array of MeetingData objects corresponding to a particular course.
    * @param {string} session The session (F, S, Y) to query.
    * @returns {object[]} An array of row data objects that will appear in the course modal table.
    */
