@@ -13,6 +13,11 @@ import Database.Tables (Building, MeetingId, Time' (..), Times (..))
 import GHC.Generics (Generic)
 import Models.Building (getBuilding)
 
+-- | The time and location data for a single meeting occurrence, as returned by the back-end to the front-end.
+--
+-- This is different from the schema-defined 'Times' type (in "Database.Tables").
+-- Whereas 'Times' stores a raw room code string, 'TimeData' resolves the location to a
+-- full 'Building' object for JSON serialization to the client.
 data TimeData
     = TimeData
     { timeSession :: Maybe T.Text
