@@ -28,6 +28,11 @@ import Models.Time (TimeData, buildTime)
 
 import GHC.Generics
 
+-- | The data for a single meeting section, as returned by the back-end to the front-end.
+-- This is different from the schema-defined 'Meeting' type (in "Database.Tables").
+-- A single meeting section (such as a lecture, tutorial, practical etc) often meets at multiple times and locations
+-- throughout the week, so 'MeetingData' bundles the section's 'Meeting' information with
+-- its associated list of 'TimeData' records for JSON serialization to the client.
 data MeetingData = MeetingData {meetData :: Meeting, timeData :: [TimeData]}
     deriving (Show, Generic)
 
