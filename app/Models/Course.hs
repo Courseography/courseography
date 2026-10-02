@@ -45,11 +45,10 @@ import Database.Tables (
     Distribution (distributionDescription),
     EntityField (BreadthDescription, CourseCode, DistributionDescription, MeetingCode),
     Key,
-    MeetTime',
     Meeting (meetingCode),
  )
 import GHC.Generics (Generic)
-import Models.Meeting (buildMeetTimes, meetingQuery)
+import Models.Meeting (MeetingData, buildMeetTimes, meetingQuery)
 
 -- | The data for a single course, as returned by the back-end to the front-end.
 -- This is different from the schema-defined 'Course' type (in "Database.Tables")
@@ -62,7 +61,7 @@ data CourseData
     , description :: Maybe T.Text
     , title :: Maybe T.Text
     , prereqString :: Maybe T.Text
-    , allMeetingTimes :: Maybe [MeetTime']
+    , allMeetingTimes :: Maybe [MeetingData]
     , name :: !T.Text
     , prep :: Maybe T.Text
     , exclusions :: Maybe T.Text
@@ -107,7 +106,7 @@ getDescriptionD (Just key) = do
 
 -- | Builds a 'CourseData' structure from a tuple from the Course table.
 -- Some fields still need to be added in.
-buildCourse :: [MeetTime'] -> Course -> SqlPersistM CourseData
+buildCourse :: [MeetingData] -> Course -> SqlPersistM CourseData
 buildCourse allMeetings course = do
     cBreadth <- getDescriptionB (courseBreadth course)
     cDistribution <- getDescriptionD (courseDistribution course)

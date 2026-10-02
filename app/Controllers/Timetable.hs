@@ -24,8 +24,8 @@ import Export.LatexGenerator
 import Export.PdfGenerator
 import Happstack.Server
 import MasterTemplate
-import Models.Meeting (returnMeeting)
-import Models.Time (buildTime)
+import Models.Meeting (MeetingData (..), returnMeeting)
+import Models.Time (TimeData (endHour, startHour, weekDay), buildTime)
 import Scripts
 import System.FilePath ((</>))
 import System.IO.Temp (withSystemTempDirectory)
@@ -143,7 +143,7 @@ getCoursesInfo courses = map courseInfo allCourses
     allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
-pullDatabase :: (Code, Section, Session) -> IO (Maybe MeetTime')
+pullDatabase :: (Code, Section, Session) -> IO (Maybe MeetingData)
 pullDatabase (code, section, session) = runDb $ do
     meet <- returnMeeting code fullSection session
     case meet of
@@ -151,7 +151,7 @@ pullDatabase (code, section, session) = runDb $ do
         Just x -> do
             allTimes <- selectList [TimesMeeting ==. entityKey x] []
             parsedTime <- mapM (buildTime . entityVal) allTimes
-            return $ Just (MeetTime' (entityVal x) parsedTime)
+            return $ Just (MeetingData (entityVal x) parsedTime)
   where
     fullSection
         | T.isPrefixOf "L" section = T.append "LEC" sectCode
@@ -164,7 +164,7 @@ pullDatabase (code, section, session) = runDb $ do
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> Maybe MeetTime' -> IO [String]
+getEvents :: SystemTime -> Maybe MeetingData -> IO [String]
 getEvents _ Nothing = return []
 getEvents systemTime (Just courseTime) = do
     courseInfo <- getCourseInfo courseTime -- Get the course information
@@ -212,7 +212,7 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: MeetTime' -> IO (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
+getCourseInfo :: MeetingData -> IO (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
 getCourseInfo meeting = do
     let meet = meetData meeting
         allTimes = timeData meeting
@@ -257,10 +257,10 @@ fifth (_, _, _, _, dates) = dates
 -- ** Ordering data
 
 -- | A list of the information within the time fields ordered by day.
-type InfoTimeFieldsByDay = [[Time]]
+type InfoTimeFieldsByDay = [[TimeData]]
 
 -- | Orders by day the start and endtimes obtained from the database.
-orderTimeFields :: [Time] -> InfoTimeFieldsByDay
+orderTimeFields :: [TimeData] -> InfoTimeFieldsByDay
 orderTimeFields timeFields = groupBy (\x y -> weekDay x == weekDay y) sortedList
   where
     sortedList = sortOn weekDay timeFields
@@ -344,7 +344,7 @@ type EndDate = String
 
 -- | Gives the appropriate starting and ending dates for each day, in which the
 -- course takes place, depending on the course session.
-getDatesByDay :: Session -> [Time] -> IO (StartDate, EndDate)
+getDatesByDay :: Session -> [TimeData] -> IO (StartDate, EndDate)
 getDatesByDay _ [] = error "Failed to fetch dates"
 getDatesByDay session (firstDate : _)
     | session == "F" = do

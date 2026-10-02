@@ -1,10 +1,15 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Models.Meeting (
+    MeetingData (..),
     meetingQuery,
     buildMeetTimes,
     returnMeeting,
     getMeetingTime,
     getMeetingSection,
 ) where
+
+import Data.Aeson (ToJSON)
 
 import Data.Maybe (fromJust)
 import qualified Data.Text as T (Text, append, isPrefixOf, tail, take, toUpper)
@@ -19,20 +24,32 @@ import Database.Persist.Sqlite (
     (==.),
  )
 import Database.Tables as Tables
-import Models.Time (buildTime)
+import Models.Time (TimeData, buildTime)
+
+import GHC.Generics
+
+-- | The data for a single meeting section, as returned by the back-end to the front-end.
+-- This is different from the schema-defined 'Meeting' type (in "Database.Tables").
+-- A single meeting section (such as a lecture, tutorial, practical etc) often meets at multiple times and locations
+-- throughout the week, so 'MeetingData' bundles the section's 'Meeting' information with
+-- its associated list of 'TimeData' records for JSON serialization to the client.
+data MeetingData = MeetingData {meetData :: Meeting, timeData :: [TimeData]}
+    deriving (Show, Generic)
+
+instance ToJSON MeetingData
 
 -- | Queries the database for all matching lectures, tutorials,
-meetingQuery :: [T.Text] -> SqlPersistM [MeetTime']
+meetingQuery :: [T.Text] -> SqlPersistM [MeetingData]
 meetingQuery meetingCodes = do
     allMeetings <- selectList [MeetingCode <-. map (T.take 6) meetingCodes] []
     mapM buildMeetTimes allMeetings
 
 -- | Queries the database for all times corresponding to a given meeting.
-buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime'
+buildMeetTimes :: Entity Meeting -> SqlPersistM MeetingData
 buildMeetTimes meet = do
     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
     parsedTime <- mapM (buildTime . entityVal) allTimes
-    return $ Tables.MeetTime' (entityVal meet) parsedTime
+    return $ MeetingData (entityVal meet) parsedTime
 
 -- | Queries the database for all information regarding a specific meeting for
 --  a course, returns a Meeting.
@@ -46,8 +63,8 @@ returnMeeting lowerStr sect session = do
         []
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
--- a course, returns a list of Time.
-getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
+-- a course, returns a list of TimeData.
+getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [TimeData]
 getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
     maybeEntityMeetings <-
         selectFirst

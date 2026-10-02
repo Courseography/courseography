@@ -191,26 +191,11 @@ data Time'
     }
     deriving (Show, Eq, Generic)
 
-data Time
-    = Time
-    { timeSession :: Maybe T.Text
-    , weekDay :: Double
-    , startHour :: Double
-    , endHour :: Double
-    , timeLocation :: Maybe Building
-    }
-    deriving (Show, Generic)
-
 -- | A Meeting with its associated Times.
 data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time']}
     deriving (Show, Generic)
 
-data MeetTime' = MeetTime' {meetData :: Meeting, timeData :: [Time]}
-    deriving (Show, Generic)
-
 instance ToJSON Program
-instance ToJSON Time
-instance ToJSON MeetTime'
 instance ToJSON Building
 
 instance ToJSON Meeting where

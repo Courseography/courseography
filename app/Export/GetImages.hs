@@ -15,10 +15,10 @@ import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy.IO as LTIO
-import Database.Tables (Time (..))
 import Export.ImageConversion (withImageFile)
 import Export.TimetableImageCreator (renderTableHelper, times)
 import Models.Meeting (getMeetingTime)
+import Models.Time (TimeData (TimeData, endHour, startHour, weekDay))
 import Svg.Generator (buildSVG)
 import System.FilePath ((</>))
 import System.IO (Handle)
@@ -56,27 +56,27 @@ list2tuple [a, b, c] = (a, b, c)
 list2tuple _ = undefined
 
 -- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
--- returns a list of list of Time.
-getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
+-- returns a list of list of TimeData.
+getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[TimeData]]
 getTimes selectedMeetings = runDb $ mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
 -- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.
 -- Courses are added to schedule, based on their days and times.
-getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[[T.Text]]]
+getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[TimeData]] -> [[[T.Text]]]
 getScheduleByTime selectedMeetings mTimes =
     let meetingTimes_ = zip selectedMeetings mTimes
         schedule = replicate 26 $ replicate 5 []
      in foldl addCourseToSchedule schedule meetingTimes_
 
--- | Take a list of Time and returns a list of tuples that correctly index
+-- | Take a list of TimeData and returns a list of tuples that correctly index
 -- into the 2-D table (for generating the image).
 -- TODO: Make this support half-hour times.
-convertTimeToArray :: Time -> [(Int, Int)]
-convertTimeToArray Time{weekDay = day, startHour = startTime, endHour = endTime} =
+convertTimeToArray :: TimeData -> [(Int, Int)]
+convertTimeToArray TimeData{weekDay = day, startHour = startTime, endHour = endTime} =
     [(floor day, row) | row <- [(floor startTime - 8) .. (floor endTime - 8) - 1]]
 
-addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Time]) -> [[[T.Text]]]
+addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [TimeData]) -> [[[T.Text]]]
 addCourseToSchedule schedule (course, courseTimes) =
     let time' = filter (\t -> mod' (startHour t) 1 == 0) courseTimes
         timeArray = concatMap convertTimeToArray time'
