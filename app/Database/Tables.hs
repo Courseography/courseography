@@ -97,6 +97,7 @@ Times
     endHour Double
     meeting MeetingId
     location T.Text Maybe
+    deriving Show Eq
 
 Breadth
     description T.Text
@@ -181,19 +182,8 @@ SchemaVersion
 
 -- ** TODO: Remove these extra types and class instances
 
-data Time'
-    = Time'
-    { timeSession' :: Maybe T.Text
-    , weekDay' :: Double
-    , startHour' :: Double
-    , endHour' :: Double
-    , timeLocation' :: Maybe T.Text
-    }
-    deriving (Show, Eq, Generic)
-
--- | A Meeting with its associated Times.
-data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [Time']}
-    deriving (Show, Generic)
+data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [MeetingId -> Times]}
+    deriving Generic
 
 instance ToJSON Program
 instance ToJSON Building
@@ -231,27 +221,28 @@ instance FromJSON Meeting where
             else
                 fail "Not a lecture, Tutorial or Practical"
 
-instance FromJSON Time' where
-    parseJSON = withObject "Expected Object for Times" $ \o -> do
-        startObject <- o .: "start"
-        endObject <- o .: "end"
-        meetingDay :: Maybe Int <- startObject .:? "day" .!= Nothing
-        meetingStartTime :: Maybe Int <- startObject .:? "millisofday" .!= Nothing
-        meetingEndTime :: Maybe Int <- endObject .:? "millisofday" .!= Nothing
+parseTime :: Value -> Parser (MeetingId -> Times)
+parseTime = withObject "Expected Object for Times" $ \o -> do
+    startObject <- o .: "start"
+    endObject <- o .: "end"
+    meetingDay :: Maybe Int <- startObject .:? "day" .!= Nothing
+    meetingStartTime :: Maybe Int <- startObject .:? "millisofday" .!= Nothing
+    meetingEndTime :: Maybe Int <- endObject .:? "millisofday" .!= Nothing
 
-        building <- o .: "building"
-        buildingCode <- building .: "buildingCode"
+    building <- o .: "building"
+    buildingCode <- building .: "buildingCode"
 
-        session <- o .: "sessionCode"
+    session <- o .: "sessionCode"
 
-        let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
-        return $ Time' session adjustedDay adjustedStartTime adjustedEndTime buildingCode
+    let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
+    return $ \meetingId -> Times session adjustedDay adjustedStartTime adjustedEndTime meetingId buildingCode
 
 instance FromJSON MeetTime where
     parseJSON (Object o) = do
         meeting <- parseJSON (Object o)
-        timesList :: [Time'] <- o .:? "meetingTimes" .!= []
-        return $ MeetTime meeting timesList
+        rawTimes :: [Value] <- o .:? "meetingTimes" .!= []
+        timesFunctionList <- mapM parseTime rawTimes
+        return $ MeetTime meeting timesFunctionList
     parseJSON _ = fail "Invalid meeting"
 
 -- | Helpers for parsing JSON
