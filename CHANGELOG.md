@@ -10,6 +10,7 @@
 
 ### 🔧 Internal changes
 
+- Removed `Time'` data type in favour of `(MeetingId -> Times)` function type in `Database.Tables`
 - Refactored `Database.Tables.MeetTime'` into `Models.Meeting` and renamed it to `MeetingData`
 - Refactored `Database.Tables.Time` into `Models.Time` and renamed it to `TimeData`
 - Refactored `parseReqs` into a new module `Models.Requirement` and updated its input type from `String` to `Text`
