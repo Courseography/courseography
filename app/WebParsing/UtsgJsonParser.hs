@@ -21,7 +21,6 @@ import Database.Persist.Sqlite (
  )
 import Database.Tables (EntityField (..), MeetTime (..), Meeting (..))
 
--- import Models.Time (buildTimes)
 import Network.Connection (TLSSettings (TLSSettingsSimple))
 import Network.HTTP.Conduit (
     RequestBody (RequestBodyLBS),
