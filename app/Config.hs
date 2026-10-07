@@ -28,15 +28,12 @@ module Config (
 ) where
 
 import Control.Monad.IO.Class (MonadIO, liftIO)
-import Control.Monad.Logger (NoLoggingT)
-import Control.Monad.Trans.Reader (ReaderT)
-import Control.Monad.Trans.Resource (ResourceT)
 import Data.Aeson (FromJSON (..), Value, object, withObject, (.:), (.=))
 import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Time (Day)
 import Data.Yaml.Config (loadYamlSettings, useEnv)
-import Database.Persist.Sqlite (SqlBackend, runSqlite)
+import Database.Persist.Sqlite (SqlPersistM, runSqlite)
 import Happstack.Server (Conf (..), LogAccess, nullConf)
 import Network.HTTP.Types.Header (RequestHeaders)
 import System.Environment (lookupEnv)
@@ -126,7 +123,7 @@ databasePath :: IO Text
 databasePath = databasePathValue <$> loadConfig
 
 -- | Fetch the database path and execute the given action in the context of the database.
-runDb :: MonadIO m => ReaderT SqlBackend (NoLoggingT (ResourceT IO)) a -> m a
+runDb :: MonadIO m => SqlPersistM a -> m a
 runDb action = do
     dbPath <- liftIO databasePath
     liftIO $ runSqlite dbPath action
