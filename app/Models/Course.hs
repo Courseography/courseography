@@ -147,7 +147,7 @@ prereqsForCourse code = runDb $ do
                 SqlPersistM (Either String (T.Text, T.Text))
 
 getDeptCourses :: MonadIO m => T.Text -> m [CourseData]
-getDeptCourses dept = liftIO $ runDb $ do
+getDeptCourses dept = runDb $ do
     courses :: [Entity Course] <- rawSql "SELECT ?? FROM course WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
     let deptCourses = map entityVal courses
     meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map courseCode deptCourses] []

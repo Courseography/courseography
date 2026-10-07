@@ -35,7 +35,7 @@ graphResponse =
                 graphScripts
 
 index :: ServerPart Response
-index = liftIO $ runDb $ do
+index = runDb $ do
     graphsList :: [Entity Graph] <- selectList [GraphDynamic ==. False] [Asc GraphTitle]
     return $ createJSONResponse graphsList :: SqlPersistM Response
 
@@ -74,5 +74,5 @@ saveGraphJSON = do
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just components -> do
-            _ <- liftIO $ runDb $ insertGraph nameStr components
+            _ <- runDb $ insertGraph nameStr components
             return $ toResponse ("Success" :: String)

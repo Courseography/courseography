@@ -27,10 +27,10 @@ module Config (
     holidays,
 ) where
 
-import Control.Monad.IO.Class (liftIO)
+import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Monad.Logger (NoLoggingT)
 import Control.Monad.Trans.Reader (ReaderT)
-import Control.Monad.Trans.Resource (MonadUnliftIO, ResourceT)
+import Control.Monad.Trans.Resource (ResourceT)
 import Data.Aeson (FromJSON (..), Value, object, withObject, (.:), (.=))
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -126,10 +126,10 @@ databasePath :: IO Text
 databasePath = databasePathValue <$> loadConfig
 
 -- | Fetch the database path and execute the given action in the context of the database.
-runDb :: MonadUnliftIO m => ReaderT SqlBackend (NoLoggingT (ResourceT m)) a -> m a
+runDb :: MonadIO m => ReaderT SqlBackend (NoLoggingT (ResourceT IO)) a -> m a
 runDb action = do
     dbPath <- liftIO databasePath
-    runSqlite dbPath action
+    liftIO $ runSqlite dbPath action
 
 -- FILE PATH STRINGS
 

@@ -23,7 +23,7 @@ retrieveCourse = do
 -- | Builds a list of all course codes in the database.
 index :: ServerPart Response
 index = do
-    response <- liftIO $ runDb $ do
+    response <- runDb $ do
         coursesList :: [Entity Course] <- selectList [] []
         let codes = map (courseCode . entityVal) coursesList
         return $ T.unlines codes :: SqlPersistM T.Text
