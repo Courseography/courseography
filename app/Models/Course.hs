@@ -10,7 +10,7 @@ module Models.Course (
 ) where
 
 import Config (runDb)
-import Control.Monad.IO.Class (MonadIO, liftIO)
+import Control.Monad.IO.Class (MonadIO)
 import Data.Aeson (ToJSON)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T (Text, append, filter, snoc, toUpper)
