@@ -30,6 +30,7 @@
 - Added static info existence test for `Database/Database.hs`
 - Converted more JS files to TypeScript
 - Enabled `noUnusedLocals`/`noUnusedParameters` in `tsconfig.json` and disabled ESLint's `no-unused-vars` for `.ts`/`.tsx` files
+- Refactored backend database `runDb` helper in `app/Config.hs`
 
 ## [0.8.1] - 2026-08-10
 
