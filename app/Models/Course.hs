@@ -10,7 +10,7 @@ module Models.Course (
 ) where
 
 import Config (runDb)
-import Control.Monad.IO.Class (MonadIO, liftIO)
+import Control.Monad.IO.Class (MonadIO)
 import Data.Aeson (ToJSON)
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T (Text, append, filter, snoc, toUpper)
@@ -147,7 +147,7 @@ prereqsForCourse code = runDb $ do
                 SqlPersistM (Either String (T.Text, T.Text))
 
 getDeptCourses :: MonadIO m => T.Text -> m [CourseData]
-getDeptCourses dept = liftIO $ runDb $ do
+getDeptCourses dept = runDb $ do
     courses :: [Entity Course] <- rawSql "SELECT ?? FROM course WHERE code LIKE ?" [PersistText $ T.snoc dept '%']
     let deptCourses = map entityVal courses
     meetings :: [Entity Meeting] <- selectList [MeetingCode <-. map courseCode deptCourses] []

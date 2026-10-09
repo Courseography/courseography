@@ -22,7 +22,7 @@ import Util.Happstack (createJSONResponse)
 -- | Builds a list of all program codes in the database
 index :: ServerPart Response
 index = do
-    response <- liftIO $ runDb $ do
+    response <- runDb $ do
         programsList :: [Entity Program] <- selectList [] []
         let codes = map (programCode . entityVal) programsList
             rmEmpty = filter (not . T.null . T.strip) codes
