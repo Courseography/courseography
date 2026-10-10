@@ -34,7 +34,6 @@ import Data.Aeson (
     genericToJSON,
     withObject,
     (.!=),
-    (.:),
     (.:?),
  )
 import Data.Aeson.Types (Options (..), Parser, Value (Object), defaultOptions)
@@ -180,11 +179,6 @@ SchemaVersion
     deriving Show Eq
 |]
 
--- ** TODO: Remove these extra types and class instances
-
-data MeetTime = MeetTime {meetInfo :: Meeting, timeInfo :: [MeetingId -> Times]}
-    deriving Generic
-
 instance ToJSON Program
 instance ToJSON Building
 
@@ -220,66 +214,10 @@ instance FromJSON Meeting where
                 return $ Meeting "" "" sectionId cap instructor enrol wait extra
             else
                 fail "Not a lecture, Tutorial or Practical"
-
-parseTime :: Value -> Parser (MeetingId -> Times)
-parseTime = withObject "Expected Object for Times" $ \o -> do
-    startObject <- o .: "start"
-    endObject <- o .: "end"
-    meetingDay :: Maybe Int <- startObject .:? "day" .!= Nothing
-    meetingStartTime :: Maybe Int <- startObject .:? "millisofday" .!= Nothing
-    meetingEndTime :: Maybe Int <- endObject .:? "millisofday" .!= Nothing
-
-    building <- o .: "building"
-    buildingCode <- building .: "buildingCode"
-
-    session <- o .: "sessionCode"
-
-    let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
-    return $ \meetingId -> Times session adjustedDay adjustedStartTime adjustedEndTime meetingId buildingCode
-
-instance FromJSON MeetTime where
-    parseJSON (Object o) = do
-        meeting <- parseJSON (Object o)
-        rawTimes :: [Value] <- o .:? "meetingTimes" .!= []
-        timesFunctionList <- mapM parseTime rawTimes
-        return $ MeetTime meeting timesFunctionList
-    parseJSON _ = fail "Invalid meeting"
-
--- | Helpers for parsing JSON
-parseInstr :: Value -> Parser T.Text
-parseInstr (Object io) = do
-    firstName <- io .:? "firstName" .!= ""
-    lastName <- io .:? "lastName" .!= ""
-    return (T.concat [firstName, " ", lastName])
-parseInstr _ = return ""
-
--- | Converts the miliseconds time into hourly time
--- | Assumes times are rounded to the nearest hour
-getHourVal :: Int -> Double
-getHourVal millis =
-    let
-        seconds = fromIntegral millis / 1000.0
-        minutes = seconds / 60
-        hours = minutes / 60
-     in
-        hours
-
--- | Converts a the given day into a double representation for the database
--- | Monday (1) to Friday (5) becomes 0.0 to 4.0
-getDayVal :: Int -> Double
-getDayVal 1 = 0.0
-getDayVal 2 = 1.0
-getDayVal 3 = 2.0
-getDayVal 4 = 3.0
-getDayVal 5 = 4.0
-getDayVal _ = 4.0
-
--- | Convert the given day, start time and end time to a tuple of Doubles. If nothing is given,
---   the place holder is 5 and 25, indicating the day and times are invalid.
-convertTimeVals :: Maybe Int -> Maybe Int -> Maybe Int -> (Double, Double, Double)
-convertTimeVals (Just day) (Just start) (Just end) =
-    let dayDbl = getDayVal day
-        startDbl = getHourVal start
-        endDbl = getHourVal end
-     in (dayDbl, startDbl, endDbl)
-convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
+      where
+        parseInstr :: Value -> Parser T.Text
+        parseInstr (Object io) = do
+            firstName <- io .:? "firstName" .!= ""
+            lastName <- io .:? "lastName" .!= ""
+            return (T.concat [firstName, " ", lastName])
+        parseInstr _ = return ""

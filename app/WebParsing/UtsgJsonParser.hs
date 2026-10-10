@@ -1,25 +1,15 @@
-module WebParsing.UtsgJsonParser (parseTimetable, insertAllMeetings, insertCourses) where
+module WebParsing.UtsgJsonParser (parseTimetable, insertTimetableData) where
 
 import Config (createReqBody, reqHeaders, runDb, timetableApiUrl)
 import Control.Monad.IO.Class (liftIO)
-import Data.Aeson (Value, decode, encode, withObject, (.!=), (.:), (.:?))
+import Data.Aeson (Object, decode, encode, (.!=), (.:), (.:?))
 import Data.Aeson.Types (Parser, parseMaybe)
 import Data.ByteString.Lazy.Internal (ByteString)
 import Data.Default.Class (def)
 import qualified Data.Text as T
-import Database.Persist.Sqlite (
-    SqlPersistM,
-    Update,
-    deleteWhere,
-    entityKey,
-    insert,
-    insertMany_,
-    selectFirst,
-    upsert,
-    (=.),
-    (==.),
- )
-import Database.Tables (EntityField (..), MeetTime (..), Meeting (..))
+import Database.Persist.Sqlite (SqlPersistM)
+import Database.Tables (Meeting (..))
+import Models.Meeting (MeetingParsedData (..), insertMeetingParsedData)
 
 import Network.Connection (TLSSettings (TLSSettingsSimple))
 import Network.HTTP.Conduit (
@@ -38,7 +28,7 @@ import Network.TLS (EMSMode (AllowEMS), Supported (..))
 -- | Parse all timetable data.
 parseTimetable :: IO ()
 parseTimetable = do
-    runDb $ insertAllMeetings 1
+    runDb $ insertTimetablePages 1
 
 -- Make a request and return the response as a serialized JSON representation
 makeRequest :: Int -> IO ByteString
@@ -57,95 +47,55 @@ makeRequest pageNum = do
     response <- liftIO $ httpLbs request' manager
     return $ responseBody response
 
--- Get the page number, page size and total number of courses from response
-getPageInfo :: ByteString -> Maybe (Int, Int, Int)
-getPageInfo respBody = do
-    json <- decode respBody
-    flip parseMaybe json $ \obj -> do
+-- | Helper function to insert courses for a page of a HTTP response
+insertTimetableData :: ByteString -> SqlPersistM ()
+insertTimetableData respBody =
+    case decode respBody >>= parseMaybe parseCourses of
+        Nothing -> liftIO $ print ("Failed to parse meeting information." :: String)
+        Just meetings -> mapM_ insertMeetingParsedData meetings
+  where
+    -- Parse all of the meetings and times for the courses in a page
+    parseCourses :: Object -> Parser [MeetingParsedData]
+    parseCourses obj = do
         payload <- obj .: "payload"
         pageableCourse <- payload .: "pageableCourse"
-        page <- pageableCourse .: "page"
-        pageSize <- pageableCourse .: "pageSize"
-        totalCourses <- pageableCourse .: "total"
-        return (page, pageSize, totalCourses)
+        rawCoursesData :: [Object] <- pageableCourse .: "courses"
+        concat <$> mapM parseCourse rawCoursesData
 
--- Helper function to insert courses for a page of a HTTP response
-insertCourses :: ByteString -> SqlPersistM ()
-insertCourses respBody =
-    case parseMeetingInfo respBody of
-        Nothing -> liftIO $ print ("Failed to parse meeting information." :: String)
-        Just meetTimes -> mapM_ insertMeeting meetTimes
+    -- Parse the meetings and times for a single course
+    parseCourse :: Object -> Parser [MeetingParsedData]
+    parseCourse o = do
+        codeExtraChars <- o .: "code"
+        let courseCode = T.dropEnd 2 codeExtraChars
+        session :: T.Text <- o .: "sectionCode"
+        meetingsParsedData :: [MeetingParsedData] <- o .:? "sections" .!= []
+        return $ map (\m -> m{meetInfo = (meetInfo m){meetingCode = courseCode, meetingSession = session}}) meetingsParsedData
 
--- | insert/update all the data into the Meeting and Times schema by creating and sending
---   the http request to Artsci Timetable and then parsing the JSON response
-insertAllMeetings :: Int -> SqlPersistM ()
-insertAllMeetings page = do
+-- | Retrieve timetable information for @page@ and insert/update the corresponding Meeting
+--   and Times data into the database. Repeat for all pages in increasing order.
+insertTimetablePages :: Int -> SqlPersistM ()
+insertTimetablePages page = do
     respBody <- liftIO $ makeRequest page
     let pageInfo = getPageInfo respBody
     case pageInfo of
         Nothing -> return ()
         Just (_, pageSize, totalCourses) -> do
+            let totalPages :: Integer = ceiling (fromIntegral totalCourses / fromIntegral pageSize :: Double)
             liftIO $ print $ "Parsing results for page " ++ show page ++ " of " ++ show totalPages
-            insertCourses respBody
+            insertTimetableData respBody
 
             if page * pageSize >= totalCourses
                 then liftIO $ print ("All courses have been parsed." :: String)
-                else insertAllMeetings (page + 1)
-          where
-            totalPages :: Int
-            totalPages = ceiling (fromIntegral totalCourses / fromIntegral pageSize :: Double)
-
--- | Insert or update a meeting and then delete
---   and re-insert the corresponding Times into the database.
-insertMeeting :: MeetTime -> SqlPersistM ()
-insertMeeting (MeetTime meetingData meetingTimeFunctions) = do
-    -- Check if the meeting already exists in the meeting table
-    let code = meetingCode meetingData
-    let session = meetingSession meetingData
-    let section = meetingSection meetingData
-    maybeMeetingKey <- selectFirst [MeetingCode ==. code, MeetingSession ==. session, MeetingSection ==. section] []
-    case maybeMeetingKey of
-        Just _ -> do
-            -- meeting already exists, so update/replace
-            entity <- upsert meetingData (meetingUpdates meetingData)
-            let meetingKey = entityKey entity
-            deleteWhere [TimesMeeting ==. meetingKey]
-            let allTimes = map ($ meetingKey) meetingTimeFunctions
-            insertMany_ allTimes
-        Nothing -> do
-            -- meeting does not exist, so insert
-            meetingKey <- insert meetingData
-            let allTimes = map ($ meetingKey) meetingTimeFunctions
-            insertMany_ allTimes
-
--- | Update the entries of the Meeting Table if necessary
-meetingUpdates :: Meeting -> [Update Meeting]
-meetingUpdates m =
-    [ MeetingCode =. meetingCode m
-    , MeetingSession =. meetingSession m
-    , MeetingSection =. meetingSection m
-    , MeetingCap =. meetingCap m
-    , MeetingInstructor =. meetingInstructor m
-    , MeetingEnrol =. meetingEnrol m
-    , MeetingWait =. meetingWait m
-    , MeetingExtra =. meetingExtra m
-    ]
-
--- | Parse all of the meetings, along with their associated times
-parseMeetingInfo :: ByteString -> Maybe [MeetTime]
-parseMeetingInfo respBody = do
-    json <- decode respBody
-    flip parseMaybe json $ \obj -> do
-        payload <- obj .: "payload"
-        pageableCourse <- payload .: "pageableCourse"
-        courses :: [Value] <- pageableCourse .: "courses"
-        concat <$> mapM parseCourse courses
-
--- | Parse a single course object into the meetings it contains
-parseCourse :: Value -> Parser [MeetTime]
-parseCourse = withObject "Expected an Object for a course" $ \o -> do
-    codeExtraChars <- o .: "code"
-    let courseCode = T.dropEnd 2 codeExtraChars
-    session :: T.Text <- o .: "sectionCode"
-    sectionsList :: [MeetTime] <- o .:? "sections" .!= []
-    return $ map (\m -> m{meetInfo = (meetInfo m){meetingCode = courseCode, meetingSession = session}}) sectionsList
+                else insertTimetablePages (page + 1)
+  where
+    -- Get the page number, page size and total number of courses from response
+    getPageInfo :: ByteString -> Maybe (Int, Int, Int)
+    getPageInfo respBody = do
+        json <- decode respBody
+        flip parseMaybe json $ \obj -> do
+            payload <- obj .: "payload"
+            pageableCourse <- payload .: "pageableCourse"
+            pageNum <- pageableCourse .: "page"
+            pageSize <- pageableCourse .: "pageSize"
+            totalCourses <- pageableCourse .: "total"
+            return (pageNum, pageSize, totalCourses)

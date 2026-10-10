@@ -32,6 +32,7 @@
 - Converted more JS files to TypeScript
 - Enabled `noUnusedLocals`/`noUnusedParameters` in `tsconfig.json` and disabled ESLint's `no-unused-vars` for `.ts`/`.tsx` files
 - Refactored backend database `runDb` helper in `app/Config.hs`
+- Refactored `Database.Tables.MeetTime` into `Models.Meeting` and renamed it to `MeetingParsedData` along with timetable JSON parsing helpers
 
 ## [0.8.1] - 2026-08-10
 
