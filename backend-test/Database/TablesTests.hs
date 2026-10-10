@@ -51,6 +51,11 @@ meetingFromJSONTestCases =
         , "{\"teachMethod\":\"LAB\",\"sectionNumber\":\"0101\"}"
         , Nothing
         )
+    ,
+        ( "Valid meeting with malformed instructors, empty instructor returned"
+        , "{\"teachMethod\":\"LEC\",\"sectionNumber\":\"0101\",\"instructors\":[\"abc\"]}"
+        , Just (Meeting "" "" "LEC0101" (-1) "" 0 0 0)
+        )
     ]
 
 -- | Run a test case (case, input, expected output) on the FromJSON instance of Meeting.
