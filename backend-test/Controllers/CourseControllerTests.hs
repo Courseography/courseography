@@ -14,10 +14,9 @@ import Data.List (nub)
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
-import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_)
-import Database.Tables (Building (..), Course (..), MeetTime (..), Meeting (..), Time' (..))
+import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, toSqlKey)
+import Database.Tables (Building (..), Course (..), MeetTime (..), Meeting (..), Times (..))
 import Happstack.Server (rsBody, rsCode)
-import Models.Time (buildTimes)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, mockGetRequest, runServerPart, runServerPartWith, withDatabase)
@@ -58,20 +57,24 @@ retrieveCourseTestCases =
                     , meetingWait = 0
                     , meetingExtra = 0
                     }
-                [ Time'
-                    { timeSession' = Just "20269"
-                    , weekDay' = 0.0
-                    , startHour' = 10.0
-                    , endHour' = 11.0
-                    , timeLocation' = Just "MP"
-                    }
-                , Time'
-                    { timeSession' = Just "20269"
-                    , weekDay' = 2.0
-                    , startHour' = 13.0
-                    , endHour' = 14.0
-                    , timeLocation' = Just "SS"
-                    }
+                [ \meetingId ->
+                    Times
+                        { timesSession = Just "20269"
+                        , timesWeekDay = 0.0
+                        , timesStartHour = 10.0
+                        , timesEndHour = 11.0
+                        , timesMeeting = meetingId
+                        , timesLocation = Just "MP"
+                        }
+                , \meetingId ->
+                    Times
+                        { timesSession = Just "20269"
+                        , timesWeekDay = 2.0
+                        , timesStartHour = 13.0
+                        , timesEndHour = 14.0
+                        , timesMeeting = meetingId
+                        , timesLocation = Just "SS"
+                        }
                 ]
             , MeetTime
                 Meeting
@@ -84,20 +87,24 @@ retrieveCourseTestCases =
                     , meetingWait = 0
                     , meetingExtra = 0
                     }
-                [ Time'
-                    { timeSession' = Just "20271"
-                    , weekDay' = 1.0
-                    , startHour' = 10.0
-                    , endHour' = 11.0
-                    , timeLocation' = Just "WW"
-                    }
-                , Time'
-                    { timeSession' = Just "20271"
-                    , weekDay' = 4.0
-                    , startHour' = 13.0
-                    , endHour' = 14.0
-                    , timeLocation' = Just "SS"
-                    }
+                [ \meetingId ->
+                    Times
+                        { timesSession = Just "20271"
+                        , timesWeekDay = 1.0
+                        , timesStartHour = 10.0
+                        , timesEndHour = 11.0
+                        , timesMeeting = meetingId
+                        , timesLocation = Just "WW"
+                        }
+                , \meetingId ->
+                    Times
+                        { timesSession = Just "20271"
+                        , timesWeekDay = 4.0
+                        , timesStartHour = 13.0
+                        , timesEndHour = 14.0
+                        , timesMeeting = meetingId
+                        , timesLocation = Just "SS"
+                        }
                 ]
             ]
         , 200
@@ -136,20 +143,24 @@ retrieveCourseTestCases =
                     , meetingWait = 0
                     , meetingExtra = 0
                     }
-                [ Time'
-                    { timeSession' = Just "20269"
-                    , weekDay' = 0.0
-                    , startHour' = 10.0
-                    , endHour' = 11.0
-                    , timeLocation' = Just "MP"
-                    }
-                , Time'
-                    { timeSession' = Just "20269"
-                    , weekDay' = 2.0
-                    , startHour' = 13.0
-                    , endHour' = 14.0
-                    , timeLocation' = Just "SS"
-                    }
+                [ \meetingId ->
+                    Times
+                        { timesSession = Just "20269"
+                        , timesWeekDay = 0.0
+                        , timesStartHour = 10.0
+                        , timesEndHour = 11.0
+                        , timesMeeting = meetingId
+                        , timesLocation = Just "MP"
+                        }
+                , \meetingId ->
+                    Times
+                        { timesSession = Just "20269"
+                        , timesWeekDay = 2.0
+                        , timesStartHour = 13.0
+                        , timesEndHour = 14.0
+                        , timesMeeting = meetingId
+                        , timesLocation = Just "SS"
+                        }
                 ]
             ]
         , 200
@@ -281,9 +292,9 @@ insertCourses = mapM_ insertCourse
 insertMeetingTimes :: [MeetTime] -> SqlPersistM ()
 insertMeetingTimes = mapM_ insertMeeting
   where
-    insertMeeting (MeetTime meetingData meetingTime) = do
+    insertMeeting (MeetTime meetingData meetingTimeFunctions) = do
         meetingKey <- insert meetingData
-        insertMany_ $ map (buildTimes meetingKey) meetingTime
+        insertMany_ $ map ($ meetingKey) meetingTimeFunctions
 
 -- | Helper function to insert dummy buildings from a list of codes
 insertBuildings :: [T.Text] -> SqlPersistM ()
@@ -304,7 +315,8 @@ insertBuildings = mapM_ insertBuilding
 getUniqueBuildings :: [MeetTime] -> [T.Text]
 getUniqueBuildings = nub . concatMap getMeetBuildings
   where
-    getMeetBuildings (MeetTime _ times') = mapMaybe timeLocation' times'
+    getMeetBuildings (MeetTime _ timeFunctions) =
+        mapMaybe (\timeFn -> timesLocation (timeFn (toSqlKey 0))) timeFunctions
 
 -- | List of test cases as (label, input courses, expected output)
 indexTestCases :: [(String, [T.Text], String)]

@@ -20,7 +20,7 @@ import Database.Persist.Sqlite (
     (==.),
  )
 import Database.Tables (EntityField (..), MeetTime (..), Meeting (..))
-import Models.Time (buildTimes)
+
 import Network.Connection (TLSSettings (TLSSettingsSimple))
 import Network.HTTP.Conduit (
     RequestBody (RequestBodyLBS),
@@ -98,7 +98,7 @@ insertAllMeetings page = do
 -- | Insert or update a meeting and then delete
 --   and re-insert the corresponding Times into the database.
 insertMeeting :: MeetTime -> SqlPersistM ()
-insertMeeting (MeetTime meetingData meetingTime) = do
+insertMeeting (MeetTime meetingData meetingTimeFunctions) = do
     -- Check if the meeting already exists in the meeting table
     let code = meetingCode meetingData
     let session = meetingSession meetingData
@@ -110,12 +110,12 @@ insertMeeting (MeetTime meetingData meetingTime) = do
             entity <- upsert meetingData (meetingUpdates meetingData)
             let meetingKey = entityKey entity
             deleteWhere [TimesMeeting ==. meetingKey]
-            let allTimes = map (buildTimes meetingKey) meetingTime
+            let allTimes = map ($ meetingKey) meetingTimeFunctions
             insertMany_ allTimes
         Nothing -> do
             -- meeting does not exist, so insert
             meetingKey <- insert meetingData
-            let allTimes = map (buildTimes meetingKey) meetingTime
+            let allTimes = map ($ meetingKey) meetingTimeFunctions
             insertMany_ allTimes
 
 -- | Update the entries of the Meeting Table if necessary

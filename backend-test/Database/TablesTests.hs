@@ -6,10 +6,12 @@ module Database.TablesTests (
     test_tables,
 ) where
 
-import Data.Aeson (decode, decodeStrictText)
+import Data.Aeson (Value, decode, decodeStrictText)
+import Data.Aeson.Types (parseMaybe)
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
-import Database.Tables (Meeting (..), Time' (..))
+import Database.Persist.Sqlite (toSqlKey)
+import Database.Tables (Meeting (..), MeetingId, Times (..), parseTime)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (assertEqual, testCase)
 
@@ -49,6 +51,11 @@ meetingFromJSONTestCases =
         , "{\"teachMethod\":\"LAB\",\"sectionNumber\":\"0101\"}"
         , Nothing
         )
+    ,
+        ( "Valid meeting with malformed instructors, empty instructor returned"
+        , "{\"teachMethod\":\"LEC\",\"sectionNumber\":\"0101\",\"instructors\":[\"abc\"]}"
+        , Just (Meeting "" "" "LEC0101" (-1) "" 0 0 0)
+        )
     ]
 
 -- | Run a test case (case, input, expected output) on the FromJSON instance of Meeting.
@@ -62,33 +69,36 @@ runMeetingFromJSONTest (label, meetingJSON, expected) =
 runMeetingFromJSONTests :: [TestTree]
 runMeetingFromJSONTests = map runMeetingFromJSONTest meetingFromJSONTestCases
 
+dummyMeetingId :: MeetingId
+dummyMeetingId = toSqlKey 1
+
 -- | List of test cases as (label, input JSON string, expected output)
-time'FromJSONTestCases :: [(String, T.Text, Maybe Time')]
-time'FromJSONTestCases =
+parseTimeTestCases :: [(String, T.Text, Maybe Times)]
+parseTimeTestCases =
     [ ("Empty JSON string, Nothing returned", "", Nothing)
     ,
         ( "Valid JSON string"
         , "{ \"start\": { \"day\": 1, \"millisofday\": 36000000 }, \"end\": { \"millisofday\": 39600000 }, \"building\": { \"buildingCode\": \"BA\", \"buildingRoomNumber\": \"1130\" }, \"sessionCode\": \"20269\" }"
         , Just
-            (Time'{timeSession' = Just "20269", weekDay' = 0.0, startHour' = 10.0, endHour' = 11.0, timeLocation' = Just "BA"})
+            (Times (Just "20269") 0.0 10.0 11.0 dummyMeetingId (Just "BA"))
         )
     ,
         ( "Valid JSON string with no day, default time values returned"
         , "{ \"start\": { \"millisofday\": 43200000 }, \"end\": { \"millisofday\": 50400000 }, \"building\": { \"buildingCode\": \"MY\", \"buildingRoomNumber\": \"150\" }, \"sessionCode\": \"20271\" }"
         , Just
-            (Time'{timeSession' = Just "20271", weekDay' = 5.0, startHour' = 25.0, endHour' = 25.0, timeLocation' = Just "MY"})
+            (Times (Just "20271") 5.0 25.0 25.0 dummyMeetingId (Just "MY"))
         )
     ,
         ( "Valid JSON string with no start millisofday, default time values returned"
         , "{ \"start\": { \"day\": 3 }, \"end\": { \"millisofday\": 50400000 }, \"building\": { \"buildingCode\": \"MY\", \"buildingRoomNumber\": \"150\" }, \"sessionCode\": \"20271\" }"
         , Just
-            (Time'{timeSession' = Just "20271", weekDay' = 5.0, startHour' = 25.0, endHour' = 25.0, timeLocation' = Just "MY"})
+            (Times (Just "20271") 5.0 25.0 25.0 dummyMeetingId (Just "MY"))
         )
     ,
         ( "Valid JSON string with no end millisofday, default time values returned"
         , "{ \"start\": { \"day\": 3, \"millisofday\": 43200000 }, \"end\": { }, \"building\": { \"buildingCode\": \"MY\", \"buildingRoomNumber\": \"150\" }, \"sessionCode\": \"20271\" }"
         , Just
-            (Time'{timeSession' = Just "20271", weekDay' = 5.0, startHour' = 25.0, endHour' = 25.0, timeLocation' = Just "MY"})
+            (Times (Just "20271") 5.0 25.0 25.0 dummyMeetingId (Just "MY"))
         )
     ,
         ( "Invalid JSON string with no start value, Nothing returned"
@@ -112,18 +122,20 @@ time'FromJSONTestCases =
         )
     ]
 
--- | Run a test case (label, input JSON string, expected output) on the FromJSON instance of Time'.
-runTime'FromJSONTest :: (String, T.Text, Maybe Time') -> TestTree
-runTime'FromJSONTest (label, input, expected) =
+-- | Run a test case (label, input JSON string, expected output) on the parseTime function.
+runParseTimeTest :: (String, T.Text, Maybe Times) -> TestTree
+runParseTimeTest (label, input, expected) =
     testCase label $ do
-        let decoded = decodeStrictText input :: Maybe Time'
-        assertEqual ("Unexpected parsing result for " ++ label) expected decoded
+        let decodedValue = decodeStrictText input :: Maybe Value
+            parsedFn = decodedValue >>= parseMaybe parseTime
+            actualTimes = fmap ($ dummyMeetingId) parsedFn
+        assertEqual ("Unexpected parsing result for " ++ label) expected actualTimes
 
--- | Run all the time'FromJSON test cases
-runTime'FromJSONTests :: [TestTree]
-runTime'FromJSONTests = map runTime'FromJSONTest time'FromJSONTestCases
+-- | Run all the parseTime test cases
+runParseTimeTests :: [TestTree]
+runParseTimeTests = map runParseTimeTest parseTimeTestCases
 
 -- | Test suite for Tables Module
 test_tables :: TestTree
 test_tables =
-    testGroup "Tables tests" $ runMeetingFromJSONTests ++ runTime'FromJSONTests
+    testGroup "Tables tests" $ runMeetingFromJSONTests ++ runParseTimeTests

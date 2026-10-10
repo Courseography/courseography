@@ -3,13 +3,12 @@
 module Models.Time (
     TimeData (..),
     buildTime,
-    buildTimes,
 ) where
 
 import Data.Aeson (ToJSON)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM)
-import Database.Tables (Building, MeetingId, Time' (..), Times (..))
+import Database.Tables (Building, Times (..))
 import GHC.Generics (Generic)
 import Models.Building (getBuilding)
 
@@ -41,13 +40,3 @@ buildTime t = do
             (timesStartHour t)
             (timesEndHour t)
             location
-
-buildTimes :: MeetingId -> Time' -> Times
-buildTimes meetingKey t =
-    Times
-        (timeSession' t)
-        (weekDay' t)
-        (startHour' t)
-        (endHour' t)
-        meetingKey
-        (timeLocation' t)
