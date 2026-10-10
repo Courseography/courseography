@@ -17,7 +17,7 @@ import Database.Tables (EntityField (..), Meeting (..), MeetingId, Times (..))
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, withDatabase)
-import WebParsing.UtsgJsonParser (insertCourses)
+import WebParsing.UtsgJsonParser (insertTimetableData)
 
 -- | All the meetings currently in the database, ordered by code and then section
 getMeetings :: IO [Entity Meeting]
@@ -166,23 +166,23 @@ insertCoursesTestCases =
         )
     ]
 
--- | Run a test case (label, input response body, expected meetings and their times) on the insertCourses function.
+-- | Run a test case (label, input response body, expected meetings and their times) on the insertTimetableData function.
 runInsertCoursesTest :: (String, BL.ByteString, [(Meeting, [Times])]) -> TestTree
 runInsertCoursesTest (label, respBody, expected) =
     testCase label $ do
         runDb $ do
             clearDatabase
-            insertCourses respBody
+            insertTimetableData respBody
         meetings <- getMeetings
         assertEqual ("Unexpected meetings inserted for " ++ label) (map fst expected) (map entityVal meetings)
         times <- mapM (getTimesOf . entityKey) meetings
         assertEqual ("Unexpected times inserted for " ++ label) (map snd expected) times
 
--- | Run all the insertCourses test cases
+-- | Run all the insertTimetableData test cases
 runInsertCoursesTests :: [TestTree]
 runInsertCoursesTests = map runInsertCoursesTest insertCoursesTestCases
 
--- | The CSC108 fall lecture, used by the tests that call insertCourses twice
+-- | The CSC108 fall lecture, used by the tests that call insertTimetableData twice
 initialResponse :: BL.ByteString
 initialResponse =
     "{\"payload\": {\"pageableCourse\": {\"courses\": [\
@@ -207,14 +207,14 @@ updatedResponse =
     \{\"start\": {\"day\": 1, \"millisofday\": 43200000}, \"end\": {\"millisofday\": 46800000},\
     \ \"building\": {\"buildingCode\": \"MP\"}, \"sessionCode\": \"20269\"}]}]}]}}}"
 
--- | Run test on insertCourses to check that inserting the same response twice does not duplicate entries
+-- | Run test on insertTimetableData to check that inserting the same response twice does not duplicate entries
 testInsertCoursesIdempotent :: TestTree
 testInsertCoursesIdempotent =
-    testCase "insertCourses is called twice with the same response and does not duplicate entries" $ do
+    testCase "insertTimetableData is called twice with the same response and does not duplicate entries" $ do
         runDb $ do
             clearDatabase
-            insertCourses initialResponse
-            insertCourses initialResponse
+            insertTimetableData initialResponse
+            insertTimetableData initialResponse
         meetings <- getMeetings
         times <- mapM (getTimesOf . entityKey) meetings
         assertEqual
@@ -230,14 +230,14 @@ testInsertCoursesIdempotent =
             ]
             times
 
--- | Run test on insertCourses to check that an existing meeting is updated and its times replaced
+-- | Run test on insertTimetableData to check that an existing meeting is updated and its times replaced
 testInsertCoursesUpdatesExisting :: TestTree
 testInsertCoursesUpdatesExisting =
-    testCase "insertCourses updates an existing meeting and replaces its times" $ do
+    testCase "insertTimetableData updates an existing meeting and replaces its times" $ do
         runDb $ do
             clearDatabase
-            insertCourses initialResponse
-            insertCourses updatedResponse
+            insertTimetableData initialResponse
+            insertTimetableData updatedResponse
         meetings <- getMeetings
         times <- mapM (getTimesOf . entityKey) meetings
         assertEqual

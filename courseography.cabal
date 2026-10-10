@@ -125,7 +125,7 @@ test-suite Tests
     Database.BuildingTests,
     Database.CourseQueriesTests,
     Database.DatabaseTests,
-    Database.TablesTests,
+    Models.MeetingTests,
     Models.RequirementModelTests,
     RequirementTests.ModifierTests,
     RequirementTests.PostParserTests,
