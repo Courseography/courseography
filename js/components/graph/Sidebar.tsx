@@ -1,6 +1,19 @@
-import React from "react"
-import PropTypes from "prop-types"
+import { useState } from "react"
 import Button from "./Button"
+
+type Course = [courseId: string, courseLabel: string]
+
+interface SidebarProps {
+  fceCount: number
+  reset: () => void
+  activeCourses: Set<string>
+  courses: Course[]
+  courseClick: (courseId: string | null) => void
+  xClick: (courseId: string | null) => void
+  sidebarItemClick?: () => void
+  onHover: () => void
+  onMouseLeave?: () => void
+}
 
 export default function Sidebar({
   fceCount,
@@ -12,15 +25,15 @@ export default function Sidebar({
   sidebarItemClick,
   onHover,
   onMouseLeave,
-}) {
-  const [collapsed, setCollapsed] = React.useState(true)
-  const [results, setResults] = React.useState([])
+}: SidebarProps) {
+  const [collapsed, setCollapsed] = useState(true)
+  const [results, setResults] = useState<Course[] | undefined>([])
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed)
   }
 
-  const filteredSearch = query => {
+  const filteredSearch = (query: string) => {
     if (!query || !courses) {
       return
     }
@@ -41,9 +54,9 @@ export default function Sidebar({
    * If an invalid course label is supplied, `null` will be returned.
    * e.g. "CSC263/265" will resolve to "csc263265"
    *      "CSC999" will resolve to `null`
-   * @return {string} course node id
+   * @return course node id
    */
-  const courseIdFromLabel = courseLabel => {
+  const courseIdFromLabel = (courseLabel: string) => {
     for (let i = 0; i < courses.length; i++) {
       if (courses[i][1] === courseLabel) {
         return courses[i][0]
@@ -55,7 +68,7 @@ export default function Sidebar({
   // Sidebar rendering methods
   /**
    * Render the FCE counter above the sidebar on the left side.
-   * @return {HTMLDivElement} FCE to the DOM
+   * @return FCE to the DOM
    */
   const renderFCE = () => {
     const fceString = Number.isInteger(fceCount) ? fceCount + ".0" : fceCount
@@ -69,7 +82,7 @@ export default function Sidebar({
 
   /**
    * Render the dropdown results within the sidebar dropdown.
-   * @return {HTMLDivElement} Searchbar to the DOM
+   * @return Searchbar to the DOM
    */
   const renderDropdown = () => {
     if (courses) {
@@ -97,7 +110,7 @@ export default function Sidebar({
 
   /**
    * Render courses that are in the sidebar.
-   * @return {HTMLBodyElement} list of div's for each course that is active
+   * @return list of div's for each course that is active
    */
   const renderActiveCourses = () => {
     const temp = activeCourses ? [...activeCourses] : []
@@ -172,16 +185,4 @@ export default function Sidebar({
       </div>
     </div>
   )
-}
-
-Sidebar.propTypes = {
-  fceCount: PropTypes.number,
-  reset: PropTypes.func,
-  activeCourses: PropTypes.instanceOf(Set),
-  courses: PropTypes.array,
-  courseClick: PropTypes.func,
-  xClick: PropTypes.func,
-  sidebarItemClick: PropTypes.func,
-  onHover: PropTypes.func,
-  onMouseLeave: PropTypes.func,
 }
