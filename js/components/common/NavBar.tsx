@@ -7,7 +7,7 @@ import { Graph } from "../graph/types"
 
 interface NavBarProps {
   selected_page: string
-  open_modal: (() => void) | undefined
+  open_modal?: () => void
   graphs?: Graph[]
   updateGraph?: (graphName: string) => void
 }
