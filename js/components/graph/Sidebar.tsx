@@ -5,13 +5,13 @@ type Course = [courseId: string, courseLabel: string]
 
 interface SidebarProps {
   fceCount: number
-  reset: () => void
+  reset?: () => void
   activeCourses: Set<string>
   courses: Course[]
-  courseClick: (courseId: string | null) => void
-  xClick: (courseId: string | null) => void
+  courseClick?: (courseId: string | null) => void
+  xClick?: (courseId: string | null) => void
   sidebarItemClick?: () => void
-  onHover: () => void
+  onHover?: () => void
   onMouseLeave?: () => void
 }
 
@@ -124,14 +124,14 @@ export default function Sidebar({
               key={`active ${course}`}
               data-testid={`test ${course}`}
               onClick={() => {
-                courseClick(courseIdFromLabel(course))
+                courseClick?.(courseIdFromLabel(course))
               }}
               className="course-selection"
               onMouseEnter={onHover}
               onMouseLeave={onMouseLeave}
             >
               {course}
-              <Button text="X" mouseDown={() => xClick(courseIdFromLabel(course))} />
+              <Button text="X" mouseDown={() => xClick?.(courseIdFromLabel(course))} />
             </div>
           )
         })}
@@ -171,7 +171,7 @@ export default function Sidebar({
         <button
           className="reset-selections"
           data-testid="test-reset"
-          onClick={() => reset()}
+          onClick={() => reset?.()}
         >
           Reset Selections
         </button>
