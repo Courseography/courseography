@@ -1,13 +1,11 @@
-interface Graph {
-  title: string
-}
+import { Graph } from "./types"
 
 interface GraphDropdownProps {
   showGraphDropdown?: boolean
   onMouseEnter?: () => void
   onMouseLeave?: () => void
   graphs?: Graph[]
-  updateGraph: (title: string) => void
+  updateGraph?: (graphName: string) => void
 }
 
 export default function GraphDropdown({
@@ -32,7 +30,7 @@ export default function GraphDropdown({
           <li
             key={i}
             className="graph-dropdown-item"
-            onClick={() => updateGraph(graph.title)}
+            onClick={() => updateGraph?.(graph.title)}
             data-testid={"test-graph-" + i}
           >
             {graph.title}

@@ -1,3 +1,8 @@
+/**  Basic metadata for a course graph option. */
+export interface Graph {
+  title: string
+}
+
 /** A single line of text rendered inside a node/bool shape. */
 export interface GraphTextTag {
   pos: [number, number]

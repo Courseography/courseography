@@ -5,7 +5,7 @@ import { faWandSparkles } from "@fortawesome/free-solid-svg-icons"
 import { Tooltip } from "react-tooltip"
 import { Graph, populateHybridRelatives } from "../graph/Graph"
 import Disclaimer from "../common/Disclaimer"
-import { NavBar } from "../common/NavBar.js.jsx"
+import { NavBar } from "../common/NavBar"
 import AutocompleteDropdown from "./AutocompleteDropdown"
 
 export default class GenerateForm extends React.Component {

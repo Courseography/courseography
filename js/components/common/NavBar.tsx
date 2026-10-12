@@ -1,16 +1,29 @@
-import React from "react"
+import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDownload } from "@fortawesome/free-solid-svg-icons"
 import { Tooltip } from "react-tooltip"
 import GraphDropdown from "../graph/GraphDropdown"
+import { Graph } from "../graph/types"
 
+interface NavBarProps {
+  selected_page: string
+  open_modal: (() => void) | undefined
+  graphs?: Graph[]
+  updateGraph?: (graphName: string) => void
+}
 /**
  * NavBar component.
  */
-export function NavBar({ selected_page, open_modal, graphs = [], updateGraph }) {
-  const isActive = page => (page === selected_page ? "selected-page" : undefined)
-  const [showGraphDropdown, setShowGraphDropdown] = React.useState(false)
-  const [dropdownTimeouts, setDropdownTimeouts] = React.useState([])
+export function NavBar({
+  selected_page,
+  open_modal,
+  graphs = [],
+  updateGraph,
+}: NavBarProps) {
+  const isActive = (page: string) =>
+    page === selected_page ? "selected-page" : undefined
+  const [showGraphDropdown, setShowGraphDropdown] = useState(false)
+  const [dropdownTimeouts, setDropdownTimeouts] = useState<number[]>([])
 
   const clearDropdownTimeouts = () => {
     dropdownTimeouts.forEach(timeout => clearTimeout(timeout))
@@ -56,7 +69,7 @@ export function NavBar({ selected_page, open_modal, graphs = [], updateGraph }) 
             {selected_page === "graph" && (
               <GraphDropdown
                 showGraphDropdown={showGraphDropdown}
-                onMouseMove={handleShowGraphDropdown}
+                onMouseEnter={handleShowGraphDropdown}
                 onMouseLeave={handleHideGraphDropdown}
                 graphs={graphs}
                 updateGraph={updateGraph}
@@ -88,12 +101,7 @@ export function NavBar({ selected_page, open_modal, graphs = [], updateGraph }) 
             >
               <FontAwesomeIcon icon={faDownload} />
             </button>
-            <Tooltip
-              id="Export"
-              className="export-tooltip"
-              place="left"
-              variant="float"
-            />
+            <Tooltip id="Export" className="export-tooltip" place="left" float />
           </>
         )}
       </div>
