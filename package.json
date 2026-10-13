@@ -42,7 +42,7 @@
     "bootstrap": "^5.3.3",
     "core-js": "^3.42.0",
     "formik": "^2.4.6",
-    "handlebars": "^4.7.9",
+    "handlebars": "^4.7.10",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.3",
     "lodash": "^4.18.1",
