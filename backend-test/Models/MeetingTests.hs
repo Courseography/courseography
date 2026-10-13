@@ -1,23 +1,22 @@
 -- |
--- Description: Tables module tests.
+-- Description: Meeting module tests.
 --
--- Module that contains the tests for the functions in the Tables module.
-module Database.TablesTests (
-    test_tables,
+-- Module that contains the tests for the functions in the Meeting module.
+module Models.MeetingTests (
+    test_meeting,
 ) where
 
-import Data.Aeson (Value, decode, decodeStrictText)
-import Data.Aeson.Types (parseMaybe)
-import qualified Data.ByteString.Lazy.Char8 as BL
+import Data.Aeson (decodeStrictText)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (toSqlKey)
-import Database.Tables (Meeting (..), MeetingId, Times (..), parseTime)
+import Database.Tables (Meeting (..), MeetingId, Times (..))
+import Models.Meeting (MeetingParsedData (..))
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (assertEqual, testCase)
 
 -- | List of test cases as (label, input JSON payload, expected output)
-meetingFromJSONTestCases :: [(String, BL.ByteString, Maybe Meeting)]
-meetingFromJSONTestCases =
+parseMeetingTestCases :: [(String, T.Text, Maybe Meeting)]
+parseMeetingTestCases =
     [ ("Invalid meeting (empty JSON), Nothing returned", "{}", Nothing)
     , ("Valid meeting with valid teachMethod", "{\"teachMethod\":\"LEC\"}", Just (Meeting "" "" "LEC" (-1) "" 0 0 0))
     ,
@@ -58,16 +57,16 @@ meetingFromJSONTestCases =
         )
     ]
 
--- | Run a test case (case, input, expected output) on the FromJSON instance of Meeting.
-runMeetingFromJSONTest :: (String, BL.ByteString, Maybe Meeting) -> TestTree
-runMeetingFromJSONTest (label, meetingJSON, expected) =
+-- | Run a test case (label, input JSON payload, expected output) on the parsing of a meeting.
+runParseMeetingTest :: (String, T.Text, Maybe Meeting) -> TestTree
+runParseMeetingTest (label, meetingJSON, expected) =
     testCase label $ do
-        let actual = decode meetingJSON :: Maybe Meeting
+        let actual = meetInfo <$> (decodeStrictText meetingJSON :: Maybe MeetingParsedData)
         assertEqual ("Unexpected parsing result for " ++ label) expected actual
 
--- | Run all the meetingFromJSON test cases
-runMeetingFromJSONTests :: [TestTree]
-runMeetingFromJSONTests = map runMeetingFromJSONTest meetingFromJSONTestCases
+-- | Run all the parseMeeting test cases
+runParseMeetingTests :: [TestTree]
+runParseMeetingTests = map runParseMeetingTest parseMeetingTestCases
 
 dummyMeetingId :: MeetingId
 dummyMeetingId = toSqlKey 1
@@ -122,20 +121,24 @@ parseTimeTestCases =
         )
     ]
 
--- | Run a test case (label, input JSON string, expected output) on the parseTime function.
+-- | Run a test case (label, input JSON string, expected output) on the parsing of a meeting time.
+-- The time is wrapped in a minimal valid meeting so it is parsed by the FromJSON instance of MeetingParsedData.
 runParseTimeTest :: (String, T.Text, Maybe Times) -> TestTree
 runParseTimeTest (label, input, expected) =
     testCase label $ do
-        let decodedValue = decodeStrictText input :: Maybe Value
-            parsedFn = decodedValue >>= parseMaybe parseTime
-            actualTimes = fmap ($ dummyMeetingId) parsedFn
+        let meetingJSON = T.concat ["{\"teachMethod\":\"LEC\",\"meetingTimes\":[", input, "]}"]
+            parsedMeeting = decodeStrictText meetingJSON :: Maybe MeetingParsedData
+            actualTimes =
+                parsedMeeting >>= \m -> case timeInfo m of
+                    [timeFn] -> Just (timeFn dummyMeetingId)
+                    _ -> Nothing
         assertEqual ("Unexpected parsing result for " ++ label) expected actualTimes
 
 -- | Run all the parseTime test cases
 runParseTimeTests :: [TestTree]
 runParseTimeTests = map runParseTimeTest parseTimeTestCases
 
--- | Test suite for Tables Module
-test_tables :: TestTree
-test_tables =
-    testGroup "Tables tests" $ runMeetingFromJSONTests ++ runParseTimeTests
+-- | Test suite for Meeting Module
+test_meeting :: TestTree
+test_meeting =
+    testGroup "Meeting tests" $ runParseMeetingTests ++ runParseTimeTests

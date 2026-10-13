@@ -15,14 +15,14 @@ import qualified Data.Map as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, toSqlKey)
-import Database.Tables (Building (..), Course (..), MeetTime (..), Meeting (..), Times (..))
+import Database.Tables (Building (..), Course (..), Meeting (..), MeetingId, Times (..))
 import Happstack.Server (rsBody, rsCode)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, mockGetRequest, runServerPart, runServerPartWith, withDatabase)
 
 -- | List of test cases as (case description, input course name, course data, list of meeting data, status code, expected JSON output)
-retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, [MeetTime], Int, String)]
+retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, [(Meeting, [Times])], Int, String)]
 retrieveCourseTestCases =
     [
         ( "Course exists with meeting times, and other meeting times exist"
@@ -46,8 +46,8 @@ retrieveCourseTestCases =
             , ("videoUrls", "https://example.com/video1, https://example.com/video2")
             ]
         ,
-            [ MeetTime
-                Meeting
+            [
+                ( Meeting
                     { meetingCode = "STA238"
                     , meetingSession = "F"
                     , meetingSection = "LEC0101"
@@ -57,27 +57,27 @@ retrieveCourseTestCases =
                     , meetingWait = 0
                     , meetingExtra = 0
                     }
-                [ \meetingId ->
-                    Times
+                ,
+                    [ Times
                         { timesSession = Just "20269"
                         , timesWeekDay = 0.0
                         , timesStartHour = 10.0
                         , timesEndHour = 11.0
-                        , timesMeeting = meetingId
+                        , timesMeeting = placeholderMeetingId
                         , timesLocation = Just "MP"
                         }
-                , \meetingId ->
-                    Times
+                    , Times
                         { timesSession = Just "20269"
                         , timesWeekDay = 2.0
                         , timesStartHour = 13.0
                         , timesEndHour = 14.0
-                        , timesMeeting = meetingId
+                        , timesMeeting = placeholderMeetingId
                         , timesLocation = Just "SS"
                         }
-                ]
-            , MeetTime
-                Meeting
+                    ]
+                )
+            ,
+                ( Meeting
                     { meetingCode = "STA239"
                     , meetingSession = "S"
                     , meetingSection = "LEC0201"
@@ -87,25 +87,25 @@ retrieveCourseTestCases =
                     , meetingWait = 0
                     , meetingExtra = 0
                     }
-                [ \meetingId ->
-                    Times
+                ,
+                    [ Times
                         { timesSession = Just "20271"
                         , timesWeekDay = 1.0
                         , timesStartHour = 10.0
                         , timesEndHour = 11.0
-                        , timesMeeting = meetingId
+                        , timesMeeting = placeholderMeetingId
                         , timesLocation = Just "WW"
                         }
-                , \meetingId ->
-                    Times
+                    , Times
                         { timesSession = Just "20271"
                         , timesWeekDay = 4.0
                         , timesStartHour = 13.0
                         , timesEndHour = 14.0
-                        , timesMeeting = meetingId
+                        , timesMeeting = placeholderMeetingId
                         , timesLocation = Just "SS"
                         }
-                ]
+                    ]
+                )
             ]
         , 200
         , "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"startHour\":10,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"20269\",\"weekDay\":0},{\"endHour\":14,\"startHour\":13,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"20269\",\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prep\":null,\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
@@ -132,8 +132,8 @@ retrieveCourseTestCases =
             , ("videoUrls", "https://example.com/video1, https://example.com/video2")
             ]
         ,
-            [ MeetTime
-                Meeting
+            [
+                ( Meeting
                     { meetingCode = "STA238"
                     , meetingSession = "F"
                     , meetingSection = "LEC0101"
@@ -143,25 +143,25 @@ retrieveCourseTestCases =
                     , meetingWait = 0
                     , meetingExtra = 0
                     }
-                [ \meetingId ->
-                    Times
+                ,
+                    [ Times
                         { timesSession = Just "20269"
                         , timesWeekDay = 0.0
                         , timesStartHour = 10.0
                         , timesEndHour = 11.0
-                        , timesMeeting = meetingId
+                        , timesMeeting = placeholderMeetingId
                         , timesLocation = Just "MP"
                         }
-                , \meetingId ->
-                    Times
+                    , Times
                         { timesSession = Just "20269"
                         , timesWeekDay = 2.0
                         , timesStartHour = 13.0
                         , timesEndHour = 14.0
-                        , timesMeeting = meetingId
+                        , timesMeeting = placeholderMeetingId
                         , timesLocation = Just "SS"
                         }
-                ]
+                    ]
+                )
             ]
         , 200
         , "{\"allMeetingTimes\":[{\"meetData\":{\"cap\":50,\"code\":\"STA238\",\"enrol\":15,\"extra\":0,\"instructor\":\"Instructor Name\",\"section\":\"LEC0101\",\"session\":\"F\",\"wait\":0},\"timeData\":[{\"endHour\":11,\"startHour\":10,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"MP\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"MP\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"20269\",\"weekDay\":0},{\"endHour\":14,\"startHour\":13,\"timeLocation\":{\"buildingAddress\":\"N/A\",\"buildingCode\":\"SS\",\"buildingLat\":1,\"buildingLng\":1,\"buildingName\":\"SS\",\"buildingPostalCode\":\"A1A 1A1\"},\"timeSession\":\"20269\",\"weekDay\":2}]}],\"breadth\":null,\"coreqs\":\"CSC108H1/  CSC110Y1/  CSC148H1 *Note: the corequisite may be completed either concurrently or in advance.\",\"description\":\"An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.\",\"distribution\":null,\"exclusions\":\"ECO220Y1/  ECO227Y1/  GGR270H1/  PSY201H1/  SOC300H1/  SOC202H1/  SOC252H1/  STA220H1/  STA221H1/  STA255H1/  STA248H1/  STA261H1/  STA288H1/  EEB225H1/  STAB22H3/  STAB27H3/  STAB57H3/  STA220H5/  STA221H5/  STA258H5/  STA260H5/  ECO220Y5/  ECO227Y5\",\"name\":\"STA238H1\",\"prep\":null,\"prereqString\":\"STA237H1/  STA247H1/  STA257H1/  STAB52H3/  STA256H5\",\"title\":\"Probability, Statistics and Data Analysis II\",\"videoUrls\":[\"https://example.com/video1\",\"https://example.com/video2\"]}"
@@ -235,7 +235,7 @@ retrieveCourseTestCases =
     ]
 
 -- | Run a test case (case, input, expected status code, expected output) on the retrieveCourse function.
-runRetrieveCourseTest :: (String, T.Text, Map.Map T.Text T.Text, [MeetTime], Int, String) -> TestTree
+runRetrieveCourseTest :: (String, T.Text, Map.Map T.Text T.Text, [(Meeting, [Times])], Int, String) -> TestTree
 runRetrieveCourseTest (label, courseName, courseData, meetingTimes, expectedCode, expectedBody) =
     testCase label $ do
         let currCourseName = fromMaybe "" $ Map.lookup "name" courseData
@@ -283,18 +283,22 @@ runRetrieveCourseTests :: [TestTree]
 runRetrieveCourseTests = map runRetrieveCourseTest retrieveCourseTestCases
 
 -- | Helper function to insert courses into the database
-insertCourses :: [T.Text] -> SqlPersistM ()
-insertCourses = mapM_ insertCourse
+insertTimetableData :: [T.Text] -> SqlPersistM ()
+insertTimetableData = mapM_ insertCourse
   where
     insertCourse code = insert_ (Course code Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing [])
 
--- | Helper function to insert MeetTimes into the database
-insertMeetingTimes :: [MeetTime] -> SqlPersistM ()
+-- | Placeholder key for the test Times, replaced with the real key when the Meeting is inserted
+placeholderMeetingId :: MeetingId
+placeholderMeetingId = toSqlKey 0
+
+-- | Helper function to insert meetings and their times into the database
+insertMeetingTimes :: [(Meeting, [Times])] -> SqlPersistM ()
 insertMeetingTimes = mapM_ insertMeeting
   where
-    insertMeeting (MeetTime meetingData meetingTimeFunctions) = do
+    insertMeeting (meetingData, meetingTimes) = do
         meetingKey <- insert meetingData
-        insertMany_ $ map ($ meetingKey) meetingTimeFunctions
+        insertMany_ $ map (\t -> t{timesMeeting = meetingKey}) meetingTimes
 
 -- | Helper function to insert dummy buildings from a list of codes
 insertBuildings :: [T.Text] -> SqlPersistM ()
@@ -311,12 +315,9 @@ insertBuildings = mapM_ insertBuilding
                 , buildingLng = 1.0
                 }
 
--- | Helper function to get a list of unique locations involved in a MeetTime
-getUniqueBuildings :: [MeetTime] -> [T.Text]
-getUniqueBuildings = nub . concatMap getMeetBuildings
-  where
-    getMeetBuildings (MeetTime _ timeFunctions) =
-        mapMaybe (\timeFn -> timesLocation (timeFn (toSqlKey 0))) timeFunctions
+-- | Helper function to get a list of unique locations involved in the given meetings
+getUniqueBuildings :: [(Meeting, [Times])] -> [T.Text]
+getUniqueBuildings = nub . concatMap (mapMaybe timesLocation . snd)
 
 -- | List of test cases as (label, input courses, expected output)
 indexTestCases :: [(String, [T.Text], String)]
@@ -336,7 +337,7 @@ runIndexTest (label, courses, expected) =
     testCase label $ do
         runDb $ do
             clearDatabase
-            insertCourses courses
+            insertTimetableData courses
         response <- runServerPart Controllers.Course.index
         let actual = BL.unpack $ rsBody response
         assertEqual ("Unexpected response body for " ++ label) expected actual
