@@ -98,7 +98,7 @@ jobs:
 
       - name: Generate documentation
         run: |
-          stack --allow-different-user exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --optghc=-XLambdaCase --ignore-all-exports app/Main.hs
+          stack --allow-different-user exec haddock -- -o doc -h --optghc=-iapp --optghc=-XOverloadedStrings --optghc=-XPartialTypeSignatures --optghc=-XScopedTypeVariables --optghc=-XLambdaCase --ignore-all-exports exe/Main.hs
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v7
