@@ -82,7 +82,7 @@ _For more information on the `-p` argument, see https://github.com/UnkindPartiti
 If you are contributing to Courseography, you should run the following to install and test our pre-commit hooks:
 
 1. `pnpm exec husky`
-2. `stack install hlint`
+2. `stack build hlint fourmolu`
 3. `pnpm exec lint-staged` (this will run the pre-commit hooks; make sure that it runs without errors)
 
 Also follow these steps to get IDE like support for Haskell through [Haskell Language Server (HLS)](https://haskell-language-server.readthedocs.io/en/stable/)
