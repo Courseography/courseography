@@ -25,15 +25,15 @@ export default function Sidebar({
   sidebarItemClick,
   onHover,
   onMouseLeave,
-}: SidebarProps) {
+}: SidebarProps): React.JSX.Element {
   const [collapsed, setCollapsed] = useState(true)
   const [results, setResults] = useState<Course[] | undefined>([])
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (): void => {
     setCollapsed(!collapsed)
   }
 
-  const filteredSearch = (query: string) => {
+  const filteredSearch = (query: string): Course[] | undefined => {
     if (!query || !courses) {
       return
     }
@@ -56,7 +56,7 @@ export default function Sidebar({
    *      "CSC999" will resolve to `null`
    * @return course node id
    */
-  const courseIdFromLabel = (courseLabel: string) => {
+  const courseIdFromLabel = (courseLabel: string): string | null => {
     for (let i = 0; i < courses.length; i++) {
       if (courses[i][1] === courseLabel) {
         return courses[i][0]
@@ -70,7 +70,7 @@ export default function Sidebar({
    * Render the FCE counter above the sidebar on the left side.
    * @return FCE to the DOM
    */
-  const renderFCE = () => {
+  const renderFCE = (): React.JSX.Element => {
     const fceString = Number.isInteger(fceCount) ? fceCount + ".0" : fceCount
 
     return (
@@ -84,7 +84,7 @@ export default function Sidebar({
    * Render the dropdown results within the sidebar dropdown.
    * @return Searchbar to the DOM
    */
-  const renderDropdown = () => {
+  const renderDropdown = (): React.JSX.Element | undefined => {
     if (courses) {
       const showDropdown = results ? "" : "hidden"
       const masterDropdown = `${showDropdown} search-dropdown`
@@ -112,7 +112,7 @@ export default function Sidebar({
    * Render courses that are in the sidebar.
    * @return list of div's for each course that is active
    */
-  const renderActiveCourses = () => {
+  const renderActiveCourses = (): React.JSX.Element => {
     const temp = activeCourses ? [...activeCourses] : []
     // sort the list of rendered courses, alphabetically
     temp.sort((a, b) => a.localeCompare(b))
