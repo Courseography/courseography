@@ -1,6 +1,6 @@
 import React from "react"
 import { render, screen, cleanup } from "@testing-library/react"
-import { NavBar } from "../NavBar.js.jsx"
+import { NavBar } from "../NavBar"
 import userEvent from "@testing-library/user-event"
 
 describe("test that navbar logo and items render correctly", () => {

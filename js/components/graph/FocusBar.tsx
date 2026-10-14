@@ -1,6 +1,11 @@
-import React from "react"
-import PropTypes from "prop-types"
+import { useState } from "react"
 import FocusTab from "./FocusTab"
+
+interface FocusBarProps {
+  focusBarEnabled: boolean
+  highlightFocus: (id: string) => void
+  currFocus: string | null
+}
 
 // These lists are in reverse order to what ends up appearing on the screen
 const computerScienceFocusLabels = [
@@ -18,8 +23,12 @@ const computerScienceFocusLabels = [
 /**
  * React component representing the focus menu bar
  */
-export default function FocusBar({ focusBarEnabled, highlightFocus, currFocus }) {
-  const [open, setOpen] = React.useState(false)
+export default function FocusBar({
+  focusBarEnabled,
+  highlightFocus,
+  currFocus,
+}: FocusBarProps) {
+  const [open, setOpen] = useState(false)
 
   /**
    * Changes whether the focus bar is open or not
@@ -60,10 +69,4 @@ export default function FocusBar({ focusBarEnabled, highlightFocus, currFocus })
       <div className="focuses-list">{open && generateFocusTabs()}</div>
     </div>
   )
-}
-
-FocusBar.propTypes = {
-  focusBarEnabled: PropTypes.bool,
-  highlightFocus: PropTypes.func,
-  currFocus: PropTypes.string,
 }

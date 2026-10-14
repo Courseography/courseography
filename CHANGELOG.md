@@ -10,6 +10,7 @@
 
 ### 🔧 Internal changes
 
+- Migrated `Sidebar.js`, `FocusBar.js`, and `NavBar.js.jsx` to TypeScript
 - Removed `Time'` data type in favour of `(MeetingId -> Times)` function type in `Database.Tables`
 - Refactored `Database.Tables.MeetTime'` into `Models.Meeting` and renamed it to `MeetingData`
 - Refactored `Database.Tables.Time` into `Models.Time` and renamed it to `TimeData`
@@ -17,7 +18,7 @@
 - Added a test case for the getGraphJSON function in `Controllers/Graph`
 - Migrated JS package manager from yarn to pnpm
 - Updated `react-leaflet` to v5.0.0 and `@eslint/compat` to v2.1.0
-- Added peer dependency overrides for `eslint-plugin-react` (for `eslint` v10) and `@babel/plugin-syntax-*` (for `@babel/core` v8.0.1
+- Added peer dependency overrides for `eslint-plugin-react` (for `eslint` v10) and `@babel/plugin-syntax-*` (for `@babel/core` v8.0.1)
 - Set `NODE_ENV=production` for webpack `build` command
 - Fixed dynamic graph centering bug by updating `parseTransform` in `app/Svg/Parser.hs` to parse multiple transform functions and removing `getShapesMinXY` in `js/components/graph/Graph.js`
 - Switched CI provider from CircleCI to GitHub Actions

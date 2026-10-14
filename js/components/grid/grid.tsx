@@ -11,7 +11,7 @@ import {
   ModuleRegistry,
   provideGlobalGridOptions,
 } from "ag-grid-community"
-import { NavBar } from "../common/NavBar.js.jsx"
+import { NavBar } from "../common/NavBar"
 
 // Register all community features
 ModuleRegistry.registerModules([AllCommunityModule])

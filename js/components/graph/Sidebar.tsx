@@ -1,6 +1,19 @@
-import React from "react"
-import PropTypes from "prop-types"
+import { useState } from "react"
 import Button from "./Button"
+
+type Course = [courseId: string, courseLabel: string]
+
+interface SidebarProps {
+  fceCount: number
+  reset?: () => void
+  activeCourses: Set<string>
+  courses: Course[]
+  courseClick?: (courseId: string | null) => void
+  xClick?: (courseId: string | null) => void
+  sidebarItemClick?: () => void
+  onHover?: () => void
+  onMouseLeave?: () => void
+}
 
 export default function Sidebar({
   fceCount,
@@ -12,15 +25,15 @@ export default function Sidebar({
   sidebarItemClick,
   onHover,
   onMouseLeave,
-}) {
-  const [collapsed, setCollapsed] = React.useState(true)
-  const [results, setResults] = React.useState([])
+}: SidebarProps): React.JSX.Element {
+  const [collapsed, setCollapsed] = useState(true)
+  const [results, setResults] = useState<Course[] | undefined>([])
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (): void => {
     setCollapsed(!collapsed)
   }
 
-  const filteredSearch = query => {
+  const filteredSearch = (query: string): Course[] | undefined => {
     if (!query || !courses) {
       return
     }
@@ -41,9 +54,9 @@ export default function Sidebar({
    * If an invalid course label is supplied, `null` will be returned.
    * e.g. "CSC263/265" will resolve to "csc263265"
    *      "CSC999" will resolve to `null`
-   * @return {string} course node id
+   * @return course node id
    */
-  const courseIdFromLabel = courseLabel => {
+  const courseIdFromLabel = (courseLabel: string): string | null => {
     for (let i = 0; i < courses.length; i++) {
       if (courses[i][1] === courseLabel) {
         return courses[i][0]
@@ -55,9 +68,9 @@ export default function Sidebar({
   // Sidebar rendering methods
   /**
    * Render the FCE counter above the sidebar on the left side.
-   * @return {HTMLDivElement} FCE to the DOM
+   * @return FCE to the DOM
    */
-  const renderFCE = () => {
+  const renderFCE = (): React.JSX.Element => {
     const fceString = Number.isInteger(fceCount) ? fceCount + ".0" : fceCount
 
     return (
@@ -69,9 +82,9 @@ export default function Sidebar({
 
   /**
    * Render the dropdown results within the sidebar dropdown.
-   * @return {HTMLDivElement} Searchbar to the DOM
+   * @return Searchbar to the DOM
    */
-  const renderDropdown = () => {
+  const renderDropdown = (): React.JSX.Element | undefined => {
     if (courses) {
       const showDropdown = results ? "" : "hidden"
       const masterDropdown = `${showDropdown} search-dropdown`
@@ -97,9 +110,9 @@ export default function Sidebar({
 
   /**
    * Render courses that are in the sidebar.
-   * @return {HTMLBodyElement} list of div's for each course that is active
+   * @return list of div's for each course that is active
    */
-  const renderActiveCourses = () => {
+  const renderActiveCourses = (): React.JSX.Element => {
     const temp = activeCourses ? [...activeCourses] : []
     // sort the list of rendered courses, alphabetically
     temp.sort((a, b) => a.localeCompare(b))
@@ -111,14 +124,14 @@ export default function Sidebar({
               key={`active ${course}`}
               data-testid={`test ${course}`}
               onClick={() => {
-                courseClick(courseIdFromLabel(course))
+                courseClick?.(courseIdFromLabel(course))
               }}
               className="course-selection"
               onMouseEnter={onHover}
               onMouseLeave={onMouseLeave}
             >
               {course}
-              <Button text="X" mouseDown={() => xClick(courseIdFromLabel(course))} />
+              <Button text="X" mouseDown={() => xClick?.(courseIdFromLabel(course))} />
             </div>
           )
         })}
@@ -158,7 +171,7 @@ export default function Sidebar({
         <button
           className="reset-selections"
           data-testid="test-reset"
-          onClick={() => reset()}
+          onClick={() => reset?.()}
         >
           Reset Selections
         </button>
@@ -172,16 +185,4 @@ export default function Sidebar({
       </div>
     </div>
   )
-}
-
-Sidebar.propTypes = {
-  fceCount: PropTypes.number,
-  reset: PropTypes.func,
-  activeCourses: PropTypes.instanceOf(Set),
-  courses: PropTypes.array,
-  courseClick: PropTypes.func,
-  xClick: PropTypes.func,
-  sidebarItemClick: PropTypes.func,
-  onHover: PropTypes.func,
-  onMouseLeave: PropTypes.func,
 }
