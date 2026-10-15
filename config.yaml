@@ -13,6 +13,10 @@ genCssPath: "./public/style/"
 # URLs
 timetableUrl: "https://ttb.utoronto.ca/"
 timetableApiUrl: "https://api.easi.utoronto.ca/ttb/getPageableCourses"
+timetableSessions:
+  - "20269"
+  - "20271"
+  - "20269-20271"
 fasCalendarUrl: "https://artsci.calendar.utoronto.ca/"
 programsUrl: "https://artsci.calendar.utoronto.ca/listing-program-subject-areas"
 
