@@ -34,7 +34,7 @@ parseTimetable = do
 makeRequest :: Int -> IO ByteString
 makeRequest pageNum = do
     -- set up the request
-    let reqBody = createReqBody pageNum
+    reqBody <- createReqBody pageNum
     timetableApi <- liftIO timetableApiUrl
     request <- liftIO $ parseRequest (T.unpack timetableApi)
     let request' = request{method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}
