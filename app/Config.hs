@@ -51,6 +51,7 @@ data Config = Config
     , timetableApiUrlValue :: Text
     , fasCalendarUrlValue :: String
     , programsUrlValue :: String
+    , timetableSessionsValue :: [T.Text]
     , fallStartDateValue :: Day
     , fallEndDateValue :: Day
     , winterStartDateValue :: Day
@@ -73,6 +74,7 @@ instance FromJSON Config where
             <*> obj .: "timetableApiUrl"
             <*> obj .: "fasCalendarUrl"
             <*> obj .: "programsUrl"
+            <*> obj .: "timetableSessions"
             <*> obj .: "fallStartDate"
             <*> obj .: "fallEndDate"
             <*> obj .: "winterStartDate"
@@ -162,31 +164,33 @@ programsUrl = programsUrlValue <$> loadConfig
 -- HTTP REQUEST STRINGS
 
 -- | Create the body for the HTTP request based on the page
-createReqBody :: Int -> Value
-createReqBody page =
-    object
-        [ "campuses" .= ([] :: [T.Text])
-        , "courseCodeAndTitleProps"
-            .= object
-                [ "courseCode" .= ("" :: T.Text)
-                , "courseSectionCode" .= ("" :: T.Text)
-                , "courseTitle" .= ("" :: T.Text)
-                , "searchCourseDescription" .= True
-                ]
-        , "courseLevels" .= ([] :: [T.Text])
-        , "creditWeights" .= ([] :: [T.Text])
-        , "dayPreferences" .= ([] :: [T.Text])
-        , "deliveryModes" .= ([] :: [T.Text])
-        , "departmentProps" .= ([] :: [T.Text])
-        , "direction" .= ("asc" :: T.Text)
-        , "divisions" .= (["ARTSC"] :: [T.Text])
-        , "instructor" .= ("" :: T.Text)
-        , "page" .= page
-        , "pageSize" .= (300 :: Int)
-        , "requirementProps" .= ([] :: [T.Text])
-        , "sessions" .= (["20269", "20271", "20269-20271"] :: [T.Text])
-        , "timePreferences" .= ([] :: [T.Text])
-        ]
+createReqBody :: Int -> IO Value
+createReqBody page = do
+    sessions <- timetableSessionsValue <$> loadConfig
+    return $
+        object
+            [ "campuses" .= ([] :: [T.Text])
+            , "courseCodeAndTitleProps"
+                .= object
+                    [ "courseCode" .= ("" :: T.Text)
+                    , "courseSectionCode" .= ("" :: T.Text)
+                    , "courseTitle" .= ("" :: T.Text)
+                    , "searchCourseDescription" .= True
+                    ]
+            , "courseLevels" .= ([] :: [T.Text])
+            , "creditWeights" .= ([] :: [T.Text])
+            , "dayPreferences" .= ([] :: [T.Text])
+            , "deliveryModes" .= ([] :: [T.Text])
+            , "departmentProps" .= ([] :: [T.Text])
+            , "direction" .= ("asc" :: T.Text)
+            , "divisions" .= (["ARTSC"] :: [T.Text])
+            , "instructor" .= ("" :: T.Text)
+            , "page" .= page
+            , "pageSize" .= (300 :: Int)
+            , "requirementProps" .= ([] :: [T.Text])
+            , "sessions" .= sessions
+            , "timePreferences" .= ([] :: [T.Text])
+            ]
 
 -- | The headers for the HTTP request
 reqHeaders :: RequestHeaders

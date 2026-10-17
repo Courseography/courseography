@@ -16,6 +16,12 @@ timetableApiUrl: "https://api.easi.utoronto.ca/ttb/getPageableCourses"
 fasCalendarUrl: "https://artsci.calendar.utoronto.ca/"
 programsUrl: "https://artsci.calendar.utoronto.ca/listing-program-subject-areas"
 
+# Data Fetching Parameters
+timetableSessions:
+  - "20269"
+  - "20271"
+  - "20269-20271"
+
 # Term dates
 fallStartDate: 2026-09-08
 fallEndDate: 2026-12-07

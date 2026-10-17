@@ -35,6 +35,7 @@
 - Refactored backend database `runDb` helper in `app/Config.hs`
 - Refactored `Database.Tables.MeetTime` into `Models.Meeting` and renamed it to `MeetingParsedData`; consolidated and refactored timetable JSON parsing helpers
 - Restructured `courseography.cabal` to separate executable from library, extract shared settings, and remove `hlint`
+- Refactored `createReqBody` in `app/Config.hs` to use session field from `config.yaml`
 
 ## [0.8.1] - 2026-08-10
 
