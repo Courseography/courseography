@@ -49,9 +49,9 @@ data Config = Config
     , genCssPathValue :: String
     , timetableUrlValue :: String
     , timetableApiUrlValue :: Text
-    , timetableSessionsValue :: [T.Text]
     , fasCalendarUrlValue :: String
     , programsUrlValue :: String
+    , timetableSessionsValue :: [T.Text]
     , fallStartDateValue :: Day
     , fallEndDateValue :: Day
     , winterStartDateValue :: Day
@@ -72,9 +72,9 @@ instance FromJSON Config where
             <*> obj .: "genCssPath"
             <*> obj .: "timetableUrl"
             <*> obj .: "timetableApiUrl"
-            <*> obj .: "timetableSessions"
             <*> obj .: "fasCalendarUrl"
             <*> obj .: "programsUrl"
+            <*> obj .: "timetableSessions"
             <*> obj .: "fallStartDate"
             <*> obj .: "fallEndDate"
             <*> obj .: "winterStartDate"
