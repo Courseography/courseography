@@ -1,6 +1,6 @@
 module WebParsing.UtsgJsonParser (parseTimetable, insertTimetableData) where
 
-import Config (createReqBody, reqHeaders, runDb, timetableApiUrl)
+import Config (createReqBody, reqHeaders, runDb, timetableApiUrl, timetableSessions)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (Object, decode, encode, (.!=), (.:), (.:?))
 import Data.Aeson.Types (Parser, parseMaybe)
@@ -34,7 +34,8 @@ parseTimetable = do
 makeRequest :: Int -> IO ByteString
 makeRequest pageNum = do
     -- set up the request
-    let reqBody = createReqBody pageNum
+    sessions <- timetableSessions
+    let reqBody = createReqBody sessions pageNum
     timetableApi <- liftIO timetableApiUrl
     request <- liftIO $ parseRequest (T.unpack timetableApi)
     let request' = request{method = "POST", requestBody = RequestBodyLBS $ encode reqBody, requestHeaders = reqHeaders}

@@ -17,6 +17,7 @@ module Config (
     timetableApiUrl,
     fasCalendarUrl,
     programsUrl,
+    timetableSessions,
     createReqBody,
     reqHeaders,
     fallStartDate,
@@ -51,6 +52,7 @@ data Config = Config
     , timetableApiUrlValue :: Text
     , fasCalendarUrlValue :: String
     , programsUrlValue :: String
+    , timetableSessionsValue :: [T.Text]
     , fallStartDateValue :: Day
     , fallEndDateValue :: Day
     , winterStartDateValue :: Day
@@ -73,6 +75,7 @@ instance FromJSON Config where
             <*> obj .: "timetableApiUrl"
             <*> obj .: "fasCalendarUrl"
             <*> obj .: "programsUrl"
+            <*> obj .: "timetableSessions"
             <*> obj .: "fallStartDate"
             <*> obj .: "fallEndDate"
             <*> obj .: "winterStartDate"
@@ -159,11 +162,17 @@ fasCalendarUrl = fasCalendarUrlValue <$> loadConfig
 programsUrl :: IO String
 programsUrl = programsUrlValue <$> loadConfig
 
+-- DATA FETCHING PARAMETERS
+
+-- | The sessions field for the timetable API
+timetableSessions :: IO [T.Text]
+timetableSessions = timetableSessionsValue <$> loadConfig
+
 -- HTTP REQUEST STRINGS
 
 -- | Create the body for the HTTP request based on the page
-createReqBody :: Int -> Value
-createReqBody page =
+createReqBody :: [T.Text] -> Int -> Value
+createReqBody sessions page =
     object
         [ "campuses" .= ([] :: [T.Text])
         , "courseCodeAndTitleProps"
@@ -184,7 +193,7 @@ createReqBody page =
         , "page" .= page
         , "pageSize" .= (300 :: Int)
         , "requirementProps" .= ([] :: [T.Text])
-        , "sessions" .= (["20269", "20271", "20269-20271"] :: [T.Text])
+        , "sessions" .= sessions
         , "timePreferences" .= ([] :: [T.Text])
         ]
 
