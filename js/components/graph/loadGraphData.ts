@@ -79,13 +79,13 @@ export function loadGraphData(data: GraphRawData): LoadedGraphData {
   const outEdgesObj: Record<string, string[]> = {}
   const storedNodes: Set<string> = new Set()
 
-  data.texts.forEach(entry => {
+  data.texts.forEach((entry: GraphLabelEntry) => {
     if (entry.rId.startsWith("tspan")) {
       labelsJSON[entry.rId] = entry
     }
   })
 
-  data.shapes.forEach(function (entry) {
+  data.shapes.forEach(function (entry: GraphNodeJSON & { type_: string }) {
     if (entry.type_ === "Node") {
       nodesJSON[entry.id_] = entry
     } else if (entry.type_ === "Hybrid") {
@@ -96,7 +96,7 @@ export function loadGraphData(data: GraphRawData): LoadedGraphData {
     }
   })
 
-  data.paths.forEach(function (entry) {
+  data.paths.forEach(function (entry: GraphPathEntry) {
     if (entry.isRegion) {
       regionsJSON[entry.id_] = entry
     } else {
@@ -107,7 +107,7 @@ export function loadGraphData(data: GraphRawData): LoadedGraphData {
   // The duplicate filter is a temporary fix, as previously there were two nodes, Hybrid and Node,
   // that were placed in the same spot on some graphs where there should be only a Hybrid node.
   const noDuplicatesNodesJSON: Record<string, GraphNodeJSON> = {}
-  Object.values(nodesJSON).forEach(node => {
+  Object.values(nodesJSON).forEach((node: GraphNodeJSON) => {
     if (!(node.id_ in parentsObj)) {
       parentsObj[node.id_] = []
       inEdgesObj[node.id_] = []
@@ -122,7 +122,7 @@ export function loadGraphData(data: GraphRawData): LoadedGraphData {
     }
   })
 
-  Object.values(hybridsJSON).forEach(hybrid => {
+  Object.values(hybridsJSON).forEach((hybrid: GraphNodeJSON) => {
     childrenObj[hybrid.id_] = []
     outEdgesObj[hybrid.id_] = []
     const nodesList = Object.values(nodesJSON)
@@ -137,7 +137,7 @@ export function loadGraphData(data: GraphRawData): LoadedGraphData {
     }
   })
 
-  Object.values(edgesJSON).forEach(edge => {
+  Object.values(edgesJSON).forEach((edge: GraphEdgeEntry) => {
     if (edge.target in parentsObj && edge.target in inEdgesObj) {
       parentsObj[edge.target].push(edge.source)
       inEdgesObj[edge.target].push(edge.id_)
@@ -149,12 +149,12 @@ export function loadGraphData(data: GraphRawData): LoadedGraphData {
     }
   })
 
-  Object.keys(boolsJSON).forEach(boolId => {
+  Object.keys(boolsJSON).forEach((boolId: string) => {
     const parents: string[] = []
     const childs: string[] = []
     const outEdges: string[] = []
     const inEdges: string[] = []
-    Object.values(edgesJSON).forEach(edge => {
+    Object.values(edgesJSON).forEach((edge: GraphEdgeEntry) => {
       if (boolId === edge.target) {
         parents.push(edge.source)
         inEdges.push(edge.id_)
@@ -169,7 +169,7 @@ export function loadGraphData(data: GraphRawData): LoadedGraphData {
     inEdgesObj[boolId] = inEdges
   })
 
-  Object.keys(noDuplicatesNodesJSON).forEach(nodeId => {
+  Object.keys(noDuplicatesNodesJSON).forEach((nodeId: string) => {
     let state = localStorage.getItem(nodeId)
     if (state === null) {
       state = parentsObj[nodeId].length === 0 ? "takeable" : "inactive"
@@ -181,7 +181,7 @@ export function loadGraphData(data: GraphRawData): LoadedGraphData {
   })
 
   const edgesStatus: Record<string, string> = Object.values(edgesJSON).reduce(
-    (acc, curr) => {
+    (acc: Record<string, string>, curr: GraphEdgeEntry) => {
       const source = curr.source
       const target = curr.target
       let status: string
