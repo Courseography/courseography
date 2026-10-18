@@ -10,8 +10,8 @@ import { GraphNodeJSON } from "./types"
  * @param childrenObj
  */
 export function populateHybridRelatives(
-  hybridNode: GraphNodeJSON & { id_: string },
-  nodesJSON: (GraphNodeJSON & { id_: string })[],
+  hybridNode: GraphNodeJSON,
+  nodesJSON: GraphNodeJSON[],
   parentsObj: Record<string, string[]>,
   childrenObj: Record<string, string[]>
 ): void {
@@ -58,8 +58,8 @@ export function populateHybridRelatives(
  */
 export function findRelationship(
   course: string,
-  nodesJSON: (GraphNodeJSON & { id_: string })[]
-): (GraphNodeJSON & { id_: string }) | undefined {
+  nodesJSON: GraphNodeJSON[]
+): GraphNodeJSON | undefined {
   return nodesJSON.find(
     n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course))
   )

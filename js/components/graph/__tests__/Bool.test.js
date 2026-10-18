@@ -24,7 +24,7 @@ describe("AND Bool", () => {
         fill: "",
         graph: 1,
         height: 14.7368002,
-        id: "bool1",
+        id_: "bool1",
         pos: [1020.015148, 243.51310800000002],
         stroke: "",
         text: [
@@ -140,7 +140,7 @@ describe("OR Bool", () => {
         fill: "",
         graph: 1,
         height: 14.7368002,
-        id: "bool1",
+        id_: "bool1",
         pos: [1020.015148, 243.51310800000002],
         stroke: "",
         text: [

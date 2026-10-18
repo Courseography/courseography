@@ -21,7 +21,7 @@ type GraphPathEntry = GraphEdgeEntry | GraphRegionEntry
 
 interface GraphRawData {
   texts: GraphLabelEntry[]
-  shapes: (GraphNodeJSON & { id_: string; type_: string })[]
+  shapes: (GraphNodeJSON & { type_: string })[]
   paths: GraphPathEntry[]
   width: number
   height: number
@@ -42,9 +42,9 @@ export interface GraphNodeStatus {
 export interface LoadedGraphData {
   labelsJSON: Record<string, GraphLabelEntry>
   regionsJSON: Record<string, GraphRegionEntry>
-  nodesJSON: Record<string, GraphNodeJSON & { id_: string }>
-  hybridsJSON: Record<string, GraphNodeJSON & { id_: string }>
-  boolsJSON: Record<string, GraphNodeJSON & { id_: string }>
+  nodesJSON: Record<string, GraphNodeJSON>
+  hybridsJSON: Record<string, GraphNodeJSON>
+  boolsJSON: Record<string, GraphNodeJSON>
   boolsStatus: Record<string, string>
   edgesJSON: Record<string, GraphEdgeEntry>
   width: number
@@ -67,10 +67,10 @@ export interface LoadedGraphData {
 export function loadGraphData(data: GraphRawData): LoadedGraphData {
   const labelsJSON: Record<string, GraphLabelEntry> = {}
   const regionsJSON: Record<string, GraphRegionEntry> = {}
-  const nodesJSON: Record<string, GraphNodeJSON & { id_: string }> = {}
+  const nodesJSON: Record<string, GraphNodeJSON> = {}
   const nodesStatus: Record<string, GraphNodeStatus> = {}
-  const hybridsJSON: Record<string, GraphNodeJSON & { id_: string }> = {}
-  const boolsJSON: Record<string, GraphNodeJSON & { id_: string }> = {}
+  const hybridsJSON: Record<string, GraphNodeJSON> = {}
+  const boolsJSON: Record<string, GraphNodeJSON> = {}
   const boolsStatusObj: Record<string, string> = {}
   const edgesJSON: Record<string, GraphEdgeEntry> = {}
   const parentsObj: Record<string, string[]> = {}
@@ -106,7 +106,7 @@ export function loadGraphData(data: GraphRawData): LoadedGraphData {
 
   // The duplicate filter is a temporary fix, as previously there were two nodes, Hybrid and Node,
   // that were placed in the same spot on some graphs where there should be only a Hybrid node.
-  const noDuplicatesNodesJSON: Record<string, GraphNodeJSON & { id_: string }> = {}
+  const noDuplicatesNodesJSON: Record<string, GraphNodeJSON> = {}
   Object.values(nodesJSON).forEach(node => {
     if (!(node.id_ in parentsObj)) {
       parentsObj[node.id_] = []
