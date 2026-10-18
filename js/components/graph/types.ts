@@ -12,6 +12,7 @@ export interface GraphTextTag {
 /** The SVG shape data for a graph node or boolean (and/or) node. */
 export interface GraphNodeJSON {
   id_?: string
+  type_?: string
   pos: [number, number]
   width: number
   height: number
