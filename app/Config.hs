@@ -17,6 +17,7 @@ module Config (
     timetableApiUrl,
     fasCalendarUrl,
     programsUrl,
+    timetableSessions,
     createReqBody,
     reqHeaders,
     fallStartDate,
@@ -161,36 +162,40 @@ fasCalendarUrl = fasCalendarUrlValue <$> loadConfig
 programsUrl :: IO String
 programsUrl = programsUrlValue <$> loadConfig
 
+-- DATA FETCHING PARAMETERS
+
+-- | The sessions field for the timetable API
+timetableSessions :: IO [T.Text]
+timetableSessions = timetableSessionsValue <$> loadConfig
+
 -- HTTP REQUEST STRINGS
 
 -- | Create the body for the HTTP request based on the page
-createReqBody :: Int -> IO Value
-createReqBody page = do
-    sessions <- timetableSessionsValue <$> loadConfig
-    return $
-        object
-            [ "campuses" .= ([] :: [T.Text])
-            , "courseCodeAndTitleProps"
-                .= object
-                    [ "courseCode" .= ("" :: T.Text)
-                    , "courseSectionCode" .= ("" :: T.Text)
-                    , "courseTitle" .= ("" :: T.Text)
-                    , "searchCourseDescription" .= True
-                    ]
-            , "courseLevels" .= ([] :: [T.Text])
-            , "creditWeights" .= ([] :: [T.Text])
-            , "dayPreferences" .= ([] :: [T.Text])
-            , "deliveryModes" .= ([] :: [T.Text])
-            , "departmentProps" .= ([] :: [T.Text])
-            , "direction" .= ("asc" :: T.Text)
-            , "divisions" .= (["ARTSC"] :: [T.Text])
-            , "instructor" .= ("" :: T.Text)
-            , "page" .= page
-            , "pageSize" .= (300 :: Int)
-            , "requirementProps" .= ([] :: [T.Text])
-            , "sessions" .= sessions
-            , "timePreferences" .= ([] :: [T.Text])
-            ]
+createReqBody :: [T.Text] -> Int -> Value
+createReqBody sessions page =
+    object
+        [ "campuses" .= ([] :: [T.Text])
+        , "courseCodeAndTitleProps"
+            .= object
+                [ "courseCode" .= ("" :: T.Text)
+                , "courseSectionCode" .= ("" :: T.Text)
+                , "courseTitle" .= ("" :: T.Text)
+                , "searchCourseDescription" .= True
+                ]
+        , "courseLevels" .= ([] :: [T.Text])
+        , "creditWeights" .= ([] :: [T.Text])
+        , "dayPreferences" .= ([] :: [T.Text])
+        , "deliveryModes" .= ([] :: [T.Text])
+        , "departmentProps" .= ([] :: [T.Text])
+        , "direction" .= ("asc" :: T.Text)
+        , "divisions" .= (["ARTSC"] :: [T.Text])
+        , "instructor" .= ("" :: T.Text)
+        , "page" .= page
+        , "pageSize" .= (300 :: Int)
+        , "requirementProps" .= ([] :: [T.Text])
+        , "sessions" .= sessions
+        , "timePreferences" .= ([] :: [T.Text])
+        ]
 
 -- | The headers for the HTTP request
 reqHeaders :: RequestHeaders
