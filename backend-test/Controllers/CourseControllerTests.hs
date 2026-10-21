@@ -288,7 +288,7 @@ insertTimetableData = mapM_ insertCourse
   where
     insertCourse code = insert_ (Course code Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing [])
 
--- | Placeholder key for the test Times, replaced with the real key when the Meeting is inserted
+-- | Placeholder key for test Time records, replaced with the real key when the Meeting is inserted
 placeholderMeetingId :: MeetingId
 placeholderMeetingId = toSqlKey 0
 

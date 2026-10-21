@@ -135,7 +135,7 @@ instance FromJSON MeetingParsedData where
         convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
 
 -- | Insert or update a meeting and then delete
---   and re-insert the corresponding Times into the database.
+--   and re-insert the corresponding Time records into the database.
 insertMeetingParsedData :: MeetingParsedData -> SqlPersistM ()
 insertMeetingParsedData (MeetingParsedData meetingData meetingTimeFunctions) = do
     -- Check if the meeting already exists in the meeting table
