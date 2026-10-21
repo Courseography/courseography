@@ -149,7 +149,7 @@ pullDatabase (code, section, session) = runDb $ do
     case meet of
         Nothing -> return Nothing
         Just x -> do
-            allTimes <- selectList [TimesMeeting ==. entityKey x] []
+            allTimes <- selectList [TimeMeeting ==. entityKey x] []
             parsedTime <- mapM (buildTime . entityVal) allTimes
             return $ Just (MeetingData (entityVal x) parsedTime)
   where

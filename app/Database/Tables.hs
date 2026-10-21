@@ -82,7 +82,7 @@ Meeting
     deriving Generic Show Eq
     UniqueMeeting code session section
 
-Times
+Time
     session T.Text Maybe
     weekDay Double
     startHour Double

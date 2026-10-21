@@ -44,6 +44,7 @@ migrationList =
     , MigrationWrapper{version = 3, script = renameCoursesTable}
     , MigrationWrapper{version = 4, script = splitTimes}
     , MigrationWrapper{version = 5, script = addPrepField}
+    , MigrationWrapper{version = 6, script = renameTimesTable}
     ]
 
 -- | Migration script which renames the Post tables to Program
@@ -69,6 +70,11 @@ splitTimes = do
 addPrepField :: Migration
 addPrepField = do
     addMigration True "ALTER TABLE course ADD COLUMN prep VARCHAR NULL;"
+
+-- | Migrate script which renames the Times table to Time
+renameTimesTable :: Migration
+renameTimesTable =
+    addMigration True "ALTER TABLE times RENAME TO time;"
 
 -- | Gets the current version of the database.
 -- If no version is defined, initialize the
