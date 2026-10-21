@@ -110,7 +110,7 @@ clearDatabase :: SqlPersistM ()
 clearDatabase = do
     deleteWhere ([] :: [Filter Department])
     deleteWhere ([] :: [Filter Course])
-    deleteWhere ([] :: [Filter Times])
+    deleteWhere ([] :: [Filter Time])
     deleteWhere ([] :: [Filter Meeting])
     deleteWhere ([] :: [Filter Breadth])
     deleteWhere ([] :: [Filter Distribution])
