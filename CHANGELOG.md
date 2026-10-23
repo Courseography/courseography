@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Changed the colour of hybrid nodes to avoid a visual clash with the darkened background when selecting a focus
+
 ### 🐛 Bug fixes
 
 ### 🔧 Internal changes
@@ -36,6 +38,7 @@
 - Refactored `Database.Tables.MeetTime` into `Models.Meeting` and renamed it to `MeetingParsedData`; consolidated and refactored timetable JSON parsing helpers
 - Restructured `courseography.cabal` to separate executable from library, extract shared settings, and remove `hlint`
 - Refactored `createReqBody` in `app/Config.hs` to use session field from `config.yaml`
+- Changed SVG parsing to leave the `fill` column empty when inserting hybrid nodes into the database
 
 ## [0.8.1] - 2026-08-10
 
