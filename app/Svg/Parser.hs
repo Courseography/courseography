@@ -735,10 +735,13 @@ updateShape ::
     Shape
 updateShape fill r =
     r
-        { shapeFill = let fill' = (if T.null (shapeFill r) || shapeFill r == "none"
-                            then fill
-                            else shapeFill r)
-                      in if fill' == "#888888" then "" else fill'
+        { shapeFill =
+            let fill' =
+                    ( if T.null (shapeFill r) || shapeFill r == "none"
+                        then fill
+                        else shapeFill r
+                    )
+             in if fill' == "#888888" then "" else fill'
         , shapeType_ =
             if fill == "#888888"
                 then Hybrid
