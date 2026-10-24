@@ -1,4 +1,4 @@
-import { CourseModal } from "../react_modal.js.jsx"
+import { getTable } from "../CourseModal"
 /**
  * Test for getTable.
  */
@@ -6,7 +6,6 @@ describe("getTable", () => {
   let actual
   let meetingTime
   let expected
-  const wrapper = new CourseModal({})
 
   describe("The meeting time has only one lecture and the lecture has one occurence", () => {
     beforeEach(() => {
@@ -42,7 +41,7 @@ describe("getTable", () => {
       ]
     })
     test("The information of the lecture is formatted correctly", () => {
-      actual = wrapper.getTable(meetingTime, "F")
+      actual = getTable(meetingTime, "F")
       expected = [
         {
           activity: "LEC0101",
@@ -107,7 +106,7 @@ describe("getTable", () => {
       ]
     })
     test("The occurences of the lecture are sorted by day", () => {
-      actual = wrapper.getTable(meetingTime, "F")
+      actual = getTable(meetingTime, "F")
       expected = [
         {
           activity: "LEC0101",
@@ -173,7 +172,7 @@ describe("getTable", () => {
       ]
     })
     test("Both of the first and second location of the occurence are shown", () => {
-      actual = wrapper.getTable(meetingTime, "Y")
+      actual = getTable(meetingTime, "Y")
       expected = [
         {
           activity: "LEC0101",
@@ -252,7 +251,7 @@ describe("getTable", () => {
       ]
     })
     test("The lectures are sorted by the section", () => {
-      actual = wrapper.getTable(meetingTime, "F")
+      actual = getTable(meetingTime, "F")
       expected = [
         {
           activity: "LEC0101",
@@ -334,7 +333,7 @@ describe("getTable", () => {
       ]
     })
     test("The lecture is shown before the tutorial", () => {
-      actual = wrapper.getTable(meetingTime, "F")
+      actual = getTable(meetingTime, "F")
       expected = [
         {
           activity: "LEC0101",

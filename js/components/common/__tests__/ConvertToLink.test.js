@@ -1,5 +1,5 @@
 import React from "react"
-import { CourseModal } from "../react_modal.js.jsx"
+import { convertToLink } from "../CourseModal"
 
 /**
  * Test for convertToLink.
@@ -8,14 +8,13 @@ describe("ConvertToLink", () => {
   let actual
   let content
   let expected
-  const wrapper = new CourseModal({})
 
   describe("The content has no course names", () => {
     beforeEach(() => {
       content = "The application of logic and proof techniques."
     })
     test("The content is returned as all strings", () => {
-      actual = wrapper.convertToLink(content)
+      actual = convertToLink(content)
       expected = [content]
       expect(actual).toEqual(expected)
     })
@@ -26,7 +25,7 @@ describe("ConvertToLink", () => {
       content = "Certain topics briefly mentioned in CSC165H1 may be covered."
     })
     test("The content is returned as one link tag and several strings", () => {
-      actual = wrapper.convertToLink(content)
+      actual = convertToLink(content)
       expected = [
         "Certain topics briefly mentioned in ",
         <a
@@ -48,7 +47,7 @@ describe("ConvertToLink", () => {
     })
     test("The content is returned as one link tag and several strings \
          (including the symbol after the course name", () => {
-      actual = wrapper.convertToLink(content)
+      actual = convertToLink(content)
       expected = [
         "(60% or higher in ",
         <a
