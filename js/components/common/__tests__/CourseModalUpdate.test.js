@@ -1,5 +1,5 @@
 import { render, screen, cleanup } from "@testing-library/react"
-import { CourseModal } from "../react_modal.js.jsx"
+import { CourseModal } from "../CourseModal"
 import fetchMock from "fetch-mock"
 
 describe("componentDidUpdate", () => {

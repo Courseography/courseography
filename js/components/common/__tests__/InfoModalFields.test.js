@@ -1,6 +1,6 @@
 import React from "react"
 import { render, screen, cleanup } from "@testing-library/react"
-import { Description } from "../react_modal.js.jsx"
+import { Description } from "../Description"
 
 describe("Displays course information fields iff they are non-empty.", () => {
   beforeEach(() => cleanup())

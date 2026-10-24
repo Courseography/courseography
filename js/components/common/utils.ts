@@ -1,16 +1,4 @@
-interface ProgramData {
-  modified: true
-  title: string
-  description: string
-  requirements: string
-  courseList: string[]
-  modifiedTime: string | null
-}
-
-interface ProgramNotModified {
-  modified: false
-}
-
+import { ProgramData, ProgramNotModified } from "./types"
 /**
  * Retrieves a course from file.
  * @param courseName The course code. This + '.txt' is the name of the file.
@@ -75,4 +63,14 @@ function getCourseList(requirements: string): string[] {
   const courseCodeRegex = /[A-Z]{3}[0-9]{3}(?=[HY][135])/g
   const courseList = requirements.match(courseCodeRegex) || []
   return courseList.map(course => course.toLowerCase())
+}
+
+// Helper function to get the string representation of the time
+export function convertTimeToString(time: number): string {
+  const meridiem = time < 12 ? "AM" : "PM"
+
+  if (time % 1 === 0) {
+    return (time === 12 ? 12 : time % 12) + ":00" + meridiem
+  }
+  return ((time === 12.5 ? 12 : Math.floor(time)) % 12) + ":30" + meridiem
 }
