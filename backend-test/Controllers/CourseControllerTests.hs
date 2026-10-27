@@ -15,14 +15,14 @@ import qualified Data.Map as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM, insert, insertMany_, insert_, toSqlKey)
-import Database.Tables (Building (..), Course (..), Meeting (..), MeetingId, Times (..))
+import Database.Tables (Building (..), Course (..), Meeting (..), MeetingId, Time (..))
 import Happstack.Server (rsBody, rsCode)
 import Test.Tasty (TestTree)
 import Test.Tasty.HUnit (assertEqual, testCase)
 import TestHelpers (clearDatabase, mockGetRequest, runServerPart, runServerPartWith, withDatabase)
 
 -- | List of test cases as (case description, input course name, course data, list of meeting data, status code, expected JSON output)
-retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, [(Meeting, [Times])], Int, String)]
+retrieveCourseTestCases :: [(String, T.Text, Map.Map T.Text T.Text, [(Meeting, [Time])], Int, String)]
 retrieveCourseTestCases =
     [
         ( "Course exists with meeting times, and other meeting times exist"
@@ -58,21 +58,21 @@ retrieveCourseTestCases =
                     , meetingExtra = 0
                     }
                 ,
-                    [ Times
-                        { timesSession = Just "20269"
-                        , timesWeekDay = 0.0
-                        , timesStartHour = 10.0
-                        , timesEndHour = 11.0
-                        , timesMeeting = placeholderMeetingId
-                        , timesLocation = Just "MP"
+                    [ Time
+                        { timeSession = Just "20269"
+                        , timeWeekDay = 0.0
+                        , timeStartHour = 10.0
+                        , timeEndHour = 11.0
+                        , timeMeeting = placeholderMeetingId
+                        , timeLocation = Just "MP"
                         }
-                    , Times
-                        { timesSession = Just "20269"
-                        , timesWeekDay = 2.0
-                        , timesStartHour = 13.0
-                        , timesEndHour = 14.0
-                        , timesMeeting = placeholderMeetingId
-                        , timesLocation = Just "SS"
+                    , Time
+                        { timeSession = Just "20269"
+                        , timeWeekDay = 2.0
+                        , timeStartHour = 13.0
+                        , timeEndHour = 14.0
+                        , timeMeeting = placeholderMeetingId
+                        , timeLocation = Just "SS"
                         }
                     ]
                 )
@@ -88,21 +88,21 @@ retrieveCourseTestCases =
                     , meetingExtra = 0
                     }
                 ,
-                    [ Times
-                        { timesSession = Just "20271"
-                        , timesWeekDay = 1.0
-                        , timesStartHour = 10.0
-                        , timesEndHour = 11.0
-                        , timesMeeting = placeholderMeetingId
-                        , timesLocation = Just "WW"
+                    [ Time
+                        { timeSession = Just "20271"
+                        , timeWeekDay = 1.0
+                        , timeStartHour = 10.0
+                        , timeEndHour = 11.0
+                        , timeMeeting = placeholderMeetingId
+                        , timeLocation = Just "WW"
                         }
-                    , Times
-                        { timesSession = Just "20271"
-                        , timesWeekDay = 4.0
-                        , timesStartHour = 13.0
-                        , timesEndHour = 14.0
-                        , timesMeeting = placeholderMeetingId
-                        , timesLocation = Just "SS"
+                    , Time
+                        { timeSession = Just "20271"
+                        , timeWeekDay = 4.0
+                        , timeStartHour = 13.0
+                        , timeEndHour = 14.0
+                        , timeMeeting = placeholderMeetingId
+                        , timeLocation = Just "SS"
                         }
                     ]
                 )
@@ -144,21 +144,21 @@ retrieveCourseTestCases =
                     , meetingExtra = 0
                     }
                 ,
-                    [ Times
-                        { timesSession = Just "20269"
-                        , timesWeekDay = 0.0
-                        , timesStartHour = 10.0
-                        , timesEndHour = 11.0
-                        , timesMeeting = placeholderMeetingId
-                        , timesLocation = Just "MP"
+                    [ Time
+                        { timeSession = Just "20269"
+                        , timeWeekDay = 0.0
+                        , timeStartHour = 10.0
+                        , timeEndHour = 11.0
+                        , timeMeeting = placeholderMeetingId
+                        , timeLocation = Just "MP"
                         }
-                    , Times
-                        { timesSession = Just "20269"
-                        , timesWeekDay = 2.0
-                        , timesStartHour = 13.0
-                        , timesEndHour = 14.0
-                        , timesMeeting = placeholderMeetingId
-                        , timesLocation = Just "SS"
+                    , Time
+                        { timeSession = Just "20269"
+                        , timeWeekDay = 2.0
+                        , timeStartHour = 13.0
+                        , timeEndHour = 14.0
+                        , timeMeeting = placeholderMeetingId
+                        , timeLocation = Just "SS"
                         }
                     ]
                 )
@@ -235,7 +235,7 @@ retrieveCourseTestCases =
     ]
 
 -- | Run a test case (case, input, expected status code, expected output) on the retrieveCourse function.
-runRetrieveCourseTest :: (String, T.Text, Map.Map T.Text T.Text, [(Meeting, [Times])], Int, String) -> TestTree
+runRetrieveCourseTest :: (String, T.Text, Map.Map T.Text T.Text, [(Meeting, [Time])], Int, String) -> TestTree
 runRetrieveCourseTest (label, courseName, courseData, meetingTimes, expectedCode, expectedBody) =
     testCase label $ do
         let currCourseName = fromMaybe "" $ Map.lookup "name" courseData
@@ -288,17 +288,17 @@ insertTimetableData = mapM_ insertCourse
   where
     insertCourse code = insert_ (Course code Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing [])
 
--- | Placeholder key for the test Times, replaced with the real key when the Meeting is inserted
+-- | Placeholder key for test Time records, replaced with the real key when the Meeting is inserted
 placeholderMeetingId :: MeetingId
 placeholderMeetingId = toSqlKey 0
 
 -- | Helper function to insert meetings and their times into the database
-insertMeetingTimes :: [(Meeting, [Times])] -> SqlPersistM ()
+insertMeetingTimes :: [(Meeting, [Time])] -> SqlPersistM ()
 insertMeetingTimes = mapM_ insertMeeting
   where
     insertMeeting (meetingData, meetingTimes) = do
         meetingKey <- insert meetingData
-        insertMany_ $ map (\t -> t{timesMeeting = meetingKey}) meetingTimes
+        insertMany_ $ map (\t -> t{timeMeeting = meetingKey}) meetingTimes
 
 -- | Helper function to insert dummy buildings from a list of codes
 insertBuildings :: [T.Text] -> SqlPersistM ()
@@ -316,8 +316,8 @@ insertBuildings = mapM_ insertBuilding
                 }
 
 -- | Helper function to get a list of unique locations involved in the given meetings
-getUniqueBuildings :: [(Meeting, [Times])] -> [T.Text]
-getUniqueBuildings = nub . concatMap (mapMaybe timesLocation . snd)
+getUniqueBuildings :: [(Meeting, [Time])] -> [T.Text]
+getUniqueBuildings = nub . concatMap (mapMaybe timeLocation . snd)
 
 -- | List of test cases as (label, input courses, expected output)
 indexTestCases :: [(String, [T.Text], String)]

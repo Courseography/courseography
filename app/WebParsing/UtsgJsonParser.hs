@@ -73,7 +73,7 @@ insertTimetableData respBody =
         return $ map (\m -> m{meetInfo = (meetInfo m){meetingCode = courseCode, meetingSession = session}}) meetingsParsedData
 
 -- | Retrieve timetable information for @page@ and insert/update the corresponding Meeting
---   and Times data into the database. Repeat for all pages in increasing order.
+--   and Time records into the database. Repeat for all pages in increasing order.
 insertTimetablePages :: Int -> SqlPersistM ()
 insertTimetablePages page = do
     respBody <- liftIO $ makeRequest page
