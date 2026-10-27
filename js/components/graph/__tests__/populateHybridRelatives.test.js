@@ -1,4 +1,4 @@
-import { populateHybridRelatives } from "../Graph.js"
+import { populateHybridRelatives } from "../util"
 
 describe("populateHybridRelatives", () => {
   let hybridNode

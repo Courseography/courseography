@@ -8,7 +8,7 @@ interface NodeProps {
   highlightDeps?: boolean
   highlightFocus?: boolean
   hybrid: boolean
-  JSON: GraphNodeJSON & { id_: string }
+  JSON: GraphNodeJSON
   onClick?: () => void
   onMouseEnter?: () => void
   onMouseLeave?: () => void

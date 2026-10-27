@@ -9,7 +9,9 @@ import Node from "./Node"
 import Button from "./Button"
 import InfoBox from "./InfoBox"
 import Sidebar from "./Sidebar"
-import { parseAnd } from "../../util/util"
+import { parseAnd } from "./requirementParser"
+import { findRelationship, numCredits, transformPoint, formatTransform } from "./util"
+import { loadGraphData } from "./loadGraphData"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faMagnifyingGlassMinus,
@@ -124,170 +126,7 @@ export class Graph extends React.Component {
       })
       .then(data => {
         localStorage.setItem("active-graph", graphName)
-        const labelsJSON = {}
-        const regionsJSON = {}
-        const nodesJSON = {}
-        const nodesStatus = {}
-        const hybridsJSON = {}
-        const boolsJSON = {}
-        const boolsStatusObj = {}
-        const edgesJSON = {}
-        const parentsObj = {}
-        const inEdgesObj = {}
-        const childrenObj = {}
-        const outEdgesObj = {}
-        const storedNodes = new Set()
-
-        data.texts.forEach(entry => {
-          if (entry.rId.startsWith("tspan")) {
-            labelsJSON[entry.rId] = entry
-          }
-        })
-
-        data.shapes.forEach(function (entry) {
-          if (entry.type_ === "Node") {
-            nodesJSON[entry.id_] = entry
-          } else if (entry.type_ === "Hybrid") {
-            hybridsJSON[entry.id_] = entry
-          } else if (entry.type_ === "BoolNode") {
-            boolsStatusObj[entry.id_] = localStorage.getItem(entry.id_) || "inactive"
-            boolsJSON[entry.id_] = entry
-          }
-        })
-
-        data.paths.forEach(function (entry) {
-          if (entry.isRegion) {
-            regionsJSON[entry.id_] = entry
-          } else {
-            edgesJSON[entry.id_] = entry
-          }
-        })
-
-        // The duplicate filter is a temporary fix, as previously there were two nodes, Hybrid and Node,
-        // that were placed in the same spot on some graphs where there should be only a Hybrid node.
-        const noDuplicatesNodesJSON = {}
-        Object.values(nodesJSON).forEach(node => {
-          if (!(node.id_ in parentsObj)) {
-            parentsObj[node.id_] = []
-            inEdgesObj[node.id_] = []
-            childrenObj[node.id_] = []
-            outEdgesObj[node.id_] = []
-            // Quickly adding any active nodes from local storage into the selected nodes
-            if (localStorage.getItem(node.id_) === "active") {
-              storedNodes.add(node.text[node.text.length - 1].text)
-            }
-
-            noDuplicatesNodesJSON[node.id_] = node
-          }
-        })
-
-        Object.values(hybridsJSON).forEach(hybrid => {
-          childrenObj[hybrid.id_] = []
-          outEdgesObj[hybrid.id_] = []
-          const nodesList = Object.values(nodesJSON)
-          populateHybridRelatives(hybrid, nodesList, parentsObj, childrenObj)
-          let state = localStorage.getItem(hybrid.id_)
-          if (state === null) {
-            state = parentsObj[hybrid.id_].length === 0 ? "takeable" : "inactive"
-          }
-          nodesStatus[hybrid.id_] = {
-            status: state,
-            selected: ["active", "overridden"].indexOf(state) >= 0,
-          }
-        })
-
-        Object.values(edgesJSON).forEach(edge => {
-          if (edge.target in parentsObj && edge.target in inEdgesObj) {
-            parentsObj[edge.target].push(edge.source)
-            inEdgesObj[edge.target].push(edge.id_)
-          }
-
-          if (edge.source in childrenObj && edge.source in outEdgesObj) {
-            childrenObj[edge.source].push(edge.target)
-            outEdgesObj[edge.source].push(edge.id_)
-          }
-        })
-
-        Object.keys(boolsJSON).forEach(boolId => {
-          const parents = []
-          const childs = []
-          const outEdges = []
-          const inEdges = []
-          Object.values(edgesJSON).forEach(edge => {
-            if (boolId === edge.target) {
-              parents.push(edge.source)
-              inEdges.push(edge.id_)
-            } else if (boolId === edge.source) {
-              childs.push(edge.target)
-              outEdges.push(edge.id_)
-            }
-          })
-          parentsObj[boolId] = parents
-          childrenObj[boolId] = childs
-          outEdgesObj[boolId] = outEdges
-          inEdgesObj[boolId] = inEdges
-        })
-
-        Object.keys(noDuplicatesNodesJSON).forEach(nodeId => {
-          let state = localStorage.getItem(nodeId)
-          if (state === null) {
-            state = parentsObj[nodeId].length === 0 ? "takeable" : "inactive"
-          }
-          nodesStatus[nodeId] = {
-            status: state,
-            selected: ["active", "overridden"].indexOf(state) >= 0,
-          }
-        })
-
-        const edgesStatus = Object.values(edgesJSON).reduce((acc, curr) => {
-          const source = curr.source
-          const target = curr.target
-          let status
-          const isSourceSelected =
-            nodesStatus[source]?.selected || boolsStatusObj[source] === "active"
-
-          const isTargetSelected =
-            nodesStatus[target]?.selected || boolsStatusObj[target] === "active"
-
-          const targetStatus = nodesStatus[target]?.status || boolsStatusObj[target]
-
-          if (!isSourceSelected && targetStatus === "missing") {
-            status = "missing"
-          } else if (!isSourceSelected) {
-            status = "inactive"
-          } else if (!isTargetSelected) {
-            status = "takeable"
-          } else {
-            status = "active"
-          }
-          acc[curr.id_] = status
-          return acc
-        }, {})
-
-        this.setState({
-          labelsJSON: labelsJSON,
-          regionsJSON: regionsJSON,
-          nodesJSON: noDuplicatesNodesJSON,
-          hybridsJSON: hybridsJSON,
-          boolsJSON: boolsJSON,
-          boolsStatus: boolsStatusObj,
-          edgesJSON: edgesJSON,
-          width: data.width,
-          height: data.height,
-          zoomFactor: 1,
-          horizontalPanFactor: 0,
-          verticalPanFactor: 0,
-          graphName: graphName,
-          edgesStatus: edgesStatus,
-          connections: {
-            parents: parentsObj,
-            inEdges: inEdgesObj,
-            children: childrenObj,
-            outEdges: outEdgesObj,
-          },
-          nodesStatus: nodesStatus,
-          selectedNodes: storedNodes,
-        })
+        this.setState({ ...loadGraphData(data), graphName: graphName })
       })
       .catch(err => {
         console.error("Fetch API failed. Here are the headers: ")
@@ -303,7 +142,7 @@ export class Graph extends React.Component {
           !this.state.hybridsJSON[nodeJSON.id_] &&
           this.state.nodesStatus[nodeJSON.id_].selected
         ) {
-          totalFCEs += this.numCredits(nodeJSON.id_)
+          totalFCEs += numCredits(nodeJSON.id_)
         }
       })
       if (this.props.setFCECount) {
@@ -378,7 +217,7 @@ export class Graph extends React.Component {
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const wasSelected = this.state.nodesStatus[courseId].selected
     const temp = [...this.state.selectedNodes]
-    const credits = this.numCredits(courseId)
+    const credits = numCredits(courseId)
 
     this.toggleSelection(courseId)
     if (typeof this.props.incrementFCECount === "function") {
@@ -397,38 +236,13 @@ export class Graph extends React.Component {
     const courseLabel = courseLabelArray[courseLabelArray.length - 1].text
     const wasSelected = this.state.nodesStatus[courseId].selected
     const temp = this.state.selectedNodes
-    const credits = this.numCredits(courseId)
+    const credits = numCredits(courseId)
 
     if (typeof this.props.incrementFCECount === "function" && wasSelected) {
       this.toggleSelection(courseId)
       this.props.incrementFCECount(-credits)
       temp.delete(courseLabel)
     }
-  }
-
-  /**
-   * Assuming the first section of courseId follows the format:
-   * 3 letters for department, 3 numbers for course, and characters for session and campus.
-   * e.g. csc108h1 or mat235y1mat237y1mat257y1
-   */
-  numCredits = courseId => {
-    let session = courseId[6]
-    return typeof session === "string" && session.toLowerCase() === "y" ? 1.0 : 0.5
-  }
-
-  /**
-   * Transforms <x> and <y> with the given transformation.
-   * Assumes that transformation is a valid list [a,b,c,d,e,f] of length 6 that represents the
-   * transformation matrix [[a, c, e], [b, d, f], [0, 0, 1]]
-   * @param {list} transformation - a list that represents a matrix transformation
-   * @param {float} x - the x coordinate to be transformed
-   * @param {float} y - the y coordinate to be transformed
-   */
-  transformPoint = (transformation, x, y) => {
-    const [a, b, c, d, e, f] = transformation
-    const newX = a * x + c * y + e
-    const newY = b * x + d * y + f
-    return [newX, newY]
   }
 
   /**
@@ -463,7 +277,7 @@ export class Graph extends React.Component {
     yPos = parseFloat(yPos)
 
     if (currentNode.transform) {
-      ;[xPos, yPos] = this.transformPoint(currentNode.transform, xPos, yPos)
+      ;[xPos, yPos] = transformPoint(currentNode.transform, xPos, yPos)
     }
 
     if (!this.state.onDraw) {
@@ -1349,7 +1163,7 @@ export class Graph extends React.Component {
       const { parents } = connections
       const json = {
         ...boolJSON,
-        transform: this.formatTransform(boolJSON.transform),
+        transform: formatTransform(boolJSON.transform),
       }
 
       return (
@@ -1385,7 +1199,7 @@ export class Graph extends React.Component {
           target={edgeJSON.target}
           points={edgeJSON.points}
           status={edgesStatus[edgeJSON.id_]}
-          transform={this.formatTransform(edgeJSON.transform)}
+          transform={formatTransform(edgeJSON.transform)}
         />
       )
     }
@@ -1451,7 +1265,7 @@ export class Graph extends React.Component {
               parents={connections.parents[entry.id_]}
               childs={connections.children[entry.id_]}
               status={nodesStatus[entry.id_].status}
-              transform={this.formatTransform(entry.transform)}
+              transform={formatTransform(entry.transform)}
               onWheel={onWheel}
               onKeydown={onKeyDown}
               nodeDropshadowFilter={nodeDropshadowFilter}
@@ -1474,7 +1288,7 @@ export class Graph extends React.Component {
               hybrid={false}
               parents={connections.parents[entry.id_]}
               status={nodesStatus[entry.id_].status}
-              transform={this.formatTransform(entry.transform)}
+              transform={formatTransform(entry.transform)}
               highlightDeps={highlightDeps}
               highlightFocus={highlightFocus}
               onClick={nodeClick}
@@ -1519,7 +1333,7 @@ export class Graph extends React.Component {
           style={textStyle}
           className="region-label"
           textAnchor={entry["text-anchor"]}
-          transform={this.formatTransform(entry.transform)}
+          transform={formatTransform(entry.transform)}
         >
           {entry["text"]}
         </text>
@@ -1534,15 +1348,6 @@ export class Graph extends React.Component {
         {this.renderLabels(labelsJSON)}
       </g>
     )
-  }
-
-  /**
-   * Formats fransformation to a valid CSS transform value.
-   * Assumes that <transform> is a list of length 6 that represents a matrix transformation if it exists,
-   * that is, [a, b, c, d, e, f] => matrix(a, b, c, d, e, f)
-   */
-  formatTransform = transform => {
-    return transform ? `matrix(${transform.join(", ")})` : ""
   }
 
   render() {
@@ -1751,65 +1556,6 @@ export class Graph extends React.Component {
 }
 
 export { ZOOM_INCREMENT, KEYBOARD_PANNING_INCREMENT }
-
-/**
- * Helper function to populate the parents object and children object with the connections of a hybrid node.
- * A parent-child connection is added for each course that appears in the hybrid node's prereq string.
- * @param {Node} hybridNode
- * @param {Array} nodesJSON
- * @param {Object} parentsObj
- * @param {Object} childrenObj
- */
-export function populateHybridRelatives(
-  hybridNode,
-  nodesJSON,
-  parentsObj,
-  childrenObj
-) {
-  // parse prereqs based on text
-  let hybridText = hybridNode.text.map(textTag => textTag.text).join("")
-  const nodeParents = []
-  // First search for a node that matches the entire string (see Stats graph)
-  let prereqNode = findRelationship(hybridText, nodesJSON)
-  if (prereqNode !== undefined) {
-    nodeParents.push(prereqNode.id_)
-    childrenObj[prereqNode.id_].push(hybridNode.id_)
-  }
-  // Otherwise, parse the hybrid node's text as a prerequisite string of multiple courses,
-  // and add a parent-child connection for each involved course
-  else {
-    let prereqs = parseAnd(hybridText)
-    if (typeof prereqs === "object") {
-      prereqs = prereqs.flat(Infinity)
-      prereqs.forEach(course => {
-        prereqNode = findRelationship(course, nodesJSON)
-        if (prereqNode !== undefined) {
-          nodeParents.push(prereqNode.id_)
-          childrenObj[prereqNode.id_].push(hybridNode.id_)
-        } else {
-          console.error("Could not find prereq for ", hybridText)
-        }
-      })
-    } else {
-      console.error("Could not find prereq for ", hybridText)
-    }
-  }
-  parentsObj[hybridNode.id_] = nodeParents
-}
-
-/**
- * Helper for hybrid computation. Finds the node with the same course label as the hybrid.
- * @param {string} course
- * @param {Array} nodesJSON
- * @return {Node}
- */
-export var findRelationship = (course, nodesJSON) => {
-  const nodes = nodesJSON
-  const node = nodes.find(
-    n => n.type_ === "Node" && n.text.some(textTag => textTag.text.includes(course))
-  )
-  return node
-}
 
 Graph.propTypes = {
   currFocus: PropTypes.string,
