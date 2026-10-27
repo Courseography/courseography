@@ -1,4 +1,4 @@
-import { findRelationship } from "../Graph.js"
+import { findRelationship } from "../util"
 
 describe("findRelationship", () => {
   describe("nodesJSON contains a node for CSC207", () => {

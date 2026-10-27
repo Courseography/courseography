@@ -1,5 +1,10 @@
-// Tests for parsing algorithms from js/util/util.ts
-import { parseAnd, parseOr, splitPrereqString, removeOuterParens } from "./util"
+// Tests for parsing algorithms from js/components/graph/requirementParser.ts
+import {
+  parseAnd,
+  parseOr,
+  splitPrereqString,
+  removeOuterParens,
+} from "../requirementParser"
 
 describe("parseAnd", () => {
   test("parseAnd correctly parses courses when a comma separates two couress", () => {

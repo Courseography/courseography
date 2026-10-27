@@ -8,14 +8,15 @@ module Models.Time (
 import Data.Aeson (ToJSON)
 import qualified Data.Text as T
 import Database.Persist.Sqlite (SqlPersistM)
-import Database.Tables (Building, Times (..))
+import Database.Tables (Building, Time (..))
+import qualified Database.Tables as Tables
 import GHC.Generics (Generic)
 import Models.Building (getBuilding)
 
 -- | The time and location data for a single meeting occurrence, as returned by the back-end to the front-end.
 --
--- This is different from the schema-defined 'Times' type (in "Database.Tables").
--- Whereas 'Times' stores a raw room code string, 'TimeData' resolves the location to a
+-- This is different from the schema-defined 'Time' type (in "Database.Tables").
+-- Whereas 'Time' stores a raw room code string, 'TimeData' resolves the location to a
 -- full 'Building' object for JSON serialization to the client.
 data TimeData
     = TimeData
@@ -29,14 +30,14 @@ data TimeData
 
 instance ToJSON TimeData
 
--- | Convert a Times record into a TimeData by resolving room codes to Buildings
-buildTime :: Times -> SqlPersistM TimeData
+-- | Convert a Time record into a TimeData by resolving room codes to Buildings
+buildTime :: Time -> SqlPersistM TimeData
 buildTime t = do
-    location <- getBuilding (timesLocation t)
+    location <- getBuilding (Tables.timeLocation t)
     return $
         TimeData
-            (timesSession t)
-            (timesWeekDay t)
-            (timesStartHour t)
-            (timesEndHour t)
+            (Tables.timeSession t)
+            (Tables.timeWeekDay t)
+            (Tables.timeStartHour t)
+            (Tables.timeEndHour t)
             location
