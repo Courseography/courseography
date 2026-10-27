@@ -84,7 +84,7 @@ $graph-overlay-side-margin: 15px;
   // Graph / course-map paths and nodes
   --main-path-color: var(--color-black);
   --missing-path-color: #c01;
-  --hybrid-node-fill-color: #888;
+  --hybrid-node-fill-color: #b7b7b7;
   --node-inactive-fill-color: #ccc;
 
   // Course/timetable status colors
@@ -882,8 +882,9 @@ g.hybrid {
 }
 
 g.hybrid > text {
-  fill: var(--color-white);
+  fill: var(--color-black);
   font-size: 9pt;
+  font-style: italic;
   stroke: none;
   text-anchor: middle;
 }
@@ -893,8 +894,21 @@ g.hybrid > rect {
   stroke: var(--color-black);
 }
 
+g.hybrid.active > rect {
+  opacity: 1;
+}
+
+g.hybrid.active > text {
+  opacity: 1;
+}
+
 g.hybrid.inactive > rect {
-  stroke-width: 0;
+  stroke-width: 1;
+  stroke-dasharray: none;
+}
+
+g.hybrid.inactive > text { 
+  opacity: 0.45;
 }
 
 g.active > rect {

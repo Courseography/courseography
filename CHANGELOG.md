@@ -6,6 +6,8 @@
 
 ### ✨ New features/enhancements
 
+- Changed the colour of hybrid nodes to avoid a visual clash with the darkened background when selecting a focus
+
 ### 🐛 Bug fixes
 
 ### 🔧 Internal changes
@@ -38,6 +40,7 @@
 - Refactored `createReqBody` in `app/Config.hs` to use session field from `config.yaml`
 - Refactored the `Times` table to `Time` with a database migration
 - Extracted `loadGraphData.ts` and `util.ts` (both TypeScript) out of `js/components/graph/Graph.js`, and moved `js/util/util.ts` to `js/components/graph/requirementParser.ts`
+- Changed SVG parsing to leave the `fill` column empty when inserting hybrid nodes into the database
 
 ## [0.8.1] - 2026-08-10
 

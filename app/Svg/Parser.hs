@@ -161,7 +161,7 @@ parseGraph key tags =
             ( not . \s ->
                 shapePos s `elem` map shapePos shapes
                     && isEdge s
-                    && elem (shapeType_ s) [Node, Hybrid]
+                    && shapeType_ s == Node
             )
             shapes
 
@@ -736,9 +736,12 @@ updateShape ::
 updateShape fill r =
     r
         { shapeFill =
-            if T.null (shapeFill r) || shapeFill r == "none"
-                then fill
-                else shapeFill r
+            let fill' =
+                    ( if T.null (shapeFill r) || shapeFill r == "none"
+                        then fill
+                        else shapeFill r
+                    )
+             in if fill' == "#888888" then "" else fill'
         , shapeType_ =
             if fill == "#888888"
                 then Hybrid
