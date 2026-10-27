@@ -47,16 +47,16 @@ data MeetingData = MeetingData {meetData :: Meeting, timeData :: [TimeData]}
 instance ToJSON MeetingData
 
 -- | A single meeting section parsed from the timetable API, before it is inserted into the database.
--- Its 'Times' can't be built until the 'Meeting' has been inserted and has a 'MeetingId',
+-- Its 'Time' can't be built until the 'Meeting' has been inserted and has a 'MeetingId',
 -- so they are stored as functions awaiting that key.
-data MeetingParsedData = MeetingParsedData {meetInfo :: Meeting, timeInfo :: [MeetingId -> Times]}
+data MeetingParsedData = MeetingParsedData {meetInfo :: Meeting, timeInfo :: [MeetingId -> Time]}
 
 instance FromJSON MeetingParsedData where
     parseJSON = withObject "Invalid meeting" $ \o -> do
         meeting <- parseMeeting o
         rawTimes :: [Value] <- o .:? "meetingTimes" .!= []
-        timesFunctionList <- mapM parseTime rawTimes
-        return $ MeetingParsedData meeting timesFunctionList
+        timeFunctionList <- mapM parseTime rawTimes
+        return $ MeetingParsedData meeting timeFunctionList
       where
         -- Parse a lecture, tutorial or practical. Its code and session are left empty,
         -- since they come from the enclosing course.
@@ -88,8 +88,8 @@ instance FromJSON MeetingParsedData where
             return (T.concat [firstName, " ", lastName])
         parseInstr _ = return ""
 
-        parseTime :: Value -> Parser (MeetingId -> Times)
-        parseTime = withObject "Expected Object for Times" $ \o -> do
+        parseTime :: Value -> Parser (MeetingId -> Time)
+        parseTime = withObject "Expected Object for Time" $ \o -> do
             startObject <- o .: "start"
             endObject <- o .: "end"
             meetingDay :: Maybe Int <- startObject .:? "day" .!= Nothing
@@ -102,7 +102,7 @@ instance FromJSON MeetingParsedData where
             session <- o .: "sessionCode"
 
             let (adjustedDay, adjustedStartTime, adjustedEndTime) = convertTimeVals meetingDay meetingStartTime meetingEndTime
-            return $ \meetingId -> Times session adjustedDay adjustedStartTime adjustedEndTime meetingId buildingCode'
+            return $ \meetingId -> Time session adjustedDay adjustedStartTime adjustedEndTime meetingId buildingCode'
 
         -- Converts the miliseconds time into hourly time
         -- Assumes times are rounded to the nearest hour
@@ -135,7 +135,7 @@ instance FromJSON MeetingParsedData where
         convertTimeVals _ _ _ = (5.0, 25.0, 25.0)
 
 -- | Insert or update a meeting and then delete
---   and re-insert the corresponding Times into the database.
+--   and re-insert the corresponding Time records into the database.
 insertMeetingParsedData :: MeetingParsedData -> SqlPersistM ()
 insertMeetingParsedData (MeetingParsedData meetingData meetingTimeFunctions) = do
     -- Check if the meeting already exists in the meeting table
@@ -148,7 +148,7 @@ insertMeetingParsedData (MeetingParsedData meetingData meetingTimeFunctions) = d
             -- meeting already exists, so update/replace
             entity <- upsert meetingData (meetingUpdates meetingData)
             let meetingKey = entityKey entity
-            deleteWhere [TimesMeeting ==. meetingKey]
+            deleteWhere [TimeMeeting ==. meetingKey]
             let allTimes = map ($ meetingKey) meetingTimeFunctions
             insertMany_ allTimes
         Nothing -> do
@@ -179,7 +179,7 @@ meetingQuery meetingCodes = do
 -- | Queries the database for all times corresponding to a given meeting.
 buildMeetTimes :: Entity Meeting -> SqlPersistM MeetingData
 buildMeetTimes meet = do
-    allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
+    allTimes :: [Entity Time] <- selectList [TimeMeeting ==. entityKey meet] []
     parsedTime <- mapM (buildTime . entityVal) allTimes
     return $ MeetingData (entityVal meet) parsedTime
 
@@ -205,7 +205,7 @@ getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
             , MeetingSession ==. meetingSession_
             ]
             []
-    allTimes <- selectList [TimesMeeting ==. entityKey (fromJust maybeEntityMeetings)] []
+    allTimes <- selectList [TimeMeeting ==. entityKey (fromJust maybeEntityMeetings)] []
     mapM (buildTime . entityVal) allTimes
 
 getMeetingSection :: T.Text -> T.Text
