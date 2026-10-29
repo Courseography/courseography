@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { FocusModal } from "../common/react_modal.js.jsx"
+import { FocusModal } from "../common/FocusModal"
 
 interface FocusTabProps {
   focusName: string

@@ -12,6 +12,7 @@
 
 ### 🔧 Internal changes
 
+- Refactored `react_modal.js.jsx` into modular functional TypeScript components (`CampusMap.tsx`, `CourseModal.tsx`, `DayBox.tsx`, `Description.tsx`, `FocusModal.tsx`, `MapModal.tsx`, `MapSidebar.tsx`), added shared `types.ts`, and removed unused dead code
 - Migrated `Sidebar.js`, `FocusBar.js`, and `NavBar.js.jsx` to TypeScript
 - Removed `Time'` data type in favour of `(MeetingId -> Times)` function type in `Database.Tables`
 - Refactored `Database.Tables.MeetTime'` into `Models.Meeting` and renamed it to `MeetingData`

@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react"
-import { CourseModal } from "../common/react_modal.js.jsx"
+import { CourseModal } from "../common/CourseModal"
 import { getCourse } from "../common/utils"
 
 /**
