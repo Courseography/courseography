@@ -29,7 +29,10 @@ interface CourseModalProps {
 }
 
 /**
- * Convert the course names to <a> tags and return a list of strings and <a> tags.
+ * Converts course codes within a text string to interactive <a> tags.
+ * @param content Text containing course codes to parse into links.
+ * @param onNavigate Optional callback invoked when a course link is clicked.
+ * @returns An array of strings and clickable JSX link elements.
  */
 export const convertToLink = (
   content?: string | null,
@@ -41,7 +44,7 @@ export const convertToLink = (
 
   const result: (string | JSX.Element)[] = content.split(COURSE_CODE_REGEX)
   for (let i = 0; i < result.length; i++) {
-    let word = result[i]
+    const word = result[i]
     if (typeof word === "string" && word.match(COURSE_CODE_REGEX)) {
       result[i] = (
         <a key={i} className="course-selection" onClick={() => onNavigate?.(word)}>
@@ -54,10 +57,10 @@ export const convertToLink = (
 }
 
 /**
- * Helper function to format a Time data object for display in the course modal.
- * @param {time} time A Time data object.
+ * Helper function to format a TimeData object for display in the course modal.
+ * @param {TimeData} time A TimeData object.
  * @returns {string} The time formatted as a string (e.g. "Tuesday 11 - 13").
- * */
+ */
 const formatTime = (time: TimeData): string => {
   return INT_TO_DAY[time.weekDay] + " " + time.startHour + " - " + time.endHour
 }
@@ -65,7 +68,7 @@ const formatTime = (time: TimeData): string => {
 /**
  * Generate the data needed for the course modal table based on the meeting times corresponding
  * to a course in a given session.
- * @param {MeetingItem[]} allMeetTimes An array of MeetingData objects corresponding to a particular course.
+ * @param {MeetingItem[]} allMeetTimes An array of MeetingItem objects corresponding to a particular course.
  * @param {Session} session The session (F, S, Y) to query.
  * @returns {SessionRowData[]} An array of row data objects that will appear in the course modal table.
  */
@@ -152,8 +155,9 @@ export function CourseModal({
   const currentCourseId = visitedCourses[currVisitedIndex] ?? ""
 
   /**
-   * Change the courseId state, whenever a new course link is clicked.
-   * Additionally, add the new courseId to the list of visited courses.
+   * Updates state when a new course link is clicked.
+   * Truncates any forward history and appends the new course code.
+   * @param newCourseId The course code to navigate to.
    */
   const navigateToCourse = (newCourseId: string): void => {
     if (newCourseId === currentCourseId) return

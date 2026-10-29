@@ -1,5 +1,16 @@
 import type { JSX } from "react"
 
+/**
+ * Literal union representing academic sessions:
+ * - "F": Fall session (September to December)
+ * - "S": Winter / Spring session (January to April)
+ * - "Y": Full Year session (September to April)
+ */
+export type Session = "F" | "S" | "Y"
+
+/**
+ * Physical campus building information with coordinates and address details.
+ */
 interface Building {
   buildingCode: string
   buildingName?: string
@@ -9,7 +20,13 @@ interface Building {
   buildingLng?: number
 }
 
+/**
+ * Scheduled meeting timeframe block for an individual course section,
+ * representing day of the week, start/end hours, location, and session code.
+ * Used in CourseModal and timetable generation.
+ */
 export interface TimeData {
+  /** Day of the week: 0 = Monday, 1 = Tuesday, 2 = Wednesday, 3 = Thursday, 4 = Friday */
   weekDay: 0 | 1 | 2 | 3 | 4
   startHour?: number
   endHour?: number
@@ -17,6 +34,10 @@ export interface TimeData {
   timeSession?: string
 }
 
+/**
+ * Instructional section (e.g., lecture, tutorial, practical) containing enrollment
+ * figures, instructor name, session code, and associated meeting time blocks.
+ */
 export interface MeetingItem {
   meetData: {
     session: string
@@ -29,6 +50,11 @@ export interface MeetingItem {
   timeData: TimeData[]
 }
 
+/**
+ * Processed course details displayed inside CourseModal and Description.
+ * Text fields like prerequisites, corequisites, and exclusions have been parsed
+ * and converted into clickable course link elements where applicable.
+ */
 export interface CourseDetails {
   breadth?: string | null
   description?: (string | JSX.Element)[]
@@ -42,6 +68,11 @@ export interface CourseDetails {
   coreqs?: (string | JSX.Element)[]
 }
 
+/**
+ * Row data model for the AG Grid table within Description.tsx,
+ * displaying section activity, instructor, availability, waitlist,
+ * and meeting times/locations for up to two time blocks (e.g. for Full Year courses).
+ */
 export interface SessionRowData {
   activity: string
   instructor: string
@@ -53,6 +84,10 @@ export interface SessionRowData {
   location2: string[]
 }
 
+/**
+ * Timetable data partitioned by academic session ("F", "S", "Y")
+ * containing arrays of table rows rendered in Description.tsx.
+ */
 export interface Sessions {
   F?: SessionRowData[]
   S?: SessionRowData[]
@@ -60,6 +95,24 @@ export interface Sessions {
   [key: string]: SessionRowData[] | undefined
 }
 
+/**
+ * Geographic coordinate and room details for a lecture location,
+ * used to plot building markers in CampusMap.tsx.
+ */
+export interface BuildingLocation {
+  buildingCode?: string
+  buildingName?: string
+  buildingAddress?: string
+  buildingPostalCode?: string
+  buildingLat?: number
+  buildingLng?: number
+  room?: string
+}
+
+/**
+ * Scheduled lecture timeslot used in MapModal, MapSidebar, DayBox, and CampusMap.
+ * Tracks course code, session, time range, geographic location, and conflict status.
+ */
 export interface LectureTimeframe {
   courseCode: string
   session: string
@@ -74,6 +127,9 @@ export interface LectureTimeframe {
   dataSatisfied?: boolean
 }
 
+/**
+ * Individual lecture occurrence within a day group, specifying time boundaries and room.
+ */
 export interface TimeframeData {
   courseCode: string
   session: string
@@ -82,22 +138,20 @@ export interface TimeframeData {
   room?: string
 }
 
+/**
+ * Collection of scheduled lecture timeframes occurring on a specific weekday.
+ * Used for ordering and rendering daily schedules in MapSidebar and DayBox.
+ */
 export interface DayData {
   dayString: string
   dayOrder: number
   timeframes: TimeframeData[]
 }
 
-export interface BuildingLocation {
-  buildingCode?: string
-  buildingName?: string
-  buildingAddress?: string
-  buildingPostalCode?: string
-  buildingLat?: number
-  buildingLng?: number
-  room?: string
-}
-
+/**
+ * Unprocessed course data retrieved directly from the backend endpoint
+ * prior to parsing text descriptions and requirement links in CourseModal.tsx.
+ */
 export interface RawCourseData {
   breadth?: string | null
   description?: string | null
@@ -112,6 +166,10 @@ export interface RawCourseData {
   videoUrls?: string[]
 }
 
+/**
+ * Aggregated lecture schedules grouped by physical campus building.
+ * Passed to CampusMap to render map markers and calculate bounding boxes.
+ */
 export interface BuildingGroup {
   buildingName?: string
   buildingCode?: string
@@ -122,6 +180,10 @@ export interface BuildingGroup {
   days: DayData[]
 }
 
+/**
+ * Degree focus or program data retrieved from the backend when modified.
+ * Used in FocusModal to display focus title, description, requirements, and courses.
+ */
 export interface ProgramData {
   modified: true
   title: string
@@ -131,8 +193,9 @@ export interface ProgramData {
   modifiedTime: string | null
 }
 
+/**
+ * Response received when program data has not changed since last request.
+ */
 export interface ProgramNotModified {
   modified: false
 }
-
-export type Session = "F" | "S" | "Y"
