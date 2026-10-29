@@ -1,8 +1,8 @@
-import { JSX, useRef } from "react"
+import { type JSX, useRef } from "react"
 import L from "leaflet"
 import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
 import { convertTimeToString } from "./utils"
-import { BuildingGroup, LectureTimeframe } from "./types"
+import type { BuildingGroup, LectureTimeframe } from "./types"
 
 export interface CampusMapProps {
   lecturesByBuilding: BuildingGroup[]

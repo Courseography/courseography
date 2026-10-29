@@ -1,7 +1,7 @@
-import { JSX, useEffect, useState } from "react"
+import { type JSX, useEffect, useState } from "react"
 import ReactModal from "react-modal"
 import { getProgram } from "./utils"
-import { ProgramData, ProgramNotModified } from "./types"
+import type { ProgramData, ProgramNotModified } from "./types"
 
 interface FocusModalProps {
   showFocusModal: boolean

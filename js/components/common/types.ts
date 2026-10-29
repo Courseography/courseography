@@ -1,4 +1,4 @@
-import { JSX } from "react"
+import type { JSX } from "react"
 
 interface Building {
   buildingCode: string
@@ -134,3 +134,5 @@ export interface ProgramData {
 export interface ProgramNotModified {
   modified: false
 }
+
+export type Session = "F" | "S" | "Y"

@@ -1,6 +1,6 @@
-import { JSX, useState } from "react"
+import { type JSX, useState } from "react"
 import { convertTimeToString } from "./utils"
-import { BuildingLocation, LectureTimeframe } from "./types"
+import type { BuildingLocation, LectureTimeframe } from "./types"
 
 interface DayBoxProps {
   day: string

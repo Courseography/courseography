@@ -1,11 +1,12 @@
-import { JSX, useEffect, useState } from "react"
+import { type JSX, useEffect, useState } from "react"
 import ReactModal from "react-modal"
 import { Description } from "./Description"
 import { getCourse } from "./utils"
-import {
+import type {
   CourseDetails,
   MeetingItem,
   RawCourseData,
+  Session,
   Sessions,
   SessionRowData,
   TimeData,
@@ -65,12 +66,12 @@ const formatTime = (time: TimeData): string => {
  * Generate the data needed for the course modal table based on the meeting times corresponding
  * to a course in a given session.
  * @param {MeetingItem[]} allMeetTimes An array of MeetingData objects corresponding to a particular course.
- * @param {string} session The session (F, S, Y) to query.
+ * @param {Session} session The session (F, S, Y) to query.
  * @returns {SessionRowData[]} An array of row data objects that will appear in the course modal table.
  */
 export const getTable = (
   allMeetTimes: MeetingItem[],
-  session: string
+  session: Session
 ): SessionRowData[] => {
   // Filter and sort the lecture sections in the specified session by their section code
   const filteredMeetTimes = allMeetTimes.filter(
@@ -173,7 +174,7 @@ export function CourseModal({
 
   /**
    * Manages state for currVisitedIndex when we click the forward button to
-   * gp to the next course in visitedCourses
+   * advance to the next course that we visited.
    */
   const navigateForward = (): void => {
     if (currVisitedIndex < visitedCourses.length - 1) {

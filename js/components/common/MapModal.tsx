@@ -1,8 +1,8 @@
-import { JSX, useImperativeHandle, useState } from "react"
+import { type JSX, useImperativeHandle, useState } from "react"
 import ReactModal from "react-modal"
 import { CampusMap } from "./CampusMap"
 import { MapSidebar } from "./MapSidebar"
-import { BuildingGroup, LectureTimeframe } from "./types"
+import type { BuildingGroup, LectureTimeframe } from "./types"
 
 export interface MapModalHandle {
   openModal: () => void

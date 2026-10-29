@@ -1,6 +1,6 @@
-import { JSX } from "react"
+import type { JSX } from "react"
 import { DayBox } from "./DayBox"
-import { LectureTimeframe } from "./types"
+import type { LectureTimeframe } from "./types"
 
 interface MapSidebarProps {
   lecturesByDay: Record<string, LectureTimeframe[]>

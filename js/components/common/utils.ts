@@ -1,4 +1,4 @@
-import { ProgramData, ProgramNotModified } from "./types"
+import type { ProgramData, ProgramNotModified } from "./types"
 /**
  * Retrieves a course from file.
  * @param courseName The course code. This + '.txt' is the name of the file.

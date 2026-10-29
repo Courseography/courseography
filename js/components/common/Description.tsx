@@ -1,6 +1,6 @@
-import { JSX } from "react"
+import type { JSX } from "react"
 import { AgGridReact } from "ag-grid-react"
-import { CourseDetails, Sessions } from "./types"
+import type { CourseDetails, Sessions } from "./types"
 
 interface DescriptionProps {
   course: CourseDetails
@@ -20,9 +20,9 @@ interface DescriptionProps {
 export function Description({ course, sessions }: DescriptionProps): JSX.Element {
   const timetableUnavailable =
     Object.keys(sessions).length !== 0 &&
-    sessions.F?.length === 0 &&
-    sessions.S?.length === 0 &&
-    sessions.Y?.length === 0
+    !sessions.F?.length &&
+    !sessions.S?.length &&
+    !sessions.Y?.length
 
   let timetableDisplay
   if (timetableUnavailable) {
@@ -126,7 +126,7 @@ export function Description({ course, sessions }: DescriptionProps): JSX.Element
   //We want to use the Timetable component, but that component needs to be independent before using it here
   return (
     <div>
-      {/* Description does not have a strong label prefix */}
+      {/* Course description does not have a bold label prefix, and so is rendered separately from the fields below */}
       {(course.description?.length ?? 0) > 0 && <p>{course.description}</p>}
 
       {/* Dynamically render all labeled course fields */}
