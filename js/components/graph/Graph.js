@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { CourseModal } from "../common/react_modal.js.jsx"
+import { CourseModal } from "../common/CourseModal"
 import { ExportModal } from "../common/export"
 import { getProgram } from "../common/utils"
 import Bool from "./Bool"

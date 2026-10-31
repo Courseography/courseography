@@ -1,5 +1,5 @@
 import { createRef, useCallback } from "react"
-import { MapModal } from "../common/react_modal.js.jsx"
+import { MapModal } from "../common/MapModal"
 
 /*
  * Holds the containers of the Fall and Spring timetables,
