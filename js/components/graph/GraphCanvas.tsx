@@ -82,18 +82,18 @@ export default function GraphCanvas({
       onMouseMove={onMouseMove}
       onTouchStart={onTouchStart}
     >
-      <filter id={NODE_DROPSHADOW_FILTER_ID} height="130%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-        <feOffset dx="2" dy="2" result="offsetblur" />
-        <feComponentTransfer>
-          <feFuncA type="linear" slope="0.8" />
-        </feComponentTransfer>
-        <feMerge>
-          <feMergeNode />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
       <defs>
+        <filter id={NODE_DROPSHADOW_FILTER_ID} height="130%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+          <feOffset dx="2" dy="2" result="offsetblur" />
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="0.8" />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
         <marker
           id="arrowHead"
           viewBox="0 0 10 10"
@@ -106,8 +106,6 @@ export default function GraphCanvas({
         >
           <polyline points="0,1 10,5 0,9" fill="black" />
         </marker>
-      </defs>
-      <defs>
         <filter id="blur-filter">
           <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
         </filter>
