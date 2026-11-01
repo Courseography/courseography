@@ -14,9 +14,10 @@ import { numCredits, transformPoint, formatTransform } from "./util"
 import { loadGraphData } from "./loadGraphData"
 import {
   isSelected,
-  arePrereqsSatisfiedBool,
-  arePrereqsSatisfiedNode,
-  arePrereqsSatisfiedHybrid,
+  computeNodeStatus,
+  computeBoolStatus,
+  computeEdgeStatus,
+  totalSelectedCredits,
 } from "./graphState"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -141,17 +142,8 @@ export class Graph extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.nodesJSON !== this.state.nodesJSON) {
-      let totalFCEs = 0
-      Object.values(this.state.nodesJSON).forEach(nodeJSON => {
-        if (
-          !this.state.hybridsJSON[nodeJSON.id_] &&
-          this.state.nodesStatus[nodeJSON.id_].selected
-        ) {
-          totalFCEs += numCredits(nodeJSON.id_)
-        }
-      })
       if (this.props.setFCECount) {
-        this.props.setFCECount(totalFCEs)
+        this.props.setFCECount(totalSelectedCredits(this.state))
       }
     }
 
@@ -183,22 +175,8 @@ export class Graph extends React.Component {
    * Update the status of the Edge, based on the status of the Node/Bool it points from/to.
    */
   updateEdgeStatus = (status, edgeID, source, target) => {
-    const isSourceSelected = isSelected(this.state, source)
-    const isTargetSelected = isSelected(this.state, target)
-    const targetStatus = this.state.nodesStatus[target]
-      ? this.state.nodesStatus[target].status
-      : this.state.boolsStatus[target]
-
     if (!status) {
-      if (!isSourceSelected && targetStatus === "missing") {
-        status = "missing"
-      } else if (!isSourceSelected) {
-        status = "inactive"
-      } else if (!isTargetSelected) {
-        status = "takeable"
-      } else {
-        status = "active"
-      }
+      status = computeEdgeStatus(this.state, source, target)
     }
     this.setState(state => {
       const edgesStatus = { ...state.edgesStatus }
@@ -696,7 +674,7 @@ export class Graph extends React.Component {
    * Update the Bool's state at any moment given the prereqs and current state.
    */
   updateNodeBool = boolId => {
-    const newState = arePrereqsSatisfiedBool(this.state, boolId) ? "active" : "inactive"
+    const newState = computeBoolStatus(this.state, boolId)
     const childs = this.state.connections.children[boolId]
     const inEdges = this.state.connections.inEdges[boolId]
     const outEdges = this.state.connections.outEdges[boolId]
@@ -733,32 +711,7 @@ export class Graph extends React.Component {
    * @param  {boolean} recursive whether we should recurse on its children
    */
   updateNode = (nodeId, recursive) => {
-    let newState
-    if (this.state.hybridsJSON[nodeId]) {
-      // For a hybrid node, set the state to 'active' or 'inactive' depending on if its text is satisfied
-      // as a prerequisite string
-      if (arePrereqsSatisfiedHybrid(this.state, nodeId)) {
-        newState = "active"
-      } else {
-        newState = "inactive"
-      }
-    } else {
-      // For a regular course node, set the state to 'active', 'takeable', 'inactive', or 'overridden'
-      // depending on whether the user has selected the course and whether the course's prereqs are met
-      if (arePrereqsSatisfiedNode(this.state, nodeId)) {
-        if (isSelected(this.state, nodeId)) {
-          newState = "active"
-        } else {
-          newState = "takeable"
-        }
-      } else {
-        if (isSelected(this.state, nodeId)) {
-          newState = "overridden"
-        } else {
-          newState = "inactive"
-        }
-      }
-    }
+    const newState = computeNodeStatus(this.state, nodeId)
 
     const childs = this.state.connections.children[nodeId]
     const status =

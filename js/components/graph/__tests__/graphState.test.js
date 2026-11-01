@@ -5,6 +5,10 @@ import {
   arePrereqsSatisfiedBool,
   arePrereqsSatisfiedNode,
   arePrereqsSatisfiedHybrid,
+  computeNodeStatus,
+  computeBoolStatus,
+  computeEdgeStatus,
+  totalSelectedCredits,
 } from "../graphState"
 
 const node = (id, text, type_ = "Node") => ({
@@ -150,5 +154,86 @@ describe("arePrereqsSatisfiedHybrid", () => {
 
   it("Should be false when a prereq course is not in the graph", () => {
     expect(arePrereqsSatisfiedHybrid(buildState(), "hMissing")).toBe(false)
+  })
+})
+
+describe("computeNodeStatus", () => {
+  it("Should be 'active' for a selected course with satisfied prereqs", () => {
+    const state = buildState()
+    state.nodesStatus.csc148.selected = true
+    expect(computeNodeStatus(state, "csc148")).toBe("active")
+  })
+
+  it("Should be 'takeable' for an unselected course with satisfied prereqs", () => {
+    expect(computeNodeStatus(buildState(), "csc148")).toBe("takeable")
+  })
+
+  it("Should be 'overridden' for a selected course with unsatisfied prereqs", () => {
+    const state = buildState()
+    state.nodesStatus.csc165.selected = true
+    expect(computeNodeStatus(state, "csc165")).toBe("overridden")
+  })
+
+  it("Should be 'inactive' for an unselected course with unsatisfied prereqs", () => {
+    expect(computeNodeStatus(buildState(), "csc165")).toBe("inactive")
+  })
+
+  it("Should base a hybrid node's status on its prereq string", () => {
+    const state = buildState()
+    expect(computeNodeStatus(state, "hOr")).toBe("active")
+    expect(computeNodeStatus(state, "hAnd")).toBe("inactive")
+  })
+})
+
+describe("computeBoolStatus", () => {
+  it("Should be 'active' exactly when the bool's prereqs are satisfied", () => {
+    const state = buildState()
+    expect(computeBoolStatus(state, "orBool")).toBe("active")
+    expect(computeBoolStatus(state, "andBool")).toBe("inactive")
+  })
+})
+
+describe("computeEdgeStatus", () => {
+  it("Should be 'active' when both endpoints are selected", () => {
+    const state = buildState()
+    state.nodesStatus.csc148.selected = true
+    expect(computeEdgeStatus(state, "csc108", "csc148")).toBe("active")
+  })
+
+  it("Should be 'takeable' when only the source is selected", () => {
+    expect(computeEdgeStatus(buildState(), "csc108", "csc148")).toBe("takeable")
+  })
+
+  it("Should be 'inactive' when the source is not selected", () => {
+    expect(computeEdgeStatus(buildState(), "csc148", "csc236")).toBe("inactive")
+  })
+
+  it("Should be 'missing' when the source is not selected and the target is missing", () => {
+    const state = buildState()
+    state.nodesStatus.csc236.status = "missing"
+    expect(computeEdgeStatus(state, "csc148", "csc236")).toBe("missing")
+  })
+
+  it("Should use the bool status when the target is a bool", () => {
+    const state = buildState()
+    state.boolsStatus.andBool = "missing"
+    expect(computeEdgeStatus(state, "csc148", "andBool")).toBe("missing")
+  })
+})
+
+describe("totalSelectedCredits", () => {
+  it("Should sum the credits of selected courses, excluding hybrids", () => {
+    const state = buildState()
+    state.nodesJSON.mat235y1 = node("mat235y1", "MAT235")
+    state.nodesStatus.mat235y1 = { status: "active", selected: true }
+    state.nodesJSON.hOr = state.hybridsJSON.hOr
+    state.nodesStatus.hOr.selected = true
+    expect(totalSelectedCredits(state)).toBe(1.5)
+  })
+
+  it("Should be 0 when nothing is selected", () => {
+    const state = buildState()
+    state.nodesStatus.csc108.selected = false
+    expect(totalSelectedCredits(state)).toBe(0)
   })
 })
