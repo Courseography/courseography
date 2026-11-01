@@ -20,10 +20,10 @@
   },
   "browserslist": "defaults",
   "lint-staged": {
-    "*": "pnpm prettier --ignore-unknown --write",
-    "*.{js,ts,tsx}": "pnpm run eslint --cache --fix js",
-    "*.css": "pnpm run stylelint",
-    "*.scss": "pnpm run stylelint",
+    "*": "prettier --ignore-unknown --write",
+    "*.{js,ts,tsx}": "eslint --cache --fix",
+    "*.css": "stylelint --fix",
+    "*.scss": "stylelint --fix",
     "*.hs": [
       "stack exec hlint",
       "stack exec fourmolu -- --mode check"
