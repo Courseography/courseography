@@ -12,6 +12,7 @@
 
 ### 🔧 Internal changes
 
+- Extracted read-only selection and prerequisite queries (`isSelected`, `arePrereqsSatisfied*`) from `Graph.js` into a typed `graphState.ts` module
 - Fixed lint-staged pre-commit hook running Prettier and ESLint over the whole repository instead of only staged files, and added `pnpm-lock.yaml` to `.prettierignore`
 - Extracted the root `<svg>` setup (viewBox calculation, shared filters/markers) of `Graph.js` into a typed `GraphCanvas.tsx` component
 - Refactored `react_modal.js.jsx` into modular functional TypeScript components (`CampusMap.tsx`, `CourseModal.tsx`, `DayBox.tsx`, `Description.tsx`, `FocusModal.tsx`, `MapModal.tsx`, `MapSidebar.tsx`), added shared `types.ts`, and removed unused dead code

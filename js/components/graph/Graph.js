@@ -10,9 +10,14 @@ import Button from "./Button"
 import InfoBox from "./InfoBox"
 import GraphCanvas, { NODE_DROPSHADOW_FILTER_ID } from "./GraphCanvas"
 import Sidebar from "./Sidebar"
-import { parseAnd } from "./requirementParser"
-import { findRelationship, numCredits, transformPoint, formatTransform } from "./util"
+import { numCredits, transformPoint, formatTransform } from "./util"
 import { loadGraphData } from "./loadGraphData"
+import {
+  isSelected,
+  arePrereqsSatisfiedBool,
+  arePrereqsSatisfiedNode,
+  arePrereqsSatisfiedHybrid,
+} from "./graphState"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faMagnifyingGlassMinus,
@@ -178,8 +183,8 @@ export class Graph extends React.Component {
    * Update the status of the Edge, based on the status of the Node/Bool it points from/to.
    */
   updateEdgeStatus = (status, edgeID, source, target) => {
-    const isSourceSelected = this.isSelected(source)
-    const isTargetSelected = this.isSelected(target)
+    const isSourceSelected = isSelected(this.state, source)
+    const isTargetSelected = isSelected(this.state, target)
     const targetStatus = this.state.nodesStatus[target]
       ? this.state.nodesStatus[target].status
       : this.state.boolsStatus[target]
@@ -691,7 +696,7 @@ export class Graph extends React.Component {
    * Update the Bool's state at any moment given the prereqs and current state.
    */
   updateNodeBool = boolId => {
-    const newState = this.arePrereqsSatisfiedBool(boolId) ? "active" : "inactive"
+    const newState = arePrereqsSatisfiedBool(this.state, boolId) ? "active" : "inactive"
     const childs = this.state.connections.children[boolId]
     const inEdges = this.state.connections.inEdges[boolId]
     const outEdges = this.state.connections.outEdges[boolId]
@@ -732,7 +737,7 @@ export class Graph extends React.Component {
     if (this.state.hybridsJSON[nodeId]) {
       // For a hybrid node, set the state to 'active' or 'inactive' depending on if its text is satisfied
       // as a prerequisite string
-      if (this.arePrereqsSatisfiedHybrid(nodeId)) {
+      if (arePrereqsSatisfiedHybrid(this.state, nodeId)) {
         newState = "active"
       } else {
         newState = "inactive"
@@ -740,14 +745,14 @@ export class Graph extends React.Component {
     } else {
       // For a regular course node, set the state to 'active', 'takeable', 'inactive', or 'overridden'
       // depending on whether the user has selected the course and whether the course's prereqs are met
-      if (this.arePrereqsSatisfiedNode(nodeId)) {
-        if (this.isSelected(nodeId)) {
+      if (arePrereqsSatisfiedNode(this.state, nodeId)) {
+        if (isSelected(this.state, nodeId)) {
           newState = "active"
         } else {
           newState = "takeable"
         }
       } else {
-        if (this.isSelected(nodeId)) {
+        if (isSelected(this.state, nodeId)) {
           newState = "overridden"
         } else {
           newState = "inactive"
@@ -890,7 +895,7 @@ export class Graph extends React.Component {
         () => {
           inEdges?.forEach(edge => {
             const currentEdge = this.state.edgesJSON[edge]
-            if (!this.isSelected(currentEdge.source)) {
+            if (!isSelected(this.state, currentEdge.source)) {
               this.updateEdgeStatus(
                 "missing",
                 currentEdge.id_,
@@ -940,7 +945,7 @@ export class Graph extends React.Component {
         () => {
           inEdges?.forEach(edge => {
             const currentEdge = this.state.edgesJSON[edge]
-            if (!this.isSelected(currentEdge.source)) {
+            if (!isSelected(this.state, currentEdge.source)) {
               this.updateEdgeStatus(
                 "missing",
                 currentEdge.id_,
@@ -1000,125 +1005,6 @@ export class Graph extends React.Component {
         )
       }
     })
-  }
-
-  /**
-   * Checks if a node or bool node is currently selected or active.
-   * @param {string} nodeId
-   * @returns {boolean}
-   */
-  isSelected = nodeId => {
-    if (this.state.nodesStatus[nodeId]) {
-      return this.isSelectedNode(nodeId)
-    } else {
-      return this.isSelectedBool(nodeId)
-    }
-  }
-
-  /**
-   * Checks whether this Node is selected
-   * @return {boolean}
-   */
-  isSelectedNode = nodeId => {
-    if (this.state.nodesJSON[nodeId]) {
-      return this.state.nodesStatus[nodeId].selected
-    } else {
-      return this.state.nodesStatus[nodeId].status === "active"
-    }
-  }
-
-  /**
-   * Check whether the Bool is selected.
-   * @returns {boolean} Whether status is active or not.
-   */
-  isSelectedBool = boolId => {
-    return this.state.boolsStatus[boolId] === "active"
-  }
-
-  /**
-   * Check if the prerequisite courses have been satisfied based on bool type.
-   * @param {string} boolId the ID of the bool node.
-   * @returns {boolean} Whether the bool is satisfied based on its prerequisite nodes.
-   */
-  arePrereqsSatisfiedBool = boolId => {
-    const isAllTrue = element => {
-      return this.state.nodesStatus[element]
-        ? this.isSelected(element)
-        : this.isSelected(element)
-    }
-
-    if (this.state.boolsJSON[boolId].text[0].text === "and") {
-      return this.state.connections.parents[boolId].every(isAllTrue)
-    } else if (this.state.boolsJSON[boolId].text[0].text === "or") {
-      return this.state.connections.parents[boolId].some(isAllTrue)
-    }
-  }
-
-  /**
-   * Recursively checks whether all prerequisite/preceding nodes for a node are satisfied.
-   * @param {string} nodeId the ID of the node.
-   * @return {boolean} whether all of the node's prerequisite nodes are satisfied by the selected courses.
-   */
-  arePrereqsSatisfiedNode = nodeId => {
-    const parents = this.state.connections.parents[nodeId]
-    /**
-     * Recursively checks that preceding nodes are selected
-     * @param  {string|Array} element Node(s)/other on the graph
-     * @return {boolean}
-     */
-    const isAllTrue = element => {
-      if (typeof element === "string") {
-        if (this.state.nodesStatus[element] || this.state.boolsJSON[element]) {
-          return this.isSelected(element)
-        } else {
-          return false
-        }
-      } else {
-        return element.some(isAllTrue)
-      }
-    }
-
-    return parents.every(isAllTrue)
-  }
-
-  /**
-   * Checks whether a hybrid node's prereq string is satisfied.
-   * @param {string} nodeId the ID of the hybrid node.
-   * @return {boolean} whether the node's text prerequisite string is satisfied by the selected courses.
-   */
-  arePrereqsSatisfiedHybrid = nodeId => {
-    // Concatenate prereq string
-    let hybridNode = this.state.hybridsJSON[nodeId]
-    let hybridText = hybridNode.text.map(textTag => textTag.text).join("")
-
-    // Parse prereq string into a nested list alternating between AND and OR conditions
-    let prereqList = parseAnd(hybridText)
-
-    // Recursively check if each prerequisite condition is satisfied within the selected courses
-    let nodesList = Object.values(this.state.nodesJSON)
-    const isSelectedCourse = course => {
-      let prereqNode = findRelationship(course, nodesList)
-      if (prereqNode !== undefined) {
-        return this.isSelectedNode(prereqNode.id_)
-      } else {
-        return false
-      }
-    }
-    const andSatisfied = andList => {
-      if (typeof andList === "string") {
-        return isSelectedCourse(andList)
-      } else {
-        return andList.every(orSatisfied)
-      }
-    }
-    const orSatisfied = orList => {
-      if (typeof orList === "string") {
-        return isSelectedCourse(orList)
-      } else {
-        return orList.some(andSatisfied)
-      }
-    }
-    return andSatisfied(prereqList)
   }
 
   /**
