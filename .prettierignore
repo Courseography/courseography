@@ -12,5 +12,6 @@ vendor/
 .yarn/
 .pnp.cjs
 .pnp.loader.mjs
+pnpm-lock.yaml
 
 venv/
