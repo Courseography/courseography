@@ -8,6 +8,7 @@ import Edge from "./Edge"
 import Node from "./Node"
 import Button from "./Button"
 import InfoBox from "./InfoBox"
+import GraphCanvas, { NODE_DROPSHADOW_FILTER_ID } from "./GraphCanvas"
 import Sidebar from "./Sidebar"
 import { parseAnd } from "./requirementParser"
 import { findRelationship, numCredits, transformPoint, formatTransform } from "./util"
@@ -67,7 +68,6 @@ export class Graph extends React.Component {
       selectedNodes: new Set(),
     }
     this.exportModal = React.createRef()
-    this.nodeDropshadowFilter = "dropshadow"
   }
 
   componentDidMount() {
@@ -514,36 +514,6 @@ export class Graph extends React.Component {
     if (this.state.currFocus !== null) {
       this.highlightFocuses([])
     }
-  }
-
-  renderArrowHead = () => {
-    const polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" }
-    return (
-      <defs>
-        <marker
-          id="arrowHead"
-          viewBox="0 0 10 10"
-          refX="4"
-          refY="5"
-          markerUnits="strokeWidth"
-          markerWidth="7"
-          markerHeight="7"
-          orient="auto"
-        >
-          <polyline {...polylineAttrs} />
-        </marker>
-      </defs>
-    )
-  }
-
-  renderEllipseBlurFilter = () => {
-    return (
-      <defs>
-        <filter id="blur-filter">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
-        </filter>
-      </defs>
-    )
   }
 
   /** Zoom into the graph by calculating new viewbox dimensions
@@ -1351,44 +1321,6 @@ export class Graph extends React.Component {
   }
 
   render() {
-    let containerWidth = 0
-    let containerHeight = 0
-    if (document.getElementById("react-graph") !== null) {
-      const reactGraph = document.getElementById("react-graph")
-      containerWidth = reactGraph.clientWidth
-      containerHeight = reactGraph.clientHeight
-    }
-
-    let newViewboxWidth = this.state.width * this.state.zoomFactor
-    let newViewboxHeight = this.state.height * this.state.zoomFactor
-    if (document.getElementById("generateRoot") !== null) {
-      newViewboxWidth =
-        Math.max(this.state.width, containerWidth) * this.state.zoomFactor
-      newViewboxHeight =
-        Math.max(this.state.height, containerHeight) * this.state.zoomFactor
-    }
-
-    const viewboxContainerRatio =
-      containerHeight !== 0 ? newViewboxHeight / containerHeight : 1
-    const viewboxX =
-      (this.state.width - newViewboxWidth) / 2 +
-      this.state.horizontalPanFactor * viewboxContainerRatio
-    const viewboxY =
-      (this.state.height - newViewboxHeight) / 2 +
-      this.state.verticalPanFactor * viewboxContainerRatio
-
-    // not all of these properties are supported in React
-    const svgAttrs = {
-      height: "100%",
-      width: "100%",
-      viewBox: `${viewboxX} ${viewboxY} ${newViewboxWidth} ${newViewboxHeight}`,
-      preserveAspectRatio: "xMidYMid",
-      "xmlns:svg": "http://www.w3.org/2000/svg",
-      "xmlns:dc": "http://purl.org/dc/elements/1.1/",
-      "xmlns:cc": "http://creativecommons.org/ns#",
-      "xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-    }
-
     const resetDisabled =
       this.state.zoomFactor === 1 &&
       this.state.horizontalPanFactor === 0 &&
@@ -1493,27 +1425,14 @@ export class Graph extends React.Component {
           </div>
         )}
 
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
-          id="main-graph"
-          {...svgAttrs}
-          version="1.1"
+        <GraphCanvas
+          width={this.state.width}
+          height={this.state.height}
+          zoomFactor={this.state.zoomFactor}
+          horizontalPanFactor={this.state.horizontalPanFactor}
+          verticalPanFactor={this.state.verticalPanFactor}
           {...svgMouseEvents}
         >
-          <filter id={this.nodeDropshadowFilter} height="130%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-            <feOffset dx="2" dy="2" result="offsetblur" />
-            <feComponentTransfer>
-              <feFuncA type="linear" slope="0.8" />
-            </feComponentTransfer>
-            <feMerge>
-              <feMergeNode />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          {this.renderArrowHead()}
-          {this.renderEllipseBlurFilter()}
           {this.renderRegionsLabels(this.state.regionsJSON, this.state.labelsJSON)}
 
           {this.renderBoolGroup(
@@ -1537,7 +1456,7 @@ export class Graph extends React.Component {
             this.state.highlightedNodesFocus,
             this.state.highlightedNodesDeps,
             this.state.connections,
-            this.nodeDropshadowFilter
+            NODE_DROPSHADOW_FILTER_ID
           )}
 
           <InfoBox
@@ -1549,7 +1468,7 @@ export class Graph extends React.Component {
             yPos={this.state.infoBoxYPos}
             nodeId={this.state.infoBoxNodeId}
           />
-        </svg>
+        </GraphCanvas>
       </div>
     )
   }
