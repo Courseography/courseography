@@ -32,6 +32,7 @@ export function CampusMap({
 
     if (!map || !mapGroup) return
 
+    // markerCount is the number of markers on the map.
     const markerCount = mapGroup.getLayers().length
 
     if (markerCount > 1) {
