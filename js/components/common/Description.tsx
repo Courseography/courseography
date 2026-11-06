@@ -19,10 +19,7 @@ interface DescriptionProps {
  */
 export function Description({ course, sessions }: DescriptionProps): JSX.Element {
   const timetableUnavailable =
-    Object.keys(sessions).length !== 0 &&
-    !sessions.F?.length &&
-    !sessions.S?.length &&
-    !sessions.Y?.length
+    !sessions.F?.length && !sessions.S?.length && !sessions.Y?.length
 
   let timetableDisplay
   if (timetableUnavailable) {
