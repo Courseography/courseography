@@ -13,6 +13,7 @@ jest.mock("leaflet", () => ({
   latLng: jest.fn((lat, lng) => ({ lat, lng })),
 }))
 
+/* eslint-disable react/prop-types */
 jest.mock("react-leaflet", () => ({
   MapContainer: ({ children }) => <div data-testid="map-container">{children}</div>,
   TileLayer: ({ url }) => <div data-testid="tile-layer" data-url={url} />,
@@ -24,6 +25,7 @@ jest.mock("react-leaflet", () => ({
   ),
   Popup: ({ children }) => <div data-testid="popup">{children}</div>,
 }))
+/* eslint-enable react/prop-types */
 
 describe("CampusMap", () => {
   const mockLecturesByBuilding = [
@@ -54,7 +56,10 @@ describe("CampusMap", () => {
 
   it("renders the map container", () => {
     render(
-      <CampusMap lecturesByBuilding={mockLecturesByBuilding} selectedLecTimeframes={[]} />
+      <CampusMap
+        lecturesByBuilding={mockLecturesByBuilding}
+        selectedLecTimeframes={[]}
+      />
     )
 
     const mapContainer = screen.getByTestId("map-container")
@@ -63,7 +68,10 @@ describe("CampusMap", () => {
 
   it("renders markers for each building", () => {
     render(
-      <CampusMap lecturesByBuilding={mockLecturesByBuilding} selectedLecTimeframes={[]} />
+      <CampusMap
+        lecturesByBuilding={mockLecturesByBuilding}
+        selectedLecTimeframes={[]}
+      />
     )
 
     const markers = screen.getAllByTestId("marker")
@@ -108,7 +116,10 @@ describe("CampusMap", () => {
 
   it("renders Zoom to Fit button", () => {
     render(
-      <CampusMap lecturesByBuilding={mockLecturesByBuilding} selectedLecTimeframes={[]} />
+      <CampusMap
+        lecturesByBuilding={mockLecturesByBuilding}
+        selectedLecTimeframes={[]}
+      />
     )
 
     const zoomButton = screen.getByText("Zoom to Fit")
@@ -118,7 +129,10 @@ describe("CampusMap", () => {
   it("zoom button is clickable", async () => {
     const user = userEvent.setup()
     render(
-      <CampusMap lecturesByBuilding={mockLecturesByBuilding} selectedLecTimeframes={[]} />
+      <CampusMap
+        lecturesByBuilding={mockLecturesByBuilding}
+        selectedLecTimeframes={[]}
+      />
     )
 
     const zoomButton = screen.getByText("Zoom to Fit")
@@ -142,7 +156,10 @@ describe("CampusMap", () => {
     ]
 
     render(
-      <CampusMap lecturesByBuilding={buildingsWithoutCoords} selectedLecTimeframes={[]} />
+      <CampusMap
+        lecturesByBuilding={buildingsWithoutCoords}
+        selectedLecTimeframes={[]}
+      />
     )
 
     const markers = screen.queryAllByTestId("marker")
@@ -151,7 +168,10 @@ describe("CampusMap", () => {
 
   it("renders popup component for markers", () => {
     render(
-      <CampusMap lecturesByBuilding={mockLecturesByBuilding} selectedLecTimeframes={[]} />
+      <CampusMap
+        lecturesByBuilding={mockLecturesByBuilding}
+        selectedLecTimeframes={[]}
+      />
     )
 
     // Check that popup component is rendered
