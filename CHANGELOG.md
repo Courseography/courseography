@@ -10,8 +10,12 @@
 
 ### 🐛 Bug fixes
 
+- Fixed campus map not rendering in timetable modal by adding explicit height to `#campus-map` container
+- Fixed "Zoom to Fit" button: resolved sidebar overlap and enabled view reset for single-marker maps
+
 ### 🔧 Internal changes
 
+- Added test coverage for `CampusMap` component (7 test cases covering rendering, markers, and zoom functionality)
 - Extracted read-only selection, prerequisite, and status computations (`isSelected`, `arePrereqsSatisfied*`, `compute*Status`, `totalSelectedCredits`) from `Graph.js` into a typed `graphState.ts` module
 - Fixed lint-staged pre-commit hook running Prettier and ESLint over the whole repository instead of only staged files, and added `pnpm-lock.yaml` to `.prettierignore`
 - Extracted the root `<svg>` setup (viewBox calculation, shared filters/markers) of `Graph.js` into a typed `GraphCanvas.tsx` component
