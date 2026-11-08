@@ -155,7 +155,7 @@ export function CampusMap({
         dragging={true}
         ref={mapRef}
       >
-        <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+        <TileLayer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png" />
         <FeatureGroup ref={groupRef}>{locationMarkers}</FeatureGroup>
       </MapContainer>
       <button id="zoom-button" onClick={zoomToFit}>

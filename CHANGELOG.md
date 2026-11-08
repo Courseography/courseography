@@ -16,6 +16,8 @@
 ### 🔧 Internal changes
 
 - Added test coverage for `CampusMap` component (7 test cases covering rendering, markers, and zoom functionality)
+- Simplified timetable availability check in `Description.tsx` by removing redundant `Object.keys(sessions).length !== 0` condition
+- Updated OpenStreetMap tile layer URL from HTTP to HTTPS in `CampusMap.tsx` for improved security
 - Extracted read-only selection, prerequisite, and status computations (`isSelected`, `arePrereqsSatisfied*`, `compute*Status`, `totalSelectedCredits`) from `Graph.js` into a typed `graphState.ts` module
 - Fixed lint-staged pre-commit hook running Prettier and ESLint over the whole repository instead of only staged files, and added `pnpm-lock.yaml` to `.prettierignore`
 - Extracted the root `<svg>` setup (viewBox calculation, shared filters/markers) of `Graph.js` into a typed `GraphCanvas.tsx` component
