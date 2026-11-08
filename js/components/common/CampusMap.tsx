@@ -33,12 +33,16 @@ export function CampusMap({
     if (!map || !mapGroup) return
 
     // markerCount is the number of markers on the map.
-    // Only adjust the map bounds if there are multiple markers because the zoom will
-    // be strange for 1 marker. Note that the map will be centered on the single marker
     const markerCount = mapGroup.getLayers().length
 
     if (markerCount > 1) {
+      // Multiple markers: fit bounds to show all markers
       map.fitBounds(mapGroup.getBounds(), { padding: [30, 30] })
+    } else if (markerCount === 1) {
+      // Single marker: reset to default zoom level 16 and center on the marker
+      const bounds = mapGroup.getBounds()
+      const center = bounds.getCenter()
+      map.setView(center, 16)
     }
   }
 

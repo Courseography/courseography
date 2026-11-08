@@ -337,7 +337,12 @@ ol {
   fill: var(--secondary-color);
 }
 
+#campus-map {
+  height: 500px;
+}
+
 #map-sidebar {
+  margin-top: 3.75rem;
   overflow-y: auto;
   padding: 0;
 }
