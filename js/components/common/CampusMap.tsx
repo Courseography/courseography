@@ -4,6 +4,15 @@ import { FeatureGroup, MapContainer, Marker, Popup, TileLayer } from "react-leaf
 import { convertTimeToString } from "./utils"
 import type { BuildingGroup, LectureTimeframe } from "./types"
 
+// Tile layer settings required by the OpenStreetMap tile usage policy:
+// https://operations.osmfoundation.org/policies/tiles/
+const OSM_TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+const OSM_COPYRIGHT_URL = "https://www.openstreetmap.org/copyright"
+const OSM_REPORT_ISSUE_URL = "https://www.openstreetmap.org/fixthemap"
+const OSM_ATTRIBUTION = `&copy; <a href="${OSM_COPYRIGHT_URL}">OpenStreetMap</a> contributors | <a href="${OSM_REPORT_ISSUE_URL}">Report a map issue</a>`
+// Highest zoom level OpenStreetMap serves tiles for
+const OSM_MAX_ZOOM = 19
+
 export interface CampusMapProps {
   lecturesByBuilding: BuildingGroup[]
   selectedLecTimeframes: LectureTimeframe[]
@@ -147,7 +156,7 @@ export function CampusMap({
       <MapContainer
         center={center}
         zoom={16}
-        maxZoom={40}
+        maxZoom={OSM_MAX_ZOOM}
         attributionControl={true}
         zoomControl={true}
         doubleClickZoom={true}
@@ -155,7 +164,11 @@ export function CampusMap({
         dragging={true}
         ref={mapRef}
       >
-        <TileLayer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+        <TileLayer
+          url={OSM_TILE_URL}
+          attribution={OSM_ATTRIBUTION}
+          maxZoom={OSM_MAX_ZOOM}
+        />
         <FeatureGroup ref={groupRef}>{locationMarkers}</FeatureGroup>
       </MapContainer>
       <button id="zoom-button" onClick={zoomToFit}>
