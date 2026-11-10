@@ -2,17 +2,38 @@ import { useCallback, useState } from "react"
 import { CourseModal } from "../common/CourseModal"
 import { CourseList } from "./course_list"
 import { Course } from "./course"
+import { SelectedLecture } from "./types"
+
+export interface CoursePanelProps {
+  selectedCourses: string[]
+  selectedLectures: SelectedLecture[]
+  removeCourse: (courseCode: string) => void
+  clearCourses: () => void
+  hoverLecture: (lecture: SelectedLecture) => void
+  unhoverLecture: () => void
+  selectLecture: (lecture: SelectedLecture) => void
+  selectCourse: (courseCode: string) => void
+}
 
 /**
  * Creates a search box and stores the current user input that is in the search box
  * Holds courses selected from the search box, and lists of their F, S and Y lecture, tutorial,
  * and practical sections.
  */
-export function CoursePanel(props) {
+export function CoursePanel({
+  selectedCourses,
+  selectedLectures,
+  removeCourse,
+  clearCourses,
+  hoverLecture,
+  unhoverLecture,
+  selectLecture,
+  selectCourse,
+}: CoursePanelProps) {
   const [value, setValue] = useState("")
-  const [courseInfoId, setCourseInfoId] = useState(null) // The course code to display in the CourseModal
+  const [courseInfoId, setCourseInfoId] = useState<string | undefined>(undefined) // The course code to display in the CourseModal
 
-  const handleInput = useCallback(event => {
+  const handleInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
   }, [])
 
@@ -20,23 +41,23 @@ export function CoursePanel(props) {
   // pop up window.
   const clearAllCourses = useCallback(() => {
     if (window.confirm("Clear all selected courses?")) {
-      props.clearCourses()
+      clearCourses()
     }
-  }, [props.clearCourses])
+  }, [clearCourses])
 
-  const displayInfo = useCallback(courseId => {
+  const displayInfo = useCallback((courseId: string) => {
     setCourseInfoId(courseId)
   }, [])
 
-  const courses = props.selectedCourses.map(course => (
+  const courses = selectedCourses.map(course => (
     <Course
       key={course}
-      selectedLectures={props.selectedLectures}
+      selectedLectures={selectedLectures}
       courseCode={course}
-      removeCourse={props.removeCourse}
-      hoverLecture={props.hoverLecture}
-      unhoverLecture={props.unhoverLecture}
-      selectLecture={props.selectLecture}
+      removeCourse={removeCourse}
+      hoverLecture={hoverLecture}
+      unhoverLecture={unhoverLecture}
+      selectLecture={selectLecture}
       displayInfo={displayInfo}
     />
   ))
@@ -59,9 +80,9 @@ export function CoursePanel(props) {
       <div id="search-container">
         <CourseList
           courseFilter={value.toUpperCase()}
-          selectedCourses={props.selectedCourses}
-          selectCourse={props.selectCourse}
-          removeCourse={props.removeCourse}
+          selectedCourses={selectedCourses}
+          selectCourse={selectCourse}
+          removeCourse={removeCourse}
         />
       </div>
       <div id="course-select-wrapper">
@@ -75,7 +96,7 @@ export function CoursePanel(props) {
       <CourseModal
         showCourseModal={!!courseInfoId}
         courseId={courseInfoId}
-        onClose={() => setCourseInfoId(null)}
+        onClose={() => setCourseInfoId(undefined)}
       />
     </div>
   )

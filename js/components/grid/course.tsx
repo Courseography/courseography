@@ -11,7 +11,7 @@ export interface CourseProps {
   hoverLecture: (lecture: SelectedLecture) => void
   unhoverLecture: () => void
   selectLecture: (lecture: SelectedLecture) => void
-  displayInfo: (courseId: any) => void
+  displayInfo: (courseId: string) => void
 }
 
 interface ParsedLecture {
