@@ -9,7 +9,7 @@ import type { BuildingGroup, LectureTimeframe } from "./types"
 const OSM_TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 const OSM_COPYRIGHT_URL = "https://www.openstreetmap.org/copyright"
 const OSM_REPORT_ISSUE_URL = "https://www.openstreetmap.org/fixthemap"
-const OSM_ATTRIBUTION = `&copy; <a href="${OSM_COPYRIGHT_URL}">OpenStreetMap</a> contributors | <a href="${OSM_REPORT_ISSUE_URL}">Report a map issue</a>`
+const OSM_ATTRIBUTION = `&copy; <a href="${OSM_COPYRIGHT_URL}" target="_blank" rel="noopener">OpenStreetMap</a> contributors | <a href="${OSM_REPORT_ISSUE_URL}" target="_blank" rel="noopener">Report a map issue</a>`
 // Highest zoom level OpenStreetMap serves tiles for
 const OSM_MAX_ZOOM = 19
 
