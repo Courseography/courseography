@@ -123,7 +123,7 @@ export interface LectureTimeframe {
   endTime: number
   location?: BuildingLocation | null
   inConflict?: boolean
-  width?: number
+  width: number
   dataSatisfied?: boolean
 }
 
