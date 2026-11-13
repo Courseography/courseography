@@ -3,7 +3,7 @@ import { SelectedLecture, TimetableMap } from "./types"
 
 /**
  * Helper function to initialize the <fallSession> and <springSession> 2-D dictionaries
- * @param {list} lectures : List of 'Lecture' objects
+ * @param lectures the list of currently selected lectures
  */
 export const initializeSessions = (lectures: LectureTimeframe[]): TimetableMap[] => {
   const fallSession = {} as TimetableMap
@@ -32,13 +32,12 @@ export const initializeSessions = (lectures: LectureTimeframe[]): TimetableMap[]
 }
 
 /**
- * Helper function which sets the width of each Lecture,
- * and also sets the inConflict attribute of all Lecture objects
- * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
+ * Helper function which sets the width and isConflict attributes of each LectureTimeframe object
+ * @param timetableMap the map of intervals to active lectures
  */
-export function setWidths(session: TimetableMap) {
+export function setWidths(timetableMap: TimetableMap) {
   for (let i = 8; i < 22; i += 0.5) {
-    const timeRow = session[i]
+    const timeRow = timetableMap[i]
     // Reset all widths back to 1 and inConflict to false if this time slot is the startTime of
     // the lecture
     for (let day = 0; day < 5; day++) {
@@ -66,7 +65,7 @@ export function setWidths(session: TimetableMap) {
 
 /**
  * Helper function which stores the 'colSpan' attribute value for each day in the table header
- * @param {dictionary} colSpans : Dictionary storing the 'colSpan' attribute value for each day
+ * @param colSpans a dictionary storing the 'colSpan' attribute value for each day
  */
 export const storeColSpans = (session: TimetableMap, colSpans: Record<number, number>): void => {
   // For each day, stores all possible 'width' values every lecture at that day could have
@@ -80,15 +79,15 @@ export const storeColSpans = (session: TimetableMap, colSpans: Record<number, nu
 
 /**
  * Helper function which, for each day, stores all possible 'width' values the lectures in that day could have
- * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
+ * @param timetableMap the map of intervals to active lectures
  */
-const storeWidths = (session: TimetableMap): Record<number, number[]> => {
+const storeWidths = (timetableMap: TimetableMap): Record<number, number[]> => {
   const widths = {} as Record<number, number[]>
   // Iterate through every time-day slot in the session
   for (let day = 0; day < 5; day++) {
     widths[day] = []
     for (let i = 8; i < 22; i += 0.5) {
-      const timeRow = session[i]
+      const timeRow = timetableMap[i]
       const timeDaySlot = timeRow[day]
       // If there are lectures running at this time-day slot
       if (timeDaySlot.length > 0) {
@@ -107,17 +106,16 @@ const storeWidths = (session: TimetableMap): Record<number, number[]> => {
 /**
  * Helper function which returns if there is a course conflict at a time-and-day slot
  * (denoted by the number of courses in the list at this time-and-day slot)
+ * @param courseList the array of LectureTimeframe objects involved in the slot
  */
 const lectureConflict = (courseList: LectureTimeframe[]): boolean => {
   return courseList.length > 1
 }
 
 /**
- * Create a list of lecture objects representing each separate time a given lecture section takes place
- * @param lectureSection : Represents a lecture section for a course with time periods in which the lecture
- *                            takes place
- * @return {LectureTimeframe[]} An array of objects representing each disconnected time period the given
- *                  lecture occurs in
+ * Create a list of LectureTimeframe objects representing each separate time a given section takes place
+ * @param lectureSection the selected lecture as persisting in localStorage
+ * @return an array of objects representing each disconnected time period the given lecture occurs in
  */
 export const createNewLectures = (lectureSection: SelectedLecture, selectedLectures: SelectedLecture[]): LectureTimeframe[] => {
   // dataSatisfied is false if a tutorial or practical for a course is selected in a particular session(F or S) and there
