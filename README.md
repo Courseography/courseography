@@ -157,6 +157,10 @@ Alex Shih,
 Cassandra Stefura,
 Zi Kai Xu
 
+## Contact
+
+Have a question, comment, or concern about Courseography? Email us at [courseography@cs.toronto.edu](mailto:courseography@cs.toronto.edu).
+
 ## Privacy Policy and Licensing
 
 Click [here](https://github.com/Courseography/courseography/blob/master/PRIVACY.md) to learn about our Privacy Policy.
