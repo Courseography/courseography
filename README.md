@@ -73,7 +73,7 @@ run `$ pnpm test -- <path>`.
 
 #### Running end-to-end tests
 
-We use [Cypress](https://www.cypress.io/) for end-to-end tests that run against the full app in a browser. The tests are in `cypress/integration/`.
+We use [Cypress](https://www.cypress.io/) for end-to-end tests that run against the full app in a browser. The tests are in `cypress/integration/`, and they also run in CI on every pull request.
 
 1. Make sure the database is populated (see [Parsing and Generation](#parsing-and-generation)) and start the app (see [Running](#running)). The tests expect the server at `http://localhost:8000`.
 2. In a new terminal window, run one of:

@@ -54,11 +54,18 @@ describe("Graph", () => {
 
   describe("Info Box", () => {
     it("clicking the info box should produce a pop up modal", () => {
-      cy.visit("/graph")
+      // Course info comes from scraping the Arts & Science Calendar, so stub it
+      // rather than requiring a fully populated database
+      cy.intercept(
+        { method: "GET", pathname: "/course" },
+        { fixture: "csc108-course-info.json" }
+      ).as("getCourse")
+
       cy.contains("CSC108").trigger("mouseover")
       cy.contains("Info").click()
 
-      cy.contains("CSC108 Introduction to Computer Programming")
+      cy.wait("@getCourse").its("request.url").should("include", "name=csc108")
+      cy.contains("CSC108H1 Introduction to Computer Programming")
       // force click because it's not visible
       cy.get(".ReactModal__Overlay").click({ force: true })
     })
