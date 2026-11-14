@@ -1,6 +1,6 @@
 import { render, screen, cleanup, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { CoursePanel } from "../course_panel.js.jsx"
+import { CoursePanel } from "../course_panel"
 import fetchMock from "fetch-mock"
 
 describe("CoursePanel", () => {

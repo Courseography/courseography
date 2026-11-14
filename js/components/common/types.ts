@@ -46,6 +46,8 @@ export interface MeetingItem {
     cap: number
     enrol: number
     wait: number
+    code: string
+    extra?: number
   }
   timeData: TimeData[]
 }
