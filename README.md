@@ -71,6 +71,20 @@ Run `$ pnpm run typecheck`, which uses [Typescript](https://www.typescriptlang.o
 To run all tests, run `$ pnpm test`. However, if you need to run a specific file or folder of tests,
 run `$ pnpm test -- <path>`.
 
+#### Running end-to-end tests
+
+We use [Cypress](https://www.cypress.io/) for end-to-end tests that run against the full app in a browser. The tests are in `cypress/integration/`.
+
+1. Make sure the database is populated (see [Parsing and Generation](#parsing-and-generation)) and start the app (see [Running](#running)). The tests expect the server at `http://localhost:8000`.
+2. In a new terminal window, run one of:
+   - `$ pnpm run cypress:run` to run all tests headlessly in the terminal.
+   - `$ pnpm run cypress:run --spec <path>` to run a specific test file (e.g., `cypress/integration/graph_spec/node_spec.js`).
+   - `$ pnpm run cypress:open` to open the interactive Cypress app, where you can pick tests to run and watch them in the browser.
+
+Screenshots of failing tests are saved to `cypress/screenshots/`.
+
+**Note:** If Cypress fails to start with `bad option: --smoke-test`, your terminal has the `ELECTRON_RUN_AS_NODE` environment variable set (VS Code's integrated terminal can do this). Unset it first, e.g. `$ env -u ELECTRON_RUN_AS_NODE pnpm run cypress:run`.
+
 #### Running back-end tests
 
 To run all tests, run `$ stack test`. To run a specific test group or test case, run `stack test --ta '-p "<name of test group/case>"'`.
