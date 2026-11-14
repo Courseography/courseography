@@ -6,12 +6,12 @@ describe("Hybrid Node", () => {
     cy.get("body").trigger("mouseout")
   })
   it("should have the 'hybrid' CSS class", () => {
-    cy.get('[data-testid="h(csc209)"]').should("have.class", "hybrid")
-    cy.get('[data-testid="h(csc209)"]').should("have.class", "inactive")
+    cy.get('[data-testid="h(csc209h1)"]').should("have.class", "hybrid")
+    cy.get('[data-testid="h(csc209h1)"]').should("have.class", "inactive")
   })
   it("shouldn't do anything when you hover or click it", () => {
-    cy.get('[data-testid="h(csc209)"]').should("have.class", "inactive")
-    cy.get('[data-testid="h(csc209)"]')
+    cy.get('[data-testid="h(csc209h1)"]').should("have.class", "inactive")
+    cy.get('[data-testid="h(csc209h1)"]')
       .click()
       .should("have.class", "inactive")
       .trigger("mouseover")
@@ -20,114 +20,117 @@ describe("Hybrid Node", () => {
       .should("have.class", "inactive")
   })
   it("should be 'inactive' when it's prereq parent is NOT met", () => {
-    cy.get('[data-testid="h(csc209)"]').should("have.class", "inactive")
+    cy.get('[data-testid="h(csc209h1)"]').should("have.class", "inactive")
   })
   it("should be 'active' when its prereq parent is met", () => {
-    cy.get('[data-testid="csc209"]').click()
-    cy.get('[data-testid="h(csc209)"]').should("have.class", "active")
+    cy.get('[data-testid="csc209h1"]').click()
+    cy.get('[data-testid="h(csc209h1)"]').should("have.class", "active")
   })
 
   it("should be 'missing' if not 'active' and it's an unmet prereq of the currently hovered course", () => {
-    cy.get('[data-testid="csc317"]').trigger("mouseover")
-    cy.get('[data-testid="h(csc209)"]').should("have.class", "missing")
-    cy.get('[data-testid="csc317"]').trigger("mouseout")
+    cy.get('[data-testid="csc456h1"]').trigger("mouseover")
+    cy.get('[data-testid="h(csc209h1)"]').should("have.class", "missing")
+    cy.get('[data-testid="csc456h1"]').trigger("mouseout")
   })
 })
 
 describe("Course Node", () => {
+  beforeEach(() => {
+    cy.visit("/graph")
+  })
+
   it("should have the CSS class: 'node'", () => {
-    cy.get('[data-testid="csc108"]').should("have.class", "node")
+    cy.get('[data-testid="csc108h1"]').should("have.class", "node")
   })
   describe("Unselected Course Node", () => {
     it("should be 'takeable' if it has no prereqs", () => {
-      cy.get('[data-testid="csc108"]').should("have.class", "takeable")
+      cy.get('[data-testid="csc108h1"]').should("have.class", "takeable")
     })
     it("should be 'inactive' if the prereqs are NOT met", () => {
-      cy.get('[data-testid="csc148"]').should("have.class", "inactive")
+      cy.get('[data-testid="csc148h1"]').should("have.class", "inactive")
     })
     it("should be 'takeable' if the prereqs are met", () => {
-      cy.get('[data-testid="csc108"]').click()
-      cy.get('[data-testid="csc148"]').should("have.class", "takeable")
+      cy.get('[data-testid="csc108h1"]').click()
+      cy.get('[data-testid="csc148h1"]').should("have.class", "takeable")
 
       // cleanup
-      cy.get('[data-testid="csc108"]').click()
+      cy.get('[data-testid="csc108h1"]').click()
     })
     it('should be "missing" when unselected and hovered over', () => {
-      cy.get('[data-testid="csc108"]').trigger("mouseover")
-      cy.get('[data-testid="csc108"]').should("have.class", "missing")
+      cy.get('[data-testid="csc108h1"]').trigger("mouseover")
+      cy.get('[data-testid="csc108h1"]').should("have.class", "missing")
     })
 
     it("when hovered, should set all unmet prereqs and itself as 'missing'", () => {
-      cy.get('[data-testid="csc207"]').trigger("mouseover")
-      cy.get('[data-testid="csc148"]').should("have.class", "missing")
-      cy.get('[data-testid="csc108"]').should("have.class", "missing")
+      cy.get('[data-testid="csc207h1"]').trigger("mouseover")
+      cy.get('[data-testid="csc148h1"]').should("have.class", "missing")
+      cy.get('[data-testid="csc108h1"]').should("have.class", "missing")
     })
   })
 
   describe("Selected Course Node", () => {
     it("with met prereqs should 'active'", () => {
-      cy.get('[data-testid="csc108"]').click()
-      cy.get('[data-testid="csc108"]').should("have.class", "active")
+      cy.get('[data-testid="csc108h1"]').click()
+      cy.get('[data-testid="csc108h1"]').should("have.class", "active")
 
       // cleanup
-      cy.get('[data-testid="csc108"]').click()
+      cy.get('[data-testid="csc108h1"]').click()
     })
     describe("selected course with un-met prereqs", () => {
       it("should be 'overridden' (if you don't hover over it)", () => {
-        cy.get('[data-testid="csc148"]').click()
-        cy.get('[data-testid="csc148"]').should("have.class", "overridden")
+        cy.get('[data-testid="csc148h1"]').click()
+        cy.get('[data-testid="csc148h1"]').should("have.class", "overridden")
 
         // cleanup
-        cy.get('[data-testid="csc148"]').click()
+        cy.get('[data-testid="csc148h1"]').click()
       })
 
       it("'overridden' course counts as a satisfied prereq (acts like 'active')", () => {
-        cy.get('[data-testid="csc148"]').click()
-        cy.get('[data-testid="csc148"]').should("have.class", "overridden")
-        cy.get('[data-testid="csc207"]').should("have.class", "takeable")
+        cy.get('[data-testid="csc148h1"]').click()
+        cy.get('[data-testid="csc148h1"]').should("have.class", "overridden")
+        cy.get('[data-testid="csc207h1"]').should("have.class", "takeable")
       })
 
-      it("hovering over a course with an 'overridden' prereq still marks the 'overridden' unmet prereqs as 'missing'", () => {
-        cy.get('[data-testid="csc148"]').click()
-        cy.get('[data-testid="csc207"]').trigger("mouseover")
-        cy.get('[data-testid="csc108"]').should("have.class", "missing")
+      // cy.click() leaves the mouse over the clicked node, so trigger "mouseout" after
+      // clicking to avoid that node's hover state affecting the assertions.
+      it("hovering over a course with an 'overridden' prereq does not mark the 'overridden' unmet prereqs as 'missing'", () => {
+        cy.get('[data-testid="csc148h1"]').click().trigger("mouseout")
+        cy.get('[data-testid="csc207h1"]').trigger("mouseover")
+        // not missing because csc148h1 is overridden
+        cy.get('[data-testid="csc108h1"]').should("have.class", "takeable")
       })
 
       it("hovering over the child of an 'active' course will ignore any unmet ancestor courses", () => {
-        cy.get('[data-testid="csc148"]').click()
-        cy.get('[data-testid="csc207"]').click()
-        cy.get('[data-testid="csc207"]').trigger("mouseover")
-        cy.get('[data-testid="csc108"]').should("have.class", "missing")
-
-        // cleanup
-        cy.get('[data-testid="csc148"]').click()
-        cy.get('[data-testid="csc207"]').click()
+        cy.get('[data-testid="csc148h1"]').click().trigger("mouseout")
+        cy.get('[data-testid="csc207h1"]').click().trigger("mouseout")
+        cy.get('[data-testid="csc207h1"]').trigger("mouseover")
+        cy.get('[data-testid="csc108h1"]').should("have.class", "takeable")
       })
       it("'missing' class when the mouse is hovering over a child class", () => {
-        cy.get('[data-testid="csc458"]')
+        cy.get('[data-testid="csc458h1"]')
           .trigger("mouseover")
           .should("have.class", "missing")
-        cy.get('[data-testid="h(csc263265)"]').should("have.class", "missing")
-        cy.get('[data-testid="and(csc209,csc258)"]').should("have.class", "missing")
-        cy.get('[data-testid="csc209"]').should("have.class", "missing")
-        cy.get('[data-testid="csc258"]').should("have.class", "missing")
-        cy.get('[data-testid="csc108"]').should("have.class", "missing")
+        cy.get('[data-testid="h(csc263h1,csc265h1)"]').should("have.class", "missing")
+        cy.get('[data-testid="and(csc209h1,csc258h1)"]').should("have.class", "missing")
+        cy.get('[data-testid="csc209h1"]').should("have.class", "missing")
+        cy.get('[data-testid="csc258h1"]').should("have.class", "missing")
+        cy.get('[data-testid="csc108h1"]').should("have.class", "missing")
 
         // unaffected, despite sharing the same prereqs as CSC458
-        cy.get('[data-testid="csc385"]').should("have.class", "inactive")
+        cy.get('[data-testid="csc385h1"]').should("have.class", "inactive")
 
         // cleanup
-        cy.get('[data-testid="csc148"]').click()
+        cy.get('[data-testid="csc148h1"]').click()
       })
       it("selected + hovered over + unmet prereqs: 'missing'", () => {
-        cy.get('[data-testid="csc324"]').click()
-        cy.get('[data-testid="csc324"]').should("have.class", "overridden")
+        cy.get('[data-testid="csc324h1"]').click()
+        cy.get('[data-testid="csc324h1"]').should("have.class", "overridden")
 
-        cy.get('[data-testid="csc324"]').trigger("mouseover")
-        cy.get('[data-testid="csc324"]').should("have.class", "missing")
+        cy.get('[data-testid="csc324h1"]').trigger("mouseover")
+        cy.get('[data-testid="csc324h1"]').should("have.class", "missing")
 
         // cleanup
-        cy.get('[data-testid="csc324"]').click()
+        cy.get('[data-testid="csc324h1"]').click()
       })
     })
   })
