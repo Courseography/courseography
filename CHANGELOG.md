@@ -16,6 +16,7 @@
 
 ### 🔧 Internal changes
 
+- Updated Cypress to 15.21.2, resolving the `extract-zip` and `qs` `pnpm audit` vulnerabilities, and disabled `allowCypressEnv`
 - Updated Cypress to 14.5.4, migrated `cypress.json` to `cypress.config.js`, fixed outdated end-to-end tests, added `cypress:run`/`cypress:open` scripts and README instructions for running them, and added an end-to-end test run to CI
 - Added test coverage for `CampusMap` component (7 test cases covering rendering, markers, and zoom functionality)
 - Simplified timetable availability check in `Description.tsx` by removing redundant `Object.keys(sessions).length !== 0` condition
