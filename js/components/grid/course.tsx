@@ -165,11 +165,7 @@ export function Course({
             onClick={() => displayInfo(courseCode)}
           />
         </div>
-        <h3
-          onClick={toggleSelect}
-          data-satisfied="true"
-          data-taken={containsSelectedLecture() ? "true" : "false"}
-        >
+        <h3 onClick={toggleSelect} data-satisfied="true">
           {courseCode}
         </h3>
       </div>
