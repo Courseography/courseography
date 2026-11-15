@@ -1,4 +1,4 @@
-import { SelectedLecture } from "./types"
+import type { SelectedLecture } from "./types"
 
 export interface LectureSectionProps {
   session: string

@@ -1,4 +1,4 @@
-import { SelectedLecture } from "./types"
+import type { SelectedLecture } from "./types"
 import { LectureSection } from "./lecture_section"
 
 export interface SectionListProps {

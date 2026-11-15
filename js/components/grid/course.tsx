@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { getCourse } from "../common/utils"
-import { SelectedLecture } from "./types"
-import { MeetingItem, TimeData } from "../common/types"
+import type { SelectedLecture } from "./types"
+import type { MeetingItem, TimeData } from "../common/types"
 import { SectionList } from "./section_list"
 
 export interface CourseProps {

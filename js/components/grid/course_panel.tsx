@@ -2,7 +2,7 @@ import { useCallback, useState } from "react"
 import { CourseModal } from "../common/CourseModal"
 import { CourseList } from "./course_list"
 import { Course } from "./course"
-import { SelectedLecture } from "./types"
+import type { SelectedLecture } from "./types"
 
 export interface CoursePanelProps {
   selectedCourses: string[]
