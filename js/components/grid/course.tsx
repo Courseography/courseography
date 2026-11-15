@@ -5,7 +5,6 @@ import type { MeetingItem, TimeData } from "../common/types"
 import { SectionList } from "./section_list"
 
 export interface CourseProps {
-  selectedLectures: SelectedLecture[]
   courseCode: string
   removeCourse: (courseCode: string) => void
   hoverLecture: (lecture: SelectedLecture) => void
@@ -35,7 +34,6 @@ interface ParsedCourse {
  * and practical sections for the course.
  */
 export function Course({
-  selectedLectures,
   courseCode,
   removeCourse,
   hoverLecture,

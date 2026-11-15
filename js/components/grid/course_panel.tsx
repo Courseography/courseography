@@ -6,7 +6,6 @@ import type { SelectedLecture } from "./types"
 
 export interface CoursePanelProps {
   selectedCourses: string[]
-  selectedLectures: SelectedLecture[]
   removeCourse: (courseCode: string) => void
   clearCourses: () => void
   hoverLecture: (lecture: SelectedLecture) => void
@@ -22,7 +21,6 @@ export interface CoursePanelProps {
  */
 export function CoursePanel({
   selectedCourses,
-  selectedLectures,
   removeCourse,
   clearCourses,
   hoverLecture,
@@ -52,7 +50,6 @@ export function CoursePanel({
   const courses = selectedCourses.map(course => (
     <Course
       key={course}
-      selectedLectures={selectedLectures}
       courseCode={course}
       removeCourse={removeCourse}
       hoverLecture={hoverLecture}

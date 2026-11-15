@@ -6,7 +6,6 @@ import fetchMock from "fetch-mock"
 describe("CoursePanel", () => {
   const coursePanelProps = {
     selectedCourses: [],
-    selectedLectures: [],
     removeCourse: jest.fn(),
     clearCourses: jest.fn(),
     hoverLecture: jest.fn(),

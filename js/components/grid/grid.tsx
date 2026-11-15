@@ -178,7 +178,6 @@ export default function Grid() {
       <Disclaimer />
       <CoursePanel
         selectedCourses={selectedCourses}
-        selectedLectures={selectedLectures}
         removeCourse={removeSelectedCourse}
         clearCourses={clearSelectedCourses}
         hoverLecture={hoverLecture}
