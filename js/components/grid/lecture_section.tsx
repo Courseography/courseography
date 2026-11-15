@@ -13,7 +13,6 @@ export interface LectureSectionProps {
  * A lecture, tutorial or practical section for the specified course in the specified
  * session. The section is added to or removed from a list of selected lecture upon click.
  */
-
 export function LectureSection({
   session,
   courseCode,

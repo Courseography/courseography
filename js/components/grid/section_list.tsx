@@ -14,7 +14,6 @@ export interface SectionListProps {
  * A list of lecture, tutorial and practical sections for the specified course for the specified
  * session.
  */
-
 export function SectionList({
   courseCode,
   session,

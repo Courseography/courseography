@@ -11,7 +11,6 @@ export interface CourseEntryProps {
  * Describes a course based on its course code, and whether or not it has been selected
  * (If the course is selected, it is a "starred-course").
  */
-
 export function CourseEntry({
   course,
   selectCourse,

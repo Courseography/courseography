@@ -12,7 +12,6 @@ export interface CourseListProps {
  * A list of courses in column flow
  * Composed of many CourseEntry
  */
-
 export function CourseList({
   courseFilter,
   selectedCourses,

@@ -34,7 +34,6 @@ interface ParsedCourse {
  * Also retrieves the course information. It holds list of F, S and Y lecture, tutorial
  * and practical sections for the course.
  */
-
 export function Course({
   selectedLectures,
   courseCode,
