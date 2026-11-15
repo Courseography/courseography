@@ -100,19 +100,6 @@ export function Course({
     return parsedLectures
   }, [])
 
-  const containsSelectedLecture = useCallback(() => {
-    // Only use method subString on the value of courseInfo.courseCode if
-    // if the courseInfo.courseCode exists (ie the course information has already been fetched)
-    if (courseInfo.courseCode) {
-      const lectures = selectedLectures.map(lecture =>
-        lecture.courseCode.substring(0, 6)
-      )
-      const courseCode = courseInfo.courseCode
-      return lectures.indexOf(courseCode.substring(0, 6)) >= 0
-    }
-    return false
-  }, [selectedLectures])
-
   useEffect(() => {
     getCourse(courseCode)
       .then(data => {
