@@ -72,6 +72,7 @@ module.exports = [
     languageOptions: {
       globals: {
         cy: "readonly",
+        Cypress: "readonly",
       },
     },
   },

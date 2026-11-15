@@ -53,10 +53,10 @@ cabal.sandbox.config
 coverage
 
 # cypress suggested folder structure scaffolding
-/cypress/fixtures
 /cypress/integration/examples
 /cypress/plugins
-/cypress/support
+/cypress/screenshots
+/cypress/videos
 
 # Python virtual environment
 venv
