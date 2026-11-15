@@ -55,6 +55,7 @@
 - Extracted `loadGraphData.ts` and `util.ts` (both TypeScript) out of `js/components/graph/Graph.js`, and moved `js/util/util.ts` to `js/components/graph/requirementParser.ts`
 - Changed SVG parsing to leave the `fill` column empty when inserting hybrid nodes into the database
 - Refactored `js/components/grid/course_panel.js.jsx` into separate typescript react components
+- Fixed type-only Typescript imports and added `verbatimModuleSyntax: true` to `tsconfig.json`
 
 ## [0.8.1] - 2026-08-10
 

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDownload } from "@fortawesome/free-solid-svg-icons"
 import { Tooltip } from "react-tooltip"
 import GraphDropdown from "../graph/GraphDropdown"
-import { Graph } from "../graph/types"
+import type { Graph } from "../graph/types"
 
 interface NavBarProps {
   selected_page: string

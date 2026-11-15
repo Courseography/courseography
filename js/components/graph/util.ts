@@ -1,5 +1,5 @@
 import { parseAnd } from "./requirementParser"
-import { GraphNodeJSON } from "./types"
+import type { GraphNodeJSON } from "./types"
 
 /**
  * Helper function to populate `parentsObj` and `childrenObj` with the connections of a hybrid node.

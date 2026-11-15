@@ -1,5 +1,5 @@
 import { populateHybridRelatives } from "./util"
-import { GraphNodeJSON } from "./types"
+import { type GraphNodeJSON } from "./types"
 
 interface GraphLabelEntry {
   rId: string

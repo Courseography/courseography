@@ -1,6 +1,6 @@
-import { parseAnd, PrereqTree } from "./requirementParser"
+import { parseAnd, type PrereqTree } from "./requirementParser"
 import { findRelationship, numCredits } from "./util"
-import { LoadedGraphData } from "./loadGraphData"
+import type { LoadedGraphData } from "./loadGraphData"
 
 /** The parts of Graph's state that describe the graph's nodes, bools, and their statuses. */
 export type GraphState = Pick<
