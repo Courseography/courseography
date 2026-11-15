@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { type JSX, useCallback, useState } from "react"
 import { CourseModal } from "../common/CourseModal"
 import { CourseList } from "./course_list"
 import { Course } from "./course"
@@ -29,7 +29,7 @@ export function CoursePanel({
   unhoverLecture,
   selectLecture,
   selectCourse,
-}: CoursePanelProps) {
+}: CoursePanelProps): JSX.Element {
   const [value, setValue] = useState("")
   const [courseInfoId, setCourseInfoId] = useState<string | undefined>(undefined) // The course code to display in the CourseModal
 

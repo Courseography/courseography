@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { type JSX, useCallback } from "react"
 
 export interface CourseEntryProps {
   course: string
@@ -16,7 +16,7 @@ export function CourseEntry({
   selectCourse,
   removeCourse,
   selectedCourses,
-}: CourseEntryProps) {
+}: CourseEntryProps): JSX.Element {
   // Check whether the course is already in the selectCourses list.
   // Remove the course if it is, or add the course if it is not.
   const select = useCallback(() => {

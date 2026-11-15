@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { type JSX, useState, useEffect, useCallback } from "react"
 import { getCourse } from "../common/utils"
 import type { SelectedLecture } from "./types"
 import type { MeetingItem, TimeData } from "../common/types"
@@ -42,7 +42,7 @@ export function Course({
   unhoverLecture,
   selectLecture,
   displayInfo,
-}: CourseProps) {
+}: CourseProps): JSX.Element {
   const [selected, setSelected] = useState(false)
   const [courseInfo, setCourseInfo] = useState<ParsedCourse>({
     courseCode: "",

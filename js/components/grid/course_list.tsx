@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { type JSX, useState, useEffect } from "react"
 import { CourseEntry } from "./course_entry"
 
 export interface CourseListProps {
@@ -17,7 +17,7 @@ export function CourseList({
   selectedCourses,
   selectCourse,
   removeCourse,
-}: CourseListProps) {
+}: CourseListProps): JSX.Element {
   const [courses, setCourses] = useState<string[]>([])
 
   useEffect(() => {

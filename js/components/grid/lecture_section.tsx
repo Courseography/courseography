@@ -1,3 +1,4 @@
+import type { JSX } from "react"
 import type { SelectedLecture } from "./types"
 
 export interface LectureSectionProps {
@@ -20,7 +21,7 @@ export function LectureSection({
   hoverLecture,
   unhoverLecture,
   selectLecture,
-}: LectureSectionProps) {
+}: LectureSectionProps): JSX.Element {
   return (
     <li
       id={courseCode + "-" + lecture.lectureCode + "-" + session}

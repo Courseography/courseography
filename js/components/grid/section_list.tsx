@@ -1,3 +1,4 @@
+import type { JSX } from "react"
 import type { SelectedLecture } from "./types"
 import { LectureSection } from "./lecture_section"
 
@@ -21,7 +22,7 @@ export function SectionList({
   hoverLecture,
   unhoverLecture,
   selectLecture,
-}: SectionListProps) {
+}: SectionListProps): JSX.Element {
   const lectureSections = lectures.map(lecture => (
     <LectureSection
       key={courseCode + lecture.lectureCode}
