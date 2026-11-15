@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 
-import { CoursePanel } from "./course_panel.js.jsx"
+import { CoursePanel } from "./course_panel"
 import { Row } from "./calendar.js.jsx"
 import { ExportModal, ExportModalHandle } from "../common/export"
 import Disclaimer from "../common/Disclaimer"
@@ -178,7 +178,6 @@ export default function Grid() {
       <Disclaimer />
       <CoursePanel
         selectedCourses={selectedCourses}
-        selectedLectures={selectedLectures}
         removeCourse={removeSelectedCourse}
         clearCourses={clearSelectedCourses}
         hoverLecture={hoverLecture}
