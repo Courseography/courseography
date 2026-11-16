@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete"
+import Autocomplete, { type AutocompleteProps } from "@mui/material/Autocomplete"
 import Chip from "@mui/material/Chip"
 import { useField } from "formik"
 

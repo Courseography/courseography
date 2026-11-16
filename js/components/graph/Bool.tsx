@@ -1,4 +1,4 @@
-import { GraphNodeJSON } from "./types"
+import type { GraphNodeJSON } from "./types"
 
 interface BoolProps {
   className?: string
