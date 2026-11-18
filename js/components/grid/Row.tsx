@@ -1,8 +1,7 @@
 import { createNewLectures, initializeSessions, setWidths, storeColSpans } from "./calendar";
 import { TimetableContainer } from "./TimetableContainer";
 import type { JSX } from "react";
-import type { LectureTimeframe } from "../common/types";
-import type { SelectedLecture, TimetableMap } from "./types";
+import type { SelectedLecture } from "./types";
 
 export interface RowProps {
   lectureSections: SelectedLecture[]
