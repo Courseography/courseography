@@ -1,5 +1,5 @@
-import { LectureTimeframe } from "../common/types"
-import { SelectedLecture, TimetableMap } from "./types"
+import type { LectureTimeframe } from "../common/types"
+import type { SelectedLecture, TimetableMap } from "./types"
 
 /**
  * Helper function to initialize the <fallSession> and <springSession> 2-D dictionaries
@@ -82,7 +82,7 @@ export const storeColSpans = (session: TimetableMap, colSpans: Record<number, nu
  * @param timetableMap the map of intervals to active lectures
  */
 const storeWidths = (timetableMap: TimetableMap): Record<number, number[]> => {
-  const widths = {} as Record<number, number[]>
+  const widths: Record<number, number[]> = {}
   // Iterate through every time-day slot in the session
   for (let day = 0; day < 5; day++) {
     widths[day] = []

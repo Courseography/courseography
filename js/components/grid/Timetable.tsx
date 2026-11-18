@@ -1,9 +1,9 @@
 import { type JSX, useCallback, RefObject, useRef } from "react";
-import { MapModalHandle, MapModal } from "../common/MapModal";
+import { type MapModalHandle, MapModal } from "../common/MapModal";
 import { TimetableBody } from "./TimetableBody";
 import { TimetableHeader } from "./TimetableHeader";
-import { LectureTimeframe } from "../common/types";
-import { TimetableMap } from "./types";
+import type { LectureTimeframe } from "../common/types";
+import type { TimetableMap } from "./types";
 
 export interface TimetableProps {
   session: "F" | "S"

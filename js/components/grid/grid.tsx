@@ -2,9 +2,9 @@ import { useEffect, useState, useRef } from "react"
 
 import { CoursePanel } from "./course_panel.js.jsx"
 import { Row } from "./Row"
-import { ExportModal, ExportModalHandle } from "../common/export"
+import { ExportModal, type ExportModalHandle } from "../common/export"
 import Disclaimer from "../common/Disclaimer"
-import { SelectedLecture } from "./types"
+import type { SelectedLecture } from "./types"
 
 import {
   AllCommunityModule,

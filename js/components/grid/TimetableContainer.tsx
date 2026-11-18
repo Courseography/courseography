@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { TimetableProps } from "./Timetable";
+import type { TimetableProps } from "./Timetable";
 import { Timetable } from "./Timetable";
 
 /**

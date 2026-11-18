@@ -1,4 +1,4 @@
-import { LectureTimeframe, TimeData } from "../common/types"
+import type { LectureTimeframe, TimeData } from "../common/types"
 
 /** A lecture section a user has selected, persisted to localStorage. */
 export interface SelectedLecture {

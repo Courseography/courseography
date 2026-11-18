@@ -1,6 +1,6 @@
 import type { JSX } from "react";
+import type { TimetableMap } from "./types";
 import { TimetableRow } from "./TimetableRow";
-import { TimetableMap } from "./types";
 
 export interface TimetableBodyProps {
   session: "F" | "S"

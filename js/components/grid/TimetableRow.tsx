@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { LectureTimeframe } from "../common/types";
+import type { LectureTimeframe } from "../common/types";
 
 export interface TimetableRowProps {
   session: "F" | "S"

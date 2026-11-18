@@ -1,8 +1,8 @@
-import type { JSX } from "react";
-import { LectureTimeframe } from "../common/types";
 import { createNewLectures, initializeSessions, setWidths, storeColSpans } from "./calendar";
 import { TimetableContainer } from "./TimetableContainer";
-import { SelectedLecture, TimetableMap } from "./types";
+import type { JSX } from "react";
+import type { LectureTimeframe } from "../common/types";
+import type { SelectedLecture, TimetableMap } from "./types";
 
 export interface RowProps {
   lectureSections: SelectedLecture[]
@@ -19,7 +19,7 @@ export function Row({ lectureSections }: RowProps): JSX.Element {
   let rawLectures = lectureSections.map((lectureSection, _index, selectedLectures) => 
     createNewLectures(lectureSection, selectedLectures)
   );
-  let lectures = ([] as LectureTimeframe[]).concat.apply([], rawLectures);
+  let lectures = rawLectures.flat(1);
 
   const fallLectures = lectures.filter(lecture => {
     return lecture.session === "F" || lecture.session === "Y";
@@ -30,7 +30,7 @@ export function Row({ lectureSections }: RowProps): JSX.Element {
   });
 
   // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
-  let fallSession: TimetableMap, springSession: TimetableMap;[fallSession, springSession] = initializeSessions(lectures);
+  let [fallSession, springSession] = initializeSessions(lectures);
 
   // For each session, set the 'width' attribute of each Lecture
   // (go to Lecture constructor for definition of 'width')
