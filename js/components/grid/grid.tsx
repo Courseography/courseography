@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react"
 
 import { CoursePanel } from "./course_panel"
-import { Row } from "./calendar.js.jsx"
+import { Row } from "./Row"
 import { ExportModal, type ExportModalHandle } from "../common/export"
 import Disclaimer from "../common/Disclaimer"
 import type { SelectedLecture } from "./types"
