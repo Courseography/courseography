@@ -1,4 +1,4 @@
-import { type JSX, useCallback, RefObject, useRef } from "react";
+import { type JSX, useCallback, type RefObject, useRef } from "react";
 import { type MapModalHandle, MapModal } from "../common/MapModal";
 import { TimetableBody } from "./TimetableBody";
 import { TimetableHeader } from "./TimetableHeader";
