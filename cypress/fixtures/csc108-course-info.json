@@ -1,0 +1,13 @@
+{
+  "name": "CSC108H1",
+  "title": "Introduction to Computer Programming",
+  "description": "Programming in a language such as Python. Elementary data types, lists, maps. Program structure: control flow, functions, classes, objects, methods. Algorithms and problem solving. Searching, sorting, and complexity. Unit testing.",
+  "prereqString": null,
+  "coreqs": null,
+  "exclusions": "CSC110Y1, CSC148H1",
+  "prep": null,
+  "breadth": "The Physical and Mathematical Universes (5)",
+  "distribution": "Science",
+  "allMeetingTimes": [],
+  "videoUrls": []
+}

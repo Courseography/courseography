@@ -1,11 +1,11 @@
-import type { ProgramData, ProgramNotModified } from "./types"
+import type { ProgramData, ProgramNotModified, RawCourseData } from "./types"
 /**
  * Retrieves a course from file.
  * @param courseName The course code. This + '.txt' is the name of the file.
  * @returns Promise object representing the JSON object containing course information
  *                    or null if not found.
  */
-export function getCourse(courseName: string): Promise<unknown> {
+export function getCourse(courseName: string): Promise<RawCourseData> {
   "use strict"
 
   return fetch("course?name=" + courseName).then(response => {

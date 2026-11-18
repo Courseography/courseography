@@ -50,12 +50,21 @@ jobs:
           apt-get update
           apt-get install -y graphviz
           apt-get install -y texlive-latex-base
+          # System dependencies for Cypress (https://docs.cypress.io/app/get-started/install-cypress#Linux-Prerequisites)
+          apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libxtst6 xauth xvfb
+          apt-get install -y libasound2t64 || apt-get install -y libasound2
           if [ ! -d squashfs-root ]; then
             wget --tries=5 --retry-connrefused --waitretry=10 -O magick https://github.com/ImageMagick/ImageMagick/releases/download/7.1.2-31/ImageMagick-7.1.2-31-gcc-x86_64.AppImage
             chmod u+x ./magick
             ./magick --appimage-extract
           fi
           stack --allow-different-user update
+
+      - name: Restore Cypress binary cache
+        uses: actions/cache@v6
+        with:
+          path: /root/.cache/Cypress
+          key: v1-courseography-cypress-${{ hashFiles('pnpm-lock.yaml') }}
 
       - uses: pnpm/setup@v3.1.2
         with:
@@ -87,6 +96,27 @@ jobs:
         run: |
           stack --allow-different-user --no-terminal test --coverage
           $(stack --allow-different-user exec which hpc-lcov) -o coverage/backend.info
+
+      - name: Set up database and start server for end-to-end tests
+        run: |
+          pnpm run build
+          stack --allow-different-user exec courseography database-setup
+          stack --allow-different-user exec courseography database-graphs
+          stack --allow-different-user exec courseography > server.log 2>&1 &
+          timeout 120 sh -c 'until curl -sf http://localhost:8000/graph > /dev/null; do sleep 2; done'
+
+      - name: Run end-to-end tests
+        run: pnpm run cypress:run
+
+      - name: Upload end-to-end test failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cypress-failures
+          path: |
+            cypress/screenshots
+            server.log
+          if-no-files-found: ignore
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2

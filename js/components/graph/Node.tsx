@@ -1,5 +1,5 @@
 import React from "react"
-import { GraphNodeJSON } from "./types"
+import type { GraphNodeJSON } from "./types"
 
 interface NodeProps {
   className: string

@@ -10,11 +10,14 @@
 
 ### 🐛 Bug fixes
 
+- Updated the campus map in `CampusMap.tsx` to comply with the OpenStreetMap tile usage policy (attribution, canonical tile URL, max zoom)
 - Fixed campus map not rendering in timetable modal by adding explicit height to `#campus-map` container
 - Fixed "Zoom to Fit" button: resolved sidebar overlap and enabled view reset for single-marker maps
 
 ### 🔧 Internal changes
 
+- Updated Cypress to 15.21.2, resolving the `extract-zip` and `qs` `pnpm audit` vulnerabilities, and disabled `allowCypressEnv`
+- Updated Cypress to 14.5.4, migrated `cypress.json` to `cypress.config.js`, fixed outdated end-to-end tests, added `cypress:run`/`cypress:open` scripts and README instructions for running them, and added an end-to-end test run to CI
 - Added test coverage for `CampusMap` component (7 test cases covering rendering, markers, and zoom functionality)
 - Simplified timetable availability check in `Description.tsx` by removing redundant `Object.keys(sessions).length !== 0` condition
 - Updated OpenStreetMap tile layer URL from HTTP to HTTPS in `CampusMap.tsx` for improved security
@@ -51,6 +54,8 @@
 - Refactored the `Times` table to `Time` with a database migration
 - Extracted `loadGraphData.ts` and `util.ts` (both TypeScript) out of `js/components/graph/Graph.js`, and moved `js/util/util.ts` to `js/components/graph/requirementParser.ts`
 - Changed SVG parsing to leave the `fill` column empty when inserting hybrid nodes into the database
+- Refactored `js/components/grid/course_panel.js.jsx` into separate typescript react components
+- Fixed type-only Typescript imports and added `verbatimModuleSyntax: true` to `tsconfig.json`
 - Extracted `js/components/grid/calendar.js.jsx` into TypeScript components
 
 ## [0.8.1] - 2026-08-10

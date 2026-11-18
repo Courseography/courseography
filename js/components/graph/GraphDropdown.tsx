@@ -1,4 +1,4 @@
-import { Graph } from "./types"
+import type { Graph } from "./types"
 
 interface GraphDropdownProps {
   showGraphDropdown?: boolean
