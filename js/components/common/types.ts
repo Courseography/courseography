@@ -118,7 +118,7 @@ export interface BuildingLocation {
 export interface LectureTimeframe {
   courseCode: string
   session: string
-  timeSession?: string | null
+  timeSession: string
   day: number
   dayString: string
   startTime: number
