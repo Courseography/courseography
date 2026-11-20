@@ -13,6 +13,7 @@
 - Updated the campus map in `CampusMap.tsx` to comply with the OpenStreetMap tile usage policy (attribution, canonical tile URL, max zoom)
 - Fixed campus map not rendering in timetable modal by adding explicit height to `#campus-map` container
 - Fixed "Zoom to Fit" button: resolved sidebar overlap and enabled view reset for single-marker maps
+- Fixed Y courses appearing duplicated on the timetable on the grid page
 
 ### 🔧 Internal changes
 
@@ -56,6 +57,7 @@
 - Changed SVG parsing to leave the `fill` column empty when inserting hybrid nodes into the database
 - Refactored `js/components/grid/course_panel.js.jsx` into separate typescript react components
 - Fixed type-only Typescript imports and added `verbatimModuleSyntax: true` to `tsconfig.json`
+- Extracted `js/components/grid/calendar.js.jsx` into TypeScript components
 
 ## [0.8.1] - 2026-08-10
 

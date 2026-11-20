@@ -118,14 +118,14 @@ export interface BuildingLocation {
 export interface LectureTimeframe {
   courseCode: string
   session: string
-  timeSession?: string | null
+  timeSession: string
   day: number
   dayString: string
   startTime: number
   endTime: number
   location?: BuildingLocation | null
   inConflict?: boolean
-  width?: number
+  width: number
   dataSatisfied?: boolean
 }
 
