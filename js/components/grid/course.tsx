@@ -1,7 +1,7 @@
 import { type JSX, useState, useEffect, useCallback } from "react"
 import { getCourse } from "../common/utils"
 import type { SelectedLecture } from "./types"
-import type { MeetingItem, TimeData } from "../common/types"
+import type { MeetingItem } from "../common/types"
 import { SectionList } from "./section_list"
 
 export interface CourseProps {
@@ -13,18 +13,11 @@ export interface CourseProps {
   displayInfo: (courseId: string) => void
 }
 
-interface ParsedLecture {
-  courseCode: string
-  lectureCode: string
-  session: string
-  times: TimeData[]
-}
-
 interface ParsedCourse {
   courseCode: string
-  F: ParsedLecture[]
-  S: ParsedLecture[]
-  Y: ParsedLecture[]
+  F: SelectedLecture[]
+  S: SelectedLecture[]
+  Y: SelectedLecture[]
 }
 
 /**
@@ -50,7 +43,7 @@ export function Course({
   })
 
   const filterLectureList = useCallback(
-    (lectures: ParsedLecture[], session: string): ParsedLecture[] => {
+    (lectures: SelectedLecture[], session: string): SelectedLecture[] => {
       return lectures
         .filter(lec => lec.session === session)
         .sort((firstLec, secondLec) =>
@@ -68,8 +61,8 @@ export function Course({
     removeCourse(courseCode)
   }, [removeCourse, courseCode])
 
-  const parseLectures = useCallback((lectures: MeetingItem[]): ParsedLecture[] => {
-    const parsedLectures: ParsedLecture[] = []
+  const parseLectures = useCallback((lectures: MeetingItem[]): SelectedLecture[] => {
+    const parsedLectures: SelectedLecture[] = []
 
     // Loop through the lecture sections to get each section's session code and lecture times
     lectures.forEach(lectureInfo => {
@@ -80,7 +73,7 @@ export function Course({
         lectureInfo.meetData.section.charAt(3) !== "2" &&
         lectureInfo.meetData.section.charAt(3) !== "9"
       ) {
-        const lecture: ParsedLecture = {
+        const lecture: SelectedLecture = {
           courseCode:
             lectureInfo.meetData.code +
             " (" +
