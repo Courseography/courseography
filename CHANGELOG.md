@@ -57,6 +57,7 @@
 - Refactored `js/components/grid/course_panel.js.jsx` into separate typescript react components
 - Fixed type-only Typescript imports and added `verbatimModuleSyntax: true` to `tsconfig.json`
 - Extracted `js/components/grid/calendar.js.jsx` into TypeScript components
+- Extracted `js/components/graph/Graph.js` focusPrereqs functions into `js/components/graph/graphState.ts`
 
 ## [0.8.1] - 2026-08-10
 
