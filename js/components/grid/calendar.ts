@@ -134,7 +134,14 @@ export const createNewLectures = (lectureSection: SelectedLecture, selectedLectu
   }
 
   const dayStrings = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-  const lectures = lectureSection.times.map(time => {
+  const lectures = lectureSection.times
+    .filter(time => (
+      time.timeSession !== undefined && 
+      time.startHour !== undefined && 
+      time.endHour !== undefined
+      )
+    )
+    .map(time => {
     const timeframe: LectureTimeframe = {
       courseCode: lectureSection.courseCode,
       session: lectureSection.session,
