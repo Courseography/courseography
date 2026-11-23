@@ -245,7 +245,9 @@ export function focusPrereqs(state: GraphState, nodeId: string): GraphState {
   }
 
   let nodesStatus: Record<string, GraphNodeStatus> = { ...state.nodesStatus }
-  nodesStatus[nodeId].status = "missing"
+  let nodeStatusEntry = { ...nodesStatus[nodeId] }
+  nodeStatusEntry.status = "missing"
+  nodesStatus[nodeId] = nodeStatusEntry
   state.nodesStatus = nodesStatus
 
   let highlightedNodesDeps: string[] = [...state.highlightedNodesDeps]
