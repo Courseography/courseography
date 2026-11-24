@@ -172,6 +172,7 @@ export default function Grid() {
       ></NavBar>
       <ExportModal
         page="grid"
+        session="fall"
         open={modalOpen}
         onRequestClose={closeExportModal}
       ></ExportModal>

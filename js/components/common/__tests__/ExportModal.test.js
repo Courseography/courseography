@@ -3,7 +3,15 @@ import { render, screen, cleanup } from "@testing-library/react"
 import { ExportModal } from "../export"
 
 describe("test that export modal displays correct content for graph and grid pages", () => {
-  beforeEach(() => cleanup())
+  beforeEach(() => {
+    cleanup()
+    // Opening the modal requests the exported image with jQuery's $.ajax
+    global.$ = { ajax: jest.fn(({ success }) => success("aW1hZ2U=")) }
+  })
+
+  afterEach(() => {
+    delete global.$
+  })
 
   it("test that modal displays correct content for graph page", async () => {
     render(<ExportModal page="graph" open={true}></ExportModal>)
@@ -14,7 +22,7 @@ describe("test that export modal displays correct content for graph and grid pag
   })
 
   it("test that modal displays correct content for grid page", async () => {
-    render(<ExportModal page="grid" open={true}></ExportModal>)
+    render(<ExportModal page="grid" session="fall" open={true}></ExportModal>)
     await screen.findByText("Export")
     await screen.findByText("Download PDF")
     await screen.findByText("Download timetable as ICS")
@@ -24,5 +32,36 @@ describe("test that export modal displays correct content for graph and grid pag
   it("test that modal doesn't display its contents when it is not set to open", async () => {
     render(<ExportModal page="grid" open={false}></ExportModal>)
     expect(screen.queryByText("Export")).toBeNull()
+  })
+
+  describe("fetching the exported image", () => {
+    it("requests and shows the graph image when the modal is opened", async () => {
+      render(<ExportModal page="graph" open={true} />)
+      expect(global.$.ajax).toHaveBeenCalledTimes(1)
+      expect(global.$.ajax.mock.calls[0][0].url).toBe("/image")
+      const image = await screen.findByRole("img")
+      expect(image.getAttribute("src")).toBe("data:image/png;base64,aW1hZ2U=")
+    })
+
+    it("requests the timetable image for the given session when the modal is opened", async () => {
+      render(<ExportModal page="grid" session="fall" open={true} />)
+      expect(global.$.ajax).toHaveBeenCalledTimes(1)
+      expect(global.$.ajax.mock.calls[0][0].url).toBe("/timetable-image")
+      expect(global.$.ajax.mock.calls[0][0].data.session).toBe("Fall")
+      const image = await screen.findByRole("img")
+      expect(image.getAttribute("src")).toBe("data:image/png;base64,aW1hZ2U=")
+    })
+
+    it("does not request an image while the modal is closed", () => {
+      render(<ExportModal page="graph" open={false} />)
+      expect(global.$.ajax).not.toHaveBeenCalled()
+    })
+
+    it("requests a new image each time the modal is reopened", () => {
+      const { rerender } = render(<ExportModal page="graph" open={true} />)
+      rerender(<ExportModal page="graph" open={false} />)
+      rerender(<ExportModal page="graph" open={true} />)
+      expect(global.$.ajax).toHaveBeenCalledTimes(2)
+    })
   })
 })

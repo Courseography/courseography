@@ -3,7 +3,15 @@ import { render, screen, cleanup, fireEvent } from "@testing-library/react"
 import Container from "../Container.js"
 
 describe("test export modal functionality on graph page", () => {
-  beforeEach(() => cleanup())
+  beforeEach(() => {
+    cleanup()
+    // Opening the export modal requests the graph image with jQuery's $.ajax
+    global.$ = { ajax: jest.fn() }
+  })
+
+  afterEach(() => {
+    delete global.$
+  })
 
   it("test that export modal for graph pops up when export button clicked", async () => {
     render(<Container></Container>)
