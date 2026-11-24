@@ -24,6 +24,15 @@ First install the following:
 2. [Node.js](https://nodejs.org/en/download/)
 3. [pnpm](https://pnpm.io/), by opening a terminal and running: `corepack enable && corepack prepare pnpm@11.21.0 --activate`
 4. [ImageMagick](http://www.imagemagick.org/script/download.php)
+   - If you install ImageMagick with Homebrew on macOS, install the `imagemagick-full` package instead of `imagemagick`. The regular `imagemagick` package doesn't include the font and SVG support Courseography needs to export graph and timetable images. `imagemagick-full` isn't added to your `PATH` automatically, so install it and add it to your `PATH` by running:
+
+     ```bash
+     brew install imagemagick-full
+     echo 'export PATH="$(brew --prefix)/opt/imagemagick-full/bin:$PATH"' >> ~/.zshrc
+     ```
+
+     Then open a new terminal and start the Courseography server from it, since terminals that were already open won't use the updated `PATH`.
+
 5. [GraphViz](https://graphviz.org/download/)
 6. [LaTeX](https://www.latex-project.org/get/)
 
