@@ -18,6 +18,7 @@
 
 ### 🔧 Internal changes
 
+- Added macOS setup instructions to the README for installing the `imagemagick-full` Homebrew package, which is needed to export graph and timetable images
 - Updated Cypress to 15.21.2, resolving the `extract-zip` and `qs` `pnpm audit` vulnerabilities, and disabled `allowCypressEnv`
 - Updated Cypress to 14.5.4, migrated `cypress.json` to `cypress.config.js`, fixed outdated end-to-end tests, added `cypress:run`/`cypress:open` scripts and README instructions for running them, and added an end-to-end test run to CI
 - Added test coverage for `CampusMap` component (7 test cases covering rendering, markers, and zoom functionality)
