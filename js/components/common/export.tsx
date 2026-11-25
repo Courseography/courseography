@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState } from "react"
+import React, { useEffect, useImperativeHandle, useState } from "react"
 import ReactModal from "react-modal"
 import type { SelectedLecture } from "../grid/types"
 
@@ -95,6 +95,13 @@ export function ExportModal({
   }
 
   useImperativeHandle(ref, () => ({ getImage }))
+
+  // Fetch a fresh image each time the modal is opened
+  useEffect(() => {
+    if (open) {
+      getImage()
+    }
+  }, [open])
 
   if (page === "graph") {
     return (

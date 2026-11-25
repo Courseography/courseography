@@ -8,6 +8,8 @@ describe("test export modal functionality on grid page", () => {
     cleanup()
     fetchMock.restore()
     fetchMock.get("/courses", [])
+    // Opening the export modal requests the timetable image with jQuery's $.ajax
+    global.$ = { ajax: jest.fn() }
   })
 
   it("test that export modal for grid pops up when export button clicked", async () => {
@@ -21,5 +23,6 @@ describe("test export modal functionality on grid page", () => {
 
   afterEach(() => {
     fetchMock.restore()
+    delete global.$
   })
 })
