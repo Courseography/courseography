@@ -204,7 +204,11 @@ function getPDF() {
   })
 }
 
-function ImageError({ error }: { error: string }) {
+interface ImageErrorProps {
+  error: string
+}
+
+function ImageError({ error }: ImageErrorProps) {
   if (!error) {
     return null
   }
@@ -215,7 +219,12 @@ function ImageError({ error }: { error: string }) {
   )
 }
 
-function GraphImage({ data, error }: { data: string; error: string }) {
+interface GraphImageProps {
+  data: string
+  error: string
+}
+
+function GraphImage({ data, error }: GraphImageProps) {
   return (
     <div>
       <div className="modal-header">Export</div>
@@ -230,15 +239,13 @@ function GraphImage({ data, error }: { data: string; error: string }) {
   )
 }
 
-function GridImage({
-  data,
-  error,
-  toggleSession,
-}: {
+interface GridImageProps {
   data: string
   error: string
   toggleSession: () => void
-}) {
+}
+
+function GridImage({ data, error, toggleSession }: GridImageProps) {
   return (
     <div>
       <div className="modal-header">Export</div>
