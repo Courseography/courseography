@@ -21,11 +21,11 @@ export function Row({ lectureSections }: RowProps): JSX.Element {
   let lectures = rawLectures.flat(1);
 
   const fallLectures = lectures.filter(lecture => {
-    return lecture.session === "F" || lecture.session === "Y";
+    return lecture.timeSession.endsWith("9");
   });
 
   const springLectures = lectures.filter(lecture => {
-    return lecture.session === "S" || lecture.session === "Y";
+    return lecture.timeSession.endsWith("1");
   });
 
   // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries

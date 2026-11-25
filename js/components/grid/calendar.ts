@@ -14,14 +14,14 @@ export const initializeSessions = (lectures: LectureTimeframe[]): TimetableMap[]
   }
 
   lectures.forEach(lecture => {
-    if (lecture.session === "F" || lecture.session === "Y") {
+    if (lecture.timeSession.endsWith("9")) {
       for (let i = lecture.startTime; i < lecture.endTime; i += 0.5) {
         // Store this Lecture in its active time-slot (denoted by <i>),
         // and in the list in its active day slot (denoted by <lecture.day>), in <fallSession>.
         fallSession[i][lecture.day].push(lecture)
       }
     }
-    if (lecture.session === "S" || lecture.session === "Y") {
+    if (lecture.timeSession.endsWith("1")) {
       // Same process as above for spring lectures in <springSession>
       for (let i = lecture.startTime; i < lecture.endTime; i += 0.5) {
         springSession[i][lecture.day].push(lecture)
@@ -134,11 +134,18 @@ export const createNewLectures = (lectureSection: SelectedLecture, selectedLectu
   }
 
   const dayStrings = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-  const lectures = lectureSection.times.map(time => {
+  const lectures = lectureSection.times
+    .filter(time => (
+      time.timeSession !== undefined && 
+      time.startHour !== undefined && 
+      time.endHour !== undefined
+      )
+    )
+    .map(time => {
     const timeframe: LectureTimeframe = {
       courseCode: lectureSection.courseCode,
       session: lectureSection.session,
-      timeSession: time.timeSession,
+      timeSession: time.timeSession!,
       day: time.weekDay,
       dayString: dayStrings[time.weekDay],
       startTime: time.startHour!,
