@@ -27,6 +27,7 @@ export function ExportModal({
   ref,
 }: ExportModalProps) {
   const [data, setData] = useState("")
+  const [error, setError] = useState("")
   const [otherSession, setOtherSession] = useState("Spring")
 
   const getGraphImage = () => {
@@ -54,9 +55,11 @@ export function ExportModal({
       data: { JsonLocalStorageObj: JsonLocalStorageObj },
       success: function (data: string) {
         setData("data:image/png;base64," + data)
+        setError("")
       },
       error: function () {
-        throw "No image generated"
+        setData("")
+        setError("The graph image could not be generated. Please try again.")
       },
     })
   }
@@ -73,10 +76,12 @@ export function ExportModal({
       data: { session: formattedSession, courses: courseData.join("_") },
       success: function (data: string) {
         setData("data:image/png;base64," + data)
+        setError("")
         setOtherSession(formattedSession === "Fall" ? "Spring" : "Fall")
       },
       error: function () {
-        throw "No image generated"
+        setData("")
+        setError("The timetable image could not be generated. Please try again.")
       },
     })
   }
@@ -111,7 +116,7 @@ export function ExportModal({
         isOpen={open ?? false}
         onRequestClose={onRequestClose}
       >
-        <GraphImage data={data} />
+        <GraphImage data={data} error={error} />
       </ReactModal>
     )
   } else {
@@ -122,7 +127,7 @@ export function ExportModal({
         isOpen={open ?? false}
         onRequestClose={onRequestClose}
       >
-        <GridImage data={data} toggleSession={toggleSession} />
+        <GridImage data={data} error={error} toggleSession={toggleSession} />
       </ReactModal>
     )
   }
@@ -199,7 +204,18 @@ function getPDF() {
   })
 }
 
-function GraphImage({ data }: { data: string }) {
+function ImageError({ error }: { error: string }) {
+  if (!error) {
+    return null
+  }
+  return (
+    <p className="export-image-error" role="alert">
+      {error}
+    </p>
+  )
+}
+
+function GraphImage({ data, error }: { data: string; error: string }) {
   return (
     <div>
       <div className="modal-header">Export</div>
@@ -207,6 +223,7 @@ function GraphImage({ data }: { data: string }) {
         <a onClick={getPDF} href="#">
           Download PDF
         </a>
+        <ImageError error={error} />
         <div>{data && <img id="post-image" src={data} />}</div>
       </div>
     </div>
@@ -215,9 +232,11 @@ function GraphImage({ data }: { data: string }) {
 
 function GridImage({
   data,
+  error,
   toggleSession,
 }: {
   data: string
+  error: string
   toggleSession: () => void
 }) {
   return (
@@ -231,6 +250,7 @@ function GridImage({
         <a onClick={getPDF} href="#">
           Download PDF
         </a>
+        <ImageError error={error} />
         <div>{data && <img id="post-image" src={data} />}</div>
         <button
           type="button"
