@@ -245,7 +245,7 @@ export class Graph extends React.Component {
     }
 
     const currentNode = this.state.nodesJSON[courseId]
-    this.focusPrereqsHandle(courseId)
+    this.handleFocusPrereqs(courseId)
 
     let xPos = currentNode.pos[0]
     let yPos = currentNode.pos[1]
@@ -842,7 +842,7 @@ export class Graph extends React.Component {
   }
 
   /** Sets the status of all missing prerequisites to 'missing' */
-  focusPrereqsHandle = nodeId => {
+  handleFocusPrereqs = nodeId => {
     this.setState(prevState => {
       const copy = { ...prevState }
       return focusPrereqs(copy, nodeId)
