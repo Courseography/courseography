@@ -17,7 +17,6 @@ import {
   computeBoolStatus,
   computeEdgeStatus,
   totalSelectedCredits,
-  focusPrereqsBool,
   focusPrereqs,
 } from "./graphState"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -829,15 +828,6 @@ export class Graph extends React.Component {
     )
   }
 
-  /**
-   * Cross check with the selected focus prerequisites.
-   */
-  focusPrereqsBoolHandle = boolId => {
-    this.setState(prevState => {
-      const copy = { ...prevState }
-      return focusPrereqsBool(copy, boolId)
-    })
-  }
   /**
    * Remove the focus preqrequisites if the focus is unselected.
    */
