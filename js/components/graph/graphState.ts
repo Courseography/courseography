@@ -4,7 +4,7 @@ import type { GraphNodeStatus, LoadedGraphData } from "./loadGraphData"
 
 /** The parts of Graph's state that describe the graph's nodes, bools, and their statuses. */
 export type GraphState = Pick<
-  LoadedGraphData & { highlightedNodesDeps: string[] },
+  LoadedGraphData,
   | "nodesJSON"
   | "nodesStatus"
   | "hybridsJSON"
@@ -13,8 +13,9 @@ export type GraphState = Pick<
   | "edgesJSON"
   | "edgesStatus"
   | "connections"
-  | "highlightedNodesDeps"
->
+> & {
+  highlightedNodesDeps: string[]
+}
 
 /**
  * Checks if a node or bool node is currently selected or active.
