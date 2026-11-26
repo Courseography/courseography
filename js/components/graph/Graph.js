@@ -845,6 +845,12 @@ export class Graph extends React.Component {
   handleFocusPrereqs = nodeId => {
     this.setState(prevState => {
       const copy = { ...prevState }
+      const boolsStatusCopy = { ...prevState.boolsStatus }
+      copy.boolsStatus = boolsStatusCopy
+      const edgesStatusCopy = { ...prevState.edgesStatus }
+      copy.edgesStatus = edgesStatusCopy
+      const nodesStatusCopy = { ...prevState.nodesStatus }
+      copy.nodesStatus = nodesStatusCopy
       return focusPrereqs(copy, nodeId)
     })
   }

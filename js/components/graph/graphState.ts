@@ -219,15 +219,11 @@ export function focusPrereqsBool(state: GraphState, boolId: string): GraphState 
   if (status === "active") {
     return state
   }
-  const boolStatus: Record<string, string> = { ...state.boolsStatus }
-  boolStatus[boolId] = "missing"
-  state.boolsStatus = boolStatus
+  state.boolsStatus[boolId] = "missing"
   inEdges?.forEach(edge => {
     const currentEdge = state.edgesJSON[edge]
     if (!isSelected(state, currentEdge.source)) {
-      let edgesStatus: Record<string, string> = { ...state.edgesStatus }
-      edgesStatus[currentEdge.id_] = "missing"
-      state.edgesStatus = edgesStatus
+      state.edgesStatus[currentEdge.id_] = "missing"
     }
   })
   parents?.forEach(node => {
@@ -245,7 +241,7 @@ export function focusPrereqs(state: GraphState, nodeId: string): GraphState {
     return state
   }
 
-  let nodesStatus: Record<string, GraphNodeStatus> = { ...state.nodesStatus }
+  let nodesStatus: Record<string, GraphNodeStatus> = state.nodesStatus
   let nodeStatusEntry = { ...nodesStatus[nodeId] }
   nodeStatusEntry.status = "missing"
   nodesStatus[nodeId] = nodeStatusEntry
@@ -258,9 +254,7 @@ export function focusPrereqs(state: GraphState, nodeId: string): GraphState {
   inEdges?.forEach(edge => {
     const currentEdge = state.edgesJSON[edge]
     if (!isSelected(state, currentEdge.source)) {
-      let edgesStatus = { ...state.edgesStatus }
-      edgesStatus[currentEdge.id_] = "missing"
-      state.edgesStatus = edgesStatus
+      state.edgesStatus[currentEdge.id_] = "missing"
     }
   })
   parents?.forEach(node => {
