@@ -11,6 +11,7 @@
 ### 🐛 Bug fixes
 
 - Fixed the export modal not loading the graph or timetable image when opened
+- Added an error message to the export modal when the graph or timetable image fails to load
 - Updated the campus map in `CampusMap.tsx` to comply with the OpenStreetMap tile usage policy (attribution, canonical tile URL, max zoom)
 - Fixed campus map not rendering in timetable modal by adding explicit height to `#campus-map` container
 - Fixed "Zoom to Fit" button: resolved sidebar overlap and enabled view reset for single-marker maps
