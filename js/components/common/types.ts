@@ -113,10 +113,11 @@ export interface BuildingLocation {
 
 /**
  * Scheduled lecture timeslot used in MapModal, MapSidebar, DayBox, and CampusMap.
- * Tracks course code, session, time range, geographic location, and conflict status.
+ * Tracks course display string, section code, session, time range, geographic location, and conflict status.
  */
 export interface LectureTimeframe {
   courseCode: string
+  sectionCode: string
   session: string
   timeSession: string
   day: number

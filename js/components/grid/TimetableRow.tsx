@@ -57,7 +57,9 @@ export function TimetableRow({
               data-type="L"
               data-clicked="true"
               data-currentlecturelist={currentLectureList}
-              title={lecture.courseCode + " " + 
+              // courseCode must be stripped of its trailing " (LEC)" to obtain the real course code
+              title={lecture.courseCode.substring(0, lecture.courseCode.indexOf(" (")) +
+                " " + lecture.sectionCode + ": " + 
                 formatTime(lecture.startTime) + "-" + formatTime(lecture.endTime)}
             >
               {lecture.courseCode}
