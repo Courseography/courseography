@@ -61,12 +61,15 @@ export function CoursePanel({
 
   return (
     <div id="search-layout" className="col-md-2 col-12">
+      <div id="course-panel-header">
+        <h3>Course Palette</h3>
+      </div>
       <div id="filter-container">
         <form onSubmit={() => false}>
           <input
             id="course-filter"
             className="form-control"
-            placeholder="Enter a course!"
+            placeholder="Add your planned courses"
             autoComplete="off"
             type="text"
             value={value}
@@ -85,7 +88,7 @@ export function CoursePanel({
       <div id="course-select-wrapper">
         <ul className="trapScroll-enabled" id="course-select">
           <li id="clear-all" key="clear-all-grid" onClick={clearAllCourses}>
-            <h3>Clear All</h3>
+            <h3>Reset Grid</h3>
           </li>
           {courses}
         </ul>
