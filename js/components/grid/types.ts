@@ -2,15 +2,17 @@ import type { LectureTimeframe, TimeData } from "../common/types"
 
 /** 
  * A lecture section a user can select, which persists to localStorage. 
- * dataSatisfied is false if a tutorial or practical for a course is selected in a particular
- * session (F or S) and there is no lecture selected for that course in the given session.
- * */
+ * 
+ * `lecturesOnly` is true if this section's course only has LEC sections.    
+ * `dataSatisfied` is true if all required section types (LEC and TUT/PRA if applicable) are selected.
+ */
 export interface SelectedLecture {
   courseCode: string
   lectureCode: string
   session: string
   times: TimeData[]
-  dataSatisfied?: boolean
+  lecturesOnly: boolean
+  dataSatisfied?: boolean 
 }
 
 /**
