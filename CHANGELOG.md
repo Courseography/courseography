@@ -7,7 +7,7 @@
 ### ✨ New features/enhancements
 
 - Changed the colour of hybrid nodes to avoid a visual clash with the darkened background when selecting a focus
-- Updated text on the course panel of the grid page to better clarify its purpose
+- Updated text on the course panel of the grid page to better communicate the panel's behaviour
 
 ### 🐛 Bug fixes
 
