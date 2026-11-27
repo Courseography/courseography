@@ -12,7 +12,7 @@ export interface SelectedLecture {
   session: string
   times: TimeData[]
   lecturesOnly: boolean
-  dataSatisfied?: boolean 
+  dataSatisfied?: boolean
 }
 
 /**
