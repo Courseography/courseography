@@ -57,6 +57,8 @@ export function TimetableRow({
               data-type="L"
               data-clicked="true"
               data-currentlecturelist={currentLectureList}
+              title={lecture.courseCode + " " + 
+                formatTime(lecture.startTime) + "-" + formatTime(lecture.endTime)}
             >
               {lecture.courseCode}
             </td>
@@ -113,3 +115,15 @@ export function TimetableRow({
   return <tr>{tableData}</tr>;
 }
 
+/**
+ * Format a number representing a half-hour interval into its time. (e.g. 8.5 -> 8:30)
+ * @param timeValue the interval number
+ */
+const formatTime = (timeValue: number): string => {
+  if (timeValue % 1 == 0) {
+    return timeValue.toString() + ":00" 
+  }
+  else {
+    return (Math.floor(timeValue).toString() + ":30")
+  }
+}
