@@ -7,6 +7,7 @@
 ### ✨ New features/enhancements
 
 - Changed the colour of hybrid nodes to avoid a visual clash with the darkened background when selecting a focus
+- Updated section codes on the grid page to match the official timetable builder (listed as LEC/TUT/PRA instead of L/T/P)
 
 ### 🐛 Bug fixes
 
