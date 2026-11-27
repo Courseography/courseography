@@ -56,7 +56,7 @@ describe("CoursePanel", () => {
     const courseHeader = await screen.findByText("CSC110Y1")
     await user.click(courseHeader)
 
-    await screen.findByText("L0101")
+    await screen.findByText("LEC0101")
   })
 
   it("handles the case when course is not found", async () => {
