@@ -16,6 +16,7 @@
 - Fixed campus map not rendering in timetable modal by adding explicit height to `#campus-map` container
 - Fixed "Zoom to Fit" button: resolved sidebar overlap and enabled view reset for single-marker maps
 - Fixed Y courses appearing duplicated on the timetable on the grid page
+- Fixed graph image export when no active graph is saved in local storage
 
 ### 🔧 Internal changes
 

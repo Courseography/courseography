@@ -28,7 +28,7 @@ import System.IO (Handle)
 writeActiveGraphImage :: T.Text -> Handle -> IO ()
 writeActiveGraphImage graphInfo svgHandle = do
     let graphInfoMap = fromMaybe M.empty $ decodeStrictText graphInfo :: M.Map T.Text T.Text
-        graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
+        graphName = fromMaybe "Computer Science" $ M.lookup "active-graph" graphInfoMap
     getGraphImage graphName graphInfoMap svgHandle
 
 -- | If there are selected lectures available, a timetable image of

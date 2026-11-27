@@ -140,6 +140,7 @@ test-suite Tests
     Database.BuildingTests,
     Database.CourseQueriesTests,
     Database.DatabaseTests,
+    Export.GetImagesTests,
     Models.MeetingTests,
     Models.RequirementModelTests,
     RequirementTests.ModifierTests,
@@ -171,6 +172,7 @@ test-suite Tests
     test-framework,
     test-framework-hunit,
     test-framework-quickcheck2,
+    temporary,
     text,
     time
   build-tool-depends:
