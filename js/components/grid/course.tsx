@@ -79,8 +79,7 @@ export function Course({
             " (" +
             lectureInfo.meetData.section.substring(0, 3) +
             ")",
-          lectureCode:
-            lectureInfo.meetData.section,
+          lectureCode: lectureInfo.meetData.section,
           session: lectureInfo.meetData.session,
           times: lectureInfo.timeData,
         }
