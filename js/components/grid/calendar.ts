@@ -118,19 +118,27 @@ const lectureConflict = (courseList: LectureTimeframe[]): boolean => {
  * @return an array of objects representing each disconnected time period the given lecture occurs in
  */
 export const createNewLectures = (lectureSection: SelectedLecture, selectedLectures: SelectedLecture[]): LectureTimeframe[] => {
-  // dataSatisfied is false if a tutorial or practical for a course is selected in a particular session(F or S) and there
-  // is no lecture selected for that course in the given session.
-  lectureSection.dataSatisfied = false
-  const lectureSelected = selectedLectures.filter(lecture => {
-    return (
-      lecture.lectureCode.substring(0, 1) === "L" &&
-      lecture.courseCode.substring(0, 6) ===
-        lectureSection.courseCode.substring(0, 6) &&
-      lecture.session === lectureSection.session
+  // If the course has both LEC and TUT/PRA sections, set dataSatisfied to true if both have been selected.
+  lectureSection.dataSatisfied = lectureSection.lecturesOnly
+  if (!lectureSection.lecturesOnly) {
+    lectureSection.dataSatisfied = (
+      selectedLectures.some(lecture => {
+        return (
+          lecture.lectureCode.substring(0, 1) === "L" &&
+          lecture.courseCode.substring(0, 6) ===
+            lectureSection.courseCode.substring(0, 6) &&
+          lecture.session === lectureSection.session
+        )
+      }) &&
+      selectedLectures.some(lecture => {
+        return (
+          (lecture.lectureCode.substring(0, 1) === "T" || lecture.lectureCode.substring(0, 1) === "P") &&
+          lecture.courseCode.substring(0, 6) ===
+            lectureSection.courseCode.substring(0, 6) &&
+          lecture.session === lectureSection.session
+        )
+      })
     )
-  })
-  if (lectureSelected.length > 0) {
-    lectureSection.dataSatisfied = true
   }
 
   const dayStrings = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]

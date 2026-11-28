@@ -63,6 +63,12 @@ export function Course({
 
   const parseLectures = useCallback((lectures: MeetingItem[]): SelectedLecture[] => {
     const parsedLectures: SelectedLecture[] = []
+    const lecturesOnly = !lectures.some(lectureInfo => {
+      return (
+        lectureInfo.meetData.section.substring(0, 1) === "T" || 
+        lectureInfo.meetData.section.substring(0, 1) === "P"
+      )
+    })
 
     // Loop through the lecture sections to get each section's session code and lecture times
     lectures.forEach(lectureInfo => {
@@ -82,6 +88,7 @@ export function Course({
           lectureCode: lectureInfo.meetData.section,
           session: lectureInfo.meetData.session,
           times: lectureInfo.timeData,
+          lecturesOnly: lecturesOnly
         }
         parsedLectures.push(lecture)
       }

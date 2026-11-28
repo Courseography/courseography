@@ -8,6 +8,7 @@
 
 - Changed the colour of hybrid nodes to avoid a visual clash with the darkened background when selecting a focus
 - Updated section codes on the grid page to match the official timetable builder (listed as LEC/TUT/PRA instead of L/T/P)
+- Updated `dataSatisfied` in the timetable grid to also render a course as unsatisfied when a lecture is selected without a corresponding tutorial or practical
 
 ### 🐛 Bug fixes
 
