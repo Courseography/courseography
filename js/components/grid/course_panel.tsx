@@ -88,7 +88,7 @@ export function CoursePanel({
       <div id="course-select-wrapper">
         <ul className="trapScroll-enabled" id="course-select">
           <li id="clear-all" key="clear-all-grid" onClick={clearAllCourses}>
-            <h3>Reset Grid</h3>
+            <h3>Clear All</h3>
           </li>
           {courses}
         </ul>
