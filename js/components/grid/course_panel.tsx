@@ -61,12 +61,15 @@ export function CoursePanel({
 
   return (
     <div id="search-layout" className="col-md-2 col-12">
+      <div id="course-panel-header">
+        <h3>Course Picker</h3>
+      </div>
       <div id="filter-container">
         <form onSubmit={() => false}>
           <input
             id="course-filter"
             className="form-control"
-            placeholder="Enter a course!"
+            placeholder="Enter a course code!"
             autoComplete="off"
             type="text"
             value={value}
