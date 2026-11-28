@@ -74,11 +74,7 @@ export function Course({
         lectureInfo.meetData.section.charAt(3) !== "9"
       ) {
         const lecture: SelectedLecture = {
-          courseCode:
-            lectureInfo.meetData.code +
-            " (" +
-            lectureInfo.meetData.section.substring(0, 1) +
-            ")",
+          courseCode: lectureInfo.meetData.code,
           lectureCode:
             lectureInfo.meetData.section.substring(0, 1) +
             lectureInfo.meetData.section.substring(3),
