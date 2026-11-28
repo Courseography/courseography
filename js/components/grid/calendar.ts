@@ -121,23 +121,24 @@ export const createNewLectures = (lectureSection: SelectedLecture, selectedLectu
   // If the course has both LEC and TUT/PRA sections, set dataSatisfied to true if both have been selected.
   lectureSection.dataSatisfied = lectureSection.lecturesOnly
   if (!lectureSection.lecturesOnly) {
-    const lecsSelected = selectedLectures.filter(lecture => {
-      return (
-        lecture.lectureCode.substring(0, 1) === "L" &&
-        lecture.courseCode.substring(0, 6) ===
-          lectureSection.courseCode.substring(0, 6) &&
-        lecture.session === lectureSection.session
-      )
-    })
-    const tutsSelected = selectedLectures.filter(lecture => {
-      return (
-        (lecture.lectureCode.substring(0, 1) === "T" || lecture.lectureCode.substring(0, 1) === "P") &&
-        lecture.courseCode.substring(0, 6) ===
-          lectureSection.courseCode.substring(0, 6) &&
-        lecture.session === lectureSection.session
-      )
-    })
-    lectureSection.dataSatisfied = (lecsSelected.length > 0 && tutsSelected.length > 0)
+    lectureSection.dataSatisfied = (
+      selectedLectures.some(lecture => {
+        return (
+          lecture.lectureCode.substring(0, 1) === "L" &&
+          lecture.courseCode.substring(0, 6) ===
+            lectureSection.courseCode.substring(0, 6) &&
+          lecture.session === lectureSection.session
+        )
+      }) &&
+      selectedLectures.some(lecture => {
+        return (
+          (lecture.lectureCode.substring(0, 1) === "T" || lecture.lectureCode.substring(0, 1) === "P") &&
+          lecture.courseCode.substring(0, 6) ===
+            lectureSection.courseCode.substring(0, 6) &&
+          lecture.session === lectureSection.session
+        )
+      })
+    )
   }
 
   const dayStrings = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
