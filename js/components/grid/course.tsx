@@ -75,9 +75,7 @@ export function Course({
       ) {
         const lecture: SelectedLecture = {
           courseCode: lectureInfo.meetData.code,
-          lectureCode:
-            lectureInfo.meetData.section.substring(0, 1) +
-            lectureInfo.meetData.section.substring(3),
+          lectureCode: lectureInfo.meetData.section,
           session: lectureInfo.meetData.session,
           times: lectureInfo.timeData,
         }
