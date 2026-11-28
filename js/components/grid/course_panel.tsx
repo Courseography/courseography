@@ -62,7 +62,7 @@ export function CoursePanel({
   return (
     <div id="search-layout" className="col-md-2 col-12">
       <div id="course-panel-header">
-        <h3>Course Planner</h3>
+        <h3>Course Picker</h3>
       </div>
       <div id="filter-container">
         <form onSubmit={() => false}>
