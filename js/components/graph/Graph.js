@@ -851,6 +851,8 @@ export class Graph extends React.Component {
       copy.edgesStatus = edgesStatusCopy
       const nodesStatusCopy = { ...prevState.nodesStatus }
       copy.nodesStatus = nodesStatusCopy
+      const highlightedNodesDepsCopy = [...prevState.highlightedNodesDeps]
+      copy.highlightedNodesDeps = highlightedNodesDepsCopy
       return focusPrereqs(copy, nodeId)
     })
   }

@@ -247,9 +247,7 @@ export function focusPrereqs(state: GraphState, nodeId: string): GraphState {
   nodesStatus[nodeId] = nodeStatusEntry
   state.nodesStatus = nodesStatus
 
-  let highlightedNodesDeps: string[] = [...state.highlightedNodesDeps]
-  highlightedNodesDeps.push(nodeId)
-  state.highlightedNodesDeps = highlightedNodesDeps
+  state.highlightedNodesDeps.push(nodeId)
 
   inEdges?.forEach(edge => {
     const currentEdge = state.edgesJSON[edge]
