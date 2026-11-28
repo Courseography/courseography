@@ -97,9 +97,11 @@ export default function Grid() {
   const addSelectedLecture = (newLecture: SelectedLecture) => {
     // The maximum number of courses in the lecture list with the same code is 3, one for each session (F, S, Y)
     const updatedLectures = selectedLectures.filter(lecture => {
+      // Filter out selected lectures of the same course and type (LEC, TUT, or PRA)
       return (
         lecture.courseCode !== newLecture.courseCode ||
-        lecture.session !== newLecture.session
+        lecture.session !== newLecture.session ||
+        lecture.lectureCode.substring(0, 1) !== newLecture.lectureCode.substring(0, 1)
       )
     })
     updatedLectures.push(newLecture)
@@ -107,9 +109,13 @@ export default function Grid() {
   }
 
   // Method passed to child component CoursePanel to remove a lecture from selectedLectures
-  const removeSelectedLecture = (courseCode: string, session: string) => {
+  const removeSelectedLecture = (courseCode: string, lectureCode: string, session: string) => {
     const updatedLectures = selectedLectures.filter(lecture => {
-      return lecture.courseCode !== courseCode || lecture.session !== session
+      return (
+        lecture.courseCode !== courseCode || 
+        lecture.session !== session || 
+        lecture.lectureCode !== lectureCode
+      )
     })
     setSelectedLectures(updatedLectures)
   }
@@ -117,7 +123,7 @@ export default function Grid() {
   // Remove the lecture if it is already in the selectedLectures list, or add the lecture if it is not.
   const selectLecture = (lecture: SelectedLecture) => {
     if (isSelectedLecture(lecture)) {
-      removeSelectedLecture(lecture.courseCode, lecture.session)
+      removeSelectedLecture(lecture.courseCode, lecture.lectureCode, lecture.session)
     } else {
       addSelectedLecture(lecture)
       unhoverLecture()

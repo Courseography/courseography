@@ -144,6 +144,7 @@ export const createNewLectures = (lectureSection: SelectedLecture, selectedLectu
     .map(time => {
     const timeframe: LectureTimeframe = {
       courseCode: lectureSection.courseCode,
+      sectionCode: lectureSection.lectureCode,
       session: lectureSection.session,
       timeSession: time.timeSession!,
       day: time.weekDay,
