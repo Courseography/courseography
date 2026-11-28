@@ -13,11 +13,11 @@ import Sidebar from "./Sidebar"
 import { numCredits, transformPoint, formatTransform } from "./util"
 import { loadGraphData } from "./loadGraphData"
 import {
-  isSelected,
   computeNodeStatus,
   computeBoolStatus,
   computeEdgeStatus,
   totalSelectedCredits,
+  focusPrereqs,
 } from "./graphState"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -245,7 +245,7 @@ export class Graph extends React.Component {
     }
 
     const currentNode = this.state.nodesJSON[courseId]
-    this.focusPrereqs(courseId)
+    this.handleFocusPrereqs(courseId)
 
     let xPos = currentNode.pos[0]
     let yPos = currentNode.pos[1]
@@ -829,44 +829,6 @@ export class Graph extends React.Component {
   }
 
   /**
-   * Cross check with the selected focus prerequisites.
-   */
-  focusPrereqsBool = boolId => {
-    const status = this.state.boolsStatus[boolId]
-    const inEdges = this.state.connections.inEdges[boolId]
-    const parents = this.state.connections.parents[boolId]
-    // Check if there are any missing prerequisites.
-    if (status !== "active") {
-      this.setState(
-        prevState => {
-          const boolsStatus = { ...prevState.boolsStatus }
-          boolsStatus[boolId] = "missing"
-          return {
-            boolsStatus: boolsStatus,
-          }
-        },
-        () => {
-          inEdges?.forEach(edge => {
-            const currentEdge = this.state.edgesJSON[edge]
-            if (!isSelected(this.state, currentEdge.source)) {
-              this.updateEdgeStatus(
-                "missing",
-                currentEdge.id_,
-                currentEdge.source,
-                currentEdge.target
-              )
-            }
-          })
-          parents?.forEach(node => {
-            this.state.nodesStatus[node]
-              ? this.focusPrereqs(node)
-              : this.focusPrereqsBool(node)
-          })
-        }
-      )
-    }
-  }
-  /**
    * Remove the focus preqrequisites if the focus is unselected.
    */
   unfocusPrereqsBool = boolId => {
@@ -880,49 +842,19 @@ export class Graph extends React.Component {
   }
 
   /** Sets the status of all missing prerequisites to 'missing' */
-  focusPrereqs = nodeId => {
-    const status = this.state.nodesStatus[nodeId]?.status
-    const inEdges = this.state.connections.inEdges[nodeId]
-    const parents = this.state.connections.parents[nodeId]
-
-    if (["inactive", "overridden", "takeable"].includes(status)) {
-      this.setState(
-        prevState => {
-          const nodesStatus = { ...prevState.nodesStatus }
-          nodesStatus[nodeId].status = "missing"
-          return {
-            nodesStatus: nodesStatus,
-            highlightedNodesDeps: [...prevState.highlightedNodesDeps, nodeId],
-          }
-        },
-        () => {
-          inEdges?.forEach(edge => {
-            const currentEdge = this.state.edgesJSON[edge]
-            if (!isSelected(this.state, currentEdge.source)) {
-              this.updateEdgeStatus(
-                "missing",
-                currentEdge.id_,
-                currentEdge.source,
-                currentEdge.target
-              )
-            }
-          })
-          parents?.forEach(node => {
-            if (typeof node === "string") {
-              this.state.nodesStatus[node]
-                ? this.focusPrereqs(node)
-                : this.focusPrereqsBool(node)
-            } else {
-              node.forEach(n => {
-                this.state.nodesStatus[n]
-                  ? this.focusPrereqs(n)
-                  : this.focusPrereqsBool(n)
-              })
-            }
-          })
-        }
-      )
-    }
+  handleFocusPrereqs = nodeId => {
+    this.setState(prevState => {
+      const copy = { ...prevState }
+      const boolsStatusCopy = { ...prevState.boolsStatus }
+      copy.boolsStatus = boolsStatusCopy
+      const edgesStatusCopy = { ...prevState.edgesStatus }
+      copy.edgesStatus = edgesStatusCopy
+      const nodesStatusCopy = { ...prevState.nodesStatus }
+      copy.nodesStatus = nodesStatusCopy
+      const highlightedNodesDepsCopy = [...prevState.highlightedNodesDeps]
+      copy.highlightedNodesDeps = highlightedNodesDepsCopy
+      return focusPrereqs(copy, nodeId)
+    })
   }
 
   /**

@@ -1,6 +1,6 @@
 import { parseAnd, type PrereqTree } from "./requirementParser"
 import { findRelationship, numCredits } from "./util"
-import type { LoadedGraphData } from "./loadGraphData"
+import type { GraphNodeStatus, LoadedGraphData } from "./loadGraphData"
 
 /** The parts of Graph's state that describe the graph's nodes, bools, and their statuses. */
 export type GraphState = Pick<
@@ -10,8 +10,12 @@ export type GraphState = Pick<
   | "hybridsJSON"
   | "boolsJSON"
   | "boolsStatus"
+  | "edgesJSON"
+  | "edgesStatus"
   | "connections"
->
+> & {
+  highlightedNodesDeps: string[]
+}
 
 /**
  * Checks if a node or bool node is currently selected or active.
@@ -202,4 +206,57 @@ export function totalSelectedCredits(state: GraphState): number {
     }
   })
   return total
+}
+
+/**
+ * Cross check with the selected focus prerequisites.
+ */
+export function focusPrereqsBool(state: GraphState, boolId: string): GraphState {
+  const status = state.boolsStatus[boolId]
+  const inEdges = state.connections.inEdges[boolId]
+  const parents = state.connections.parents[boolId]
+  // Check if there are any missing prerequisites.
+  if (status === "active") {
+    return state
+  }
+  state.boolsStatus[boolId] = "missing"
+  inEdges?.forEach(edge => {
+    const currentEdge = state.edgesJSON[edge]
+    if (!isSelected(state, currentEdge.source)) {
+      state.edgesStatus[currentEdge.id_] = "missing"
+    }
+  })
+  parents?.forEach(node => {
+    state.nodesStatus[node] ? focusPrereqs(state, node) : focusPrereqsBool(state, node)
+  })
+  return state
+}
+
+/** Sets the status of all missing prerequisites to 'missing' */
+export function focusPrereqs(state: GraphState, nodeId: string): GraphState {
+  const status = state.nodesStatus[nodeId]?.status
+  const inEdges = state.connections.inEdges[nodeId]
+  const parents = state.connections.parents[nodeId]
+  if (!["inactive", "overridden", "takeable"].includes(status)) {
+    return state
+  }
+
+  let nodesStatus: Record<string, GraphNodeStatus> = state.nodesStatus
+  let nodeStatusEntry = { ...nodesStatus[nodeId] }
+  nodeStatusEntry.status = "missing"
+  nodesStatus[nodeId] = nodeStatusEntry
+  state.nodesStatus = nodesStatus
+
+  state.highlightedNodesDeps.push(nodeId)
+
+  inEdges?.forEach(edge => {
+    const currentEdge = state.edgesJSON[edge]
+    if (!isSelected(state, currentEdge.source)) {
+      state.edgesStatus[currentEdge.id_] = "missing"
+    }
+  })
+  parents?.forEach(node => {
+    state.nodesStatus[node] ? focusPrereqs(state, node) : focusPrereqsBool(state, node)
+  })
+  return state
 }
