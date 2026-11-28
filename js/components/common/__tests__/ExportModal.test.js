@@ -64,4 +64,51 @@ describe("test that export modal displays correct content for graph and grid pag
       expect(global.$.ajax).toHaveBeenCalledTimes(2)
     })
   })
+
+  describe("when the image request fails", () => {
+    it("shows an error message instead of the graph image", async () => {
+      global.$.ajax = jest.fn(({ error }) => error())
+      render(<ExportModal page="graph" open={true} />)
+      const alert = await screen.findByRole("alert")
+      expect(alert.textContent).toBe(
+        "The graph image could not be generated. Please try again."
+      )
+      expect(screen.queryByRole("img")).toBeNull()
+    })
+
+    it("shows an error message instead of the timetable image", async () => {
+      global.$.ajax = jest.fn(({ error }) => error())
+      render(<ExportModal page="grid" session="fall" open={true} />)
+      const alert = await screen.findByRole("alert")
+      expect(alert.textContent).toBe(
+        "The timetable image could not be generated. Please try again."
+      )
+      expect(screen.queryByRole("img")).toBeNull()
+    })
+
+    it("replaces a previously loaded image with the error message", async () => {
+      const { rerender } = render(<ExportModal page="graph" open={true} />)
+      await screen.findByRole("img")
+
+      global.$.ajax = jest.fn(({ error }) => error())
+      rerender(<ExportModal page="graph" open={false} />)
+      rerender(<ExportModal page="graph" open={true} />)
+
+      await screen.findByRole("alert")
+      expect(screen.queryByRole("img")).toBeNull()
+    })
+
+    it("clears the error message once an image loads successfully", async () => {
+      global.$.ajax = jest.fn(({ error }) => error())
+      const { rerender } = render(<ExportModal page="graph" open={true} />)
+      await screen.findByRole("alert")
+
+      global.$.ajax = jest.fn(({ success }) => success("aW1hZ2U="))
+      rerender(<ExportModal page="graph" open={false} />)
+      rerender(<ExportModal page="graph" open={true} />)
+
+      await screen.findByRole("img")
+      expect(screen.queryByRole("alert")).toBeNull()
+    })
+  })
 })
