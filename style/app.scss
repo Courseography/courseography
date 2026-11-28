@@ -454,6 +454,12 @@ ol {
   max-width: 100%;
 }
 
+.export-image-error {
+  color: var(--invalid-color);
+  font-weight: 500;
+  margin: 10px 0;
+}
+
 #react-graph {
   display: inline-block;
   height: calc(100% - 50px);
